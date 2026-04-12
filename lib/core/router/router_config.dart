@@ -8,11 +8,13 @@ import 'package:injectable/injectable.dart';
 import '../../core/router/app_page_transitions.dart';
 import '../../features/auth/presentation/ui/screens/login_screen.dart';
 import '../../features/onboarding/presentation/ui/screens/onboarding_screen.dart';
+import '../../features/permissions/presentation/ui/screens/permission_gate_screen.dart';
 import '../../features/root/presentation/ui/screens/root_screen.dart';
 import '../../features/splash/presentation/ui/screens/splash_screen.dart';
 import '../../utils/constants/app_flow_constants.dart';
 import '../../utils/helpers/colored_print.dart';
 import '../services/onboarding/onboarding_service.dart';
+import '../services/permissions/permissions_coordinator.dart';
 import '../services/session/auth_state_notifier.dart';
 
 part 'app_routes.dart';
@@ -25,10 +27,12 @@ class RouterRefreshListenable extends ChangeNotifier {
   RouterRefreshListenable({
     required this.authState,
     required this.onboardingService,
+    required this.permissionsCoordinator,
   }) {
     // * Listen to all reactive sources that affect routing.
     authState.addListener(_onSourceChanged);
     onboardingService.addListener(_onSourceChanged);
+    permissionsCoordinator.addListener(_onSourceChanged);
 
     // * Ensure the splash is visible for at least [SplashConfig.initialDelay]
     //   even if auth/onboarding resolve instantly.
@@ -41,12 +45,21 @@ class RouterRefreshListenable extends ChangeNotifier {
 
   final AuthStateNotifier authState;
   final OnboardingService onboardingService;
+  final PermissionsCoordinator permissionsCoordinator;
 
   bool _splashDelayElapsed = false;
+  int _refreshTick = 0;
 
   bool get splashDelayElapsed => _splashDelayElapsed;
 
   void _onSourceChanged() {
+    _refreshTick++;
+    printM(
+      '${RouterLogTags.router} refresh #$_refreshTick '
+      'status=${authState.authStatus.status} '
+      'isGuest=${authState.isGuest} '
+      'splashDelayElapsed=$_splashDelayElapsed',
+    );
     notifyListeners();
   }
 
@@ -54,6 +67,7 @@ class RouterRefreshListenable extends ChangeNotifier {
   void dispose() {
     authState.removeListener(_onSourceChanged);
     onboardingService.removeListener(_onSourceChanged);
+    permissionsCoordinator.removeListener(_onSourceChanged);
     super.dispose();
   }
 }
@@ -70,17 +84,21 @@ class AppRouterConfig {
   AppRouterConfig(
     this._authState,
     this._onboardingService,
+    this._permissionsCoordinator,
     this._routeRegistry,
   ) {
     _refresh = RouterRefreshListenable(
       authState: _authState,
       onboardingService: _onboardingService,
+      permissionsCoordinator: _permissionsCoordinator,
     );
 
     _guard = AppRouteGuard(
       authState: _authState,
       onboardingService: _onboardingService,
+      permissionsCoordinator: _permissionsCoordinator,
       splashPath: SplashScreen.pagePath,
+      permissionPath: PermissionGateScreen.pagePath,
       onboardingPath: OnboardingScreen.pagePath,
       loginPath: LoginScreen.pagePath,
       rootPath: RootScreen.pagePath,
@@ -95,11 +113,22 @@ class AppRouterConfig {
         state: state,
         splashDelayElapsed: _refresh.splashDelayElapsed,
       ),
+      errorPageBuilder: (context, state) {
+        printY(
+          '${RouterLogTags.redirect} unmatched route '
+          'location="${state.uri}" -> splash fallback',
+        );
+        return AppPageTransitions.build(
+          state: state,
+          child: const SplashScreen(),
+        );
+      },
     );
   }
 
   final AuthStateNotifier _authState;
   final OnboardingService _onboardingService;
+  final PermissionsCoordinator _permissionsCoordinator;
   final AppRouteRegistry _routeRegistry;
 
   late final RouterRefreshListenable _refresh;
@@ -118,7 +147,9 @@ class AppRouteGuard {
   AppRouteGuard({
     required this.authState,
     required this.onboardingService,
+    required this.permissionsCoordinator,
     required this.splashPath,
+    required this.permissionPath,
     required this.onboardingPath,
     required this.loginPath,
     required this.rootPath,
@@ -126,10 +157,23 @@ class AppRouteGuard {
 
   final AuthStateNotifier authState;
   final OnboardingService onboardingService;
+  final PermissionsCoordinator permissionsCoordinator;
   final String splashPath;
+  final String permissionPath;
   final String onboardingPath;
   final String loginPath;
   final String rootPath;
+
+  int _redirectCycleCounter = 0;
+
+  bool _isStaleCycle(int cycleId) => cycleId != _redirectCycleCounter;
+
+  /// Internal onboarding guard result so we can explicitly block auth checks
+  /// while onboarding is still incomplete.
+  ({String? redirect, bool blockAuth}) _onboardingOutcome({
+    required String? redirect,
+    required bool blockAuth,
+  }) => (redirect: redirect, blockAuth: blockAuth);
 
   /// * Central route-guard / redirect logic.
   ///
@@ -146,42 +190,128 @@ class AppRouteGuard {
     required GoRouterState state,
     required bool splashDelayElapsed,
   }) async {
+    final cycleId = ++_redirectCycleCounter;
+
     final currentPath = state.matchedLocation;
-    final status = authState.authStatus.status;
-    final isGuest = authState.isGuest;
-    final isAuthenticated = status == Status.authenticated && !isGuest;
-    final canEnterApp = isAuthenticated || isGuest;
+    final initialStatus = authState.authStatus.status;
+    final initialGuest = authState.isGuest;
 
     printM(
-      '${RouterLogTags.redirect} currentPath="$currentPath" '
-      'status=$status isGuest=$isGuest',
+      '${RouterLogTags.redirect} #$cycleId start '
+      'currentPath="$currentPath" '
+      'status=$initialStatus isGuest=$initialGuest '
+      'splashDelayElapsed=$splashDelayElapsed',
     );
 
     // 1) Splash / initial state.
     final splashRedirect = _handleSplash(
       currentPath: currentPath,
-      status: status,
+      status: initialStatus,
       splashDelayElapsed: splashDelayElapsed,
     );
-    if (splashRedirect != null) return splashRedirect;
+    if (splashRedirect != null) {
+      printC(
+        '${RouterLogTags.redirect} #$cycleId decision -> "$splashRedirect" '
+        '(splash gate)',
+      );
+      return splashRedirect;
+    }
 
     // Important: while splash is still active (delay not elapsed OR auth status
     // still bootstrapping), we must NOT run onboarding/auth redirects.
     // Otherwise GoRouter can immediately redirect away from the splash route
     // before the first frame is painted, making the splash appear to never show.
-    if (!splashDelayElapsed || status == Status.initial) {
+    if (!splashDelayElapsed || initialStatus == Status.initial) {
+      printC(
+        '${RouterLogTags.redirect} #$cycleId decision -> stay '
+        '(waiting splash/auth bootstrap)',
+      );
       return null;
     }
 
     // 2) Onboarding.
-    final onboardingRedirect = await _handleOnboarding(currentPath);
-    if (onboardingRedirect != null) return onboardingRedirect;
+    final onboardingOutcome = await _handleOnboarding(currentPath, cycleId);
+    if (_isStaleCycle(cycleId)) {
+      printY(
+        '${RouterLogTags.redirect} #$cycleId stale after onboarding gate, drop decision',
+      );
+      return null;
+    }
+    if (onboardingOutcome.redirect != null) {
+      printC(
+        '${RouterLogTags.redirect} #$cycleId decision -> "${onboardingOutcome.redirect}" '
+        '(onboarding gate)',
+      );
+      return onboardingOutcome.redirect;
+    }
 
-    // 3) Auth.
+    if (onboardingOutcome.blockAuth) {
+      printC(
+        '${RouterLogTags.redirect} #$cycleId decision -> stay '
+        '(onboarding pending, permission/auth gate blocked)',
+      );
+      return null;
+    }
+
+    // 3) Permission Gate.
+    final permissionOutcome = await _handlePermissionGate(
+      currentPath,
+      cycleId,
+    );
+    if (_isStaleCycle(cycleId)) {
+      printY(
+        '${RouterLogTags.redirect} #$cycleId stale after permission gate, drop decision',
+      );
+      return null;
+    }
+    if (permissionOutcome.redirect != null) {
+      printC(
+        '${RouterLogTags.redirect} #$cycleId decision -> "${permissionOutcome.redirect}" '
+        '(permission gate)',
+      );
+      return permissionOutcome.redirect;
+    }
+
+    if (permissionOutcome.blockAuth) {
+      printC(
+        '${RouterLogTags.redirect} #$cycleId decision -> stay '
+        '(permission pending, auth gate blocked)',
+      );
+      return null;
+    }
+
+    final latestStatus = authState.authStatus.status;
+    final latestGuest = authState.isGuest;
+    final latestAuthenticated =
+        latestStatus == Status.authenticated && !latestGuest;
+    final canEnterApp = latestAuthenticated || latestGuest;
+
+    printM(
+      '${RouterLogTags.redirect} #$cycleId auth snapshot '
+      'status=$latestStatus isGuest=$latestGuest canEnterApp=$canEnterApp',
+    );
+
+    // 4) Auth.
     final authRedirect = _handleAuth(
       currentPath: currentPath,
       canEnterApp: canEnterApp,
+      cycleId: cycleId,
     );
+    if (_isStaleCycle(cycleId)) {
+      printY(
+        '${RouterLogTags.redirect} #$cycleId stale after auth gate, drop decision',
+      );
+      return null;
+    }
+
+    if (authRedirect == null) {
+      printG(
+        '${RouterLogTags.redirect} #$cycleId decision -> stay on "$currentPath"',
+      );
+    } else {
+      printG('${RouterLogTags.redirect} #$cycleId decision -> "$authRedirect"');
+    }
+
     return authRedirect;
   }
 
@@ -200,32 +330,75 @@ class AppRouteGuard {
     return null;
   }
 
-  Future<String?> _handleOnboarding(String currentPath) async {
+  Future<({String? redirect, bool blockAuth})> _handlePermissionGate(
+      String currentPath, int cycleId) async {
+    if (!AppFlowConfig.permissionGateEnabled) {
+      return (redirect: null, blockAuth: false);
+    }
+
+    try {
+      final hasForegroundPermission = await permissionsCoordinator
+          .isForegroundLocationGranted();
+
+      printM(
+        '${RouterLogTags.redirect} #$cycleId permission '
+        'foregroundGranted=$hasForegroundPermission currentPath="$currentPath"',
+      );
+
+      if (!hasForegroundPermission) {
+        if (currentPath != permissionPath) {
+          printC(
+            '${RouterLogTags.redirect} #$cycleId -> permission-gate (location required)',
+          );
+          return (redirect: permissionPath, blockAuth: true);
+        }
+        return (redirect: null, blockAuth: true);
+      }
+
+      return (redirect: null, blockAuth: false);
+    } catch (e) {
+      printY('${RouterLogTags.redirect} #$cycleId permission gate error: $e');
+      return (redirect: null, blockAuth: false);
+    }
+  }
+
+  Future<({String? redirect, bool blockAuth})> _handleOnboarding(
+    String currentPath,
+    int cycleId,
+  ) async {
     if (!AppFlowConfig.onboardingEnabled) {
-      return null;
+      return _onboardingOutcome(redirect: null, blockAuth: false);
     }
 
     final finished = await onboardingService.isOnboardingFinished();
+    printM(
+      '${RouterLogTags.redirect} #$cycleId onboarding '
+      'finished=$finished currentPath="$currentPath"',
+    );
+
     if (!finished) {
       if (currentPath != onboardingPath) {
-        printC('${RouterLogTags.redirect} → onboarding (not finished)');
-        return onboardingPath;
+        printC(
+          '${RouterLogTags.redirect} #$cycleId -> onboarding (not finished)',
+        );
+        return _onboardingOutcome(redirect: onboardingPath, blockAuth: true);
       }
-      return null;
+      return _onboardingOutcome(redirect: null, blockAuth: true);
     }
 
     // Onboarding is finished but user is still on the onboarding page.
     // Fall through to auth redirects so the router moves them forward.
-    return null;
+    return _onboardingOutcome(redirect: null, blockAuth: false);
   }
 
   String? _handleAuth({
     required String currentPath,
     required bool canEnterApp,
+    required int cycleId,
   }) {
     if (!AppFlowConfig.authEnabled) {
       if (currentPath != rootPath) {
-        printG('${RouterLogTags.redirect} auth disabled → root');
+        printG('${RouterLogTags.redirect} #$cycleId auth disabled -> root');
         return rootPath;
       }
       return null;
@@ -233,16 +406,17 @@ class AppRouteGuard {
 
     if (!canEnterApp) {
       if (currentPath != loginPath) {
-        printY('${RouterLogTags.redirect} unauthenticated → login');
+        printY('${RouterLogTags.redirect} #$cycleId unauthenticated -> login');
         return loginPath;
       }
       return null;
     }
 
     if (currentPath == splashPath ||
+        currentPath == permissionPath ||
         currentPath == loginPath ||
         currentPath == onboardingPath) {
-      printG('${RouterLogTags.redirect} authenticated → root');
+      printG('${RouterLogTags.redirect} #$cycleId authenticated -> root');
       return rootPath;
     }
 

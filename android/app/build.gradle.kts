@@ -1,4 +1,5 @@
 import java.util.Properties
+import java.io.File
 
 plugins {
     id("com.android.application")
@@ -33,12 +34,26 @@ android {
         versionName = flutter.versionName
 
         // Load API Key from .env file
-        val envFile = project.rootProject.file(".env")
+        val flutterRootDir = rootProject.projectDir.parentFile
+        val envFile = File(flutterRootDir, ".env")
         val envProperties = Properties()
         if (envFile.exists()) {
             envFile.inputStream().use { envProperties.load(it) }
+            println("[MapsConfig] Loaded env file from: ${envFile.absolutePath}")
+        } else {
+            println("[MapsConfig] .env not found at: ${envFile.absolutePath}")
         }
-        val apiKey = envProperties.getProperty("GOOGLE_MAPS_API_KEY") ?: "{apiKey}"
+        val envApiKey = envProperties.getProperty("GOOGLE_MAPS_API_KEY")
+        val gradleApiKey = project.findProperty("GOOGLE_MAPS_API_KEY") as String?
+        val apiKey = envApiKey ?: gradleApiKey ?: ""
+
+        if (apiKey.isBlank() || apiKey == "{apiKey}") {
+            println("[MapsConfig] WARNING: GOOGLE_MAPS_API_KEY is missing or placeholder. Map tiles will not load.")
+        } else {
+            val maskedSuffix = if (apiKey.length > 6) apiKey.takeLast(6) else "short"
+            println("[MapsConfig] Google Maps key loaded (***$maskedSuffix)")
+        }
+
         manifestPlaceholders["googleMapsApiKey"] = apiKey
     }
 

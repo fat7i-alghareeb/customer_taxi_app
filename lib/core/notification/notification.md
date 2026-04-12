@@ -36,6 +36,12 @@ You can control behavior using:
 
 - `NotificationInitOptions(initializeFirebase: ..., enableFcm: ...)`
 
+Current startup behavior in this app:
+
+- Notification infrastructure is initialized during bootstrap.
+- Notification runtime permission prompt is deferred to the post-splash permission flow.
+- Bootstrap should use `requestPermissionsAtStartup: false`.
+
 ### ✅ Firebase setup (required ONLY if you enable FCM)
 
 If you use `NotificationInitOptions(enableFcm: true)` you must configure Firebase:
@@ -315,6 +321,11 @@ if (!granted) {
   await getIt<NotificationCoordinator>().requestNotificationPermission();
 }
 ```
+
+Recommended timing:
+
+- Run the request after splash (for example inside the permission gate flow).
+- Keep notification permission non-blocking so app navigation can continue.
 
 ### 🧨 Dispose (logout)
 

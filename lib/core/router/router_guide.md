@@ -15,6 +15,7 @@ The router is intentionally written so that **startup is driven by state**:
 
 - **`AuthStateNotifier`** decides whether the user is authenticated/guest.
 - **`OnboardingService`** decides whether onboarding is finished.
+- **`PermissionsCoordinator`** enforces mandatory location permission gate.
 - **`SplashConfig.initialDelay`** enforces a minimum splash duration.
 
 So the app does not manually navigate during startup; instead, routing reacts to state changes.
@@ -44,10 +45,12 @@ Key parts:
     - `GoRouter`
 
   - Sets `initialLocation` to `SplashScreen.pagePath`.
+  - Uses a splash fallback page for unmatched routes during startup transitions.
 
 - **`AppRouteGuard`**
   - Purpose: keep _all_ redirect rules in a single focused class.
   - Exposes one method: `handleRedirect(...)`.
+  - Uses redirect cycle IDs to ignore stale async guard outcomes when newer redirect cycles are already running.
   - Internally uses:
     - `_handleSplash(...)`
     - `_handleOnboarding(...)`
@@ -110,7 +113,24 @@ What this means:
 - Even if auth/onboarding resolve instantly, the splash remains visible for at least `SplashConfig.initialDelay`.
 - If the app is still bootstrapping session state, splash stays until `AuthStateNotifier` moves out of `Status.initial`.
 
-### Step 2: Onboarding guard (only if enabled)
+### Step 2: Permission gate (mandatory location)
+
+After splash conditions are satisfied, the guard checks location permission:
+
+- If foreground location is **not granted**:
+  - Redirect to `PermissionGateScreen.pagePath`.
+  - App remains blocked there until foreground location is granted.
+
+- If foreground location is granted:
+  - Continue to onboarding/auth checks.
+
+Permission behavior details:
+
+- Notification permission is requested softly after splash and is non-blocking.
+- Location permission is blocking for startup flow.
+- Permanently denied location should route the user to settings and keep a blocking state until granted.
+
+### Step 3: Onboarding guard (only if enabled)
 
 After splash conditions are satisfied, the guard checks onboarding:
 
@@ -120,7 +140,7 @@ After splash conditions are satisfied, the guard checks onboarding:
 - Else, it calls `OnboardingService.isOnboardingFinished()`.
   - If onboarding is **not finished**:
     - Redirect to `OnboardingScreen.pagePath`.
-    - While the user is on onboarding and it is still not finished, the guard allows staying there.
+    - While the user is on onboarding and it is still not finished, the guard keeps the user there and blocks auth redirects until onboarding becomes finished.
 
   - If onboarding is **finished**:
     - Continue to the auth step.
@@ -129,7 +149,7 @@ Transition point:
 
 - When onboarding is completed, the service notifies listeners → `RouterRefreshListenable` notifies → redirect re-runs.
 
-### Step 3: Auth guard (only if enabled)
+### Step 4: Auth guard (only if enabled)
 
 After onboarding (or if onboarding is disabled), the guard checks auth:
 
@@ -154,16 +174,19 @@ Then:
 
 1. Start on Splash.
 2. Wait for splash delay + auth status resolves.
-3. Onboarding not finished → go to Onboarding.
-4. User completes onboarding → redirect re-runs.
-5. Auth enabled → unauthenticated → go to Login.
+3. Location not granted → go to PermissionGate.
+4. User grants location permission.
+5. Onboarding not finished → go to Onboarding.
+6. User completes onboarding → redirect re-runs.
+7. Auth enabled → unauthenticated → go to Login.
 
 ### Returning user (onboarding finished, already logged in)
 
 1. Start on Splash.
 2. Wait for splash delay + auth status resolves to authenticated.
-3. Onboarding finished → proceed.
-4. Authenticated → go to Root.
+3. Location granted → proceed.
+4. Onboarding finished → proceed.
+5. Authenticated → go to Root.
 
 ### Token expired (JWT mode)
 

@@ -6,6 +6,15 @@ class OnboardingStorageKeys {
   static const String finished = 'onboarding.finished';
 }
 
+/// Permission flow related persistent keys.
+class PermissionFlowStorageKeys {
+  PermissionFlowStorageKeys._();
+
+  /// Tracks whether post-splash notification soft prompt was attempted.
+  static const String notificationSoftPrompted =
+      'permission.notificationSoftPrompted';
+}
+
 /// Configuration for splash screen behavior.
 class SplashConfig {
   SplashConfig._();
@@ -26,6 +35,31 @@ class AppFlowConfig {
 
   /// * Enable or disable authentication-based routing.
   static const bool authEnabled = true;
+
+  /// * Enable startup permission gate before onboarding/auth/root.
+  static const bool permissionGateEnabled = true;
+}
+
+/// Map related configuration and defaults.
+class MapConfig {
+  MapConfig._();
+
+  /// Default starting point if no location can be found (Aleppo Center).
+  static const double defaultLat = 36.2021;
+  static const double defaultLng = 37.1343;
+
+  /// Zoom level used when the map initially loads in broad view.
+  static const double initialZoom = 10;
+
+  /// Zoom level used when focused on the user's precise location.
+  static const double focusZoom = 18.0;
+
+  /// Zoom level used during the middle of a cinematic flight animation.
+  /// Higher values mean less "zoom out" during recentering.
+  static const double flightZoomOut = 18.0;
+
+  /// Duration of the cinematic recentering flight.
+  static const Duration flightDuration = Duration(milliseconds: 100);
 }
 
 /// Log tags for routing / flow related components.

@@ -6,4 +6,10 @@ part 'env.g.dart';
 abstract class Env {
   @EnviedField(varName: 'GOOGLE_MAPS_API_KEY', obfuscate: true)
   static final String googleMapsApiKey = _Env.googleMapsApiKey;
+
+  @EnviedField(varName: 'STAGE_BASE_URL', defaultValue: '')
+  static final String stageBaseUrl = _Env.stageBaseUrl;
+
+  @EnviedField(varName: 'PRODUCTION_BASE_URL', defaultValue: '')
+  static final String productionBaseUrl = _Env.productionBaseUrl;
 }

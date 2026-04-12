@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,7 +25,7 @@ import 'main_loading_progress.dart';
 ///   ),
 /// );
 /// ```
-enum FullScreenImageSourceType { network, asset }
+enum FullScreenImageSourceType { network, asset, file }
 
 /// Simple full screen preview for network/asset images.
 class FullScreenImageScreen extends StatelessWidget {
@@ -72,6 +73,25 @@ class FullScreenImageScreen extends StatelessWidget {
       key: key,
       source: assetPath,
       sourceType: FullScreenImageSourceType.asset,
+      backgroundColor: backgroundColor,
+      fit: fit,
+      alignment: alignment,
+      filterQuality: filterQuality,
+    );
+  }
+ 
+  factory FullScreenImageScreen.file(
+    File file, {
+    Key? key,
+    Color? backgroundColor,
+    BoxFit fit = BoxFit.contain,
+    Alignment alignment = Alignment.center,
+    FilterQuality filterQuality = FilterQuality.high,
+  }) {
+    return FullScreenImageScreen._(
+      key: key,
+      source: file.path,
+      sourceType: FullScreenImageSourceType.file,
       backgroundColor: backgroundColor,
       fit: fit,
       alignment: alignment,
@@ -141,6 +161,13 @@ class FullScreenImageScreen extends StatelessWidget {
             if (frame == null) return _buildLoading(context);
             return child;
           },
+        ),
+        FullScreenImageSourceType.file => Image.file(
+          File(source),
+          fit: fit,
+          alignment: alignment,
+          filterQuality: filterQuality,
+          errorBuilder: (context, error, stackTrace) => _buildError(context),
         ),
       };
     } catch (_) {

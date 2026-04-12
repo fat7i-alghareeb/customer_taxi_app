@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../common/widgets/button/app_button.dart';
-import '../../../../../common/widgets/button/app_button_child.dart';
-import '../../../../../common/widgets/custom_scaffold/app_scaffold.dart'
-    show AppScaffold, AppScaffoldAppBarConfig;
-import '../../../../../core/injection/injectable.dart';
-import '../../../../../core/services/onboarding/onboarding_service.dart';
-import '../../../../../utils/constants/design_constants.dart';
-import '../../../../../utils/extensions/widget_extensions.dart';
+import 'package:customertaxi/common/widgets/button/app_button.dart';
+import 'package:customertaxi/common/widgets/button/app_button_child.dart';
+import 'package:customertaxi/common/widgets/button/app_button_variants.dart';
+import 'package:customertaxi/common/widgets/custom_scaffold/app_scaffold.dart';
+import 'package:customertaxi/core/injection/injectable.dart';
+import 'package:customertaxi/core/services/onboarding/onboarding_service.dart';
+import 'package:customertaxi/core/services/permissions/permissions_coordinator.dart';
+import 'package:customertaxi/utils/constants/design_constants.dart';
+import 'package:customertaxi/utils/helpers/app_strings.dart';
+import 'package:customertaxi/utils/gen/assets.gen.dart';
+import 'package:customertaxi/features/onboarding/presentation/ui/widgets/onboarding_page/onboarding_page_section.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -29,6 +32,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _finish() async {
+    // Check permissions natively without a dedicated loading screen
+    await getIt<PermissionsCoordinator>().ensurePostSplashPermissions();
     await getIt<OnboardingService>().setOnboardingFinished();
   }
 
@@ -38,79 +43,103 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       return;
     }
     await _controller.nextPage(
-      duration: const Duration(milliseconds: 260),
-      curve: Curves.easeOut,
+      duration: AppDurations.normal,
+      curve: Curves.easeInOutCubic,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold.appBar(
-      appBarConfig: const AppScaffoldAppBarConfig(
-        title: 'Onboarding',
-        showLeading: false,
+    return AppScaffold.body(
+      scaffoldConfig: const AppScaffoldConfig(
+        safeArea: [], // IMERSSIVE FULL SCREEN
       ),
-      child: Column(
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          Expanded(
-            child: PageView(
-              controller: _controller,
-              onPageChanged: (value) => setState(() => _index = value),
-              children: const [
-                _OnboardingPage(title: 'Welcome', subtitle: ''),
-                _OnboardingPage(title: 'Stay organized', subtitle: ''),
-                _OnboardingPage(title: 'Ready to start', subtitle: ''),
+          PageView(
+            controller: _controller,
+            onPageChanged: (value) => setState(() => _index = value),
+            children: [
+              OnboardingPageSection(
+                title: AppStrings.onboardingTitle1,
+                subtitle: AppStrings.onboardingSubtitle1,
+                imagePath: Assets.images.onboarding1.path,
+              ),
+              OnboardingPageSection(
+                title: AppStrings.onboardingTitle2,
+                subtitle: AppStrings.onboardingSubtitle2,
+                imagePath: Assets.images.onboarding2.path,
+              ),
+              OnboardingPageSection(
+                title: AppStrings.onboardingTitle3,
+                subtitle: AppStrings.onboardingSubtitle3,
+                imagePath: Assets.images.onboarding3.path,
+              ),
+            ],
+          ),
+
+          // Skip Button
+          if (_index < 2)
+            Positioned(
+              top: MediaQuery.paddingOf(context).top + AppSpacing.sm.h,
+              right: AppSpacing.xl.w,
+              child: AppButton.grey(
+                layout: const AppButtonLayout(height: 40),
+                noShadow: true,
+                child: AppButtonChild.label(AppStrings.onboardingSkip),
+                onTap: _finish,
+              ),
+            ),
+
+          // Bottom Controls Section
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: MediaQuery.paddingOf(context).bottom + AppSpacing.xl.h,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Page Indicator
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    3,
+                    (index) => AnimatedContainer(
+                      duration: AppDurations.normal,
+                      margin: EdgeInsets.symmetric(horizontal: 4.w),
+                      height: 8.h,
+                      width: _index == index ? 24.w : 8.w,
+                      decoration: BoxDecoration(
+                        color: _index == index
+                            ? Theme.of(context).primaryColor
+                            : Colors.white.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                    ),
+                  ),
+                ),
+                AppSpacing.xl.verticalSpace,
+
+                // Primary Action Button
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.xl.w),
+                  child: AppButton.primary(
+                    // noShadow: true,
+                    shadowVariant: AppButtonShadowVariant.primary,
+                    child: AppButtonChild.label(
+                      _index < 2
+                          ? AppStrings.onboardingContinue
+                          : AppStrings.onboardingGetStarted,
+                    ),
+                    onTap: _next,
+                  ),
+                ),
               ],
             ),
           ),
-          Row(
-            children: [
-              if (_index < 2)
-                Expanded(
-                  child: AppButton.grey(
-                    child: AppButtonChild.label('Skip'),
-                    onTap: _finish,
-                  ),
-                )
-              else
-                const Expanded(child: SizedBox()),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: AppButton.primary(
-                  child: AppButtonChild.label(
-                    _index < 2 ? 'Continue' : 'Start',
-                  ),
-                  onTap: _next,
-                ),
-              ),
-            ],
-          ).standardPadding,
-          AppSpacing.xl.verticalSpace,
         ],
       ),
-    );
-  }
-}
-
-class _OnboardingPage extends StatelessWidget {
-  const _OnboardingPage({required this.title, required this.subtitle});
-
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(title, textAlign: TextAlign.center),
-          if (subtitle.isNotEmpty) ...[
-            AppSpacing.sm.verticalSpace,
-            Text(subtitle, textAlign: TextAlign.center),
-          ],
-        ],
-      ).standardPadding,
     );
   }
 }

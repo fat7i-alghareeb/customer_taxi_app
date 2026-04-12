@@ -27,6 +27,14 @@ class AppRouteRegistry {
       ),
     ),
     GoRoute(
+      path: PermissionGateScreen.pagePath,
+      name: PermissionGateScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const PermissionGateScreen(),
+      ),
+    ),
+    GoRoute(
       path: LoginScreen.pagePath,
       name: LoginScreen.pageName,
       pageBuilder: (context, state) =>

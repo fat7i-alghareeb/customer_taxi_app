@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/user_entity.dart';
+import '../../../utils/helpers/colored_print.dart';
 
 /// Global reactive holder for the current user and authentication status.
 ///
@@ -36,18 +37,31 @@ class AuthStateNotifier extends ChangeNotifier {
 
   /// Updates the current [user] and notifies listeners.
   void setUser(UserEntity? user) {
+    final previousId = _user?.id;
+    final nextId = user?.id;
+    printM('[AuthStateNotifier] setUser $previousId -> $nextId');
     _user = user;
     notifyListeners();
   }
 
   /// Updates the guest flag and notifies listeners.
   void setGuest(bool value) {
+    if (_isGuest == value) {
+      printM('[AuthStateNotifier] setGuest unchanged => $value');
+      return;
+    }
+
+    printM('[AuthStateNotifier] setGuest $_isGuest -> $value');
     _isGuest = value;
     notifyListeners();
   }
 
   /// Updates the authentication status and notifies listeners.
   void setAuthStatus(AuthStatus status) {
+    printC(
+      '[AuthStateNotifier] setAuthStatus '
+      '${_authStatus.status} -> ${status.status}',
+    );
     _authStatus = status;
     notifyListeners();
   }

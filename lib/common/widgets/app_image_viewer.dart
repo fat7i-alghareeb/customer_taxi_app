@@ -58,6 +58,8 @@
 
 library;
 
+import 'dart:io';
+ 
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
@@ -80,7 +82,7 @@ enum AppImageViewerLoading { shimmer, progress, none }
 
 /// Supported sources for [AppImageViewer].
 
-enum AppImageViewerSourceType { network, asset }
+enum AppImageViewerSourceType { network, asset, file }
 
 /// A containerized image widget with optional shadow, loading UI, and
 
@@ -348,6 +350,61 @@ class AppImageViewer extends StatelessWidget {
       fullScreenBackgroundColor: fullScreenBackgroundColor,
     );
   }
+ 
+  factory AppImageViewer.file(
+    File file, {
+    Key? key,
+    double? width,
+    double? height,
+    double? percentageWidth,
+    double? percentageHeight,
+    EdgeInsetsGeometry? margin,
+    Color? backgroundColor,
+    double borderRadius = 12,
+    bool noShadow = true,
+    List<BoxShadow>? customShadows,
+    BoxFit fit = BoxFit.cover,
+    Alignment alignment = Alignment.center,
+    FilterQuality filterQuality = FilterQuality.medium,
+    AppImageViewerLoading loading = AppImageViewerLoading.shimmer,
+    bool shimmerAnimate = true,
+    bool shimmerEnableHighlight = true,
+    Color? shimmerBaseColor,
+    Color? shimmerHighlightColor,
+    double progressSize = 30,
+    double progressStrokeWidth = 3,
+    Color? progressColor,
+    bool enableFullScreen = false,
+    Color? fullScreenBackgroundColor,
+  }) {
+    return AppImageViewer._(
+      key: key,
+      source: file.path,
+      sourceType: AppImageViewerSourceType.file,
+      width: width,
+      height: height,
+      percentageWidth: percentageWidth,
+      percentageHeight: percentageHeight,
+      margin: margin,
+      backgroundColor: backgroundColor,
+      borderRadius: borderRadius,
+      noShadow: noShadow,
+      customShadows: customShadows,
+      fit: fit,
+      alignment: alignment,
+      filterQuality: filterQuality,
+      loading: loading,
+      shimmerAnimate: shimmerAnimate,
+      shimmerEnableHighlight: shimmerEnableHighlight,
+      shimmerBaseColor: shimmerBaseColor,
+      shimmerHighlightColor: shimmerHighlightColor,
+      progressSize: progressSize,
+      progressStrokeWidth: progressStrokeWidth,
+      progressColor: progressColor,
+      enableFullScreen: enableFullScreen,
+      fullScreenBackgroundColor: fullScreenBackgroundColor,
+    );
+  }
 
   final String source;
 
@@ -514,6 +571,10 @@ class AppImageViewer extends StatelessWidget {
 
             backgroundColor: fullScreenBackgroundColor,
           ),
+          AppImageViewerSourceType.file => FullScreenImageScreen.file(
+            File(source),
+            backgroundColor: fullScreenBackgroundColor,
+          ),
         };
 
         return screen;
@@ -642,6 +703,23 @@ class AppImageViewer extends StatelessWidget {
             // "Bad state: Cannot clone a disposed image.".
             if (frame == null) return _buildLoading(context);
             return child;
+          },
+          ),
+ 
+        AppImageViewerSourceType.file => Image.file(
+          File(source),
+          fit: fit,
+          alignment: alignment,
+          filterQuality: filterQuality,
+          errorBuilder: (context, error, stackTrace) {
+            assert(() {
+              debugPrint(
+                'AppImageViewer: file image error for source="$source"',
+              );
+              debugPrint('$error');
+              return true;
+            }());
+            return _buildError(context);
           },
         ),
       };

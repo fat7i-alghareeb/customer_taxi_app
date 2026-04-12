@@ -14,19 +14,6 @@ Failure to follow the Hierarchical UI Decomposition (Screens -> Sections -> Widg
 
 This document defines the standardized architecture for all product features. Every new feature module must strictly adhere to this structure to ensure consistency, scalability, and predictable dependency flow across the Alsultan platform.
 
-## 🔑 The Root Feature: Core Logic & Orchestration
-
-The **Root** feature is the most critical module in the application, serving as the "App Shell" or primary orchestrator. Unlike standard domain features (like trading or inventory), the purpose of the Root is to provide a unified experience and bridge the gap between different product areas.
-
-### Purpose & Responsibilities
-
-- **Centralized Navigation**: It hosts the main navigation controllers and the `BottomNavBar`, managing the transitions and state persistence between the primary application tabs.
-- **Global UI Shell**: It provides the persistent interface elements — such as the `AppScaffold`, `EndDrawer`, and specialized overlays — that must remain consistent regardless of which functional module is currently visible.
-- **App-Level Side Effects**: It handles global state changes like theme switching (Light/Dark mode) and localization updates that affect the entire application context simultaneously.
-- **Unified Entry Point**: After authentication, the Root feature is the landing zone that initializes the core application environment and establishes the navigation scope for all subsequent user interactions.
-
----
-
 ## 🏗️ State Management Standards (BLoC & Freezed)
 
 We utilize **BLoC** with **Freezed** to ensure immutability and exhaustive pattern matching. Every feature must follow this exact state implementation pattern.
@@ -209,8 +196,6 @@ The separation between Domain and Data layers must be absolute.
 2. **Models/DTOs (Data)**: API-specific objects. Must include `fromJson` and `toJson`.
 3. **Request Modeling**: Every API call **MUST** have a dedicated `RequestModel` (e.g., `UpdateProfileRequest`) instead of passing raw Maps or multiple primitives.
 4. **Mappers**: You **MUST** implement mapper logic (often as `toEntity()` on the Model or a dedicated `Mapper` class) to convert between Data and Domain layers. Models must **NEVER** leak into the Domain or Presentation layers.
-
-**Gold Standard Feature Pattern**
 
 - `constants/forms/`: `abstract class` with static `FormGroup`.
 - `data/models/`: `xxx_model.dart` with `toJson`.

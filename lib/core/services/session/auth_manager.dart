@@ -42,10 +42,18 @@ class AuthManager {
   /// Initializes the manager by loading user and guest flag, and wiring token
   /// status updates when JWT mode is enabled.
   Future<void> initialize() async {
-    printC('${AuthLogTags.authManager} initialize');
+    printC('${AuthLogTags.authManager} initialize start');
     await _loadUserFromStorage();
+    printM(
+      '${AuthLogTags.authManager} user loaded '
+      'userId=${state.user?.id} isGuest=${state.isGuest}',
+    );
 
     await tokenStorage.initialize();
+    printM(
+      '${AuthLogTags.authManager} token initialized '
+      'cachedToken=${tokenStorage.cachedToken != null}',
+    );
 
     final shouldLogExpiry = state.user != null && !state.isGuest;
     if (shouldLogExpiry) {
@@ -70,6 +78,9 @@ class AuthManager {
     // Make sure we don't stay in [Status.initial] while waiting for stream
     // emissions.
     if (state.authStatus.status == Status.initial) {
+      printY(
+        '${AuthLogTags.authManager} status was initial, forcing unauthenticated bootstrap state',
+      );
       state.setAuthStatus(
         AuthStatus.unauthenticated(message: 'No active session'),
       );
@@ -78,6 +89,7 @@ class AuthManager {
     _tokenStatusSub = tokenStorage.authenticationStatus.listen(
       _onAuthStatusChanged,
     );
+    printG('${AuthLogTags.authManager} initialize complete');
   }
 
   /// Disposes internal listeners and closes the underlying token storage.
@@ -89,7 +101,10 @@ class AuthManager {
   /// Logs in the given [user], persists their data and optionally stores JWT
   /// tokens when JWT mode is active.
   Future<void> login({required UserEntity user, AuthTokenModel? token}) async {
-    printG('${AuthLogTags.authManager} login');
+    printG(
+      '${AuthLogTags.authManager} login start '
+      'userId=${user.id} hasToken=${token != null}',
+    );
 
     await _persistUser(user);
     await _setGuest(false);
@@ -100,6 +115,8 @@ class AuthManager {
     if (token != null) {
       await tokenStorage.write(token);
     }
+
+    printG('${AuthLogTags.authManager} login complete');
   }
 
   /// Logs out the current user, clears persisted data and removes tokens.
@@ -156,6 +173,10 @@ class AuthManager {
   /// Loads user and guest flag from storage to compute the initial state.
   Future<void> _loadUserFromStorage() async {
     final jsonString = await storage.readString(AuthStorageKeys.user);
+    printM(
+      '${AuthLogTags.authManager} loadUserFromStorage '
+      'hasRawUser=${jsonString != null && jsonString.isNotEmpty}',
+    );
     if (jsonString != null && jsonString.isNotEmpty) {
       try {
         final decoded = json.decode(jsonString) as Map<String, dynamic>;
@@ -165,11 +186,16 @@ class AuthManager {
     }
 
     final guestFlag = await storage.readBool(AuthStorageKeys.guestFlag);
+    printM('${AuthLogTags.authManager} guestFlagFromStorage=$guestFlag');
     state.setGuest(guestFlag ?? false);
   }
 
   /// Forwards status changes from dio_refresh_bot into the reactive notifier.
   void _onAuthStatusChanged(AuthStatus status) {
+    printC(
+      '${AuthLogTags.authManager} token status stream -> '
+      '${status.status}',
+    );
     state.setAuthStatus(status);
   }
 }

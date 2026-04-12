@@ -96,6 +96,7 @@ Future<void> _initializeNotifications() async {
       options: const NotificationInitOptions(
         initializeFirebase: false,
         enableFcm: false,
+        requestPermissionsAtStartup: false,
       ),
       onNotificationTap: (payload) async {
         await _handleNotificationNavigation(payload);

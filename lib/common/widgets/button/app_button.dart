@@ -510,7 +510,7 @@ class _AppButtonState extends State<AppButton>
 
     /// Swap content with a lightweight loading indicator.
     final content = widget.isLoading
-        ? LoadingDots(color: style.foreground)
+        ? FittedBox(child: LoadingDots(color: style.foreground))
         : widget.child.build(context, foreground: style.foreground);
 
     /// We use low-level gesture callbacks to drive the press animation and

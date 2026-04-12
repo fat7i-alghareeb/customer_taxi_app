@@ -1,11 +1,12 @@
 import '../../flavors.dart';
 import '../../utils/helpers/colored_print.dart';
+import '../config/env/env.dart';
 
 class ApiConfig {
   ApiConfig._();
 
-  static const String _stageBaseUrl = '';
-  static const String _productionBaseUrl = '';
+  static String get _stageBaseUrl => Env.stageBaseUrl;
+  static String get _productionBaseUrl => Env.productionBaseUrl;
 
   static bool _hasLoggedBaseUrl = false;
 

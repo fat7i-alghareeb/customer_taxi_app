@@ -66,6 +66,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>GoogleMapsApiKey</key>
+	<string>{apiKey}</string>
 
     <!-- Location Permissions -->
     <key>NSLocationWhenInUseUsageDescription</key>

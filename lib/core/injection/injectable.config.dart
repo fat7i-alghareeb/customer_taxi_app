@@ -33,8 +33,14 @@ import 'package:customertaxi/core/notification/notification_timezone_service.dar
 import 'package:customertaxi/core/router/router_config.dart' as _i434;
 import 'package:customertaxi/core/services/localization/locale_service.dart'
     as _i504;
+import 'package:customertaxi/core/services/location/location_service.dart'
+    as _i396;
 import 'package:customertaxi/core/services/onboarding/onboarding_service.dart'
     as _i389;
+import 'package:customertaxi/core/services/permissions/location_permission_service.dart'
+    as _i331;
+import 'package:customertaxi/core/services/permissions/permissions_coordinator.dart'
+    as _i102;
 import 'package:customertaxi/core/services/session/auth_manager.dart' as _i814;
 import 'package:customertaxi/core/services/session/auth_state_notifier.dart'
     as _i32;
@@ -62,8 +68,6 @@ import 'package:customertaxi/features/root/domain/repositories/root_repository.d
     as _i549;
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart'
     as _i144;
-import 'package:customertaxi/features/root/presentation/ui/widgets/nav_bar/navigation_controller.dart'
-    as _i452;
 import 'package:injectable/injectable.dart' as _i526;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -78,7 +82,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.storageService,
       preResolve: true,
     );
-    gh.factory<_i452.NavigationController>(() => _i452.NavigationController());
     gh.lazySingleton<_i18.CustomDioInterceptor>(
       () => _i18.CustomDioInterceptor(),
     );
@@ -101,6 +104,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i434.AppRouteRegistry>(
       () => const _i434.AppRouteRegistry(),
     );
+    gh.lazySingleton<_i396.LocationService>(
+      () => const _i396.LocationService(),
+    );
+    gh.lazySingleton<_i331.LocationPermissionService>(
+      () => const _i331.LocationPermissionService(),
+    );
     gh.lazySingleton<_i32.AuthStateNotifier>(() => _i32.AuthStateNotifier());
     gh.lazySingleton<_i511.NotificationCoordinator>(
       () => _i511.NotificationCoordinator(
@@ -108,6 +117,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i661.NotificationTimezoneService>(),
         gh<_i181.NotificationLocalService>(),
         gh<_i226.NotificationFcmService>(),
+      ),
+    );
+    gh.lazySingleton<_i102.PermissionsCoordinator>(
+      () => _i102.PermissionsCoordinator(
+        gh<_i511.NotificationCoordinator>(),
+        gh<_i331.LocationPermissionService>(),
+        gh<_i396.LocationService>(),
       ),
     );
     gh.lazySingleton<_i504.LocaleService>(
@@ -121,6 +137,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i998.ThemeController>(
       () => _i998.ThemeController(gh<_i742.StorageService>()),
+    );
+    gh.factory<_i144.RootBloc>(
+      () => _i144.RootBloc(
+        gh<_i102.PermissionsCoordinator>(),
+        gh<_i396.LocationService>(),
+      ),
     );
     gh.lazySingleton<_i341.LocalizationInterceptor>(
       () => _i341.LocalizationInterceptor(gh<_i504.LocaleService>()),
@@ -136,6 +158,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i434.AppRouterConfig(
         gh<_i32.AuthStateNotifier>(),
         gh<_i389.OnboardingService>(),
+        gh<_i102.PermissionsCoordinator>(),
         gh<_i434.AppRouteRegistry>(),
       ),
     );
@@ -167,7 +190,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i770.RootFacade>(
       () => _i770.RootFacade(gh<_i549.RootRepository>()),
     );
-    gh.factory<_i144.RootBloc>(() => _i144.RootBloc(gh<_i770.RootFacade>()));
     gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
     return this;
   }

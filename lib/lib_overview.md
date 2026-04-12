@@ -21,17 +21,10 @@ The initialization of the application is a strictly ordered async sequence. AI a
 4. **Localization Core**: `EasyLocalization.ensureInitialized()`.
 5. **Controller Initialization**: `ThemeController.initialize()`.
 6. **Auth & Network Warming**: `AuthManager.initialize()` (Loads JWT and Session state).
-7. **Data Prefetching (Silent)**: Warming up `CurrencyCatalog`, `VaultCatalog`, and `PartiesCatalog` facades.
+7. **Notifications Infra Init**: `NotificationCoordinator.initialize(...)` without runtime prompt (`requestPermissionsAtStartup: false`).
 8. **Locale Resolution**: `LocaleService.resolveInitialLocale()`.
-9. **Engine Binding**: `WidgetsFlutterBinding.ensureInitialized()` and `SystemUiMode.edgeToEdge`.
-10. **Flavor Discovery**: Resolving `F.appFlavor` from the native environment.
-11. **Dependency Injection**: `configureDependencies()` (GetIt/Injectable).
-12. **Localization Core**: `EasyLocalization.ensureInitialized()`.
-13. **Controller Initialization**: `ThemeController.initialize()`.
-14. **Auth & Network Warming**: `AuthManager.initialize()` (Loads JWT and Session state).
-15. **Data Prefetching (Silent)**: Warming up `CurrencyCatalog`, `VaultCatalog`, and `PartiesCatalog` facades.
-16. **Locale Resolution**: `LocaleService.resolveInitialLocale()`.
-17. **Guarded Run**: Launching `ScreenUtilInit` and the root `App`.
+9. **Guarded Run**: Launching `ScreenUtilInit` and the root `App`.
+10. **Post-Splash Permission Gate**: Routing enforces location permission before onboarding/auth/root.
 
 ---
 
