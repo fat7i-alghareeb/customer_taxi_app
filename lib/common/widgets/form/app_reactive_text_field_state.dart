@@ -48,7 +48,7 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode()..addListener(_onFocusChanged);
+    _focusNode = (widget.focusNode ?? FocusNode())..addListener(_onFocusChanged);
 
     if (widget._type == _AppReactiveTextFieldType.password) {
       _obscure = widget.passwordObscureText;
@@ -97,9 +97,10 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
   void dispose() {
     disposeDebounce();
     _deferValidationDebounce?.cancel();
-    _focusNode
-      ..removeListener(_onFocusChanged)
-      ..dispose();
+    _focusNode.removeListener(_onFocusChanged);
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    }
     _phoneController?.dispose();
     super.dispose();
   }
@@ -479,7 +480,10 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
       textDirection: direction,
       child: Row(
         children: <Widget>[
-          if (widget.affixes.prefixIcon != null)
+          if (widget.prefix != null) ...[
+            widget.prefix!,
+            AppSpacing.sm.horizontalSpace,
+          ] else if (widget.affixes.prefixIcon != null) ...[
             _PrefixSuffixSlot(
               onTap: widget.affixes.onPrefixTap,
               child: widget.affixes.prefixIcon!.build(
@@ -488,7 +492,8 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
                 size: 20,
               ),
             ),
-          if (widget.affixes.prefixIcon != null) AppSpacing.sm.horizontalSpace,
+            AppSpacing.sm.horizontalSpace,
+          ],
           Expanded(
             child: ReactiveTextField<String>(
               formControlName: widget.formControlName,
@@ -533,7 +538,10 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
               },
             ),
           ),
-          if (suffixWidget != null || widget.affixes.suffixIcon != null) ...[
+          if (widget.suffix != null) ...[
+            AppSpacing.sm.horizontalSpace,
+            widget.suffix!,
+          ] else if (suffixWidget != null || widget.affixes.suffixIcon != null) ...[
             AppSpacing.sm.horizontalSpace,
             _PrefixSuffixSlot(
               onTap:

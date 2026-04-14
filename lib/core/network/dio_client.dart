@@ -168,6 +168,13 @@ void _configureJwtFlow({
             printY('[DioClient] shouldRefresh=false (missing token)');
             return false;
           }
+          if (ApiEndpoints.refreshToken.isEmpty) {
+            printY(
+              '[DioClient] shouldRefresh=false '
+              '(refresh endpoint not configured)',
+            );
+            return false;
+          }
 
           final aboutToExpire = isTokenAboutToExpire(token.accessToken);
           final unauthorized = response?.statusCode == 401;
@@ -213,7 +220,10 @@ void _configureJwtFlow({
           }
 
           if (ApiEndpoints.refreshToken.isEmpty) {
-            throw Exception('ApiEndpoints.refreshToken is not configured');
+            printY(
+              '[DioClient] Refresh skipped because endpoint is not configured',
+            );
+            return token;
           }
 
           final response = await tokenDio.post<dynamic>(

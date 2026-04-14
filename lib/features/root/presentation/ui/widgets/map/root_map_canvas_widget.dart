@@ -7,11 +7,14 @@ class RootMapCanvasWidget extends StatelessWidget {
     super.key,
     required this.currentLocation,
     required this.onMapCreated,
+    this.onCameraMove,
+    this.onCameraIdle,
   });
-
 
   final RootMapLocationEntity currentLocation;
   final void Function(GoogleMapController controller) onMapCreated;
+  final void Function(CameraPosition position)? onCameraMove;
+  final VoidCallback? onCameraIdle;
 
   LatLng get _latLng =>
       LatLng(currentLocation.latitude, currentLocation.longitude);
@@ -25,6 +28,8 @@ class RootMapCanvasWidget extends StatelessWidget {
     return RepaintBoundary(
       child: GoogleMap(
         onMapCreated: onMapCreated,
+        onCameraMove: onCameraMove,
+        onCameraIdle: onCameraIdle,
         initialCameraPosition: CameraPosition(
           target: _latLng,
           zoom: currentLocation.zoom,

@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
+import 'package:customertaxi/features/order/presentation/ui/widgets/order_body.dart';
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
 
@@ -28,7 +30,24 @@ class RootBody extends StatelessWidget {
               const RootEvent.mapBootstrapRequested(),
             );
           },
-          success: (location) => RootMapSection(initialLocation: location),
+          success: (location) => Stack(
+            fit: StackFit.expand,
+            children: [
+              RootMapSection(
+                initialLocation: location,
+                onCameraIdleLocationChanged: (target) {
+                  context.read<OrderBloc>().add(
+                    OrderEvent.mapCameraTargetUpdated(
+                      latitude: target.latitude,
+                      longitude: target.longitude,
+                      zoom: target.zoom,
+                    ),
+                  );
+                },
+              ),
+              const OrderBody(),
+            ],
+          ),
         );
       },
     );

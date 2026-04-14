@@ -65,6 +65,14 @@ abstract class AppButtonChild {
       padding: padding,
     );
   }
+
+  /// Arbitrary custom content.
+  factory AppButtonChild.custom(
+    Widget child, {
+    EdgeInsetsGeometry? padding,
+  }) {
+    return _CustomButtonChild(child, padding: padding);
+  }
 }
 
 enum AppButtonIconPosition { leading, trailing }
@@ -180,5 +188,22 @@ class _LabelIconButtonChild extends AppButtonChild {
   EdgeInsetsGeometry defaultPadding(BuildContext context) {
     return padding ??
         REdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 12);
+  }
+}
+
+class _CustomButtonChild extends AppButtonChild {
+  const _CustomButtonChild(this.child, {this.padding});
+
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+
+  @override
+  Widget build(BuildContext context, {required Color foreground}) {
+    return child;
+  }
+
+  @override
+  EdgeInsetsGeometry defaultPadding(BuildContext context) {
+    return padding ?? EdgeInsets.zero;
   }
 }

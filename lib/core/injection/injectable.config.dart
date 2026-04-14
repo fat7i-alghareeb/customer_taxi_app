@@ -58,6 +58,16 @@ import 'package:customertaxi/features/auth/domain/repositories/auth_repository.d
     as _i618;
 import 'package:customertaxi/features/auth/presentation/states/auth_bloc.dart'
     as _i781;
+import 'package:customertaxi/features/order/data/datasources/order_remote_datasource.dart'
+    as _i93;
+import 'package:customertaxi/features/order/data/repositories/order_repository_impl.dart'
+    as _i312;
+import 'package:customertaxi/features/order/domain/facade/order_facade.dart'
+    as _i925;
+import 'package:customertaxi/features/order/domain/repositories/order_repository.dart'
+    as _i153;
+import 'package:customertaxi/features/order/presentation/states/order_bloc.dart'
+    as _i47;
 import 'package:customertaxi/features/root/data/datasources/root_remote_datasource.dart'
     as _i312;
 import 'package:customertaxi/features/root/data/repositories/root_repository_impl.dart'
@@ -175,6 +185,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i54.AuthRemoteDataSource>(
       () => _i54.AuthRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i93.OrderRemoteDataSource>(
+      () => _i93.OrderRemoteDataSource(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i312.RootRemoteDataSource>(
       () => _i312.RootRemoteDataSource(gh<_i361.Dio>()),
     );
@@ -190,7 +203,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i770.RootFacade>(
       () => _i770.RootFacade(gh<_i549.RootRepository>()),
     );
+    gh.lazySingleton<_i153.OrderRepository>(
+      () => _i312.OrderRepositoryImpl(gh<_i93.OrderRemoteDataSource>()),
+    );
     gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
+    gh.lazySingleton<_i925.OrderFacade>(
+      () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
+    );
+    gh.factory<_i47.OrderBloc>(
+      () =>
+          _i47.OrderBloc(gh<_i925.OrderFacade>(), gh<_i396.LocationService>()),
+    );
     return this;
   }
 }

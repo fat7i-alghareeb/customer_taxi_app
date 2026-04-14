@@ -35,9 +35,16 @@
   "search": "بحث",
   "emptyStateNoData": "لا توجد بيانات متاحة.",
   "somethingWentWrong": "حدث خطأ ما.",
+  "suggestions": "اقتراحات",
   "retry": "إعادة المحاولة",
   "from": "من",
   "to": "إلى",
+  "orderNow": "اطلب الآن",
+  "setOnMap": "حدد على الخريطة",
+  "confirmPoint": "تأكيد النقطة",
+  "confirmOrder": "تأكيد الطلب",
+  "searchFromLocation": "ابحث عن موقع الانطلاق",
+  "searchToLocation": "ابحث عن موقع الوجهة",
   "clear": "مسح",
   "cancel": "إلغاء",
   "done": "تم",
@@ -108,5 +115,6 @@
   "onboardingSubtitle3": "سائقونا المدربون تدريباً عالياً مستعدون لخدمتك بابتسامة.",
   "onboardingSkip": "تخطي",
   "onboardingContinue": "متابعة",
-  "onboardingGetStarted": "ابدأ الآن"
+  "onboardingGetStarted": "ابدأ الآن",
+  "planYourTrip": "خطط لرحلتك"
 }

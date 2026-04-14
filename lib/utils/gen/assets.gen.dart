@@ -34,6 +34,10 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding3 =>
       const AssetGenImage('assets/images/onboarding_3.png');
 
+  /// File path: assets/images/order_now_car.png
+  AssetGenImage get orderNowCar =>
+      const AssetGenImage('assets/images/order_now_car.png');
+
   /// File path: assets/images/splash_dark.png
   AssetGenImage get splashDark =>
       const AssetGenImage('assets/images/splash_dark.png');
@@ -49,6 +53,7 @@ class $AssetsImagesGen {
     onboarding1,
     onboarding2,
     onboarding3,
+    orderNowCar,
     splashDark,
     splashLight,
   ];
@@ -63,8 +68,11 @@ class $AssetsL10nGen {
   /// File path: assets/l10n/en.json
   String get en => 'assets/l10n/en.json';
 
+  /// File path: assets/l10n/nl.json
+  String get nl => 'assets/l10n/nl.json';
+
   /// List of all assets
-  List<String> get values => [ar, en];
+  List<String> get values => [ar, en, nl];
 }
 
 class $AssetsSvgIconsGen {

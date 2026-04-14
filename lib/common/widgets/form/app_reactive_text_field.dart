@@ -103,6 +103,9 @@ class AppReactiveTextField extends StatefulWidget {
     this.phoneCountries,
     this.phoneUseEmojiFlags = true,
     this.phoneDefaultIsoCode,
+    this.focusNode,
+    this.prefix,
+    this.suffix,
 
     required _AppReactiveTextFieldType type,
   }) : _type = type;
@@ -130,6 +133,9 @@ class AppReactiveTextField extends StatefulWidget {
     AppReactiveTextFieldValueCallback? onChangedDebounced,
     Duration onChangedDebounceDuration = const Duration(milliseconds: 400),
     AppReactiveTextFieldValueCallback? onSubmitted,
+    FocusNode? focusNode,
+    Widget? prefix,
+    Widget? suffix,
   }) {
     return AppReactiveTextField._(
       key: key,
@@ -153,6 +159,9 @@ class AppReactiveTextField extends StatefulWidget {
       onChangedDebounced: onChangedDebounced,
       onChangedDebounceDuration: onChangedDebounceDuration,
       onSubmitted: onSubmitted,
+      focusNode: focusNode,
+      prefix: prefix,
+      suffix: suffix,
       type: _AppReactiveTextFieldType.text,
     );
   }
@@ -518,6 +527,10 @@ class AppReactiveTextField extends StatefulWidget {
   /// If not provided, the widget tries to use `Localizations.localeOf(context)`
   /// country code, and falls back to `US`.
   final String? phoneDefaultIsoCode;
+
+  final FocusNode? focusNode;
+  final Widget? prefix;
+  final Widget? suffix;
 
   final _AppReactiveTextFieldType _type;
 

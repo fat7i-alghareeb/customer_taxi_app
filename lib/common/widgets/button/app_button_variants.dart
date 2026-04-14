@@ -27,6 +27,7 @@ class AppButtonLayout {
     this.borderRadius,
     this.shape = AppButtonShape.rounded,
     this.contentPadding,
+    this.backgroundColor,
   });
 
   final double? width;
@@ -39,6 +40,8 @@ class AppButtonLayout {
   final AppButtonShape shape;
 
   final EdgeInsetsGeometry? contentPadding;
+
+  final Color? backgroundColor;
 }
 
 abstract class AppButtonVariant {
@@ -84,12 +87,14 @@ class AppButtonStyleResolver {
     required bool noShadow,
     AppButtonShadowVariant? shadowVariant,
     List<BoxShadow>? customShadows,
+    AppButtonLayout layout = const AppButtonLayout(),
   }) {
     final effectiveVariant = isActive ? variant : AppButtonVariant.grey;
 
-    final color = fill == AppButtonFill.solid
-        ? effectiveVariant.solidColor(context)
-        : null;
+    final color = layout.backgroundColor ??
+        (fill == AppButtonFill.solid
+            ? effectiveVariant.solidColor(context)
+            : null);
 
     final gradient = fill == AppButtonFill.gradient
         ? effectiveVariant.gradient(context)

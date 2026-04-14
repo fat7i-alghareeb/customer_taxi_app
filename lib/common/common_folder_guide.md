@@ -48,8 +48,6 @@ This project uses `flutter_screenutil` for all layout dimensions. Using raw `dou
 2. **.w (Width)**: Use for horizontal margins, padding, and screen-relative horizontal dimensions.
 3. **.sp (Scalable Pixels)**: Use for **EVERYTHING** related to text (fontSize) and any box that must grow if the user scales their system font (like button heights).
 
-**Standard Padding Example**
-
 ```dart
 Padding(
   padding: EdgeInsets.symmetric(

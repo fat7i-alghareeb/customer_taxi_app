@@ -35,9 +35,16 @@
   "search": "Search",
   "emptyStateNoData": "No data available.",
   "somethingWentWrong": "Something went wrong.",
+  "suggestions": "Suggestions",
   "retry": "Retry",
   "from": "From",
   "to": "To",
+  "orderNow": "Order now",
+  "setOnMap": "Set on map",
+  "confirmPoint": "Confirm point",
+  "confirmOrder": "Confirm order",
+  "searchFromLocation": "Search pickup location",
+  "searchToLocation": "Search destination location",
   "clear": "Clear",
   "cancel": "Cancel",
   "done": "Done",
@@ -108,5 +115,6 @@
   "onboardingSubtitle3": "Our highly trained chauffeurs are ready to serve you with a smile.",
   "onboardingSkip": "Skip",
   "onboardingContinue": "Continue",
-  "onboardingGetStarted": "Get Started"
+  "onboardingGetStarted": "Get Started",
+  "planYourTrip": "Plan your trip"
 }

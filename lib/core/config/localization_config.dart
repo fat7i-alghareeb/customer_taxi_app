@@ -8,13 +8,13 @@ class AppLocalizationConfig {
   /// All supported language codes. Add new languages here only
   /// (e.g. 'tr', 'fr'), and both EasyLocalization and the
   /// AppStrings generator will pick them up.
-  static const List<String> supportedLanguageCodes = <String>['en', 'ar'];
+  static const List<String> supportedLanguageCodes = <String>['en', 'ar', 'nl'];
 }
 
 /// High-level language enum used across the app.
 ///
 /// Keep this in sync with [AppLocalizationConfig.supportedLanguageCodes].
-enum AppLanguage { ar, en }
+enum AppLanguage { ar, en, nl }
 
 extension AppLanguageX on AppLanguage {
   /// Returns the language code as used in JSON files and headers.
@@ -24,6 +24,8 @@ extension AppLanguageX on AppLanguage {
         return 'ar';
       case AppLanguage.en:
         return 'en';
+      case AppLanguage.nl:
+        return 'nl';
     }
   }
 }

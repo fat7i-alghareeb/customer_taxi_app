@@ -69,7 +69,7 @@ class AppDurations {
   static const Duration normal = Duration(milliseconds: 250);
 
   /// Longer transitions (e.g. page transitions, dialogs).
-  static const Duration slow = Duration(milliseconds: 350);
+  static const Duration slow = Duration(milliseconds: 400);
 }
 
 /// Curves used for animations.

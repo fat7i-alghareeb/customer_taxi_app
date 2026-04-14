@@ -10,13 +10,20 @@ import 'package:customertaxi/features/root/domain/entities/root_map_location_ent
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
 
 import '../../../../../../utils/constants/app_flow_constants.dart';
+import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
+import 'package:customertaxi/features/order/constants/order_constants.dart';
 import 'root_map_canvas_widget.dart';
 import 'root_map_controls_section.dart';
 
 class RootMapSection extends StatefulWidget {
-  const RootMapSection({super.key, required this.initialLocation});
+  const RootMapSection({
+    super.key,
+    required this.initialLocation,
+    this.onCameraIdleLocationChanged,
+  });
 
   final RootMapLocationEntity initialLocation;
+  final ValueChanged<RootMapLocationEntity>? onCameraIdleLocationChanged;
 
   @override
   State<RootMapSection> createState() => _RootMapSectionState();
@@ -28,6 +35,7 @@ class _RootMapSectionState extends State<RootMapSection>
   late RootMapLocationEntity _currentLocation;
   bool _isAnimating = false;
   late final AnimationController _flightController;
+  CameraPosition? _lastCameraPosition;
 
   @override
   void initState() {
@@ -70,29 +78,24 @@ class _RootMapSectionState extends State<RootMapSection>
     _mapController = controller;
   }
 
-  Future<void> _onZoomInTap() async {
-    final controller = _mapController;
-    if (controller == null) {
-      printY('[RootMapSection] zoomIn ignored (controller not ready)');
-      return;
-    }
-
-    printM('[RootMapSection] zoomIn');
-
-    await controller.animateCamera(CameraUpdate.zoomIn());
+  void _onCameraMove(CameraPosition position) {
+    _lastCameraPosition = position;
   }
 
-  Future<void> _onZoomOutTap() async {
-    final controller = _mapController;
-    if (controller == null) {
-      printY('[RootMapSection] zoomOut ignored (controller not ready)');
-      return;
-    }
+  void _onCameraIdle() {
+    final target = _lastCameraPosition;
+    if (target == null) return;
 
-    printM('[RootMapSection] zoomOut');
-
-    await controller.animateCamera(CameraUpdate.zoomOut());
+    widget.onCameraIdleLocationChanged?.call(
+      RootMapLocationEntity(
+        latitude: target.target.latitude,
+        longitude: target.target.longitude,
+        zoom: target.zoom,
+      ),
+    );
   }
+
+  // Zoom methods removed as requested
 
   LatLng _lerpLatLng(LatLng a, LatLng b, double t) {
     return LatLng(
@@ -245,26 +248,42 @@ class _RootMapSectionState extends State<RootMapSection>
                   RootMapCanvasWidget(
                     currentLocation: _currentLocation,
                     onMapCreated: _onMapCreated,
+                    onCameraMove: _onCameraMove,
+                    onCameraIdle: _onCameraIdle,
                   ),
-                  PositionedDirectional(
-                    end: 30.w,
-                    bottom: 40.h,
-                    child: BlocBuilder<RootBloc, RootState>(
-                      buildWhen: (previous, current) =>
-                          previous.recenterState != current.recenterState,
-                      builder: (context, state) {
-                        return RootMapControlsSection(
-                          onRecenterTap: _onRecenterTap,
-                          onZoomInTap: () {
-                            _onZoomInTap();
+                  BlocBuilder<OrderBloc, OrderState>(
+                    buildWhen: (p, c) => p.sheetMode != c.sheetMode,
+                    builder: (context, orderState) {
+                      final double sheetHeight = switch (orderState.sheetMode) {
+                        OrderSheetMode.collapsed =>
+                          OrderConstants.collapsedSheetHeight.h,
+                        OrderSheetMode.mapPicking =>
+                          OrderConstants.mapPickSheetHeight.h,
+                        OrderSheetMode.expanded => context.screenHeight,
+                      };
+
+                      // Only show controls if the sheet is not expanded
+                      if (orderState.sheetMode == OrderSheetMode.expanded) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return AnimatedPositionedDirectional(
+                        duration: AppDurations.slow,
+                        curve: Curves.easeInOut,
+                        end: 20.w,
+                        bottom: sheetHeight + 16.h,
+                        child: BlocBuilder<RootBloc, RootState>(
+                          buildWhen: (previous, current) =>
+                              previous.recenterState != current.recenterState,
+                          builder: (context, state) {
+                            return RootMapControlsSection(
+                              onRecenterTap: _onRecenterTap,
+                              recenterLoading: state.recenterState.isLoading,
+                            );
                           },
-                          onZoomOutTap: () {
-                            _onZoomOutTap();
-                          },
-                          recenterLoading: state.recenterState.isLoading,
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               )

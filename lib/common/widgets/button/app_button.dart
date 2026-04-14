@@ -476,6 +476,7 @@ class _AppButtonState extends State<AppButton>
       noShadow: widget.noShadow,
       shadowVariant: widget.shadowVariant,
       customShadows: widget.customShadows,
+      layout: widget.layout,
     );
 
     /// Optional fixed width. When null, the button wraps to content width.

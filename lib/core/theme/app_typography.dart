@@ -15,8 +15,7 @@ class AppTypography {
   /// To swap fonts, change this to another [GoogleFonts] family and adjust
   /// weights in this method as needed.
   static TextTheme get baseTextTheme {
-    // final textTheme = context.textTheme;
-    return GoogleFonts.reemKufiTextTheme();
+    return GoogleFonts.outfitTextTheme();
   }
 
   static TextTheme? _cachedTextTheme;

@@ -47,11 +47,17 @@ extension AppThemeContextX on BuildContext {
   /// Color used for content on top of [background].
   Color get onBackground => colorScheme.onSurface;
 
-  /// Default surface color for components.
+  /// Surface color for components.
   Color get surface => colorScheme.surface;
 
   /// Color used for content on top of [surface].
   Color get onSurface => colorScheme.onSurface;
+
+  /// Container colors for modern surface designs.
+  Color get primaryContainer => colorScheme.primaryContainer;
+  Color get onPrimaryContainer => colorScheme.onPrimaryContainer;
+  Color get secondaryContainer => colorScheme.secondaryContainer;
+  Color get onSecondaryContainer => colorScheme.onSecondaryContainer;
 
   Color get grey => colorScheme.outline;
 

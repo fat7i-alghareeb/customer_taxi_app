@@ -5,7 +5,6 @@ import 'package:customertaxi/core/services/location/location_service.dart';
 import 'package:customertaxi/core/services/permissions/permissions_coordinator.dart';
 import 'package:customertaxi/utils/constants/app_flow_constants.dart';
 import 'package:customertaxi/utils/helpers/app_strings.dart';
-import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/utils/bloc_status.dart';
 import '../../domain/entities/root_map_location_entity.dart';
@@ -29,7 +28,6 @@ class RootBloc extends Bloc<RootEvent, RootState> {
   final LocationService _locationService;
 
   Future<void> _onStarted(_Started event, Emitter<RootState> emit) async {
-    printC('[RootBloc] started -> mapBootstrapRequested');
     add(const RootEvent.mapBootstrapRequested());
   }
 
@@ -37,13 +35,11 @@ class RootBloc extends Bloc<RootEvent, RootState> {
     _MapBootstrapRequested event,
     Emitter<RootState> emit,
   ) async {
-    printC('[RootBloc] map bootstrap start (fast mode)');
     emit(state.copyWith(mapBootstrapState: const BlocStatus.loading()));
 
     // 1. FAST PATH: Check last known position immediately
     final lastKnown = await _locationService.getLastKnownPosition();
     if (lastKnown != null) {
-      printG('[RootBloc] bootstrap: found lastKnown position');
       emit(
         state.copyWith(
           mapBootstrapState: BlocStatus.success(
@@ -57,11 +53,10 @@ class RootBloc extends Bloc<RootEvent, RootState> {
       );
     } else {
       // 2. FALLBACK PATH: Use Aleppo default pivot instantly
-      printY('[RootBloc] bootstrap: no lastKnown, using default Aleppo');
       emit(
         state.copyWith(
-          mapBootstrapState: BlocStatus.success(
-            const RootMapLocationEntity(
+          mapBootstrapState: const BlocStatus.success(
+            RootMapLocationEntity(
               latitude: MapConfig.defaultLat,
               longitude: MapConfig.defaultLng,
               zoom: MapConfig.initialZoom, // Start zoomed out
@@ -82,13 +77,12 @@ class RootBloc extends Bloc<RootEvent, RootState> {
       final status = await _resolveCurrentLocationStatus();
       status.maybeWhen(
         success: (location) {
-          printG('[RootBloc] accurate location resolved background -> dispatch');
           add(RootEvent.accurateLocationResolved(location));
         },
         orElse: () {},
       );
     } catch (e) {
-      printY('[RootBloc] background accurate resolution failed: $e');
+      // Silent resolution failure
     }
   }
 
@@ -96,7 +90,6 @@ class RootBloc extends Bloc<RootEvent, RootState> {
     _AccurateLocationResolved event,
     Emitter<RootState> emit,
   ) {
-    printG('[RootBloc] applying accurate location update');
     emit(state.copyWith(mapBootstrapState: BlocStatus.success(event.location)));
   }
 
@@ -104,13 +97,11 @@ class RootBloc extends Bloc<RootEvent, RootState> {
     _RecenterRequested event,
     Emitter<RootState> emit,
   ) async {
-    printC('[RootBloc] recenter start (ultra-fast mode)');
     emit(state.copyWith(recenterState: const BlocStatus.loading()));
 
     // 1. FASTEST PATH: Immediate move to last known without checks
     final lastKnown = await _locationService.getLastKnownPosition();
     if (lastKnown != null) {
-      printG('[RootBloc] recenter: immediate lastKnown resolution');
       final location = RootMapLocationEntity(
         latitude: lastKnown.latitude,
         longitude: lastKnown.longitude,
@@ -130,7 +121,6 @@ class RootBloc extends Bloc<RootEvent, RootState> {
 
   Future<BlocStatus<RootMapLocationEntity>>
   _resolveCurrentLocationStatus() async {
-    printM('[RootBloc] resolveCurrentLocationStatus (lean mode)');
     try {
       final position = await _locationService.getCurrentPosition();
       return BlocStatus<RootMapLocationEntity>.success(
@@ -141,10 +131,10 @@ class RootBloc extends Bloc<RootEvent, RootState> {
         ),
       );
     } catch (e) {
-      printY('[RootBloc] getCurrentPosition failed: $e');
       return BlocStatus<RootMapLocationEntity>.failure(
         AppStrings.rootMapCurrentLocationUnavailable,
       );
     }
   }
 }
+
