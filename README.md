@@ -15,4 +15,11 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-# customertaxi
+
+## Current feature highlights
+
+- Order flow is map-overlay based on the Root screen.
+- From/To location confirmation now fetches and renders a Google Directions route.
+- Approximate trip time is shown from Google duration text.
+- Vehicle selection step includes 3 ride categories (Standard, Comfort, 8-passenger bus).
+- Vehicle prices are fetched in one mocked datasource response, with price-only loading in cards.

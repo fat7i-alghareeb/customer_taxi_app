@@ -12,6 +12,8 @@ import '../../../states/order_bloc.dart';
 import 'order_location_field_widget.dart';
 import 'order_location_suggestions_widget.dart';
 import 'order_map_context_trigger_widget.dart';
+import 'order_pickup_point_step_widget.dart';
+import 'order_vehicle_selection_step_widget.dart';
 
 class OrderExpandedSheetWidget extends StatefulWidget {
   const OrderExpandedSheetWidget({super.key, required this.state});
@@ -34,6 +36,8 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
   String? _ignoreNextFromQueryValue;
   String? _ignoreNextToQueryValue;
+  String? _ignoreNextPickupStreetValue;
+  String? _ignoreNextPickupHouseNumberValue;
 
   @override
   void initState() {
@@ -121,22 +125,38 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     if (field == OrderForms.toField) {
       _ignoreNextToQueryValue = value;
     }
+    if (field == OrderForms.pickupStreetField) {
+      _ignoreNextPickupStreetValue = value;
+    }
+    if (field == OrderForms.pickupHouseNumberField) {
+      _ignoreNextPickupHouseNumberValue = value;
+    }
 
     _isSyncing = true;
     control.updateValue(value, emitEvent: true);
     _isSyncing = false;
   }
 
-  bool _consumeIgnoredQueryIfNeeded({
+  bool _consumeIgnoredValueIfNeeded({
     required String field,
-    required String query,
+    required String value,
   }) {
-    if (field == OrderForms.fromField && _ignoreNextFromQueryValue == query) {
+    if (field == OrderForms.fromField && _ignoreNextFromQueryValue == value) {
       _ignoreNextFromQueryValue = null;
       return true;
     }
-    if (field == OrderForms.toField && _ignoreNextToQueryValue == query) {
+    if (field == OrderForms.toField && _ignoreNextToQueryValue == value) {
       _ignoreNextToQueryValue = null;
+      return true;
+    }
+    if (field == OrderForms.pickupStreetField &&
+        _ignoreNextPickupStreetValue == value) {
+      _ignoreNextPickupStreetValue = null;
+      return true;
+    }
+    if (field == OrderForms.pickupHouseNumberField &&
+        _ignoreNextPickupHouseNumberValue == value) {
+      _ignoreNextPickupHouseNumberValue = null;
       return true;
     }
     return false;
@@ -152,11 +172,33 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     if (toLabel != null && toLabel.trim().isNotEmpty) {
       _syncControlValue(OrderForms.toField, toLabel);
     }
+
+    _syncControlValue(OrderForms.pickupStreetField, state.pickupStreetName);
+    _syncControlValue(
+      OrderForms.pickupHouseNumberField,
+      state.pickupHouseNumber,
+    );
   }
 
   bool get _isConfirmActive {
     return widget.state.fromLocationState.isSuccess &&
         widget.state.toLocationState.isSuccess;
+  }
+
+  bool get _isVehicleSelectionStep {
+    return widget.state.expandedStep == OrderExpandedStep.carSelection;
+  }
+
+  bool get _isPickupPointStep {
+    return widget.state.expandedStep == OrderExpandedStep.pickupPoint;
+  }
+
+  bool get _isVehicleConfirmActive {
+    return widget.state.selectedCarTypeId?.trim().isNotEmpty ?? false;
+  }
+
+  bool get _isPickupConfirmActive {
+    return widget.state.pickupPointState.isSuccess;
   }
 
   OrderLocationTarget get _resolvedMapTarget {
@@ -169,6 +211,8 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
         return widget.state.fromSuggestionsState;
       case OrderLocationTarget.to:
         return widget.state.toSuggestionsState;
+      case OrderLocationTarget.pickupPoint:
+        return const BlocStatus.initial();
     }
   }
 
@@ -249,9 +293,44 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                 ),
                 AppSpacing.sm.horizontalSpace,
+                if (_isVehicleSelectionStep || _isPickupPointStep)
+                  Padding(
+                    padding: REdgeInsetsDirectional.only(end: AppSpacing.sm),
+                    child: Material(
+                      color: context.onPrimary.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                        onTap: () {
+                          if (_isPickupPointStep) {
+                            context.read<OrderBloc>().add(
+                              const OrderEvent.pickupPointBackPressed(),
+                            );
+                            return;
+                          }
+
+                          context.read<OrderBloc>().add(
+                            const OrderEvent.vehicleStepBackPressed(),
+                          );
+                        },
+                        child: Padding(
+                          padding: REdgeInsets.all(AppSpacing.sm),
+                          child: FaIcon(
+                            FontAwesomeIcons.chevronLeft,
+                            size: 16.r,
+                            color: context.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 Expanded(
                   child: Text(
-                    AppStrings.planYourTrip,
+                    _isVehicleSelectionStep
+                        ? AppStrings.selectCarType
+                        : _isPickupPointStep
+                        ? AppStrings.selectPickupPoint
+                        : AppStrings.planYourTrip,
                     style: AppTextStyles.s18w600.copyWith(
                       color: context.onPrimary,
                       letterSpacing: -0.5,
@@ -296,9 +375,9 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                 },
                 onQueryChanged: (value) {
                   if (_isSyncing) return;
-                  if (_consumeIgnoredQueryIfNeeded(
+                  if (_consumeIgnoredValueIfNeeded(
                     field: OrderForms.fromField,
-                    query: value,
+                    value: value,
                   )) {
                     return;
                   }
@@ -320,9 +399,9 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                 },
                 onQueryChanged: (value) {
                   if (_isSyncing) return;
-                  if (_consumeIgnoredQueryIfNeeded(
+                  if (_consumeIgnoredValueIfNeeded(
                     field: OrderForms.toField,
-                    query: value,
+                    value: value,
                   )) {
                     return;
                   }
@@ -347,80 +426,234 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
           final confirmButton = AppButton.primary(
             onTap: () {
+              FocusScope.of(context).unfocus();
               context.read<OrderBloc>().add(
                 const OrderEvent.confirmOrderPressed(),
               );
             },
             layout: AppButtonLayout(height: 54.sp, borderRadius: AppRadii.lg),
+            child: AppButtonChild.label(AppStrings.confirmLocations),
+          );
+
+          final vehicleConfirmButton = AppButton.primary(
+            onTap: () {
+              context.read<OrderBloc>().add(
+                const OrderEvent.confirmCarSelectionPressed(),
+              );
+            },
+            layout: AppButtonLayout(height: 54.sp, borderRadius: AppRadii.lg),
+            child: AppButtonChild.label(AppStrings.done),
+          );
+
+          final pickupConfirmButton = AppButton.primary(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              context.read<OrderBloc>().add(
+                const OrderEvent.confirmPickupPointPressed(),
+              );
+            },
+            isActive: _isPickupConfirmActive,
+            layout: AppButtonLayout(height: 54.sp, borderRadius: AppRadii.lg),
             child: AppButtonChild.label(AppStrings.confirmOrder),
           );
 
-          return Column(
-            children: [
-              AppSpacing.xl.verticalSpace,
-              headerSection
-                  .animate()
-                  .fadeIn(delay: 50.ms)
-                  .slideY(begin: -0.1, curve: Curves.easeOutQuart),
-              AppSpacing.lg.verticalSpace,
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: REdgeInsets.only(
-                    left: AppSpacing.md,
-                    right: AppSpacing.md,
-                    top: AppSpacing.md,
-                    bottom: isKeyboardOpen
-                        ? keyboardInset + AppSpacing.md
-                        : AppSpacing.md,
+          if (_isVehicleSelectionStep) {
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: REdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.sm,
+                    ),
+                    child: OrderVehicleSelectionStepWidget(
+                      state: widget.state,
+                      onCarTypeTapped: (typeId) {
+                        context.read<OrderBloc>().add(
+                          OrderEvent.carTypeToggled(typeId),
+                        );
+                      },
+                    ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.08),
                   ),
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      fieldsSection
-                          .animate()
-                          .fadeIn(delay: 200.ms)
-                          .slideY(
-                            begin:
-                                0.15, // Increased from 0.05 for more prominent effect
-                            curve: Curves.easeOutCubic,
+                  if (_isVehicleConfirmActive && !isKeyboardOpen)
+                    Padding(
+                          padding: REdgeInsets.only(
+                            left: AppSpacing.md,
+                            right: AppSpacing.md,
+                            bottom: AppSpacing.xs,
                           ),
-                      AppSpacing.xl.verticalSpace,
-                      mapTrigger
-                          .animate()
-                          .fadeIn(delay: 350.ms)
-                          .slideY(begin: 0.1, curve: Curves.easeOutCubic),
-                      AppSpacing.xl.verticalSpace,
-                      if (_activeSuggestionsState.maybeWhen(
-                        success: (items) => items.isNotEmpty,
-                        orElse: () => false,
-                      )) ...[
-                        Text(
-                          AppStrings.suggestions,
-                          style: AppTextStyles.s12w400.copyWith(
-                            color: context.primary,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ).animate().fadeIn(delay: 450.ms).slideX(begin: -0.05),
-                        AppSpacing.xxl.verticalSpace,
-                      ],
-                      OrderLocationSuggestionsWidget(
-                        state: _activeSuggestionsState,
-                        onSelected: _onSharedSuggestionSelected,
-                      ).animate().fadeIn(delay: 550.ms),
-                    ],
-                  ),
-                ),
+                          child: vehicleConfirmButton,
+                        )
+                        .animate()
+                        .fadeIn(duration: AppDurations.slow)
+                        .moveY(
+                          begin: 16,
+                          end: 0,
+                          duration: AppDurations.slow,
+                          curve: Curves.easeOutCubic,
+                        ),
+                ],
               ),
-              if (_isConfirmActive && !isKeyboardOpen)
-                Padding(
-                      padding: REdgeInsets.all(AppSpacing.md),
-                      child: confirmButton,
-                    )
-                    .animate()
-                    .fadeIn(delay: 650.ms)
-                    .moveY(begin: 20, end: 0, curve: Curves.easeOutBack),
-            ],
+            );
+          }
+
+          if (_isPickupPointStep) {
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: REdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.sm,
+                    ),
+                    child: OrderPickupPointStepWidget(
+                      state: widget.state,
+                      onSetPickupOnMapPressed: () {
+                        FocusScope.of(context).unfocus();
+                        context.read<OrderBloc>().add(
+                          const OrderEvent.setOnMapPressed(
+                            OrderLocationTarget.pickupPoint,
+                          ),
+                        );
+                      },
+                      onPickupStreetChanged: (value) {
+                        if (_isSyncing) {
+                          return;
+                        }
+
+                        if (_consumeIgnoredValueIfNeeded(
+                          field: OrderForms.pickupStreetField,
+                          value: value,
+                        )) {
+                          return;
+                        }
+
+                        context.read<OrderBloc>().add(
+                          OrderEvent.pickupStreetChanged(value),
+                        );
+                      },
+                      onPickupHouseNumberChanged: (value) {
+                        if (_isSyncing) {
+                          return;
+                        }
+
+                        if (_consumeIgnoredValueIfNeeded(
+                          field: OrderForms.pickupHouseNumberField,
+                          value: value,
+                        )) {
+                          return;
+                        }
+
+                        context.read<OrderBloc>().add(
+                          OrderEvent.pickupHouseNumberChanged(value),
+                        );
+                      },
+                    ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.08),
+                  ),
+                  if (!isKeyboardOpen)
+                    Padding(
+                          padding: REdgeInsets.only(
+                            left: AppSpacing.md,
+                            right: AppSpacing.md,
+                            bottom: AppSpacing.xs,
+                          ),
+                          child: pickupConfirmButton,
+                        )
+                        .animate()
+                        .fadeIn(duration: AppDurations.slow)
+                        .moveY(
+                          begin: 16,
+                          end: 0,
+                          duration: AppDurations.slow,
+                          curve: Curves.easeOutCubic,
+                        ),
+                ],
+              ),
+            );
+          }
+
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final showInlineConfirm =
+                  _isConfirmActive &&
+                  !isKeyboardOpen &&
+                  constraints.maxHeight <= 220.h;
+
+              return Column(
+                children: [
+                  AppSpacing.xl.verticalSpace,
+                  headerSection
+                      .animate()
+                      .fadeIn(delay: 50.ms)
+                      .slideY(begin: -0.1, curve: Curves.easeOutQuart),
+                  AppSpacing.lg.verticalSpace,
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: REdgeInsets.only(
+                        left: AppSpacing.md,
+                        right: AppSpacing.md,
+                        top: AppSpacing.md,
+                        bottom: isKeyboardOpen
+                            ? keyboardInset + AppSpacing.md
+                            : AppSpacing.md,
+                      ),
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          fieldsSection
+                              .animate()
+                              .fadeIn(delay: 200.ms)
+                              .slideY(begin: 0.15, curve: Curves.easeOutCubic),
+                          AppSpacing.xl.verticalSpace,
+                          mapTrigger
+                              .animate()
+                              .fadeIn(delay: 350.ms)
+                              .slideY(begin: 0.1, curve: Curves.easeOutCubic),
+                          AppSpacing.xl.verticalSpace,
+                          if (_activeSuggestionsState.maybeWhen(
+                            success: (items) => items.isNotEmpty,
+                            orElse: () => false,
+                          )) ...[
+                            Text(
+                                  AppStrings.suggestions,
+                                  style: AppTextStyles.s12w400.copyWith(
+                                    color: context.primary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                )
+                                .animate()
+                                .fadeIn(delay: 450.ms)
+                                .slideX(begin: -0.05),
+                            AppSpacing.xxl.verticalSpace,
+                          ],
+                          OrderLocationSuggestionsWidget(
+                            state: _activeSuggestionsState,
+                            onSelected: _onSharedSuggestionSelected,
+                          ).animate().fadeIn(delay: 550.ms),
+                          if (showInlineConfirm) ...[
+                            AppSpacing.md.verticalSpace,
+                            confirmButton,
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_isConfirmActive && !isKeyboardOpen && !showInlineConfirm)
+                    Padding(
+                          padding: REdgeInsets.all(AppSpacing.md),
+                          child: confirmButton,
+                        )
+                        .animate()
+                        .fadeIn(delay: 650.ms)
+                        .moveY(begin: 20, end: 0, curve: Curves.easeOutBack),
+                ],
+              );
+            },
           );
         },
       ),

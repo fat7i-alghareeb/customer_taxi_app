@@ -5,6 +5,8 @@ import '../../../../core/utils/result.dart';
 import '../entities/order_entity.dart';
 import '../entities/order_location_entity.dart';
 import '../entities/order_location_request_entity.dart';
+import '../entities/order_trip_car_option_entity.dart';
+import '../entities/order_trip_route_entity.dart';
 import '../repositories/order_repository.dart';
 
 @lazySingleton
@@ -32,5 +34,23 @@ class OrderFacade {
       '[OrderFacade] reverseGeocode lat=${request.latitude} lng=${request.longitude}',
     );
     return _repository.reverseGeocode(request);
+  }
+
+  Future<Result<OrderTripRouteEntity>> getTripRoute(
+    OrderTripRouteRequestEntity request,
+  ) {
+    printC(
+      '[OrderFacade] getTripRoute from=(${request.fromLatitude},${request.fromLongitude}) to=(${request.toLatitude},${request.toLongitude})',
+    );
+    return _repository.getTripRoute(request);
+  }
+
+  Future<Result<List<OrderTripCarOptionEntity>>> getTripCarOptions(
+    OrderTripPricingRequestEntity request,
+  ) {
+    printC(
+      '[OrderFacade] getTripCarOptions from=(${request.fromLatitude},${request.fromLongitude}) to=(${request.toLatitude},${request.toLongitude})',
+    );
+    return _repository.getTripCarOptions(request);
   }
 }

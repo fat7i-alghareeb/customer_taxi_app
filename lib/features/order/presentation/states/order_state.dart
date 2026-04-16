@@ -8,6 +8,8 @@ abstract class OrderState with _$OrderState {
 
     @Default(OrderSheetMode.collapsed) OrderSheetMode sheetMode,
 
+    @Default(OrderExpandedStep.locationEntry) OrderExpandedStep expandedStep,
+
     @Default(OrderLocationTarget.from) OrderLocationTarget mapPickingTarget,
 
     @Default(MapConfig.defaultLat) double mapCameraLatitude,
@@ -25,5 +27,31 @@ abstract class OrderState with _$OrderState {
 
     @Default(BlocStatus<List<OrderLocationEntity>>.initial())
     BlocStatus<List<OrderLocationEntity>> toSuggestionsState,
+
+    @Default(BlocStatus<OrderLocationEntity>.initial())
+    BlocStatus<OrderLocationEntity> pickupPointState,
+
+    @Default('') String pickupStreetName,
+    @Default('') String pickupHouseNumber,
+
+    @Default(BlocStatus<String>.initial())
+    BlocStatus<String> pickupConfirmationFeedbackState,
+
+    @Default(BlocStatus<OrderTripRouteEntity>.initial())
+    BlocStatus<OrderTripRouteEntity> tripRouteState,
+
+    @Default(BlocStatus<List<OrderTripCarOptionEntity>>.initial())
+    BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState,
+
+    @Default(BlocStatus<OrderTripRouteEntity>.initial())
+    BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState,
+
+    @Default(BlocStatus<List<OrderTripCarOptionEntity>>.initial())
+    BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState,
+
+    OrderLocationEntity? prefetchedFromLocation,
+    OrderLocationEntity? prefetchedToLocation,
+
+    String? selectedCarTypeId,
   }) = _OrderState;
 }

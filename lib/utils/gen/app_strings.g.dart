@@ -17,6 +17,12 @@ class AppStrings {
   static String get authUnauthorized => 'authUnauthorized'.tr();
   /// Cancel - إلغاء - Annuleren
   static String get cancel => 'cancel'.tr();
+  /// 8-passenger bus - باص 8 ركاب - Bus voor 8 passagiers
+  static String get carTypeBus8 => 'carTypeBus8'.tr();
+  /// Comfort - مريح - Comfort
+  static String get carTypeComfort => 'carTypeComfort'.tr();
+  /// Standard - عادي - Standaard
+  static String get carTypeStandard => 'carTypeStandard'.tr();
   /// Clear - مسح - Wissen
   static String get clear => 'clear'.tr();
   /// The request was invalid. - الطلب غير صالح. - De aanvraag was ongeldig.
@@ -27,6 +33,8 @@ class AppStrings {
   static String get clientNotFound => 'clientNotFound'.tr();
   /// The data you sent could not be processed. - لا يمكن معالجة البيانات المرسلة. - De verzonden gegevens konden niet worden verwerkt.
   static String get clientUnprocessableEntity => 'clientUnprocessableEntity'.tr();
+  /// Confirm locations - تأكيد المواقع - Locaties bevestigen
+  static String get confirmLocations => 'confirmLocations'.tr();
   /// Confirm order - تأكيد الطلب - Bestelling bevestigen
   static String get confirmOrder => 'confirmOrder'.tr();
   /// Confirm point - تأكيد النقطة - Punt bevestigen
@@ -41,6 +49,8 @@ class AppStrings {
   static String get done => 'done'.tr();
   /// No data available. - لا توجد بيانات متاحة. - Geen gegevens beschikbaar.
   static String get emptyStateNoData => 'emptyStateNoData'.tr();
+  /// Estimated trip time - الوقت التقريبي للرحلة - Geschatte reistijd
+  static String get estimatedTripTime => 'estimatedTripTime'.tr();
   /// Feb - فبر - Feb
   static String get feb => 'feb'.tr();
   /// February - فبراير - Februari
@@ -109,6 +119,8 @@ class AppStrings {
   static String get onboardingTitle2 => 'onboardingTitle2'.tr();
   /// Professional Service - خدمة احترافية - Professionele Service
   static String get onboardingTitle3 => 'onboardingTitle3'.tr();
+  /// Order confirmed successfully. - تم تأكيد الطلب بنجاح. - Bestelling succesvol bevestigd.
+  static String get orderConfirmedSuccess => 'orderConfirmedSuccess'.tr();
   /// Order now - اطلب الآن - Nu bestellen
   static String get orderNow => 'orderNow'.tr();
   /// You cannot continue using the app until location permission is granted. - لا يمكنك متابعة استخدام التطبيق حتى تمنح صلاحية الموقع. - U kunt de app niet blijven gebruiken totdat de locatiepermissie is verleend.
@@ -129,6 +141,20 @@ class AppStrings {
   static String get permissionGateTitle => 'permissionGateTitle'.tr();
   /// Check again - التحقق مرة أخرى - Controleer opnieuw
   static String get permissionGateTryAgain => 'permissionGateTryAgain'.tr();
+  /// Pickup details (optional) - تفاصيل الالتقاط (اختياري) - Ophaalgegevens (optioneel)
+  static String get pickupDetailsOptional => 'pickupDetailsOptional'.tr();
+  /// House number - رقم المنزل - Huisnummer
+  static String get pickupHouseNumber => 'pickupHouseNumber'.tr();
+  /// Pickup point - نقطة الالتقاط - Ophaalpunt
+  static String get pickupPoint => 'pickupPoint'.tr();
+  /// No pickup point selected yet. - لم يتم تحديد نقطة الالتقاط بعد. - Er is nog geen ophaalpunt geselecteerd.
+  static String get pickupPointNotSelected => 'pickupPointNotSelected'.tr();
+  /// Please select a pickup point first. - يرجى تحديد نقطة الالتقاط أولاً. - Selecteer eerst een ophaalpunt.
+  static String get pickupPointRequired => 'pickupPointRequired'.tr();
+  /// Pickup point must be within 300 meters of your start point. - يجب أن تكون نقطة الالتقاط ضمن 300 متر من نقطة البداية. - Het ophaalpunt moet binnen 300 meter van uw startpunt liggen.
+  static String get pickupPointTooFar => 'pickupPointTooFar'.tr();
+  /// Street name - اسم الشارع - Straatnaam
+  static String get pickupStreetName => 'pickupStreetName'.tr();
   /// Plan your trip - خطط لرحلتك - Plan je reis
   static String get planYourTrip => 'planYourTrip'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd.
@@ -155,6 +181,8 @@ class AppStrings {
   static String get searchFromLocation => 'searchFromLocation'.tr();
   /// Search destination location - ابحث عن موقع الوجهة - Zoek bestemmingslocatie
   static String get searchToLocation => 'searchToLocation'.tr();
+  /// Select car type - اختر نوع السيارة - Selecteer voertuigtype
+  static String get selectCarType => 'selectCarType'.tr();
   /// Select date - اختر التاريخ - Datum selecteren
   static String get selectDate => 'selectDate'.tr();
   /// Select date & time - اختر التاريخ والوقت - Datum & tijd selecteren
@@ -165,6 +193,8 @@ class AppStrings {
   static String get selectMonth => 'selectMonth'.tr();
   /// Select option - اختر خيارًا - Selecteer optie
   static String get selectOption => 'selectOption'.tr();
+  /// Select pickup point - اختر نقطة الالتقاط - Selecteer ophaalpunt
+  static String get selectPickupPoint => 'selectPickupPoint'.tr();
   /// Select time - اختر الوقت - Tijd selecteren
   static String get selectTime => 'selectTime'.tr();
   /// Select year - اختر السنة - Jaar selecteren
@@ -173,16 +203,18 @@ class AppStrings {
   static String get sep => 'sep'.tr();
   /// September - سبتمبر - September
   static String get september => 'september'.tr();
-  /// Suggestions - اقتراحات - Suggestions
-  static String get suggestions => 'suggestions'.tr();
   /// Server error. Please try again later. - خطأ في الخادم. حاول مرة أخرى لاحقًا. - Serverfout. Probeer het later opnieuw.
   static String get serverError => 'serverError'.tr();
   /// Service is temporarily unavailable. Please try again later. - الخدمة غير متاحة مؤقتًا. حاول مرة أخرى لاحقًا. - Service tijdelijk niet beschikbaar. Probeer het later opnieuw.
   static String get serverServiceUnavailable => 'serverServiceUnavailable'.tr();
   /// Set on map - حدد على الخريطة - Op kaart instellen
   static String get setOnMap => 'setOnMap'.tr();
+  /// Set pickup point on map - حدد نقطة الالتقاط على الخريطة - Stel ophaalpunt in op de kaart
+  static String get setPickupPointOnMap => 'setPickupPointOnMap'.tr();
   /// Something went wrong. - حدث خطأ ما. - Er is iets misgegaan.
   static String get somethingWentWrong => 'somethingWentWrong'.tr();
+  /// Suggestions - اقتراحات - Suggesties
+  static String get suggestions => 'suggestions'.tr();
   /// Sun - أحد - Zo
   static String get sun => 'sun'.tr();
   /// Sunday - الأحد - Zondag

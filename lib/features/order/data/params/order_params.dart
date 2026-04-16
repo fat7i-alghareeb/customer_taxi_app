@@ -17,3 +17,31 @@ class OrderReverseGeocodeParams {
   final double latitude;
   final double longitude;
 }
+
+class OrderTripRouteParams {
+  const OrderTripRouteParams({
+    required this.fromLatitude,
+    required this.fromLongitude,
+    required this.toLatitude,
+    required this.toLongitude,
+  });
+
+  final double fromLatitude;
+  final double fromLongitude;
+  final double toLatitude;
+  final double toLongitude;
+}
+
+class OrderTripPricingParams {
+  const OrderTripPricingParams({
+    required this.fromLatitude,
+    required this.fromLongitude,
+    required this.toLatitude,
+    required this.toLongitude,
+  });
+
+  final double fromLatitude;
+  final double fromLongitude;
+  final double toLatitude;
+  final double toLongitude;
+}

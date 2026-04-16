@@ -12,90 +12,93 @@ class OrderMapPickSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectingLabel = state.mapPickingTarget == OrderLocationTarget.from
-        ? AppStrings.from
-        : AppStrings.to;
+    final selectingLabel = switch (state.mapPickingTarget) {
+      OrderLocationTarget.from => AppStrings.from,
+      OrderLocationTarget.to => AppStrings.to,
+      OrderLocationTarget.pickupPoint => AppStrings.pickupPoint,
+    };
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              padding: REdgeInsets.all(AppSpacing.xs),
-              decoration: BoxDecoration(
-                color: context.primary.withValues(alpha: 0.08),
-                shape: BoxShape.circle,
-              ),
-              child: FaIcon(
-                FontAwesomeIcons.crosshairs,
-                size: 14.r,
-                color: context.primary,
-              ),
-            ).animate().fadeIn(delay: 100.ms).scale(),
-            AppSpacing.sm.horizontalSpace,
-            Expanded(
-              child: Text(
-                '${AppStrings.setOnMap} $selectingLabel',
-                style: AppTextStyles.s14w600.copyWith(
-                  color: context.onSurface,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.05),
-          ],
-        ),
-        AppSpacing.xl.verticalSpace,
-        Row(
-          children: [
-            Expanded(
-              child: AppButton.grey(
-                onTap: () {
-                  printM('[OrderMapPickSheetWidget] cancel map pick tapped');
-                  context.read<OrderBloc>().add(
+            Row(
+              children: [
+                Container(
+                  padding: REdgeInsets.all(AppSpacing.xs),
+                  decoration: BoxDecoration(
+                    color: context.primary.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: FaIcon(
+                    FontAwesomeIcons.crosshairs,
+                    size: 14.r,
+                    color: context.primary,
+                  ),
+                ).animate().fadeIn(delay: 100.ms).scale(),
+                AppSpacing.sm.horizontalSpace,
+                Expanded(
+                  child: Text(
+                    '${AppStrings.setOnMap} $selectingLabel',
+                    style: AppTextStyles.s14w600.copyWith(
+                      color: context.onSurface,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.05),
+              ],
+            ),
+            AppSpacing.xl.verticalSpace,
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton.grey(
+                    onTap: () {
+                      printM(
+                        '[OrderMapPickSheetWidget] cancel map pick tapped',
+                      );
+                      context.read<OrderBloc>().add(
                         const OrderEvent.mapPickCancelled(),
                       );
-                },
-                layout: AppButtonLayout(
-                  height: 48.sp,
-                  borderRadius: AppRadii.lg,
-                ),
-                child: AppButtonChild.label(AppStrings.cancel),
-              ),
-            ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2),
-            AppSpacing.sm.horizontalSpace,
-            Expanded(
-              child: AppButton.primary(
-                onTap: () {
-                  printC('[OrderMapPickSheetWidget] confirm point tapped');
-                  context.read<OrderBloc>().add(
-                        const OrderEvent.confirmMapPointPressed(),
-                      );
-                },
-                layout: AppButtonLayout(
-                  height: 48.sp,
-                  borderRadius: AppRadii.lg,
-                ),
-                child: AppButtonChild.label(AppStrings.confirmPoint),
-              ),
-            )
-                .animate()
-                .fadeIn(delay: 400.ms)
-                .slideY(begin: 0.2)
-                .then(delay: 1000.ms)
-                .shimmer(
-                  duration: 1500.ms,
-                  color: context.onPrimary.withValues(alpha: 0.2),
-                ),
+                    },
+                    layout: AppButtonLayout(
+                      height: 48.sp,
+                      borderRadius: AppRadii.lg,
+                    ),
+                    child: AppButtonChild.label(AppStrings.cancel),
+                  ),
+                ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2),
+                AppSpacing.sm.horizontalSpace,
+                Expanded(
+                      child: AppButton.primary(
+                        onTap: () {
+                          printC(
+                            '[OrderMapPickSheetWidget] confirm point tapped',
+                          );
+                          context.read<OrderBloc>().add(
+                            const OrderEvent.confirmMapPointPressed(),
+                          );
+                        },
+                        layout: AppButtonLayout(
+                          height: 48.sp,
+                          borderRadius: AppRadii.lg,
+                        ),
+                        child: AppButtonChild.label(AppStrings.confirmPoint),
+                      ),
+                    )
+                    .animate()
+                    .fadeIn(delay: 400.ms)
+                    .slideY(begin: 0.2)
+                    .then(delay: 1000.ms)
+                    .shimmer(
+                      duration: 1500.ms,
+                      color: context.onPrimary.withValues(alpha: 0.2),
+                    ),
+              ],
+            ),
           ],
-        ),
-      ],
-    ).animate().fadeIn(duration: 400.ms).slideY(
-          begin: 0.1,
-          end: 0,
-          curve: Curves.easeOutQuart,
-        );
+        )
+        .animate()
+        .fadeIn(duration: 400.ms)
+        .slideY(begin: 0.1, end: 0, curve: Curves.easeOutQuart);
   }
 }
-
-

@@ -26,7 +26,22 @@ class OrderSheetSection extends StatelessWidget {
       case OrderSheetMode.collapsed:
         return OrderConstants.collapsedSheetHeight.h;
       case OrderSheetMode.expanded:
-        return context.screenHeight;
+        if (state.expandedStep == OrderExpandedStep.locationEntry) {
+          return context.screenHeight;
+        }
+
+        if (state.expandedStep == OrderExpandedStep.pickupPoint) {
+          return OrderConstants.expandedPickupStepBaseHeight.h +
+              OrderConstants.expandedPickupConfirmButtonExtraHeight.h;
+        }
+
+        final hasVehicleConfirm =
+            state.selectedCarTypeId?.trim().isNotEmpty ?? false;
+
+        return OrderConstants.expandedVehicleStepBaseHeight.h +
+            (hasVehicleConfirm
+                ? OrderConstants.expandedVehicleConfirmButtonExtraHeight.h
+                : 0);
       case OrderSheetMode.mapPicking:
         return OrderConstants.mapPickSheetHeight.h;
     }
@@ -87,22 +102,17 @@ class OrderSheetSection extends StatelessWidget {
         switchInCurve: Curves.easeOutQuart,
         switchOutCurve: Curves.easeInQuart,
         transitionBuilder: (child, animation) {
-          final slide = Tween<Offset>(
-            begin: const Offset(0, 0.04),
-            end: Offset.zero,
-          ).animate(
-            CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutQuart,
-            ),
-          );
+          final slide =
+              Tween<Offset>(
+                begin: const Offset(0, 0.04),
+                end: Offset.zero,
+              ).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeOutQuart),
+              );
 
           return FadeTransition(
             opacity: animation,
-            child: SlideTransition(
-              position: slide,
-              child: child,
-            ),
+            child: SlideTransition(position: slide, child: child),
           );
         },
         child: KeyedSubtree(
