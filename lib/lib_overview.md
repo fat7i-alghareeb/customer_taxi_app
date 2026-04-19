@@ -24,7 +24,9 @@ The initialization of the application is a strictly ordered async sequence. AI a
 7. **Notifications Infra Init**: `NotificationCoordinator.initialize(...)` without runtime prompt (`requestPermissionsAtStartup: false`).
 8. **Locale Resolution**: `LocaleService.resolveInitialLocale()`.
 9. **Guarded Run**: Launching `ScreenUtilInit` and the root `App`.
-10. **Post-Splash Permission Gate**: Routing enforces location permission before onboarding/auth/root.
+10. **Post-Splash Routing Gates**: Splash exits only after minimum delay,
+    auth bootstrap, and map warmup completion (or timeout fallback), then
+    routing enforces location permission before onboarding/auth/root.
 
 ---
 

@@ -8,6 +8,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 import '../../../../constants/forms/order_forms.dart';
 import '../../../../constants/order_constants.dart';
 import '../../../../domain/entities/order_location_entity.dart';
+import '../../../../domain/entities/order_saved_location_entity.dart';
 import '../../../states/order_bloc.dart';
 import 'order_location_field_widget.dart';
 import 'order_location_suggestions_widget.dart';
@@ -64,6 +65,11 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
   void _handleFromFocusChanged() {
     if (_fromFocusNode.hasFocus) {
       _setFocusedFieldTarget(OrderLocationTarget.from);
+      _setActiveSearchTarget(OrderLocationTarget.from);
+      final value = _form.control(OrderForms.fromField).value?.toString() ?? '';
+      if (value.trim().isEmpty) {
+        context.read<OrderBloc>().add(const OrderEvent.fromQueryChanged(''));
+      }
       return;
     }
     if (!_toFocusNode.hasFocus) {
@@ -74,6 +80,11 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
   void _handleToFocusChanged() {
     if (_toFocusNode.hasFocus) {
       _setFocusedFieldTarget(OrderLocationTarget.to);
+      _setActiveSearchTarget(OrderLocationTarget.to);
+      final value = _form.control(OrderForms.toField).value?.toString() ?? '';
+      if (value.trim().isEmpty) {
+        context.read<OrderBloc>().add(const OrderEvent.toQueryChanged(''));
+      }
       return;
     }
     if (!_fromFocusNode.hasFocus) {
@@ -205,14 +216,14 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     return _focusedFieldTarget ?? OrderLocationTarget.to;
   }
 
-  BlocStatus<List<OrderLocationEntity>> get _activeSuggestionsState {
+  BlocStatus<List<OrderSavedLocationEntity>> get _activeSuggestionsState {
     switch (_activeSearchTarget) {
       case OrderLocationTarget.from:
         return widget.state.fromSuggestionsState;
       case OrderLocationTarget.to:
         return widget.state.toSuggestionsState;
       case OrderLocationTarget.pickupPoint:
-        return const BlocStatus.initial();
+        return const BlocStatus<List<OrderSavedLocationEntity>>.initial();
     }
   }
 
@@ -225,16 +236,29 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     });
   }
 
-  void _onSharedSuggestionSelected(OrderLocationEntity location) {
+  void _onSharedSuggestionSelected(OrderSavedLocationEntity location) {
     if (_activeSearchTarget == OrderLocationTarget.from) {
-      _syncControlValue(OrderForms.fromField, location.label);
+      _syncControlValue(OrderForms.fromField, location.location.label);
       context.read<OrderBloc>().add(
         OrderEvent.fromSuggestionSelected(location),
       );
       return;
     }
-    _syncControlValue(OrderForms.toField, location.label);
+    _syncControlValue(OrderForms.toField, location.location.label);
     context.read<OrderBloc>().add(OrderEvent.toSuggestionSelected(location));
+  }
+
+  void _onSharedSuggestionPinToggled(OrderSavedLocationEntity location) {
+    if (_activeSearchTarget == OrderLocationTarget.pickupPoint) {
+      return;
+    }
+
+    context.read<OrderBloc>().add(
+      OrderEvent.savedLocationPinToggled(
+        target: _activeSearchTarget,
+        location: location,
+      ),
+    );
   }
 
   void _clearField(OrderLocationTarget target) {
@@ -431,7 +455,11 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                 const OrderEvent.confirmOrderPressed(),
               );
             },
-            layout: AppButtonLayout(height: 54.sp, borderRadius: AppRadii.lg),
+            layout: AppButtonLayout(
+              width: double.infinity,
+              height: 54.sp,
+              borderRadius: AppRadii.lg,
+            ),
             child: AppButtonChild.label(AppStrings.confirmLocations),
           );
 
@@ -441,7 +469,11 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                 const OrderEvent.confirmCarSelectionPressed(),
               );
             },
-            layout: AppButtonLayout(height: 54.sp, borderRadius: AppRadii.lg),
+            layout: AppButtonLayout(
+              width: double.infinity,
+              height: 54.sp,
+              borderRadius: AppRadii.lg,
+            ),
             child: AppButtonChild.label(AppStrings.done),
           );
 
@@ -453,7 +485,11 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
               );
             },
             isActive: _isPickupConfirmActive,
-            layout: AppButtonLayout(height: 54.sp, borderRadius: AppRadii.lg),
+            layout: AppButtonLayout(
+              width: double.infinity,
+              height: 54.sp,
+              borderRadius: AppRadii.lg,
+            ),
             child: AppButtonChild.label(AppStrings.confirmOrder),
           );
 
@@ -480,14 +516,12 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   if (_isVehicleConfirmActive && !isKeyboardOpen)
                     Padding(
                           padding: REdgeInsets.only(
-                            left: AppSpacing.md,
-                            right: AppSpacing.md,
-                            bottom: AppSpacing.xs,
+                            bottom: AppSpacing.xxl, // Increased bottom space
                           ),
                           child: vehicleConfirmButton,
                         )
                         .animate()
-                        .fadeIn(duration: AppDurations.slow)
+                        .fadeIn(duration: AppDurations.fast)
                         .moveY(
                           begin: 16,
                           end: 0,
@@ -557,14 +591,12 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   if (!isKeyboardOpen)
                     Padding(
                           padding: REdgeInsets.only(
-                            left: AppSpacing.md,
-                            right: AppSpacing.md,
-                            bottom: AppSpacing.xs,
+                            bottom: AppSpacing.xxl, // Increased bottom space
                           ),
                           child: pickupConfirmButton,
                         )
                         .animate()
-                        .fadeIn(duration: AppDurations.slow)
+                        .fadeIn(duration: AppDurations.fast)
                         .moveY(
                           begin: 16,
                           end: 0,
@@ -634,6 +666,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                           OrderLocationSuggestionsWidget(
                             state: _activeSuggestionsState,
                             onSelected: _onSharedSuggestionSelected,
+                            onPinToggled: _onSharedSuggestionPinToggled,
                           ).animate().fadeIn(delay: 550.ms),
                           if (showInlineConfirm) ...[
                             AppSpacing.md.verticalSpace,
@@ -645,11 +678,13 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                   if (_isConfirmActive && !isKeyboardOpen && !showInlineConfirm)
                     Padding(
-                          padding: REdgeInsets.all(AppSpacing.md),
+                          padding: REdgeInsets.only(
+                            bottom: AppSpacing.xxl, // Increased bottom space
+                          ),
                           child: confirmButton,
                         )
                         .animate()
-                        .fadeIn(delay: 650.ms)
+                        .fadeIn(delay: 100.ms)
                         .moveY(begin: 20, end: 0, curve: Curves.easeOutBack),
                 ],
               );

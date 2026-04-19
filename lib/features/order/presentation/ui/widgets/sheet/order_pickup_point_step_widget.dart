@@ -75,19 +75,51 @@ class OrderPickupPointStepWidget extends StatelessWidget {
                       ),
                     ),
                     AppSpacing.xs.verticalSpace,
-                    Text(
-                      hasPickup
-                          ? pickupLabel!
-                          : AppStrings.pickupPointNotSelected,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.s12w400.copyWith(
-                        color: context.onSurface.withValues(alpha: 0.7),
-                      ),
+                    state.pickupPointState.maybeWhen(
+                      success: (location) {
+                        final primary = location.primaryName ?? location.label;
+                        final secondary = location.secondaryAddress;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              primary,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.s14w600.copyWith(
+                                color: context.onSurface.withValues(alpha: 0.9),
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+
+                            if ((secondary ?? '').isNotEmpty)
+                              Text(
+                                secondary!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.s12w400.copyWith(
+                                  color:
+                                      context.onSurface.withValues(alpha: 0.5),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                      orElse: () {
+                        return Text(
+                          AppStrings.pickupPointNotSelected,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.s12w400.copyWith(
+                            color: context.onSurface.withValues(alpha: 0.7),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
+
             ],
           ),
         ).animate().fadeIn(delay: 120.ms).slideY(begin: 0.06),

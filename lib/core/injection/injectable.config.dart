@@ -35,6 +35,10 @@ import 'package:customertaxi/core/services/localization/locale_service.dart'
     as _i504;
 import 'package:customertaxi/core/services/location/location_service.dart'
     as _i396;
+import 'package:customertaxi/core/services/location/startup_map_warmup_coordinator.dart'
+    as _i371;
+import 'package:customertaxi/core/services/objectbox/objectbox_service.dart'
+    as _i477;
 import 'package:customertaxi/core/services/onboarding/onboarding_service.dart'
     as _i389;
 import 'package:customertaxi/core/services/permissions/location_permission_service.dart'
@@ -58,6 +62,8 @@ import 'package:customertaxi/features/auth/domain/repositories/auth_repository.d
     as _i618;
 import 'package:customertaxi/features/auth/presentation/states/auth_bloc.dart'
     as _i781;
+import 'package:customertaxi/features/order/data/datasources/order_local_datasource.dart'
+    as _i588;
 import 'package:customertaxi/features/order/data/datasources/order_remote_datasource.dart'
     as _i93;
 import 'package:customertaxi/features/order/data/repositories/order_repository_impl.dart'
@@ -92,6 +98,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.storageService,
       preResolve: true,
     );
+    await gh.factoryAsync<_i477.ObjectBoxService>(
+      () => registerModule.objectBoxService,
+      preResolve: true,
+    );
     gh.lazySingleton<_i18.CustomDioInterceptor>(
       () => _i18.CustomDioInterceptor(),
     );
@@ -116,6 +126,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i396.LocationService>(
       () => const _i396.LocationService(),
+    );
+    gh.lazySingleton<_i371.StartupMapWarmupCoordinator>(
+      () => _i371.StartupMapWarmupCoordinator(),
     );
     gh.lazySingleton<_i331.LocationPermissionService>(
       () => const _i331.LocationPermissionService(),
@@ -148,6 +161,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i998.ThemeController>(
       () => _i998.ThemeController(gh<_i742.StorageService>()),
     );
+    gh.lazySingleton<_i588.OrderLocalDataSource>(
+      () => _i588.OrderLocalDataSource(gh<_i477.ObjectBoxService>()),
+    );
     gh.factory<_i144.RootBloc>(
       () => _i144.RootBloc(
         gh<_i102.PermissionsCoordinator>(),
@@ -162,14 +178,6 @@ extension GetItInjectableX on _i174.GetIt {
         storage: gh<_i742.StorageService>(),
         state: gh<_i32.AuthStateNotifier>(),
         tokenStorage: gh<_i247.JwtTokenStorage>(),
-      ),
-    );
-    gh.lazySingleton<_i434.AppRouterConfig>(
-      () => _i434.AppRouterConfig(
-        gh<_i32.AuthStateNotifier>(),
-        gh<_i389.OnboardingService>(),
-        gh<_i102.PermissionsCoordinator>(),
-        gh<_i434.AppRouteRegistry>(),
       ),
     );
     gh.singleton<_i361.Dio>(
@@ -191,6 +199,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i312.RootRemoteDataSource>(
       () => _i312.RootRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i434.AppRouterConfig>(
+      () => _i434.AppRouterConfig(
+        gh<_i32.AuthStateNotifier>(),
+        gh<_i389.OnboardingService>(),
+        gh<_i102.PermissionsCoordinator>(),
+        gh<_i371.StartupMapWarmupCoordinator>(),
+        gh<_i434.AppRouteRegistry>(),
+      ),
+    );
     gh.lazySingleton<_i618.AuthRepository>(
       () => _i771.AuthRepositoryImpl(gh<_i54.AuthRemoteDataSource>()),
     );
@@ -200,16 +217,19 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i239.AuthFacade>(
       () => _i239.AuthFacade(gh<_i618.AuthRepository>()),
     );
+    gh.lazySingleton<_i153.OrderRepository>(
+      () => _i312.OrderRepositoryImpl(
+        gh<_i93.OrderRemoteDataSource>(),
+        gh<_i588.OrderLocalDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i770.RootFacade>(
       () => _i770.RootFacade(gh<_i549.RootRepository>()),
     );
-    gh.lazySingleton<_i153.OrderRepository>(
-      () => _i312.OrderRepositoryImpl(gh<_i93.OrderRemoteDataSource>()),
-    );
-    gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
     gh.lazySingleton<_i925.OrderFacade>(
       () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
     );
+    gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
     gh.factory<_i47.OrderBloc>(
       () =>
           _i47.OrderBloc(gh<_i925.OrderFacade>(), gh<_i396.LocationService>()),

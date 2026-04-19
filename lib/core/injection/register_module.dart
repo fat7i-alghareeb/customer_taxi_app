@@ -6,6 +6,7 @@ import '../network/interceptors/custom_dio_interceptor.dart';
 import '../network/interceptors/error_interceptor.dart';
 import '../network/interceptors/localization_interceptor.dart';
 import '../network/interceptors/memory_aware_interceptor.dart';
+import '../services/objectbox/objectbox_service.dart';
 import '../services/session/auth_manager.dart';
 import '../services/session/jwt_token_storage.dart';
 import '../services/storage/storage_service.dart';
@@ -14,6 +15,10 @@ import '../services/storage/storage_service.dart';
 abstract class RegisterModule {
   @preResolve
   Future<StorageService> get storageService => StorageService.createDefault();
+
+  @preResolve
+  Future<ObjectBoxService> get objectBoxService =>
+      ObjectBoxService.createDefault();
 
   @singleton
   Dio dio(

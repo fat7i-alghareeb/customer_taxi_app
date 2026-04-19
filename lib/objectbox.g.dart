@@ -35,7 +35,7 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(2, 4163690337509402538),
         name: 'key',
         type: 9,
-        flags: 2080,
+        flags: 34848,
         indexId: const obx_int.IdUid(1, 7896173847252604837),
       ),
       obx_int.ModelProperty(

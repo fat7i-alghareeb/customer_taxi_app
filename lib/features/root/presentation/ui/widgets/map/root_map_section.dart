@@ -15,6 +15,7 @@ import 'package:customertaxi/features/order/presentation/states/order_bloc.dart'
 import 'package:customertaxi/features/order/constants/order_constants.dart';
 import 'root_map_canvas_widget.dart';
 import 'root_map_controls_section.dart';
+import 'root_map_eta_pill_widget.dart';
 import '../../../utils/map_marker_generator.dart';
 
 class RootMapSection extends StatefulWidget {
@@ -226,12 +227,12 @@ class _RootMapSectionState extends State<RootMapSection>
     final aMarker = await MapMarkerGenerator.createCustomMarker(
       text: 'A',
       color: Colors.orange,
-      size: 55,
+      size: 45,
     );
     final bMarker = await MapMarkerGenerator.createCustomMarker(
       text: 'B',
       color: Colors.blue,
-      size: 55,
+      size: 45,
     );
 
     if (mounted) {
@@ -248,7 +249,7 @@ class _RootMapSectionState extends State<RootMapSection>
     final etaMarker = await MapMarkerGenerator.createCustomMarker(
       text: etaText,
       color: Colors.orange,
-      size: 80, // Balanced for ETA
+      size: 55, // Balanced for ETA
       isEta: true,
     );
 
@@ -524,6 +525,25 @@ class _RootMapSectionState extends State<RootMapSection>
                             );
                           },
                         ),
+                      );
+                    },
+                  ),
+                  BlocBuilder<OrderBloc, OrderState>(
+                    buildWhen: (previous, current) =>
+                        previous.tripRouteState != current.tripRouteState,
+                    builder: (context, orderState) {
+                      return orderState.tripRouteState.maybeWhen(
+                        success: (route) => Positioned(
+                          top: 50.h,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: RootMapEtaPillWidget(
+                              durationText: route.durationText,
+                            ),
+                          ),
+                        ),
+                        orElse: () => const SizedBox.shrink(),
                       );
                     },
                   ),

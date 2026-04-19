@@ -25,7 +25,7 @@ class ObjectBoxLocalCacheEntryEntity implements ObjectBoxEntity {
   @override
   int objId;
 
-  @Unique()
+  @Unique(onConflict: ConflictStrategy.replace)
   String key;
 
   String value;

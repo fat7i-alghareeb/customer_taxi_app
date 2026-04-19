@@ -47,6 +47,8 @@ class AppStrings {
   static String get decodeError => 'decodeError'.tr();
   /// Done - تم - Gereed
   static String get done => 'done'.tr();
+  /// Dropped Pin - نقطة محددة - Gemarkeerde speld
+  static String get droppedPin => 'droppedPin'.tr();
   /// No data available. - لا توجد بيانات متاحة. - Geen gegevens beschikbaar.
   static String get emptyStateNoData => 'emptyStateNoData'.tr();
   /// Estimated trip time - الوقت التقريبي للرحلة - Geschatte reistijd
@@ -121,6 +123,8 @@ class AppStrings {
   static String get onboardingTitle3 => 'onboardingTitle3'.tr();
   /// Order confirmed successfully. - تم تأكيد الطلب بنجاح. - Bestelling succesvol bevestigd.
   static String get orderConfirmedSuccess => 'orderConfirmedSuccess'.tr();
+  /// Selected location - الموقع المحدد - Geselecteerde locatie
+  static String get orderLocationUnknownLabel => 'orderLocationUnknownLabel'.tr();
   /// Order now - اطلب الآن - Nu bestellen
   static String get orderNow => 'orderNow'.tr();
   /// You cannot continue using the app until location permission is granted. - لا يمكنك متابعة استخدام التطبيق حتى تمنح صلاحية الموقع. - U kunt de app niet blijven gebruiken totdat de locatiepermissie is verleend.

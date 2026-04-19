@@ -39,36 +39,48 @@ class RootMapCanvasWidget extends StatelessWidget {
       Polyline(
         polylineId: const PolylineId('walking-to-start'),
         points: [_latLng, tripPolylinePoints.first],
-        width: 3,
-        color: context.primary.withValues(alpha: 0.5),
-        patterns: [PatternItem.dash(10), PatternItem.gap(10)],
+        width: 3.r.toInt(),
+        color: context.primary.withValues(alpha: 0.45),
+        patterns: [PatternItem.dash(8), PatternItem.gap(6)],
       ),
     );
 
-    // 2. Main Driving Path (Solid - Bolder Black)
+    // 2. Main Driving Path - Shadow (Thicker & Transparent)
+    polylines.add(
+      Polyline(
+        polylineId: const PolylineId('order-trip-route-shadow'),
+        points: tripPolylinePoints,
+        width: 6.r.toInt(),
+        color: context.primary.withValues(alpha: 0.15),
+      ),
+    );
+
+    // 3. Main Driving Path (Solid - Primary)
     polylines.add(
       Polyline(
         polylineId: const PolylineId('order-trip-route'),
         points: tripPolylinePoints,
-        width: 8.r.toInt(),
+        width: 4.r.toInt(),
+        color: context.primary,
       ),
     );
 
-    // 3. Walking path from Trip End to Destination (Dashed)
+    // 4. Walking path from Trip End to Destination (Dashed)
     if (destinationLocation != null) {
       polylines.add(
         Polyline(
           polylineId: const PolylineId('walking-to-destination'),
           points: [tripPolylinePoints.last, destinationLocation!],
-          width: 4.r.toInt(),
-          color: Colors.black54,
-          patterns: [PatternItem.dash(10), PatternItem.gap(10)],
+          width: 3.r.toInt(),
+          color: context.onSurface.withValues(alpha: 0.35),
+          patterns: [PatternItem.dash(8), PatternItem.gap(6)],
         ),
       );
     }
 
     return polylines;
   }
+
 
   @override
   Widget build(BuildContext context) {

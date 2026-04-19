@@ -1,15 +1,16 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:customertaxi/common/imports/imports.dart';
+import '../../../../domain/entities/order_location_entity.dart';
 
 class OrderRouteSummaryTimelineWidget extends StatelessWidget {
   const OrderRouteSummaryTimelineWidget({
     super.key,
-    required this.fromLabel,
-    required this.toLabel,
+    required this.fromLocation,
+    required this.toLocation,
   });
 
-  final String fromLabel;
-  final String toLabel;
+  final OrderLocationEntity fromLocation;
+  final OrderLocationEntity toLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -18,32 +19,27 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.surface,
         borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: context.shadows.grey,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: [
-              _buildPin(context, context.primary, FontAwesomeIcons.circleArrowUp),
+              _buildPin(
+                context,
+                context.primary,
+                FontAwesomeIcons.circleArrowUp,
+              ),
               Container(
                 width: 2.w,
-                height: 32.h,
+                height: 48.h, // Increased for two-line layout
                 margin: REdgeInsets.symmetric(vertical: 4),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      context.primary,
-                      Colors.redAccent,
-                    ],
+                    colors: [context.primary, Colors.redAccent],
                   ),
                 ),
               ),
@@ -58,14 +54,14 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
                 _buildLocationText(
                   context,
                   AppStrings.from,
-                  fromLabel,
+                  fromLocation,
                   isPrimary: true,
                 ),
                 32.h.verticalSpace,
                 _buildLocationText(
                   context,
                   AppStrings.to,
-                  toLabel,
+                  toLocation,
                   isPrimary: false,
                 ),
               ],
@@ -85,11 +81,7 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: Center(
-        child: FaIcon(
-          icon,
-          size: 14.r,
-          color: color,
-        ),
+        child: FaIcon(icon, size: 14.r, color: color),
       ),
     );
   }
@@ -97,9 +89,12 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
   Widget _buildLocationText(
     BuildContext context,
     String title,
-    String label, {
+    OrderLocationEntity location, {
     required bool isPrimary,
   }) {
+    final primaryName = location.primaryName ?? location.label;
+    final secondaryAddress = location.secondaryAddress;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -112,7 +107,7 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
           ),
         ),
         Text(
-          label,
+          primaryName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.s14w600.copyWith(
@@ -120,6 +115,15 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
             fontWeight: FontWeight.w800,
           ),
         ),
+        if ((secondaryAddress ?? '').isNotEmpty)
+          Text(
+            secondaryAddress!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.s12w400.copyWith(
+              color: context.onSurface.withValues(alpha: 0.5),
+            ),
+          ),
       ],
     );
   }

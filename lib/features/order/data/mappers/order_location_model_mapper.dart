@@ -7,6 +7,9 @@ extension OrderLocationModelMapper on OrderLocationModel {
       latitude: latitude,
       longitude: longitude,
       label: label,
+      primaryName: primaryName,
+      secondaryAddress: secondaryAddress,
     );
+
   }
 }

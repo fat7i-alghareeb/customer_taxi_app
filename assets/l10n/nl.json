@@ -109,6 +109,7 @@
   "sunday": "Zondag",
   "selectOption": "Selecteer optie",
   "noResultsFound": "Geen resultaten gevonden.",
+  "orderLocationUnknownLabel": "Geselecteerde locatie",
   "permissionGateTitle": "Locatiepermissie is vereist",
   "permissionGateDescription": "Om customertaxi te gebruiken, geef toegang tot uw locatie zodat we nabijgelegen ritten kunnen vinden en correct kunnen navigeren.",
   "permissionGateLoading": "Vereiste machtigingen controleren...",
@@ -132,5 +133,6 @@
   "onboardingSkip": "Overslaan",
   "onboardingContinue": "Doorgaan",
   "onboardingGetStarted": "Aan de slag",
-  "planYourTrip": "Plan je reis"
+  "planYourTrip": "Plan je reis",
+  "droppedPin": "Gemarkeerde speld"
 }

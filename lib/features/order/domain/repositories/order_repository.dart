@@ -4,6 +4,7 @@ import '../entities/order_trip_car_option_entity.dart';
 import '../entities/order_trip_route_entity.dart';
 import '../entities/order_location_entity.dart';
 import '../entities/order_location_request_entity.dart';
+import '../entities/order_saved_location_entity.dart';
 
 abstract class OrderRepository {
   Future<Result<List<OrderEntity>>> getAllOrders();
@@ -22,5 +23,15 @@ abstract class OrderRepository {
 
   Future<Result<List<OrderTripCarOptionEntity>>> getTripCarOptions(
     OrderTripPricingRequestEntity request,
+  );
+
+  Future<Result<List<OrderSavedLocationEntity>>> getSavedLocations();
+
+  Future<Result<List<OrderSavedLocationEntity>>> saveSelectedLocation(
+    OrderLocationEntity location,
+  );
+
+  Future<Result<List<OrderSavedLocationEntity>>> togglePinnedLocation(
+    OrderLocationEntity location,
   );
 }

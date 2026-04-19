@@ -109,6 +109,7 @@
   "sunday": "Sunday",
   "selectOption": "Select option",
   "noResultsFound": "No results found.",
+  "orderLocationUnknownLabel": "Selected location",
   "permissionGateTitle": "Location permission is required",
   "permissionGateDescription": "To use customertaxi, allow location access so we can find nearby rides and navigate correctly.",
   "permissionGateLoading": "Checking required permissions...",
@@ -132,5 +133,6 @@
   "onboardingSkip": "Skip",
   "onboardingContinue": "Continue",
   "onboardingGetStarted": "Get Started",
-  "planYourTrip": "Plan your trip"
-}
+  "planYourTrip": "Plan your trip",
+  "droppedPin": "Dropped Pin"
+}

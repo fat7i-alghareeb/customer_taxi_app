@@ -109,6 +109,7 @@
   "sunday": "الأحد",
   "selectOption": "اختر خيارًا",
   "noResultsFound": "لا توجد نتائج.",
+  "orderLocationUnknownLabel": "الموقع المحدد",
   "permissionGateTitle": "صلاحية الموقع مطلوبة",
   "permissionGateDescription": "لاستخدام تطبيق customertaxi، يجب السماح بالوصول إلى الموقع حتى نعرض الرحلات القريبة ونوجّهك بشكل صحيح.",
   "permissionGateLoading": "جارٍ التحقق من الصلاحيات المطلوبة...",
@@ -132,5 +133,6 @@
   "onboardingSkip": "تخطي",
   "onboardingContinue": "متابعة",
   "onboardingGetStarted": "ابدأ الآن",
-  "planYourTrip": "خطط لرحلتك"
-}
+  "planYourTrip": "خطط لرحلتك",
+  "droppedPin": "نقطة محددة"
+}

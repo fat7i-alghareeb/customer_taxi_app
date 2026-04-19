@@ -18,7 +18,8 @@ Failure to use the existing tools described here and instead duplicating logic i
 Contains global switches and storage keys for application-level flows.
 
 - **`OnboardingStorageKeys`**: `finished` (tracks if onboarding is done).
-- **`SplashConfig`**: `initialDelay` (4s minimum splash).
+- **`SplashConfig`**: `initialDelay` (4s minimum splash) and
+  `mapWarmupTimeout` (max wait for splash map warmup before fallback).
 - **`AppFlowConfig`**: `onboardingEnabled`, `authEnabled` (toggle core flows).
 - **`RouterLogTags`**: Standardized tags for routing logs.
 

@@ -17,6 +17,8 @@ The router is intentionally written so that **startup is driven by state**:
 - **`OnboardingService`** decides whether onboarding is finished.
 - **`PermissionsCoordinator`** enforces mandatory location permission gate.
 - **`SplashConfig.initialDelay`** enforces a minimum splash duration.
+- **`StartupMapWarmupCoordinator`** enforces splash-time GoogleMap warmup
+  completion (with timeout fallback).
 
 So the app does not manually navigate during startup; instead, routing reacts to state changes.
 
@@ -33,8 +35,11 @@ Key parts:
   - It listens to:
     - `AuthStateNotifier`
     - `OnboardingService`
+    - `PermissionsCoordinator`
+    - `StartupMapWarmupCoordinator`
 
   - It also starts a timer that waits `SplashConfig.initialDelay` before allowing the app to leave splash.
+  - Splash can proceed once map warmup is finished (ready or timed out).
   - Any change triggers `notifyListeners()`, which causes `GoRouter.redirect` to run again.
 
 - **`AppRouterConfig`**
@@ -84,6 +89,8 @@ Responsibilities:
 
 - `AuthStateNotifier` changes (login, logout, token refresh, guest mode).
 - `OnboardingService` changes (onboarding finished flag changes).
+- `PermissionsCoordinator` changes (location permission updates).
+- `StartupMapWarmupCoordinator` changes (warmup start/ready/timeout).
 - The splash delay timer finishes.
 
 ## Startup flow (from first frame to the final screen)
@@ -100,18 +107,23 @@ This is the exact order enforced by `AppRouteGuard.handleRedirect`.
 Additionally:
 
 - `RouterRefreshListenable` starts the `SplashConfig.initialDelay` timer.
+- Splash UI starts a hidden `GoogleMap` warmup with
+  `SplashConfig.mapWarmupTimeout` as a safety fallback.
 
-### Step 1: Splash guard (minimum splash + initial auth status)
+### Step 1: Splash guard (minimum splash + auth bootstrap + map warmup)
 
 Guard logic (simplified):
 
-- If `splashDelayElapsed == false` **OR** `authStatus.status == Status.initial`:
+- If `splashDelayElapsed == false` **OR** `authStatus.status == Status.initial`
+  **OR** `mapWarmupFinished == false`:
   - Stay on splash (or redirect back to splash if you tried to navigate away).
 
 What this means:
 
 - Even if auth/onboarding resolve instantly, the splash remains visible for at least `SplashConfig.initialDelay`.
 - If the app is still bootstrapping session state, splash stays until `AuthStateNotifier` moves out of `Status.initial`.
+- Map warmup does not depend on location permission. If warmup does not complete
+  in time, timeout fallback marks the gate complete.
 
 ### Step 2: Permission gate (mandatory location)
 

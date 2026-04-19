@@ -16,7 +16,10 @@ extension AppContextExtensions on BuildContext {
 
   Size get screenSize => MediaQuery.sizeOf(this);
 
+  double get devicePixelRatio => MediaQuery.devicePixelRatioOf(this);
+
   double get screenWidth => screenSize.width;
+
 
   double get screenHeight => screenSize.height;
 

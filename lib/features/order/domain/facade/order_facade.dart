@@ -5,6 +5,7 @@ import '../../../../core/utils/result.dart';
 import '../entities/order_entity.dart';
 import '../entities/order_location_entity.dart';
 import '../entities/order_location_request_entity.dart';
+import '../entities/order_saved_location_entity.dart';
 import '../entities/order_trip_car_option_entity.dart';
 import '../entities/order_trip_route_entity.dart';
 import '../repositories/order_repository.dart';
@@ -52,5 +53,28 @@ class OrderFacade {
       '[OrderFacade] getTripCarOptions from=(${request.fromLatitude},${request.fromLongitude}) to=(${request.toLatitude},${request.toLongitude})',
     );
     return _repository.getTripCarOptions(request);
+  }
+
+  Future<Result<List<OrderSavedLocationEntity>>> getSavedLocations() {
+    printC('[OrderFacade] getSavedLocations');
+    return _repository.getSavedLocations();
+  }
+
+  Future<Result<List<OrderSavedLocationEntity>>> saveSelectedLocation(
+    OrderLocationEntity location,
+  ) {
+    printC(
+      '[OrderFacade] saveSelectedLocation lat=${location.latitude} lng=${location.longitude} label="${location.label}"',
+    );
+    return _repository.saveSelectedLocation(location);
+  }
+
+  Future<Result<List<OrderSavedLocationEntity>>> togglePinnedLocation(
+    OrderLocationEntity location,
+  ) {
+    printC(
+      '[OrderFacade] togglePinnedLocation lat=${location.latitude} lng=${location.longitude} label="${location.label}"',
+    );
+    return _repository.togglePinnedLocation(location);
   }
 }

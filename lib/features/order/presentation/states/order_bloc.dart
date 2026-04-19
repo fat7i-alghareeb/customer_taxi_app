@@ -15,6 +15,7 @@ import '../../constants/order_constants.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/entities/order_location_entity.dart';
 import '../../domain/entities/order_location_request_entity.dart';
+import '../../domain/entities/order_saved_location_entity.dart';
 import '../../domain/entities/order_trip_car_option_entity.dart';
 import '../../domain/entities/order_trip_route_entity.dart';
 import '../../domain/facade/order_facade.dart';
@@ -49,6 +50,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<_ToLocationCleared>(_onToLocationCleared);
     on<_FromSuggestionSelected>(_onFromSuggestionSelected);
     on<_ToSuggestionSelected>(_onToSuggestionSelected);
+    on<_SavedLocationPinToggled>(_onSavedLocationPinToggled);
     on<_CarTypeToggled>(_onCarTypeToggled);
     on<_PickupStreetChanged>(_onPickupStreetChanged);
     on<_PickupHouseNumberChanged>(_onPickupHouseNumberChanged);
@@ -63,6 +65,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   final OrderFacade _facade;
   final LocationService _locationService;
+  static const int _maxSavedLocationsCount = 10;
   int _tripResolutionToken = 0;
   int _prefetchToken = 0;
 
@@ -80,6 +83,317 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   bool _isPrefetchTokenCurrent(int token) {
     return _prefetchToken == token;
+  }
+
+  String _buildIdentityKey(OrderLocationEntity location) {
+    return '${location.latitude.toStringAsFixed(6)},${location.longitude.toStringAsFixed(6)}';
+  }
+
+  String _savedIdentityPreview(List<OrderSavedLocationEntity> saved) {
+    if (saved.isEmpty) {
+      return '[]';
+    }
+
+    return '[${saved.map((item) => item.identityKey).join('|')}]';
+  }
+
+  int _suggestionCountFromState(
+    BlocStatus<List<OrderSavedLocationEntity>> status,
+  ) {
+    return status.maybeWhen(success: (items) => items.length, orElse: () => -1);
+  }
+
+  List<OrderSavedLocationEntity> _sortedSavedLocations(
+    List<OrderSavedLocationEntity> locations,
+  ) {
+    final sorted = List<OrderSavedLocationEntity>.from(locations);
+    sorted.sort((first, second) {
+      if (first.isPinned != second.isPinned) {
+        return first.isPinned ? -1 : 1;
+      }
+
+      return second.touchedAtMillis.compareTo(first.touchedAtMillis);
+    });
+
+    return sorted;
+  }
+
+  List<OrderSavedLocationEntity> _normalizeSavedLocationsForUi(
+    List<OrderSavedLocationEntity> locations,
+  ) {
+    final normalized = _sortedSavedLocations(locations);
+
+    while (normalized.length > _maxSavedLocationsCount) {
+      final unpinnedIndex = normalized.lastIndexWhere((item) => !item.isPinned);
+      final removeIndex = unpinnedIndex != -1
+          ? unpinnedIndex
+          : normalized.length - 1;
+      normalized.removeAt(removeIndex);
+    }
+
+    return normalized;
+  }
+
+  List<OrderSavedLocationEntity> _filterSavedLocationsByQuery({
+    required String query,
+    required List<OrderSavedLocationEntity> saved,
+  }) {
+    final normalizedQuery = query.trim().toLowerCase();
+    if (normalizedQuery.isEmpty) {
+      return _sortedSavedLocations(saved);
+    }
+
+    final filtered = saved.where((item) {
+      return item.location.label.toLowerCase().contains(normalizedQuery);
+    }).toList();
+
+    return _sortedSavedLocations(filtered);
+  }
+
+  List<OrderSavedLocationEntity> _savedLocationsFromSearchResults(
+    List<OrderLocationEntity> locations,
+  ) {
+    final now = DateTime.now().millisecondsSinceEpoch;
+
+    return locations
+        .map(
+          (location) => OrderSavedLocationEntity(
+            identityKey: _buildIdentityKey(location),
+            location: location,
+            isPinned: false,
+            touchedAtMillis: now,
+          ),
+        )
+        .toList();
+  }
+
+  BlocStatus<List<OrderSavedLocationEntity>> _buildSuggestionsState({
+    required OrderLocationTarget target,
+    required List<OrderSavedLocationEntity> source,
+  }) {
+    final query = target == OrderLocationTarget.from
+        ? state.fromQuery
+        : state.toQuery;
+
+    final targetHasSelection = target == OrderLocationTarget.from
+        ? state.fromLocationState.isSuccess
+        : state.toLocationState.isSuccess;
+
+    printM(
+      '[OrderBloc] buildSuggestionsState target=${target.name} query="$query" sourceCount=${source.length} targetHasSelection=$targetHasSelection',
+    );
+
+    final trimmedQuery = query.trim();
+    if (trimmedQuery.isNotEmpty) {
+      printM(
+        '[OrderBloc] buildSuggestionsState target=${target.name} keep existing suggestions because query is not empty',
+      );
+      return target == OrderLocationTarget.from
+          ? state.fromSuggestionsState
+          : state.toSuggestionsState;
+    }
+
+    if (targetHasSelection) {
+      printM(
+        '[OrderBloc] buildSuggestionsState target=${target.name} return initial because target already selected',
+      );
+      return const BlocStatus.initial();
+    }
+
+    final filtered = _filterSavedLocationsByQuery(query: '', saved: source);
+    printM(
+      '[OrderBloc] buildSuggestionsState target=${target.name} using saved suggestions count=${filtered.length}',
+    );
+
+    return BlocStatus.success(filtered);
+  }
+
+  void _refreshSuggestionsFromSavedLocations(
+    Emitter<OrderState> emit,
+    List<OrderSavedLocationEntity> saved,
+  ) {
+    final normalizedSaved = _normalizeSavedLocationsForUi(saved);
+
+    printM(
+      '[OrderBloc] refreshSuggestions start rawCount=${saved.length} normalizedCount=${normalizedSaved.length} fromQuery="${state.fromQuery}" toQuery="${state.toQuery}" fromSelected=${state.fromLocationState.isSuccess} toSelected=${state.toLocationState.isSuccess}',
+    );
+    printM(
+      '[OrderBloc] refreshSuggestions identities=${_savedIdentityPreview(normalizedSaved)}',
+    );
+
+    final fromSuggestionsState = _buildSuggestionsState(
+      target: OrderLocationTarget.from,
+      source: normalizedSaved,
+    );
+    final toSuggestionsState = _buildSuggestionsState(
+      target: OrderLocationTarget.to,
+      source: normalizedSaved,
+    );
+
+    final fromCount = _suggestionCountFromState(fromSuggestionsState);
+    final toCount = _suggestionCountFromState(toSuggestionsState);
+
+    if (emit.isDone) {
+      printY(
+        '[OrderBloc] refreshSuggestions skipped emit because handler is done fromCount=$fromCount toCount=$toCount',
+      );
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        savedLocationsState: BlocStatus.success(normalizedSaved),
+        fromSuggestionsState: fromSuggestionsState,
+        toSuggestionsState: toSuggestionsState,
+      ),
+    );
+
+    printC(
+      '[OrderBloc] refreshSuggestions emitted fromSuggestions=$fromCount toSuggestions=$toCount',
+    );
+  }
+
+  List<OrderSavedLocationEntity> _buildFallbackSavedLocations(
+    OrderLocationEntity location,
+  ) {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final identityKey = _buildIdentityKey(location);
+    final currentSaved = state.savedLocationsState.maybeWhen(
+      success: (saved) => saved,
+      orElse: () => const <OrderSavedLocationEntity>[],
+    );
+
+    final merged = <String, OrderSavedLocationEntity>{
+      for (final item in currentSaved) item.identityKey: item,
+    };
+
+    final previous = merged[identityKey];
+    merged[identityKey] = OrderSavedLocationEntity(
+      identityKey: identityKey,
+      location: location,
+      isPinned: previous?.isPinned ?? false,
+      touchedAtMillis: now,
+    );
+
+    return _normalizeSavedLocationsForUi(merged.values.toList());
+  }
+
+  Future<void> _saveSelectedLocationAndRefresh(
+    Emitter<OrderState> emit,
+    OrderLocationEntity location,
+  ) async {
+    printM(
+      '[OrderBloc] saveSelectedLocationAndRefresh start identity=${_buildIdentityKey(location)} label="${location.label}" emitDone=${emit.isDone}',
+    );
+
+    final result = await _facade.saveSelectedLocation(location);
+    result.when(
+      success: (saved) {
+        printG(
+          '[OrderBloc] saveSelectedLocation success identity=${_buildIdentityKey(location)} count=${saved.length}',
+        );
+
+        if (emit.isDone) {
+          printY(
+            '[OrderBloc] saveSelectedLocation success skipped refresh because handler is done',
+          );
+          return;
+        }
+
+        _refreshSuggestionsFromSavedLocations(emit, saved);
+      },
+      failure: (message) {
+        printY('[OrderBloc] saveSelectedLocation failure=$message');
+
+        final fallbackSaved = _buildFallbackSavedLocations(location);
+
+        if (emit.isDone) {
+          printY(
+            '[OrderBloc] saveSelectedLocation failure skipped fallback refresh because handler is done',
+          );
+          return;
+        }
+
+        _refreshSuggestionsFromSavedLocations(emit, fallbackSaved);
+
+        printY(
+          '[OrderBloc] saveSelectedLocation applied in-memory fallback count=${fallbackSaved.length} identities=${_savedIdentityPreview(fallbackSaved)}',
+        );
+      },
+    );
+  }
+
+  Future<void> _toggleSavedLocationPinAndRefresh({
+    required Emitter<OrderState> emit,
+    required OrderLocationTarget target,
+    required OrderSavedLocationEntity savedLocation,
+  }) async {
+    final result = await _facade.togglePinnedLocation(savedLocation.location);
+
+    result.when(
+      success: (saved) {
+        printG(
+          '[OrderBloc] togglePinnedLocation success identity=${savedLocation.identityKey} count=${saved.length}',
+        );
+
+        final sortedSaved = _sortedSavedLocations(saved);
+        final savedByIdentity = <String, OrderSavedLocationEntity>{
+          for (final item in sortedSaved) item.identityKey: item,
+        };
+
+        var nextFromSuggestionsState = state.fromSuggestionsState;
+        var nextToSuggestionsState = state.toSuggestionsState;
+
+        if (target == OrderLocationTarget.from) {
+          if (state.fromQuery.trim().isEmpty) {
+            nextFromSuggestionsState = BlocStatus.success(
+              _filterSavedLocationsByQuery(query: '', saved: sortedSaved),
+            );
+          } else {
+            nextFromSuggestionsState = state.fromSuggestionsState.maybeWhen(
+              success: (items) {
+                return BlocStatus.success(
+                  items
+                      .map((item) => savedByIdentity[item.identityKey] ?? item)
+                      .toList(),
+                );
+              },
+              orElse: () => state.fromSuggestionsState,
+            );
+          }
+        }
+
+        if (target == OrderLocationTarget.to) {
+          if (state.toQuery.trim().isEmpty) {
+            nextToSuggestionsState = BlocStatus.success(
+              _filterSavedLocationsByQuery(query: '', saved: sortedSaved),
+            );
+          } else {
+            nextToSuggestionsState = state.toSuggestionsState.maybeWhen(
+              success: (items) {
+                return BlocStatus.success(
+                  items
+                      .map((item) => savedByIdentity[item.identityKey] ?? item)
+                      .toList(),
+                );
+              },
+              orElse: () => state.toSuggestionsState,
+            );
+          }
+        }
+
+        emit(
+          state.copyWith(
+            savedLocationsState: BlocStatus.success(sortedSaved),
+            fromSuggestionsState: nextFromSuggestionsState,
+            toSuggestionsState: nextToSuggestionsState,
+          ),
+        );
+      },
+      failure: (message) {
+        printY('[OrderBloc] togglePinnedLocation failure=$message');
+      },
+    );
   }
 
   bool _isSameLocationCoordinates(
@@ -281,6 +595,16 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     return source.copyWith(
       expandedStep: OrderExpandedStep.locationEntry,
       mapPickingTarget: OrderLocationTarget.from,
+      fromQuery: '',
+      toQuery: '',
+      fromSuggestionsState: source.savedLocationsState.maybeWhen(
+        success: (saved) => BlocStatus.success(_sortedSavedLocations(saved)),
+        orElse: () => const BlocStatus.initial(),
+      ),
+      toSuggestionsState: source.savedLocationsState.maybeWhen(
+        success: (saved) => BlocStatus.success(_sortedSavedLocations(saved)),
+        orElse: () => const BlocStatus.initial(),
+      ),
       pickupPointState: const BlocStatus.initial(),
       pickupStreetName: '',
       pickupHouseNumber: '',
@@ -308,15 +632,49 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     required double latitude,
     required double longitude,
   }) {
-    return OrderLocationEntity(
+    final coords =
+        '${latitude.toStringAsFixed(6)}, ${longitude.toStringAsFixed(6)}';
+    final fallback = OrderLocationEntity(
       latitude: latitude,
       longitude: longitude,
-      label: '${latitude.toStringAsFixed(6)}, ${longitude.toStringAsFixed(6)}',
+      label: coords,
+      primaryName: AppStrings.droppedPin,
+      secondaryAddress: coords,
     );
+
+    printC(
+      '[OrderBloc:_buildFallbackLocation] primary="${fallback.primaryName}" secondary="${fallback.secondaryAddress}"',
+    );
+
+    return fallback;
+
   }
+
 
   Future<void> _onStarted(_Started event, Emitter<OrderState> emit) async {
     printM('[OrderBloc] started');
+
+    final savedLocationsResult = await _facade.getSavedLocations();
+    savedLocationsResult.when(
+      success: (saved) {
+        printG('[OrderBloc] loaded savedLocations count=${saved.length}');
+        printM(
+          '[OrderBloc] loaded savedLocations identities=${_savedIdentityPreview(saved)}',
+        );
+        emit(
+          state.copyWith(
+            savedLocationsState: BlocStatus.success(
+              _sortedSavedLocations(saved),
+            ),
+          ),
+        );
+      },
+      failure: (message) {
+        printY('[OrderBloc] getSavedLocations failed=$message');
+        emit(state.copyWith(savedLocationsState: const BlocStatus.initial()));
+      },
+    );
+
     final lastKnown = await _locationService.getLastKnownPosition();
 
     final latitude = lastKnown?.latitude ?? MapConfig.defaultLat;
@@ -331,6 +689,16 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         mapCameraLongitude: longitude,
         mapCameraZoom: MapConfig.focusZoom,
         fromLocationState: const BlocStatus.loading(),
+        fromQuery: '',
+        toQuery: '',
+        fromSuggestionsState: state.savedLocationsState.maybeWhen(
+          success: (saved) => BlocStatus.success(_sortedSavedLocations(saved)),
+          orElse: () => const BlocStatus.initial(),
+        ),
+        toSuggestionsState: state.savedLocationsState.maybeWhen(
+          success: (saved) => BlocStatus.success(_sortedSavedLocations(saved)),
+          orElse: () => const BlocStatus.initial(),
+        ),
       ),
     );
 
@@ -357,19 +725,27 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         printY(
           '[OrderBloc] started reverseGeocode failed -> using coordinate fallback',
         );
+        final fallback = OrderLocationEntity(
+          latitude: latitude,
+          longitude: longitude,
+          label:
+              '${latitude.toStringAsFixed(6)}, ${longitude.toStringAsFixed(6)}',
+          primaryName: AppStrings.droppedPin,
+          secondaryAddress:
+              '${latitude.toStringAsFixed(6)}, ${longitude.toStringAsFixed(6)}',
+        );
+
+        printC(
+          '[OrderBloc:onStarted:fallback] primary="${fallback.primaryName}" secondary="${fallback.secondaryAddress}"',
+        );
+
         emit(
           state.copyWith(
-            fromLocationState: BlocStatus.success(
-              OrderLocationEntity(
-                latitude: latitude,
-                longitude: longitude,
-                label:
-                    '${latitude.toStringAsFixed(6)}, ${longitude.toStringAsFixed(6)}',
-              ),
-            ),
+            fromLocationState: BlocStatus.success(fallback),
             sheetMode: OrderSheetMode.collapsed,
           ),
         );
+
       },
     );
   }
@@ -394,12 +770,28 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
   }
 
-  void _onOrderNowPressed(_OrderNowPressed event, Emitter<OrderState> emit) {
+  Future<void> _onOrderNowPressed(
+    _OrderNowPressed event,
+    Emitter<OrderState> emit,
+  ) async {
     _invalidateTripResolution();
     _invalidatePrefetch();
-    printM('[OrderBloc] orderNowPressed -> expanded');
+    printM('[OrderBloc] orderNowPressed -> expanded + refresh saved locations');
     emit(
       _resetTripFlowState(state).copyWith(sheetMode: OrderSheetMode.expanded),
+    );
+
+    final savedLocationsResult = await _facade.getSavedLocations();
+    savedLocationsResult.when(
+      success: (saved) {
+        printG(
+          '[OrderBloc] orderNowPressed loaded savedLocations count=${saved.length}',
+        );
+        _refreshSuggestionsFromSavedLocations(emit, saved);
+      },
+      failure: (message) {
+        printY('[OrderBloc] orderNowPressed getSavedLocations failed=$message');
+      },
     );
   }
 
@@ -420,8 +812,16 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         mapPickingTarget: OrderLocationTarget.from,
         fromLocationState: const BlocStatus.loading(),
         toLocationState: const BlocStatus.initial(),
-        fromSuggestionsState: const BlocStatus.initial(),
-        toSuggestionsState: const BlocStatus.initial(),
+        fromQuery: '',
+        toQuery: '',
+        fromSuggestionsState: state.savedLocationsState.maybeWhen(
+          success: (saved) => BlocStatus.success(_sortedSavedLocations(saved)),
+          orElse: () => const BlocStatus.initial(),
+        ),
+        toSuggestionsState: state.savedLocationsState.maybeWhen(
+          success: (saved) => BlocStatus.success(_sortedSavedLocations(saved)),
+          orElse: () => const BlocStatus.initial(),
+        ),
       ),
     );
 
@@ -648,9 +1048,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       ),
     );
 
-    result.when(
-      success: (location) {
+    await result.when(
+      success: (location) async {
         if (!_isTripResolutionTokenCurrent(token)) {
+          printY(
+            '[OrderBloc] confirmMapPoint success dropped because token is stale token=$token current=$_tripResolutionToken',
+          );
           return;
         }
 
@@ -660,11 +1063,19 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         if (state.mapPickingTarget == OrderLocationTarget.from) {
           final nextState = _resetTripFlowState(state).copyWith(
             fromLocationState: BlocStatus.success(location),
+            fromQuery: '',
             fromSuggestionsState: const BlocStatus.initial(),
             sheetMode: OrderSheetMode.expanded,
           );
 
           emit(nextState);
+          printM(
+            '[OrderBloc] confirmMapPoint from -> persist start identity=${_buildIdentityKey(location)}',
+          );
+          await _saveSelectedLocationAndRefresh(emit, location);
+          printM(
+            '[OrderBloc] confirmMapPoint from -> persist complete identity=${_buildIdentityKey(location)}',
+          );
 
           final toLocation = _extractLocation(nextState.toLocationState);
           if (toLocation != null) {
@@ -684,11 +1095,19 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
         final nextState = _resetTripFlowState(state).copyWith(
           toLocationState: BlocStatus.success(location),
+          toQuery: '',
           toSuggestionsState: const BlocStatus.initial(),
           sheetMode: OrderSheetMode.expanded,
         );
 
         emit(nextState);
+        printM(
+          '[OrderBloc] confirmMapPoint to -> persist start identity=${_buildIdentityKey(location)}',
+        );
+        await _saveSelectedLocationAndRefresh(emit, location);
+        printM(
+          '[OrderBloc] confirmMapPoint to -> persist complete identity=${_buildIdentityKey(location)}',
+        );
 
         final fromLocation = _extractLocation(nextState.fromLocationState);
         if (fromLocation != null) {
@@ -699,8 +1118,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           );
         }
       },
-      failure: (_) {
+      failure: (_) async {
         if (!_isTripResolutionTokenCurrent(token)) {
+          printY(
+            '[OrderBloc] confirmMapPoint failure dropped because token is stale token=$token current=$_tripResolutionToken',
+          );
           return;
         }
 
@@ -712,16 +1134,33 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           longitude: state.mapCameraLongitude,
           label:
               '${state.mapCameraLatitude.toStringAsFixed(6)}, ${state.mapCameraLongitude.toStringAsFixed(6)}',
+          primaryName: AppStrings.droppedPin,
+          secondaryAddress:
+              '${state.mapCameraLatitude.toStringAsFixed(6)}, ${state.mapCameraLongitude.toStringAsFixed(6)}',
         );
+
+        printC(
+          '[OrderBloc:onConfirmMapPoint:fallback] primary="${fallback.primaryName}" secondary="${fallback.secondaryAddress}"',
+        );
+
+
 
         if (state.mapPickingTarget == OrderLocationTarget.from) {
           final nextState = _resetTripFlowState(state).copyWith(
             fromLocationState: BlocStatus.success(fallback),
+            fromQuery: '',
             fromSuggestionsState: const BlocStatus.initial(),
             sheetMode: OrderSheetMode.expanded,
           );
 
           emit(nextState);
+          printM(
+            '[OrderBloc] confirmMapPoint from fallback -> persist start identity=${_buildIdentityKey(fallback)}',
+          );
+          await _saveSelectedLocationAndRefresh(emit, fallback);
+          printM(
+            '[OrderBloc] confirmMapPoint from fallback -> persist complete identity=${_buildIdentityKey(fallback)}',
+          );
 
           final toLocation = _extractLocation(nextState.toLocationState);
           if (toLocation != null) {
@@ -741,11 +1180,19 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
         final nextState = _resetTripFlowState(state).copyWith(
           toLocationState: BlocStatus.success(fallback),
+          toQuery: '',
           toSuggestionsState: const BlocStatus.initial(),
           sheetMode: OrderSheetMode.expanded,
         );
 
         emit(nextState);
+        printM(
+          '[OrderBloc] confirmMapPoint to fallback -> persist start identity=${_buildIdentityKey(fallback)}',
+        );
+        await _saveSelectedLocationAndRefresh(emit, fallback);
+        printM(
+          '[OrderBloc] confirmMapPoint to fallback -> persist complete identity=${_buildIdentityKey(fallback)}',
+        );
 
         final fromLocation = _extractLocation(nextState.fromLocationState);
         if (fromLocation != null) {
@@ -770,13 +1217,25 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     printC(
       '[OrderBloc] fromQueryChanged query="${event.query}" trimmed="$query"',
     );
+
     if (query.isEmpty) {
+      printM('[OrderBloc] fromQueryChanged cleared -> show saved suggestions');
+      final savedCount = state.savedLocationsState.maybeWhen(
+        success: (saved) => saved.length,
+        orElse: () => 0,
+      );
       printM(
-        '[OrderBloc] fromQueryChanged cleared -> reset from suggestions and from location',
+        '[OrderBloc] fromQueryChanged cleared savedCount=$savedCount fromSelected=${state.fromLocationState.isSuccess}',
       );
       emit(
         _resetTripFlowState(state).copyWith(
-          fromSuggestionsState: const BlocStatus.initial(),
+          fromQuery: '',
+          fromSuggestionsState: state.savedLocationsState.maybeWhen(
+            success: (saved) => BlocStatus.success(
+              _filterSavedLocationsByQuery(query: '', saved: saved),
+            ),
+            orElse: () => const BlocStatus.initial(),
+          ),
           fromLocationState: const BlocStatus.initial(),
         ),
       );
@@ -785,6 +1244,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
     emit(
       _resetTripFlowState(state).copyWith(
+        fromQuery: query,
         fromSuggestionsState: const BlocStatus.loading(),
         fromLocationState: const BlocStatus.initial(),
       ),
@@ -796,14 +1256,26 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
     result.when(
       success: (locations) {
+        if (state.fromQuery != query) {
+          return;
+        }
+
         printG(
           '[OrderBloc] fromQueryChanged success suggestions=${locations.length}',
         );
         emit(
-          state.copyWith(fromSuggestionsState: BlocStatus.success(locations)),
+          state.copyWith(
+            fromSuggestionsState: BlocStatus.success(
+              _savedLocationsFromSearchResults(locations),
+            ),
+          ),
         );
       },
       failure: (message) {
+        if (state.fromQuery != query) {
+          return;
+        }
+
         printY('[OrderBloc] from search failed: $message');
         emit(state.copyWith(fromSuggestionsState: const BlocStatus.initial()));
       },
@@ -821,13 +1293,25 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     printC(
       '[OrderBloc] toQueryChanged query="${event.query}" trimmed="$query"',
     );
+
     if (query.isEmpty) {
+      printM('[OrderBloc] toQueryChanged cleared -> show saved suggestions');
+      final savedCount = state.savedLocationsState.maybeWhen(
+        success: (saved) => saved.length,
+        orElse: () => 0,
+      );
       printM(
-        '[OrderBloc] toQueryChanged cleared -> reset to suggestions and to location',
+        '[OrderBloc] toQueryChanged cleared savedCount=$savedCount toSelected=${state.toLocationState.isSuccess}',
       );
       emit(
         _resetTripFlowState(state).copyWith(
-          toSuggestionsState: const BlocStatus.initial(),
+          toQuery: '',
+          toSuggestionsState: state.savedLocationsState.maybeWhen(
+            success: (saved) => BlocStatus.success(
+              _filterSavedLocationsByQuery(query: '', saved: saved),
+            ),
+            orElse: () => const BlocStatus.initial(),
+          ),
           toLocationState: const BlocStatus.initial(),
         ),
       );
@@ -836,6 +1320,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
     emit(
       _resetTripFlowState(state).copyWith(
+        toQuery: query,
         toSuggestionsState: const BlocStatus.loading(),
         toLocationState: const BlocStatus.initial(),
       ),
@@ -847,12 +1332,26 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
     result.when(
       success: (locations) {
+        if (state.toQuery != query) {
+          return;
+        }
+
         printG(
           '[OrderBloc] toQueryChanged success suggestions=${locations.length}',
         );
-        emit(state.copyWith(toSuggestionsState: BlocStatus.success(locations)));
+        emit(
+          state.copyWith(
+            toSuggestionsState: BlocStatus.success(
+              _savedLocationsFromSearchResults(locations),
+            ),
+          ),
+        );
       },
       failure: (message) {
+        if (state.toQuery != query) {
+          return;
+        }
+
         printY('[OrderBloc] to search failed: $message');
         emit(state.copyWith(toSuggestionsState: const BlocStatus.initial()));
       },
@@ -870,8 +1369,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
     emit(
       _resetTripFlowState(state).copyWith(
+        fromQuery: '',
         fromLocationState: const BlocStatus.initial(),
-        fromSuggestionsState: const BlocStatus.initial(),
+        fromSuggestionsState: state.savedLocationsState.maybeWhen(
+          success: (saved) => BlocStatus.success(
+            _filterSavedLocationsByQuery(query: '', saved: saved),
+          ),
+          orElse: () => const BlocStatus.initial(),
+        ),
       ),
     );
   }
@@ -885,64 +1390,105 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     printM('[OrderBloc] toLocationCleared -> reset to location/suggestions');
     emit(
       _resetTripFlowState(state).copyWith(
+        toQuery: '',
         toLocationState: const BlocStatus.initial(),
-        toSuggestionsState: const BlocStatus.initial(),
+        toSuggestionsState: state.savedLocationsState.maybeWhen(
+          success: (saved) => BlocStatus.success(
+            _filterSavedLocationsByQuery(query: '', saved: saved),
+          ),
+          orElse: () => const BlocStatus.initial(),
+        ),
       ),
     );
   }
 
-  void _onFromSuggestionSelected(
+  Future<void> _onFromSuggestionSelected(
     _FromSuggestionSelected event,
     Emitter<OrderState> emit,
-  ) {
+  ) async {
     _invalidateTripResolution();
     _invalidatePrefetch();
     printM(
-      '[OrderBloc] fromSuggestionSelected lat=${event.location.latitude} lng=${event.location.longitude} label="${event.location.label}"',
+      '[OrderBloc] fromSuggestionSelected lat=${event.location.location.latitude} lng=${event.location.location.longitude} label="${event.location.location.label}"',
     );
 
     final nextState = _resetTripFlowState(state).copyWith(
-      fromLocationState: BlocStatus.success(event.location),
+      fromQuery: '',
+      fromLocationState: BlocStatus.success(event.location.location),
       fromSuggestionsState: const BlocStatus.initial(),
     );
 
     emit(nextState);
+    printM(
+      '[OrderBloc] fromSuggestionSelected persist start identity=${event.location.identityKey}',
+    );
+    await _saveSelectedLocationAndRefresh(emit, event.location.location);
+    printM(
+      '[OrderBloc] fromSuggestionSelected persist complete identity=${event.location.identityKey}',
+    );
 
     final toLocation = _extractLocation(nextState.toLocationState);
     if (toLocation != null) {
       _tryStartTripPrefetch(
         emit: emit,
-        fromLocation: event.location,
+        fromLocation: event.location.location,
         toLocation: toLocation,
       );
     }
   }
 
-  void _onToSuggestionSelected(
+  Future<void> _onToSuggestionSelected(
     _ToSuggestionSelected event,
     Emitter<OrderState> emit,
-  ) {
+  ) async {
     _invalidateTripResolution();
     _invalidatePrefetch();
     printM(
-      '[OrderBloc] toSuggestionSelected lat=${event.location.latitude} lng=${event.location.longitude} label="${event.location.label}"',
+      '[OrderBloc] toSuggestionSelected lat=${event.location.location.latitude} lng=${event.location.location.longitude} label="${event.location.location.label}"',
     );
 
     final nextState = _resetTripFlowState(state).copyWith(
-      toLocationState: BlocStatus.success(event.location),
+      toQuery: '',
+      toLocationState: BlocStatus.success(event.location.location),
       toSuggestionsState: const BlocStatus.initial(),
     );
 
     emit(nextState);
+    printM(
+      '[OrderBloc] toSuggestionSelected persist start identity=${event.location.identityKey}',
+    );
+    await _saveSelectedLocationAndRefresh(emit, event.location.location);
+    printM(
+      '[OrderBloc] toSuggestionSelected persist complete identity=${event.location.identityKey}',
+    );
 
     final fromLocation = _extractLocation(nextState.fromLocationState);
     if (fromLocation != null) {
       _tryStartTripPrefetch(
         emit: emit,
         fromLocation: fromLocation,
-        toLocation: event.location,
+        toLocation: event.location.location,
       );
     }
+  }
+
+  Future<void> _onSavedLocationPinToggled(
+    _SavedLocationPinToggled event,
+    Emitter<OrderState> emit,
+  ) async {
+    if (event.target == OrderLocationTarget.pickupPoint) {
+      return;
+    }
+
+    printM(
+      '[OrderBloc] savedLocationPinToggled target=${event.target.name} identity=${event.location.identityKey}',
+    );
+
+    await _toggleSavedLocationPinAndRefresh(
+      emit: emit,
+      target: event.target,
+      savedLocation: event.location,
+    );
   }
 
   void _onCarTypeToggled(_CarTypeToggled event, Emitter<OrderState> emit) {
@@ -1112,9 +1658,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         sheetMode: OrderSheetMode.expanded,
         expandedStep: OrderExpandedStep.pickupPoint,
         mapPickingTarget: OrderLocationTarget.pickupPoint,
+        pickupPointState: state.fromLocationState,
       ),
     );
   }
+
 
   void _onConfirmPickupPointPressed(
     _ConfirmPickupPointPressed event,

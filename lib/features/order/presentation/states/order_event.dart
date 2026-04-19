@@ -29,11 +29,17 @@ class OrderEvent with _$OrderEvent {
   const factory OrderEvent.toLocationCleared() = _ToLocationCleared;
 
   const factory OrderEvent.fromSuggestionSelected(
-    OrderLocationEntity location,
+    OrderSavedLocationEntity location,
   ) = _FromSuggestionSelected;
 
-  const factory OrderEvent.toSuggestionSelected(OrderLocationEntity location) =
-      _ToSuggestionSelected;
+  const factory OrderEvent.toSuggestionSelected(
+    OrderSavedLocationEntity location,
+  ) = _ToSuggestionSelected;
+
+  const factory OrderEvent.savedLocationPinToggled({
+    required OrderLocationTarget target,
+    required OrderSavedLocationEntity location,
+  }) = _SavedLocationPinToggled;
 
   const factory OrderEvent.carTypeToggled(String typeId) = _CarTypeToggled;
 

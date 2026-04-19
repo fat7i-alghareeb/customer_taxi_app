@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:injectable/injectable.dart';
 import 'package:customertaxi/core/config/env/env.dart';
+import 'package:customertaxi/utils/helpers/app_strings.dart';
 import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../constants/order_constants.dart';
@@ -33,13 +34,34 @@ class OrderRemoteDataSource {
       'https://maps.googleapis.com/maps/api/place/textsearch/json';
   static const String _googleDirectionsEndpoint =
       'https://maps.googleapis.com/maps/api/directions/json';
+  static const String _googlePlacesNearbySearchEndpoint =
+      'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
+
   static const Duration _mockPricingDelay = Duration(milliseconds: 900);
+  static const int _polylineDecodeIsolateThresholdChars = 900;
 
   final Dio _dio;
 
-  static final RegExp _coordinatesLabelRegex = RegExp(
-    r'^-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?$',
-  );
+  Future<List<PointLatLng>> _decodeOverviewPolylineOptimized(
+    String encodedPolyline,
+  ) async {
+    if (encodedPolyline.isEmpty) {
+      return const <PointLatLng>[];
+    }
+
+    final useIsolate =
+        encodedPolyline.length >= _polylineDecodeIsolateThresholdChars;
+
+    printM(
+      '[OrderRemoteDataSource] decodeOverviewPolyline mode=${useIsolate ? 'isolate' : 'inline'} encodedLength=${encodedPolyline.length}',
+    );
+
+    if (!useIsolate) {
+      return _decodeOverviewPolyline(encodedPolyline);
+    }
+
+    return compute(_decodeOverviewPolyline, encodedPolyline);
+  }
 
   Future<List<OrderModel>> getAllOrders() {
     return rethrowAsAppException(() async {
@@ -174,7 +196,64 @@ class OrderRemoteDataSource {
     return merged;
   }
 
+  Future<OrderLocationModel?> getNearbyPlace({
+    required double latitude,
+    required double longitude,
+    int radius = 60,
+  }) {
+    return rethrowAsAppException(() async {
+      printY(
+        '[OrderRemoteDataSource] getNearbyPlace lat=$latitude lng=$longitude radius=$radius',
+      );
+
+      final response = await _dio.get<dynamic>(
+        _googlePlacesNearbySearchEndpoint,
+        queryParameters: {
+          'location': '$latitude,$longitude',
+          'radius': radius.toString(),
+          'key': Env.googleMapsApiKey,
+          // We want the most specific/prominent names first
+          'rankby': 'prominence',
+        },
+      );
+
+      final data = response.data as Map<String, dynamic>;
+      final status = data['status']?.toString() ?? '';
+      final results = data['results'] as List<dynamic>? ?? const [];
+
+      printC(
+        '[OrderRemoteDataSource] getNearbyPlace status=$status results=${results.length}',
+      );
+
+      if (status == 'OK' && results.isNotEmpty) {
+        // Exclude generic types like 'political', 'locality' where the name is just the city
+        final specificResults = results.whereType<Map<String, dynamic>>().where((
+          res,
+        ) {
+          final types = (res['types'] as List<dynamic>? ?? const [])
+              .map((t) => t.toString())
+              .toSet();
+          return !types.contains('locality') &&
+              !types.contains('political') &&
+              !types.contains('country');
+        }).toList();
+
+        if (specificResults.isNotEmpty) {
+          final bestNearby = specificResults.first;
+          final model = OrderLocationModel.fromNearbyResult(bestNearby);
+          printG(
+            '[OrderRemoteDataSource] getNearbyPlace found name="${model.primaryName}" vicinity="${model.secondaryAddress}"',
+          );
+          return model;
+        }
+      }
+
+      return null;
+    });
+  }
+
   Future<OrderLocationModel> reverseGeocode(OrderReverseGeocodeParams params) {
+
     return rethrowAsAppException(() async {
       printY(
         '[OrderRemoteDataSource] reverseGeocode lat=${params.latitude} lng=${params.longitude}',
@@ -195,47 +274,93 @@ class OrderRemoteDataSource {
       );
 
       if (status == 'OK' && results.isNotEmpty) {
-        final normalizedResults = results.whereType<Map<String, dynamic>>();
-        final bestReadable = normalizedResults
-            .map(OrderLocationModel.fromGoogleResult)
-            .firstWhere(
-              (location) => !_coordinatesLabelRegex.hasMatch(location.label),
-              orElse: () => OrderLocationModel(
-                latitude: params.latitude,
-                longitude: params.longitude,
-                label:
-                    '${params.latitude.toStringAsFixed(6)}, ${params.longitude.toStringAsFixed(6)}',
-              ),
+        final normalizedResults =
+            results.whereType<Map<String, dynamic>>().toList()..sort(
+              (first, second) => _reverseGeocodeResultScore(
+                second,
+              ).compareTo(_reverseGeocodeResultScore(first)),
             );
 
-        if (!_coordinatesLabelRegex.hasMatch(bestReadable.label)) {
-          printG(
-            '[OrderRemoteDataSource] reverseGeocode success label="${bestReadable.label}"',
-          );
-          return bestReadable;
-        }
+        final bestResult = normalizedResults.first;
+        final bestReadable = OrderLocationModel.fromGoogleResult(bestResult);
 
-        final first = results.first;
-        if (first is Map<String, dynamic>) {
-          final fallbackReadable = OrderLocationModel.fromGoogleResult(first);
-          printY(
-            '[OrderRemoteDataSource] reverseGeocode fallback first result label="${fallbackReadable.label}"',
-          );
-          return fallbackReadable;
-        }
+        printG(
+          '[OrderRemoteDataSource] reverseGeocode success label="${bestReadable.label}"',
+        );
+
+        return bestReadable;
       }
 
       printY(
-        '[OrderRemoteDataSource] reverseGeocode fallback to lat,lng label',
+        '[OrderRemoteDataSource] reverseGeocode fallback to default label',
       );
 
       return OrderLocationModel(
         latitude: params.latitude,
         longitude: params.longitude,
-        label:
-            '${params.latitude.toStringAsFixed(6)}, ${params.longitude.toStringAsFixed(6)}',
+        label: AppStrings.orderLocationUnknownLabel,
       );
     });
+  }
+
+  int _reverseGeocodeResultScore(Map<String, dynamic> result) {
+    final resultTypes = (result['types'] as List<dynamic>? ?? const <dynamic>[])
+        .map((type) => type.toString())
+        .toSet();
+
+    int score = 0;
+
+    if (resultTypes.contains('street_address')) {
+      score += 100;
+    }
+
+    if (resultTypes.contains('premise') ||
+        resultTypes.contains('subpremise') ||
+        resultTypes.contains('establishment')) {
+      score += 90;
+    }
+
+    if (resultTypes.contains('route') || resultTypes.contains('intersection')) {
+      score += 80;
+    }
+
+    if (resultTypes.contains('point_of_interest')) {
+      score += 75;
+    }
+
+    if (resultTypes.contains('neighborhood') ||
+        resultTypes.contains('sublocality') ||
+        resultTypes.contains('sublocality_level_1')) {
+      score += 65;
+    }
+
+    if (resultTypes.contains('plus_code')) {
+      score += 20;
+    }
+
+    if (resultTypes.contains('locality')) {
+      score += 10;
+    }
+
+    final components =
+        result['address_components'] as List<dynamic>? ?? const <dynamic>[];
+
+    final hasStreetComponent = components.whereType<Map<String, dynamic>>().any(
+      (component) {
+        final types = component['types'] as List<dynamic>? ?? const <dynamic>[];
+        final typeSet = types.map((type) => type.toString()).toSet();
+
+        return typeSet.contains('route') ||
+            typeSet.contains('street_number') ||
+            typeSet.contains('premise');
+      },
+    );
+
+    if (hasStreetComponent) {
+      score += 25;
+    }
+
+    return score;
   }
 
   Future<OrderTripRouteModel> getTripRoute(OrderTripRouteParams params) {
@@ -276,9 +401,9 @@ class OrderRemoteDataSource {
           ? overviewPolyline['points']?.toString() ?? ''
           : '';
 
-      final decodedPolyline = encodedPolyline.isEmpty
-          ? const <PointLatLng>[]
-          : await compute(_decodeOverviewPolyline, encodedPolyline);
+      final decodedPolyline = await _decodeOverviewPolylineOptimized(
+        encodedPolyline,
+      );
 
       final legs = route['legs'] as List<dynamic>? ?? const [];
       final legMaps = legs.whereType<Map<String, dynamic>>().toList();

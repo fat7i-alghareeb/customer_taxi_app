@@ -64,12 +64,6 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
     return result;
   }
 
-  String _extractLocationLabel(BlocStatus<OrderLocationEntity> locationState) {
-    return locationState.maybeWhen(
-      success: (location) => location.label,
-      orElse: () => '--',
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,16 +73,33 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
     );
 
     final isPriceLoading = state.tripCarOptionsState.isLoading;
-    final fromLabel = _extractLocationLabel(state.fromLocationState);
-    final toLabel = _extractLocationLabel(state.toLocationState);
+
+    final fromLocation = state.fromLocationState.maybeWhen(
+      success: (l) => l,
+      orElse: () => const OrderLocationEntity(
+        latitude: 0,
+        longitude: 0,
+        label: '--',
+      ),
+    );
+
+    final toLocation = state.toLocationState.maybeWhen(
+      success: (l) => l,
+      orElse: () => const OrderLocationEntity(
+        latitude: 0,
+        longitude: 0,
+        label: '--',
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         OrderRouteSummaryTimelineWidget(
-          fromLabel: fromLabel,
-          toLabel: toLabel,
+          fromLocation: fromLocation,
+          toLocation: toLocation,
         ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
+
         AppSpacing.lg.verticalSpace,
         Row(
           children: [

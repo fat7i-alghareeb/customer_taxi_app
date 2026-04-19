@@ -21,7 +21,12 @@ class SplashConfig {
 
   /// Minimal time the splash screen should remain visible before
   /// navigation logic can move away from it.
-  static const Duration initialDelay = Duration(seconds: 2);
+  static const Duration initialDelay = Duration(seconds: 4);
+
+  /// Maximum time allowed for map warmup during splash before falling back
+  /// and continuing startup flow.
+  static const Duration mapWarmupTimeout = Duration(seconds: 8);
+
   static Duration durationForSplashScreen =
       initialDelay - const Duration(milliseconds: 1000);
 }

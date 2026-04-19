@@ -22,11 +22,17 @@ abstract class OrderState with _$OrderState {
     @Default(BlocStatus<OrderLocationEntity>.initial())
     BlocStatus<OrderLocationEntity> toLocationState,
 
-    @Default(BlocStatus<List<OrderLocationEntity>>.initial())
-    BlocStatus<List<OrderLocationEntity>> fromSuggestionsState,
+    @Default(BlocStatus<List<OrderSavedLocationEntity>>.initial())
+    BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,
 
-    @Default(BlocStatus<List<OrderLocationEntity>>.initial())
-    BlocStatus<List<OrderLocationEntity>> toSuggestionsState,
+    @Default(BlocStatus<List<OrderSavedLocationEntity>>.initial())
+    BlocStatus<List<OrderSavedLocationEntity>> fromSuggestionsState,
+
+    @Default(BlocStatus<List<OrderSavedLocationEntity>>.initial())
+    BlocStatus<List<OrderSavedLocationEntity>> toSuggestionsState,
+
+    @Default('') String fromQuery,
+    @Default('') String toQuery,
 
     @Default(BlocStatus<OrderLocationEntity>.initial())
     BlocStatus<OrderLocationEntity> pickupPointState,

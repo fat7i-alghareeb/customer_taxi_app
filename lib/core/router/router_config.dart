@@ -11,6 +11,7 @@ import '../../features/onboarding/presentation/ui/screens/onboarding_screen.dart
 import '../../features/permissions/presentation/ui/screens/permission_gate_screen.dart';
 import '../../features/root/presentation/ui/screens/root_screen.dart';
 import '../../features/splash/presentation/ui/screens/splash_screen.dart';
+import '../services/location/startup_map_warmup_coordinator.dart';
 import '../../utils/constants/app_flow_constants.dart';
 import '../../utils/helpers/colored_print.dart';
 import '../services/onboarding/onboarding_service.dart';
@@ -28,11 +29,13 @@ class RouterRefreshListenable extends ChangeNotifier {
     required this.authState,
     required this.onboardingService,
     required this.permissionsCoordinator,
+    required this.mapWarmupCoordinator,
   }) {
     // * Listen to all reactive sources that affect routing.
     authState.addListener(_onSourceChanged);
     onboardingService.addListener(_onSourceChanged);
     permissionsCoordinator.addListener(_onSourceChanged);
+    mapWarmupCoordinator.addListener(_onSourceChanged);
 
     // * Ensure the splash is visible for at least [SplashConfig.initialDelay]
     //   even if auth/onboarding resolve instantly.
@@ -46,11 +49,13 @@ class RouterRefreshListenable extends ChangeNotifier {
   final AuthStateNotifier authState;
   final OnboardingService onboardingService;
   final PermissionsCoordinator permissionsCoordinator;
+  final StartupMapWarmupCoordinator mapWarmupCoordinator;
 
   bool _splashDelayElapsed = false;
   int _refreshTick = 0;
 
   bool get splashDelayElapsed => _splashDelayElapsed;
+  bool get mapWarmupFinished => mapWarmupCoordinator.isWarmupFinished;
 
   void _onSourceChanged() {
     _refreshTick++;
@@ -58,7 +63,9 @@ class RouterRefreshListenable extends ChangeNotifier {
       '${RouterLogTags.router} refresh #$_refreshTick '
       'status=${authState.authStatus.status} '
       'isGuest=${authState.isGuest} '
-      'splashDelayElapsed=$_splashDelayElapsed',
+      'splashDelayElapsed=$_splashDelayElapsed '
+      'mapWarmupFinished=$mapWarmupFinished '
+      'mapWarmupState=${mapWarmupCoordinator.state.name}',
     );
     notifyListeners();
   }
@@ -68,6 +75,7 @@ class RouterRefreshListenable extends ChangeNotifier {
     authState.removeListener(_onSourceChanged);
     onboardingService.removeListener(_onSourceChanged);
     permissionsCoordinator.removeListener(_onSourceChanged);
+    mapWarmupCoordinator.removeListener(_onSourceChanged);
     super.dispose();
   }
 }
@@ -85,12 +93,14 @@ class AppRouterConfig {
     this._authState,
     this._onboardingService,
     this._permissionsCoordinator,
+    this._mapWarmupCoordinator,
     this._routeRegistry,
   ) {
     _refresh = RouterRefreshListenable(
       authState: _authState,
       onboardingService: _onboardingService,
       permissionsCoordinator: _permissionsCoordinator,
+      mapWarmupCoordinator: _mapWarmupCoordinator,
     );
 
     _guard = AppRouteGuard(
@@ -112,6 +122,7 @@ class AppRouterConfig {
       redirect: (context, state) => _guard.handleRedirect(
         state: state,
         splashDelayElapsed: _refresh.splashDelayElapsed,
+        mapWarmupFinished: _refresh.mapWarmupFinished,
       ),
       errorPageBuilder: (context, state) {
         printY(
@@ -129,6 +140,7 @@ class AppRouterConfig {
   final AuthStateNotifier _authState;
   final OnboardingService _onboardingService;
   final PermissionsCoordinator _permissionsCoordinator;
+  final StartupMapWarmupCoordinator _mapWarmupCoordinator;
   final AppRouteRegistry _routeRegistry;
 
   late final RouterRefreshListenable _refresh;
@@ -189,6 +201,7 @@ class AppRouteGuard {
   FutureOr<String?> handleRedirect({
     required GoRouterState state,
     required bool splashDelayElapsed,
+    required bool mapWarmupFinished,
   }) async {
     final cycleId = ++_redirectCycleCounter;
 
@@ -200,7 +213,8 @@ class AppRouteGuard {
       '${RouterLogTags.redirect} #$cycleId start '
       'currentPath="$currentPath" '
       'status=$initialStatus isGuest=$initialGuest '
-      'splashDelayElapsed=$splashDelayElapsed',
+      'splashDelayElapsed=$splashDelayElapsed '
+      'mapWarmupFinished=$mapWarmupFinished',
     );
 
     // 1) Splash / initial state.
@@ -208,6 +222,7 @@ class AppRouteGuard {
       currentPath: currentPath,
       status: initialStatus,
       splashDelayElapsed: splashDelayElapsed,
+      mapWarmupFinished: mapWarmupFinished,
     );
     if (splashRedirect != null) {
       printC(
@@ -221,10 +236,12 @@ class AppRouteGuard {
     // still bootstrapping), we must NOT run onboarding/auth redirects.
     // Otherwise GoRouter can immediately redirect away from the splash route
     // before the first frame is painted, making the splash appear to never show.
-    if (!splashDelayElapsed || initialStatus == Status.initial) {
+    if (!splashDelayElapsed ||
+        initialStatus == Status.initial ||
+        !mapWarmupFinished) {
       printC(
         '${RouterLogTags.redirect} #$cycleId decision -> stay '
-        '(waiting splash/auth bootstrap)',
+        '(waiting splash/auth bootstrap/map warmup)',
       );
       return null;
     }
@@ -254,10 +271,7 @@ class AppRouteGuard {
     }
 
     // 3) Permission Gate.
-    final permissionOutcome = await _handlePermissionGate(
-      currentPath,
-      cycleId,
-    );
+    final permissionOutcome = await _handlePermissionGate(currentPath, cycleId);
     if (_isStaleCycle(cycleId)) {
       printY(
         '${RouterLogTags.redirect} #$cycleId stale after permission gate, drop decision',
@@ -319,10 +333,14 @@ class AppRouteGuard {
     required String currentPath,
     required Status status,
     required bool splashDelayElapsed,
+    required bool mapWarmupFinished,
   }) {
-    if (!splashDelayElapsed || status == Status.initial) {
+    if (!splashDelayElapsed || status == Status.initial || !mapWarmupFinished) {
       if (currentPath != splashPath) {
-        printC('${RouterLogTags.redirect} → splash (bootstrapping)');
+        printC(
+          '${RouterLogTags.redirect} → splash '
+          '(bootstrapping/map warmup gate)',
+        );
         return splashPath;
       }
       return null;
@@ -331,7 +349,9 @@ class AppRouteGuard {
   }
 
   Future<({String? redirect, bool blockAuth})> _handlePermissionGate(
-      String currentPath, int cycleId) async {
+    String currentPath,
+    int cycleId,
+  ) async {
     if (!AppFlowConfig.permissionGateEnabled) {
       return (redirect: null, blockAuth: false);
     }
