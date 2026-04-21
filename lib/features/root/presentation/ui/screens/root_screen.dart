@@ -6,6 +6,7 @@ import 'package:customertaxi/features/order/presentation/states/order_bloc.dart'
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
 
 import '../widgets/root_body.dart';
+import '../widgets/root_drawer_content.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -35,6 +36,8 @@ class _RootScreenState extends State<RootScreen> {
           safeArea: [],
           resizeToAvoidBottomInset: false,
         ),
+        enableLeadingDrawer: true,
+        drawer: const RootDrawerContent(),
         child: const RootBody(),
       ),
     );

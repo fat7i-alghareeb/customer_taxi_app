@@ -1,4 +1,3 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:customertaxi/common/imports/imports.dart';
 import '../../../../domain/entities/order_location_entity.dart';
 

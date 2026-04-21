@@ -104,7 +104,18 @@ class OrderBody extends StatelessWidget {
                 const IgnorePointer(child: OrderCenterPinWidget()),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: OrderSheetSection(state: state),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: state.sheetMode == OrderSheetMode.expanded &&
+                            (state.expandedStep ==
+                                    OrderExpandedStep.pickupPoint ||
+                                state.expandedStep ==
+                                    OrderExpandedStep.carSelection)
+                        ? MediaQuery.viewInsetsOf(context).bottom
+                        : 0,
+                  ),
+                  child: OrderSheetSection(state: state),
+                ),
               ),
             ],
           ),

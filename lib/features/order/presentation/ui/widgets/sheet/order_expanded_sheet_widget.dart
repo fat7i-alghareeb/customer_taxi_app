@@ -1,6 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/core/utils/bloc_status.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -495,6 +493,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
           if (_isVehicleSelectionStep) {
             return SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -515,19 +514,19 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                   if (_isVehicleConfirmActive && !isKeyboardOpen)
                     Padding(
-                          padding: REdgeInsets.only(
-                            bottom: AppSpacing.xxl, // Increased bottom space
-                          ),
-                          child: vehicleConfirmButton,
-                        )
-                        .animate()
-                        .fadeIn(duration: AppDurations.fast)
-                        .moveY(
-                          begin: 16,
-                          end: 0,
-                          duration: AppDurations.slow,
-                          curve: Curves.easeOutCubic,
-                        ),
+                      padding: REdgeInsets.only(
+                        bottom: AppSpacing.xxl,
+                      ),
+                      child: vehicleConfirmButton,
+                    )
+                    .animate()
+                    .fadeIn(duration: AppDurations.fast)
+                    .moveY(
+                      begin: 16,
+                      end: 0,
+                      duration: AppDurations.slow,
+                      curve: Curves.easeOutCubic,
+                    ),
                 ],
               ),
             );
@@ -535,6 +534,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
           if (_isPickupPointStep) {
             return SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -558,14 +558,14 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         if (_isSyncing) {
                           return;
                         }
-
+  
                         if (_consumeIgnoredValueIfNeeded(
                           field: OrderForms.pickupStreetField,
                           value: value,
                         )) {
                           return;
                         }
-
+  
                         context.read<OrderBloc>().add(
                           OrderEvent.pickupStreetChanged(value),
                         );
@@ -574,14 +574,14 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         if (_isSyncing) {
                           return;
                         }
-
+  
                         if (_consumeIgnoredValueIfNeeded(
                           field: OrderForms.pickupHouseNumberField,
                           value: value,
                         )) {
                           return;
                         }
-
+  
                         context.read<OrderBloc>().add(
                           OrderEvent.pickupHouseNumberChanged(value),
                         );
@@ -590,23 +590,24 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                   if (!isKeyboardOpen)
                     Padding(
-                          padding: REdgeInsets.only(
-                            bottom: AppSpacing.xxl, // Increased bottom space
-                          ),
-                          child: pickupConfirmButton,
-                        )
-                        .animate()
-                        .fadeIn(duration: AppDurations.fast)
-                        .moveY(
-                          begin: 16,
-                          end: 0,
-                          duration: AppDurations.slow,
-                          curve: Curves.easeOutCubic,
-                        ),
+                      padding: REdgeInsets.only(
+                        bottom: AppSpacing.xxl,
+                      ),
+                      child: pickupConfirmButton,
+                    )
+                    .animate()
+                    .fadeIn(duration: AppDurations.fast)
+                    .moveY(
+                      begin: 16,
+                      end: 0,
+                      duration: AppDurations.slow,
+                      curve: Curves.easeOutCubic,
+                    ),
                 ],
               ),
             );
           }
+
 
           return LayoutBuilder(
             builder: (context, constraints) {

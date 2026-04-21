@@ -10,7 +10,9 @@ export 'package:easy_localization/easy_localization.dart' hide TextDirection;
 // Flutter (UI layer)
 export 'package:flutter/material.dart';
 export 'package:flutter/widgets.dart';
+export 'package:flutter_animate/flutter_animate.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
+export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 export '../../../../../core/injection/injectable.dart';
 export "../../core/theme/app_colors.dart";

@@ -1,4 +1,3 @@
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/core/services/location/startup_map_warmup_coordinator.dart';
 

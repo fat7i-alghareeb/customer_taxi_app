@@ -134,5 +134,20 @@
   "onboardingContinue": "Doorgaan",
   "onboardingGetStarted": "Aan de slag",
   "planYourTrip": "Plan je reis",
-  "droppedPin": "Gemarkeerde speld"
+  "droppedPin": "Gemarkeerde speld",
+  "theme": "Thema",
+  "language": "Taal",
+  "logout": "Uitloggen",
+  "darkMode": "Donkere modus",
+  "lightMode": "Lichte modus",
+  "languageEN": "Engels",
+  "languageAR": "Arabisch",
+  "languageNL": "Nederlands",
+  "selectLanguage": "Selecteer taal",
+  "selectTheme": "Selecteer thema",
+  "light": "Licht",
+  "dark": "Donker",
+  "settings": "Instellingen"
+
+
 }

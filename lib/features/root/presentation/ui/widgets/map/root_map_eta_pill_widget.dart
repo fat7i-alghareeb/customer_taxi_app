@@ -1,6 +1,4 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:customertaxi/common/imports/imports.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 class RootMapEtaPillWidget extends StatelessWidget {
   const RootMapEtaPillWidget({super.key, required this.durationText});

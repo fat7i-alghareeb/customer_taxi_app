@@ -61,7 +61,7 @@ dependencies:
   firebase_messaging: ^16.1.1
   firebase_core: ^4.4.0
   timezone: ^0.10.1
-  objectbox: ^5.2.0 
+  objectbox: ^5.2.0
   objectbox_flutter_libs: ^5.2.0
   path_provider: ^2.1.5
   device_preview_plus: ^2.6.1
@@ -122,7 +122,7 @@ flavorizr:
         applicationId: "dev.fat7i.customertaxi.stage"
     production:
       app:
-        name: "customertaxi"
+        name: "Adam Taxi"
         package_name: "dev.fat7i.customertaxi"
       android:
         applicationId: "dev.fat7i.customertaxi"

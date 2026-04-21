@@ -31,17 +31,10 @@ class OrderSheetSection extends StatelessWidget {
         }
 
         if (state.expandedStep == OrderExpandedStep.pickupPoint) {
-          return OrderConstants.expandedPickupStepBaseHeight.h +
-              OrderConstants.expandedPickupConfirmButtonExtraHeight.h;
+          return OrderConstants.expandedPickupStepBaseHeight.h;
         }
-
-        final hasVehicleConfirm =
-            state.selectedCarTypeId?.trim().isNotEmpty ?? false;
-
-        return OrderConstants.expandedVehicleStepBaseHeight.h +
-            (hasVehicleConfirm
-                ? OrderConstants.expandedVehicleConfirmButtonExtraHeight.h
-                : 0);
+        
+        return OrderConstants.expandedVehicleStepBaseHeight.h;
       case OrderSheetMode.mapPicking:
         return OrderConstants.mapPickSheetHeight.h;
     }

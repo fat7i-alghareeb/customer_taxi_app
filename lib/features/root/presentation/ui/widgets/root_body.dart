@@ -6,6 +6,7 @@ import 'package:customertaxi/features/root/domain/entities/root_map_location_ent
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
 
 import 'map/root_map_loading_section.dart';
+import 'map/root_map_menu_button.dart';
 import 'map/root_map_section.dart';
 
 class RootBody extends StatelessWidget {
@@ -45,6 +46,7 @@ class RootBody extends StatelessWidget {
                   );
                 },
               ),
+              const RootMapMenuButton(),
               const OrderBody(),
             ],
           ),

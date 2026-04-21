@@ -25,6 +25,7 @@ final class AppScaffoldAppBarConfig {
     this.enableDrawer = false,
     this.drawerIcon,
     this.drawerActionPadding = const EdgeInsets.all(11),
+    this.enableLeadingDrawer = false,
   });
 
   final double? height;
@@ -52,10 +53,10 @@ final class AppScaffoldAppBarConfig {
   /// Whether a leading widget should be shown.
   final bool showLeading;
 
-  /// Custom leading widget.
+  /// Custom leading widget source.
   ///
   /// When `null`, a default back icon is used.
-  final Widget? leading;
+  final IconSource? leading;
 
   /// Callback invoked when the leading widget is tapped.
   ///
@@ -71,6 +72,9 @@ final class AppScaffoldAppBarConfig {
   /// - injects a drawer action into the app bar
   final bool enableDrawer;
 
+  /// Enables a leading drawer via a menu button in the start (top-start) corner.
+  final bool enableLeadingDrawer;
+
   /// Optional icon for the drawer action.
   final IconSource? drawerIcon;
 
@@ -81,7 +85,11 @@ final class AppScaffoldAppBarConfig {
 ///
 /// This file intentionally avoids using Flutter's [AppBar].
 class _AppScaffoldAppBar extends StatelessWidget {
-  const _AppScaffoldAppBar({required this.config, required this.drawerEnabled});
+  const _AppScaffoldAppBar({
+    required this.config,
+    required this.drawerEnabled,
+    required this.leadingDrawerEnabled,
+  });
 
   final AppScaffoldAppBarConfig config;
 
@@ -89,6 +97,9 @@ class _AppScaffoldAppBar extends StatelessWidget {
   ///
   /// When true, a drawer action button is injected at the end of the actions.
   final bool drawerEnabled;
+
+  /// Whether the leading drawer is enabled for this scaffold.
+  final bool leadingDrawerEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -184,19 +195,31 @@ class _AppScaffoldAppBar extends StatelessWidget {
   Widget? _buildLeading(BuildContext context) {
     if (!config.showLeading) return null;
 
-    /// If no custom leading widget is provided, we default to a standard back icon.
-    final icon =
-        config.leading ??
-        IconSource.icon(
-          context.chevronStart,
-        ).build(context, color: context.onSurface, size: 22);
+    /// If leadingDrawerEnabled is true and no custom leading is provided,
+    /// we show a menu icon that triggers the leading drawer.
+    final IconSource icon;
+    if (leadingDrawerEnabled && config.leading == null) {
+      icon = config.drawerIcon ?? IconSource.icon(Icons.menu);
+    } else {
+      icon = config.leading ?? IconSource.icon(context.chevronStart);
+    }
 
-    /// If no leading callback is provided, default behavior is route pop.
-    final onTap = config.onLeadingTap ?? () => context.pop();
+    final resolvedIcon = icon.build(context, color: context.onSurface, size: 22);
+
+    /// If no leading callback is provided, default behavior depends on drawer.
+    final onTap =
+        config.onLeadingTap ??
+        () {
+          if (leadingDrawerEnabled) {
+            Scaffold.of(context).openDrawer();
+          } else {
+            context.pop();
+          }
+        };
 
     return _TapArea(
       onTap: onTap,
-      child: Padding(padding: config.leadingPadding, child: icon),
+      child: Padding(padding: config.leadingPadding, child: resolvedIcon),
     );
   }
 }

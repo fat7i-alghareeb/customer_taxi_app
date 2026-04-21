@@ -14,6 +14,14 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/Group 26.png
+  AssetGenImage get group26 =>
+      const AssetGenImage('assets/images/Group 26.png');
+
+  /// File path: assets/images/Group 27.png
+  AssetGenImage get group27 =>
+      const AssetGenImage('assets/images/Group 27.png');
+
   /// File path: assets/images/legacy_logo.png
   AssetGenImage get legacyLogo =>
       const AssetGenImage('assets/images/legacy_logo.png');
@@ -48,6 +56,8 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    group26,
+    group27,
     legacyLogo,
     logoLauncher,
     onboarding1,

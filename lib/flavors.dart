@@ -13,7 +13,7 @@ class F {
       case Flavor.stage:
         return 'customertaxi Stage';
       case Flavor.production:
-        return 'customertaxi';
+        return 'Adam Taxi';
     }
   }
 

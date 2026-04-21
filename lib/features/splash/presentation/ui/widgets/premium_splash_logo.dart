@@ -1,4 +1,3 @@
-import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../../common/imports/imports.dart';
 

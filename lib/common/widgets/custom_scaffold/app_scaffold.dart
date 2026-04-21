@@ -100,9 +100,8 @@ class AppScaffold extends StatelessWidget {
     this.scaffoldConfig = const AppScaffoldConfig(),
     this.appBarConfig,
     this.searchConfig,
-
+    this.drawer,
     this.endDrawer,
-
     this.bottomNavigationBar,
     this.topSpacing = 0,
     this.afterAppBarSpacing = AppSpacing.md,
@@ -118,7 +117,9 @@ class AppScaffold extends StatelessWidget {
     AppScaffoldConfig scaffoldConfig = const AppScaffoldConfig(),
     double topSpacing = 0,
     Widget? bottomNavigationBar,
+    Widget? drawer,
     Widget? endDrawer,
+    bool enableLeadingDrawer = false,
   }) {
     return AppScaffold._(
       key: key,
@@ -126,7 +127,11 @@ class AppScaffold extends StatelessWidget {
       scaffoldConfig: scaffoldConfig,
       topSpacing: topSpacing,
       bottomNavigationBar: bottomNavigationBar,
+      drawer: drawer,
       endDrawer: endDrawer,
+      appBarConfig: enableLeadingDrawer
+          ? const AppScaffoldAppBarConfig(enableLeadingDrawer: true)
+          : null,
       child: child,
     );
   }
@@ -139,6 +144,7 @@ class AppScaffold extends StatelessWidget {
     double topSpacing = 0,
     double afterAppBarSpacing = AppSpacing.md,
     Widget? bottomNavigationBar,
+    Widget? drawer,
     Widget? endDrawer,
   }) {
     return AppScaffold._(
@@ -149,6 +155,7 @@ class AppScaffold extends StatelessWidget {
       topSpacing: topSpacing,
       afterAppBarSpacing: afterAppBarSpacing,
       bottomNavigationBar: bottomNavigationBar,
+      drawer: drawer,
       endDrawer: endDrawer,
       child: child,
     );
@@ -215,6 +222,7 @@ class AppScaffold extends StatelessWidget {
     double afterAppBarSpacing = AppSpacing.md,
     double afterSearchSpacing = AppSpacing.md,
     Widget? bottomNavigationBar,
+    Widget? drawer,
     Widget? endDrawer,
   }) {
     return AppScaffold._(
@@ -227,6 +235,7 @@ class AppScaffold extends StatelessWidget {
       afterAppBarSpacing: afterAppBarSpacing,
       afterSearchSpacing: afterSearchSpacing,
       bottomNavigationBar: bottomNavigationBar,
+      drawer: drawer,
       endDrawer: endDrawer,
       child: child,
     );
@@ -239,9 +248,9 @@ class AppScaffold extends StatelessWidget {
   final AppScaffoldAppBarConfig? appBarConfig;
   final AppScaffoldSearchConfig? searchConfig;
 
-  /// Optional end drawer content.
-  ///
-  /// Only built when the drawer feature is enabled.
+  /// Optional leading drawer content.
+  final Widget? drawer;
+
   final Widget? endDrawer;
 
   final Widget? bottomNavigationBar;
@@ -259,8 +268,9 @@ class AppScaffold extends StatelessWidget {
   /// Drawer is intentionally gated behind the app bar so:
   /// - we don't expose a drawer action without a chrome that can trigger it
   /// - we don't allocate/endDrawer unless explicitly required
-  bool get _drawerEnabled =>
-      _appBarEnabled && (appBarConfig?.enableDrawer ?? false);
+  bool get _drawerEnabled => appBarConfig?.enableDrawer ?? false;
+
+  bool get _leadingDrawerEnabled => appBarConfig?.enableLeadingDrawer ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -283,6 +293,7 @@ class AppScaffold extends StatelessWidget {
             _AppScaffoldAppBar(
               config: appBarConfig,
               drawerEnabled: _drawerEnabled,
+              leadingDrawerEnabled: _leadingDrawerEnabled,
             ).standardHorizontalPadding,
             if (afterAppBarSpacing > 0) afterAppBarSpacing.verticalSpace,
           ],
@@ -302,7 +313,12 @@ class AppScaffold extends StatelessWidget {
       child: Scaffold(
         backgroundColor: scaffoldConfig.backgroundColor,
         resizeToAvoidBottomInset: scaffoldConfig.resizeToAvoidBottomInset,
-        endDrawer: _drawerEnabled ? _AppEndDrawerShell(child: endDrawer) : null,
+        drawer: _leadingDrawerEnabled
+            ? _AppDrawerShell.start(child: drawer)
+            : null,
+        endDrawer: _drawerEnabled
+            ? _AppDrawerShell.end(child: endDrawer)
+            : null,
         body: body,
         bottomNavigationBar: bottomNavigationBar,
       ),

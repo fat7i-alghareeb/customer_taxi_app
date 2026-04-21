@@ -13,14 +13,14 @@ abstract class OrderConstants {
 
   static const double mapPickSheetHeight = 160;
   static const double expandedSheetHeightFactor = 0.6;
-  static const double expandedVehicleStepBaseHeight = 308;
+  static const double expandedVehicleStepBaseHeight = 420;
   static const double expandedVehicleConfirmButtonExtraHeight = 76;
-  static const double expandedPickupStepBaseHeight = 360;
+  static const double expandedPickupStepBaseHeight = 460;
   static const double expandedPickupConfirmButtonExtraHeight = 76;
   static const double expandedRouteFitPaddingFactor = 0.24;
   static const double vehicleCardWidth = 240;
   static const double vehicleCardsViewportHeight = 74;
-  static const int pickupPointMaxDistanceMeters = 300;
+  static const int pickupPointMaxDistanceMeters = 50;
 
   static const double expandedHeaderHeight = 72;
   static const double mapContextStripHeight = 48;

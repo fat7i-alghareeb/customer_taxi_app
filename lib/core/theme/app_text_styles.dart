@@ -74,6 +74,11 @@ class AppTextStyles {
     return _withWeight(base, FontWeight.w600);
   }
 
+  static TextStyle get s16w700 {
+    final base = AppTypography.textTheme?.titleMedium;
+    return _withWeight(base, FontWeight.w700);
+  }
+
   static TextStyle get s14w600 {
     final base = AppTypography.textTheme?.titleSmall;
     return _withWeight(base, FontWeight.w600);
@@ -92,6 +97,11 @@ class AppTextStyles {
   static TextStyle get s12w400 {
     final base = AppTypography.textTheme?.bodySmall;
     return _withWeight(base, FontWeight.w400);
+  }
+
+  static TextStyle get s12w700 {
+    final base = AppTypography.textTheme?.bodySmall;
+    return _withWeight(base, FontWeight.w700);
   }
 
   static TextStyle get s14w500 {

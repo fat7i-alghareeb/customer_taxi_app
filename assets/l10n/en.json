@@ -52,7 +52,7 @@
   "pickupStreetName": "Street name",
   "pickupHouseNumber": "House number",
   "pickupPointRequired": "Please select a pickup point first.",
-  "pickupPointTooFar": "Pickup point must be within 300 meters of your start point.",
+  "pickupPointTooFar": "Pickup point must be within 50 meters of your start point.",
   "orderConfirmedSuccess": "Order confirmed successfully.",
   "selectCarType": "Select car type",
   "estimatedTripTime": "Estimated trip time",
@@ -134,5 +134,20 @@
   "onboardingContinue": "Continue",
   "onboardingGetStarted": "Get Started",
   "planYourTrip": "Plan your trip",
-  "droppedPin": "Dropped Pin"
-}
+  "droppedPin": "Dropped Pin",
+  "theme": "Theme",
+  "language": "Language",
+  "logout": "Logout",
+  "darkMode": "Dark mode",
+  "lightMode": "Light mode",
+  "languageEN": "English",
+  "languageAR": "Arabic",
+  "languageNL": "Dutch",
+  "selectLanguage": "Select Language",
+  "selectTheme": "Select Theme",
+  "light": "Light",
+  "dark": "Dark",
+  "settings": "Settings"
+
+
+}

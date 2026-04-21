@@ -52,7 +52,7 @@
   "pickupStreetName": "اسم الشارع",
   "pickupHouseNumber": "رقم المنزل",
   "pickupPointRequired": "يرجى تحديد نقطة الالتقاط أولاً.",
-  "pickupPointTooFar": "يجب أن تكون نقطة الالتقاط ضمن 300 متر من نقطة البداية.",
+  "pickupPointTooFar": "يجب أن تكون نقطة الالتقاط ضمن 50 متر من نقطة البداية.",
   "orderConfirmedSuccess": "تم تأكيد الطلب بنجاح.",
   "selectCarType": "اختر نوع السيارة",
   "estimatedTripTime": "الوقت التقريبي للرحلة",
@@ -134,5 +134,20 @@
   "onboardingContinue": "متابعة",
   "onboardingGetStarted": "ابدأ الآن",
   "planYourTrip": "خطط لرحلتك",
-  "droppedPin": "نقطة محددة"
-}
+  "droppedPin": "نقطة محددة",
+  "theme": "المظهر",
+  "language": "اللغة",
+  "logout": "تسجيل الخروج",
+  "darkMode": "الوضع الليلي",
+  "lightMode": "الوضع النهاري",
+  "languageEN": "English",
+  "languageAR": "العربية",
+  "languageNL": "الهولندية",
+  "selectLanguage": "اختر اللغة",
+  "selectTheme": "اختر السمة",
+  "light": "الفاتح",
+  "dark": "الداكن",
+  "settings": "الإعدادات"
+
+
+}

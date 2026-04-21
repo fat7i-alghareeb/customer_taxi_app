@@ -39,6 +39,10 @@ class AppStrings {
   static String get confirmOrder => 'confirmOrder'.tr();
   /// Confirm point - تأكيد النقطة - Punt bevestigen
   static String get confirmPoint => 'confirmPoint'.tr();
+  /// Dark - الداكن - Donker
+  static String get dark => 'dark'.tr();
+  /// Dark mode - الوضع الليلي - Donkere modus
+  static String get darkMode => 'darkMode'.tr();
   /// Dec - ديس - Dec
   static String get dec => 'dec'.tr();
   /// December - ديسمبر - December
@@ -75,6 +79,20 @@ class AppStrings {
   static String get jun => 'jun'.tr();
   /// June - يونيو - Juni
   static String get june => 'june'.tr();
+  /// Language - اللغة - Taal
+  static String get language => 'language'.tr();
+  /// Arabic - العربية - Arabisch
+  static String get languageAR => 'languageAR'.tr();
+  /// English - English - Engels
+  static String get languageEN => 'languageEN'.tr();
+  /// Dutch - الهولندية - Nederlands
+  static String get languageNL => 'languageNL'.tr();
+  /// Light - الفاتح - Licht
+  static String get light => 'light'.tr();
+  /// Light mode - الوضع النهاري - Lichte modus
+  static String get lightMode => 'lightMode'.tr();
+  /// Logout - تسجيل الخروج - Uitloggen
+  static String get logout => 'logout'.tr();
   /// Mar - مار - Mrt
   static String get mar => 'mar'.tr();
   /// March - مارس - Maart
@@ -155,7 +173,7 @@ class AppStrings {
   static String get pickupPointNotSelected => 'pickupPointNotSelected'.tr();
   /// Please select a pickup point first. - يرجى تحديد نقطة الالتقاط أولاً. - Selecteer eerst een ophaalpunt.
   static String get pickupPointRequired => 'pickupPointRequired'.tr();
-  /// Pickup point must be within 300 meters of your start point. - يجب أن تكون نقطة الالتقاط ضمن 300 متر من نقطة البداية. - Het ophaalpunt moet binnen 300 meter van uw startpunt liggen.
+  /// Pickup point must be within 50 meters of your start point. - يجب أن تكون نقطة الالتقاط ضمن 50 متر من نقطة البداية. - Het ophaalpunt moet binnen 300 meter van uw startpunt liggen.
   static String get pickupPointTooFar => 'pickupPointTooFar'.tr();
   /// Street name - اسم الشارع - Straatnaam
   static String get pickupStreetName => 'pickupStreetName'.tr();
@@ -193,12 +211,16 @@ class AppStrings {
   static String get selectDateTime => 'selectDateTime'.tr();
   /// Select day - اختر اليوم - Dag selecteren
   static String get selectDay => 'selectDay'.tr();
+  /// Select Language - اختر اللغة - Selecteer taal
+  static String get selectLanguage => 'selectLanguage'.tr();
   /// Select month - اختر الشهر - Maand selecteren
   static String get selectMonth => 'selectMonth'.tr();
   /// Select option - اختر خيارًا - Selecteer optie
   static String get selectOption => 'selectOption'.tr();
   /// Select pickup point - اختر نقطة الالتقاط - Selecteer ophaalpunt
   static String get selectPickupPoint => 'selectPickupPoint'.tr();
+  /// Select Theme - اختر السمة - Selecteer thema
+  static String get selectTheme => 'selectTheme'.tr();
   /// Select time - اختر الوقت - Tijd selecteren
   static String get selectTime => 'selectTime'.tr();
   /// Select year - اختر السنة - Jaar selecteren
@@ -215,6 +237,8 @@ class AppStrings {
   static String get setOnMap => 'setOnMap'.tr();
   /// Set pickup point on map - حدد نقطة الالتقاط على الخريطة - Stel ophaalpunt in op de kaart
   static String get setPickupPointOnMap => 'setPickupPointOnMap'.tr();
+  /// Settings - الإعدادات - Instellingen
+  static String get settings => 'settings'.tr();
   /// Something went wrong. - حدث خطأ ما. - Er is iets misgegaan.
   static String get somethingWentWrong => 'somethingWentWrong'.tr();
   /// Suggestions - اقتراحات - Suggesties
@@ -223,6 +247,8 @@ class AppStrings {
   static String get sun => 'sun'.tr();
   /// Sunday - الأحد - Zondag
   static String get sunday => 'sunday'.tr();
+  /// Theme - المظهر - Thema
+  static String get theme => 'theme'.tr();
   /// Thu - خمي - Do
   static String get thu => 'thu'.tr();
   /// Thursday - الخميس - Donderdag
