@@ -37,7 +37,7 @@ workflows:
       email:
         recipients:
           - fat7ighareeb@gmail.com
-          - fat7ighareeb@gmail.com
+          # - fat7ighareeb@gmail.com
           # - amiradelsaad@gmail.com
           # - me@aminuix.com
         notify:
