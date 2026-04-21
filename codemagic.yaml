@@ -25,9 +25,27 @@ workflows:
 
       - name: Generate Code
         script: |
+          # Diagnostic output for verification
+          echo "--- Environment Diagnostics ---"
+          if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
+            echo "❌ ERROR: GOOGLE_MAPS_API_KEY is empty or not found."
+          else
+            echo "✅ GOOGLE_MAPS_API_KEY detected (Length: ${#GOOGLE_MAPS_API_KEY})"
+          fi
+          
+          if [ -z "$PRODUCTION_BASE_URL" ]; then
+            echo "❌ ERROR: PRODUCTION_BASE_URL is empty or not found."
+          else
+            echo "✅ PRODUCTION_BASE_URL detected (Length: ${#PRODUCTION_BASE_URL})"
+          fi
+          echo "-------------------------------"
+
+          # Write to .env for build_runner and build.gradle
           echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" > .env
           echo "STAGE_BASE_URL=$STAGE_BASE_URL" >> .env
           echo "PRODUCTION_BASE_URL=$PRODUCTION_BASE_URL" >> .env
+          
+          # Run build_runner
           dart run build_runner build --delete-conflicting-outputs
 
       - name: Build APK (Production)

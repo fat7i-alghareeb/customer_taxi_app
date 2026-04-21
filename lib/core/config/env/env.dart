@@ -4,7 +4,7 @@ part 'env.g.dart';
 
 @Envied(path: '.env')
 abstract class Env {
-  @EnviedField(varName: 'GOOGLE_MAPS_API_KEY', obfuscate: true)
+  @EnviedField(varName: 'GOOGLE_MAPS_API_KEY', obfuscate: true, defaultValue: '')
   static final String googleMapsApiKey = _Env.googleMapsApiKey;
 
   @EnviedField(varName: 'STAGE_BASE_URL', defaultValue: '')

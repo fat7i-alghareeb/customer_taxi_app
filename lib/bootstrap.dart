@@ -48,9 +48,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         orElse: () => Flavor.stage,
       );
 
-      //    Configure the dependency injection container and register
-      //    low-level services and singletons.
+      printG('[Bootstrap] configureDependencies starting...');
       await configureDependencies();
+      printG('[Bootstrap] configureDependencies done');
 
       if (F.appFlavor == Flavor.stage) {
         if (!getIt.isRegistered<StageDevicePreviewController>()) {
@@ -61,18 +61,29 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         await getIt<StageDevicePreviewController>().load();
       }
 
+      printG('[Bootstrap] initializing notifications...');
       await _initializeNotifications();
+      printG('[Bootstrap] notifications initialized');
 
+      printG('[Bootstrap] initializing EasyLocalization...');
       await EasyLocalization.ensureInitialized();
+      printG('[Bootstrap] EasyLocalization ready');
+
+      printG('[Bootstrap] initializing ThemeController...');
       await getIt<ThemeController>().initialize();
+      printG('[Bootstrap] ThemeController ready');
 
+      printG('[Bootstrap] initializing Auth and Network...');
       await _initializeAuthAndNetwork();
+      printG('[Bootstrap] Auth and Network ready');
 
-      //    Resolve the locale that the app should start with using
-      //    the [LocaleService] abstraction.
+      printG('[Bootstrap] resolving initial locale...');
       final initialLocale = await getIt<LocaleService>().resolveInitialLocale();
+      printG('[Bootstrap] initialLocale resolved: $initialLocale');
 
+      printG('[Bootstrap] running app builder...');
       await _runGuardedApp(builder, initialLocale);
+      printG('[Bootstrap] app running');
     },
     (error, stackTrace) {
       // Last-resort safety net for any exceptions that happen outside
