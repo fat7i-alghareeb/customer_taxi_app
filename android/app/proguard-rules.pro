@@ -25,3 +25,8 @@
 # Prevent obfuscation of some essential classes
 -dontwarn io.objectbox.**
 -dontwarn com.google.android.gms.**
+-dontwarn com.google.android.play.core.**
+
+# Keep Play Core classes if present
+-keep class com.google.android.play.core.** { *; }
+-keep interface com.google.android.play.core.** { *; }
