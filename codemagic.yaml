@@ -1,6 +1,6 @@
 workflows:
   android-production:
-    name: Fat7i Android APK (Production)
+    name: Adam Taxi Android APK (Production)
 
     max_build_duration: 60
 
@@ -37,7 +37,7 @@ workflows:
       email:
         recipients:
           - fat7ighareeb@gmail.com
-          # - fat7ighareeb@gmail.com
+          - fat7ighareeb@gmail.com
           # - amiradelsaad@gmail.com
           # - me@aminuix.com
         notify:
