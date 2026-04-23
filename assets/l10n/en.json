@@ -147,7 +147,13 @@
   "selectTheme": "Select Theme",
   "light": "Light",
   "dark": "Dark",
-  "settings": "Settings"
-
-
+  "settings": "Settings",
+  "phoneNumber": "Phone Number",
+  "otp": "Verification",
+  "sendOtp": "Send Code",
+  "verifyOtp": "Verify Code",
+  "enterPhone": "Enter phone number",
+  "enterOtp": "Enter 4-digit code",
+  "invalidOtp": "Invalid code. Please try again.",
+  "login": "Login"
 }

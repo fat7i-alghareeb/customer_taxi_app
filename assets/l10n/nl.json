@@ -147,7 +147,13 @@
   "selectTheme": "Selecteer thema",
   "light": "Licht",
   "dark": "Donker",
-  "settings": "Instellingen"
-
-
+  "settings": "Instellingen",
+  "phoneNumber": "Telefoonnummer",
+  "otp": "Verificatie",
+  "sendOtp": "Code verzenden",
+  "verifyOtp": "Code verifiëren",
+  "enterPhone": "Voer telefoonnummer in",
+  "enterOtp": "Voer 4-cijferige code in",
+  "invalidOtp": "Ongeldige code. Probeer het opnieuw.",
+  "login": "Inloggen"
 }

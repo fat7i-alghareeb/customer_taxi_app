@@ -55,6 +55,10 @@ class AppStrings {
   static String get droppedPin => 'droppedPin'.tr();
   /// No data available. - لا توجد بيانات متاحة. - Geen gegevens beschikbaar.
   static String get emptyStateNoData => 'emptyStateNoData'.tr();
+  /// Enter 4-digit code - أدخل الرمز المكون من 4 أرقام - Voer 4-cijferige code in
+  static String get enterOtp => 'enterOtp'.tr();
+  /// Enter phone number - أدخل رقم الهاتف - Voer telefoonnummer in
+  static String get enterPhone => 'enterPhone'.tr();
   /// Estimated trip time - الوقت التقريبي للرحلة - Geschatte reistijd
   static String get estimatedTripTime => 'estimatedTripTime'.tr();
   /// Feb - فبر - Feb
@@ -67,6 +71,8 @@ class AppStrings {
   static String get friday => 'friday'.tr();
   /// From - من - Van
   static String get from => 'from'.tr();
+  /// Invalid code. Please try again. - الرمز غير صحيح. يرجى المحاولة مرة أخرى. - Ongeldige code. Probeer het opnieuw.
+  static String get invalidOtp => 'invalidOtp'.tr();
   /// Jan - ينا - Jan
   static String get jan => 'jan'.tr();
   /// January - يناير - Januari
@@ -91,6 +97,8 @@ class AppStrings {
   static String get light => 'light'.tr();
   /// Light mode - الوضع النهاري - Lichte modus
   static String get lightMode => 'lightMode'.tr();
+  /// Login - تسجيل الدخول - Inloggen
+  static String get login => 'login'.tr();
   /// Logout - تسجيل الخروج - Uitloggen
   static String get logout => 'logout'.tr();
   /// Mar - مار - Mrt
@@ -145,6 +153,8 @@ class AppStrings {
   static String get orderLocationUnknownLabel => 'orderLocationUnknownLabel'.tr();
   /// Order now - اطلب الآن - Nu bestellen
   static String get orderNow => 'orderNow'.tr();
+  /// Verification - التحقق - Verificatie
+  static String get otp => 'otp'.tr();
   /// You cannot continue using the app until location permission is granted. - لا يمكنك متابعة استخدام التطبيق حتى تمنح صلاحية الموقع. - U kunt de app niet blijven gebruiken totdat de locatiepermissie is verleend.
   static String get permissionGateBlockingHint => 'permissionGateBlockingHint'.tr();
   /// Location permission is still denied. Please allow it to continue. - ما زالت صلاحية الموقع مرفوضة. يرجى السماح بها للمتابعة. - Locatiepermissie is nog steeds geweigerd. Sta dit toe om door te gaan.
@@ -163,6 +173,8 @@ class AppStrings {
   static String get permissionGateTitle => 'permissionGateTitle'.tr();
   /// Check again - التحقق مرة أخرى - Controleer opnieuw
   static String get permissionGateTryAgain => 'permissionGateTryAgain'.tr();
+  /// Phone Number - رقم الهاتف - Telefoonnummer
+  static String get phoneNumber => 'phoneNumber'.tr();
   /// Pickup details (optional) - تفاصيل الالتقاط (اختياري) - Ophaalgegevens (optioneel)
   static String get pickupDetailsOptional => 'pickupDetailsOptional'.tr();
   /// House number - رقم المنزل - Huisnummer
@@ -225,6 +237,8 @@ class AppStrings {
   static String get selectTime => 'selectTime'.tr();
   /// Select year - اختر السنة - Jaar selecteren
   static String get selectYear => 'selectYear'.tr();
+  /// Send Code - إرسال الرمز - Code verzenden
+  static String get sendOtp => 'sendOtp'.tr();
   /// Sep - سبتم - Sep
   static String get sep => 'sep'.tr();
   /// September - سبتمبر - September
@@ -297,6 +311,8 @@ class AppStrings {
   static String get validationRequiredTrue => 'validationRequiredTrue'.tr();
   /// Invalid value. - قيمة غير صحيحة. - Ongeldige waarde.
   static String get validationUnknown => 'validationUnknown'.tr();
+  /// Verify Code - تحقق من الرمز - Code verifiëren
+  static String get verifyOtp => 'verifyOtp'.tr();
   /// Wed - أرب - Wo
   static String get wed => 'wed'.tr();
   /// Wednesday - الأربعاء - Woensdag

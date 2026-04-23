@@ -66,6 +66,12 @@ extension AppThemeContextX on BuildContext {
 
   /// Color used for content on top of [error].
   Color get onError => colorScheme.onError;
+
+  /// Variant of onSurface (typically lighter text).
+  Color get onSurfaceVariant => colorScheme.onSurfaceVariant;
+
+  /// Container colors for modern surface designs.
+  Color get surfaceContainer => colorScheme.surfaceContainer;
 }
 
 /// Extensions for accessing text styles directly from [BuildContext].
