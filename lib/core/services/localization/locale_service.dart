@@ -35,10 +35,8 @@ class LocaleService {
     if (savedCode != null && _isSupported(savedCode)) {
       finalCode = savedCode;
     } else {
-      final deviceCode = _deviceLanguageCode();
-      finalCode = _isSupported(deviceCode)
-          ? deviceCode
-          : AppLocalizationConfig.fallbackLanguageCode;
+      // final deviceCode = _deviceLanguageCode();
+      finalCode = AppLocalizationConfig.fallbackLanguageCode;
 
       await _storage.writeString(LocalizationStorageKeys.localeCode, finalCode);
     }

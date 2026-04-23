@@ -107,6 +107,17 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.state != widget.state) {
       _syncFormWithState(widget.state);
+
+      final wasConfirmActive =
+          oldWidget.state.fromLocationState.isSuccess &&
+          oldWidget.state.toLocationState.isSuccess;
+      final isConfirmActiveNow =
+          widget.state.fromLocationState.isSuccess &&
+          widget.state.toLocationState.isSuccess;
+
+      if (!wasConfirmActive && isConfirmActiveNow) {
+        FocusScope.of(context).unfocus();
+      }
     }
   }
 
@@ -294,7 +305,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
           final isKeyboardOpen = keyboardInset > 0;
 
           final headerSection = Container(
-            height: OrderConstants.expandedHeaderHeight.h,
+            height: OrderConstants.expandedHeaderHeight.sp,
             padding: REdgeInsets.symmetric(horizontal: AppSpacing.md),
             decoration: BoxDecoration(
               color: context.primary,
@@ -493,7 +504,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
           if (_isVehicleSelectionStep) {
             return SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -514,19 +525,17 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                   if (_isVehicleConfirmActive && !isKeyboardOpen)
                     Padding(
-                      padding: REdgeInsets.only(
-                        bottom: AppSpacing.xxl,
-                      ),
-                      child: vehicleConfirmButton,
-                    )
-                    .animate()
-                    .fadeIn(duration: AppDurations.fast)
-                    .moveY(
-                      begin: 16,
-                      end: 0,
-                      duration: AppDurations.slow,
-                      curve: Curves.easeOutCubic,
-                    ),
+                          padding: REdgeInsets.only(bottom: AppSpacing.xxl),
+                          child: vehicleConfirmButton,
+                        )
+                        .animate()
+                        .fadeIn(duration: AppDurations.fast)
+                        .moveY(
+                          begin: 16,
+                          end: 0,
+                          duration: AppDurations.slow,
+                          curve: Curves.easeOutCubic,
+                        ),
                 ],
               ),
             );
@@ -534,7 +543,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
           if (_isPickupPointStep) {
             return SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -558,14 +567,14 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         if (_isSyncing) {
                           return;
                         }
-  
+
                         if (_consumeIgnoredValueIfNeeded(
                           field: OrderForms.pickupStreetField,
                           value: value,
                         )) {
                           return;
                         }
-  
+
                         context.read<OrderBloc>().add(
                           OrderEvent.pickupStreetChanged(value),
                         );
@@ -574,14 +583,14 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         if (_isSyncing) {
                           return;
                         }
-  
+
                         if (_consumeIgnoredValueIfNeeded(
                           field: OrderForms.pickupHouseNumberField,
                           value: value,
                         )) {
                           return;
                         }
-  
+
                         context.read<OrderBloc>().add(
                           OrderEvent.pickupHouseNumberChanged(value),
                         );
@@ -590,24 +599,21 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                   if (!isKeyboardOpen)
                     Padding(
-                      padding: REdgeInsets.only(
-                        bottom: AppSpacing.xxl,
-                      ),
-                      child: pickupConfirmButton,
-                    )
-                    .animate()
-                    .fadeIn(duration: AppDurations.fast)
-                    .moveY(
-                      begin: 16,
-                      end: 0,
-                      duration: AppDurations.slow,
-                      curve: Curves.easeOutCubic,
-                    ),
+                          padding: REdgeInsets.only(bottom: AppSpacing.xxl),
+                          child: pickupConfirmButton,
+                        )
+                        .animate()
+                        .fadeIn(duration: AppDurations.fast)
+                        .moveY(
+                          begin: 16,
+                          end: 0,
+                          duration: AppDurations.slow,
+                          curve: Curves.easeOutCubic,
+                        ),
                 ],
               ),
             );
           }
-
 
           return LayoutBuilder(
             builder: (context, constraints) {

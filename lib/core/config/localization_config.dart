@@ -3,7 +3,7 @@ class AppLocalizationConfig {
   static const String translationsPath = 'assets/l10n';
 
   /// Fallback language code used by the app and generator.
-  static const String fallbackLanguageCode = 'en';
+  static const String fallbackLanguageCode = 'nl';
 
   /// All supported language codes. Add new languages here only
   /// (e.g. 'tr', 'fr'), and both EasyLocalization and the

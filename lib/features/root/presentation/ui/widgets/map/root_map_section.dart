@@ -498,7 +498,7 @@ class _RootMapSectionState extends State<RootMapSection>
                         OrderSheetMode.collapsed =>
                           OrderConstants.collapsedSheetHeight.h,
                         OrderSheetMode.mapPicking =>
-                          OrderConstants.mapPickSheetHeight.h,
+                          OrderConstants.mapPickSheetHeight.sp,
                         OrderSheetMode.expanded =>
                           context.screenHeight *
                               OrderConstants.expandedSheetHeightFactor,

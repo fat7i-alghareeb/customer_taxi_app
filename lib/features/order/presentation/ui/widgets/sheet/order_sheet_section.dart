@@ -33,10 +33,10 @@ class OrderSheetSection extends StatelessWidget {
         if (state.expandedStep == OrderExpandedStep.pickupPoint) {
           return OrderConstants.expandedPickupStepBaseHeight.h;
         }
-        
-        return OrderConstants.expandedVehicleStepBaseHeight.h;
+
+        return OrderConstants.expandedVehicleStepBaseHeight.sp;
       case OrderSheetMode.mapPicking:
-        return OrderConstants.mapPickSheetHeight.h;
+        return OrderConstants.mapPickSheetHeight.sp;
     }
   }
 
