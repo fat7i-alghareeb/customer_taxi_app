@@ -33,7 +33,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://fat7i.dev/'));
+      ..loadRequest(Uri.parse('https://admtaxitours.com/'));
   }
 
   @override

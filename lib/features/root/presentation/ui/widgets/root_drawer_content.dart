@@ -239,7 +239,7 @@ class RootDrawerContent extends StatelessWidget {
     return DrawerOptionCard(
       icon: FontAwesomeIcons.circleInfo,
       label: AppStrings.profileAboutUs,
-      // value: 'https://fat7i.dev',
+      // value: 'https://admtaxitours.com/',
       onTap: () => context.pushNamed(AboutUsScreen.pageName),
     );
   }
@@ -248,7 +248,7 @@ class RootDrawerContent extends StatelessWidget {
     return DrawerOptionCard(
       icon: FontAwesomeIcons.headset,
       label: AppStrings.profileContactUs,
-      // value: '+31 6 87608841',
+      // value: '(06) 39 55 03 52',
       onTap: () => context.pushNamed(ContactUsScreen.pageName),
     );
   }

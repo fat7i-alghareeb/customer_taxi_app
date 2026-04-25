@@ -41,15 +41,17 @@ class AppStrings {
   static String get confirmPoint => 'confirmPoint'.tr();
   /// Address - العنوان - Adres
   static String get contactUsAddress => 'contactUsAddress'.tr();
+  /// Have a question, need more information, or want to book a taxi? Contact Adam Taxi Tours and we’ll get back to you as soon as possible. Our team is available 24/7 to assist you with bookings, pricing, and special requests. - هل لديك سؤال، أو تحتاج إلى مزيد من المعلومات، أو ترغب في حجز سيارة أجرة؟ تواصل مع آدم لرحلات التاكسي وسنرد عليك في أقرب وقت ممكن. فريقنا متاح على مدار الساعة طوال أيام الأسبوع لمساعدتك في الحجوزات والأسعار والطلبات الخاصة. - Heeft u een vraag, heeft u meer informatie nodig of wilt u een taxi boeken? Neem contact op met Adam Taxi Tours en we nemen zo snel mogelijk contact met u op. Ons team staat 24/7 voor u klaar om u te helpen met boekingen, prijzen en speciale verzoeken.
+  static String get contactUsDescription => 'contactUsDescription'.tr();
   /// Email - البريد الإلكتروني - E-mail
   static String get contactUsEmail => 'contactUsEmail'.tr();
   /// Phone - الهاتف - Telefoon
   static String get contactUsPhone => 'contactUsPhone'.tr();
-  /// Tak 1 - الفرع 1 - Tak 1
+  /// We’re here to help you plan your next ride - نحن هنا لمساعدتك في التخطيط لرحلتك القادمة - We zijn er om u te helpen bij het plannen van uw volgende rit
+  static String get contactUsSubtitle => 'contactUsSubtitle'.tr();
+  /// Maassluis Netherlands - ماسلويس، هولندا - Maassluis Nederland
   static String get contactUsTak1 => 'contactUsTak1'.tr();
-  /// Tak 2 - الفرع 2 - Tak 2
-  static String get contactUsTak2 => 'contactUsTak2'.tr();
-  /// Contact Us - اتصل بنا - Neem contact op
+  /// Get in Touch With Us - تواصل معنا - Neem contact met ons op
   static String get contactUsTitle => 'contactUsTitle'.tr();
   /// Dark - الداكن - Donker
   static String get dark => 'dark'.tr();

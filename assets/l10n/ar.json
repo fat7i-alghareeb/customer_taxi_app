@@ -158,11 +158,12 @@
   "drawerSupport": "الدعم",
   "profileAboutUs": "من نحن",
   "profileContactUs": "اتصل بنا",
-  "contactUsTitle": "اتصل بنا",
+  "contactUsTitle": "تواصل معنا",
+  "contactUsSubtitle": "نحن هنا لمساعدتك في التخطيط لرحلتك القادمة",
+  "contactUsDescription": "هل لديك سؤال، أو تحتاج إلى مزيد من المعلومات، أو ترغب في حجز سيارة أجرة؟ تواصل مع آدم لرحلات التاكسي وسنرد عليك في أقرب وقت ممكن.\n\nفريقنا متاح على مدار الساعة طوال أيام الأسبوع لمساعدتك في الحجوزات والأسعار والطلبات الخاصة.",
   "contactUsPhone": "الهاتف",
   "contactUsEmail": "البريد الإلكتروني",
   "contactUsAddress": "العنوان",
-  "contactUsTak1": "الفرع 1",
-  "contactUsTak2": "الفرع 2",
+  "contactUsTak1": "ماسلويس، هولندا",
   "login": "تسجيل الدخول"
 }

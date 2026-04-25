@@ -9,46 +9,63 @@ class ContactUsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold.appBar(
-      appBarConfig: AppScaffoldAppBarConfig(
-        title: AppStrings.contactUsTitle,
-      ),
+      appBarConfig: AppScaffoldAppBarConfig(title: AppStrings.contactUsTitle),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             AppSpacing.xl.verticalSpace,
+            Text(
+              AppStrings.contactUsTitle,
+              style: AppTextStyles.s24w700.copyWith(color: context.primary),
+              textAlign: TextAlign.center,
+            ),
+            AppSpacing.sm.verticalSpace,
+            Text(
+              AppStrings.contactUsSubtitle,
+              style: AppTextStyles.s16w600.copyWith(
+                color: context.onSurface.withValues(alpha: 0.7),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            AppSpacing.lg.verticalSpace,
+            Text(
+              AppStrings.contactUsDescription,
+              style: AppTextStyles.s14w400.copyWith(
+                color: context.onSurface.withValues(alpha: 0.6),
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            AppSpacing.xl.verticalSpace,
             _ContactSection(
-              title: AppStrings.contactUsPhone,
-              icon: FontAwesomeIcons.phone,
-              children: const [
-                _ContactItem(value: '+31 6 87608841'),
-                _ContactItem(value: '+963 965399369'),
-              ],
-            ).animate().fadeIn(duration: AppDurations.normal).slideX(begin: -0.1, end: 0),
+                  title: AppStrings.contactUsPhone,
+                  icon: FontAwesomeIcons.phone,
+                  children: const [_ContactItem(value: '(06) 39 55 03 52')],
+                )
+                .animate()
+                .fadeIn(duration: AppDurations.normal)
+                .slideX(begin: -0.1, end: 0),
             AppSpacing.lg.verticalSpace,
             _ContactSection(
-              title: AppStrings.contactUsEmail,
-              icon: FontAwesomeIcons.solidEnvelope,
-              children: const [
-                _ContactItem(value: 'fat7ighareeb@gmail.com'),
-              ],
-            ).animate().fadeIn(delay: 150.ms, duration: AppDurations.normal).slideX(begin: -0.1, end: 0),
+                  title: AppStrings.contactUsEmail,
+                  icon: FontAwesomeIcons.solidEnvelope,
+                  children: const [
+                    _ContactItem(value: 'info@admtaxitours.com'),
+                  ],
+                )
+                .animate()
+                .fadeIn(delay: 150.ms, duration: AppDurations.normal)
+                .slideX(begin: -0.1, end: 0),
             AppSpacing.lg.verticalSpace,
             _ContactSection(
-              title: AppStrings.contactUsAddress,
-              icon: FontAwesomeIcons.locationDot,
-              children: [
-                _ContactItem(
-                  label: AppStrings.contactUsTak1,
-                  value: 'Prins Bernhardplantsoen 106, 7551 HT Hengelo',
-                ),
-                12.verticalSpace,
-                _ContactItem(
-                  label: AppStrings.contactUsTak2,
-                  value: 'Syrië, Aleppo, Nijlstraat, kruispunt Al-Moallem Al-Arabi',
-                ),
-              ],
-            ).animate().fadeIn(delay: 300.ms, duration: AppDurations.normal).slideX(begin: -0.1, end: 0),
+                  title: AppStrings.contactUsAddress,
+                  icon: FontAwesomeIcons.locationDot,
+                  children: [_ContactItem(value: AppStrings.contactUsTak1)],
+                )
+                .animate()
+                .fadeIn(delay: 300.ms, duration: AppDurations.normal)
+                .slideX(begin: -0.1, end: 0),
             AppSpacing.xxl.verticalSpace,
           ],
         ).standardHorizontalPadding,
@@ -76,9 +93,7 @@ class _ContactSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(AppRadii.xl.r),
-        border: Border.all(
-          color: context.onSurface.withValues(alpha: 0.05),
-        ),
+        border: Border.all(color: context.onSurface.withValues(alpha: 0.05)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,10 +117,7 @@ class _ContactSection extends StatelessWidget {
 }
 
 class _ContactItem extends StatelessWidget {
-  const _ContactItem({
-    this.label,
-    required this.value,
-  });
+  const _ContactItem({this.label, required this.value});
 
   final String? label;
   final String value;

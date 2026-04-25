@@ -158,11 +158,12 @@
   "drawerSupport": "Ondersteuning",
   "profileAboutUs": "Over ons",
   "profileContactUs": "Neem contact op",
-  "contactUsTitle": "Neem contact op",
+  "contactUsTitle": "Neem contact met ons op",
+  "contactUsSubtitle": "We zijn er om u te helpen bij het plannen van uw volgende rit",
+  "contactUsDescription": "Heeft u een vraag, heeft u meer informatie nodig of wilt u een taxi boeken? Neem contact op met Adam Taxi Tours en we nemen zo snel mogelijk contact met u op.\n\nOns team staat 24/7 voor u klaar om u te helpen met boekingen, prijzen en speciale verzoeken.",
   "contactUsPhone": "Telefoon",
   "contactUsEmail": "E-mail",
   "contactUsAddress": "Adres",
-  "contactUsTak1": "Tak 1",
-  "contactUsTak2": "Tak 2",
+  "contactUsTak1": "Maassluis Nederland",
   "login": "Inloggen"
 }
