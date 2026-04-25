@@ -10,6 +10,8 @@ import '../../features/auth/presentation/ui/screens/login_screen.dart';
 import '../../features/onboarding/presentation/ui/screens/onboarding_screen.dart';
 import '../../features/permissions/presentation/ui/screens/permission_gate_screen.dart';
 import '../../features/root/presentation/ui/screens/root_screen.dart';
+import '../../features/root/presentation/ui/screens/about_us_screen.dart';
+import '../../features/root/presentation/ui/screens/contact_us_screen.dart';
 import '../../features/splash/presentation/ui/screens/splash_screen.dart';
 import '../services/location/startup_map_warmup_coordinator.dart';
 import '../../utils/constants/app_flow_constants.dart';

@@ -254,8 +254,8 @@ class AppThemeShadows {
   static const AppShadowSpec _greySpec = AppShadowSpec(
     blurRadius: 14,
     offset: Offset(0, 8),
-    lightOpacity: 0.9,
-    darkOpacity: 0.7,
+    lightOpacity: 0.42,
+    darkOpacity: 0.42,
   );
 
   static const AppShadowSpec _auroraSpec = AppShadowSpec(
@@ -266,7 +266,7 @@ class AppThemeShadows {
   );
 
   List<BoxShadow> get primary =>
-      _colored(colorScheme.primary, spec: _primarySpec);
+      _colored(colorScheme.outline, spec: _primarySpec);
 
   List<BoxShadow> get success =>
       _colored(AppColors.success, spec: _successSpec);

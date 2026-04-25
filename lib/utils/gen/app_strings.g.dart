@@ -39,6 +39,18 @@ class AppStrings {
   static String get confirmOrder => 'confirmOrder'.tr();
   /// Confirm point - تأكيد النقطة - Punt bevestigen
   static String get confirmPoint => 'confirmPoint'.tr();
+  /// Address - العنوان - Adres
+  static String get contactUsAddress => 'contactUsAddress'.tr();
+  /// Email - البريد الإلكتروني - E-mail
+  static String get contactUsEmail => 'contactUsEmail'.tr();
+  /// Phone - الهاتف - Telefoon
+  static String get contactUsPhone => 'contactUsPhone'.tr();
+  /// Tak 1 - الفرع 1 - Tak 1
+  static String get contactUsTak1 => 'contactUsTak1'.tr();
+  /// Tak 2 - الفرع 2 - Tak 2
+  static String get contactUsTak2 => 'contactUsTak2'.tr();
+  /// Contact Us - اتصل بنا - Neem contact op
+  static String get contactUsTitle => 'contactUsTitle'.tr();
   /// Dark - الداكن - Donker
   static String get dark => 'dark'.tr();
   /// Dark mode - الوضع الليلي - Donkere modus
@@ -51,6 +63,8 @@ class AppStrings {
   static String get decodeError => 'decodeError'.tr();
   /// Done - تم - Gereed
   static String get done => 'done'.tr();
+  /// Support - الدعم - Ondersteuning
+  static String get drawerSupport => 'drawerSupport'.tr();
   /// Dropped Pin - نقطة محددة - Gemarkeerde speld
   static String get droppedPin => 'droppedPin'.tr();
   /// No data available. - لا توجد بيانات متاحة. - Geen gegevens beschikbaar.
@@ -191,6 +205,10 @@ class AppStrings {
   static String get pickupStreetName => 'pickupStreetName'.tr();
   /// Plan your trip - خطط لرحلتك - Plan je reis
   static String get planYourTrip => 'planYourTrip'.tr();
+  /// About Us - من نحن - Over ons
+  static String get profileAboutUs => 'profileAboutUs'.tr();
+  /// Contact Us - اتصل بنا - Neem contact op
+  static String get profileContactUs => 'profileContactUs'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd.
   static String get requestCancelled => 'requestCancelled'.tr();
   /// Retry - إعادة المحاولة - Opnieuw

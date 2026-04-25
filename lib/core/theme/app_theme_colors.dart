@@ -157,7 +157,7 @@ class AppColorSeeds {
   /// Seed colors for the dark theme.
   static const AppColorSeedSet dark = AppColorSeedSet(
     primary: AppColors.primaryDark,
-    onPrimary: Color(0xFF0A0A0F),
+    onPrimary: Colors.white,
     secondary: AppColors.secondaryDark,
     background: AppColors.backGroundDark,
     surface: AppColors.surfaceDark,

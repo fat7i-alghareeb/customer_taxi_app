@@ -155,5 +155,14 @@
   "enterPhone": "Voer telefoonnummer in",
   "enterOtp": "Voer 4-cijferige code in",
   "invalidOtp": "Ongeldige code. Probeer het opnieuw.",
+  "drawerSupport": "Ondersteuning",
+  "profileAboutUs": "Over ons",
+  "profileContactUs": "Neem contact op",
+  "contactUsTitle": "Neem contact op",
+  "contactUsPhone": "Telefoon",
+  "contactUsEmail": "E-mail",
+  "contactUsAddress": "Adres",
+  "contactUsTak1": "Tak 1",
+  "contactUsTak2": "Tak 2",
   "login": "Inloggen"
 }

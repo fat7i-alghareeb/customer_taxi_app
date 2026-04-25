@@ -155,5 +155,14 @@
   "enterPhone": "Enter phone number",
   "enterOtp": "Enter 4-digit code",
   "invalidOtp": "Invalid code. Please try again.",
+  "drawerSupport": "Support",
+  "profileAboutUs": "About Us",
+  "profileContactUs": "Contact Us",
+  "contactUsTitle": "Contact Us",
+  "contactUsPhone": "Phone",
+  "contactUsEmail": "Email",
+  "contactUsAddress": "Address",
+  "contactUsTak1": "Tak 1",
+  "contactUsTak2": "Tak 2",
   "login": "Login"
 }

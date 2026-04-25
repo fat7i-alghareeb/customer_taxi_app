@@ -40,11 +40,23 @@ class AppRouteRegistry {
       pageBuilder: (context, state) =>
           AppPageTransitions.build(state: state, child: const LoginScreen()),
     ),
-    GoRoute(
-      path: RootScreen.pagePath,
-      name: RootScreen.pageName,
-      pageBuilder: (context, state) =>
-          AppPageTransitions.build(state: state, child: const RootScreen()),
-    ),
-  ];
+      GoRoute(
+        path: RootScreen.pagePath,
+        name: RootScreen.pageName,
+        pageBuilder: (context, state) =>
+            AppPageTransitions.build(state: state, child: const RootScreen()),
+      ),
+      GoRoute(
+        path: AboutUsScreen.pagePath,
+        name: AboutUsScreen.pageName,
+        pageBuilder: (context, state) =>
+            AppPageTransitions.build(state: state, child: const AboutUsScreen()),
+      ),
+      GoRoute(
+        path: ContactUsScreen.pagePath,
+        name: ContactUsScreen.pageName,
+        pageBuilder: (context, state) =>
+            AppPageTransitions.build(state: state, child: const ContactUsScreen()),
+      ),
+    ];
 }

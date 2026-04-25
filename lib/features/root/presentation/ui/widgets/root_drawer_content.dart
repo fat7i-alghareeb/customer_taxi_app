@@ -4,6 +4,8 @@ import 'package:customertaxi/core/config/localization_config.dart';
 import 'package:customertaxi/core/services/localization/locale_service.dart';
 import 'package:customertaxi/core/services/session/auth_manager.dart';
 import 'package:customertaxi/core/theme/theme_controller.dart';
+import 'package:customertaxi/features/root/presentation/ui/screens/about_us_screen.dart';
+import 'package:customertaxi/features/root/presentation/ui/screens/contact_us_screen.dart';
 
 import 'drawer/drawer_option_card.dart';
 
@@ -23,6 +25,10 @@ class RootDrawerContent extends StatelessWidget {
               _buildSectionHeader(context, AppStrings.settings),
               _buildLanguageSelector(context),
               _buildThemeSelector(context),
+              AppSpacing.md.verticalSpace,
+              _buildSectionHeader(context, AppStrings.drawerSupport),
+              _buildAboutUsTile(context),
+              _buildContactUsTile(context),
               const Divider().standardVerticalPadding,
               _buildLogoutButton(context),
             ],
@@ -51,36 +57,116 @@ class RootDrawerContent extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: REdgeInsets.fromLTRB(
-        AppSpacing.xl,
-        context.topPadding + AppSpacing.xl,
-        AppSpacing.xl,
-        AppSpacing.xl,
-      ),
-      decoration: BoxDecoration(
-        color: context.primary.withValues(alpha: 0.05),
-        border: Border(
-          bottom: BorderSide(
-            color: context.theme.dividerColor.withValues(alpha: 0.1),
+    final currentUser = getIt<AuthManager>().currentUser;
+    // Default to the dummy phone if user currently has no phone
+    final phoneText = currentUser?.phone ?? '+31 6 87608841';
+
+    return ClipRect(
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: context.primary.withValues(alpha: 0.05),
+          border: Border(
+            bottom: BorderSide(
+              color: context.theme.dividerColor.withValues(alpha: 0.1),
+            ),
           ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset(
-            Assets.images.legacyLogo.path,
-            height: 60.h,
-            fit: BoxFit.contain,
-          ),
-          AppSpacing.md.verticalSpace,
-          Text(
-            'customertaxi',
-            style: AppTextStyles.s24w700.copyWith(color: context.primary),
-          ),
-        ],
+        child: Stack(
+          children: [
+            // Rich Shapes
+            Positioned(
+              top: -30.r,
+              right: -30.r,
+              child: Container(
+                width: 140.r,
+                height: 140.r,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [
+                      context.primary.withValues(alpha: 0.15),
+                      context.primary.withValues(alpha: 0.0),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -50.r,
+              left: -50.r,
+              child: Container(
+                width: 180.r,
+                height: 180.r,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: context.primary.withValues(alpha: 0.05),
+                    width: 20.w,
+                  ),
+                ),
+              ),
+            ),
+            // Content
+            Padding(
+              padding: REdgeInsets.fromLTRB(
+                AppSpacing.xl,
+                context.topPadding + AppSpacing.xl,
+                AppSpacing.xl,
+                AppSpacing.xl,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: REdgeInsets.all(AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: context.surface,
+                          borderRadius: BorderRadius.circular(AppRadii.xl.r),
+                          boxShadow: context.shadows.grey,
+                        ),
+                        child: Image.asset(
+                          Assets.images.legacyLogo.path,
+                          height: 80.h,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      Container(
+                        width: 64.r,
+                        height: 64.r,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: context.surface,
+                          boxShadow: context.shadows.grey,
+                        ),
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.solidUser,
+                            size: 28.r,
+                            color: context.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  AppSpacing.xl.verticalSpace,
+                  Text(
+                    phoneText,
+                    style: AppTextStyles.s24w700.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: context.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -136,18 +222,9 @@ class RootDrawerContent extends StatelessWidget {
           title: AppStrings.selectLanguage,
           selectedValue: _getAppLanguageFromLocale(currentLocale),
           items: [
-            SelectionItem(
-              label: AppStrings.languageEN,
-              value: AppLanguage.en,
-            ),
-            SelectionItem(
-              label: AppStrings.languageAR,
-              value: AppLanguage.ar,
-            ),
-            SelectionItem(
-              label: AppStrings.languageNL,
-              value: AppLanguage.nl,
-            ),
+            SelectionItem(label: AppStrings.languageEN, value: AppLanguage.en),
+            SelectionItem(label: AppStrings.languageAR, value: AppLanguage.ar),
+            SelectionItem(label: AppStrings.languageNL, value: AppLanguage.nl),
           ],
         );
 
@@ -155,6 +232,24 @@ class RootDrawerContent extends StatelessWidget {
           await getIt<LocaleService>().changeLanguage(result, context);
         }
       },
+    );
+  }
+
+  Widget _buildAboutUsTile(BuildContext context) {
+    return DrawerOptionCard(
+      icon: FontAwesomeIcons.circleInfo,
+      label: AppStrings.profileAboutUs,
+      // value: 'https://fat7i.dev',
+      onTap: () => context.pushNamed(AboutUsScreen.pageName),
+    );
+  }
+
+  Widget _buildContactUsTile(BuildContext context) {
+    return DrawerOptionCard(
+      icon: FontAwesomeIcons.headset,
+      label: AppStrings.profileContactUs,
+      // value: '+31 6 87608841',
+      onTap: () => context.pushNamed(ContactUsScreen.pageName),
     );
   }
 

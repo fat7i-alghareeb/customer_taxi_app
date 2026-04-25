@@ -1,6 +1,7 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
+import 'package:customertaxi/core/theme/app_map_styles.dart';
 
 class RootMapCanvasWidget extends StatelessWidget {
   const RootMapCanvasWidget({
@@ -86,6 +87,7 @@ class RootMapCanvasWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: GoogleMap(
+        style: context.isDarkTheme ? AppMapStyles.dark : null,
         onMapCreated: onMapCreated,
         onCameraMove: onCameraMove,
         onCameraIdle: onCameraIdle,

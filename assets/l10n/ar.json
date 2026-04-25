@@ -155,5 +155,14 @@
   "enterPhone": "أدخل رقم الهاتف",
   "enterOtp": "أدخل الرمز المكون من 4 أرقام",
   "invalidOtp": "الرمز غير صحيح. يرجى المحاولة مرة أخرى.",
+  "drawerSupport": "الدعم",
+  "profileAboutUs": "من نحن",
+  "profileContactUs": "اتصل بنا",
+  "contactUsTitle": "اتصل بنا",
+  "contactUsPhone": "الهاتف",
+  "contactUsEmail": "البريد الإلكتروني",
+  "contactUsAddress": "العنوان",
+  "contactUsTak1": "الفرع 1",
+  "contactUsTak2": "الفرع 2",
   "login": "تسجيل الدخول"
 }

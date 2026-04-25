@@ -7,21 +7,25 @@ class UserEntity {
     this.id,
     this.name,
     this.email,
+    this.phone,
   });
 
   final String? id;
   final String? name;
   final String? email;
+  final String? phone;
 
   UserEntity copyWith({
     String? id,
     String? name,
     String? email,
+    String? phone,
   }) {
     return UserEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
+      phone: phone ?? this.phone,
     );
   }
 
@@ -29,11 +33,13 @@ class UserEntity {
         'id': id,
         'name': name,
         'email': email,
+        'phone': phone,
       };
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
         id: json['id'] as String?,
         name: json['name'] as String?,
         email: json['email'] as String?,
+        phone: json['phone'] as String?,
       );
 }

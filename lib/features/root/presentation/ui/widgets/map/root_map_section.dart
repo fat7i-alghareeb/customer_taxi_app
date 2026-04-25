@@ -1,10 +1,8 @@
 import 'dart:ui' show lerpDouble;
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
-import 'package:customertaxi/core/utils/bloc_status.dart';
 import 'package:customertaxi/features/order/domain/entities/order_location_entity.dart';
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
@@ -496,9 +494,12 @@ class _RootMapSectionState extends State<RootMapSection>
                     builder: (context, orderState) {
                       final double sheetHeight = switch (orderState.sheetMode) {
                         OrderSheetMode.collapsed =>
-                          OrderConstants.collapsedSheetHeight.h,
-                        OrderSheetMode.mapPicking =>
-                          OrderConstants.mapPickSheetHeight.sp,
+                          (OrderConstants.collapsedHeroHeight +
+                                  (OrderConstants
+                                          .collapsedSheetVerticalPadding *
+                                      3))
+                              .h,
+                        OrderSheetMode.mapPicking => 160.sp,
                         OrderSheetMode.expanded =>
                           context.screenHeight *
                               OrderConstants.expandedSheetHeightFactor,
@@ -513,7 +514,7 @@ class _RootMapSectionState extends State<RootMapSection>
                         duration: AppDurations.slow,
                         curve: Curves.easeInOut,
                         end: AppSpacing.xl,
-                        bottom: sheetHeight + AppSpacing.lg,
+                        bottom: sheetHeight + AppSpacing.xxl,
                         child: BlocBuilder<RootBloc, RootState>(
                           buildWhen: (previous, current) =>
                               previous.recenterState != current.recenterState,

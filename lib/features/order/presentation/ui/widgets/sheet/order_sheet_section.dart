@@ -21,23 +21,17 @@ class OrderSheetSection extends StatelessWidget {
     }
   }
 
-  double _resolveSheetHeight(BuildContext context) {
-    switch (state.sheetMode) {
-      case OrderSheetMode.collapsed:
-        return OrderConstants.collapsedSheetHeight.h;
-      case OrderSheetMode.expanded:
-        if (state.expandedStep == OrderExpandedStep.locationEntry) {
-          return context.screenHeight;
-        }
-
-        if (state.expandedStep == OrderExpandedStep.pickupPoint) {
-          return OrderConstants.expandedPickupStepBaseHeight.h;
-        }
-
-        return OrderConstants.expandedVehicleStepBaseHeight.sp;
-      case OrderSheetMode.mapPicking:
-        return OrderConstants.mapPickSheetHeight.sp;
+  double? _resolveSheetHeight(BuildContext context) {
+    if (state.sheetMode == OrderSheetMode.expanded &&
+        state.expandedStep == OrderExpandedStep.locationEntry) {
+      final verticalPadding = _resolveSheetVerticalPadding();
+      final targetHeight = context.screenHeight - (verticalPadding * 2);
+      printC('[OrderSheetSection] _resolveSheetHeight -> $targetHeight');
+      return targetHeight;
     }
+    
+    printC('[OrderSheetSection] _resolveSheetHeight -> null (adapt to content)');
+    return null;
   }
 
   Widget _resolveSheetContent(BuildContext context) {
@@ -83,14 +77,17 @@ class OrderSheetSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     printC('[OrderSheetSection] build mode=${state.sheetMode.name}');
-    return AnimatedContainer(
+    return AnimatedSize(
       duration: AppDurations.slow,
       curve: Curves.easeInOut,
-      padding: REdgeInsets.symmetric(vertical: _resolveSheetVerticalPadding()),
-      width: double.maxFinite,
-      height: _resolveSheetHeight(context),
-      decoration: _resolveSheetDecoration(context),
-      child: AnimatedSwitcher(
+      alignment: Alignment.bottomCenter,
+      child: AnimatedContainer(
+        duration: AppDurations.slow,
+        curve: Curves.easeInOut,
+        padding: REdgeInsets.symmetric(vertical: _resolveSheetVerticalPadding()),
+        width: double.maxFinite,
+        decoration: _resolveSheetDecoration(context),
+        child: AnimatedSwitcher(
         duration: AppDurations.slow,
         switchInCurve: Curves.easeOutQuart,
         switchOutCurve: Curves.easeInQuart,
@@ -110,9 +107,13 @@ class OrderSheetSection extends StatelessWidget {
         },
         child: KeyedSubtree(
           key: ValueKey<String>('order-sheet-${state.sheetMode.name}'),
-          child: _resolveSheetContent(context).standardHorizontalPadding,
+          child: SizedBox(
+            height: _resolveSheetHeight(context),
+            child: _resolveSheetContent(context).standardHorizontalPadding,
+          ),
         ),
       ),
+    ),
     );
   }
 }

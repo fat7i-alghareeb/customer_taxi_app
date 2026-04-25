@@ -14,9 +14,11 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
             vertical: OrderConstants.collapsedSheetVerticalPadding,
           ),
           child: Material(
-            color: context.primary,
+            color: context.isDarkTheme
+                ? context.primary.withValues(alpha: 0.6)
+                : context.primary,
             elevation: 8,
-            shadowColor: Colors.black.withValues(alpha: 0.12),
+            // shadowColor: context.grey,
             borderRadius: BorderRadius.circular(AppRadii.lg.r),
             child: InkWell(
               borderRadius: BorderRadius.circular(AppRadii.lg.r),
@@ -32,7 +34,7 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppRadii.lg.r),
                   border: Border.all(
-                    color: context.onPrimary.withValues(alpha: 0.1),
+                    color: context.primary.withValues(alpha: 0.1),
                     width: 1.5,
                   ),
                 ),
@@ -93,7 +95,7 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
                                         vertical: AppSpacing.xs,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: context.onPrimary,
+                                        color: context.surface,
                                         borderRadius: BorderRadius.circular(
                                           999.r,
                                         ),
@@ -109,7 +111,7 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
                                                 overflow: TextOverflow.ellipsis,
                                                 style: AppTextStyles.s12w400
                                                     .copyWith(
-                                                      color: context.primary,
+                                                      color: context.onSurface,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                     ),
@@ -138,31 +140,32 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
 
                           // Bleeding Image
                           Transform.translate(
-                            offset: Offset(20.w, 5.h),
-                            child: Assets.images.orderNowCar
-                                .image(
-                                  width:
-                                      OrderConstants.collapsedHeroImageSize.w,
-                                  height:
-                                      (OrderConstants.collapsedHeroImageSize *
-                                              0.8)
-                                          .h,
-                                  fit: BoxFit.contain,
-                                )
-                                .animate(onPlay: (c) => c.repeat(reverse: true))
-                                .moveY(
-                                  begin: 0,
-                                  end: -4.h,
-                                  duration: 2000.ms,
-                                  curve: Curves.easeInOut,
-                                ),
-                          )
+                                offset: Offset(20.w, 5.h),
+                                child: Assets.images.orderNowCar
+                                    .image(
+                                      width: OrderConstants
+                                          .collapsedHeroImageSize
+                                          .w,
+                                      height:
+                                          (OrderConstants
+                                                      .collapsedHeroImageSize *
+                                                  0.8)
+                                              .h,
+                                      fit: BoxFit.contain,
+                                    )
+                                    .animate(
+                                      onPlay: (c) => c.repeat(reverse: true),
+                                    )
+                                    .moveY(
+                                      begin: 0,
+                                      end: -4.h,
+                                      duration: 2000.ms,
+                                      curve: Curves.easeInOut,
+                                    ),
+                              )
                               .animate()
                               .fadeIn(delay: 500.ms)
-                              .slideX(
-                                begin: 0.1,
-                                curve: Curves.easeOutQuart,
-                              ),
+                              .slideX(begin: 0.1, curve: Curves.easeOutQuart),
                         ],
                       ),
                     ),

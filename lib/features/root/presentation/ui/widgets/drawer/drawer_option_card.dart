@@ -5,14 +5,14 @@ class DrawerOptionCard extends StatelessWidget {
     super.key,
     required this.icon,
     required this.label,
-    required this.value,
+    this.value,
     required this.onTap,
     this.iconColor,
   });
 
   final IconData icon;
   final String label;
-  final String value;
+  final String? value;
   final VoidCallback onTap;
   final Color? iconColor;
 
@@ -23,7 +23,13 @@ class DrawerOptionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.surface,
         borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        boxShadow: context.shadows.grey,
+        boxShadow: [
+          BoxShadow(
+            color: context.grey.withValues(alpha: 0.1),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
+          ),
+        ],
         border: Border.all(
           color: context.theme.dividerColor.withValues(alpha: 0.05),
         ),
@@ -58,12 +64,13 @@ class DrawerOptionCard extends StatelessWidget {
                         color: context.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
-                    Text(
-                      value,
-                      style: AppTextStyles.s16w700.copyWith(
-                        color: context.onSurface,
+                    if (value != null && value!.isNotEmpty)
+                      Text(
+                        value!,
+                        style: AppTextStyles.s16w700.copyWith(
+                          color: context.onSurface,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -77,9 +84,9 @@ class DrawerOptionCard extends StatelessWidget {
         ),
       ),
     ).animate().fadeIn().slideX(
-          begin: 0.1,
-          duration: AppDurations.normal,
-          curve: Curves.easeOutQuad,
-        );
+      begin: 0.1,
+      duration: AppDurations.normal,
+      curve: Curves.easeOutQuad,
+    );
   }
 }

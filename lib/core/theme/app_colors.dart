@@ -10,7 +10,7 @@ class AppColors {
   /// primary Color (Oxford Blue)
   // static const Color primary = Color(0xFF132e41);
   static const Color primaryLight = Color(0xFF1D0247);
-  static const Color primaryDark = Color(0xFF1D0247);
+  static const Color primaryDark = Color.fromARGB(255, 55, 11, 125);
 
   /// Secondary Color (Deep Plum/Violet Slate)
   /// Lighter than primary, used for secondary UI elements.
@@ -28,12 +28,12 @@ class AppColors {
   /// Background Colors
   /// Light mode gets a very subtle cool tint; Dark mode is a midnight purple.
   static const Color backGroundLight = Color(0xFFF7F6F9);
-  static const Color backGroundDark = Color(0xFF0E071A);
+  static const Color backGroundDark = Color.fromARGB(255, 0, 0, 0);
 
   /// Surface Colors
   /// Slightly elevated from backgrounds.
   static const Color surfaceLight = Color(0xFFF7F6F9);
-  static const Color surfaceDark = Color(0xFF0E071A);
+  static const Color surfaceDark = Color.fromARGB(255, 0, 0, 0);
 
   /// Grey/Muted Colors
   /// Shifted to have slight violet undertones to blend with the theme.
