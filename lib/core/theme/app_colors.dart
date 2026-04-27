@@ -52,4 +52,7 @@ class AppColors {
 
   /// Color used for informational highlights (Clear Blue).
   static const Color info = Color(0xFF0077B6);
+
+  /// Brand Gold color.
+  static const Color brandGold = Color(0xFFF1B94A);
 }

@@ -102,7 +102,7 @@ class OrderCarOptionCardWidget extends StatelessWidget {
                       priceText ?? '--',
                       style: AppTextStyles.s14w600.copyWith(
                         color: isSelected
-                            ? context.primary
+                            ? AppColors.brandGold
                             : context.onSurface.withValues(alpha: 0.6),
                         fontWeight: FontWeight.w900,
                       ),

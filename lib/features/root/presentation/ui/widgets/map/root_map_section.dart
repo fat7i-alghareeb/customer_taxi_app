@@ -514,7 +514,10 @@ class _RootMapSectionState extends State<RootMapSection>
                         duration: AppDurations.slow,
                         curve: Curves.easeInOut,
                         end: AppSpacing.xl,
-                        bottom: sheetHeight + AppSpacing.xxl,
+                        bottom:
+                            context.bottomPadding +
+                            sheetHeight +
+                            AppSpacing.xxl,
                         child: BlocBuilder<RootBloc, RootState>(
                           buildWhen: (previous, current) =>
                               previous.recenterState != current.recenterState,

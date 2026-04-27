@@ -68,7 +68,7 @@ class OrderPickupPointStepWidget extends StatelessWidget {
                     Text(
                       AppStrings.pickupPoint,
                       style: AppTextStyles.s14w600.copyWith(
-                        color: context.onSurface,
+                        color: AppColors.brandGold,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -131,7 +131,7 @@ class OrderPickupPointStepWidget extends StatelessWidget {
         Text(
           AppStrings.pickupDetailsOptional,
           style: AppTextStyles.s14w600.copyWith(
-            color: context.onSurface,
+            color: AppColors.brandGold,
             fontWeight: FontWeight.w800,
           ),
         ).animate().fadeIn(delay: 240.ms),

@@ -38,7 +38,7 @@ class OrderMapPickSheetWidget extends StatelessWidget {
                   child: Text(
                     '${AppStrings.setOnMap} $selectingLabel',
                     style: AppTextStyles.s14w600.copyWith(
-                      color: context.onSurface,
+                      color: AppColors.brandGold,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

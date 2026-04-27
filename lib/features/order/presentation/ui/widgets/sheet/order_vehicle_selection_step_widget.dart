@@ -113,7 +113,7 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
             Text(
               AppStrings.selectCarType,
               style: AppTextStyles.s16w600.copyWith(
-                color: context.onSurface,
+                color: AppColors.brandGold,
                 fontWeight: FontWeight.w900,
                 letterSpacing: -0.5,
               ),

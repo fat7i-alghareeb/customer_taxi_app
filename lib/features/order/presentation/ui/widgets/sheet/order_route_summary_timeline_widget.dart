@@ -100,7 +100,7 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
         Text(
           title,
           style: AppTextStyles.s11w500.copyWith(
-            color: context.onSurface.withValues(alpha: 0.5),
+            color: AppColors.brandGold,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.5,
           ),

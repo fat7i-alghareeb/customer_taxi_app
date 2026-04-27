@@ -44,7 +44,7 @@ abstract class AppFormFieldDefaults {
   }
 
   static Color borderColorFocused(BuildContext context) {
-    return context.primary;
+    return AppColors.brandGold;
   }
 
   static Color borderColorDisabled(BuildContext context) {

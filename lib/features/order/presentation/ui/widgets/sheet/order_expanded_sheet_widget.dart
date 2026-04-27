@@ -301,8 +301,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
       formGroup: _form,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
-          final isKeyboardOpen = keyboardInset > 0;
+          final isKeyboardOpen = context.bottomInset > 0;
 
           final headerSection = Container(
             height: OrderConstants.expandedHeaderHeight.sp,
@@ -364,10 +363,10 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         : _isPickupPointStep
                         ? AppStrings.selectPickupPoint
                         : AppStrings.planYourTrip,
-                    style: AppTextStyles.s18w600.copyWith(
+                    style: AppTextStyles.s16w600.copyWith(
                       color: context.onPrimary,
+                      fontWeight: FontWeight.w900,
                       letterSpacing: -0.5,
-                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
@@ -525,7 +524,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                   if (_isVehicleConfirmActive && !isKeyboardOpen)
                     Padding(
-                          padding: REdgeInsets.only(bottom: AppSpacing.xxl),
+                          padding: REdgeInsets.only(bottom: AppSpacing.lg),
                           child: vehicleConfirmButton,
                         )
                         .animate()
@@ -599,7 +598,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                   if (!isKeyboardOpen)
                     Padding(
-                          padding: REdgeInsets.only(bottom: AppSpacing.xxl),
+                          padding: REdgeInsets.only(bottom: AppSpacing.lg),
                           child: pickupConfirmButton,
                         )
                         .animate()
@@ -637,8 +636,8 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         right: AppSpacing.md,
                         top: AppSpacing.md,
                         bottom: isKeyboardOpen
-                            ? keyboardInset + AppSpacing.md
-                            : AppSpacing.md,
+                            ? context.bottomInset + AppSpacing.md
+                            : AppSpacing.sm,
                       ),
                       physics: const BouncingScrollPhysics(),
                       child: Column(
@@ -661,7 +660,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                             Text(
                                   AppStrings.suggestions,
                                   style: AppTextStyles.s12w400.copyWith(
-                                    color: context.primary,
+                                    // color: AppColors.brandGold,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 )
@@ -685,9 +684,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   ),
                   if (_isConfirmActive && !isKeyboardOpen && !showInlineConfirm)
                     Padding(
-                          padding: REdgeInsets.only(
-                            bottom: AppSpacing.xxl, // Increased bottom space
-                          ),
+                          padding: REdgeInsets.only(bottom: AppSpacing.lg),
                           child: confirmButton,
                         )
                         .animate()

@@ -25,7 +25,8 @@ class OrderSheetSection extends StatelessWidget {
     if (state.sheetMode == OrderSheetMode.expanded &&
         state.expandedStep == OrderExpandedStep.locationEntry) {
       final verticalPadding = _resolveSheetVerticalPadding();
-      final targetHeight = context.screenHeight - (verticalPadding * 2);
+      final targetHeight =
+          context.screenHeight - (verticalPadding * 2) - context.bottomPadding;
       printC('[OrderSheetSection] _resolveSheetHeight -> $targetHeight');
       return targetHeight;
     }

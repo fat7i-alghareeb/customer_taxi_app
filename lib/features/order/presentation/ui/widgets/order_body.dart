@@ -106,13 +106,14 @@ class OrderBody extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: EdgeInsets.only(
-                    bottom: state.sheetMode == OrderSheetMode.expanded &&
-                            (state.expandedStep ==
-                                    OrderExpandedStep.pickupPoint ||
-                                state.expandedStep ==
-                                    OrderExpandedStep.carSelection)
-                        ? MediaQuery.viewInsetsOf(context).bottom
-                        : 0,
+                    bottom: context.bottomPadding +
+                        (state.sheetMode == OrderSheetMode.expanded &&
+                                (state.expandedStep ==
+                                        OrderExpandedStep.pickupPoint ||
+                                    state.expandedStep ==
+                                        OrderExpandedStep.carSelection)
+                            ? context.bottomInset
+                            : 0),
                   ),
                   child: OrderSheetSection(state: state),
                 ),

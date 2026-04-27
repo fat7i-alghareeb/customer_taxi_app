@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
+import 'package:customertaxi/core/theme/app_colors.dart';
 
 import '../../utils/constants/design_constants.dart';
 import 'app_theme_colors.dart';
@@ -64,6 +65,11 @@ class AppTheme {
             borderRadius: BorderRadius.circular(AppRadii.md),
           ),
         ),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: AppColors.brandGold,
+        selectionColor: AppColors.brandGold.withValues(alpha: 0.3),
+        selectionHandleColor: AppColors.brandGold,
       ),
     );
   }
