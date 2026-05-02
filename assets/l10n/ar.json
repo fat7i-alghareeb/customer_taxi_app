@@ -61,6 +61,10 @@
   "carTypeBus8": "باص 8 ركاب",
   "searchFromLocation": "ابحث عن موقع الانطلاق",
   "searchToLocation": "ابحث عن موقع الوجهة",
+  "whereTo": "إلى أين؟",
+  "tabAccount": "الحساب",
+  "tabHome": "الرئيسية",
+  "tabOffers": "العروض",
   "clear": "مسح",
   "cancel": "إلغاء",
   "done": "تم",
@@ -165,5 +169,13 @@
   "contactUsEmail": "البريد الإلكتروني",
   "contactUsAddress": "العنوان",
   "contactUsTak1": "ماسلويس، هولندا",
-  "login": "تسجيل الدخول"
+  "login": "تسجيل الدخول",
+  "drawerBalance": "الرصيد",
+  "drawerTrips": "الرحلات",
+  "drawerPayments": "المدفوعات",
+  "drawerPromotions": "العروض",
+  "drawerFavorites": "العناوين المفضلة",
+  "drawerPlanning": "التخطيط",
+  "drawerHelpCenter": "مركز المساعدة",
+  "comingSoon": "قريباً"
 }

@@ -253,9 +253,9 @@ class AppThemeShadows {
 
   static const AppShadowSpec _greySpec = AppShadowSpec(
     blurRadius: 14,
-    offset: Offset(0, 8),
+    offset: Offset(0, 6),
     lightOpacity: 0.42,
-    darkOpacity: 0.42,
+    darkOpacity: 0.15,
   );
 
   static const AppShadowSpec _auroraSpec = AppShadowSpec(

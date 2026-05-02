@@ -7,44 +7,43 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  /// primary Color (Oxford Blue)
-  // static const Color primary = Color(0xFF132e41);
-  static const Color primaryLight = Color(0xFF1D0247);
-  static const Color primaryDark = Color.fromARGB(255, 55, 11, 125);
+  /// Primary Color (Vibrant Orange)
+  static const Color primary = Color(0xFFF5671D);
+  static const Color primaryLight = Color(0xFFF8925A);
+  static const Color primaryDark = Color(0xFFD14F0D);
 
-  /// Secondary Color (Deep Plum/Violet Slate)
-  /// Lighter than primary, used for secondary UI elements.
-  static const Color secondary = Color(0xFF2A1558);
-  static const Color secondaryLight = Color(0xFF2A1558);
-  static const Color secondaryDark = Color(0xFF2A1558);
+  /// Secondary Color (Deep Slate)
+  /// Provides a clean, modern, cool-toned contrast to the warm orange primary.
+  static const Color secondary = Color(0xFF2D3142);
+  static const Color secondaryLight = Color(0xFF4F5D75);
+  static const Color secondaryDark = Color(0xFF1C1F2B);
 
-  /// Accent Color (Muted Amethyst)
-  /// Used to make certain elements pop against the dark backgrounds.
-  static const Color accent = Color(0xFF6A4C93);
+  /// Accent Color (Deep Teal)
+  /// A complementary color used to make certain elements pop against the backgrounds.
+  static const Color accent = Color(0xFF0081A7);
 
-  /// Platinum (Cool tinted off-white)
-  static const Color platinum = Color(0xFFE5E3E8);
+  /// Platinum (Warm tinted off-white)
+  static const Color platinum = Color(0xFFEAE8E3);
 
   /// Background Colors
-  /// Light mode gets a very subtle cool tint; Dark mode is a midnight purple.
-  static const Color backGroundLight = Color(0xFFF7F6F9);
-  static const Color backGroundDark = Color.fromARGB(255, 0, 0, 0);
+  /// Light mode gets a warm, airy tint; Dark mode is a very deep, warm off-black.
+  static const Color backGroundLight = Color(0xFFFDFBF9);
+  static const Color backGroundDark = Color(0xFF1A1614);
 
   /// Surface Colors
   /// Slightly elevated from backgrounds.
-  static const Color surfaceLight = Color(0xFFF7F6F9);
-  static const Color surfaceDark = Color.fromARGB(255, 0, 0, 0);
+  static const Color surfaceLight = Color(0xFFFDFBF9);
+  static const Color surfaceDark = Color(0xFF1A1614);
 
   /// Grey/Muted Colors
-  /// Shifted to have slight violet undertones to blend with the theme.
-  static const Color greyLight = Color(0xFFB8B3C0);
-  static const Color greyDark = Color(0xFF756A8A);
+  /// Shifted to have slight warm/earthy undertones to blend with the orange theme.
+  static const Color greyLight = Color(0xFFC2BCB8);
+  static const Color greyDark = Color(0xFF7D7570);
 
   /// Color used for success/toast states (Vibrant Professional Green).
   static const Color success = Color(0xFF218356);
 
   /// Color used for warning states (Amber Gold).
-  /// (Kept original as gold/amber is a perfect complement to deep purple).
   static const Color warning = Color(0xFFFFB703);
 
   /// Color used for error states (Crisp Red).

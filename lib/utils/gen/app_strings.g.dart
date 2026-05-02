@@ -33,6 +33,8 @@ class AppStrings {
   static String get clientNotFound => 'clientNotFound'.tr();
   /// The data you sent could not be processed. - لا يمكن معالجة البيانات المرسلة. - De verzonden gegevens konden niet worden verwerkt.
   static String get clientUnprocessableEntity => 'clientUnprocessableEntity'.tr();
+  /// Coming Soon - قريباً - Binnenkort beschikbaar
+  static String get comingSoon => 'comingSoon'.tr();
   /// Confirm locations - تأكيد المواقع - Locaties bevestigen
   static String get confirmLocations => 'confirmLocations'.tr();
   /// Confirm order - تأكيد الطلب - Bestelling bevestigen
@@ -41,7 +43,7 @@ class AppStrings {
   static String get confirmPoint => 'confirmPoint'.tr();
   /// Address - العنوان - Adres
   static String get contactUsAddress => 'contactUsAddress'.tr();
-  /// Have a question, need more information, or want to book a taxi? Contact Adam Taxi Tours and we’ll get back to you as soon as possible. Our team is available 24/7 to assist you with bookings, pricing, and special requests. - هل لديك سؤال، أو تحتاج إلى مزيد من المعلومات، أو ترغب في حجز سيارة أجرة؟ تواصل مع آدم لرحلات التاكسي وسنرد عليك في أقرب وقت ممكن. فريقنا متاح على مدار الساعة طوال أيام الأسبوع لمساعدتك في الحجوزات والأسعار والطلبات الخاصة. - Heeft u een vraag, heeft u meer informatie nodig of wilt u een taxi boeken? Neem contact op met Adam Taxi Tours en we nemen zo snel mogelijk contact met u op. Ons team staat 24/7 voor u klaar om u te helpen met boekingen, prijzen en speciale verzoeken.
+  /// Have a question, need more information, or want to book a taxi? Contact customertaxi Tours and we’ll get back to you as soon as possible. Our team is available 24/7 to assist you with bookings, pricing, and special requests. - هل لديك سؤال، أو تحتاج إلى مزيد من المعلومات، أو ترغب في حجز سيارة أجرة؟ تواصل مع آدم لرحلات التاكسي وسنرد عليك في أقرب وقت ممكن. فريقنا متاح على مدار الساعة طوال أيام الأسبوع لمساعدتك في الحجوزات والأسعار والطلبات الخاصة. - Heeft u een vraag, heeft u meer informatie nodig of wilt u een taxi boeken? Neem contact op met customertaxi Tours en we nemen zo snel mogelijk contact met u op. Ons team staat 24/7 voor u klaar om u te helpen met boekingen, prijzen en speciale verzoeken.
   static String get contactUsDescription => 'contactUsDescription'.tr();
   /// Email - البريد الإلكتروني - E-mail
   static String get contactUsEmail => 'contactUsEmail'.tr();
@@ -65,8 +67,22 @@ class AppStrings {
   static String get decodeError => 'decodeError'.tr();
   /// Done - تم - Gereed
   static String get done => 'done'.tr();
+  /// Balance - الرصيد - Tegoed
+  static String get drawerBalance => 'drawerBalance'.tr();
+  /// Favorite addresses - العناوين المفضلة - Favoriete adressen
+  static String get drawerFavorites => 'drawerFavorites'.tr();
+  /// Help center - مركز المساعدة - Helpcentrum
+  static String get drawerHelpCenter => 'drawerHelpCenter'.tr();
+  /// Payments - المدفوعات - Betalingen
+  static String get drawerPayments => 'drawerPayments'.tr();
+  /// Planning - التخطيط - Planning
+  static String get drawerPlanning => 'drawerPlanning'.tr();
+  /// Promotions - العروض - Promoties
+  static String get drawerPromotions => 'drawerPromotions'.tr();
   /// Support - الدعم - Ondersteuning
   static String get drawerSupport => 'drawerSupport'.tr();
+  /// Trips - الرحلات - Ritten
+  static String get drawerTrips => 'drawerTrips'.tr();
   /// Dropped Pin - نقطة محددة - Gemarkeerde speld
   static String get droppedPin => 'droppedPin'.tr();
   /// No data available. - لا توجد بيانات متاحة. - Geen gegevens beschikbaar.
@@ -281,6 +297,12 @@ class AppStrings {
   static String get sun => 'sun'.tr();
   /// Sunday - الأحد - Zondag
   static String get sunday => 'sunday'.tr();
+  /// Account - الحساب - Account
+  static String get tabAccount => 'tabAccount'.tr();
+  /// Home - الرئيسية - Home
+  static String get tabHome => 'tabHome'.tr();
+  /// Offers - العروض - Aanbiedingen
+  static String get tabOffers => 'tabOffers'.tr();
   /// Theme - المظهر - Thema
   static String get theme => 'theme'.tr();
   /// Thu - خمي - Do
@@ -337,5 +359,7 @@ class AppStrings {
   static String get wed => 'wed'.tr();
   /// Wednesday - الأربعاء - Woensdag
   static String get wednesday => 'wednesday'.tr();
+  /// Where to? - إلى أين؟ - Waarheen?
+  static String get whereTo => 'whereTo'.tr();
 }
 

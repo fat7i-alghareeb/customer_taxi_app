@@ -1,4 +1,4 @@
-
+// cspell:ignore oranje
 import '../../../../../common/imports/imports.dart';
 
 /// A premium, multi-phase animated logo for the unified splash screen.
@@ -16,7 +16,7 @@ class PremiumSplashLogo extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         // Layer 1: Shadow Pulse (Heartbeat background)
-        Assets.images.legacyLogo
+        Assets.images.oranjeLogo
             .image(
               width: logoSize * 1.1,
               height: logoSize * 1.1,
@@ -34,7 +34,7 @@ class PremiumSplashLogo extends StatelessWidget {
             .blur(begin: const Offset(10, 10), end: const Offset(20, 20)),
 
         // Layer 2: Main Logo with Multi-Phase Animation
-        Assets.images.legacyLogo
+        Assets.images.oranjeLogo
             .image(width: logoSize, height: logoSize, fit: BoxFit.contain)
             .animate()
             // Phase 1: Blur Reveal (Entrance)

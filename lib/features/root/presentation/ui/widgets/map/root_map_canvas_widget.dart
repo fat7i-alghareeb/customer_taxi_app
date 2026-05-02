@@ -13,6 +13,7 @@ class RootMapCanvasWidget extends StatelessWidget {
     this.onCameraMove,
     this.onCameraIdle,
     this.destinationLocation,
+    this.showMyLocationButton = false,
   });
 
   final RootMapLocationEntity currentLocation;
@@ -22,6 +23,7 @@ class RootMapCanvasWidget extends StatelessWidget {
   final void Function(CameraPosition position)? onCameraMove;
   final VoidCallback? onCameraIdle;
   final LatLng? destinationLocation;
+  final bool showMyLocationButton;
 
   LatLng get _latLng =>
       LatLng(currentLocation.latitude, currentLocation.longitude);
@@ -98,7 +100,7 @@ class RootMapCanvasWidget extends StatelessWidget {
         markers: _markers,
         polylines: _buildPolylines(context),
         myLocationEnabled: true,
-        myLocationButtonEnabled: false,
+        myLocationButtonEnabled: showMyLocationButton,
         compassEnabled: false,
         zoomControlsEnabled: false,
         mapToolbarEnabled: false,

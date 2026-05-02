@@ -1,3 +1,4 @@
+// cspell:ignore oranje
 import 'package:customertaxi/common/imports/imports.dart';
 
 import 'package:customertaxi/features/auth/constants/forms/auth_forms.dart';
@@ -100,7 +101,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
 
                               // Logo
                               Center(
-                                    child: Assets.images.legacyLogo.image(
+                                    child: Assets.images.oranjeLogo.image(
                                       height: 140.h,
                                       fit: BoxFit.contain,
                                     ),
@@ -161,7 +162,9 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                                       ),
                                     ),
                                     child: AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 400),
+                                      duration: const Duration(
+                                        milliseconds: 400,
+                                      ),
                                       transitionBuilder: (child, animation) =>
                                           FadeTransition(
                                             opacity: animation,

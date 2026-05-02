@@ -102,22 +102,24 @@ class OrderBody extends StatelessWidget {
             children: [
               if (state.sheetMode == OrderSheetMode.mapPicking)
                 const IgnorePointer(child: OrderCenterPinWidget()),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: context.bottomPadding +
-                        (state.sheetMode == OrderSheetMode.expanded &&
-                                (state.expandedStep ==
-                                        OrderExpandedStep.pickupPoint ||
-                                    state.expandedStep ==
-                                        OrderExpandedStep.carSelection)
-                            ? context.bottomInset
-                            : 0),
+              if (state.sheetMode != OrderSheetMode.collapsed)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: REdgeInsets.only(
+                      bottom:
+                          context.bottomPadding +
+                          (state.sheetMode == OrderSheetMode.expanded &&
+                                  (state.expandedStep ==
+                                          OrderExpandedStep.pickupPoint ||
+                                      state.expandedStep ==
+                                          OrderExpandedStep.carSelection)
+                              ? context.bottomInset
+                              : 0),
+                    ),
+                    child: OrderSheetSection(state: state),
                   ),
-                  child: OrderSheetSection(state: state),
                 ),
-              ),
             ],
           ),
         );

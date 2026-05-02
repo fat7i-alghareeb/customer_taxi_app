@@ -4,7 +4,7 @@ class OrderCarOptionCardWidget extends StatelessWidget {
   const OrderCarOptionCardWidget({
     super.key,
     required this.title,
-    required this.iconData,
+    required this.imagePath,
     required this.isSelected,
     required this.isPriceLoading,
     required this.onTap,
@@ -12,7 +12,7 @@ class OrderCarOptionCardWidget extends StatelessWidget {
   });
 
   final String title;
-  final IconData iconData;
+  final String imagePath;
   final bool isSelected;
   final bool isPriceLoading;
   final VoidCallback onTap;
@@ -28,56 +28,68 @@ class OrderCarOptionCardWidget extends StatelessWidget {
         child: AnimatedContainer(
           duration: AppDurations.normal,
           curve: Curves.easeOutCubic,
-          padding: REdgeInsets.all(AppSpacing.md),
+          padding: REdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
           decoration: BoxDecoration(
             color: isSelected
-                ? context.primary.withValues(alpha: 0.05)
+                ? context.primary.withValues(alpha: 0.08)
                 : context.surface,
             borderRadius: BorderRadius.circular(AppRadii.lg.r),
             border: Border.all(
-              color: isSelected ? context.primary : Colors.transparent,
-              width: 2.r,
+              color: isSelected
+                  ? context.primary
+                  : context.onSurface.withValues(alpha: 0.05),
+              width: isSelected ? 2.5.r : 1.5.r,
             ),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: context.primary.withValues(alpha: 0.1),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
+                      color: context.primary.withValues(alpha: 0.12),
+                      blurRadius: 16,
+                      offset: const Offset(0, 6),
                     ),
                   ]
-                : null,
+                : [
+                    BoxShadow(
+                      color: context.onSurface.withValues(alpha: 0.03),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               AnimatedContainer(
                 duration: AppDurations.normal,
-                width: 48.r,
-                height: 48.r,
+                width: 60.r,
+                height: 60.r,
                 decoration: BoxDecoration(
                   gradient: isSelected
                       ? LinearGradient(
                           colors: [
                             context.primary,
-                            context.primary.withValues(alpha: 0.8),
+                            context.primary.withValues(alpha: 0.85),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         )
                       : LinearGradient(
                           colors: [
-                            context.onSurface.withValues(alpha: 0.05),
-                            context.onSurface.withValues(alpha: 0.08),
+                            context.onSurface.withValues(alpha: 0.04),
+                            context.onSurface.withValues(alpha: 0.07),
                           ],
                         ),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
-                  child: FaIcon(
-                    iconData,
-                    size: 18.r,
-                    color: isSelected ? context.onPrimary : context.primary,
+                  child: AppImageViewer.asset(
+                    imagePath,
+                    width: 44.r,
+                    height: 44.r,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
@@ -89,22 +101,26 @@ class OrderCarOptionCardWidget extends StatelessWidget {
                   Text(
                     title,
                     maxLines: 1,
-                    style: AppTextStyles.s14w600.copyWith(
+                    style: AppTextStyles.s16w600.copyWith(
                       color: isSelected ? context.primary : context.onSurface,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                   AppSpacing.xs.verticalSpace,
                   if (isPriceLoading)
-                    LoadingDots(color: context.primary, dotSize: 3, spacing: 2)
+                    LoadingDots(
+                      color: context.primary,
+                      dotSize: 4.r,
+                      spacing: 3.r,
+                    )
                   else
                     Text(
                       priceText ?? '--',
                       style: AppTextStyles.s14w600.copyWith(
                         color: isSelected
-                            ? AppColors.brandGold
-                            : context.onSurface.withValues(alpha: 0.6),
-                        fontWeight: FontWeight.w900,
+                            ? context.primary
+                            : context.onSurface.withValues(alpha: 0.7),
+                        fontWeight: FontWeight.w800,
                       ),
                     ).animate().fadeIn(duration: 200.ms),
                 ],

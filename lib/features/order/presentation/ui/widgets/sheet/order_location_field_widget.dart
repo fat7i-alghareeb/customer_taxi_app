@@ -60,10 +60,10 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
   @override
   Widget build(BuildContext context) {
     final borderColor = _hasFocus
-        ? AppColors.brandGold
+        ? context.primary
         : context.colorScheme.outline.withValues(alpha: 0.15);
     final backgroundColor = _hasFocus
-        ? AppColors.brandGold.withValues(alpha: 0.04)
+        ? context.primary.withValues(alpha: 0.04)
         : context.surface;
 
     return AnimatedContainer(
@@ -89,7 +89,7 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                   widget.iconData,
                   size: 14.r,
                   color: _hasFocus
-                      ? AppColors.brandGold
+                      ? context.primary
                       : context.onSurface.withValues(alpha: 0.5),
                 ),
                 AppSpacing.xs.horizontalSpace,
@@ -97,7 +97,7 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                   widget.title.toUpperCase(),
                   style: AppTextStyles.s11w500.copyWith(
                     color: _hasFocus
-                        ? AppColors.brandGold
+                        ? context.primary
                         : context.onSurface.withValues(alpha: 0.5),
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w700,

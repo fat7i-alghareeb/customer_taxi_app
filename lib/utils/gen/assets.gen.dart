@@ -24,17 +24,16 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/Group 26.png
-  AssetGenImage get group26 =>
-      const AssetGenImage('assets/images/Group 26.png');
+  /// File path: assets/images/8-passengeres.png
+  AssetGenImage get a8Passengeres =>
+      const AssetGenImage('assets/images/8-passengeres.png');
 
-  /// File path: assets/images/Group 27.png
-  AssetGenImage get group27 =>
-      const AssetGenImage('assets/images/Group 27.png');
+  /// File path: assets/images/adam_logo.png
+  AssetGenImage get adamLogo =>
+      const AssetGenImage('assets/images/adam_logo.png');
 
-  /// File path: assets/images/legacy_logo.png
-  AssetGenImage get legacyLogo =>
-      const AssetGenImage('assets/images/legacy_logo.png');
+  /// File path: assets/images/comfort.png
+  AssetGenImage get comfort => const AssetGenImage('assets/images/comfort.png');
 
   /// File path: assets/images/logo_launcher.png
   AssetGenImage get logoLauncher =>
@@ -52,6 +51,10 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding3 =>
       const AssetGenImage('assets/images/onboarding_3.png');
 
+  /// File path: assets/images/oranje_logo.png
+  AssetGenImage get oranjeLogo =>
+      const AssetGenImage('assets/images/oranje_logo.png');
+
   /// File path: assets/images/order_now_car.png
   AssetGenImage get orderNowCar =>
       const AssetGenImage('assets/images/order_now_car.png');
@@ -64,18 +67,24 @@ class $AssetsImagesGen {
   AssetGenImage get splashLight =>
       const AssetGenImage('assets/images/splash_light.png');
 
+  /// File path: assets/images/standered.png
+  AssetGenImage get standered =>
+      const AssetGenImage('assets/images/standered.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
-    group26,
-    group27,
-    legacyLogo,
+    a8Passengeres,
+    adamLogo,
+    comfort,
     logoLauncher,
     onboarding1,
     onboarding2,
     onboarding3,
+    oranjeLogo,
     orderNowCar,
     splashDark,
     splashLight,
+    standered,
   ];
 }
 

@@ -312,50 +312,41 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
             ),
             child: Row(
               children: [
-                Container(
-                  padding: REdgeInsets.all(AppSpacing.sm),
-                  decoration: BoxDecoration(
-                    color: context.onPrimary.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(AppRadii.md.r),
-                  ),
-                  child: FaIcon(
-                    FontAwesomeIcons.route,
-                    size: 18.r,
-                    color: context.onPrimary,
-                  ),
-                ),
-                AppSpacing.sm.horizontalSpace,
-                if (_isVehicleSelectionStep || _isPickupPointStep)
-                  Padding(
-                    padding: REdgeInsetsDirectional.only(end: AppSpacing.sm),
-                    child: Material(
-                      color: context.onPrimary.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(AppRadii.lg.r),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(AppRadii.lg.r),
-                        onTap: () {
-                          if (_isPickupPointStep) {
-                            context.read<OrderBloc>().add(
-                              const OrderEvent.pickupPointBackPressed(),
-                            );
-                            return;
-                          }
+                Material(
+                  color: context.onPrimary.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                    onTap: () {
+                      if (_isPickupPointStep) {
+                        context.read<OrderBloc>().add(
+                          const OrderEvent.pickupPointBackPressed(),
+                        );
+                        return;
+                      }
 
-                          context.read<OrderBloc>().add(
-                            const OrderEvent.vehicleStepBackPressed(),
-                          );
-                        },
-                        child: Padding(
-                          padding: REdgeInsets.all(AppSpacing.sm),
-                          child: FaIcon(
-                            FontAwesomeIcons.chevronLeft,
-                            size: 16.r,
-                            color: context.onPrimary,
-                          ),
-                        ),
+                      if (_isVehicleSelectionStep) {
+                        context.read<OrderBloc>().add(
+                          const OrderEvent.vehicleStepBackPressed(),
+                        );
+                        return;
+                      }
+
+                      context.read<OrderBloc>().add(
+                        const OrderEvent.collapseRequested(),
+                      );
+                    },
+                    child: Padding(
+                      padding: REdgeInsets.all(AppSpacing.sm),
+                      child: FaIcon(
+                        context.chevronStart,
+                        size: 16.r,
+                        color: context.onPrimary,
                       ),
                     ),
                   ),
+                ),
+                AppSpacing.md.horizontalSpace,
                 Expanded(
                   child: Text(
                     _isVehicleSelectionStep
@@ -384,7 +375,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                       padding: REdgeInsets.all(AppSpacing.sm),
                       child: FaIcon(
                         FontAwesomeIcons.xmark,
-                        size: 20.r,
+                        size: 18.r,
                         color: context.onPrimary,
                       ),
                     ),
@@ -660,7 +651,6 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                             Text(
                                   AppStrings.suggestions,
                                   style: AppTextStyles.s12w400.copyWith(
-                                    // color: AppColors.brandGold,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 )

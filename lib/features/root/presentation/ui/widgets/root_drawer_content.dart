@@ -7,165 +7,107 @@ import 'package:customertaxi/core/theme/theme_controller.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/about_us_screen.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/contact_us_screen.dart';
 
-import 'drawer/drawer_option_card.dart';
+import 'package:customertaxi/common/widgets/show_overlay.dart';
+
+import 'drawer/drawer_balance_card.dart';
+import 'drawer/drawer_header_section.dart';
+import 'drawer/drawer_logout_footer.dart';
+import 'drawer/drawer_menu_item.dart';
 
 class RootDrawerContent extends StatelessWidget {
   const RootDrawerContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildHeader(context),
-        AppSpacing.lg.verticalSpace,
-        Expanded(
-          child: ListView(
-            padding: REdgeInsets.symmetric(horizontal: AppSpacing.md),
-            children: [
-              _buildSectionHeader(context, AppStrings.settings),
-              _buildLanguageSelector(context),
-              _buildThemeSelector(context),
-              AppSpacing.md.verticalSpace,
-              _buildSectionHeader(context, AppStrings.drawerSupport),
-              _buildAboutUsTile(context),
-              _buildContactUsTile(context),
-              const Divider().standardVerticalPadding,
-              _buildLogoutButton(context),
-            ],
+    return Container(
+      color: context.surface,
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: REdgeInsets.only(bottom: AppSpacing.xl),
+              children: [
+                const DrawerHeaderSection(),
+                AppSpacing.md.verticalSpace,
+                DrawerBalanceCard(
+                  balance: '€ 28,50', // Mock data as per image
+                  onAddTap: () =>
+                      showSuccessOverlay(context, AppStrings.comingSoon),
+                ),
+                AppSpacing.xl.verticalSpace,
+
+                // Primary Menu
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.carSide,
+                  label: AppStrings.drawerTrips,
+                  onTap: () =>
+                      showSuccessOverlay(context, AppStrings.comingSoon),
+                ),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.wallet,
+                  label: AppStrings.drawerPayments,
+                  onTap: () =>
+                      showSuccessOverlay(context, AppStrings.comingSoon),
+                ),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.percent,
+                  label: AppStrings.drawerPromotions,
+                  onTap: () =>
+                      showSuccessOverlay(context, AppStrings.comingSoon),
+                ),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.locationDot,
+                  label: AppStrings.drawerFavorites,
+                  onTap: () =>
+                      showSuccessOverlay(context, AppStrings.comingSoon),
+                ),
+
+                AppSpacing.xl.verticalSpace,
+
+                // Support Section
+                _buildSectionHeader(context, AppStrings.drawerSupport),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.circleInfo,
+                  label: AppStrings.profileAboutUs,
+                  onTap: () => context.pushNamed(AboutUsScreen.pageName),
+                ),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.headset,
+                  label: AppStrings.profileContactUs,
+                  onTap: () => context.pushNamed(ContactUsScreen.pageName),
+                ),
+
+                AppSpacing.xl.verticalSpace,
+
+                // Settings Section
+                _buildSectionHeader(context, AppStrings.settings),
+                _buildLanguageSelector(context),
+                _buildThemeSelector(context),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.gear,
+                  label: AppStrings.settings,
+                  onTap: () =>
+                      showSuccessOverlay(context, AppStrings.comingSoon),
+                ),
+              ],
+            ),
           ),
-        ),
-        _buildFooter(context),
-      ],
+          DrawerLogoutFooter(onLogoutTap: () => _handleLogout(context)),
+        ],
+      ),
     );
   }
 
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
-      padding: REdgeInsets.only(
-        left: AppSpacing.sm,
-        right: AppSpacing.sm,
-        bottom: AppSpacing.md,
+      padding: REdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.sm,
       ),
       child: Text(
-        title.toUpperCase(),
-        style: AppTextStyles.s12w700.copyWith(
+        title,
+        style: AppTextStyles.s14w400.copyWith(
           color: context.onSurface.withValues(alpha: 0.4),
-          letterSpacing: 1.2,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    final currentUser = getIt<AuthManager>().currentUser;
-    // Default to the dummy phone if user currently has no phone
-    final phoneText = currentUser?.phone ?? '+31 6 87608841';
-
-    return ClipRect(
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: context.primary.withValues(alpha: 0.05),
-          border: Border(
-            bottom: BorderSide(
-              color: context.theme.dividerColor.withValues(alpha: 0.1),
-            ),
-          ),
-        ),
-        child: Stack(
-          children: [
-            // Rich Shapes
-            Positioned(
-              top: -30.r,
-              right: -30.r,
-              child: Container(
-                width: 140.r,
-                height: 140.r,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: [
-                      context.primary.withValues(alpha: 0.15),
-                      context.primary.withValues(alpha: 0.0),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: -50.r,
-              left: -50.r,
-              child: Container(
-                width: 180.r,
-                height: 180.r,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: context.primary.withValues(alpha: 0.05),
-                    width: 20.w,
-                  ),
-                ),
-              ),
-            ),
-            // Content
-            Padding(
-              padding: REdgeInsets.fromLTRB(
-                AppSpacing.xl,
-                context.topPadding + AppSpacing.xl,
-                AppSpacing.xl,
-                AppSpacing.xl,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: REdgeInsets.all(AppSpacing.md),
-                        decoration: BoxDecoration(
-                          color: context.surface,
-                          borderRadius: BorderRadius.circular(AppRadii.xl.r),
-                          boxShadow: context.shadows.grey,
-                        ),
-                        child: Image.asset(
-                          Assets.images.legacyLogo.path,
-                          height: 80.h,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Container(
-                        width: 64.r,
-                        height: 64.r,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context.surface,
-                          boxShadow: context.shadows.grey,
-                        ),
-                        child: Center(
-                          child: FaIcon(
-                            FontAwesomeIcons.solidUser,
-                            size: 28.r,
-                            color: context.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  AppSpacing.xl.verticalSpace,
-                  Text(
-                    phoneText,
-                    style: AppTextStyles.s24w700.copyWith(
-                      fontWeight: FontWeight.w900,
-                      color: context.onSurface,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -177,7 +119,7 @@ class RootDrawerContent extends StatelessWidget {
       listenable: themeController,
       builder: (context, _) {
         final isDark = themeController.isDarkMode;
-        return DrawerOptionCard(
+        return DrawerMenuItem(
           icon: isDark ? FontAwesomeIcons.moon : FontAwesomeIcons.sun,
           label: AppStrings.selectTheme,
           value: isDark ? AppStrings.dark : AppStrings.light,
@@ -212,7 +154,7 @@ class RootDrawerContent extends StatelessWidget {
   Widget _buildLanguageSelector(BuildContext context) {
     final currentLocale = context.locale;
 
-    return DrawerOptionCard(
+    return DrawerMenuItem(
       icon: FontAwesomeIcons.globe,
       label: AppStrings.selectLanguage,
       value: _getLanguageName(currentLocale),
@@ -232,24 +174,6 @@ class RootDrawerContent extends StatelessWidget {
           await getIt<LocaleService>().changeLanguage(result, context);
         }
       },
-    );
-  }
-
-  Widget _buildAboutUsTile(BuildContext context) {
-    return DrawerOptionCard(
-      icon: FontAwesomeIcons.circleInfo,
-      label: AppStrings.profileAboutUs,
-      // value: 'https://admtaxitours.com/',
-      onTap: () => context.pushNamed(AboutUsScreen.pageName),
-    );
-  }
-
-  Widget _buildContactUsTile(BuildContext context) {
-    return DrawerOptionCard(
-      icon: FontAwesomeIcons.headset,
-      label: AppStrings.profileContactUs,
-      // value: '(06) 39 55 03 52',
-      onTap: () => context.pushNamed(ContactUsScreen.pageName),
     );
   }
 
@@ -279,64 +203,30 @@ class RootDrawerContent extends StatelessWidget {
     }
   }
 
-  Widget _buildLogoutButton(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        final confirm = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(AppStrings.logout),
-            content: Text(AppStrings.logout),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(AppStrings.cancel),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(
-                  AppStrings.logout,
-                  style: TextStyle(color: context.error),
-                ),
-              ),
-            ],
+  Future<void> _handleLogout(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppStrings.logout),
+        content: Text(AppStrings.logout),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(AppStrings.cancel),
           ),
-        );
-
-        if (confirm == true) {
-          await getIt<AuthManager>().logout();
-        }
-      },
-      borderRadius: BorderRadius.circular(AppRadii.md.r),
-      child: Padding(
-        padding: REdgeInsets.all(AppSpacing.md),
-        child: Row(
-          children: [
-            FaIcon(
-              FontAwesomeIcons.rightFromBracket,
-              size: 20.r,
-              color: context.error,
-            ),
-            AppSpacing.md.horizontalSpace,
-            Text(
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(
               AppStrings.logout,
-              style: AppTextStyles.s16w600.copyWith(color: context.error),
+              style: TextStyle(color: context.error),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
-  }
 
-  Widget _buildFooter(BuildContext context) {
-    return Padding(
-      padding: REdgeInsets.all(AppSpacing.xl),
-      child: Text(
-        'v1.0.0',
-        style: AppTextStyles.s12w400.copyWith(
-          color: context.onSurface.withValues(alpha: 0.5),
-        ),
-      ),
-    );
+    if (confirm == true) {
+      await getIt<AuthManager>().logout();
+    }
   }
 }

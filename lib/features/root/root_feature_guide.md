@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Root is the post-auth shell and now hosts the taxi baseline map surface.
+Root is the post-auth shell and now hosts the taxi baseline map surface inside
+the Home tab, with a bottom nav shell for the other placeholder tabs.
 
 ## Map Baseline
 
@@ -18,7 +19,17 @@ The root map implementation is optimized for first-release performance:
 - presentation/ui/screens/root_screen.dart
   - Route entry and BlocProvider wiring.
 - presentation/ui/widgets/root_body.dart
-  - StatusBuilder orchestration for map bootstrap state.
+  - Root tab shell with PageView + bottom nav.
+- presentation/ui/widgets/home/root_home_tab_section.dart
+  - Home tab map bootstrap + overlays.
+- presentation/ui/widgets/home/root_header_search_pill_widget.dart
+  - Tappable header search pill overlay.
+- presentation/ui/widgets/nav/root_bottom_nav_bar.dart
+  - Bottom nav container.
+- presentation/ui/widgets/nav/root_bottom_nav_item.dart
+  - Individual nav item button.
+- presentation/ui/widgets/placeholders/root_placeholder_tab_section.dart
+  - Placeholder tab content.
 - presentation/ui/widgets/map/root_map_section.dart
   - Stateful map orchestration, camera updates, control integration.
 - presentation/ui/widgets/map/root_map_canvas_widget.dart
@@ -32,6 +43,8 @@ The root map implementation is optimized for first-release performance:
 
 - Initial map center is resolved through RootBloc bootstrap event.
 - Recenter uses RootEvent.recenterRequested and updates camera manually.
+- Header search pill triggers OrderEvent.orderNowPressed.
+- Bottom nav hides on Home when Order is expanded or map picking.
 - Zoom/compass actions are handled locally in map section for low overhead.
 
 ## Map Key Setup

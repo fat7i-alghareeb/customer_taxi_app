@@ -2,9 +2,10 @@
 
 ## Purpose
 
-Order overlays the Root map with a 3-mode bottom sheet flow for selecting ride locations, then choosing a ride type:
+Order overlays the Root map with a bottom sheet flow for selecting ride locations,
+then choosing a ride type. The flow is triggered from the Home header search
+pill.
 
-- Collapsed: animated hero surface with illustration and ambient motion.
 - Expanded (step 1): immersive modular layout with pickup/destination blocks, smart map trigger, suggestions, and conditional confirm dock.
 - Expanded (step 2): route summary with Google-estimated trip time and selectable vehicle cards with price-only loading.
 - Expanded (step 3): pickup-point refinement (map selection) with optional street and house-number details.
@@ -14,8 +15,8 @@ The user stays on Root screen while all Order interaction logic remains inside t
 
 ## Interaction Flow
 
-1. Order starts in collapsed mode.
-2. Tapping the collapsed hero expands to a full-height immersive sheet.
+1. Order starts in collapsed (idle) mode with no visible sheet.
+2. Tapping the Home header search pill expands to a full-height immersive sheet.
 3. From is initialized from current location and reverse-geocoded into a readable address.
 4. To starts empty.
 5. Each field supports text search through Google geocoding and map-based picking.
@@ -103,7 +104,7 @@ Data contracts:
 Root integration remains thin:
 
 - RootScreen provides OrderBloc together with RootBloc.
-- RootBody renders OrderBody as an overlay above RootMapSection.
+- RootHomeTabSection renders OrderBody as an overlay above RootMapSection.
 - RootMapSection exposes camera-idle location callback so Order can confirm map center.
 - RootMapSection renders trip polyline + From/To markers from Order state and auto-fits camera bounds on route success.
 

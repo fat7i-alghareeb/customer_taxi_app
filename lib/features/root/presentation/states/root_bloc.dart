@@ -23,7 +23,6 @@ class RootBloc extends Bloc<RootEvent, RootState> {
     on<_AccurateLocationResolved>(_onAccurateLocationResolved);
   }
 
-  // ignore: unused_field
   final PermissionsCoordinator _permissionsCoordinator;
   final LocationService _locationService;
 
@@ -35,9 +34,10 @@ class RootBloc extends Bloc<RootEvent, RootState> {
     _MapBootstrapRequested event,
     Emitter<RootState> emit,
   ) async {
-    emit(state.copyWith(mapBootstrapState: const BlocStatus.loading()));
+    // 1. Ensure permissions are handled
+    await _permissionsCoordinator.ensureForegroundLocationRequired();
 
-    // 1. FAST PATH: Check last known position immediately
+    // 2. FAST PATH: Check last known position immediately
     final lastKnown = await _locationService.getLastKnownPosition();
     if (lastKnown != null) {
       emit(
@@ -52,7 +52,7 @@ class RootBloc extends Bloc<RootEvent, RootState> {
         ),
       );
     } else {
-      // 2. FALLBACK PATH: Use Aleppo default pivot instantly
+      // 3. FALLBACK PATH: Use Aleppo default pivot instantly
       emit(
         state.copyWith(
           mapBootstrapState: const BlocStatus.success(

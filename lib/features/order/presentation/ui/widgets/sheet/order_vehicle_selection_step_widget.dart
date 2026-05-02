@@ -31,16 +31,16 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
     }
   }
 
-  IconData _resolveIcon(String typeId) {
+  String _resolveImagePath(String typeId) {
     switch (typeId) {
       case OrderConstants.carTypeStandard:
-        return FontAwesomeIcons.carSide;
+        return Assets.images.standered.path;
       case OrderConstants.carTypeComfort:
-        return FontAwesomeIcons.carRear;
+        return Assets.images.comfort.path;
       case OrderConstants.carTypeBus8:
-        return FontAwesomeIcons.vanShuttle;
+        return Assets.images.a8Passengeres.path;
       default:
-        return FontAwesomeIcons.car;
+        return Assets.images.standered.path;
     }
   }
 
@@ -113,7 +113,7 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
             Text(
               AppStrings.selectCarType,
               style: AppTextStyles.s16w600.copyWith(
-                color: AppColors.brandGold,
+                color: context.primary,
                 fontWeight: FontWeight.w900,
                 letterSpacing: -0.5,
               ),
@@ -128,7 +128,7 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
           child: Row(
             children: [
               for (var index = 0; index < _orderedTypeIds.length; index++) ...[
-                if (index > 0) AppSpacing.sm.horizontalSpace,
+                if (index > 0) AppSpacing.md.horizontalSpace,
                 Builder(
                   builder: (context) {
                     final typeId = _orderedTypeIds[index];
@@ -139,7 +139,7 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
 
                     return OrderCarOptionCardWidget(
                       title: _resolveLabel(typeId),
-                      iconData: _resolveIcon(typeId),
+                      imagePath: _resolveImagePath(typeId),
                       isSelected: state.selectedCarTypeId == typeId,
                       isPriceLoading: isPriceLoading,
                       priceText: priceText,
