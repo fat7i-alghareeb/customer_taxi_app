@@ -15,6 +15,8 @@ class AppStrings {
   static String get authForbidden => 'authForbidden'.tr();
   /// You are not authorized. Please sign in again. - غير مصرح. يرجى تسجيل الدخول مرة أخرى. - U bent niet geautoriseerd. Log opnieuw in.
   static String get authUnauthorized => 'authUnauthorized'.tr();
+  /// Booking Details - تفاصيل الحجز - Boekingsdetails
+  static String get bookingDetails => 'bookingDetails'.tr();
   /// Cancel - إلغاء - Annuleren
   static String get cancel => 'cancel'.tr();
   /// 8-passenger bus - باص 8 ركاب - Bus voor 8 passagiers
@@ -35,6 +37,8 @@ class AppStrings {
   static String get clientUnprocessableEntity => 'clientUnprocessableEntity'.tr();
   /// Coming Soon - قريباً - Binnenkort beschikbaar
   static String get comingSoon => 'comingSoon'.tr();
+  /// Confirm Booking - تأكيد الحجز - Boeking bevestigen
+  static String get confirmBooking => 'confirmBooking'.tr();
   /// Confirm locations - تأكيد المواقع - Locaties bevestigen
   static String get confirmLocations => 'confirmLocations'.tr();
   /// Confirm order - تأكيد الطلب - Bestelling bevestigen
@@ -157,6 +161,8 @@ class AppStrings {
   static String get nov => 'nov'.tr();
   /// November - نوفمبر - November
   static String get november => 'november'.tr();
+  /// Now - الآن - Nu
+  static String get now => 'now'.tr();
   /// Oct - أكت - Okt
   static String get oct => 'oct'.tr();
   /// October - أكتوبر - Oktober
@@ -187,6 +193,8 @@ class AppStrings {
   static String get orderNow => 'orderNow'.tr();
   /// Verification - التحقق - Verificatie
   static String get otp => 'otp'.tr();
+  /// Payment Method - طريقة الدفع - Betalingsmethode
+  static String get paymentMethod => 'paymentMethod'.tr();
   /// You cannot continue using the app until location permission is granted. - لا يمكنك متابعة استخدام التطبيق حتى تمنح صلاحية الموقع. - U kunt de app niet blijven gebruiken totdat de locatiepermissie is verleend.
   static String get permissionGateBlockingHint => 'permissionGateBlockingHint'.tr();
   /// Location permission is still denied. Please allow it to continue. - ما زالت صلاحية الموقع مرفوضة. يرجى السماح بها للمتابعة. - Locatiepermissie is nog steeds geweigerd. Sta dit toe om door te gaan.
@@ -245,6 +253,8 @@ class AppStrings {
   static String get sat => 'sat'.tr();
   /// Saturday - السبت - Zaterdag
   static String get saturday => 'saturday'.tr();
+  /// Schedule Time - جدولة الوقت - Tijd inplannen
+  static String get scheduleTime => 'scheduleTime'.tr();
   /// Search - بحث - Zoeken
   static String get search => 'search'.tr();
   /// Search pickup location - ابحث عن موقع الانطلاق - Zoek ophaallocatie
@@ -265,6 +275,8 @@ class AppStrings {
   static String get selectMonth => 'selectMonth'.tr();
   /// Select option - اختر خيارًا - Selecteer optie
   static String get selectOption => 'selectOption'.tr();
+  /// Select Payment Method - اختر طريقة الدفع - Selecteer betalingsmethode
+  static String get selectPaymentMethod => 'selectPaymentMethod'.tr();
   /// Select pickup point - اختر نقطة الالتقاط - Selecteer ophaalpunt
   static String get selectPickupPoint => 'selectPickupPoint'.tr();
   /// Select Theme - اختر السمة - Selecteer thema
@@ -309,6 +321,8 @@ class AppStrings {
   static String get thu => 'thu'.tr();
   /// Thursday - الخميس - Donderdag
   static String get thursday => 'thursday'.tr();
+  /// Time Selected - الوقت المحدد - Geselecteerde tijd
+  static String get timeSelected => 'timeSelected'.tr();
   /// To - إلى - Naar
   static String get to => 'to'.tr();
   /// Tue - ثلا - Di

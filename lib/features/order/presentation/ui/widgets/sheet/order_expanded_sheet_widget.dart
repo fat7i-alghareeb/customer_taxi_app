@@ -10,6 +10,7 @@ import '../../../../domain/entities/order_saved_location_entity.dart';
 import '../../../states/order_bloc.dart';
 import 'order_location_field_widget.dart';
 import 'order_location_suggestions_widget.dart';
+import 'order_booking_details_step_widget.dart';
 import 'order_map_context_trigger_widget.dart';
 import 'order_pickup_point_step_widget.dart';
 import 'order_vehicle_selection_step_widget.dart';
@@ -213,6 +214,10 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     return widget.state.expandedStep == OrderExpandedStep.pickupPoint;
   }
 
+  bool get _isBookingDetailsStep {
+    return widget.state.expandedStep == OrderExpandedStep.bookingDetails;
+  }
+
   bool get _isVehicleConfirmActive {
     return widget.state.selectedCarTypeId?.trim().isNotEmpty ?? false;
   }
@@ -318,6 +323,13 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(AppRadii.lg.r),
                     onTap: () {
+                      if (_isBookingDetailsStep) {
+                        context.read<OrderBloc>().add(
+                          const OrderEvent.bookingDetailsBackPressed(),
+                        );
+                        return;
+                      }
+
                       if (_isPickupPointStep) {
                         context.read<OrderBloc>().add(
                           const OrderEvent.pickupPointBackPressed(),
@@ -349,7 +361,9 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                 AppSpacing.md.horizontalSpace,
                 Expanded(
                   child: Text(
-                    _isVehicleSelectionStep
+                    _isBookingDetailsStep
+                        ? AppStrings.bookingDetails
+                        : _isVehicleSelectionStep
                         ? AppStrings.selectCarType
                         : _isPickupPointStep
                         ? AppStrings.selectPickupPoint
@@ -600,6 +614,28 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                           duration: AppDurations.slow,
                           curve: Curves.easeOutCubic,
                         ),
+                ],
+              ),
+            );
+          }
+
+          if (_isBookingDetailsStep) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: REdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.sm,
+                    ),
+                    child: SizedBox(
+                      height: 420.h,
+                      child: OrderBookingDetailsStepWidget(state: widget.state),
+                    ),
+                  ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.08),
                 ],
               ),
             );

@@ -177,5 +177,12 @@
   "drawerFavorites": "العناوين المفضلة",
   "drawerPlanning": "التخطيط",
   "drawerHelpCenter": "مركز المساعدة",
-  "comingSoon": "قريباً"
+  "comingSoon": "قريباً",
+  "bookingDetails": "تفاصيل الحجز",
+  "scheduleTime": "جدولة الوقت",
+  "paymentMethod": "طريقة الدفع",
+  "now": "الآن",
+  "confirmBooking": "تأكيد الحجز",
+  "selectPaymentMethod": "اختر طريقة الدفع",
+  "timeSelected": "الوقت المحدد"
 }

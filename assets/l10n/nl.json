@@ -177,5 +177,12 @@
   "drawerFavorites": "Favoriete adressen",
   "drawerPlanning": "Planning",
   "drawerHelpCenter": "Helpcentrum",
-  "comingSoon": "Binnenkort beschikbaar"
+  "comingSoon": "Binnenkort beschikbaar",
+  "bookingDetails": "Boekingsdetails",
+  "scheduleTime": "Tijd inplannen",
+  "paymentMethod": "Betalingsmethode",
+  "now": "Nu",
+  "confirmBooking": "Boeking bevestigen",
+  "selectPaymentMethod": "Selecteer betalingsmethode",
+  "timeSelected": "Geselecteerde tijd"
 }

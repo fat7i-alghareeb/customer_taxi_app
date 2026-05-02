@@ -28,7 +28,12 @@ enum OrderSheetMode { collapsed, expanded, mapPicking }
 
 enum OrderLocationTarget { from, to, pickupPoint }
 
-enum OrderExpandedStep { locationEntry, carSelection, pickupPoint }
+enum OrderExpandedStep {
+  locationEntry,
+  carSelection,
+  pickupPoint,
+  bookingDetails,
+}
 
 @injectable
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
@@ -61,6 +66,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<_PickupConfirmationFeedbackCleared>(
       _onPickupConfirmationFeedbackCleared,
     );
+    on<_ConfirmBookingDetailsPressed>(_onConfirmBookingDetailsPressed);
+    on<_BookingDetailsBackPressed>(_onBookingDetailsBackPressed);
+    on<_ScheduleTimeChanged>(_onScheduleTimeChanged);
+    on<_PaymentMethodChanged>(_onPaymentMethodChanged);
   }
 
   final OrderFacade _facade;
@@ -616,6 +625,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       prefetchedFromLocation: null,
       prefetchedToLocation: null,
       selectedCarTypeId: null,
+      scheduledAt: null,
+      paymentMethodId: null,
     );
   }
 
@@ -1715,8 +1726,46 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }
 
     printG(
-      '[OrderBloc] confirmPickupPointPressed success pickup="${pickupLocation.label}" street="${state.pickupStreetName}" house="${state.pickupHouseNumber}"',
+      '[OrderBloc] confirmPickupPointPressed success pickup="${pickupLocation.label}" street="${state.pickupStreetName}" house="${state.pickupHouseNumber}" -> move to bookingDetails',
     );
+    emit(
+      state.copyWith(
+        expandedStep: OrderExpandedStep.bookingDetails,
+        sheetMode: OrderSheetMode.expanded,
+      ),
+    );
+  }
+
+  void _onBookingDetailsBackPressed(
+    _BookingDetailsBackPressed event,
+    Emitter<OrderState> emit,
+  ) {
+    emit(state.copyWith(expandedStep: OrderExpandedStep.pickupPoint));
+  }
+
+  void _onScheduleTimeChanged(
+    _ScheduleTimeChanged event,
+    Emitter<OrderState> emit,
+  ) {
+    emit(state.copyWith(scheduledAt: event.time));
+  }
+
+  void _onPaymentMethodChanged(
+    _PaymentMethodChanged event,
+    Emitter<OrderState> emit,
+  ) {
+    emit(state.copyWith(paymentMethodId: event.methodId));
+  }
+
+  Future<void> _onConfirmBookingDetailsPressed(
+    _ConfirmBookingDetailsPressed event,
+    Emitter<OrderState> emit,
+  ) async {
+    printG(
+      '[OrderBloc] confirmBookingDetailsPressed scheduledAt=${state.scheduledAt} paymentMethodId=${state.paymentMethodId}',
+    );
+
+    // Final order confirmation logic goes here
     emit(
       state.copyWith(
         pickupConfirmationFeedbackState: BlocStatus.success(

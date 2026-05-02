@@ -58,7 +58,9 @@ class OrderBody extends StatelessWidget {
             previous.pickupHouseNumber != current.pickupHouseNumber ||
             previous.tripRouteState != current.tripRouteState ||
             previous.tripCarOptionsState != current.tripCarOptionsState ||
-            previous.selectedCarTypeId != current.selectedCarTypeId;
+            previous.selectedCarTypeId != current.selectedCarTypeId ||
+            previous.scheduledAt != current.scheduledAt ||
+            previous.paymentMethodId != current.paymentMethodId;
       },
       builder: (context, state) {
         return PopScope(
@@ -69,6 +71,15 @@ class OrderBody extends StatelessWidget {
                 printM('[OrderBody] system back -> mapPickCancelled');
                 context.read<OrderBloc>().add(
                   const OrderEvent.mapPickCancelled(),
+                );
+                return;
+              }
+
+              if (state.sheetMode == OrderSheetMode.expanded &&
+                  state.expandedStep == OrderExpandedStep.bookingDetails) {
+                printM('[OrderBody] system back -> bookingDetailsBackPressed');
+                context.read<OrderBloc>().add(
+                  const OrderEvent.bookingDetailsBackPressed(),
                 );
                 return;
               }

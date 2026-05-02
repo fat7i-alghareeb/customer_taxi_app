@@ -59,5 +59,7 @@ abstract class OrderState with _$OrderState {
     OrderLocationEntity? prefetchedToLocation,
 
     String? selectedCarTypeId,
+    DateTime? scheduledAt,
+    String? paymentMethodId,
   }) = _OrderState;
 }

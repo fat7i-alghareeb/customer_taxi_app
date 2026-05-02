@@ -177,5 +177,12 @@
   "drawerFavorites": "Favorite addresses",
   "drawerPlanning": "Planning",
   "drawerHelpCenter": "Help center",
-  "comingSoon": "Coming Soon"
+  "comingSoon": "Coming Soon",
+  "bookingDetails": "Booking Details",
+  "scheduleTime": "Schedule Time",
+  "paymentMethod": "Payment Method",
+  "now": "Now",
+  "confirmBooking": "Confirm Booking",
+  "selectPaymentMethod": "Select Payment Method",
+  "timeSelected": "Time Selected"
 }

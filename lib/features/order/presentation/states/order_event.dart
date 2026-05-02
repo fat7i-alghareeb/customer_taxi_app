@@ -63,4 +63,12 @@ class OrderEvent with _$OrderEvent {
       _ConfirmPickupPointPressed;
   const factory OrderEvent.pickupConfirmationFeedbackCleared() =
       _PickupConfirmationFeedbackCleared;
+  const factory OrderEvent.bookingDetailsBackPressed() =
+      _BookingDetailsBackPressed;
+  const factory OrderEvent.scheduleTimeChanged(DateTime? time) =
+      _ScheduleTimeChanged;
+  const factory OrderEvent.paymentMethodChanged(String methodId) =
+      _PaymentMethodChanged;
+  const factory OrderEvent.confirmBookingDetailsPressed() =
+      _ConfirmBookingDetailsPressed;
 }
