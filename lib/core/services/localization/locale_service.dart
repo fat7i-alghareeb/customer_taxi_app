@@ -72,6 +72,7 @@ class LocaleService {
   bool _isSupported(String code) =>
       AppLocalizationConfig.supportedLanguageCodes.contains(code);
 
+  // ignore: unused_element
   String _deviceLanguageCode() {
     final locale = PlatformDispatcher.instance.locale;
     return locale.languageCode.toLowerCase();

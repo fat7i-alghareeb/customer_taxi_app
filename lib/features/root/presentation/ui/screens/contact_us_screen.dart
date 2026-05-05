@@ -117,6 +117,7 @@ class _ContactSection extends StatelessWidget {
 }
 
 class _ContactItem extends StatelessWidget {
+  // ignore: unused_element_parameter
   const _ContactItem({this.label, required this.value});
 
   final String? label;
