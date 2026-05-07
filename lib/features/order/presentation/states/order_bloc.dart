@@ -1260,7 +1260,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
 
     final result = await _facade.searchLocations(
-      OrderLocationSearchRequestEntity(query: query),
+      OrderLocationSearchRequestEntity(
+        query: query,
+        biasLat: state.mapCameraLatitude,
+        biasLng: state.mapCameraLongitude,
+      ),
     );
 
     result.when(
@@ -1336,7 +1340,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
 
     final result = await _facade.searchLocations(
-      OrderLocationSearchRequestEntity(query: query),
+      OrderLocationSearchRequestEntity(
+        query: query,
+        biasLat: state.mapCameraLatitude,
+        biasLng: state.mapCameraLongitude,
+      ),
     );
 
     result.when(
