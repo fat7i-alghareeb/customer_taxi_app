@@ -55,12 +55,11 @@ extension AuthEventPatterns on AuthEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _LoginRequested value)?  loginRequested,TResult Function( _SendOtpRequested value)?  sendOtpRequested,TResult Function( _VerifyOtpRequested value)?  verifyOtpRequested,TResult Function( _ResetRequested value)?  resetRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _SendOtpRequested value)?  sendOtpRequested,TResult Function( _VerifyOtpRequested value)?  verifyOtpRequested,TResult Function( _ResetRequested value)?  resetRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that);case _LoginRequested() when loginRequested != null:
-return loginRequested(_that);case _SendOtpRequested() when sendOtpRequested != null:
+return started(_that);case _SendOtpRequested() when sendOtpRequested != null:
 return sendOtpRequested(_that);case _VerifyOtpRequested() when verifyOtpRequested != null:
 return verifyOtpRequested(_that);case _ResetRequested() when resetRequested != null:
 return resetRequested(_that);case _:
@@ -81,12 +80,11 @@ return resetRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _LoginRequested value)  loginRequested,required TResult Function( _SendOtpRequested value)  sendOtpRequested,required TResult Function( _VerifyOtpRequested value)  verifyOtpRequested,required TResult Function( _ResetRequested value)  resetRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _SendOtpRequested value)  sendOtpRequested,required TResult Function( _VerifyOtpRequested value)  verifyOtpRequested,required TResult Function( _ResetRequested value)  resetRequested,}){
 final _that = this;
 switch (_that) {
 case _Started():
-return started(_that);case _LoginRequested():
-return loginRequested(_that);case _SendOtpRequested():
+return started(_that);case _SendOtpRequested():
 return sendOtpRequested(_that);case _VerifyOtpRequested():
 return verifyOtpRequested(_that);case _ResetRequested():
 return resetRequested(_that);case _:
@@ -106,12 +104,11 @@ return resetRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _LoginRequested value)?  loginRequested,TResult? Function( _SendOtpRequested value)?  sendOtpRequested,TResult? Function( _VerifyOtpRequested value)?  verifyOtpRequested,TResult? Function( _ResetRequested value)?  resetRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _SendOtpRequested value)?  sendOtpRequested,TResult? Function( _VerifyOtpRequested value)?  verifyOtpRequested,TResult? Function( _ResetRequested value)?  resetRequested,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that);case _LoginRequested() when loginRequested != null:
-return loginRequested(_that);case _SendOtpRequested() when sendOtpRequested != null:
+return started(_that);case _SendOtpRequested() when sendOtpRequested != null:
 return sendOtpRequested(_that);case _VerifyOtpRequested() when verifyOtpRequested != null:
 return verifyOtpRequested(_that);case _ResetRequested() when resetRequested != null:
 return resetRequested(_that);case _:
@@ -131,11 +128,10 @@ return resetRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  loginRequested,TResult Function( String phone)?  sendOtpRequested,TResult Function( String otp)?  verifyOtpRequested,TResult Function()?  resetRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String phone)?  sendOtpRequested,TResult Function( String otp)?  verifyOtpRequested,TResult Function()?  resetRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _LoginRequested() when loginRequested != null:
-return loginRequested();case _SendOtpRequested() when sendOtpRequested != null:
+return started();case _SendOtpRequested() when sendOtpRequested != null:
 return sendOtpRequested(_that.phone);case _VerifyOtpRequested() when verifyOtpRequested != null:
 return verifyOtpRequested(_that.otp);case _ResetRequested() when resetRequested != null:
 return resetRequested();case _:
@@ -156,11 +152,10 @@ return resetRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  loginRequested,required TResult Function( String phone)  sendOtpRequested,required TResult Function( String otp)  verifyOtpRequested,required TResult Function()  resetRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String phone)  sendOtpRequested,required TResult Function( String otp)  verifyOtpRequested,required TResult Function()  resetRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
-return started();case _LoginRequested():
-return loginRequested();case _SendOtpRequested():
+return started();case _SendOtpRequested():
 return sendOtpRequested(_that.phone);case _VerifyOtpRequested():
 return verifyOtpRequested(_that.otp);case _ResetRequested():
 return resetRequested();case _:
@@ -180,11 +175,10 @@ return resetRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  loginRequested,TResult? Function( String phone)?  sendOtpRequested,TResult? Function( String otp)?  verifyOtpRequested,TResult? Function()?  resetRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String phone)?  sendOtpRequested,TResult? Function( String otp)?  verifyOtpRequested,TResult? Function()?  resetRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started();case _LoginRequested() when loginRequested != null:
-return loginRequested();case _SendOtpRequested() when sendOtpRequested != null:
+return started();case _SendOtpRequested() when sendOtpRequested != null:
 return sendOtpRequested(_that.phone);case _VerifyOtpRequested() when verifyOtpRequested != null:
 return verifyOtpRequested(_that.otp);case _ResetRequested() when resetRequested != null:
 return resetRequested();case _:
@@ -219,38 +213,6 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'AuthEvent.started()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class _LoginRequested implements AuthEvent {
-  const _LoginRequested();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginRequested);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'AuthEvent.loginRequested()';
 }
 
 
@@ -426,7 +388,7 @@ String toString() {
 /// @nodoc
 mixin _$AuthState {
 
- BlocStatus<UserEntity> get loginStatus; BlocStatus<void> get phoneStatus; BlocStatus<void> get otpStatus; bool get isOtpSent;
+ BlocStatus<void> get phoneStatus; BlocStatus<UserEntity> get otpStatus; bool get isOtpSent; String? get sessionToken;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -437,16 +399,16 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.loginStatus, loginStatus) || other.loginStatus == loginStatus)&&(identical(other.phoneStatus, phoneStatus) || other.phoneStatus == phoneStatus)&&(identical(other.otpStatus, otpStatus) || other.otpStatus == otpStatus)&&(identical(other.isOtpSent, isOtpSent) || other.isOtpSent == isOtpSent));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.phoneStatus, phoneStatus) || other.phoneStatus == phoneStatus)&&(identical(other.otpStatus, otpStatus) || other.otpStatus == otpStatus)&&(identical(other.isOtpSent, isOtpSent) || other.isOtpSent == isOtpSent)&&(identical(other.sessionToken, sessionToken) || other.sessionToken == sessionToken));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loginStatus,phoneStatus,otpStatus,isOtpSent);
+int get hashCode => Object.hash(runtimeType,phoneStatus,otpStatus,isOtpSent,sessionToken);
 
 @override
 String toString() {
-  return 'AuthState(loginStatus: $loginStatus, phoneStatus: $phoneStatus, otpStatus: $otpStatus, isOtpSent: $isOtpSent)';
+  return 'AuthState(phoneStatus: $phoneStatus, otpStatus: $otpStatus, isOtpSent: $isOtpSent, sessionToken: $sessionToken)';
 }
 
 
@@ -457,11 +419,11 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- BlocStatus<UserEntity> loginStatus, BlocStatus<void> phoneStatus, BlocStatus<void> otpStatus, bool isOtpSent
+ BlocStatus<void> phoneStatus, BlocStatus<UserEntity> otpStatus, bool isOtpSent, String? sessionToken
 });
 
 
-$BlocStatusCopyWith<UserEntity, $Res> get loginStatus;$BlocStatusCopyWith<void, $Res> get phoneStatus;$BlocStatusCopyWith<void, $Res> get otpStatus;
+$BlocStatusCopyWith<void, $Res> get phoneStatus;$BlocStatusCopyWith<UserEntity, $Res> get otpStatus;
 
 }
 /// @nodoc
@@ -474,25 +436,16 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loginStatus = null,Object? phoneStatus = null,Object? otpStatus = null,Object? isOtpSent = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? phoneStatus = null,Object? otpStatus = null,Object? isOtpSent = null,Object? sessionToken = freezed,}) {
   return _then(_self.copyWith(
-loginStatus: null == loginStatus ? _self.loginStatus : loginStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<UserEntity>,phoneStatus: null == phoneStatus ? _self.phoneStatus : phoneStatus // ignore: cast_nullable_to_non_nullable
+phoneStatus: null == phoneStatus ? _self.phoneStatus : phoneStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<void>,otpStatus: null == otpStatus ? _self.otpStatus : otpStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<void>,isOtpSent: null == isOtpSent ? _self.isOtpSent : isOtpSent // ignore: cast_nullable_to_non_nullable
-as bool,
+as BlocStatus<UserEntity>,isOtpSent: null == isOtpSent ? _self.isOtpSent : isOtpSent // ignore: cast_nullable_to_non_nullable
+as bool,sessionToken: freezed == sessionToken ? _self.sessionToken : sessionToken // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of AuthState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<UserEntity, $Res> get loginStatus {
-  
-  return $BlocStatusCopyWith<UserEntity, $Res>(_self.loginStatus, (value) {
-    return _then(_self.copyWith(loginStatus: value));
-  });
-}/// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -505,9 +458,9 @@ $BlocStatusCopyWith<void, $Res> get phoneStatus {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BlocStatusCopyWith<void, $Res> get otpStatus {
+$BlocStatusCopyWith<UserEntity, $Res> get otpStatus {
   
-  return $BlocStatusCopyWith<void, $Res>(_self.otpStatus, (value) {
+  return $BlocStatusCopyWith<UserEntity, $Res>(_self.otpStatus, (value) {
     return _then(_self.copyWith(otpStatus: value));
   });
 }
@@ -592,10 +545,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<UserEntity> loginStatus,  BlocStatus<void> phoneStatus,  BlocStatus<void> otpStatus,  bool isOtpSent)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<void> phoneStatus,  BlocStatus<UserEntity> otpStatus,  bool isOtpSent,  String? sessionToken)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.loginStatus,_that.phoneStatus,_that.otpStatus,_that.isOtpSent);case _:
+return $default(_that.phoneStatus,_that.otpStatus,_that.isOtpSent,_that.sessionToken);case _:
   return orElse();
 
 }
@@ -613,10 +566,10 @@ return $default(_that.loginStatus,_that.phoneStatus,_that.otpStatus,_that.isOtpS
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<UserEntity> loginStatus,  BlocStatus<void> phoneStatus,  BlocStatus<void> otpStatus,  bool isOtpSent)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<void> phoneStatus,  BlocStatus<UserEntity> otpStatus,  bool isOtpSent,  String? sessionToken)  $default,) {final _that = this;
 switch (_that) {
 case _AuthState():
-return $default(_that.loginStatus,_that.phoneStatus,_that.otpStatus,_that.isOtpSent);case _:
+return $default(_that.phoneStatus,_that.otpStatus,_that.isOtpSent,_that.sessionToken);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -633,10 +586,10 @@ return $default(_that.loginStatus,_that.phoneStatus,_that.otpStatus,_that.isOtpS
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<UserEntity> loginStatus,  BlocStatus<void> phoneStatus,  BlocStatus<void> otpStatus,  bool isOtpSent)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<void> phoneStatus,  BlocStatus<UserEntity> otpStatus,  bool isOtpSent,  String? sessionToken)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.loginStatus,_that.phoneStatus,_that.otpStatus,_that.isOtpSent);case _:
+return $default(_that.phoneStatus,_that.otpStatus,_that.isOtpSent,_that.sessionToken);case _:
   return null;
 
 }
@@ -648,13 +601,13 @@ return $default(_that.loginStatus,_that.phoneStatus,_that.otpStatus,_that.isOtpS
 
 
 class _AuthState implements AuthState {
-  const _AuthState({this.loginStatus = const BlocStatus<UserEntity>.initial(), this.phoneStatus = const BlocStatus<void>.initial(), this.otpStatus = const BlocStatus<void>.initial(), this.isOtpSent = false});
+  const _AuthState({this.phoneStatus = const BlocStatus<void>.initial(), this.otpStatus = const BlocStatus<UserEntity>.initial(), this.isOtpSent = false, this.sessionToken});
   
 
-@override@JsonKey() final  BlocStatus<UserEntity> loginStatus;
 @override@JsonKey() final  BlocStatus<void> phoneStatus;
-@override@JsonKey() final  BlocStatus<void> otpStatus;
+@override@JsonKey() final  BlocStatus<UserEntity> otpStatus;
 @override@JsonKey() final  bool isOtpSent;
+@override final  String? sessionToken;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -666,16 +619,16 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.loginStatus, loginStatus) || other.loginStatus == loginStatus)&&(identical(other.phoneStatus, phoneStatus) || other.phoneStatus == phoneStatus)&&(identical(other.otpStatus, otpStatus) || other.otpStatus == otpStatus)&&(identical(other.isOtpSent, isOtpSent) || other.isOtpSent == isOtpSent));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.phoneStatus, phoneStatus) || other.phoneStatus == phoneStatus)&&(identical(other.otpStatus, otpStatus) || other.otpStatus == otpStatus)&&(identical(other.isOtpSent, isOtpSent) || other.isOtpSent == isOtpSent)&&(identical(other.sessionToken, sessionToken) || other.sessionToken == sessionToken));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loginStatus,phoneStatus,otpStatus,isOtpSent);
+int get hashCode => Object.hash(runtimeType,phoneStatus,otpStatus,isOtpSent,sessionToken);
 
 @override
 String toString() {
-  return 'AuthState(loginStatus: $loginStatus, phoneStatus: $phoneStatus, otpStatus: $otpStatus, isOtpSent: $isOtpSent)';
+  return 'AuthState(phoneStatus: $phoneStatus, otpStatus: $otpStatus, isOtpSent: $isOtpSent, sessionToken: $sessionToken)';
 }
 
 
@@ -686,11 +639,11 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- BlocStatus<UserEntity> loginStatus, BlocStatus<void> phoneStatus, BlocStatus<void> otpStatus, bool isOtpSent
+ BlocStatus<void> phoneStatus, BlocStatus<UserEntity> otpStatus, bool isOtpSent, String? sessionToken
 });
 
 
-@override $BlocStatusCopyWith<UserEntity, $Res> get loginStatus;@override $BlocStatusCopyWith<void, $Res> get phoneStatus;@override $BlocStatusCopyWith<void, $Res> get otpStatus;
+@override $BlocStatusCopyWith<void, $Res> get phoneStatus;@override $BlocStatusCopyWith<UserEntity, $Res> get otpStatus;
 
 }
 /// @nodoc
@@ -703,26 +656,17 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loginStatus = null,Object? phoneStatus = null,Object? otpStatus = null,Object? isOtpSent = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? phoneStatus = null,Object? otpStatus = null,Object? isOtpSent = null,Object? sessionToken = freezed,}) {
   return _then(_AuthState(
-loginStatus: null == loginStatus ? _self.loginStatus : loginStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<UserEntity>,phoneStatus: null == phoneStatus ? _self.phoneStatus : phoneStatus // ignore: cast_nullable_to_non_nullable
+phoneStatus: null == phoneStatus ? _self.phoneStatus : phoneStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<void>,otpStatus: null == otpStatus ? _self.otpStatus : otpStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<void>,isOtpSent: null == isOtpSent ? _self.isOtpSent : isOtpSent // ignore: cast_nullable_to_non_nullable
-as bool,
+as BlocStatus<UserEntity>,isOtpSent: null == isOtpSent ? _self.isOtpSent : isOtpSent // ignore: cast_nullable_to_non_nullable
+as bool,sessionToken: freezed == sessionToken ? _self.sessionToken : sessionToken // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
 /// Create a copy of AuthState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<UserEntity, $Res> get loginStatus {
-  
-  return $BlocStatusCopyWith<UserEntity, $Res>(_self.loginStatus, (value) {
-    return _then(_self.copyWith(loginStatus: value));
-  });
-}/// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -735,9 +679,9 @@ $BlocStatusCopyWith<void, $Res> get phoneStatus {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BlocStatusCopyWith<void, $Res> get otpStatus {
+$BlocStatusCopyWith<UserEntity, $Res> get otpStatus {
   
-  return $BlocStatusCopyWith<void, $Res>(_self.otpStatus, (value) {
+  return $BlocStatusCopyWith<UserEntity, $Res>(_self.otpStatus, (value) {
     return _then(_self.copyWith(otpStatus: value));
   });
 }

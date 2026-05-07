@@ -1,6 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
-import '../../../../../common/widgets/custom_scaffold/app_scaffold.dart';
 import '../widgets/premium_splash_logo.dart';
 import '../widgets/splash_map_warmup_progress_widget.dart';
 import '../widgets/splash_map_warmup_widget.dart';

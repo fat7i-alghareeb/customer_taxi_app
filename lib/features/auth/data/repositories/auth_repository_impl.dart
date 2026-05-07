@@ -8,6 +8,7 @@ import '../../../../core/utils/result.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../mappers/auth_model_mapper.dart';
+import '../params/auth_params.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
@@ -16,9 +17,23 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remote;
 
   @override
-  Future<Result<UserEntity>> loginDummy() {
+  Future<Result<String>> sendOtp(String phone) {
     return runAsResult(() async {
-      final response = await _remote.loginDummy();
+      final response = await _remote.sendOtp(SendOtpParams(phone: phone));
+      return response.sessionToken;
+    });
+  }
+
+  @override
+  Future<Result<UserEntity>> verifyOtp({
+    required String phone,
+    required String sessionToken,
+    required String code,
+  }) {
+    return runAsResult(() async {
+      final response = await _remote.verifyOtp(
+        VerifyOtpParams(phone: phone, sessionToken: sessionToken, code: code),
+      );
 
       final user = response.toUserEntity();
       final token = response.toAuthTokenModel();

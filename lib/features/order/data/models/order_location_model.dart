@@ -45,7 +45,34 @@ class OrderLocationModel {
     );
   }
 
+  // Backend proxy factories — used when maps data comes from the server
+  factory OrderLocationModel.fromBackend(Map<String, dynamic> json) {
+    final primary = json['primaryName'] as String? ?? '';
+    final secondary = json['secondaryAddress'] as String? ?? '';
+    final label = secondary.isNotEmpty ? '$primary, $secondary' : primary;
+    return OrderLocationModel(
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      label: label,
+      primaryName: primary,
+      secondaryAddress: secondary,
+    );
+  }
 
+  factory OrderLocationModel.fromReverseGeocodeBackend(
+    Map<String, dynamic> json,
+  ) {
+    final primary = json['primaryName'] as String? ?? '';
+    final secondary = json['secondaryAddress'] as String? ?? '';
+    final label = secondary.isNotEmpty ? '$primary, $secondary' : primary;
+    return OrderLocationModel(
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      label: label,
+      primaryName: primary,
+      secondaryAddress: secondary,
+    );
+  }
 
   static final RegExp _plusCodeTokenRegex = RegExp(
     r'^[A-Z0-9]{4,}\+[A-Z0-9]{2,}$',

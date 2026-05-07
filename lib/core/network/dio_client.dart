@@ -96,6 +96,7 @@ Dio _initDio({
     headers: <String, Object?>{
       'Content-Type': 'application/json; charset=utf-8',
       'Accept': 'application/json',
+      'ngrok-skip-browser-warning': '69420',
     },
   );
 

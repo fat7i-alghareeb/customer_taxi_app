@@ -3,9 +3,21 @@ class OrderParams {
 }
 
 class OrderSearchLocationParams {
-  const OrderSearchLocationParams({required this.query});
+  const OrderSearchLocationParams({
+    required this.query,
+    this.biasLat,
+    this.biasLng,
+  });
 
   final String query;
+  final double? biasLat;
+  final double? biasLng;
+
+  Map<String, dynamic> toJson() => {
+        'query': query,
+        if (biasLat != null) 'latitude': biasLat,
+        if (biasLng != null) 'longitude': biasLng,
+      };
 }
 
 class OrderReverseGeocodeParams {
@@ -16,32 +28,63 @@ class OrderReverseGeocodeParams {
 
   final double latitude;
   final double longitude;
+
+  Map<String, dynamic> toJson() => {
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+}
+
+class OrderCoordinateParam {
+  const OrderCoordinateParam({
+    required this.latitude,
+    required this.longitude,
+  });
+
+  final double latitude;
+  final double longitude;
+
+  Map<String, dynamic> toJson() => {
+        'latitude': latitude,
+        'longitude': longitude,
+      };
 }
 
 class OrderTripRouteParams {
-  const OrderTripRouteParams({
-    required this.fromLatitude,
-    required this.fromLongitude,
-    required this.toLatitude,
-    required this.toLongitude,
-  });
+  const OrderTripRouteParams({required this.stops});
 
-  final double fromLatitude;
-  final double fromLongitude;
-  final double toLatitude;
-  final double toLongitude;
+  final List<OrderCoordinateParam> stops;
+
+  Map<String, dynamic> toJson() => {
+        'stops': stops.map((s) => s.toJson()).toList(),
+      };
 }
 
-class OrderTripPricingParams {
-  const OrderTripPricingParams({
-    required this.fromLatitude,
-    required this.fromLongitude,
-    required this.toLatitude,
-    required this.toLongitude,
+class OrderPricingQuotesParams {
+  const OrderPricingQuotesParams({required this.stops});
+
+  final List<OrderCoordinateParam> stops;
+
+  Map<String, dynamic> toJson() => {
+        'stops': stops.map((s) => s.toJson()).toList(),
+      };
+}
+
+class OrderRequestTripParams {
+  const OrderRequestTripParams({
+    required this.quoteId,
+    required this.stops,
+    this.scheduledAt,
   });
 
-  final double fromLatitude;
-  final double fromLongitude;
-  final double toLatitude;
-  final double toLongitude;
+  final String quoteId;
+  final List<OrderCoordinateParam> stops;
+  final DateTime? scheduledAt;
+
+  Map<String, dynamic> toJson() => {
+        'quoteId': quoteId,
+        'stops': stops.map((s) => s.toJson()).toList(),
+        if (scheduledAt != null)
+          'scheduledAt': scheduledAt!.toUtc().toIso8601String(),
+      };
 }

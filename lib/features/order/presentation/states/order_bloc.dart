@@ -17,6 +17,7 @@ import '../../domain/entities/order_location_entity.dart';
 import '../../domain/entities/order_location_request_entity.dart';
 import '../../domain/entities/order_saved_location_entity.dart';
 import '../../domain/entities/order_trip_car_option_entity.dart';
+import '../../domain/entities/order_trip_response_entity.dart';
 import '../../domain/entities/order_trip_route_entity.dart';
 import '../../domain/facade/order_facade.dart';
 
@@ -472,22 +473,17 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     required OrderLocationEntity fromLocation,
     required OrderLocationEntity toLocation,
   }) async {
+    final stops = [
+      OrderStopCoordinateEntity(latitude: fromLocation.latitude, longitude: fromLocation.longitude),
+      OrderStopCoordinateEntity(latitude: toLocation.latitude, longitude: toLocation.longitude),
+    ];
+
     final routeFuture = _facade.getTripRoute(
-      OrderTripRouteRequestEntity(
-        fromLatitude: fromLocation.latitude,
-        fromLongitude: fromLocation.longitude,
-        toLatitude: toLocation.latitude,
-        toLongitude: toLocation.longitude,
-      ),
+      OrderTripRouteRequestEntity(stops: stops),
     );
 
-    final pricingFuture = _facade.getTripCarOptions(
-      OrderTripPricingRequestEntity(
-        fromLatitude: fromLocation.latitude,
-        fromLongitude: fromLocation.longitude,
-        toLatitude: toLocation.latitude,
-        toLongitude: toLocation.longitude,
-      ),
+    final pricingFuture = _facade.getPricingQuotes(
+      OrderPricingQuotesRequestEntity(stops: stops),
     );
 
     routeFuture.then((routeResult) {
@@ -625,8 +621,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       prefetchedFromLocation: null,
       prefetchedToLocation: null,
       selectedCarTypeId: null,
+      selectedQuoteId: null,
       scheduledAt: null,
       paymentMethodId: null,
+      tripRequestStatus: const BlocStatus.initial(),
     );
   }
 
@@ -1503,12 +1501,22 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   void _onCarTypeToggled(_CarTypeToggled event, Emitter<OrderState> emit) {
-    final nextSelection = state.selectedCarTypeId == event.typeId
-        ? null
-        : event.typeId;
+    final isSame = state.selectedCarTypeId == event.typeId;
+    final nextTypeId = isSame ? null : event.typeId;
 
-    printM('[OrderBloc] carTypeToggled selectedType=$nextSelection');
-    emit(state.copyWith(selectedCarTypeId: nextSelection));
+    final quotes = state.tripCarOptionsState.maybeWhen(
+      success: (options) => options,
+      orElse: () => <OrderTripCarOptionEntity>[],
+    );
+    final selectedQuote = nextTypeId != null
+        ? quotes.firstWhere((q) => q.typeId == nextTypeId, orElse: () => quotes.first)
+        : null;
+
+    printM('[OrderBloc] carTypeToggled selectedType=$nextTypeId quoteId=${selectedQuote?.quoteId}');
+    emit(state.copyWith(
+      selectedCarTypeId: nextTypeId,
+      selectedQuoteId: selectedQuote?.quoteId,
+    ));
   }
 
   void _onPickupStreetChanged(
@@ -1582,25 +1590,20 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     Future<Result<OrderTripRouteEntity>>? routeFuture;
     Future<Result<List<OrderTripCarOptionEntity>>>? pricingFuture;
 
+    final stops = [
+      OrderStopCoordinateEntity(latitude: fromLocation.latitude, longitude: fromLocation.longitude),
+      OrderStopCoordinateEntity(latitude: toLocation.latitude, longitude: toLocation.longitude),
+    ];
+
     if (!reusePrefetchedRoute) {
       routeFuture = _facade.getTripRoute(
-        OrderTripRouteRequestEntity(
-          fromLatitude: fromLocation.latitude,
-          fromLongitude: fromLocation.longitude,
-          toLatitude: toLocation.latitude,
-          toLongitude: toLocation.longitude,
-        ),
+        OrderTripRouteRequestEntity(stops: stops),
       );
     }
 
     if (!reusePrefetchedPricing) {
-      pricingFuture = _facade.getTripCarOptions(
-        OrderTripPricingRequestEntity(
-          fromLatitude: fromLocation.latitude,
-          fromLongitude: fromLocation.longitude,
-          toLatitude: toLocation.latitude,
-          toLongitude: toLocation.longitude,
-        ),
+      pricingFuture = _facade.getPricingQuotes(
+        OrderPricingQuotesRequestEntity(stops: stops),
       );
     }
 
@@ -1761,19 +1764,53 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     _ConfirmBookingDetailsPressed event,
     Emitter<OrderState> emit,
   ) async {
+    final quoteId = state.selectedQuoteId;
+    if (quoteId == null) {
+      printY('[OrderBloc] confirmBookingDetailsPressed blocked (no quoteId)');
+      return;
+    }
+
+    final fromLocation = _extractLocation(state.fromLocationState);
+    final toLocation = _extractLocation(state.toLocationState);
+    if (fromLocation == null || toLocation == null) {
+      printY('[OrderBloc] confirmBookingDetailsPressed blocked (locations not ready)');
+      return;
+    }
+
     printG(
-      '[OrderBloc] confirmBookingDetailsPressed scheduledAt=${state.scheduledAt} paymentMethodId=${state.paymentMethodId}',
+      '[OrderBloc] confirmBookingDetailsPressed quoteId=$quoteId scheduledAt=${state.scheduledAt}',
     );
 
-    // Final order confirmation logic goes here
-    emit(
-      state.copyWith(
-        pickupConfirmationFeedbackState: BlocStatus.success(
-          AppStrings.orderConfirmedSuccess,
-        ),
+    emit(state.copyWith(tripRequestStatus: const BlocStatus.loading()));
+
+    final pickupLocation = state.pickupPointState.maybeWhen(
+      success: (loc) => loc,
+      orElse: () => fromLocation,
+    );
+
+    final stops = [
+      OrderStopCoordinateEntity(latitude: pickupLocation.latitude, longitude: pickupLocation.longitude),
+      OrderStopCoordinateEntity(latitude: toLocation.latitude, longitude: toLocation.longitude),
+    ];
+
+    final result = await _facade.requestTrip(
+      OrderRequestTripEntity(
+        quoteId: quoteId,
+        stops: stops,
+        scheduledAt: state.scheduledAt,
       ),
     );
-    add(const OrderEvent.collapseRequested());
+
+    result.when(
+      success: (trip) {
+        printG('[OrderBloc] requestTrip success id=${trip.id}');
+        emit(state.copyWith(tripRequestStatus: BlocStatus.success(trip)));
+      },
+      failure: (message) {
+        printY('[OrderBloc] requestTrip failure=$message');
+        emit(state.copyWith(tripRequestStatus: BlocStatus.failure(message)));
+      },
+    );
   }
 
   void _onPickupConfirmationFeedbackCleared(

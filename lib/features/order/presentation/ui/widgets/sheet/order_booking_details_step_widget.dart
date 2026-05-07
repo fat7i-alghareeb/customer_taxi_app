@@ -1,6 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
-import 'package:intl/intl.dart';
 
 class OrderBookingDetailsStepWidget extends StatelessWidget {
   const OrderBookingDetailsStepWidget({super.key, required this.state});

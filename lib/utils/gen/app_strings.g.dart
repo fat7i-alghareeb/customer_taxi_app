@@ -13,8 +13,14 @@ class AppStrings {
   static String get august => 'august'.tr();
   /// You do not have permission to perform this action. - ليست لديك صلاحية لتنفيذ هذا الإجراء. - U heeft geen toestemming om deze actie uit te voeren.
   static String get authForbidden => 'authForbidden'.tr();
+  /// OTP sent to {phone} - تم إرسال رمز التحقق إلى {phone} - OTP verzonden naar {phone}
+  static String get authOtpSent => 'authOtpSent'.tr();
+  /// Send OTP - إرسال رمز التحقق - Code verzenden
+  static String get authSendOtp => 'authSendOtp'.tr();
   /// You are not authorized. Please sign in again. - غير مصرح. يرجى تسجيل الدخول مرة أخرى. - U bent niet geautoriseerd. Log opnieuw in.
   static String get authUnauthorized => 'authUnauthorized'.tr();
+  /// Verify - تحقق - Verifiëren
+  static String get authVerifyOtp => 'authVerifyOtp'.tr();
   /// Booking Details - تفاصيل الحجز - Boekingsdetails
   static String get bookingDetails => 'bookingDetails'.tr();
   /// Cancel - إلغاء - Annuleren
@@ -185,12 +191,22 @@ class AppStrings {
   static String get onboardingTitle2 => 'onboardingTitle2'.tr();
   /// Professional Service - خدمة احترافية - Professionele Service
   static String get onboardingTitle3 => 'onboardingTitle3'.tr();
+  /// Add Stop - إضافة توقف - Stop toevoegen
+  static String get orderAddStop => 'orderAddStop'.tr();
   /// Order confirmed successfully. - تم تأكيد الطلب بنجاح. - Bestelling succesvol bevestigd.
   static String get orderConfirmedSuccess => 'orderConfirmedSuccess'.tr();
   /// Selected location - الموقع المحدد - Geselecteerde locatie
   static String get orderLocationUnknownLabel => 'orderLocationUnknownLabel'.tr();
   /// Order now - اطلب الآن - Nu bestellen
   static String get orderNow => 'orderNow'.tr();
+  /// This quote has already been used. - تم استخدام هذا العرض بالفعل. - Deze prijsopgave is al gebruikt.
+  static String get orderQuoteAlreadyUsed => 'orderQuoteAlreadyUsed'.tr();
+  /// Your price quote has expired. Please request a new quote. - انتهت صلاحية عرض السعر. يرجى طلب عرض جديد. - Uw prijsopgave is verlopen. Vraag een nieuwe opgave aan.
+  static String get orderQuoteExpired => 'orderQuoteExpired'.tr();
+  /// Remove - إزالة - Verwijderen
+  static String get orderRemoveStop => 'orderRemoveStop'.tr();
+  /// Stop {n} - توقف {n} - Stop {n}
+  static String get orderStopLabel => 'orderStopLabel'.tr();
   /// Verification - التحقق - Verificatie
   static String get otp => 'otp'.tr();
   /// Payment Method - طريقة الدفع - Betalingsmethode
@@ -235,6 +251,22 @@ class AppStrings {
   static String get profileAboutUs => 'profileAboutUs'.tr();
   /// Contact Us - اتصل بنا - Neem contact op
   static String get profileContactUs => 'profileContactUs'.tr();
+  /// Edit Profile - تعديل الملف الشخصي - Profiel bewerken
+  static String get profileEditTitle => 'profileEditTitle'.tr();
+  /// Full Name - الاسم الكامل - Volledige naam
+  static String get profileName => 'profileName'.tr();
+  /// Enter your name - أدخل اسمك - Voer uw naam in
+  static String get profileNamePlaceholder => 'profileNamePlaceholder'.tr();
+  /// Profile Photo - الصورة الشخصية - Profielfoto
+  static String get profilePhoto => 'profilePhoto'.tr();
+  /// Photo upload failed - فشل تحميل الصورة - Uploaden foto mislukt
+  static String get profilePhotoUploadError => 'profilePhotoUploadError'.tr();
+  /// Save - حفظ - Opslaan
+  static String get profileSave => 'profileSave'.tr();
+  /// Save & Continue - حفظ ومتابعة - Opslaan & Doorgaan
+  static String get profileSaveAndContinue => 'profileSaveAndContinue'.tr();
+  /// Complete Your Profile - أكمل ملفك الشخصي - Voltooi uw profiel
+  static String get profileSetupTitle => 'profileSetupTitle'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd.
   static String get requestCancelled => 'requestCancelled'.tr();
   /// Retry - إعادة المحاولة - Opnieuw
@@ -325,6 +357,44 @@ class AppStrings {
   static String get timeSelected => 'timeSelected'.tr();
   /// To - إلى - Naar
   static String get to => 'to'.tr();
+  /// Your Trip - رحلتك - Uw Rit
+  static String get tripActiveTitle => 'tripActiveTitle'.tr();
+  /// Cancel Trip - إلغاء الرحلة - Rit annuleren
+  static String get tripCancelButton => 'tripCancelButton'.tr();
+  /// Are you sure you want to cancel this trip? - هل أنت متأكد أنك تريد إلغاء هذه الرحلة؟ - Weet u zeker dat u deze rit wilt annuleren?
+  static String get tripCancelConfirm => 'tripCancelConfirm'.tr();
+  /// Keep Trip - الاحتفاظ بالرحلة - Rit behouden
+  static String get tripCancelConfirmNo => 'tripCancelConfirmNo'.tr();
+  /// Yes, Cancel - نعم، إلغاء - Ja, annuleren
+  static String get tripCancelConfirmYes => 'tripCancelConfirmYes'.tr();
+  /// Requested at - وقت الطلب - Aangevraagd op
+  static String get tripCreatedAt => 'tripCreatedAt'.tr();
+  /// {fare} {currency} - {fare} {currency} - {fare} {currency}
+  static String get tripFare => 'tripFare'.tr();
+  /// No trips yet - لا توجد رحلات بعد - Nog geen ritten
+  static String get tripHistoryEmpty => 'tripHistoryEmpty'.tr();
+  /// Load more - تحميل المزيد - Meer laden
+  static String get tripHistoryLoadMore => 'tripHistoryLoadMore'.tr();
+  /// My Trips - رحلاتي - Mijn Ritten
+  static String get tripHistoryTitle => 'tripHistoryTitle'.tr();
+  /// Trip #{code} - رحلة رقم {code} - Rit #{code}
+  static String get tripReferenceCode => 'tripReferenceCode'.tr();
+  /// Scheduled for {time} - مجدولة في {time} - Ingepland voor {time}
+  static String get tripScheduledFor => 'tripScheduledFor'.tr();
+  /// Status - الحالة - Status
+  static String get tripStatus => 'tripStatus'.tr();
+  /// Cancelled - ملغاة - Geannuleerd
+  static String get tripStatusCancelled => 'tripStatusCancelled'.tr();
+  /// Completed - مكتملة - Voltooid
+  static String get tripStatusCompleted => 'tripStatusCompleted'.tr();
+  /// Driver Assigned - تم تعيين سائق - Chauffeur toegewezen
+  static String get tripStatusDriverAssigned => 'tripStatusDriverAssigned'.tr();
+  /// In Progress - في الطريق - Onderweg
+  static String get tripStatusInProgress => 'tripStatusInProgress'.tr();
+  /// Finding Driver - جاري البحث عن سائق - Chauffeur zoeken
+  static String get tripStatusPendingDriver => 'tripStatusPendingDriver'.tr();
+  /// Scheduled - مجدولة - Ingepland
+  static String get tripStatusScheduled => 'tripStatusScheduled'.tr();
   /// Tue - ثلا - Di
   static String get tue => 'tue'.tr();
   /// Tuesday - الثلاثاء - Dinsdag

@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+
 import '../../../../core/domain/user_entity.dart';
 import '../../../../core/utils/result.dart';
 import '../repositories/auth_repository.dart';
@@ -9,7 +10,16 @@ class AuthFacade {
 
   final AuthRepository _repository;
 
-  Future<Result<UserEntity>> loginDummy() {
-    return _repository.loginDummy();
-  }
+  Future<Result<String>> sendOtp(String phone) => _repository.sendOtp(phone);
+
+  Future<Result<UserEntity>> verifyOtp({
+    required String phone,
+    required String sessionToken,
+    required String code,
+  }) =>
+      _repository.verifyOtp(
+        phone: phone,
+        sessionToken: sessionToken,
+        code: code,
+      );
 }

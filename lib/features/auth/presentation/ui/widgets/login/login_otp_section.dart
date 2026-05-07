@@ -33,7 +33,6 @@ class LoginOtpSection extends StatelessWidget {
               return Column(
                 children: [
                   Pinput(
-                    length: 4,
                     defaultPinTheme: defaultPinTheme,
                     focusedPinTheme: defaultPinTheme.copyWith(
                       decoration: defaultPinTheme.decoration!.copyWith(

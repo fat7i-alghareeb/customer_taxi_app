@@ -1,31 +1,31 @@
-/// Basic user representation used across the app.
-///
-/// All fields are nullable so the model can represent guest or
-/// unauthenticated states while remaining easy to extend with new fields.
 class UserEntity {
   const UserEntity({
     this.id,
     this.name,
     this.email,
     this.phone,
+    this.profilePhotoUrl,
   });
 
   final String? id;
   final String? name;
   final String? email;
   final String? phone;
+  final String? profilePhotoUrl;
 
   UserEntity copyWith({
     String? id,
     String? name,
     String? email,
     String? phone,
+    String? profilePhotoUrl,
   }) {
     return UserEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,
+      profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
     );
   }
 
@@ -34,6 +34,7 @@ class UserEntity {
         'name': name,
         'email': email,
         'phone': phone,
+        'profilePhotoUrl': profilePhotoUrl,
       };
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
@@ -41,5 +42,6 @@ class UserEntity {
         name: json['name'] as String?,
         email: json['email'] as String?,
         phone: json['phone'] as String?,
+        profilePhotoUrl: json['profilePhotoUrl'] as String?,
       );
 }

@@ -1,19 +1,29 @@
-class AuthLoginResponseModel {
-  const AuthLoginResponseModel({
-    required this.id,
-    required this.accessToken,
-    required this.refreshToken,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String accessToken;
-  final String refreshToken;
+part 'auth_login_response_model.freezed.dart';
+part 'auth_login_response_model.g.dart';
 
-  factory AuthLoginResponseModel.fromJson(Map<String, dynamic> json) {
-    return AuthLoginResponseModel(
-      id: json['id'] as String,
-      accessToken: json['accessToken'] as String,
-      refreshToken: json['refreshToken'] as String,
-    );
-  }
+@freezed
+abstract class AuthLoginResponseModel with _$AuthLoginResponseModel {
+  const factory AuthLoginResponseModel({
+    required String accessToken,
+    required String refreshToken,
+    required AuthUserModel user,
+  }) = _AuthLoginResponseModel;
+
+  factory AuthLoginResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthLoginResponseModelFromJson(json);
+}
+
+@freezed
+abstract class AuthUserModel with _$AuthUserModel {
+  const factory AuthUserModel({
+    required String id,
+    String? name,
+    required String phone,
+    String? profilePhotoUrl,
+  }) = _AuthUserModel;
+
+  factory AuthUserModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthUserModelFromJson(json);
 }

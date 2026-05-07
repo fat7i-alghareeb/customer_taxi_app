@@ -3,11 +3,15 @@ import '../../../../core/services/session/auth_token_model.dart';
 import '../models/auth_login_response_model.dart';
 
 extension AuthLoginResponseModelMapper on AuthLoginResponseModel {
-  UserEntity toUserEntity() {
-    return UserEntity(id: id, phone: '+31 6 12345678');
-  }
+  UserEntity toUserEntity() => UserEntity(
+        id: user.id,
+        phone: user.phone,
+        name: user.name,
+        profilePhotoUrl: user.profilePhotoUrl,
+      );
 
-  AuthTokenModel toAuthTokenModel() {
-    return AuthTokenModel(accessToken: accessToken, refreshToken: refreshToken);
-  }
+  AuthTokenModel toAuthTokenModel() => AuthTokenModel(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      );
 }

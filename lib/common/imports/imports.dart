@@ -22,6 +22,7 @@ export "../../core/theme/app_colors.dart";
 export "../../core/theme/app_text_styles.dart";
 export "../../core/utils/bloc_status.dart";
 export "../../core/utils/status_builder.dart";
+export "../../core/utils/result.dart";
 // Design system
 export '../../utils/constants/design_constants.dart';
 export '../../utils/extensions/context_extensions.dart';

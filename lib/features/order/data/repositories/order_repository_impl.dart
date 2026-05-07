@@ -8,18 +8,18 @@ import '../../domain/entities/order_location_entity.dart';
 import '../../domain/entities/order_location_request_entity.dart';
 import '../../domain/entities/order_saved_location_entity.dart';
 import '../../domain/entities/order_trip_car_option_entity.dart';
+import '../../domain/entities/order_trip_response_entity.dart';
 import '../../domain/entities/order_trip_route_entity.dart';
 import '../../domain/repositories/order_repository.dart';
 import '../datasources/order_local_datasource.dart';
 import '../datasources/order_remote_datasource.dart';
 import '../mappers/order_location_model_mapper.dart';
 import '../mappers/order_model_mapper.dart';
+import '../mappers/order_pricing_quote_model_mapper.dart';
 import '../mappers/order_saved_location_cache_model_mapper.dart';
-import '../mappers/order_trip_car_option_model_mapper.dart';
+import '../mappers/order_trip_response_model_mapper.dart';
 import '../mappers/order_trip_route_model_mapper.dart';
 import '../models/order_saved_location_cache_model.dart';
-
-
 import '../params/order_params.dart';
 
 @LazySingleton(as: OrderRepository)
@@ -64,7 +64,11 @@ class OrderRepositoryImpl implements OrderRepository {
     return runAsResult(() async {
       printM('[OrderRepository] searchLocations query="${request.query}"');
       final models = await _remote.searchLocations(
-        OrderSearchLocationParams(query: request.query),
+        OrderSearchLocationParams(
+          query: request.query,
+          biasLat: request.biasLat,
+          biasLng: request.biasLng,
+        ),
       );
       printG(
         '[OrderRepository] searchLocations success count=${models.length}',
@@ -79,77 +83,21 @@ class OrderRepositoryImpl implements OrderRepository {
   ) {
     return runAsResult(() async {
       printM(
-        '[OrderRepository] hybrid reverseGeocode lat=${request.latitude} lng=${request.longitude}',
+        '[OrderRepository] reverseGeocode lat=${request.latitude} lng=${request.longitude}',
       );
 
-      // Perform parallel lookups for best performance
-      final results = await Future.wait([
-        _remote.reverseGeocode(
-          OrderReverseGeocodeParams(
-            latitude: request.latitude,
-            longitude: request.longitude,
-          ),
-        ),
-        _remote.getNearbyPlace(
+      final model = await _remote.reverseGeocode(
+        OrderReverseGeocodeParams(
           latitude: request.latitude,
           longitude: request.longitude,
         ),
-      ]);
-
-      final geocodeResult = results[0]!;
-      final nearbyPlace = results[1];
-
-      if (nearbyPlace != null) {
-        // Smart Selection Logic:
-        // By default, we prefer the Nearby Search result (specific establishment).
-        // BUT: If Geocoding found a Building/Establishment and Nearby only found a Street (Route),
-        // we prefer the Geocoding building name as the primary.
-        final preferGeocode =
-            geocodeResult.isEstablishment && !nearbyPlace.isEstablishment;
-
-        final bestPrimary = preferGeocode ? geocodeResult.primaryName : nearbyPlace.primaryName;
-
-        // Triple-Anchor Display Logic:
-        // Combine [Place] + [Street] + [Neighborhood]
-        final placeName = bestPrimary ?? '';
-        final street = geocodeResult.street ?? '';
-        final neighborhood = geocodeResult.neighborhood ?? '';
-
-        final displayParts = <String>[];
-        if (placeName.isNotEmpty) displayParts.add(placeName);
-        
-        // Add street if not already in place name
-        if (street.isNotEmpty && !placeName.toLowerCase().contains(street.toLowerCase())) {
-          displayParts.add(street);
-        }
-
-        String finalPrimary = displayParts.join(', ');
-
-        // Add neighborhood in parentheses if not already present
-        if (neighborhood.isNotEmpty && !finalPrimary.toLowerCase().contains(neighborhood.toLowerCase())) {
-          finalPrimary = '$finalPrimary ($neighborhood)';
-        }
-
-        printG(
-          '[OrderRepository] triple-anchor success: "$finalPrimary" (Place=$placeName, Street=$street, Neighborhood=$neighborhood)',
-        );
-
-        final genericSecondary = geocodeResult.label;
-        final hybridModel = nearbyPlace.copyWith(
-          primaryName: finalPrimary,
-          label: finalPrimary,
-          secondaryAddress: genericSecondary,
-        );
-
-        return hybridModel.toEntity;
-      }
-
-
-      printG(
-        '[OrderRepository] geocode-only success label="${geocodeResult.label}"',
       );
 
-      return geocodeResult.toEntity;
+      printG(
+        '[OrderRepository] reverseGeocode success label="${model.label}"',
+      );
+
+      return model.toEntity;
     });
   }
 
@@ -159,15 +107,19 @@ class OrderRepositoryImpl implements OrderRepository {
   ) {
     return runAsResult(() async {
       printM(
-        '[OrderRepository] getTripRoute from=(${request.fromLatitude},${request.fromLongitude}) to=(${request.toLatitude},${request.toLongitude})',
+        '[OrderRepository] getTripRoute stops=${request.stops.length}',
       );
 
       final model = await _remote.getTripRoute(
         OrderTripRouteParams(
-          fromLatitude: request.fromLatitude,
-          fromLongitude: request.fromLongitude,
-          toLatitude: request.toLatitude,
-          toLongitude: request.toLongitude,
+          stops: request.stops
+              .map(
+                (s) => OrderCoordinateParam(
+                  latitude: s.latitude,
+                  longitude: s.longitude,
+                ),
+              )
+              .toList(),
         ),
       );
 
@@ -180,28 +132,62 @@ class OrderRepositoryImpl implements OrderRepository {
   }
 
   @override
-  Future<Result<List<OrderTripCarOptionEntity>>> getTripCarOptions(
-    OrderTripPricingRequestEntity request,
+  Future<Result<List<OrderTripCarOptionEntity>>> getPricingQuotes(
+    OrderPricingQuotesRequestEntity request,
   ) {
     return runAsResult(() async {
       printM(
-        '[OrderRepository] getTripCarOptions from=(${request.fromLatitude},${request.fromLongitude}) to=(${request.toLatitude},${request.toLongitude})',
+        '[OrderRepository] getPricingQuotes stops=${request.stops.length}',
       );
 
-      final models = await _remote.getTripCarOptions(
-        OrderTripPricingParams(
-          fromLatitude: request.fromLatitude,
-          fromLongitude: request.fromLongitude,
-          toLatitude: request.toLatitude,
-          toLongitude: request.toLongitude,
+      final models = await _remote.getPricingQuotes(
+        OrderPricingQuotesParams(
+          stops: request.stops
+              .map(
+                (s) => OrderCoordinateParam(
+                  latitude: s.latitude,
+                  longitude: s.longitude,
+                ),
+              )
+              .toList(),
         ),
       );
 
       printG(
-        '[OrderRepository] getTripCarOptions success count=${models.length}',
+        '[OrderRepository] getPricingQuotes success count=${models.length}',
       );
 
       return models.map((model) => model.toEntity).toList();
+    });
+  }
+
+  @override
+  Future<Result<OrderTripResponseEntity>> requestTrip(
+    OrderRequestTripEntity request,
+  ) {
+    return runAsResult(() async {
+      printM(
+        '[OrderRepository] requestTrip quoteId=${request.quoteId} stops=${request.stops.length}',
+      );
+
+      final model = await _remote.requestTrip(
+        OrderRequestTripParams(
+          quoteId: request.quoteId,
+          stops: request.stops
+              .map(
+                (s) => OrderCoordinateParam(
+                  latitude: s.latitude,
+                  longitude: s.longitude,
+                ),
+              )
+              .toList(),
+          scheduledAt: request.scheduledAt,
+        ),
+      );
+
+      printG('[OrderRepository] requestTrip success');
+
+      return model.toEntity;
     });
   }
 

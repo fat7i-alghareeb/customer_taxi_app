@@ -11,18 +11,9 @@ class ApiConfig {
   static bool _hasLoggedBaseUrl = false;
 
   static String get baseUrl {
-    final url = _selectBaseUrl();
+    const url = 'https://pecan-synergy-shush.ngrok-free.dev';
     _logBaseUrlOnce(url);
     return url;
-  }
-
-  static String _selectBaseUrl() {
-    switch (F.appFlavor) {
-      case Flavor.stage:
-        return _stageBaseUrl;
-      case Flavor.production:
-        return _productionBaseUrl;
-    }
   }
 
   static void _logBaseUrlOnce(String url) {

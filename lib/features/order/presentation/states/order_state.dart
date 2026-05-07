@@ -59,7 +59,11 @@ abstract class OrderState with _$OrderState {
     OrderLocationEntity? prefetchedToLocation,
 
     String? selectedCarTypeId,
+    String? selectedQuoteId,
     DateTime? scheduledAt,
     String? paymentMethodId,
+
+    @Default(BlocStatus<OrderTripResponseEntity>.initial())
+    BlocStatus<OrderTripResponseEntity> tripRequestStatus,
   }) = _OrderState;
 }

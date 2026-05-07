@@ -7,6 +7,7 @@ import '../entities/order_location_entity.dart';
 import '../entities/order_location_request_entity.dart';
 import '../entities/order_saved_location_entity.dart';
 import '../entities/order_trip_car_option_entity.dart';
+import '../entities/order_trip_response_entity.dart';
 import '../entities/order_trip_route_entity.dart';
 import '../repositories/order_repository.dart';
 
@@ -40,19 +41,24 @@ class OrderFacade {
   Future<Result<OrderTripRouteEntity>> getTripRoute(
     OrderTripRouteRequestEntity request,
   ) {
-    printC(
-      '[OrderFacade] getTripRoute from=(${request.fromLatitude},${request.fromLongitude}) to=(${request.toLatitude},${request.toLongitude})',
-    );
+    printC('[OrderFacade] getTripRoute stops=${request.stops.length}');
     return _repository.getTripRoute(request);
   }
 
-  Future<Result<List<OrderTripCarOptionEntity>>> getTripCarOptions(
-    OrderTripPricingRequestEntity request,
+  Future<Result<List<OrderTripCarOptionEntity>>> getPricingQuotes(
+    OrderPricingQuotesRequestEntity request,
+  ) {
+    printC('[OrderFacade] getPricingQuotes stops=${request.stops.length}');
+    return _repository.getPricingQuotes(request);
+  }
+
+  Future<Result<OrderTripResponseEntity>> requestTrip(
+    OrderRequestTripEntity request,
   ) {
     printC(
-      '[OrderFacade] getTripCarOptions from=(${request.fromLatitude},${request.fromLongitude}) to=(${request.toLatitude},${request.toLongitude})',
+      '[OrderFacade] requestTrip quoteId=${request.quoteId} stops=${request.stops.length}',
     );
-    return _repository.getTripCarOptions(request);
+    return _repository.requestTrip(request);
   }
 
   Future<Result<List<OrderSavedLocationEntity>>> getSavedLocations() {

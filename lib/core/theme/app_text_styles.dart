@@ -104,6 +104,11 @@ class AppTextStyles {
     return _withWeight(base, FontWeight.w700);
   }
 
+  static TextStyle get s14w700 {
+    final base = AppTypography.textTheme?.bodyMedium;
+    return _withWeight(base, FontWeight.w700);
+  }
+
   static TextStyle get s14w500 {
     final base = AppTypography.textTheme?.labelLarge;
     return _withWeight(base, FontWeight.w500);

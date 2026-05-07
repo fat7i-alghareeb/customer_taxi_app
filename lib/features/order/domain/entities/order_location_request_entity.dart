@@ -1,7 +1,9 @@
 class OrderLocationSearchRequestEntity {
-  const OrderLocationSearchRequestEntity({required this.query});
+  const OrderLocationSearchRequestEntity({required this.query, this.biasLat, this.biasLng});
 
   final String query;
+  final double? biasLat;
+  final double? biasLng;
 }
 
 class OrderReverseGeocodeRequestEntity {
@@ -14,30 +16,36 @@ class OrderReverseGeocodeRequestEntity {
   final double longitude;
 }
 
-class OrderTripRouteRequestEntity {
-  const OrderTripRouteRequestEntity({
-    required this.fromLatitude,
-    required this.fromLongitude,
-    required this.toLatitude,
-    required this.toLongitude,
+class OrderStopCoordinateEntity {
+  const OrderStopCoordinateEntity({
+    required this.latitude,
+    required this.longitude,
   });
 
-  final double fromLatitude;
-  final double fromLongitude;
-  final double toLatitude;
-  final double toLongitude;
+  final double latitude;
+  final double longitude;
 }
 
-class OrderTripPricingRequestEntity {
-  const OrderTripPricingRequestEntity({
-    required this.fromLatitude,
-    required this.fromLongitude,
-    required this.toLatitude,
-    required this.toLongitude,
+class OrderTripRouteRequestEntity {
+  const OrderTripRouteRequestEntity({required this.stops});
+
+  final List<OrderStopCoordinateEntity> stops;
+}
+
+class OrderPricingQuotesRequestEntity {
+  const OrderPricingQuotesRequestEntity({required this.stops});
+
+  final List<OrderStopCoordinateEntity> stops;
+}
+
+class OrderRequestTripEntity {
+  const OrderRequestTripEntity({
+    required this.quoteId,
+    required this.stops,
+    this.scheduledAt,
   });
 
-  final double fromLatitude;
-  final double fromLongitude;
-  final double toLatitude;
-  final double toLongitude;
+  final String quoteId;
+  final List<OrderStopCoordinateEntity> stops;
+  final DateTime? scheduledAt;
 }

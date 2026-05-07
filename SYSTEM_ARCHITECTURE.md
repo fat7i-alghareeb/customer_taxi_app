@@ -406,11 +406,9 @@ Stores all human accounts: passengers and admins. Drivers also have a `users` re
 | `id`                 | UUID         | PRIMARY KEY, DEFAULT gen_random_uuid() |                                |
 | `phone`              | VARCHAR(20)  | UNIQUE, NOT NULL                       | E.164 format e.g. +31612345678 |
 | `email`              | VARCHAR(255) | UNIQUE, NULLABLE                       | Optional                       |
-| `display_name`       | VARCHAR(100) | NULLABLE                               | Set after registration         |
+| `name`               | JSONB        | NOT NULL                               | Trilingual LocalizedText (En, Ar, Nl) |
 | `profile_photo_url`  | TEXT         | NULLABLE                               | URL to stored image            |
-| `preferred_language` | VARCHAR(10)  | NOT NULL, DEFAULT 'en'                 | 'ar', 'en', 'nl'               |
 | `role`               | VARCHAR(20)  | NOT NULL                               | 'passenger', 'driver', 'admin' |
-| `token_version`      | INTEGER      | NOT NULL, DEFAULT 0                    | For bulk session invalidation  |
 | `fcm_token`          | TEXT         | NULLABLE                               | Single active FCM device token |
 | `is_active`          | BOOLEAN      | NOT NULL, DEFAULT TRUE                 |                                |
 | `deleted_at`         | TIMESTAMPTZ  | NULLABLE                               | Soft delete                    |
@@ -467,22 +465,16 @@ Driver-specific profile data. Each driver has a linked `users` record for auth p
 
 | Column                  | Type          | Constraints                     | Notes                             |
 | ----------------------- | ------------- | ------------------------------- | --------------------------------- |
-| `id`                    | UUID          | PRIMARY KEY                     |                                   |
+| `id`                  | UUID          | PRIMARY KEY                     |                                   |
 | `user_id`               | UUID          | FK → users.id, UNIQUE, NOT NULL | One-to-one with users             |
-| `vehicle_type_id`       | VARCHAR(50)   | FK → vehicle_types.id, NOT NULL | Admin-assigned, admin-changeable  |
+| `active_vehicle_id`     | UUID          | FK → vehicles.id, NULLABLE      | The vehicle currently in use      |
 | `status`                | VARCHAR(20)   | NOT NULL, DEFAULT 'offline'     | 'offline', 'available', 'on_trip' |
 | `current_lat`           | DECIMAL(10,7) | NULLABLE                        | Last known latitude               |
 | `current_lng`           | DECIMAL(10,7) | NULLABLE                        | Last known longitude              |
 | `location_updated_at`   | TIMESTAMPTZ   | NULLABLE                        |                                   |
-| `vehicle_make`          | VARCHAR(100)  | NOT NULL                        | e.g. "Toyota"                     |
-| `vehicle_model`         | VARCHAR(100)  | NOT NULL                        | e.g. "Camry"                      |
-| `vehicle_year`          | SMALLINT      | NOT NULL                        |                                   |
-| `vehicle_color`         | VARCHAR(50)   | NOT NULL                        |                                   |
-| `license_plate`         | VARCHAR(20)   | UNIQUE, NOT NULL                |                                   |
 | `acceptance_rate`       | DECIMAL(5,4)  | NOT NULL, DEFAULT 1.0000        | Rolling 30-day metric             |
 | `completion_rate`       | DECIMAL(5,4)  | NOT NULL, DEFAULT 1.0000        | Rolling 30-day metric             |
 | `total_trips_completed` | INTEGER       | NOT NULL, DEFAULT 0             |                                   |
-| `commission_rate`       | DECIMAL(5,4)  | NULLABLE                        | Platform commission %, TBD        |
 | `deleted_at`            | TIMESTAMPTZ   | NULLABLE                        | Soft delete                       |
 | `created_at`            | TIMESTAMPTZ   | NOT NULL                        |                                   |
 | `updated_at`            | TIMESTAMPTZ   | NOT NULL                        |                                   |
@@ -497,6 +489,27 @@ Driver-specific profile data. Each driver has a linked `users` record for auth p
 
 ---
 
+### 5.5 `vehicles`
+
+Stores physical car details. Vehicles are assigned to a driver but exist as independent entities.
+
+| Column            | Type         | Constraints                     | Notes                            |
+| ----------------- | ------------ | ------------------------------- | -------------------------------- |
+| `id`              | UUID         | PRIMARY KEY                     |                                  |
+| `driver_id`       | UUID         | FK → drivers.id, NOT NULL       | The owner/primary driver         |
+| `vehicle_type_id` | VARCHAR(50)  | FK → vehicle_types.id, NOT NULL | e.g. 'standard'                  |
+| `make`            | VARCHAR(100) | NOT NULL                        | e.g. "Toyota"                    |
+| `model`           | VARCHAR(100) | NOT NULL                        | e.g. "Camry"                     |
+| `year`            | SMALLINT     | NOT NULL                        |                                  |
+| `color`           | VARCHAR(50)  | NOT NULL                        |                                  |
+| `license_plate`   | VARCHAR(20)  | UNIQUE, NOT NULL                |                                  |
+| `is_verified`     | BOOLEAN      | NOT NULL, DEFAULT FALSE         | Admin manual check               |
+| `deleted_at`      | TIMESTAMPTZ  | NULLABLE                        | Soft delete                      |
+| `created_at`      | TIMESTAMPTZ  | NOT NULL                        |                                  |
+| `updated_at`      | TIMESTAMPTZ  | NOT NULL                        |                                  |
+
+**Indexes:** `driver_id`, `vehicle_type_id`, `license_plate`
+
 ---
 
 ### 5.6 `vehicle_types`
@@ -506,9 +519,7 @@ Admin-managed catalog of vehicle types with per-type pricing rates. The client f
 | Column               | Type          | Constraints             | Notes                                |
 | -------------------- | ------------- | ----------------------- | ------------------------------------ |
 | `id`                 | VARCHAR(50)   | PRIMARY KEY             | Slug: 'standard', 'xl', 'wheelchair' |
-| `display_name_ar`    | VARCHAR(100)  | NOT NULL                | Arabic display name                  |
-| `display_name_en`    | VARCHAR(100)  | NOT NULL                | English display name                 |
-| `display_name_nl`    | VARCHAR(100)  | NOT NULL                | Dutch display name                   |
+| `name`               | JSONB         | NOT NULL                | Trilingual LocalizedText (En, Ar, Nl) |
 | `passenger_capacity` | SMALLINT      | NOT NULL                | 4, 8, etc.                           |
 | `rate_per_km`        | DECIMAL(10,4) | NOT NULL                | e.g. 2.80                            |
 | `rate_per_min`       | DECIMAL(10,4) | NOT NULL                | e.g. 0.20                            |

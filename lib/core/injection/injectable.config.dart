@@ -74,6 +74,16 @@ import 'package:customertaxi/features/order/domain/repositories/order_repository
     as _i153;
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart'
     as _i47;
+import 'package:customertaxi/features/profile/data/datasources/profile_remote_datasource.dart'
+    as _i1044;
+import 'package:customertaxi/features/profile/data/repositories/profile_repository_impl.dart'
+    as _i411;
+import 'package:customertaxi/features/profile/domain/facade/profile_facade.dart'
+    as _i501;
+import 'package:customertaxi/features/profile/domain/repositories/profile_repository.dart'
+    as _i482;
+import 'package:customertaxi/features/profile/presentation/states/profile_bloc.dart'
+    as _i951;
 import 'package:customertaxi/features/root/data/datasources/root_remote_datasource.dart'
     as _i312;
 import 'package:customertaxi/features/root/data/repositories/root_repository_impl.dart'
@@ -84,6 +94,16 @@ import 'package:customertaxi/features/root/domain/repositories/root_repository.d
     as _i549;
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart'
     as _i144;
+import 'package:customertaxi/features/trip/data/datasources/trip_remote_datasource.dart'
+    as _i379;
+import 'package:customertaxi/features/trip/data/repositories/trip_repository_impl.dart'
+    as _i384;
+import 'package:customertaxi/features/trip/domain/facade/trip_facade.dart'
+    as _i224;
+import 'package:customertaxi/features/trip/domain/repositories/trip_repository.dart'
+    as _i133;
+import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart'
+    as _i753;
 import 'package:injectable/injectable.dart' as _i526;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -196,8 +216,20 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i93.OrderRemoteDataSource>(
       () => _i93.OrderRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i1044.ProfileRemoteDataSource>(
+      () => _i1044.ProfileRemoteDataSource(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i312.RootRemoteDataSource>(
       () => _i312.RootRemoteDataSource(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i379.TripRemoteDataSource>(
+      () => _i379.TripRemoteDataSource(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i482.ProfileRepository>(
+      () => _i411.ProfileRepositoryImpl(gh<_i1044.ProfileRemoteDataSource>()),
+    );
+    gh.lazySingleton<_i133.TripRepository>(
+      () => _i384.TripRepositoryImpl(gh<_i379.TripRemoteDataSource>()),
     );
     gh.lazySingleton<_i434.AppRouterConfig>(
       () => _i434.AppRouterConfig(
@@ -207,6 +239,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i371.StartupMapWarmupCoordinator>(),
         gh<_i434.AppRouteRegistry>(),
       ),
+    );
+    gh.lazySingleton<_i224.TripFacade>(
+      () => _i224.TripFacade(gh<_i133.TripRepository>()),
     );
     gh.lazySingleton<_i618.AuthRepository>(
       () => _i771.AuthRepositoryImpl(gh<_i54.AuthRemoteDataSource>()),
@@ -223,12 +258,19 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i588.OrderLocalDataSource>(),
       ),
     );
+    gh.lazySingleton<_i501.ProfileFacade>(
+      () => _i501.ProfileFacade(gh<_i482.ProfileRepository>()),
+    );
+    gh.factory<_i951.ProfileBloc>(
+      () => _i951.ProfileBloc(gh<_i501.ProfileFacade>()),
+    );
     gh.lazySingleton<_i770.RootFacade>(
       () => _i770.RootFacade(gh<_i549.RootRepository>()),
     );
     gh.lazySingleton<_i925.OrderFacade>(
       () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
     );
+    gh.factory<_i753.TripBloc>(() => _i753.TripBloc(gh<_i224.TripFacade>()));
     gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
     gh.factory<_i47.OrderBloc>(
       () =>
