@@ -138,19 +138,19 @@ class CustomDioInterceptor extends Interceptor {
     void Function(Object?) colorLogger;
     switch (method) {
       case 'GET':
-        colorLogger = printC;
+        colorLogger = (msg) => printC(msg, tag: false);
         break;
       case 'POST':
-        colorLogger = printG;
+        colorLogger = (msg) => printG(msg, tag: false);
         break;
       case 'PUT':
-        colorLogger = printY;
+        colorLogger = (msg) => printY(msg, tag: false);
         break;
       case 'DELETE':
-        colorLogger = printR;
+        colorLogger = (msg) => printR(msg, tag: false);
         break;
       default:
-        colorLogger = printW;
+        colorLogger = (msg) => printW(msg, tag: false);
         break;
     }
 
@@ -212,7 +212,7 @@ class CustomDioInterceptor extends Interceptor {
       sb.writeln(_truncate(pretty));
     }
 
-    _box(printM, '📥 RESPONSE [${response.statusCode}]', sb.toString());
+    _box((msg) => printM(msg, tag: false), '📥 RESPONSE [${response.statusCode}]', sb.toString());
     handler.next(response);
   }
 
@@ -243,7 +243,7 @@ class CustomDioInterceptor extends Interceptor {
       sb.writeln(_truncate(pretty));
     }
 
-    _box(printR, '❌ ERROR', sb.toString());
+    _box((msg) => printR(msg, tag: false), '❌ ERROR', sb.toString());
     handler.next(err);
   }
 }

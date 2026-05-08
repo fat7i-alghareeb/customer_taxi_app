@@ -11,10 +11,10 @@ _OrderPricingQuoteModel _$OrderPricingQuoteModelFromJson(
 ) => _OrderPricingQuoteModel(
   quoteId: json['quoteId'] as String,
   vehicleTypeId: json['vehicleTypeId'] as String,
-  vehicleTypeCode: json['vehicleTypeCode'] as String,
+  vehicleTypeCode: json['vehicleTypeCode'] as String?,
   vehicleTypeName: json['vehicleTypeName'] as String,
   totalDistanceKm: (json['totalDistanceKm'] as num).toDouble(),
-  totalDurationMin: (json['totalDurationMin'] as num).toInt(),
+  totalDurationMin: (json['totalDurationMin'] as num).toDouble(),
   finalFare: (json['finalFare'] as num).toDouble(),
   currencyCode: json['currencyCode'] as String,
   validUntil: DateTime.parse(json['validUntil'] as String),

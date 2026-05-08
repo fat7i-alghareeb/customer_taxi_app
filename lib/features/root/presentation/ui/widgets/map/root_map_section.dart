@@ -384,6 +384,19 @@ class _RootMapSectionState extends State<RootMapSection>
         : 72.w;
 
     try {
+      // Check if view size is likely to be large enough for padding
+      // This is a heuristic to prevent 'View size is too small' PlatformException
+      final viewWidth = context.screenWidth;
+      final viewHeight = context.screenHeight;
+
+      if (viewWidth < fitPadding * 2 || viewHeight < fitPadding * 2) {
+        printY(
+          '[RootMapSection] fit bounds skipped: view size (${viewWidth.toStringAsFixed(0)}x${viewHeight.toStringAsFixed(0)}) '
+          'is too small for padding ${fitPadding.toStringAsFixed(0)}',
+        );
+        return;
+      }
+
       await controller.animateCamera(
         CameraUpdate.newLatLngBounds(bounds, fitPadding),
       );

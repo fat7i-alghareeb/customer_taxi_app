@@ -1352,35 +1352,42 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           )
         : null;
 
-    if (routeFuture != null) {
-      final result = await routeFuture;
-      if (emit.isDone || !_isTripResolutionTokenCurrent(token) || isClosed) {
-        return;
-      }
-      result.when(
-        success: (route) =>
-            emit(state.copyWith(tripRouteState: BlocStatus.success(route))),
-        failure: (msg) =>
-            emit(state.copyWith(tripRouteState: BlocStatus.failure(msg))),
-      );
-    }
-
-    if (pricingFuture != null) {
-      final result = await pricingFuture;
-      if (emit.isDone || !_isTripResolutionTokenCurrent(token) || isClosed) {
-        return;
-      }
-      result.when(
-        success: (options) => emit(
-          state.copyWith(
-            tripCarOptionsState: BlocStatus.success(options),
-          ),
-        ),
-        failure: (msg) => emit(
-          state.copyWith(tripCarOptionsState: BlocStatus.failure(msg)),
-        ),
-      );
-    }
+    await Future.wait([
+      if (routeFuture != null)
+        routeFuture.then((result) {
+          if (emit.isDone || !_isTripResolutionTokenCurrent(token) || isClosed) {
+            printM('[OrderBloc] routeFuture ignored (token mismatch or closed)', tag: false);
+            return;
+          }
+          result.when(
+            success: (route) {
+              printM('[OrderBloc] getTripRoute success points=${route.points.length}', tag: false);
+              emit(state.copyWith(tripRouteState: BlocStatus.success(route)));
+            },
+            failure: (msg) {
+              printR('[OrderBloc] getTripRoute failure: $msg', tag: false);
+              emit(state.copyWith(tripRouteState: BlocStatus.failure(msg)));
+            },
+          );
+        }),
+      if (pricingFuture != null)
+        pricingFuture.then((result) {
+          if (emit.isDone || !_isTripResolutionTokenCurrent(token) || isClosed) {
+            printM('[OrderBloc] pricingFuture ignored (token mismatch or closed)', tag: false);
+            return;
+          }
+          result.when(
+            success: (options) {
+              printM('[OrderBloc] getPricingQuotes success count=${options.length}', tag: false);
+              emit(state.copyWith(tripCarOptionsState: BlocStatus.success(options)));
+            },
+            failure: (msg) {
+              printR('[OrderBloc] getPricingQuotes failure: $msg', tag: false);
+              emit(state.copyWith(tripCarOptionsState: BlocStatus.failure(msg)));
+            },
+          );
+        }),
+    ]);
   }
 
   void _onBookingDetailsBackPressed(

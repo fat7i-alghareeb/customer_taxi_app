@@ -37,7 +37,7 @@ class OrderRemoteDataSource {
 
   Future<List<OrderModel>> getAllOrders() {
     return rethrowAsAppException(() async {
-      printY('[OrderRemoteDataSource] getAllOrders -> /order');
+      printY('[OrderRemoteDataSource] getAllOrders -> /order', tag: false);
       final response = await _dio.get<dynamic>('/order');
       final data = response.data;
       final dataList = data['data'] as List<dynamic>;
@@ -51,6 +51,7 @@ class OrderRemoteDataSource {
     return rethrowAsAppException(() async {
       printY(
         '[OrderRemoteDataSource] searchLocations query="${params.query}"',
+        tag: false,
       );
       final res = await _dio.post(
         ApiEndpoints.mapsSearch,
@@ -70,6 +71,7 @@ class OrderRemoteDataSource {
     return rethrowAsAppException(() async {
       printY(
         '[OrderRemoteDataSource] reverseGeocode lat=${params.latitude} lng=${params.longitude}',
+        tag: false,
       );
       final res = await _dio.post(
         ApiEndpoints.mapsReverseGeocode,
@@ -92,6 +94,7 @@ class OrderRemoteDataSource {
     return rethrowAsAppException(() async {
       printY(
         '[OrderRemoteDataSource] getTripRoute stops=${params.stops.length}',
+        tag: false,
       );
       final res = await _dio.post(
         ApiEndpoints.mapsDirections,
@@ -118,6 +121,7 @@ class OrderRemoteDataSource {
     return rethrowAsAppException(() async {
       printY(
         '[OrderRemoteDataSource] getPricingQuotes stops=${params.stops.length}',
+        tag: false,
       );
       final res = await _dio.post(
         ApiEndpoints.tripQuotes,
@@ -133,7 +137,7 @@ class OrderRemoteDataSource {
 
   Future<OrderTripResponseModel> requestTrip(OrderRequestTripParams params) {
     return rethrowAsAppException(() async {
-      printY('[OrderRemoteDataSource] requestTrip quoteId=${params.quoteId}');
+      printY('[OrderRemoteDataSource] requestTrip quoteId=${params.quoteId}', tag: false);
       final res = await _dio.post(
         ApiEndpoints.requestTrip,
         data: params.toJson(),

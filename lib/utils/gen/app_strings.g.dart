@@ -99,6 +99,8 @@ class AppStrings {
   static String get drawerPromotions => 'drawerPromotions'.tr();
   /// Support - الدعم - Ondersteuning
   static String get drawerSupport => 'drawerSupport'.tr();
+  /// Total Trips - إجمالي الرحلات - Totaal aantal ritten
+  static String get drawerTotalTrips => 'drawerTotalTrips'.tr();
   /// Trips - الرحلات - Ritten
   static String get drawerTrips => 'drawerTrips'.tr();
   /// Dropped Pin - نقطة محددة - Gemarkeerde speld

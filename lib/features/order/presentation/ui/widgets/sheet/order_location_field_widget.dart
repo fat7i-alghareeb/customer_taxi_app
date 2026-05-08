@@ -11,6 +11,7 @@ class OrderLocationFieldWidget extends StatefulWidget {
     required this.iconData,
     required this.onQueryChanged,
     this.onClearPressed,
+    this.onAddPressed,
     this.focusNode,
   });
 
@@ -20,6 +21,7 @@ class OrderLocationFieldWidget extends StatefulWidget {
   final IconData iconData;
   final ValueChanged<String> onQueryChanged;
   final VoidCallback? onClearPressed;
+  final VoidCallback? onAddPressed;
   final FocusNode? focusNode;
 
   @override
@@ -112,22 +114,49 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
               formControlName: widget.formControlName,
               builder: (context, control, _) {
                 final hasValue = (control.value ?? '').trim().isNotEmpty;
-                final showClear =
-                    _hasFocus && hasValue && widget.onClearPressed != null;
+                final showClear = _hasFocus && hasValue && widget.onClearPressed != null;
+                final showAdd = widget.onAddPressed != null;
 
                 printM('[OrderLocationFieldWidget] build controlName=${widget.formControlName} value="${control.value}" hasFocus=$_hasFocus');
+
+                IconSource? suffixIcon;
+                VoidCallback? onSuffixTap;
+
+                if (showClear && showAdd) {
+                  suffixIcon = IconSource.widget(
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _SuffixIconButton(
+                          icon: FontAwesomeIcons.xmark,
+                          onTap: widget.onClearPressed!,
+                        ),
+                        AppSpacing.sm.horizontalSpace,
+                        _SuffixIconButton(
+                          icon: FontAwesomeIcons.plus,
+                          color: context.primary,
+                          onTap: widget.onAddPressed!,
+                        ),
+                      ],
+                    ),
+                  );
+                  onSuffixTap = null;
+                } else if (showClear) {
+                  suffixIcon = IconSource.icon(FontAwesomeIcons.xmark, size: 14.r);
+                  onSuffixTap = widget.onClearPressed;
+                } else if (showAdd) {
+                  suffixIcon = IconSource.icon(FontAwesomeIcons.plus, size: 14.r, color: context.primary);
+                  onSuffixTap = widget.onAddPressed;
+                }
 
                 return AppReactiveTextField.text(
                   formControlName: widget.formControlName,
                   hintText: widget.hintText,
                   focusNode: _internalFocusNode,
-                  affixes: showClear
+                  affixes: suffixIcon != null
                       ? AppAffixes(
-                          suffixIcon: IconSource.icon(
-                            FontAwesomeIcons.xmark,
-                            size: 14.r,
-                          ),
-                          onSuffixTap: widget.onClearPressed,
+                          suffixIcon: suffixIcon,
+                          onSuffixTap: onSuffixTap,
                         )
                       : const AppAffixes(),
                   onChangedDebounced: (value, _) {
@@ -138,6 +167,34 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SuffixIconButton extends StatelessWidget {
+  const _SuffixIconButton({
+    required this.icon,
+    required this.onTap,
+    this.color,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Padding(
+        padding: REdgeInsets.all(AppSpacing.xs),
+        child: FaIcon(
+          icon,
+          size: 14.r,
+          color: color ?? context.onSurface.withValues(alpha: 0.5),
         ),
       ),
     );

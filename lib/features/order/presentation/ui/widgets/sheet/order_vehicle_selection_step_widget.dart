@@ -5,6 +5,7 @@ import '../../../../domain/entities/order_trip_car_option_entity.dart';
 import '../../../states/order_bloc.dart';
 import 'order_car_option_card_widget.dart';
 import 'order_route_summary_timeline_widget.dart';
+import '../../../../domain/entities/order_location_entity.dart';
 
 class OrderVehicleSelectionStepWidget extends StatelessWidget {
   const OrderVehicleSelectionStepWidget({
@@ -16,65 +17,75 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
   final OrderState state;
   final ValueChanged<String> onCarTypeTapped;
 
-  String _resolveLabel(String typeId) {
-    switch (typeId) {
-      case OrderConstants.carTypeStandard:
-        return AppStrings.carTypeStandard;
-      case OrderConstants.carTypeComfort:
-        return AppStrings.carTypeComfort;
-      case OrderConstants.carTypeBus8:
-        return AppStrings.carTypeBus8;
-      default:
-        return typeId;
-    }
+  String _resolveLabel(OrderTripCarOptionEntity? option, String fallbackId) {
+    if (option != null) return option.name;
+
+    return state.tripCarOptionsState.maybeWhen(
+      loading: () => '...',
+      failure: (msg) => '!',
+      orElse: () => '...',
+    );
   }
 
-  String _resolveImagePath(String typeId) {
-    switch (typeId) {
-      case OrderConstants.carTypeStandard:
-        return Assets.images.standered.path;
-      case OrderConstants.carTypeComfort:
-        return Assets.images.comfort.path;
-      case OrderConstants.carTypeBus8:
-        return Assets.images.a8Passengeres.path;
-      default:
-        return Assets.images.standered.path;
+  String _resolveImagePath(
+    OrderTripCarOptionEntity? option,
+    String fallbackId,
+  ) {
+    final code = option?.typeCode?.toLowerCase() ?? '';
+    final name = option?.name.toLowerCase() ?? fallbackId.toLowerCase();
+
+    // Standard / عادي / ستاندرد
+    if (code.contains('standard') ||
+        name.contains('standard') ||
+        name.contains('عادي') ||
+        name.contains('ستاندرد')) {
+      return Assets.images.standered.path;
     }
+
+    // Comfort / مريح / فخم / كومفورت
+    if (code.contains('comfort') ||
+        name.contains('comfort') ||
+        name.contains('مريح') ||
+        name.contains('فخم') ||
+        name.contains('كومفورت')) {
+      return Assets.images.comfort.path;
+    }
+
+    // Large Vehicles (XL, Van, Bus, Wheelchair) / كبير / فان / حافلة / ذوي الاحتياجات
+    if (code.contains('xl') ||
+        code.contains('van') ||
+        code.contains('bus') ||
+        code.contains('wheelchair') ||
+        code.contains('8') ||
+        name.contains('xl') ||
+        name.contains('van') ||
+        name.contains('bus') ||
+        name.contains('كبير') ||
+        name.contains('فان') ||
+        name.contains('حافلة') ||
+        name.contains('ذوي الاحتياجات') ||
+        name.contains('كراسي')) {
+      return Assets.images.a8Passengeres.path;
+    }
+
+    return Assets.images.standered.path;
   }
 
-  List<String> get _orderedTypeIds => const <String>[
+  List<String> get _fallbackTypeIds => const <String>[
     OrderConstants.carTypeStandard,
     OrderConstants.carTypeComfort,
     OrderConstants.carTypeBus8,
   ];
 
-  Map<String, OrderTripCarOptionEntity> _mapByTypeId(
-    List<OrderTripCarOptionEntity> options,
-  ) {
-    final result = <String, OrderTripCarOptionEntity>{};
-
-    for (final option in options) {
-      result[option.typeId] = option;
-    }
-
-    return result;
-  }
-
 
   @override
   Widget build(BuildContext context) {
     printM('[OrderVehicleSelectionStepWidget] build');
-    final pricingMap = state.tripCarOptionsState.maybeWhen(
-      success: _mapByTypeId,
-      orElse: () => <String, OrderTripCarOptionEntity>{},
-    );
 
     final isPriceLoading = state.tripCarOptionsState.isLoading;
 
-    final fromLocation = state.stops.isNotEmpty ? state.stops.first : null;
-    final toLocation = state.stops.isNotEmpty ? state.stops.last : null;
-
-    if (fromLocation == null || toLocation == null) {
+    final stops = state.stops.whereType<OrderLocationEntity>().toList();
+    if (stops.length < 2) {
       return const SizedBox.shrink();
     }
 
@@ -82,10 +93,8 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         OrderRouteSummaryTimelineWidget(
-          fromLocation: fromLocation,
-          toLocation: toLocation,
+          stops: stops,
         ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
-
         AppSpacing.lg.verticalSpace,
         Row(
           children: [
@@ -114,29 +123,39 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
           padding: REdgeInsets.only(bottom: AppSpacing.xs),
           physics: const BouncingScrollPhysics(),
           child: Row(
-            children: [
-              for (var index = 0; index < _orderedTypeIds.length; index++) ...[
-                if (index > 0) AppSpacing.md.horizontalSpace,
-                Builder(
-                  builder: (context) {
-                    final typeId = _orderedTypeIds[index];
-                    final option = pricingMap[typeId];
-                    final priceText = option == null
-                        ? null
-                        : '${option.currency} ${option.price.toStringAsFixed(2)}';
-
-                    return OrderCarOptionCardWidget(
-                      title: _resolveLabel(typeId),
-                      imagePath: _resolveImagePath(typeId),
-                      isSelected: state.selectedCarTypeId == typeId,
-                      isPriceLoading: isPriceLoading,
-                      priceText: priceText,
-                      onTap: () => onCarTypeTapped(typeId),
-                    );
-                  },
-                ),
+            children: state.tripCarOptionsState.maybeWhen(
+              success: (options) {
+                return [
+                  for (var i = 0; i < options.length; i++) ...[
+                    if (i > 0) AppSpacing.md.horizontalSpace,
+                    OrderCarOptionCardWidget(
+                      title: _resolveLabel(options[i], options[i].typeId),
+                      imagePath: _resolveImagePath(
+                        options[i],
+                        options[i].typeId,
+                      ),
+                      isSelected: state.selectedCarTypeId == options[i].typeId,
+                      isPriceLoading: false,
+                      priceText:
+                          '${options[i].currency} ${options[i].price.toStringAsFixed(2)}',
+                      onTap: () => onCarTypeTapped(options[i].typeId),
+                    ),
+                  ],
+                ];
+              },
+              orElse: () => [
+                for (var i = 0; i < _fallbackTypeIds.length; i++) ...[
+                  if (i > 0) AppSpacing.md.horizontalSpace,
+                  OrderCarOptionCardWidget(
+                    title: _resolveLabel(null, _fallbackTypeIds[i]),
+                    imagePath: _resolveImagePath(null, _fallbackTypeIds[i]),
+                    isSelected: state.selectedCarTypeId == _fallbackTypeIds[i],
+                    isPriceLoading: isPriceLoading,
+                    onTap: () => onCarTypeTapped(_fallbackTypeIds[i]),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ).animate().fadeIn(delay: 400.ms).moveY(begin: 16, end: 0),
       ],

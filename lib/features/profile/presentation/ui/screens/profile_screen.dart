@@ -13,7 +13,10 @@ class ProfileSetupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<ProfileBloc>()..add(const ProfileEvent.started()),
-      child: AppScaffold.body(
+      child: AppScaffold.appBar(
+        appBarConfig: AppScaffoldAppBarConfig(
+          title: AppStrings.profileSetupTitle,
+        ),
         child: const ProfileBody(isSetupMode: true),
       ),
     );
@@ -30,7 +33,10 @@ class ProfileEditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<ProfileBloc>()..add(const ProfileEvent.started()),
-      child: AppScaffold.body(
+      child: AppScaffold.appBar(
+        appBarConfig: AppScaffoldAppBarConfig(
+          title: AppStrings.profileEditTitle,
+        ),
         child: const ProfileBody(isSetupMode: false),
       ),
     );

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderPricingQuoteModel {
 
- String get quoteId; String get vehicleTypeId; String get vehicleTypeCode; String get vehicleTypeName; double get totalDistanceKm; int get totalDurationMin; double get finalFare; String get currencyCode; DateTime get validUntil;
+ String get quoteId; String get vehicleTypeId; String? get vehicleTypeCode; String get vehicleTypeName; double get totalDistanceKm; double get totalDurationMin; double get finalFare; String get currencyCode; DateTime get validUntil;
 /// Create a copy of OrderPricingQuoteModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $OrderPricingQuoteModelCopyWith<$Res>  {
   factory $OrderPricingQuoteModelCopyWith(OrderPricingQuoteModel value, $Res Function(OrderPricingQuoteModel) _then) = _$OrderPricingQuoteModelCopyWithImpl;
 @useResult
 $Res call({
- String quoteId, String vehicleTypeId, String vehicleTypeCode, String vehicleTypeName, double totalDistanceKm, int totalDurationMin, double finalFare, String currencyCode, DateTime validUntil
+ String quoteId, String vehicleTypeId, String? vehicleTypeCode, String vehicleTypeName, double totalDistanceKm, double totalDurationMin, double finalFare, String currencyCode, DateTime validUntil
 });
 
 
@@ -65,15 +65,15 @@ class _$OrderPricingQuoteModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderPricingQuoteModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? quoteId = null,Object? vehicleTypeId = null,Object? vehicleTypeCode = null,Object? vehicleTypeName = null,Object? totalDistanceKm = null,Object? totalDurationMin = null,Object? finalFare = null,Object? currencyCode = null,Object? validUntil = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? quoteId = null,Object? vehicleTypeId = null,Object? vehicleTypeCode = freezed,Object? vehicleTypeName = null,Object? totalDistanceKm = null,Object? totalDurationMin = null,Object? finalFare = null,Object? currencyCode = null,Object? validUntil = null,}) {
   return _then(_self.copyWith(
 quoteId: null == quoteId ? _self.quoteId : quoteId // ignore: cast_nullable_to_non_nullable
 as String,vehicleTypeId: null == vehicleTypeId ? _self.vehicleTypeId : vehicleTypeId // ignore: cast_nullable_to_non_nullable
-as String,vehicleTypeCode: null == vehicleTypeCode ? _self.vehicleTypeCode : vehicleTypeCode // ignore: cast_nullable_to_non_nullable
-as String,vehicleTypeName: null == vehicleTypeName ? _self.vehicleTypeName : vehicleTypeName // ignore: cast_nullable_to_non_nullable
+as String,vehicleTypeCode: freezed == vehicleTypeCode ? _self.vehicleTypeCode : vehicleTypeCode // ignore: cast_nullable_to_non_nullable
+as String?,vehicleTypeName: null == vehicleTypeName ? _self.vehicleTypeName : vehicleTypeName // ignore: cast_nullable_to_non_nullable
 as String,totalDistanceKm: null == totalDistanceKm ? _self.totalDistanceKm : totalDistanceKm // ignore: cast_nullable_to_non_nullable
 as double,totalDurationMin: null == totalDurationMin ? _self.totalDurationMin : totalDurationMin // ignore: cast_nullable_to_non_nullable
-as int,finalFare: null == finalFare ? _self.finalFare : finalFare // ignore: cast_nullable_to_non_nullable
+as double,finalFare: null == finalFare ? _self.finalFare : finalFare // ignore: cast_nullable_to_non_nullable
 as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
 as String,validUntil: null == validUntil ? _self.validUntil : validUntil // ignore: cast_nullable_to_non_nullable
 as DateTime,
@@ -161,7 +161,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String quoteId,  String vehicleTypeId,  String vehicleTypeCode,  String vehicleTypeName,  double totalDistanceKm,  int totalDurationMin,  double finalFare,  String currencyCode,  DateTime validUntil)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String quoteId,  String vehicleTypeId,  String? vehicleTypeCode,  String vehicleTypeName,  double totalDistanceKm,  double totalDurationMin,  double finalFare,  String currencyCode,  DateTime validUntil)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderPricingQuoteModel() when $default != null:
 return $default(_that.quoteId,_that.vehicleTypeId,_that.vehicleTypeCode,_that.vehicleTypeName,_that.totalDistanceKm,_that.totalDurationMin,_that.finalFare,_that.currencyCode,_that.validUntil);case _:
@@ -182,7 +182,7 @@ return $default(_that.quoteId,_that.vehicleTypeId,_that.vehicleTypeCode,_that.ve
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String quoteId,  String vehicleTypeId,  String vehicleTypeCode,  String vehicleTypeName,  double totalDistanceKm,  int totalDurationMin,  double finalFare,  String currencyCode,  DateTime validUntil)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String quoteId,  String vehicleTypeId,  String? vehicleTypeCode,  String vehicleTypeName,  double totalDistanceKm,  double totalDurationMin,  double finalFare,  String currencyCode,  DateTime validUntil)  $default,) {final _that = this;
 switch (_that) {
 case _OrderPricingQuoteModel():
 return $default(_that.quoteId,_that.vehicleTypeId,_that.vehicleTypeCode,_that.vehicleTypeName,_that.totalDistanceKm,_that.totalDurationMin,_that.finalFare,_that.currencyCode,_that.validUntil);case _:
@@ -202,7 +202,7 @@ return $default(_that.quoteId,_that.vehicleTypeId,_that.vehicleTypeCode,_that.ve
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String quoteId,  String vehicleTypeId,  String vehicleTypeCode,  String vehicleTypeName,  double totalDistanceKm,  int totalDurationMin,  double finalFare,  String currencyCode,  DateTime validUntil)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String quoteId,  String vehicleTypeId,  String? vehicleTypeCode,  String vehicleTypeName,  double totalDistanceKm,  double totalDurationMin,  double finalFare,  String currencyCode,  DateTime validUntil)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderPricingQuoteModel() when $default != null:
 return $default(_that.quoteId,_that.vehicleTypeId,_that.vehicleTypeCode,_that.vehicleTypeName,_that.totalDistanceKm,_that.totalDurationMin,_that.finalFare,_that.currencyCode,_that.validUntil);case _:
@@ -217,15 +217,15 @@ return $default(_that.quoteId,_that.vehicleTypeId,_that.vehicleTypeCode,_that.ve
 @JsonSerializable()
 
 class _OrderPricingQuoteModel implements OrderPricingQuoteModel {
-  const _OrderPricingQuoteModel({required this.quoteId, required this.vehicleTypeId, required this.vehicleTypeCode, required this.vehicleTypeName, required this.totalDistanceKm, required this.totalDurationMin, required this.finalFare, required this.currencyCode, required this.validUntil});
+  const _OrderPricingQuoteModel({required this.quoteId, required this.vehicleTypeId, this.vehicleTypeCode, required this.vehicleTypeName, required this.totalDistanceKm, required this.totalDurationMin, required this.finalFare, required this.currencyCode, required this.validUntil});
   factory _OrderPricingQuoteModel.fromJson(Map<String, dynamic> json) => _$OrderPricingQuoteModelFromJson(json);
 
 @override final  String quoteId;
 @override final  String vehicleTypeId;
-@override final  String vehicleTypeCode;
+@override final  String? vehicleTypeCode;
 @override final  String vehicleTypeName;
 @override final  double totalDistanceKm;
-@override final  int totalDurationMin;
+@override final  double totalDurationMin;
 @override final  double finalFare;
 @override final  String currencyCode;
 @override final  DateTime validUntil;
@@ -263,7 +263,7 @@ abstract mixin class _$OrderPricingQuoteModelCopyWith<$Res> implements $OrderPri
   factory _$OrderPricingQuoteModelCopyWith(_OrderPricingQuoteModel value, $Res Function(_OrderPricingQuoteModel) _then) = __$OrderPricingQuoteModelCopyWithImpl;
 @override @useResult
 $Res call({
- String quoteId, String vehicleTypeId, String vehicleTypeCode, String vehicleTypeName, double totalDistanceKm, int totalDurationMin, double finalFare, String currencyCode, DateTime validUntil
+ String quoteId, String vehicleTypeId, String? vehicleTypeCode, String vehicleTypeName, double totalDistanceKm, double totalDurationMin, double finalFare, String currencyCode, DateTime validUntil
 });
 
 
@@ -280,15 +280,15 @@ class __$OrderPricingQuoteModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderPricingQuoteModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? quoteId = null,Object? vehicleTypeId = null,Object? vehicleTypeCode = null,Object? vehicleTypeName = null,Object? totalDistanceKm = null,Object? totalDurationMin = null,Object? finalFare = null,Object? currencyCode = null,Object? validUntil = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? quoteId = null,Object? vehicleTypeId = null,Object? vehicleTypeCode = freezed,Object? vehicleTypeName = null,Object? totalDistanceKm = null,Object? totalDurationMin = null,Object? finalFare = null,Object? currencyCode = null,Object? validUntil = null,}) {
   return _then(_OrderPricingQuoteModel(
 quoteId: null == quoteId ? _self.quoteId : quoteId // ignore: cast_nullable_to_non_nullable
 as String,vehicleTypeId: null == vehicleTypeId ? _self.vehicleTypeId : vehicleTypeId // ignore: cast_nullable_to_non_nullable
-as String,vehicleTypeCode: null == vehicleTypeCode ? _self.vehicleTypeCode : vehicleTypeCode // ignore: cast_nullable_to_non_nullable
-as String,vehicleTypeName: null == vehicleTypeName ? _self.vehicleTypeName : vehicleTypeName // ignore: cast_nullable_to_non_nullable
+as String,vehicleTypeCode: freezed == vehicleTypeCode ? _self.vehicleTypeCode : vehicleTypeCode // ignore: cast_nullable_to_non_nullable
+as String?,vehicleTypeName: null == vehicleTypeName ? _self.vehicleTypeName : vehicleTypeName // ignore: cast_nullable_to_non_nullable
 as String,totalDistanceKm: null == totalDistanceKm ? _self.totalDistanceKm : totalDistanceKm // ignore: cast_nullable_to_non_nullable
 as double,totalDurationMin: null == totalDurationMin ? _self.totalDurationMin : totalDurationMin // ignore: cast_nullable_to_non_nullable
-as int,finalFare: null == finalFare ? _self.finalFare : finalFare // ignore: cast_nullable_to_non_nullable
+as double,finalFare: null == finalFare ? _self.finalFare : finalFare // ignore: cast_nullable_to_non_nullable
 as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
 as String,validUntil: null == validUntil ? _self.validUntil : validUntil // ignore: cast_nullable_to_non_nullable
 as DateTime,

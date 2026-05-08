@@ -10,7 +10,7 @@ import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_
 
 import 'package:customertaxi/common/widgets/show_overlay.dart';
 
-import 'drawer/drawer_balance_card.dart';
+import 'drawer/drawer_trips_count_card.dart';
 import 'drawer/drawer_header_section.dart';
 import 'drawer/drawer_logout_footer.dart';
 import 'drawer/drawer_menu_item.dart';
@@ -30,10 +30,8 @@ class RootDrawerContent extends StatelessWidget {
               children: [
                 const DrawerHeaderSection(),
                 AppSpacing.md.verticalSpace,
-                DrawerBalanceCard(
-                  balance: '€ 28,50', // Mock data as per image
-                  onAddTap: () =>
-                      showSuccessOverlay(context, AppStrings.comingSoon),
+                const DrawerTripsCountCard(
+                  tripsCount: 12, // Mock data for now
                 ),
                 AppSpacing.xl.verticalSpace,
 
@@ -42,18 +40,6 @@ class RootDrawerContent extends StatelessWidget {
                   icon: FontAwesomeIcons.carSide,
                   label: AppStrings.drawerTrips,
                   onTap: () => context.pushNamed(TripHistoryScreen.pageName),
-                ),
-                DrawerMenuItem(
-                  icon: FontAwesomeIcons.wallet,
-                  label: AppStrings.drawerPayments,
-                  onTap: () =>
-                      showSuccessOverlay(context, AppStrings.comingSoon),
-                ),
-                DrawerMenuItem(
-                  icon: FontAwesomeIcons.percent,
-                  label: AppStrings.drawerPromotions,
-                  onTap: () =>
-                      showSuccessOverlay(context, AppStrings.comingSoon),
                 ),
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.locationDot,

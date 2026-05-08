@@ -124,7 +124,7 @@ Dio _initDio({
     errorInterceptor,
   ]);
 
-  printC('[DioClient] Created Dio (refresh=$useRefresh), baseUrl: $baseUrl');
+  printC('[DioClient] Created Dio (refresh=$useRefresh), baseUrl: $baseUrl', tag: false);
 
   return dio;
 }
@@ -162,17 +162,18 @@ void _configureJwtFlow({
       tokenProtocol: TokenProtocol(
         shouldRefresh: (response, token) {
           if (!authManager.isAuthenticated) {
-            printY('[DioClient] shouldRefresh=false (not authenticated)');
+            printY('[DioClient] shouldRefresh=false (not authenticated)', tag: false);
             return false;
           }
           if (token == null || token.accessToken.isNotEmpty == false) {
-            printY('[DioClient] shouldRefresh=false (missing token)');
+            printY('[DioClient] shouldRefresh=false (missing token)', tag: false);
             return false;
           }
           if (ApiEndpoints.refreshToken.isEmpty) {
             printY(
               '[DioClient] shouldRefresh=false '
               '(refresh endpoint not configured)',
+              tag: false,
             );
             return false;
           }
@@ -185,6 +186,7 @@ void _configureJwtFlow({
             printC(
               '[DioClient] shouldRefresh=true '
               '(aboutToExpire=$aboutToExpire, unauthorized=$unauthorized)',
+              tag: false,
             );
           }
 
@@ -195,7 +197,7 @@ void _configureJwtFlow({
       tokenHeaderBuilder: (token) {
         final raw = token.accessToken;
         final preview = raw.length > 10 ? '${raw.substring(0, 10)}...' : raw;
-        printG('[DioClient] Attaching Authorization: Bearer $preview');
+        printG('[DioClient] Attaching Authorization: Bearer $preview', tag: false);
         return <String, String>{'Authorization': 'Bearer $raw'};
       },
       // Handle revoked/invalid refresh token.
@@ -203,18 +205,20 @@ void _configureJwtFlow({
         printR(
           '[DioClient] Token revoked, logging out user. '
           'reason=${dioError.message}',
+          tag: false,
         );
         authManager.logout();
         return null;
       },
       refreshToken: (token, tokenDio) async {
         try {
-          printC('[DioClient] Attempting token refresh');
+          printC('[DioClient] Attempting token refresh', tag: false);
 
           final user = authManager.currentUser;
           if (user?.id == null || !authManager.isAuthenticated) {
             printY(
               '[DioClient] No user ID or not authenticated for token refresh',
+              tag: false,
             );
             await authManager.logout();
             throw Exception('Not authenticated for token refresh');
@@ -223,6 +227,7 @@ void _configureJwtFlow({
           if (ApiEndpoints.refreshToken.isEmpty) {
             printY(
               '[DioClient] Refresh skipped because endpoint is not configured',
+              tag: false,
             );
             return token;
           }
@@ -249,10 +254,10 @@ void _configureJwtFlow({
 
           await tokenStorage.write(newToken);
 
-          printG('[DioClient] Token refresh successful');
+          printG('[DioClient] Token refresh successful', tag: false);
           return newToken;
         } catch (e) {
-          printR('[DioClient] Token refresh failed: $e');
+          printR('[DioClient] Token refresh failed: $e', tag: false);
           await authManager.logout();
           throw Exception('Token refresh failed: $e');
         }

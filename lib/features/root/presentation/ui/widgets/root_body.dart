@@ -3,9 +3,10 @@ import 'package:customertaxi/features/order/presentation/states/order_bloc.dart'
 
 import 'home/root_home_tab_section.dart';
 import 'nav/root_bottom_nav_bar.dart';
-import 'placeholders/root_placeholder_tab_section.dart';
+import 'profile/root_profile_tab_section.dart';
+import 'trip/root_trip_tab_section.dart';
 
-enum RootTab { account, trips, home, offers }
+enum RootTab { account, home, trips }
 
 class RootBody extends StatefulWidget {
   const RootBody({super.key});
@@ -58,35 +59,21 @@ class _RootBodyState extends State<RootBody> {
         icon: FontAwesomeIcons.user,
       ),
       RootBottomNavItemConfig(
-        label: AppStrings.drawerTrips,
-        icon: FontAwesomeIcons.clock,
-      ),
-      RootBottomNavItemConfig(
         label: AppStrings.tabHome,
         icon: FontAwesomeIcons.house,
       ),
       RootBottomNavItemConfig(
-        label: AppStrings.tabOffers,
-        icon: FontAwesomeIcons.gift,
+        label: AppStrings.drawerTrips,
+        icon: FontAwesomeIcons.clock,
       ),
     ];
   }
 
   List<Widget> _buildPages() {
     return <Widget>[
-      RootPlaceholderTabSection(
-        title: AppStrings.tabAccount,
-        icon: FontAwesomeIcons.user,
-      ),
-      RootPlaceholderTabSection(
-        title: AppStrings.drawerTrips,
-        icon: FontAwesomeIcons.clock,
-      ),
+      const RootProfileTabSection(),
       const RootHomeTabSection(),
-      RootPlaceholderTabSection(
-        title: AppStrings.tabOffers,
-        icon: FontAwesomeIcons.gift,
-      ),
+      const RootTripTabSection(),
     ];
   }
 

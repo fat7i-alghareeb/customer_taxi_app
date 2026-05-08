@@ -2,7 +2,7 @@ class OrderTripCarOptionEntity {
   const OrderTripCarOptionEntity({
     required this.quoteId,
     required this.typeId,
-    required this.typeCode,
+    this.typeCode,
     required this.name,
     required this.price,
     required this.currency,
@@ -11,7 +11,7 @@ class OrderTripCarOptionEntity {
 
   final String quoteId;
   final String typeId;
-  final String typeCode;
+  final String? typeCode;
   final String name;
   final double price;
   final String currency;

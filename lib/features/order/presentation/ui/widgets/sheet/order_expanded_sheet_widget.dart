@@ -337,6 +337,9 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                       iconData: isFirst ? FontAwesomeIcons.circleDot : FontAwesomeIcons.locationDot,
                       focusNode: _focusNodes[index],
                       onClearPressed: () => _clearField(index),
+                      onAddPressed: isLast && widget.state.stops.length < 5
+                          ? () => context.read<OrderBloc>().add(const OrderEvent.stopAdded())
+                          : null,
                       onQueryChanged: (value) {
                         if (_isSyncing) return;
                         context.read<OrderBloc>().add(OrderEvent.stopQueryChanged(index, value));
@@ -345,12 +348,6 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                   );
                 },
               ),
-              if (widget.state.stops.length < 5)
-                AppButton.grey(
-                  onTap: () => context.read<OrderBloc>().add(const OrderEvent.stopAdded()),
-                  layout: const AppButtonLayout(width: double.infinity),
-                  child: AppButtonChild.label(AppStrings.addStop),
-                ),
             ],
           );
 

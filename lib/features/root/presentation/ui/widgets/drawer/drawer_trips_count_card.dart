@@ -1,14 +1,12 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
-class DrawerBalanceCard extends StatelessWidget {
-  const DrawerBalanceCard({
+class DrawerTripsCountCard extends StatelessWidget {
+  const DrawerTripsCountCard({
     super.key,
-    required this.balance,
-    required this.onAddTap,
+    required this.tripsCount,
   });
 
-  final String balance;
-  final VoidCallback onAddTap;
+  final int tripsCount;
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +31,14 @@ class DrawerBalanceCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppStrings.drawerBalance,
+                AppStrings.drawerTotalTrips,
                 style: AppTextStyles.s14w400.copyWith(
                   color: Colors.white.withValues(alpha: 0.8),
                 ),
               ),
               AppSpacing.xs.verticalSpace,
               Text(
-                balance,
+                tripsCount.toString(),
                 style: AppTextStyles.s28w700.copyWith(
                   color: Colors.white,
                   height: 1.2,
@@ -48,22 +46,10 @@ class DrawerBalanceCard extends StatelessWidget {
               ),
             ],
           ),
-          // Add Button
-          Material(
-            color: Colors.black.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            child: InkWell(
-              onTap: onAddTap,
-              borderRadius: BorderRadius.circular(AppRadii.lg.r),
-              child: Container(
-                padding: REdgeInsets.all(AppSpacing.md),
-                child: FaIcon(
-                  FontAwesomeIcons.plus,
-                  color: Colors.white,
-                  size: 20.r,
-                ),
-              ),
-            ),
+          FaIcon(
+            FontAwesomeIcons.carSide,
+            color: Colors.white.withValues(alpha: 0.2),
+            size: 48.r,
           ),
         ],
       ),
