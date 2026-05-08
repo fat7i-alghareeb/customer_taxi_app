@@ -58,5 +58,23 @@ class AppRouteRegistry {
         pageBuilder: (context, state) =>
             AppPageTransitions.build(state: state, child: const ContactUsScreen()),
       ),
+      GoRoute(
+        path: ProfileSetupScreen.pagePath,
+        name: ProfileSetupScreen.pageName,
+        pageBuilder: (context, state) =>
+            AppPageTransitions.build(state: state, child: const ProfileSetupScreen()),
+      ),
+      GoRoute(
+        path: ActiveTripScreen.pagePath,
+        name: ActiveTripScreen.pageName,
+        pageBuilder: (context, state) =>
+            AppPageTransitions.build(state: state, child: const ActiveTripScreen()),
+      ),
+      GoRoute(
+        path: TripHistoryScreen.pagePath,
+        name: TripHistoryScreen.pageName,
+        pageBuilder: (context, state) =>
+            AppPageTransitions.build(state: state, child: const TripHistoryScreen()),
+      ),
     ];
 }

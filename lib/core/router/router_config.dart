@@ -12,6 +12,9 @@ import '../../features/permissions/presentation/ui/screens/permission_gate_scree
 import '../../features/root/presentation/ui/screens/root_screen.dart';
 import '../../features/root/presentation/ui/screens/about_us_screen.dart';
 import '../../features/root/presentation/ui/screens/contact_us_screen.dart';
+import '../../features/profile/presentation/ui/screens/profile_setup_screen.dart';
+import '../../features/trip/presentation/ui/screens/active_trip_screen.dart';
+import '../../features/trip/presentation/ui/screens/trip_history_screen.dart';
 import '../../features/splash/presentation/ui/screens/splash_screen.dart';
 import '../services/location/startup_map_warmup_coordinator.dart';
 import '../../utils/constants/app_flow_constants.dart';
@@ -114,6 +117,7 @@ class AppRouterConfig {
       onboardingPath: OnboardingScreen.pagePath,
       loginPath: LoginScreen.pagePath,
       rootPath: RootScreen.pagePath,
+      profileSetupPath: ProfileSetupScreen.pagePath,
     );
 
     _router = GoRouter(
@@ -167,6 +171,7 @@ class AppRouteGuard {
     required this.onboardingPath,
     required this.loginPath,
     required this.rootPath,
+    required this.profileSetupPath,
   });
 
   final AuthStateNotifier authState;
@@ -177,6 +182,7 @@ class AppRouteGuard {
   final String onboardingPath;
   final String loginPath;
   final String rootPath;
+  final String profileSetupPath;
 
   int _redirectCycleCounter = 0;
 
@@ -307,28 +313,30 @@ class AppRouteGuard {
       'status=$latestStatus isGuest=$latestGuest canEnterApp=$canEnterApp',
     );
 
-    // 4) Auth.
     final authRedirect = _handleAuth(
       currentPath: currentPath,
       canEnterApp: canEnterApp,
       cycleId: cycleId,
     );
-    if (_isStaleCycle(cycleId)) {
-      printY(
-        '${RouterLogTags.redirect} #$cycleId stale after auth gate, drop decision',
-      );
-      return null;
-    }
-
-    if (authRedirect == null) {
-      printG(
-        '${RouterLogTags.redirect} #$cycleId decision -> stay on "$currentPath"',
-      );
-    } else {
+    if (authRedirect != null) {
       printG('${RouterLogTags.redirect} #$cycleId decision -> "$authRedirect"');
+      return authRedirect;
     }
 
-    return authRedirect;
+    // 5) Profile Setup.
+    final profileRedirect = _handleProfileSetup(
+      currentPath: currentPath,
+      isAuthenticated: latestAuthenticated,
+    );
+    if (profileRedirect != null) {
+      printG('${RouterLogTags.redirect} #$cycleId decision -> "$profileRedirect" (profile-gate)');
+      return profileRedirect;
+    }
+
+    printG(
+      '${RouterLogTags.redirect} #$cycleId decision -> stay on "$currentPath"',
+    );
+    return null;
   }
 
   String? _handleSplash({
@@ -438,7 +446,40 @@ class AppRouteGuard {
         currentPath == permissionPath ||
         currentPath == loginPath ||
         currentPath == onboardingPath) {
+      // * Check profile setup BEFORE returning rootPath.
+      final profileRedirect = _handleProfileSetup(
+        currentPath: currentPath,
+        isAuthenticated: true,
+      );
+      if (profileRedirect != null) {
+        printG('${RouterLogTags.redirect} #$cycleId authenticated -> $profileRedirect (profile gate)');
+        return profileRedirect;
+      }
+
       printG('${RouterLogTags.redirect} #$cycleId authenticated -> root');
+      return rootPath;
+    }
+
+    return null;
+  }
+
+  String? _handleProfileSetup({
+    required String currentPath,
+    required bool isAuthenticated,
+  }) {
+    if (!isAuthenticated) return null;
+
+    final user = authState.user;
+    final hasName = user?.name != null && user!.name!.isNotEmpty;
+
+    if (!hasName) {
+      if (currentPath != profileSetupPath) {
+        return profileSetupPath;
+      }
+      return null;
+    }
+
+    if (currentPath == profileSetupPath) {
       return rootPath;
     }
 

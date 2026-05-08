@@ -6,6 +6,7 @@ import 'package:customertaxi/core/services/session/auth_manager.dart';
 import 'package:customertaxi/core/theme/theme_controller.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/about_us_screen.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/contact_us_screen.dart';
+import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_screen.dart';
 
 import 'package:customertaxi/common/widgets/show_overlay.dart';
 
@@ -40,8 +41,7 @@ class RootDrawerContent extends StatelessWidget {
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.carSide,
                   label: AppStrings.drawerTrips,
-                  onTap: () =>
-                      showSuccessOverlay(context, AppStrings.comingSoon),
+                  onTap: () => context.pushNamed(TripHistoryScreen.pageName),
                 ),
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.wallet,

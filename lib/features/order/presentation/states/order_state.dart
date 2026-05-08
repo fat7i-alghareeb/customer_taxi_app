@@ -10,29 +10,24 @@ abstract class OrderState with _$OrderState {
 
     @Default(OrderExpandedStep.locationEntry) OrderExpandedStep expandedStep,
 
-    @Default(OrderLocationTarget.from) OrderLocationTarget mapPickingTarget,
+    @Default(OrderLocationTarget.stop) OrderLocationTarget mapPickingTarget,
 
     @Default(MapConfig.defaultLat) double mapCameraLatitude,
     @Default(MapConfig.defaultLng) double mapCameraLongitude,
     @Default(MapConfig.initialZoom) double mapCameraZoom,
 
-    @Default(BlocStatus<OrderLocationEntity>.initial())
-    BlocStatus<OrderLocationEntity> fromLocationState,
+    @Default([null, null]) List<OrderLocationEntity?> stops,
+    @Default(['', '']) List<String> stopQueries,
+    @Default([
+      BlocStatus<List<OrderSavedLocationEntity>>.initial(),
+      BlocStatus<List<OrderSavedLocationEntity>>.initial(),
+    ])
+    List<BlocStatus<List<OrderSavedLocationEntity>>> stopSuggestionsState,
 
-    @Default(BlocStatus<OrderLocationEntity>.initial())
-    BlocStatus<OrderLocationEntity> toLocationState,
+    @Default(0) int activeStopIndex,
 
     @Default(BlocStatus<List<OrderSavedLocationEntity>>.initial())
     BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,
-
-    @Default(BlocStatus<List<OrderSavedLocationEntity>>.initial())
-    BlocStatus<List<OrderSavedLocationEntity>> fromSuggestionsState,
-
-    @Default(BlocStatus<List<OrderSavedLocationEntity>>.initial())
-    BlocStatus<List<OrderSavedLocationEntity>> toSuggestionsState,
-
-    @Default('') String fromQuery,
-    @Default('') String toQuery,
 
     @Default(BlocStatus<OrderLocationEntity>.initial())
     BlocStatus<OrderLocationEntity> pickupPointState,
@@ -55,8 +50,7 @@ abstract class OrderState with _$OrderState {
     @Default(BlocStatus<List<OrderTripCarOptionEntity>>.initial())
     BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState,
 
-    OrderLocationEntity? prefetchedFromLocation,
-    OrderLocationEntity? prefetchedToLocation,
+    @Default([]) List<OrderLocationEntity> prefetchedStops,
 
     String? selectedCarTypeId,
     String? selectedQuoteId,

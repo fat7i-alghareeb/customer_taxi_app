@@ -8,6 +8,7 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[OrderBookingDetailsStepWidget] build');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,6 +103,7 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[_SectionHeader] build title=$title');
     return Text(
       title,
       style: AppTextStyles.s16w600.copyWith(
@@ -120,6 +122,7 @@ class _ScheduleSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[_ScheduleSelector] build scheduledAt=$scheduledAt');
     final isNow = scheduledAt == null;
     final label = isNow
         ? AppStrings.now
@@ -204,6 +207,7 @@ class _PaymentMethodSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[_PaymentMethodSelector] build selectedMethodId=$selectedMethodId');
     final methods = [
       _PaymentMethod(
         id: 'visa',

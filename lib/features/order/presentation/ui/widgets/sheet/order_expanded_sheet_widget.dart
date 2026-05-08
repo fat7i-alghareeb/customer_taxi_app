@@ -2,7 +2,6 @@ import 'package:customertaxi/common/imports/imports.dart';
 
 import '../../../../constants/forms/order_forms.dart';
 import '../../../../constants/order_constants.dart';
-import '../../../../domain/entities/order_location_entity.dart';
 import '../../../../domain/entities/order_saved_location_entity.dart';
 import '../../../states/order_bloc.dart';
 import 'order_location_field_widget.dart';
@@ -24,286 +23,200 @@ class OrderExpandedSheetWidget extends StatefulWidget {
 
 class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
   late final FormGroup _form;
-  late final FocusNode _fromFocusNode;
-  late final FocusNode _toFocusNode;
+  final List<FocusNode> _focusNodes = [];
 
   bool _isSyncing = false;
-  OrderLocationTarget _activeSearchTarget = OrderLocationTarget.to;
-  OrderLocationTarget? _focusedFieldTarget;
-
-  String? _ignoreNextFromQueryValue;
-  String? _ignoreNextToQueryValue;
-  String? _ignoreNextPickupStreetValue;
-  String? _ignoreNextPickupHouseNumberValue;
+  int _activeSearchIndex = 1;
+  int? _focusedFieldIndex;
 
   @override
   void initState() {
     super.initState();
-    _fromFocusNode = FocusNode();
-    _toFocusNode = FocusNode();
-
-    _fromFocusNode.addListener(_handleFromFocusChanged);
-    _toFocusNode.addListener(_handleToFocusChanged);
-
     _form = OrderForms.formGroup();
+    _updateFocusNodes(widget.state.stops.length);
     _syncFormWithState(widget.state);
+  }
+
+  void _updateFocusNodes(int count) {
+    while (_focusNodes.length < count) {
+      final node = FocusNode();
+      final index = _focusNodes.length;
+      node.addListener(() => _handleFocusChanged(index));
+      _focusNodes.add(node);
+    }
+    while (_focusNodes.length > count) {
+      _focusNodes.removeLast().dispose();
+    }
   }
 
   @override
   void dispose() {
-    _fromFocusNode.removeListener(_handleFromFocusChanged);
-    _toFocusNode.removeListener(_handleToFocusChanged);
-    _fromFocusNode.dispose();
-    _toFocusNode.dispose();
+    for (final node in _focusNodes) {
+      node.dispose();
+    }
     super.dispose();
-  }
-
-  void _handleFromFocusChanged() {
-    if (_fromFocusNode.hasFocus) {
-      _setFocusedFieldTarget(OrderLocationTarget.from);
-      _setActiveSearchTarget(OrderLocationTarget.from);
-      final value = _form.control(OrderForms.fromField).value?.toString() ?? '';
-      if (value.trim().isEmpty) {
-        context.read<OrderBloc>().add(const OrderEvent.fromQueryChanged(''));
-      }
-      return;
-    }
-    if (!_toFocusNode.hasFocus) {
-      _setFocusedFieldTarget(null);
-    }
-  }
-
-  void _handleToFocusChanged() {
-    if (_toFocusNode.hasFocus) {
-      _setFocusedFieldTarget(OrderLocationTarget.to);
-      _setActiveSearchTarget(OrderLocationTarget.to);
-      final value = _form.control(OrderForms.toField).value?.toString() ?? '';
-      if (value.trim().isEmpty) {
-        context.read<OrderBloc>().add(const OrderEvent.toQueryChanged(''));
-      }
-      return;
-    }
-    if (!_fromFocusNode.hasFocus) {
-      _setFocusedFieldTarget(null);
-    }
-  }
-
-  void _setFocusedFieldTarget(OrderLocationTarget? target) {
-    if (_focusedFieldTarget == target || !mounted) {
-      return;
-    }
-    setState(() {
-      _focusedFieldTarget = target;
-      if (target != null) {
-        _activeSearchTarget = target;
-      }
-    });
   }
 
   @override
   void didUpdateWidget(covariant OrderExpandedSheetWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (oldWidget.state != widget.state) {
+      printM('[OrderExpandedSheetWidget] didUpdateWidget state changed');
       _syncFormWithState(widget.state);
+    }
 
-      final wasConfirmActive =
-          oldWidget.state.fromLocationState.isSuccess &&
-          oldWidget.state.toLocationState.isSuccess;
-      final isConfirmActiveNow =
-          widget.state.fromLocationState.isSuccess &&
-          widget.state.toLocationState.isSuccess;
+    if (widget.state.stops.isEmpty) {
+      _activeSearchIndex = 0;
+      _focusedFieldIndex = null;
+      return;
+    }
 
-      if (!wasConfirmActive && isConfirmActiveNow) {
-        FocusScope.of(context).unfocus();
+    if (_activeSearchIndex >= widget.state.stops.length) {
+      _activeSearchIndex = widget.state.stops.length - 1;
+    }
+
+    if (_focusedFieldIndex != null &&
+        _focusedFieldIndex! >= widget.state.stops.length) {
+      _focusedFieldIndex = null;
+    }
+  }
+
+  void _handleFocusChanged(int index) {
+    if (_focusNodes[index].hasFocus) {
+      printM('[OrderExpandedSheetWidget] field $index gained focus');
+      setState(() {
+        _focusedFieldIndex = index;
+        _activeSearchIndex = index;
+      });
+      context.read<OrderBloc>().add(OrderEvent.activeStopChanged(index));
+      
+      final array = _form.control(OrderForms.stopsArray) as FormArray<String>;
+      final control = array.controls[index] as FormControl<String>;
+      final value = control.value ?? '';
+      
+      printM('[OrderExpandedSheetWidget] field $index focus check: value="$value"');
+      
+      if (value.trim().isEmpty) {
+        printM('[OrderExpandedSheetWidget] field $index empty, sending stopQueryChanged("")');
+        context.read<OrderBloc>().add(OrderEvent.stopQueryChanged(index, ''));
+      }
+    } else {
+      printM('[OrderExpandedSheetWidget] field $index lost focus');
+      if (_focusNodes.every((n) => !n.hasFocus)) {
+        setState(() => _focusedFieldIndex = null);
       }
     }
   }
 
-  String? _extractLabel(BlocStatus<OrderLocationEntity> status) {
-    String? result;
-    status.when(
-      initial: () {},
-      loading: () {},
-      success: (location) {
-        result = location.label;
-      },
-      failure: (_) {},
-    );
-    return result;
+  void _syncFormWithState(OrderState state) {
+    if (_isSyncing) {
+      printY('[OrderExpandedSheetWidget] _syncFormWithState blocked (already syncing)');
+      return;
+    }
+    printM('[OrderExpandedSheetWidget] _syncFormWithState start');
+    _isSyncing = true;
+
+    final array = _form.control(OrderForms.stopsArray) as FormArray<String>;
+    
+    // Adjust FormArray length
+    if (array.controls.length != state.stops.length) {
+      printM('[OrderExpandedSheetWidget] adjusting array length from ${array.controls.length} to ${state.stops.length}');
+      while (array.controls.length < state.stops.length) {
+        array.add(FormControl<String>(validators: [Validators.required]));
+      }
+      while (array.controls.length > state.stops.length) {
+        array.removeAt(array.controls.length - 1);
+      }
+    }
+    
+    _updateFocusNodes(state.stops.length);
+
+    for (var i = 0; i < state.stops.length; i++) {
+      // Keep field text in sync with stopQueries to preserve user input.
+      final query = i < state.stopQueries.length
+          ? state.stopQueries[i]
+          : (state.stops[i]?.label ?? '');
+      final control = array.controls[i] as FormControl<String>;
+      
+      if ((control.value ?? '') != query) {
+        printG('[OrderExpandedSheetWidget] index=$i query sync: control="${control.value}" -> new="$query"');
+        // We use emitEvent: true to ensure the UI (ReactiveTextField) picks up the programmatic change.
+        // The _isSyncing guard in onQueryChanged prevents infinite loops.
+        control.updateValue(query, emitEvent: true);
+      } else {
+        printGray('[OrderExpandedSheetWidget] index=$i query already in sync: "$query"');
+      }
+    }
+
+    _syncControlValue(OrderForms.pickupStreetField, state.pickupStreetName);
+    _syncControlValue(OrderForms.pickupHouseNumberField, state.pickupHouseNumber);
+
+    _isSyncing = false;
+    printM('[OrderExpandedSheetWidget] _syncFormWithState completed');
   }
 
   void _syncControlValue(String field, String value) {
     final control = _form.control(field);
-    if (control.value?.toString() == value) {
-      return;
+    if (control.value?.toString() != value) {
+      printG('[OrderExpandedSheetWidget] syncing $field to "$value"');
+      control.updateValue(value, emitEvent: true);
     }
-    if (field == OrderForms.fromField) {
-      _ignoreNextFromQueryValue = value;
-    }
-    if (field == OrderForms.toField) {
-      _ignoreNextToQueryValue = value;
-    }
-    if (field == OrderForms.pickupStreetField) {
-      _ignoreNextPickupStreetValue = value;
-    }
-    if (field == OrderForms.pickupHouseNumberField) {
-      _ignoreNextPickupHouseNumberValue = value;
-    }
+  }
 
-    _isSyncing = true;
-    control.updateValue(value, emitEvent: true);
-    _isSyncing = false;
+  bool get _isConfirmActive => widget.state.stops.every((s) => s != null);
+
+  bool get _isVehicleSelectionStep => widget.state.expandedStep == OrderExpandedStep.carSelection;
+  bool get _isPickupPointStep => widget.state.expandedStep == OrderExpandedStep.pickupPoint;
+  bool get _isBookingDetailsStep => widget.state.expandedStep == OrderExpandedStep.bookingDetails;
+
+  bool get _isVehicleConfirmActive => widget.state.selectedCarTypeId?.trim().isNotEmpty ?? false;
+  bool get _isPickupConfirmActive => widget.state.pickupPointState.isSuccess;
+
+  BlocStatus<List<OrderSavedLocationEntity>> get _activeSuggestionsState {
+    if (_activeSearchIndex < 0 || _activeSearchIndex >= widget.state.stopSuggestionsState.length) {
+      return const BlocStatus.initial();
+    }
+    return widget.state.stopSuggestionsState[_activeSearchIndex];
+  }
+
+  void _onSharedSuggestionSelected(OrderSavedLocationEntity location) {
+    context.read<OrderBloc>().add(
+      OrderEvent.stopSuggestionSelected(_activeSearchIndex, location),
+    );
+  }
+
+  void _onSharedSuggestionPinToggled(OrderSavedLocationEntity location) {
+    context.read<OrderBloc>().add(
+      OrderEvent.savedLocationPinToggled(
+        stopIndex: _activeSearchIndex,
+        location: location,
+      ),
+    );
+  }
+
+  void _clearField(int index) {
+    context.read<OrderBloc>().add(OrderEvent.stopCleared(index));
   }
 
   bool _consumeIgnoredValueIfNeeded({
     required String field,
     required String value,
   }) {
-    if (field == OrderForms.fromField && _ignoreNextFromQueryValue == value) {
-      _ignoreNextFromQueryValue = null;
-      return true;
-    }
-    if (field == OrderForms.toField && _ignoreNextToQueryValue == value) {
-      _ignoreNextToQueryValue = null;
-      return true;
-    }
-    if (field == OrderForms.pickupStreetField &&
-        _ignoreNextPickupStreetValue == value) {
-      _ignoreNextPickupStreetValue = null;
-      return true;
-    }
-    if (field == OrderForms.pickupHouseNumberField &&
-        _ignoreNextPickupHouseNumberValue == value) {
-      _ignoreNextPickupHouseNumberValue = null;
-      return true;
-    }
-    return false;
-  }
-
-  void _syncFormWithState(OrderState state) {
-    final fromLabel = _extractLabel(state.fromLocationState);
-    final toLabel = _extractLabel(state.toLocationState);
-
-    if (fromLabel != null && fromLabel.trim().isNotEmpty) {
-      _syncControlValue(OrderForms.fromField, fromLabel);
-    }
-    if (toLabel != null && toLabel.trim().isNotEmpty) {
-      _syncControlValue(OrderForms.toField, toLabel);
-    }
-
-    _syncControlValue(OrderForms.pickupStreetField, state.pickupStreetName);
-    _syncControlValue(
-      OrderForms.pickupHouseNumberField,
-      state.pickupHouseNumber,
-    );
-  }
-
-  bool get _isConfirmActive {
-    return widget.state.fromLocationState.isSuccess &&
-        widget.state.toLocationState.isSuccess;
-  }
-
-  bool get _isVehicleSelectionStep {
-    return widget.state.expandedStep == OrderExpandedStep.carSelection;
-  }
-
-  bool get _isPickupPointStep {
-    return widget.state.expandedStep == OrderExpandedStep.pickupPoint;
-  }
-
-  bool get _isBookingDetailsStep {
-    return widget.state.expandedStep == OrderExpandedStep.bookingDetails;
-  }
-
-  bool get _isVehicleConfirmActive {
-    return widget.state.selectedCarTypeId?.trim().isNotEmpty ?? false;
-  }
-
-  bool get _isPickupConfirmActive {
-    return widget.state.pickupPointState.isSuccess;
-  }
-
-  OrderLocationTarget get _resolvedMapTarget {
-    return _focusedFieldTarget ?? OrderLocationTarget.to;
-  }
-
-  BlocStatus<List<OrderSavedLocationEntity>> get _activeSuggestionsState {
-    switch (_activeSearchTarget) {
-      case OrderLocationTarget.from:
-        return widget.state.fromSuggestionsState;
-      case OrderLocationTarget.to:
-        return widget.state.toSuggestionsState;
-      case OrderLocationTarget.pickupPoint:
-        return const BlocStatus<List<OrderSavedLocationEntity>>.initial();
-    }
-  }
-
-  void _setActiveSearchTarget(OrderLocationTarget target) {
-    if (_activeSearchTarget == target) {
-      return;
-    }
-    setState(() {
-      _activeSearchTarget = target;
-    });
-  }
-
-  void _onSharedSuggestionSelected(OrderSavedLocationEntity location) {
-    if (_activeSearchTarget == OrderLocationTarget.from) {
-      _syncControlValue(OrderForms.fromField, location.location.label);
-      context.read<OrderBloc>().add(
-        OrderEvent.fromSuggestionSelected(location),
-      );
-      return;
-    }
-    _syncControlValue(OrderForms.toField, location.location.label);
-    context.read<OrderBloc>().add(OrderEvent.toSuggestionSelected(location));
-  }
-
-  void _onSharedSuggestionPinToggled(OrderSavedLocationEntity location) {
-    if (_activeSearchTarget == OrderLocationTarget.pickupPoint) {
-      return;
-    }
-
-    context.read<OrderBloc>().add(
-      OrderEvent.savedLocationPinToggled(
-        target: _activeSearchTarget,
-        location: location,
-      ),
-    );
-  }
-
-  void _clearField(OrderLocationTarget target) {
-    final isFrom = target == OrderLocationTarget.from;
-    final field = isFrom ? OrderForms.fromField : OrderForms.toField;
-
-    if (isFrom) {
-      _ignoreNextFromQueryValue = '';
-    } else {
-      _ignoreNextToQueryValue = '';
-    }
-
-    _isSyncing = true;
-    _form.control(field).updateValue('', emitEvent: true);
-    _isSyncing = false;
-
-    _setActiveSearchTarget(target);
-    if (isFrom) {
-      _fromFocusNode.requestFocus();
-      context.read<OrderBloc>().add(const OrderEvent.fromLocationCleared());
-      return;
-    }
-
-    _toFocusNode.requestFocus();
-    context.read<OrderBloc>().add(const OrderEvent.toLocationCleared());
+    final control = _form.control(field);
+    final current = control.value?.toString() ?? '';
+    return current == value;
   }
 
   @override
   Widget build(BuildContext context) {
+    printM('[OrderExpandedSheetWidget] build start');
     return ReactiveForm(
       formGroup: _form,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isKeyboardOpen = context.bottomInset > 0;
+          printM('[OrderExpandedSheetWidget] LayoutBuilder isKeyboardOpen=$isKeyboardOpen');
 
           final headerSection = Container(
             height: OrderConstants.expandedHeaderHeight.sp,
@@ -397,69 +310,64 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
           );
 
           final fieldsSection = Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              OrderLocationFieldWidget(
-                formControlName: OrderForms.fromField,
-                title: AppStrings.from,
-                hintText: AppStrings.searchFromLocation,
-                iconData: FontAwesomeIcons.locationArrow,
-                focusNode: _fromFocusNode,
-                onClearPressed: () {
-                  _clearField(OrderLocationTarget.from);
+              ReorderableListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.state.stops.length,
+                onReorder: (oldIndex, newIndex) {
+                  printM('[OrderExpandedSheetWidget] onReorder old=$oldIndex new=$newIndex');
+                  if (newIndex > oldIndex) newIndex -= 1;
+                  context.read<OrderBloc>().add(OrderEvent.stopReordered(oldIndex, newIndex));
                 },
-                onQueryChanged: (value) {
-                  if (_isSyncing) return;
-                  if (_consumeIgnoredValueIfNeeded(
-                    field: OrderForms.fromField,
-                    value: value,
-                  )) {
-                    return;
-                  }
-                  _setActiveSearchTarget(OrderLocationTarget.from);
-                  context.read<OrderBloc>().add(
-                    OrderEvent.fromQueryChanged(value),
+                itemBuilder: (context, index) {
+                  printM('[OrderExpandedSheetWidget] itemBuilder index=$index');
+                  final isFirst = index == 0;
+                  final isLast = index == widget.state.stops.length - 1;
+                  final title = isFirst ? AppStrings.from : (isLast ? AppStrings.to : AppStrings.stop);
+                  
+                  return Padding(
+                    key: ValueKey('stop_$index'),
+                    padding: REdgeInsets.only(bottom: AppSpacing.md),
+                    child: OrderLocationFieldWidget(
+                      formControlName: '${OrderForms.stopsArray}.$index',
+                      title: title,
+                      hintText: isFirst ? AppStrings.searchFromLocation : AppStrings.searchToLocation,
+                      iconData: isFirst ? FontAwesomeIcons.circleDot : FontAwesomeIcons.locationDot,
+                      focusNode: _focusNodes[index],
+                      onClearPressed: () => _clearField(index),
+                      onQueryChanged: (value) {
+                        if (_isSyncing) return;
+                        context.read<OrderBloc>().add(OrderEvent.stopQueryChanged(index, value));
+                      },
+                    ),
                   );
                 },
               ),
-              AppSpacing.md.verticalSpace,
-              OrderLocationFieldWidget(
-                formControlName: OrderForms.toField,
-                title: AppStrings.to,
-                hintText: AppStrings.searchToLocation,
-                iconData: FontAwesomeIcons.locationDot,
-                focusNode: _toFocusNode,
-                onClearPressed: () {
-                  _clearField(OrderLocationTarget.to);
-                },
-                onQueryChanged: (value) {
-                  if (_isSyncing) return;
-                  if (_consumeIgnoredValueIfNeeded(
-                    field: OrderForms.toField,
-                    value: value,
-                  )) {
-                    return;
-                  }
-                  _setActiveSearchTarget(OrderLocationTarget.to);
-                  context.read<OrderBloc>().add(
-                    OrderEvent.toQueryChanged(value),
-                  );
-                },
-              ),
+              if (widget.state.stops.length < 5)
+                AppButton.grey(
+                  onTap: () => context.read<OrderBloc>().add(const OrderEvent.stopAdded()),
+                  layout: const AppButtonLayout(width: double.infinity),
+                  child: AppButtonChild.label(AppStrings.addStop),
+                ),
             ],
           );
 
           final mapTrigger = OrderMapContextTriggerWidget(
-            target: _resolvedMapTarget,
+            target: _focusedFieldIndex == null ? OrderLocationTarget.stop : OrderLocationTarget.stop, // Generic stop target
             onTap: () {
+              printM('[OrderExpandedSheetWidget] mapTrigger onTap');
               FocusScope.of(context).unfocus();
               context.read<OrderBloc>().add(
-                OrderEvent.setOnMapPressed(_resolvedMapTarget),
+                const OrderEvent.setOnMapPressed(),
               );
             },
           );
 
           final confirmButton = AppButton.primary(
             onTap: () {
+              printM('[OrderExpandedSheetWidget] confirmLocations onTap');
               FocusScope.of(context).unfocus();
               context.read<OrderBloc>().add(
                 const OrderEvent.confirmOrderPressed(),
@@ -559,9 +467,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                       onSetPickupOnMapPressed: () {
                         FocusScope.of(context).unfocus();
                         context.read<OrderBloc>().add(
-                          const OrderEvent.setOnMapPressed(
-                            OrderLocationTarget.pickupPoint,
-                          ),
+                          const OrderEvent.setOnMapPressed(),
                         );
                       },
                       onPickupStreetChanged: (value) {

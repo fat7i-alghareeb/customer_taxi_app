@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import '../../flavors.dart';
 import '../../utils/helpers/colored_print.dart';
 import '../config/env/env.dart';
@@ -11,7 +13,7 @@ class ApiConfig {
   static bool _hasLoggedBaseUrl = false;
 
   static String get baseUrl {
-    const url = 'https://pecan-synergy-shush.ngrok-free.dev';
+    const url = 'http://82.29.177.228:5001';
     _logBaseUrlOnce(url);
     return url;
   }

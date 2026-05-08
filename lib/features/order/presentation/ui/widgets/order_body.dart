@@ -44,14 +44,12 @@ class OrderBody extends StatelessWidget {
         );
       },
       buildWhen: (previous, current) {
-        return previous.sheetMode != current.sheetMode ||
+        final shouldBuild = previous.sheetMode != current.sheetMode ||
             previous.expandedStep != current.expandedStep ||
             previous.mapPickingTarget != current.mapPickingTarget ||
-            previous.fromLocationState != current.fromLocationState ||
-            previous.toLocationState != current.toLocationState ||
+            previous.stops != current.stops ||
             previous.pickupPointState != current.pickupPointState ||
-            previous.fromSuggestionsState != current.fromSuggestionsState ||
-            previous.toSuggestionsState != current.toSuggestionsState ||
+            previous.stopSuggestionsState != current.stopSuggestionsState ||
             previous.pickupStreetName != current.pickupStreetName ||
             previous.pickupHouseNumber != current.pickupHouseNumber ||
             previous.tripRouteState != current.tripRouteState ||
@@ -59,8 +57,14 @@ class OrderBody extends StatelessWidget {
             previous.selectedCarTypeId != current.selectedCarTypeId ||
             previous.scheduledAt != current.scheduledAt ||
             previous.paymentMethodId != current.paymentMethodId;
+        
+        if (shouldBuild) {
+          printC('[OrderBody] buildWhen -> true (state changed)');
+        }
+        return shouldBuild;
       },
       builder: (context, state) {
+        printC('[OrderBody] builder rendering sheetMode=${state.sheetMode.name}');
         return PopScope(
           canPop: state.sheetMode == OrderSheetMode.collapsed,
           onPopInvokedWithResult: (_, _) {

@@ -219,6 +219,12 @@
   "orderQuoteExpired": "انتهت صلاحية عرض السعر. يرجى طلب عرض جديد.",
   "orderQuoteAlreadyUsed": "تم استخدام هذا العرض بالفعل.",
   "tripStatus": "الحالة",
-  "tripCreatedAt": "وقت الطلب"
+  "tripCreatedAt": "وقت الطلب",
+  "stop": "توقف",
+  "addStop": "إضافة توقف",
+  "activeTrip": "الرحلة الحالية",
+  "tripHistory": "سجل الرحلات",
+  "completeProfile": "إكمال الملف الشخصي",
+  "confirm": "تأكيد"
 }
 

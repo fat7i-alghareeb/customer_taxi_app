@@ -1,177 +1,110 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:customertaxi/common/imports/imports.dart';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customertaxi/features/profile/domain/entities/profile_entity.dart';
+import '../../../../root/presentation/ui/screens/root_screen.dart';
 import '../../states/profile_bloc.dart';
+import '../../../constants/forms/profile_forms.dart';
+import 'profile_photo_picker.dart';
 
-class ProfileBody extends StatelessWidget {
-  const ProfileBody({super.key, required this.isSetup});
+class ProfileBody extends StatefulWidget {
+  const ProfileBody({super.key, required this.isSetupMode});
 
-  final bool isSetup;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppScaffold.body(
-      child: BlocConsumer<ProfileBloc, ProfileState>(
-        listenWhen: (prev, curr) => prev.saveStatus != curr.saveStatus,
-        listener: (context, state) {
-          state.saveStatus.whenOrNull(
-            success: (_) {
-              if (isSetup) {
-                context.goNamed('RootScreen');
-              } else {
-                context.pop();
-              }
-            },
-            failure: (message) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message)),
-              );
-            },
-          );
-        },
-        builder: (context, state) {
-          return StatusBuilder<ProfileEntity>(
-            state: state.loadStatus,
-            success: (user) => SafeArea(
-              child: Padding(
-                padding: REdgeInsets.all(AppSpacing.xl),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    AppSpacing.xl.verticalSpace,
-                    Text(
-                      isSetup
-                          ? AppStrings.profileSetupTitle
-                          : AppStrings.profileEditTitle,
-                      style: AppTextStyles.s24w700,
-                      textAlign: TextAlign.center,
-                    ),
-                    AppSpacing.xl.verticalSpace,
-                    _PhotoPicker(
-                      currentPhotoUrl: user.profilePhotoUrl,
-                      pendingPhoto: state.pendingPhoto,
-                    ),
-                    AppSpacing.xl.verticalSpace,
-                    _NameField(initialName: user.name ?? ''),
-                    AppSpacing.xl.verticalSpace,
-                    AppButton.primary(
-                      child: AppButtonChild.label(
-                        isSetup
-                            ? AppStrings.profileSaveAndContinue
-                            : AppStrings.profileSave,
-                      ),
-                      isLoading: state.saveStatus.isLoading,
-                      onTap: () => context.read<ProfileBloc>().add(
-                            const ProfileEvent.saveRequested(),
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _NameField extends StatefulWidget {
-  const _NameField({required this.initialName});
-  final String initialName;
+  final bool isSetupMode;
 
   @override
-  State<_NameField> createState() => _NameFieldState();
+  State<ProfileBody> createState() => _ProfileBodyState();
 }
 
-class _NameFieldState extends State<_NameField> {
-  late final TextEditingController _controller;
+class _ProfileBodyState extends State<ProfileBody> {
+  late FormGroup _form;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialName);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    _form = ProfileForms.formGroup();
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      onChanged: (value) => context.read<ProfileBloc>().add(
-        ProfileEvent.nameSaved(value),
-      ),
-      decoration: InputDecoration(
-        labelText: AppStrings.profileName,
-        hintText: AppStrings.profileNamePlaceholder,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadii.md),
-        ),
-      ),
-    );
-  }
-}
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        final nameControl = _form.control(ProfileForms.nameField);
+        final remoteName = state.currentUser?.name;
 
-class _PhotoPicker extends StatelessWidget {
-  const _PhotoPicker({this.currentPhotoUrl, this.pendingPhoto});
-  final String? currentPhotoUrl;
-  final File? pendingPhoto;
+        // * Only sync form with state if the value is different and we are NOT saving.
+        // This prevents overwriting user input during the loading phase of a save request.
+        if (remoteName != null &&
+            remoteName != nameControl.value &&
+            !state.saveStatus.isLoading) {
+          printM('[ProfileBody] Syncing form name from state: "$remoteName"');
+          nameControl.updateValue(remoteName, emitEvent: false);
+        }
 
-  Future<void> _pickImage(BuildContext context) async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null && context.mounted) {
-      context.read<ProfileBloc>().add(ProfileEvent.photoSelected(File(image.path)));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: () => _pickImage(context),
-        child: Stack(
-          children: [
-            Container(
-              width: 100.r,
-              height: 100.r,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: context.surface,
-                border: Border.all(color: context.primary, width: 2.r),
-                image: pendingPhoto != null
-                    ? DecorationImage(image: FileImage(pendingPhoto!), fit: BoxFit.cover)
-                    : (currentPhotoUrl != null
-                        ? DecorationImage(image: CachedNetworkImageProvider(currentPhotoUrl!), fit: BoxFit.cover)
-                        : null),
-              ),
-              child: (pendingPhoto == null && currentPhotoUrl == null)
-                  ? Center(child: FaIcon(FontAwesomeIcons.user, size: 40.r, color: context.primary.withValues(alpha: 0.5)))
-                  : null,
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                padding: REdgeInsets.all(AppSpacing.xs),
-                decoration: BoxDecoration(
-                  color: context.primary,
-                  shape: BoxShape.circle,
+        state.saveStatus.whenOrNull(
+          success: (_) {
+            if (widget.isSetupMode) {
+              context.goNamed(RootScreen.pageName);
+            } else {
+              context.pop();
+            }
+          },
+          failure: (message) => ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message))),
+        );
+      },
+      builder: (context, state) {
+        return StatusBuilder<ProfileEntity>(
+          state: state.loadStatus,
+          success: (user) {
+            return ReactiveForm(
+              formGroup: _form,
+              child: SingleChildScrollView(
+                padding: REdgeInsets.all(AppSpacing.xl),
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AppSpacing.xl.verticalSpace,
+                    ProfilePhotoPicker(
+                      currentPhotoUrl: user.profilePhotoUrl,
+                      pendingPhoto: state.pendingPhoto,
+                    ),
+                    AppSpacing.xxl.verticalSpace,
+                    AppReactiveTextField.text(
+                      formControlName: ProfileForms.nameField,
+                      title: AppStrings.profileName,
+                      hintText: AppStrings.profileNamePlaceholder,
+                      onChangedDebounced: (value, _) {
+                        context.read<ProfileBloc>().add(
+                          ProfileEvent.nameSaved(value),
+                        );
+                      },
+                    ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.05),
+                    AppSpacing.xxl.verticalSpace,
+                    AppButton.primary(
+                      onTap: () {
+                        if (_form.valid) {
+                          context.read<ProfileBloc>().add(
+                            const ProfileEvent.saveRequested(),
+                          );
+                        } else {
+                          _form.markAllAsTouched();
+                        }
+                      },
+                      isLoading: state.saveStatus.isLoading,
+                      child: AppButtonChild.label(
+                        widget.isSetupMode
+                            ? AppStrings.profileSaveAndContinue
+                            : AppStrings.profileSave,
+                      ),
+                    ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.05),
+                  ],
                 ),
-                child: FaIcon(FontAwesomeIcons.camera, size: 16.r, color: context.onPrimary),
               ),
-            ),
-          ],
-        ),
-      ),
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -1,5 +1,6 @@
 // cspell:ignore oranje
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/common/widgets/show_overlay.dart';
 
 import 'package:customertaxi/features/auth/constants/forms/auth_forms.dart';
 import 'package:customertaxi/features/auth/presentation/states/auth_bloc.dart';
@@ -40,10 +41,18 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listenWhen: (previous, current) =>
-          previous.isOtpSent != current.isOtpSent,
+          previous.isOtpSent != current.isOtpSent ||
+          (!previous.phoneStatus.isFailed && current.phoneStatus.isFailed),
       listener: (context, state) {
         if (!state.isOtpSent) {
           _form.control(AuthForms.otpField).reset();
+        }
+
+        if (state.phoneStatus.isFailed) {
+          showErrorOverlay(
+            context,
+            state.phoneStatus.errorMessage ?? AppStrings.somethingWentWrong,
+          );
         }
       },
       builder: (context, state) {

@@ -3,6 +3,10 @@
 part of app_strings;
 
 class AppStrings {
+  /// Active Trip - الرحلة الحالية - Actieve Rit
+  static String get activeTrip => 'activeTrip'.tr();
+  /// Add stop - إضافة توقف - Stop toevoegen
+  static String get addStop => 'addStop'.tr();
   /// Apr - أبر - Apr
   static String get apr => 'apr'.tr();
   /// April - أبريل - April
@@ -43,6 +47,10 @@ class AppStrings {
   static String get clientUnprocessableEntity => 'clientUnprocessableEntity'.tr();
   /// Coming Soon - قريباً - Binnenkort beschikbaar
   static String get comingSoon => 'comingSoon'.tr();
+  /// Complete Profile - إكمال الملف الشخصي - Voltooi Profiel
+  static String get completeProfile => 'completeProfile'.tr();
+  /// Confirm - تأكيد - Bevestigen
+  static String get confirm => 'confirm'.tr();
   /// Confirm Booking - تأكيد الحجز - Boeking bevestigen
   static String get confirmBooking => 'confirmBooking'.tr();
   /// Confirm locations - تأكيد المواقع - Locaties bevestigen
@@ -335,6 +343,8 @@ class AppStrings {
   static String get settings => 'settings'.tr();
   /// Something went wrong. - حدث خطأ ما. - Er is iets misgegaan.
   static String get somethingWentWrong => 'somethingWentWrong'.tr();
+  /// Stop - توقف - Stop
+  static String get stop => 'stop'.tr();
   /// Suggestions - اقتراحات - Suggesties
   static String get suggestions => 'suggestions'.tr();
   /// Sun - أحد - Zo
@@ -371,6 +381,8 @@ class AppStrings {
   static String get tripCreatedAt => 'tripCreatedAt'.tr();
   /// {fare} {currency} - {fare} {currency} - {fare} {currency}
   static String get tripFare => 'tripFare'.tr();
+  /// Trip History - سجل الرحلات - Ritgeschiedenis
+  static String get tripHistory => 'tripHistory'.tr();
   /// No trips yet - لا توجد رحلات بعد - Nog geen ritten
   static String get tripHistoryEmpty => 'tripHistoryEmpty'.tr();
   /// Load more - تحميل المزيد - Meer laden

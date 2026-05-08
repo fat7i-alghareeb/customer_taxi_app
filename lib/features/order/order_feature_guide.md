@@ -71,6 +71,7 @@ OrderBloc uses a UI state machine with:
 Order feature uses Google geocoding APIs via Env.googleMapsApiKey:
 
 - searchLocations(query) merges Geocode + Places Text Search results, then de-duplicates and caps list size.
+- searchLocations always includes the current location latitude/longitude (when available) as a bias.
 - reverseGeocode(lat,lng)
 - getTripRoute(from,to) via Google Directions API (driving), with overview polyline decode and duration extraction.
 - overview polyline decode uses a hybrid strategy: long encoded paths run in a background isolate, while short paths decode inline to avoid isolate overhead.

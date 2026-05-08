@@ -1,7 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
-
-import '../../states/profile_bloc.dart';
 import '../widgets/profile_body.dart';
+import '../../states/profile_bloc.dart';
 
 class ProfileSetupScreen extends StatelessWidget {
   const ProfileSetupScreen({super.key});
@@ -15,23 +14,6 @@ class ProfileSetupScreen extends StatelessWidget {
       create: (_) => getIt<ProfileBloc>()..add(const ProfileEvent.started()),
       child: AppScaffold.body(
         child: const ProfileBody(isSetupMode: true),
-      ),
-    );
-  }
-}
-
-class ProfileEditScreen extends StatelessWidget {
-  const ProfileEditScreen({super.key});
-
-  static const String pagePath = '/profile_edit';
-  static const String pageName = 'ProfileEditScreen';
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<ProfileBloc>()..add(const ProfileEvent.started()),
-      child: AppScaffold.body(
-        child: const ProfileBody(isSetupMode: false),
       ),
     );
   }

@@ -11,8 +11,7 @@ class OrderEvent with _$OrderEvent {
   const factory OrderEvent.vehicleStepBackPressed() = _VehicleStepBackPressed;
   const factory OrderEvent.pickupPointBackPressed() = _PickupPointBackPressed;
 
-  const factory OrderEvent.setOnMapPressed(OrderLocationTarget target) =
-      _SetOnMapPressed;
+  const factory OrderEvent.setOnMapPressed() = _SetOnMapPressed;
 
   const factory OrderEvent.mapCameraTargetUpdated({
     required double latitude,
@@ -22,22 +21,20 @@ class OrderEvent with _$OrderEvent {
 
   const factory OrderEvent.confirmMapPointPressed() = _ConfirmMapPointPressed;
 
-  const factory OrderEvent.fromQueryChanged(String query) = _FromQueryChanged;
-  const factory OrderEvent.toQueryChanged(String query) = _ToQueryChanged;
-
-  const factory OrderEvent.fromLocationCleared() = _FromLocationCleared;
-  const factory OrderEvent.toLocationCleared() = _ToLocationCleared;
-
-  const factory OrderEvent.fromSuggestionSelected(
+  const factory OrderEvent.activeStopChanged(int index) = _ActiveStopChanged;
+  const factory OrderEvent.stopQueryChanged(int index, String query) = _StopQueryChanged;
+  const factory OrderEvent.stopCleared(int index) = _StopCleared;
+  const factory OrderEvent.stopSuggestionSelected(
+    int index,
     OrderSavedLocationEntity location,
-  ) = _FromSuggestionSelected;
+  ) = _StopSuggestionSelected;
 
-  const factory OrderEvent.toSuggestionSelected(
-    OrderSavedLocationEntity location,
-  ) = _ToSuggestionSelected;
+  const factory OrderEvent.stopAdded() = _StopAdded;
+  const factory OrderEvent.stopRemoved(int index) = _StopRemoved;
+  const factory OrderEvent.stopReordered(int oldIndex, int newIndex) = _StopReordered;
 
   const factory OrderEvent.savedLocationPinToggled({
-    required OrderLocationTarget target,
+    required int stopIndex,
     required OrderSavedLocationEntity location,
   }) = _SavedLocationPinToggled;
 
@@ -50,8 +47,7 @@ class OrderEvent with _$OrderEvent {
 
   factory OrderEvent.tripPrefetchCompleted({
     required int token,
-    required OrderLocationEntity fromLocation,
-    required OrderLocationEntity toLocation,
+    required List<OrderLocationEntity> stops,
     required BlocStatus<OrderTripRouteEntity> routeState,
     required BlocStatus<List<OrderTripCarOptionEntity>> pricingState,
   }) = _TripPrefetchCompleted;

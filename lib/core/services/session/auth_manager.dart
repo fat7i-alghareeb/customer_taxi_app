@@ -135,9 +135,23 @@ class AuthManager {
     await tokenStorage.delete(AuthReasons.logout);
   }
 
-  /// Updates the persisted user data and notifies listeners.
+  /// Updates the persisted user data by merging with existing data and notifies listeners.
   Future<void> updateUser(UserEntity user) async {
-    await _persistUser(user);
+    final existingUser = state.user;
+    final mergedUser = (existingUser ?? const UserEntity()).copyWith(
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      profilePhotoUrl: user.profilePhotoUrl,
+    );
+
+    printM(
+      '${AuthLogTags.authManager} updateUser merged '
+      'name="${mergedUser.name}" photo=${mergedUser.profilePhotoUrl != null}',
+    );
+
+    await _persistUser(mergedUser);
   }
 
   /// Updates the stored JWT token when JWT mode is active.

@@ -1,7 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
 import '../../../../constants/order_constants.dart';
-import '../../../../domain/entities/order_location_entity.dart';
 import '../../../../domain/entities/order_trip_car_option_entity.dart';
 import '../../../states/order_bloc.dart';
 import 'order_car_option_card_widget.dart';
@@ -64,6 +63,7 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[OrderVehicleSelectionStepWidget] build');
     final pricingMap = state.tripCarOptionsState.maybeWhen(
       success: _mapByTypeId,
       orElse: () => <String, OrderTripCarOptionEntity>{},
@@ -71,23 +71,12 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
 
     final isPriceLoading = state.tripCarOptionsState.isLoading;
 
-    final fromLocation = state.fromLocationState.maybeWhen(
-      success: (l) => l,
-      orElse: () => const OrderLocationEntity(
-        latitude: 0,
-        longitude: 0,
-        label: '--',
-      ),
-    );
+    final fromLocation = state.stops.isNotEmpty ? state.stops.first : null;
+    final toLocation = state.stops.isNotEmpty ? state.stops.last : null;
 
-    final toLocation = state.toLocationState.maybeWhen(
-      success: (l) => l,
-      orElse: () => const OrderLocationEntity(
-        latitude: 0,
-        longitude: 0,
-        label: '--',
-      ),
-    );
+    if (fromLocation == null || toLocation == null) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

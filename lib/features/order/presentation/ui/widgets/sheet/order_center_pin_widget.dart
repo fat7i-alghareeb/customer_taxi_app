@@ -5,6 +5,7 @@ class OrderCenterPinWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[OrderCenterPinWidget] build');
     return Align(
       child: Transform.translate(
         offset: Offset(0, -22.h), // Adjusted for better centering feel

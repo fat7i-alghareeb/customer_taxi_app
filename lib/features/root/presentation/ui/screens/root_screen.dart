@@ -5,6 +5,7 @@ import 'package:customertaxi/core/injection/injectable.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
 
+import '../../../../../utils/helpers/colored_print.dart';
 import '../widgets/root_body.dart';
 import '../widgets/root_drawer_content.dart';
 
@@ -20,6 +21,7 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> {
   @override
   Widget build(BuildContext context) {
+    printM('[RootScreen] build');
     return MultiBlocProvider(
       providers: [
         BlocProvider(

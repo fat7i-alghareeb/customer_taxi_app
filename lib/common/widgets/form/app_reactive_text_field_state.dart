@@ -64,6 +64,7 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
     if (oldWidget.formControlName != widget.formControlName ||
         oldWidget.validation.deferErrorsUntilFirstDebounce !=
             widget.validation.deferErrorsUntilFirstDebounce) {
+      printM('[AppReactiveTextField] controlName changed to ${widget.formControlName}');
       _deferValidationDebounce?.cancel();
       _deferValidationArmed = false;
     }
@@ -277,6 +278,7 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
       child: ReactiveStatusListenableBuilder(
         formControlName: widget.formControlName,
         builder: (context, control, child) {
+          printM('[AppReactiveTextField] build status listener controlName=${widget.formControlName} value="${control.value}" status=${control.status}');
           final resolvedPadding = outer.contentPadding.resolve(outer.direction);
 
           // The outer container has padding. This computes the remaining space
@@ -523,12 +525,14 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
               onChanged: (control) {
                 final value = (control.value ?? '').toString();
                 final isValid = control.valid;
+                printM('[AppReactiveTextField] onChanged controlName=${widget.formControlName} value="$value"');
                 _armDeferredValidation();
                 widget.onChanged?.call(value, isValid);
                 scheduleDebounced(value, isValid);
               },
               onSubmitted: (control) {
                 final v = (control.value ?? '').toString();
+                printM('[AppReactiveTextField] onSubmitted controlName=${widget.formControlName} value="$v"');
                 final normalized = normalizeNumericText(widget._type, v);
                 if (normalized != v) {
                   control.updateValue(normalized);

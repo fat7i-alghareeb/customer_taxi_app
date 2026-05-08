@@ -31,6 +31,7 @@ class _RootBodyState extends State<RootBody> {
   }
 
   void _onTabSelected(int index) {
+    printM('[RootBody] _onTabSelected index=$index');
     if (index == _currentIndex) {
       return;
     }
@@ -41,6 +42,7 @@ class _RootBodyState extends State<RootBody> {
   }
 
   void _onPageChanged(int index) {
+    printM('[RootBody] _onPageChanged index=$index');
     if (index == _currentIndex) {
       return;
     }
@@ -90,6 +92,7 @@ class _RootBodyState extends State<RootBody> {
 
   @override
   Widget build(BuildContext context) {
+    printM('[RootBody] build currentIndex=$_currentIndex');
     final pages = _buildPages();
     final navItems = _buildNavItems();
 

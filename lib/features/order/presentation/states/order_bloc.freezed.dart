@@ -55,7 +55,7 @@ extension OrderEventPatterns on OrderEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _GetAllRequested value)?  getAllRequested,TResult Function( _OrderNowPressed value)?  orderNowPressed,TResult Function( _CollapseRequested value)?  collapseRequested,TResult Function( _MapPickCancelled value)?  mapPickCancelled,TResult Function( _VehicleStepBackPressed value)?  vehicleStepBackPressed,TResult Function( _PickupPointBackPressed value)?  pickupPointBackPressed,TResult Function( _SetOnMapPressed value)?  setOnMapPressed,TResult Function( _MapCameraTargetUpdated value)?  mapCameraTargetUpdated,TResult Function( _ConfirmMapPointPressed value)?  confirmMapPointPressed,TResult Function( _FromQueryChanged value)?  fromQueryChanged,TResult Function( _ToQueryChanged value)?  toQueryChanged,TResult Function( _FromLocationCleared value)?  fromLocationCleared,TResult Function( _ToLocationCleared value)?  toLocationCleared,TResult Function( _FromSuggestionSelected value)?  fromSuggestionSelected,TResult Function( _ToSuggestionSelected value)?  toSuggestionSelected,TResult Function( _SavedLocationPinToggled value)?  savedLocationPinToggled,TResult Function( _CarTypeToggled value)?  carTypeToggled,TResult Function( _PickupStreetChanged value)?  pickupStreetChanged,TResult Function( _PickupHouseNumberChanged value)?  pickupHouseNumberChanged,TResult Function( _TripPrefetchCompleted value)?  tripPrefetchCompleted,TResult Function( _ConfirmOrderPressed value)?  confirmOrderPressed,TResult Function( _ConfirmCarSelectionPressed value)?  confirmCarSelectionPressed,TResult Function( _ConfirmPickupPointPressed value)?  confirmPickupPointPressed,TResult Function( _PickupConfirmationFeedbackCleared value)?  pickupConfirmationFeedbackCleared,TResult Function( _BookingDetailsBackPressed value)?  bookingDetailsBackPressed,TResult Function( _ScheduleTimeChanged value)?  scheduleTimeChanged,TResult Function( _PaymentMethodChanged value)?  paymentMethodChanged,TResult Function( _ConfirmBookingDetailsPressed value)?  confirmBookingDetailsPressed,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _GetAllRequested value)?  getAllRequested,TResult Function( _OrderNowPressed value)?  orderNowPressed,TResult Function( _CollapseRequested value)?  collapseRequested,TResult Function( _MapPickCancelled value)?  mapPickCancelled,TResult Function( _VehicleStepBackPressed value)?  vehicleStepBackPressed,TResult Function( _PickupPointBackPressed value)?  pickupPointBackPressed,TResult Function( _SetOnMapPressed value)?  setOnMapPressed,TResult Function( _MapCameraTargetUpdated value)?  mapCameraTargetUpdated,TResult Function( _ConfirmMapPointPressed value)?  confirmMapPointPressed,TResult Function( _ActiveStopChanged value)?  activeStopChanged,TResult Function( _StopQueryChanged value)?  stopQueryChanged,TResult Function( _StopCleared value)?  stopCleared,TResult Function( _StopSuggestionSelected value)?  stopSuggestionSelected,TResult Function( _StopAdded value)?  stopAdded,TResult Function( _StopRemoved value)?  stopRemoved,TResult Function( _StopReordered value)?  stopReordered,TResult Function( _SavedLocationPinToggled value)?  savedLocationPinToggled,TResult Function( _CarTypeToggled value)?  carTypeToggled,TResult Function( _PickupStreetChanged value)?  pickupStreetChanged,TResult Function( _PickupHouseNumberChanged value)?  pickupHouseNumberChanged,TResult Function( _TripPrefetchCompleted value)?  tripPrefetchCompleted,TResult Function( _ConfirmOrderPressed value)?  confirmOrderPressed,TResult Function( _ConfirmCarSelectionPressed value)?  confirmCarSelectionPressed,TResult Function( _ConfirmPickupPointPressed value)?  confirmPickupPointPressed,TResult Function( _PickupConfirmationFeedbackCleared value)?  pickupConfirmationFeedbackCleared,TResult Function( _BookingDetailsBackPressed value)?  bookingDetailsBackPressed,TResult Function( _ScheduleTimeChanged value)?  scheduleTimeChanged,TResult Function( _PaymentMethodChanged value)?  paymentMethodChanged,TResult Function( _ConfirmBookingDetailsPressed value)?  confirmBookingDetailsPressed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -68,13 +68,14 @@ return vehicleStepBackPressed(_that);case _PickupPointBackPressed() when pickupP
 return pickupPointBackPressed(_that);case _SetOnMapPressed() when setOnMapPressed != null:
 return setOnMapPressed(_that);case _MapCameraTargetUpdated() when mapCameraTargetUpdated != null:
 return mapCameraTargetUpdated(_that);case _ConfirmMapPointPressed() when confirmMapPointPressed != null:
-return confirmMapPointPressed(_that);case _FromQueryChanged() when fromQueryChanged != null:
-return fromQueryChanged(_that);case _ToQueryChanged() when toQueryChanged != null:
-return toQueryChanged(_that);case _FromLocationCleared() when fromLocationCleared != null:
-return fromLocationCleared(_that);case _ToLocationCleared() when toLocationCleared != null:
-return toLocationCleared(_that);case _FromSuggestionSelected() when fromSuggestionSelected != null:
-return fromSuggestionSelected(_that);case _ToSuggestionSelected() when toSuggestionSelected != null:
-return toSuggestionSelected(_that);case _SavedLocationPinToggled() when savedLocationPinToggled != null:
+return confirmMapPointPressed(_that);case _ActiveStopChanged() when activeStopChanged != null:
+return activeStopChanged(_that);case _StopQueryChanged() when stopQueryChanged != null:
+return stopQueryChanged(_that);case _StopCleared() when stopCleared != null:
+return stopCleared(_that);case _StopSuggestionSelected() when stopSuggestionSelected != null:
+return stopSuggestionSelected(_that);case _StopAdded() when stopAdded != null:
+return stopAdded(_that);case _StopRemoved() when stopRemoved != null:
+return stopRemoved(_that);case _StopReordered() when stopReordered != null:
+return stopReordered(_that);case _SavedLocationPinToggled() when savedLocationPinToggled != null:
 return savedLocationPinToggled(_that);case _CarTypeToggled() when carTypeToggled != null:
 return carTypeToggled(_that);case _PickupStreetChanged() when pickupStreetChanged != null:
 return pickupStreetChanged(_that);case _PickupHouseNumberChanged() when pickupHouseNumberChanged != null:
@@ -105,7 +106,7 @@ return confirmBookingDetailsPressed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _GetAllRequested value)  getAllRequested,required TResult Function( _OrderNowPressed value)  orderNowPressed,required TResult Function( _CollapseRequested value)  collapseRequested,required TResult Function( _MapPickCancelled value)  mapPickCancelled,required TResult Function( _VehicleStepBackPressed value)  vehicleStepBackPressed,required TResult Function( _PickupPointBackPressed value)  pickupPointBackPressed,required TResult Function( _SetOnMapPressed value)  setOnMapPressed,required TResult Function( _MapCameraTargetUpdated value)  mapCameraTargetUpdated,required TResult Function( _ConfirmMapPointPressed value)  confirmMapPointPressed,required TResult Function( _FromQueryChanged value)  fromQueryChanged,required TResult Function( _ToQueryChanged value)  toQueryChanged,required TResult Function( _FromLocationCleared value)  fromLocationCleared,required TResult Function( _ToLocationCleared value)  toLocationCleared,required TResult Function( _FromSuggestionSelected value)  fromSuggestionSelected,required TResult Function( _ToSuggestionSelected value)  toSuggestionSelected,required TResult Function( _SavedLocationPinToggled value)  savedLocationPinToggled,required TResult Function( _CarTypeToggled value)  carTypeToggled,required TResult Function( _PickupStreetChanged value)  pickupStreetChanged,required TResult Function( _PickupHouseNumberChanged value)  pickupHouseNumberChanged,required TResult Function( _TripPrefetchCompleted value)  tripPrefetchCompleted,required TResult Function( _ConfirmOrderPressed value)  confirmOrderPressed,required TResult Function( _ConfirmCarSelectionPressed value)  confirmCarSelectionPressed,required TResult Function( _ConfirmPickupPointPressed value)  confirmPickupPointPressed,required TResult Function( _PickupConfirmationFeedbackCleared value)  pickupConfirmationFeedbackCleared,required TResult Function( _BookingDetailsBackPressed value)  bookingDetailsBackPressed,required TResult Function( _ScheduleTimeChanged value)  scheduleTimeChanged,required TResult Function( _PaymentMethodChanged value)  paymentMethodChanged,required TResult Function( _ConfirmBookingDetailsPressed value)  confirmBookingDetailsPressed,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _GetAllRequested value)  getAllRequested,required TResult Function( _OrderNowPressed value)  orderNowPressed,required TResult Function( _CollapseRequested value)  collapseRequested,required TResult Function( _MapPickCancelled value)  mapPickCancelled,required TResult Function( _VehicleStepBackPressed value)  vehicleStepBackPressed,required TResult Function( _PickupPointBackPressed value)  pickupPointBackPressed,required TResult Function( _SetOnMapPressed value)  setOnMapPressed,required TResult Function( _MapCameraTargetUpdated value)  mapCameraTargetUpdated,required TResult Function( _ConfirmMapPointPressed value)  confirmMapPointPressed,required TResult Function( _ActiveStopChanged value)  activeStopChanged,required TResult Function( _StopQueryChanged value)  stopQueryChanged,required TResult Function( _StopCleared value)  stopCleared,required TResult Function( _StopSuggestionSelected value)  stopSuggestionSelected,required TResult Function( _StopAdded value)  stopAdded,required TResult Function( _StopRemoved value)  stopRemoved,required TResult Function( _StopReordered value)  stopReordered,required TResult Function( _SavedLocationPinToggled value)  savedLocationPinToggled,required TResult Function( _CarTypeToggled value)  carTypeToggled,required TResult Function( _PickupStreetChanged value)  pickupStreetChanged,required TResult Function( _PickupHouseNumberChanged value)  pickupHouseNumberChanged,required TResult Function( _TripPrefetchCompleted value)  tripPrefetchCompleted,required TResult Function( _ConfirmOrderPressed value)  confirmOrderPressed,required TResult Function( _ConfirmCarSelectionPressed value)  confirmCarSelectionPressed,required TResult Function( _ConfirmPickupPointPressed value)  confirmPickupPointPressed,required TResult Function( _PickupConfirmationFeedbackCleared value)  pickupConfirmationFeedbackCleared,required TResult Function( _BookingDetailsBackPressed value)  bookingDetailsBackPressed,required TResult Function( _ScheduleTimeChanged value)  scheduleTimeChanged,required TResult Function( _PaymentMethodChanged value)  paymentMethodChanged,required TResult Function( _ConfirmBookingDetailsPressed value)  confirmBookingDetailsPressed,}){
 final _that = this;
 switch (_that) {
 case _Started():
@@ -118,13 +119,14 @@ return vehicleStepBackPressed(_that);case _PickupPointBackPressed():
 return pickupPointBackPressed(_that);case _SetOnMapPressed():
 return setOnMapPressed(_that);case _MapCameraTargetUpdated():
 return mapCameraTargetUpdated(_that);case _ConfirmMapPointPressed():
-return confirmMapPointPressed(_that);case _FromQueryChanged():
-return fromQueryChanged(_that);case _ToQueryChanged():
-return toQueryChanged(_that);case _FromLocationCleared():
-return fromLocationCleared(_that);case _ToLocationCleared():
-return toLocationCleared(_that);case _FromSuggestionSelected():
-return fromSuggestionSelected(_that);case _ToSuggestionSelected():
-return toSuggestionSelected(_that);case _SavedLocationPinToggled():
+return confirmMapPointPressed(_that);case _ActiveStopChanged():
+return activeStopChanged(_that);case _StopQueryChanged():
+return stopQueryChanged(_that);case _StopCleared():
+return stopCleared(_that);case _StopSuggestionSelected():
+return stopSuggestionSelected(_that);case _StopAdded():
+return stopAdded(_that);case _StopRemoved():
+return stopRemoved(_that);case _StopReordered():
+return stopReordered(_that);case _SavedLocationPinToggled():
 return savedLocationPinToggled(_that);case _CarTypeToggled():
 return carTypeToggled(_that);case _PickupStreetChanged():
 return pickupStreetChanged(_that);case _PickupHouseNumberChanged():
@@ -154,7 +156,7 @@ return confirmBookingDetailsPressed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _GetAllRequested value)?  getAllRequested,TResult? Function( _OrderNowPressed value)?  orderNowPressed,TResult? Function( _CollapseRequested value)?  collapseRequested,TResult? Function( _MapPickCancelled value)?  mapPickCancelled,TResult? Function( _VehicleStepBackPressed value)?  vehicleStepBackPressed,TResult? Function( _PickupPointBackPressed value)?  pickupPointBackPressed,TResult? Function( _SetOnMapPressed value)?  setOnMapPressed,TResult? Function( _MapCameraTargetUpdated value)?  mapCameraTargetUpdated,TResult? Function( _ConfirmMapPointPressed value)?  confirmMapPointPressed,TResult? Function( _FromQueryChanged value)?  fromQueryChanged,TResult? Function( _ToQueryChanged value)?  toQueryChanged,TResult? Function( _FromLocationCleared value)?  fromLocationCleared,TResult? Function( _ToLocationCleared value)?  toLocationCleared,TResult? Function( _FromSuggestionSelected value)?  fromSuggestionSelected,TResult? Function( _ToSuggestionSelected value)?  toSuggestionSelected,TResult? Function( _SavedLocationPinToggled value)?  savedLocationPinToggled,TResult? Function( _CarTypeToggled value)?  carTypeToggled,TResult? Function( _PickupStreetChanged value)?  pickupStreetChanged,TResult? Function( _PickupHouseNumberChanged value)?  pickupHouseNumberChanged,TResult? Function( _TripPrefetchCompleted value)?  tripPrefetchCompleted,TResult? Function( _ConfirmOrderPressed value)?  confirmOrderPressed,TResult? Function( _ConfirmCarSelectionPressed value)?  confirmCarSelectionPressed,TResult? Function( _ConfirmPickupPointPressed value)?  confirmPickupPointPressed,TResult? Function( _PickupConfirmationFeedbackCleared value)?  pickupConfirmationFeedbackCleared,TResult? Function( _BookingDetailsBackPressed value)?  bookingDetailsBackPressed,TResult? Function( _ScheduleTimeChanged value)?  scheduleTimeChanged,TResult? Function( _PaymentMethodChanged value)?  paymentMethodChanged,TResult? Function( _ConfirmBookingDetailsPressed value)?  confirmBookingDetailsPressed,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _GetAllRequested value)?  getAllRequested,TResult? Function( _OrderNowPressed value)?  orderNowPressed,TResult? Function( _CollapseRequested value)?  collapseRequested,TResult? Function( _MapPickCancelled value)?  mapPickCancelled,TResult? Function( _VehicleStepBackPressed value)?  vehicleStepBackPressed,TResult? Function( _PickupPointBackPressed value)?  pickupPointBackPressed,TResult? Function( _SetOnMapPressed value)?  setOnMapPressed,TResult? Function( _MapCameraTargetUpdated value)?  mapCameraTargetUpdated,TResult? Function( _ConfirmMapPointPressed value)?  confirmMapPointPressed,TResult? Function( _ActiveStopChanged value)?  activeStopChanged,TResult? Function( _StopQueryChanged value)?  stopQueryChanged,TResult? Function( _StopCleared value)?  stopCleared,TResult? Function( _StopSuggestionSelected value)?  stopSuggestionSelected,TResult? Function( _StopAdded value)?  stopAdded,TResult? Function( _StopRemoved value)?  stopRemoved,TResult? Function( _StopReordered value)?  stopReordered,TResult? Function( _SavedLocationPinToggled value)?  savedLocationPinToggled,TResult? Function( _CarTypeToggled value)?  carTypeToggled,TResult? Function( _PickupStreetChanged value)?  pickupStreetChanged,TResult? Function( _PickupHouseNumberChanged value)?  pickupHouseNumberChanged,TResult? Function( _TripPrefetchCompleted value)?  tripPrefetchCompleted,TResult? Function( _ConfirmOrderPressed value)?  confirmOrderPressed,TResult? Function( _ConfirmCarSelectionPressed value)?  confirmCarSelectionPressed,TResult? Function( _ConfirmPickupPointPressed value)?  confirmPickupPointPressed,TResult? Function( _PickupConfirmationFeedbackCleared value)?  pickupConfirmationFeedbackCleared,TResult? Function( _BookingDetailsBackPressed value)?  bookingDetailsBackPressed,TResult? Function( _ScheduleTimeChanged value)?  scheduleTimeChanged,TResult? Function( _PaymentMethodChanged value)?  paymentMethodChanged,TResult? Function( _ConfirmBookingDetailsPressed value)?  confirmBookingDetailsPressed,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -167,13 +169,14 @@ return vehicleStepBackPressed(_that);case _PickupPointBackPressed() when pickupP
 return pickupPointBackPressed(_that);case _SetOnMapPressed() when setOnMapPressed != null:
 return setOnMapPressed(_that);case _MapCameraTargetUpdated() when mapCameraTargetUpdated != null:
 return mapCameraTargetUpdated(_that);case _ConfirmMapPointPressed() when confirmMapPointPressed != null:
-return confirmMapPointPressed(_that);case _FromQueryChanged() when fromQueryChanged != null:
-return fromQueryChanged(_that);case _ToQueryChanged() when toQueryChanged != null:
-return toQueryChanged(_that);case _FromLocationCleared() when fromLocationCleared != null:
-return fromLocationCleared(_that);case _ToLocationCleared() when toLocationCleared != null:
-return toLocationCleared(_that);case _FromSuggestionSelected() when fromSuggestionSelected != null:
-return fromSuggestionSelected(_that);case _ToSuggestionSelected() when toSuggestionSelected != null:
-return toSuggestionSelected(_that);case _SavedLocationPinToggled() when savedLocationPinToggled != null:
+return confirmMapPointPressed(_that);case _ActiveStopChanged() when activeStopChanged != null:
+return activeStopChanged(_that);case _StopQueryChanged() when stopQueryChanged != null:
+return stopQueryChanged(_that);case _StopCleared() when stopCleared != null:
+return stopCleared(_that);case _StopSuggestionSelected() when stopSuggestionSelected != null:
+return stopSuggestionSelected(_that);case _StopAdded() when stopAdded != null:
+return stopAdded(_that);case _StopRemoved() when stopRemoved != null:
+return stopRemoved(_that);case _StopReordered() when stopReordered != null:
+return stopReordered(_that);case _SavedLocationPinToggled() when savedLocationPinToggled != null:
 return savedLocationPinToggled(_that);case _CarTypeToggled() when carTypeToggled != null:
 return carTypeToggled(_that);case _PickupStreetChanged() when pickupStreetChanged != null:
 return pickupStreetChanged(_that);case _PickupHouseNumberChanged() when pickupHouseNumberChanged != null:
@@ -203,7 +206,7 @@ return confirmBookingDetailsPressed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  getAllRequested,TResult Function()?  orderNowPressed,TResult Function()?  collapseRequested,TResult Function()?  mapPickCancelled,TResult Function()?  vehicleStepBackPressed,TResult Function()?  pickupPointBackPressed,TResult Function( OrderLocationTarget target)?  setOnMapPressed,TResult Function( double latitude,  double longitude,  double zoom)?  mapCameraTargetUpdated,TResult Function()?  confirmMapPointPressed,TResult Function( String query)?  fromQueryChanged,TResult Function( String query)?  toQueryChanged,TResult Function()?  fromLocationCleared,TResult Function()?  toLocationCleared,TResult Function( OrderSavedLocationEntity location)?  fromSuggestionSelected,TResult Function( OrderSavedLocationEntity location)?  toSuggestionSelected,TResult Function( OrderLocationTarget target,  OrderSavedLocationEntity location)?  savedLocationPinToggled,TResult Function( String typeId)?  carTypeToggled,TResult Function( String value)?  pickupStreetChanged,TResult Function( String value)?  pickupHouseNumberChanged,TResult Function( int token,  OrderLocationEntity fromLocation,  OrderLocationEntity toLocation,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)?  tripPrefetchCompleted,TResult Function()?  confirmOrderPressed,TResult Function()?  confirmCarSelectionPressed,TResult Function()?  confirmPickupPointPressed,TResult Function()?  pickupConfirmationFeedbackCleared,TResult Function()?  bookingDetailsBackPressed,TResult Function( DateTime? time)?  scheduleTimeChanged,TResult Function( String methodId)?  paymentMethodChanged,TResult Function()?  confirmBookingDetailsPressed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  getAllRequested,TResult Function()?  orderNowPressed,TResult Function()?  collapseRequested,TResult Function()?  mapPickCancelled,TResult Function()?  vehicleStepBackPressed,TResult Function()?  pickupPointBackPressed,TResult Function()?  setOnMapPressed,TResult Function( double latitude,  double longitude,  double zoom)?  mapCameraTargetUpdated,TResult Function()?  confirmMapPointPressed,TResult Function( int index)?  activeStopChanged,TResult Function( int index,  String query)?  stopQueryChanged,TResult Function( int index)?  stopCleared,TResult Function( int index,  OrderSavedLocationEntity location)?  stopSuggestionSelected,TResult Function()?  stopAdded,TResult Function( int index)?  stopRemoved,TResult Function( int oldIndex,  int newIndex)?  stopReordered,TResult Function( int stopIndex,  OrderSavedLocationEntity location)?  savedLocationPinToggled,TResult Function( String typeId)?  carTypeToggled,TResult Function( String value)?  pickupStreetChanged,TResult Function( String value)?  pickupHouseNumberChanged,TResult Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)?  tripPrefetchCompleted,TResult Function()?  confirmOrderPressed,TResult Function()?  confirmCarSelectionPressed,TResult Function()?  confirmPickupPointPressed,TResult Function()?  pickupConfirmationFeedbackCleared,TResult Function()?  bookingDetailsBackPressed,TResult Function( DateTime? time)?  scheduleTimeChanged,TResult Function( String methodId)?  paymentMethodChanged,TResult Function()?  confirmBookingDetailsPressed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _GetAllRequested() when getAllRequested != null:
@@ -213,20 +216,21 @@ return collapseRequested();case _MapPickCancelled() when mapPickCancelled != nul
 return mapPickCancelled();case _VehicleStepBackPressed() when vehicleStepBackPressed != null:
 return vehicleStepBackPressed();case _PickupPointBackPressed() when pickupPointBackPressed != null:
 return pickupPointBackPressed();case _SetOnMapPressed() when setOnMapPressed != null:
-return setOnMapPressed(_that.target);case _MapCameraTargetUpdated() when mapCameraTargetUpdated != null:
+return setOnMapPressed();case _MapCameraTargetUpdated() when mapCameraTargetUpdated != null:
 return mapCameraTargetUpdated(_that.latitude,_that.longitude,_that.zoom);case _ConfirmMapPointPressed() when confirmMapPointPressed != null:
-return confirmMapPointPressed();case _FromQueryChanged() when fromQueryChanged != null:
-return fromQueryChanged(_that.query);case _ToQueryChanged() when toQueryChanged != null:
-return toQueryChanged(_that.query);case _FromLocationCleared() when fromLocationCleared != null:
-return fromLocationCleared();case _ToLocationCleared() when toLocationCleared != null:
-return toLocationCleared();case _FromSuggestionSelected() when fromSuggestionSelected != null:
-return fromSuggestionSelected(_that.location);case _ToSuggestionSelected() when toSuggestionSelected != null:
-return toSuggestionSelected(_that.location);case _SavedLocationPinToggled() when savedLocationPinToggled != null:
-return savedLocationPinToggled(_that.target,_that.location);case _CarTypeToggled() when carTypeToggled != null:
+return confirmMapPointPressed();case _ActiveStopChanged() when activeStopChanged != null:
+return activeStopChanged(_that.index);case _StopQueryChanged() when stopQueryChanged != null:
+return stopQueryChanged(_that.index,_that.query);case _StopCleared() when stopCleared != null:
+return stopCleared(_that.index);case _StopSuggestionSelected() when stopSuggestionSelected != null:
+return stopSuggestionSelected(_that.index,_that.location);case _StopAdded() when stopAdded != null:
+return stopAdded();case _StopRemoved() when stopRemoved != null:
+return stopRemoved(_that.index);case _StopReordered() when stopReordered != null:
+return stopReordered(_that.oldIndex,_that.newIndex);case _SavedLocationPinToggled() when savedLocationPinToggled != null:
+return savedLocationPinToggled(_that.stopIndex,_that.location);case _CarTypeToggled() when carTypeToggled != null:
 return carTypeToggled(_that.typeId);case _PickupStreetChanged() when pickupStreetChanged != null:
 return pickupStreetChanged(_that.value);case _PickupHouseNumberChanged() when pickupHouseNumberChanged != null:
 return pickupHouseNumberChanged(_that.value);case _TripPrefetchCompleted() when tripPrefetchCompleted != null:
-return tripPrefetchCompleted(_that.token,_that.fromLocation,_that.toLocation,_that.routeState,_that.pricingState);case _ConfirmOrderPressed() when confirmOrderPressed != null:
+return tripPrefetchCompleted(_that.token,_that.stops,_that.routeState,_that.pricingState);case _ConfirmOrderPressed() when confirmOrderPressed != null:
 return confirmOrderPressed();case _ConfirmCarSelectionPressed() when confirmCarSelectionPressed != null:
 return confirmCarSelectionPressed();case _ConfirmPickupPointPressed() when confirmPickupPointPressed != null:
 return confirmPickupPointPressed();case _PickupConfirmationFeedbackCleared() when pickupConfirmationFeedbackCleared != null:
@@ -252,7 +256,7 @@ return confirmBookingDetailsPressed();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  getAllRequested,required TResult Function()  orderNowPressed,required TResult Function()  collapseRequested,required TResult Function()  mapPickCancelled,required TResult Function()  vehicleStepBackPressed,required TResult Function()  pickupPointBackPressed,required TResult Function( OrderLocationTarget target)  setOnMapPressed,required TResult Function( double latitude,  double longitude,  double zoom)  mapCameraTargetUpdated,required TResult Function()  confirmMapPointPressed,required TResult Function( String query)  fromQueryChanged,required TResult Function( String query)  toQueryChanged,required TResult Function()  fromLocationCleared,required TResult Function()  toLocationCleared,required TResult Function( OrderSavedLocationEntity location)  fromSuggestionSelected,required TResult Function( OrderSavedLocationEntity location)  toSuggestionSelected,required TResult Function( OrderLocationTarget target,  OrderSavedLocationEntity location)  savedLocationPinToggled,required TResult Function( String typeId)  carTypeToggled,required TResult Function( String value)  pickupStreetChanged,required TResult Function( String value)  pickupHouseNumberChanged,required TResult Function( int token,  OrderLocationEntity fromLocation,  OrderLocationEntity toLocation,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)  tripPrefetchCompleted,required TResult Function()  confirmOrderPressed,required TResult Function()  confirmCarSelectionPressed,required TResult Function()  confirmPickupPointPressed,required TResult Function()  pickupConfirmationFeedbackCleared,required TResult Function()  bookingDetailsBackPressed,required TResult Function( DateTime? time)  scheduleTimeChanged,required TResult Function( String methodId)  paymentMethodChanged,required TResult Function()  confirmBookingDetailsPressed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  getAllRequested,required TResult Function()  orderNowPressed,required TResult Function()  collapseRequested,required TResult Function()  mapPickCancelled,required TResult Function()  vehicleStepBackPressed,required TResult Function()  pickupPointBackPressed,required TResult Function()  setOnMapPressed,required TResult Function( double latitude,  double longitude,  double zoom)  mapCameraTargetUpdated,required TResult Function()  confirmMapPointPressed,required TResult Function( int index)  activeStopChanged,required TResult Function( int index,  String query)  stopQueryChanged,required TResult Function( int index)  stopCleared,required TResult Function( int index,  OrderSavedLocationEntity location)  stopSuggestionSelected,required TResult Function()  stopAdded,required TResult Function( int index)  stopRemoved,required TResult Function( int oldIndex,  int newIndex)  stopReordered,required TResult Function( int stopIndex,  OrderSavedLocationEntity location)  savedLocationPinToggled,required TResult Function( String typeId)  carTypeToggled,required TResult Function( String value)  pickupStreetChanged,required TResult Function( String value)  pickupHouseNumberChanged,required TResult Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)  tripPrefetchCompleted,required TResult Function()  confirmOrderPressed,required TResult Function()  confirmCarSelectionPressed,required TResult Function()  confirmPickupPointPressed,required TResult Function()  pickupConfirmationFeedbackCleared,required TResult Function()  bookingDetailsBackPressed,required TResult Function( DateTime? time)  scheduleTimeChanged,required TResult Function( String methodId)  paymentMethodChanged,required TResult Function()  confirmBookingDetailsPressed,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _GetAllRequested():
@@ -262,20 +266,21 @@ return collapseRequested();case _MapPickCancelled():
 return mapPickCancelled();case _VehicleStepBackPressed():
 return vehicleStepBackPressed();case _PickupPointBackPressed():
 return pickupPointBackPressed();case _SetOnMapPressed():
-return setOnMapPressed(_that.target);case _MapCameraTargetUpdated():
+return setOnMapPressed();case _MapCameraTargetUpdated():
 return mapCameraTargetUpdated(_that.latitude,_that.longitude,_that.zoom);case _ConfirmMapPointPressed():
-return confirmMapPointPressed();case _FromQueryChanged():
-return fromQueryChanged(_that.query);case _ToQueryChanged():
-return toQueryChanged(_that.query);case _FromLocationCleared():
-return fromLocationCleared();case _ToLocationCleared():
-return toLocationCleared();case _FromSuggestionSelected():
-return fromSuggestionSelected(_that.location);case _ToSuggestionSelected():
-return toSuggestionSelected(_that.location);case _SavedLocationPinToggled():
-return savedLocationPinToggled(_that.target,_that.location);case _CarTypeToggled():
+return confirmMapPointPressed();case _ActiveStopChanged():
+return activeStopChanged(_that.index);case _StopQueryChanged():
+return stopQueryChanged(_that.index,_that.query);case _StopCleared():
+return stopCleared(_that.index);case _StopSuggestionSelected():
+return stopSuggestionSelected(_that.index,_that.location);case _StopAdded():
+return stopAdded();case _StopRemoved():
+return stopRemoved(_that.index);case _StopReordered():
+return stopReordered(_that.oldIndex,_that.newIndex);case _SavedLocationPinToggled():
+return savedLocationPinToggled(_that.stopIndex,_that.location);case _CarTypeToggled():
 return carTypeToggled(_that.typeId);case _PickupStreetChanged():
 return pickupStreetChanged(_that.value);case _PickupHouseNumberChanged():
 return pickupHouseNumberChanged(_that.value);case _TripPrefetchCompleted():
-return tripPrefetchCompleted(_that.token,_that.fromLocation,_that.toLocation,_that.routeState,_that.pricingState);case _ConfirmOrderPressed():
+return tripPrefetchCompleted(_that.token,_that.stops,_that.routeState,_that.pricingState);case _ConfirmOrderPressed():
 return confirmOrderPressed();case _ConfirmCarSelectionPressed():
 return confirmCarSelectionPressed();case _ConfirmPickupPointPressed():
 return confirmPickupPointPressed();case _PickupConfirmationFeedbackCleared():
@@ -300,7 +305,7 @@ return confirmBookingDetailsPressed();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  getAllRequested,TResult? Function()?  orderNowPressed,TResult? Function()?  collapseRequested,TResult? Function()?  mapPickCancelled,TResult? Function()?  vehicleStepBackPressed,TResult? Function()?  pickupPointBackPressed,TResult? Function( OrderLocationTarget target)?  setOnMapPressed,TResult? Function( double latitude,  double longitude,  double zoom)?  mapCameraTargetUpdated,TResult? Function()?  confirmMapPointPressed,TResult? Function( String query)?  fromQueryChanged,TResult? Function( String query)?  toQueryChanged,TResult? Function()?  fromLocationCleared,TResult? Function()?  toLocationCleared,TResult? Function( OrderSavedLocationEntity location)?  fromSuggestionSelected,TResult? Function( OrderSavedLocationEntity location)?  toSuggestionSelected,TResult? Function( OrderLocationTarget target,  OrderSavedLocationEntity location)?  savedLocationPinToggled,TResult? Function( String typeId)?  carTypeToggled,TResult? Function( String value)?  pickupStreetChanged,TResult? Function( String value)?  pickupHouseNumberChanged,TResult? Function( int token,  OrderLocationEntity fromLocation,  OrderLocationEntity toLocation,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)?  tripPrefetchCompleted,TResult? Function()?  confirmOrderPressed,TResult? Function()?  confirmCarSelectionPressed,TResult? Function()?  confirmPickupPointPressed,TResult? Function()?  pickupConfirmationFeedbackCleared,TResult? Function()?  bookingDetailsBackPressed,TResult? Function( DateTime? time)?  scheduleTimeChanged,TResult? Function( String methodId)?  paymentMethodChanged,TResult? Function()?  confirmBookingDetailsPressed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  getAllRequested,TResult? Function()?  orderNowPressed,TResult? Function()?  collapseRequested,TResult? Function()?  mapPickCancelled,TResult? Function()?  vehicleStepBackPressed,TResult? Function()?  pickupPointBackPressed,TResult? Function()?  setOnMapPressed,TResult? Function( double latitude,  double longitude,  double zoom)?  mapCameraTargetUpdated,TResult? Function()?  confirmMapPointPressed,TResult? Function( int index)?  activeStopChanged,TResult? Function( int index,  String query)?  stopQueryChanged,TResult? Function( int index)?  stopCleared,TResult? Function( int index,  OrderSavedLocationEntity location)?  stopSuggestionSelected,TResult? Function()?  stopAdded,TResult? Function( int index)?  stopRemoved,TResult? Function( int oldIndex,  int newIndex)?  stopReordered,TResult? Function( int stopIndex,  OrderSavedLocationEntity location)?  savedLocationPinToggled,TResult? Function( String typeId)?  carTypeToggled,TResult? Function( String value)?  pickupStreetChanged,TResult? Function( String value)?  pickupHouseNumberChanged,TResult? Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)?  tripPrefetchCompleted,TResult? Function()?  confirmOrderPressed,TResult? Function()?  confirmCarSelectionPressed,TResult? Function()?  confirmPickupPointPressed,TResult? Function()?  pickupConfirmationFeedbackCleared,TResult? Function()?  bookingDetailsBackPressed,TResult? Function( DateTime? time)?  scheduleTimeChanged,TResult? Function( String methodId)?  paymentMethodChanged,TResult? Function()?  confirmBookingDetailsPressed,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _GetAllRequested() when getAllRequested != null:
@@ -310,20 +315,21 @@ return collapseRequested();case _MapPickCancelled() when mapPickCancelled != nul
 return mapPickCancelled();case _VehicleStepBackPressed() when vehicleStepBackPressed != null:
 return vehicleStepBackPressed();case _PickupPointBackPressed() when pickupPointBackPressed != null:
 return pickupPointBackPressed();case _SetOnMapPressed() when setOnMapPressed != null:
-return setOnMapPressed(_that.target);case _MapCameraTargetUpdated() when mapCameraTargetUpdated != null:
+return setOnMapPressed();case _MapCameraTargetUpdated() when mapCameraTargetUpdated != null:
 return mapCameraTargetUpdated(_that.latitude,_that.longitude,_that.zoom);case _ConfirmMapPointPressed() when confirmMapPointPressed != null:
-return confirmMapPointPressed();case _FromQueryChanged() when fromQueryChanged != null:
-return fromQueryChanged(_that.query);case _ToQueryChanged() when toQueryChanged != null:
-return toQueryChanged(_that.query);case _FromLocationCleared() when fromLocationCleared != null:
-return fromLocationCleared();case _ToLocationCleared() when toLocationCleared != null:
-return toLocationCleared();case _FromSuggestionSelected() when fromSuggestionSelected != null:
-return fromSuggestionSelected(_that.location);case _ToSuggestionSelected() when toSuggestionSelected != null:
-return toSuggestionSelected(_that.location);case _SavedLocationPinToggled() when savedLocationPinToggled != null:
-return savedLocationPinToggled(_that.target,_that.location);case _CarTypeToggled() when carTypeToggled != null:
+return confirmMapPointPressed();case _ActiveStopChanged() when activeStopChanged != null:
+return activeStopChanged(_that.index);case _StopQueryChanged() when stopQueryChanged != null:
+return stopQueryChanged(_that.index,_that.query);case _StopCleared() when stopCleared != null:
+return stopCleared(_that.index);case _StopSuggestionSelected() when stopSuggestionSelected != null:
+return stopSuggestionSelected(_that.index,_that.location);case _StopAdded() when stopAdded != null:
+return stopAdded();case _StopRemoved() when stopRemoved != null:
+return stopRemoved(_that.index);case _StopReordered() when stopReordered != null:
+return stopReordered(_that.oldIndex,_that.newIndex);case _SavedLocationPinToggled() when savedLocationPinToggled != null:
+return savedLocationPinToggled(_that.stopIndex,_that.location);case _CarTypeToggled() when carTypeToggled != null:
 return carTypeToggled(_that.typeId);case _PickupStreetChanged() when pickupStreetChanged != null:
 return pickupStreetChanged(_that.value);case _PickupHouseNumberChanged() when pickupHouseNumberChanged != null:
 return pickupHouseNumberChanged(_that.value);case _TripPrefetchCompleted() when tripPrefetchCompleted != null:
-return tripPrefetchCompleted(_that.token,_that.fromLocation,_that.toLocation,_that.routeState,_that.pricingState);case _ConfirmOrderPressed() when confirmOrderPressed != null:
+return tripPrefetchCompleted(_that.token,_that.stops,_that.routeState,_that.pricingState);case _ConfirmOrderPressed() when confirmOrderPressed != null:
 return confirmOrderPressed();case _ConfirmCarSelectionPressed() when confirmCarSelectionPressed != null:
 return confirmCarSelectionPressed();case _ConfirmPickupPointPressed() when confirmPickupPointPressed != null:
 return confirmPickupPointPressed();case _PickupConfirmationFeedbackCleared() when pickupConfirmationFeedbackCleared != null:
@@ -567,67 +573,33 @@ String toString() {
 
 
 class _SetOnMapPressed implements OrderEvent {
-  const _SetOnMapPressed(this.target);
+  const _SetOnMapPressed();
   
 
- final  OrderLocationTarget target;
 
-/// Create a copy of OrderEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$SetOnMapPressedCopyWith<_SetOnMapPressed> get copyWith => __$SetOnMapPressedCopyWithImpl<_SetOnMapPressed>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SetOnMapPressed&&(identical(other.target, target) || other.target == target));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SetOnMapPressed);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,target);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'OrderEvent.setOnMapPressed(target: $target)';
+  return 'OrderEvent.setOnMapPressed()';
 }
 
 
 }
 
-/// @nodoc
-abstract mixin class _$SetOnMapPressedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
-  factory _$SetOnMapPressedCopyWith(_SetOnMapPressed value, $Res Function(_SetOnMapPressed) _then) = __$SetOnMapPressedCopyWithImpl;
-@useResult
-$Res call({
- OrderLocationTarget target
-});
 
 
-
-
-}
-/// @nodoc
-class __$SetOnMapPressedCopyWithImpl<$Res>
-    implements _$SetOnMapPressedCopyWith<$Res> {
-  __$SetOnMapPressedCopyWithImpl(this._self, this._then);
-
-  final _SetOnMapPressed _self;
-  final $Res Function(_SetOnMapPressed) _then;
-
-/// Create a copy of OrderEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? target = null,}) {
-  return _then(_SetOnMapPressed(
-null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
-as OrderLocationTarget,
-  ));
-}
-
-
-}
 
 /// @nodoc
 
@@ -734,43 +706,43 @@ String toString() {
 /// @nodoc
 
 
-class _FromQueryChanged implements OrderEvent {
-  const _FromQueryChanged(this.query);
+class _ActiveStopChanged implements OrderEvent {
+  const _ActiveStopChanged(this.index);
   
 
- final  String query;
+ final  int index;
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FromQueryChangedCopyWith<_FromQueryChanged> get copyWith => __$FromQueryChangedCopyWithImpl<_FromQueryChanged>(this, _$identity);
+_$ActiveStopChangedCopyWith<_ActiveStopChanged> get copyWith => __$ActiveStopChangedCopyWithImpl<_ActiveStopChanged>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FromQueryChanged&&(identical(other.query, query) || other.query == query));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActiveStopChanged&&(identical(other.index, index) || other.index == index));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,query);
+int get hashCode => Object.hash(runtimeType,index);
 
 @override
 String toString() {
-  return 'OrderEvent.fromQueryChanged(query: $query)';
+  return 'OrderEvent.activeStopChanged(index: $index)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$FromQueryChangedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
-  factory _$FromQueryChangedCopyWith(_FromQueryChanged value, $Res Function(_FromQueryChanged) _then) = __$FromQueryChangedCopyWithImpl;
+abstract mixin class _$ActiveStopChangedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
+  factory _$ActiveStopChangedCopyWith(_ActiveStopChanged value, $Res Function(_ActiveStopChanged) _then) = __$ActiveStopChangedCopyWithImpl;
 @useResult
 $Res call({
- String query
+ int index
 });
 
 
@@ -778,18 +750,86 @@ $Res call({
 
 }
 /// @nodoc
-class __$FromQueryChangedCopyWithImpl<$Res>
-    implements _$FromQueryChangedCopyWith<$Res> {
-  __$FromQueryChangedCopyWithImpl(this._self, this._then);
+class __$ActiveStopChangedCopyWithImpl<$Res>
+    implements _$ActiveStopChangedCopyWith<$Res> {
+  __$ActiveStopChangedCopyWithImpl(this._self, this._then);
 
-  final _FromQueryChanged _self;
-  final $Res Function(_FromQueryChanged) _then;
+  final _ActiveStopChanged _self;
+  final $Res Function(_ActiveStopChanged) _then;
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? query = null,}) {
-  return _then(_FromQueryChanged(
-null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? index = null,}) {
+  return _then(_ActiveStopChanged(
+null == index ? _self.index : index // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _StopQueryChanged implements OrderEvent {
+  const _StopQueryChanged(this.index, this.query);
+  
+
+ final  int index;
+ final  String query;
+
+/// Create a copy of OrderEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StopQueryChangedCopyWith<_StopQueryChanged> get copyWith => __$StopQueryChangedCopyWithImpl<_StopQueryChanged>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StopQueryChanged&&(identical(other.index, index) || other.index == index)&&(identical(other.query, query) || other.query == query));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,index,query);
+
+@override
+String toString() {
+  return 'OrderEvent.stopQueryChanged(index: $index, query: $query)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$StopQueryChangedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
+  factory _$StopQueryChangedCopyWith(_StopQueryChanged value, $Res Function(_StopQueryChanged) _then) = __$StopQueryChangedCopyWithImpl;
+@useResult
+$Res call({
+ int index, String query
+});
+
+
+
+
+}
+/// @nodoc
+class __$StopQueryChangedCopyWithImpl<$Res>
+    implements _$StopQueryChangedCopyWith<$Res> {
+  __$StopQueryChangedCopyWithImpl(this._self, this._then);
+
+  final _StopQueryChanged _self;
+  final $Res Function(_StopQueryChanged) _then;
+
+/// Create a copy of OrderEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? index = null,Object? query = null,}) {
+  return _then(_StopQueryChanged(
+null == index ? _self.index : index // ignore: cast_nullable_to_non_nullable
+as int,null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -800,43 +840,43 @@ as String,
 /// @nodoc
 
 
-class _ToQueryChanged implements OrderEvent {
-  const _ToQueryChanged(this.query);
+class _StopCleared implements OrderEvent {
+  const _StopCleared(this.index);
   
 
- final  String query;
+ final  int index;
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ToQueryChangedCopyWith<_ToQueryChanged> get copyWith => __$ToQueryChangedCopyWithImpl<_ToQueryChanged>(this, _$identity);
+_$StopClearedCopyWith<_StopCleared> get copyWith => __$StopClearedCopyWithImpl<_StopCleared>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ToQueryChanged&&(identical(other.query, query) || other.query == query));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StopCleared&&(identical(other.index, index) || other.index == index));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,query);
+int get hashCode => Object.hash(runtimeType,index);
 
 @override
 String toString() {
-  return 'OrderEvent.toQueryChanged(query: $query)';
+  return 'OrderEvent.stopCleared(index: $index)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$ToQueryChangedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
-  factory _$ToQueryChangedCopyWith(_ToQueryChanged value, $Res Function(_ToQueryChanged) _then) = __$ToQueryChangedCopyWithImpl;
+abstract mixin class _$StopClearedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
+  factory _$StopClearedCopyWith(_StopCleared value, $Res Function(_StopCleared) _then) = __$StopClearedCopyWithImpl;
 @useResult
 $Res call({
- String query
+ int index
 });
 
 
@@ -844,19 +884,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$ToQueryChangedCopyWithImpl<$Res>
-    implements _$ToQueryChangedCopyWith<$Res> {
-  __$ToQueryChangedCopyWithImpl(this._self, this._then);
+class __$StopClearedCopyWithImpl<$Res>
+    implements _$StopClearedCopyWith<$Res> {
+  __$StopClearedCopyWithImpl(this._self, this._then);
 
-  final _ToQueryChanged _self;
-  final $Res Function(_ToQueryChanged) _then;
+  final _StopCleared _self;
+  final $Res Function(_StopCleared) _then;
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? query = null,}) {
-  return _then(_ToQueryChanged(
-null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
-as String,
+@pragma('vm:prefer-inline') $Res call({Object? index = null,}) {
+  return _then(_StopCleared(
+null == index ? _self.index : index // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -866,107 +906,44 @@ as String,
 /// @nodoc
 
 
-class _FromLocationCleared implements OrderEvent {
-  const _FromLocationCleared();
+class _StopSuggestionSelected implements OrderEvent {
+  const _StopSuggestionSelected(this.index, this.location);
   
 
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FromLocationCleared);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'OrderEvent.fromLocationCleared()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class _ToLocationCleared implements OrderEvent {
-  const _ToLocationCleared();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ToLocationCleared);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'OrderEvent.toLocationCleared()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class _FromSuggestionSelected implements OrderEvent {
-  const _FromSuggestionSelected(this.location);
-  
-
+ final  int index;
  final  OrderSavedLocationEntity location;
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FromSuggestionSelectedCopyWith<_FromSuggestionSelected> get copyWith => __$FromSuggestionSelectedCopyWithImpl<_FromSuggestionSelected>(this, _$identity);
+_$StopSuggestionSelectedCopyWith<_StopSuggestionSelected> get copyWith => __$StopSuggestionSelectedCopyWithImpl<_StopSuggestionSelected>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FromSuggestionSelected&&(identical(other.location, location) || other.location == location));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StopSuggestionSelected&&(identical(other.index, index) || other.index == index)&&(identical(other.location, location) || other.location == location));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,location);
+int get hashCode => Object.hash(runtimeType,index,location);
 
 @override
 String toString() {
-  return 'OrderEvent.fromSuggestionSelected(location: $location)';
+  return 'OrderEvent.stopSuggestionSelected(index: $index, location: $location)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$FromSuggestionSelectedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
-  factory _$FromSuggestionSelectedCopyWith(_FromSuggestionSelected value, $Res Function(_FromSuggestionSelected) _then) = __$FromSuggestionSelectedCopyWithImpl;
+abstract mixin class _$StopSuggestionSelectedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
+  factory _$StopSuggestionSelectedCopyWith(_StopSuggestionSelected value, $Res Function(_StopSuggestionSelected) _then) = __$StopSuggestionSelectedCopyWithImpl;
 @useResult
 $Res call({
- OrderSavedLocationEntity location
+ int index, OrderSavedLocationEntity location
 });
 
 
@@ -974,18 +951,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$FromSuggestionSelectedCopyWithImpl<$Res>
-    implements _$FromSuggestionSelectedCopyWith<$Res> {
-  __$FromSuggestionSelectedCopyWithImpl(this._self, this._then);
+class __$StopSuggestionSelectedCopyWithImpl<$Res>
+    implements _$StopSuggestionSelectedCopyWith<$Res> {
+  __$StopSuggestionSelectedCopyWithImpl(this._self, this._then);
 
-  final _FromSuggestionSelected _self;
-  final $Res Function(_FromSuggestionSelected) _then;
+  final _StopSuggestionSelected _self;
+  final $Res Function(_StopSuggestionSelected) _then;
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? location = null,}) {
-  return _then(_FromSuggestionSelected(
-null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? index = null,Object? location = null,}) {
+  return _then(_StopSuggestionSelected(
+null == index ? _self.index : index // ignore: cast_nullable_to_non_nullable
+as int,null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as OrderSavedLocationEntity,
   ));
 }
@@ -996,43 +974,75 @@ as OrderSavedLocationEntity,
 /// @nodoc
 
 
-class _ToSuggestionSelected implements OrderEvent {
-  const _ToSuggestionSelected(this.location);
+class _StopAdded implements OrderEvent {
+  const _StopAdded();
   
 
- final  OrderSavedLocationEntity location;
 
-/// Create a copy of OrderEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$ToSuggestionSelectedCopyWith<_ToSuggestionSelected> get copyWith => __$ToSuggestionSelectedCopyWithImpl<_ToSuggestionSelected>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ToSuggestionSelected&&(identical(other.location, location) || other.location == location));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StopAdded);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,location);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'OrderEvent.toSuggestionSelected(location: $location)';
+  return 'OrderEvent.stopAdded()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _StopRemoved implements OrderEvent {
+  const _StopRemoved(this.index);
+  
+
+ final  int index;
+
+/// Create a copy of OrderEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StopRemovedCopyWith<_StopRemoved> get copyWith => __$StopRemovedCopyWithImpl<_StopRemoved>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StopRemoved&&(identical(other.index, index) || other.index == index));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,index);
+
+@override
+String toString() {
+  return 'OrderEvent.stopRemoved(index: $index)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$ToSuggestionSelectedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
-  factory _$ToSuggestionSelectedCopyWith(_ToSuggestionSelected value, $Res Function(_ToSuggestionSelected) _then) = __$ToSuggestionSelectedCopyWithImpl;
+abstract mixin class _$StopRemovedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
+  factory _$StopRemovedCopyWith(_StopRemoved value, $Res Function(_StopRemoved) _then) = __$StopRemovedCopyWithImpl;
 @useResult
 $Res call({
- OrderSavedLocationEntity location
+ int index
 });
 
 
@@ -1040,19 +1050,87 @@ $Res call({
 
 }
 /// @nodoc
-class __$ToSuggestionSelectedCopyWithImpl<$Res>
-    implements _$ToSuggestionSelectedCopyWith<$Res> {
-  __$ToSuggestionSelectedCopyWithImpl(this._self, this._then);
+class __$StopRemovedCopyWithImpl<$Res>
+    implements _$StopRemovedCopyWith<$Res> {
+  __$StopRemovedCopyWithImpl(this._self, this._then);
 
-  final _ToSuggestionSelected _self;
-  final $Res Function(_ToSuggestionSelected) _then;
+  final _StopRemoved _self;
+  final $Res Function(_StopRemoved) _then;
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? location = null,}) {
-  return _then(_ToSuggestionSelected(
-null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
-as OrderSavedLocationEntity,
+@pragma('vm:prefer-inline') $Res call({Object? index = null,}) {
+  return _then(_StopRemoved(
+null == index ? _self.index : index // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _StopReordered implements OrderEvent {
+  const _StopReordered(this.oldIndex, this.newIndex);
+  
+
+ final  int oldIndex;
+ final  int newIndex;
+
+/// Create a copy of OrderEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StopReorderedCopyWith<_StopReordered> get copyWith => __$StopReorderedCopyWithImpl<_StopReordered>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StopReordered&&(identical(other.oldIndex, oldIndex) || other.oldIndex == oldIndex)&&(identical(other.newIndex, newIndex) || other.newIndex == newIndex));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,oldIndex,newIndex);
+
+@override
+String toString() {
+  return 'OrderEvent.stopReordered(oldIndex: $oldIndex, newIndex: $newIndex)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$StopReorderedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
+  factory _$StopReorderedCopyWith(_StopReordered value, $Res Function(_StopReordered) _then) = __$StopReorderedCopyWithImpl;
+@useResult
+$Res call({
+ int oldIndex, int newIndex
+});
+
+
+
+
+}
+/// @nodoc
+class __$StopReorderedCopyWithImpl<$Res>
+    implements _$StopReorderedCopyWith<$Res> {
+  __$StopReorderedCopyWithImpl(this._self, this._then);
+
+  final _StopReordered _self;
+  final $Res Function(_StopReordered) _then;
+
+/// Create a copy of OrderEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? oldIndex = null,Object? newIndex = null,}) {
+  return _then(_StopReordered(
+null == oldIndex ? _self.oldIndex : oldIndex // ignore: cast_nullable_to_non_nullable
+as int,null == newIndex ? _self.newIndex : newIndex // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -1063,10 +1141,10 @@ as OrderSavedLocationEntity,
 
 
 class _SavedLocationPinToggled implements OrderEvent {
-  const _SavedLocationPinToggled({required this.target, required this.location});
+  const _SavedLocationPinToggled({required this.stopIndex, required this.location});
   
 
- final  OrderLocationTarget target;
+ final  int stopIndex;
  final  OrderSavedLocationEntity location;
 
 /// Create a copy of OrderEvent
@@ -1079,16 +1157,16 @@ _$SavedLocationPinToggledCopyWith<_SavedLocationPinToggled> get copyWith => __$S
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SavedLocationPinToggled&&(identical(other.target, target) || other.target == target)&&(identical(other.location, location) || other.location == location));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SavedLocationPinToggled&&(identical(other.stopIndex, stopIndex) || other.stopIndex == stopIndex)&&(identical(other.location, location) || other.location == location));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,target,location);
+int get hashCode => Object.hash(runtimeType,stopIndex,location);
 
 @override
 String toString() {
-  return 'OrderEvent.savedLocationPinToggled(target: $target, location: $location)';
+  return 'OrderEvent.savedLocationPinToggled(stopIndex: $stopIndex, location: $location)';
 }
 
 
@@ -1099,7 +1177,7 @@ abstract mixin class _$SavedLocationPinToggledCopyWith<$Res> implements $OrderEv
   factory _$SavedLocationPinToggledCopyWith(_SavedLocationPinToggled value, $Res Function(_SavedLocationPinToggled) _then) = __$SavedLocationPinToggledCopyWithImpl;
 @useResult
 $Res call({
- OrderLocationTarget target, OrderSavedLocationEntity location
+ int stopIndex, OrderSavedLocationEntity location
 });
 
 
@@ -1116,10 +1194,10 @@ class __$SavedLocationPinToggledCopyWithImpl<$Res>
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? target = null,Object? location = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? stopIndex = null,Object? location = null,}) {
   return _then(_SavedLocationPinToggled(
-target: null == target ? _self.target : target // ignore: cast_nullable_to_non_nullable
-as OrderLocationTarget,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+stopIndex: null == stopIndex ? _self.stopIndex : stopIndex // ignore: cast_nullable_to_non_nullable
+as int,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as OrderSavedLocationEntity,
   ));
 }
@@ -1329,12 +1407,17 @@ as String,
 
 
 class _TripPrefetchCompleted implements OrderEvent {
-   _TripPrefetchCompleted({required this.token, required this.fromLocation, required this.toLocation, required this.routeState, required this.pricingState});
+   _TripPrefetchCompleted({required this.token, required final  List<OrderLocationEntity> stops, required this.routeState, required this.pricingState}): _stops = stops;
   
 
  final  int token;
- final  OrderLocationEntity fromLocation;
- final  OrderLocationEntity toLocation;
+ final  List<OrderLocationEntity> _stops;
+ List<OrderLocationEntity> get stops {
+  if (_stops is EqualUnmodifiableListView) return _stops;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_stops);
+}
+
  final  BlocStatus<OrderTripRouteEntity> routeState;
  final  BlocStatus<List<OrderTripCarOptionEntity>> pricingState;
 
@@ -1348,16 +1431,16 @@ _$TripPrefetchCompletedCopyWith<_TripPrefetchCompleted> get copyWith => __$TripP
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripPrefetchCompleted&&(identical(other.token, token) || other.token == token)&&(identical(other.fromLocation, fromLocation) || other.fromLocation == fromLocation)&&(identical(other.toLocation, toLocation) || other.toLocation == toLocation)&&(identical(other.routeState, routeState) || other.routeState == routeState)&&(identical(other.pricingState, pricingState) || other.pricingState == pricingState));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripPrefetchCompleted&&(identical(other.token, token) || other.token == token)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.routeState, routeState) || other.routeState == routeState)&&(identical(other.pricingState, pricingState) || other.pricingState == pricingState));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,token,fromLocation,toLocation,routeState,pricingState);
+int get hashCode => Object.hash(runtimeType,token,const DeepCollectionEquality().hash(_stops),routeState,pricingState);
 
 @override
 String toString() {
-  return 'OrderEvent.tripPrefetchCompleted(token: $token, fromLocation: $fromLocation, toLocation: $toLocation, routeState: $routeState, pricingState: $pricingState)';
+  return 'OrderEvent.tripPrefetchCompleted(token: $token, stops: $stops, routeState: $routeState, pricingState: $pricingState)';
 }
 
 
@@ -1368,7 +1451,7 @@ abstract mixin class _$TripPrefetchCompletedCopyWith<$Res> implements $OrderEven
   factory _$TripPrefetchCompletedCopyWith(_TripPrefetchCompleted value, $Res Function(_TripPrefetchCompleted) _then) = __$TripPrefetchCompletedCopyWithImpl;
 @useResult
 $Res call({
- int token, OrderLocationEntity fromLocation, OrderLocationEntity toLocation, BlocStatus<OrderTripRouteEntity> routeState, BlocStatus<List<OrderTripCarOptionEntity>> pricingState
+ int token, List<OrderLocationEntity> stops, BlocStatus<OrderTripRouteEntity> routeState, BlocStatus<List<OrderTripCarOptionEntity>> pricingState
 });
 
 
@@ -1385,12 +1468,11 @@ class __$TripPrefetchCompletedCopyWithImpl<$Res>
 
 /// Create a copy of OrderEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? token = null,Object? fromLocation = null,Object? toLocation = null,Object? routeState = null,Object? pricingState = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? token = null,Object? stops = null,Object? routeState = null,Object? pricingState = null,}) {
   return _then(_TripPrefetchCompleted(
 token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
-as int,fromLocation: null == fromLocation ? _self.fromLocation : fromLocation // ignore: cast_nullable_to_non_nullable
-as OrderLocationEntity,toLocation: null == toLocation ? _self.toLocation : toLocation // ignore: cast_nullable_to_non_nullable
-as OrderLocationEntity,routeState: null == routeState ? _self.routeState : routeState // ignore: cast_nullable_to_non_nullable
+as int,stops: null == stops ? _self._stops : stops // ignore: cast_nullable_to_non_nullable
+as List<OrderLocationEntity>,routeState: null == routeState ? _self.routeState : routeState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<OrderTripRouteEntity>,pricingState: null == pricingState ? _self.pricingState : pricingState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<List<OrderTripCarOptionEntity>>,
   ));
@@ -1744,7 +1826,7 @@ String toString() {
 /// @nodoc
 mixin _$OrderState {
 
- BlocStatus<List<OrderEntity>> get getAllState; OrderSheetMode get sheetMode; OrderExpandedStep get expandedStep; OrderLocationTarget get mapPickingTarget; double get mapCameraLatitude; double get mapCameraLongitude; double get mapCameraZoom; BlocStatus<OrderLocationEntity> get fromLocationState; BlocStatus<OrderLocationEntity> get toLocationState; BlocStatus<List<OrderSavedLocationEntity>> get savedLocationsState; BlocStatus<List<OrderSavedLocationEntity>> get fromSuggestionsState; BlocStatus<List<OrderSavedLocationEntity>> get toSuggestionsState; String get fromQuery; String get toQuery; BlocStatus<OrderLocationEntity> get pickupPointState; String get pickupStreetName; String get pickupHouseNumber; BlocStatus<String> get pickupConfirmationFeedbackState; BlocStatus<OrderTripRouteEntity> get tripRouteState; BlocStatus<List<OrderTripCarOptionEntity>> get tripCarOptionsState; BlocStatus<OrderTripRouteEntity> get prefetchedTripRouteState; BlocStatus<List<OrderTripCarOptionEntity>> get prefetchedTripCarOptionsState; OrderLocationEntity? get prefetchedFromLocation; OrderLocationEntity? get prefetchedToLocation; String? get selectedCarTypeId; String? get selectedQuoteId; DateTime? get scheduledAt; String? get paymentMethodId; BlocStatus<OrderTripResponseEntity> get tripRequestStatus;
+ BlocStatus<List<OrderEntity>> get getAllState; OrderSheetMode get sheetMode; OrderExpandedStep get expandedStep; OrderLocationTarget get mapPickingTarget; double get mapCameraLatitude; double get mapCameraLongitude; double get mapCameraZoom; List<OrderLocationEntity?> get stops; List<String> get stopQueries; List<BlocStatus<List<OrderSavedLocationEntity>>> get stopSuggestionsState; int get activeStopIndex; BlocStatus<List<OrderSavedLocationEntity>> get savedLocationsState; BlocStatus<OrderLocationEntity> get pickupPointState; String get pickupStreetName; String get pickupHouseNumber; BlocStatus<String> get pickupConfirmationFeedbackState; BlocStatus<OrderTripRouteEntity> get tripRouteState; BlocStatus<List<OrderTripCarOptionEntity>> get tripCarOptionsState; BlocStatus<OrderTripRouteEntity> get prefetchedTripRouteState; BlocStatus<List<OrderTripCarOptionEntity>> get prefetchedTripCarOptionsState; List<OrderLocationEntity> get prefetchedStops; String? get selectedCarTypeId; String? get selectedQuoteId; DateTime? get scheduledAt; String? get paymentMethodId; BlocStatus<OrderTripResponseEntity> get tripRequestStatus;
 /// Create a copy of OrderState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1755,16 +1837,16 @@ $OrderStateCopyWith<OrderState> get copyWith => _$OrderStateCopyWithImpl<OrderSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderState&&(identical(other.getAllState, getAllState) || other.getAllState == getAllState)&&(identical(other.sheetMode, sheetMode) || other.sheetMode == sheetMode)&&(identical(other.expandedStep, expandedStep) || other.expandedStep == expandedStep)&&(identical(other.mapPickingTarget, mapPickingTarget) || other.mapPickingTarget == mapPickingTarget)&&(identical(other.mapCameraLatitude, mapCameraLatitude) || other.mapCameraLatitude == mapCameraLatitude)&&(identical(other.mapCameraLongitude, mapCameraLongitude) || other.mapCameraLongitude == mapCameraLongitude)&&(identical(other.mapCameraZoom, mapCameraZoom) || other.mapCameraZoom == mapCameraZoom)&&(identical(other.fromLocationState, fromLocationState) || other.fromLocationState == fromLocationState)&&(identical(other.toLocationState, toLocationState) || other.toLocationState == toLocationState)&&(identical(other.savedLocationsState, savedLocationsState) || other.savedLocationsState == savedLocationsState)&&(identical(other.fromSuggestionsState, fromSuggestionsState) || other.fromSuggestionsState == fromSuggestionsState)&&(identical(other.toSuggestionsState, toSuggestionsState) || other.toSuggestionsState == toSuggestionsState)&&(identical(other.fromQuery, fromQuery) || other.fromQuery == fromQuery)&&(identical(other.toQuery, toQuery) || other.toQuery == toQuery)&&(identical(other.pickupPointState, pickupPointState) || other.pickupPointState == pickupPointState)&&(identical(other.pickupStreetName, pickupStreetName) || other.pickupStreetName == pickupStreetName)&&(identical(other.pickupHouseNumber, pickupHouseNumber) || other.pickupHouseNumber == pickupHouseNumber)&&(identical(other.pickupConfirmationFeedbackState, pickupConfirmationFeedbackState) || other.pickupConfirmationFeedbackState == pickupConfirmationFeedbackState)&&(identical(other.tripRouteState, tripRouteState) || other.tripRouteState == tripRouteState)&&(identical(other.tripCarOptionsState, tripCarOptionsState) || other.tripCarOptionsState == tripCarOptionsState)&&(identical(other.prefetchedTripRouteState, prefetchedTripRouteState) || other.prefetchedTripRouteState == prefetchedTripRouteState)&&(identical(other.prefetchedTripCarOptionsState, prefetchedTripCarOptionsState) || other.prefetchedTripCarOptionsState == prefetchedTripCarOptionsState)&&(identical(other.prefetchedFromLocation, prefetchedFromLocation) || other.prefetchedFromLocation == prefetchedFromLocation)&&(identical(other.prefetchedToLocation, prefetchedToLocation) || other.prefetchedToLocation == prefetchedToLocation)&&(identical(other.selectedCarTypeId, selectedCarTypeId) || other.selectedCarTypeId == selectedCarTypeId)&&(identical(other.selectedQuoteId, selectedQuoteId) || other.selectedQuoteId == selectedQuoteId)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.paymentMethodId, paymentMethodId) || other.paymentMethodId == paymentMethodId)&&(identical(other.tripRequestStatus, tripRequestStatus) || other.tripRequestStatus == tripRequestStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderState&&(identical(other.getAllState, getAllState) || other.getAllState == getAllState)&&(identical(other.sheetMode, sheetMode) || other.sheetMode == sheetMode)&&(identical(other.expandedStep, expandedStep) || other.expandedStep == expandedStep)&&(identical(other.mapPickingTarget, mapPickingTarget) || other.mapPickingTarget == mapPickingTarget)&&(identical(other.mapCameraLatitude, mapCameraLatitude) || other.mapCameraLatitude == mapCameraLatitude)&&(identical(other.mapCameraLongitude, mapCameraLongitude) || other.mapCameraLongitude == mapCameraLongitude)&&(identical(other.mapCameraZoom, mapCameraZoom) || other.mapCameraZoom == mapCameraZoom)&&const DeepCollectionEquality().equals(other.stops, stops)&&const DeepCollectionEquality().equals(other.stopQueries, stopQueries)&&const DeepCollectionEquality().equals(other.stopSuggestionsState, stopSuggestionsState)&&(identical(other.activeStopIndex, activeStopIndex) || other.activeStopIndex == activeStopIndex)&&(identical(other.savedLocationsState, savedLocationsState) || other.savedLocationsState == savedLocationsState)&&(identical(other.pickupPointState, pickupPointState) || other.pickupPointState == pickupPointState)&&(identical(other.pickupStreetName, pickupStreetName) || other.pickupStreetName == pickupStreetName)&&(identical(other.pickupHouseNumber, pickupHouseNumber) || other.pickupHouseNumber == pickupHouseNumber)&&(identical(other.pickupConfirmationFeedbackState, pickupConfirmationFeedbackState) || other.pickupConfirmationFeedbackState == pickupConfirmationFeedbackState)&&(identical(other.tripRouteState, tripRouteState) || other.tripRouteState == tripRouteState)&&(identical(other.tripCarOptionsState, tripCarOptionsState) || other.tripCarOptionsState == tripCarOptionsState)&&(identical(other.prefetchedTripRouteState, prefetchedTripRouteState) || other.prefetchedTripRouteState == prefetchedTripRouteState)&&(identical(other.prefetchedTripCarOptionsState, prefetchedTripCarOptionsState) || other.prefetchedTripCarOptionsState == prefetchedTripCarOptionsState)&&const DeepCollectionEquality().equals(other.prefetchedStops, prefetchedStops)&&(identical(other.selectedCarTypeId, selectedCarTypeId) || other.selectedCarTypeId == selectedCarTypeId)&&(identical(other.selectedQuoteId, selectedQuoteId) || other.selectedQuoteId == selectedQuoteId)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.paymentMethodId, paymentMethodId) || other.paymentMethodId == paymentMethodId)&&(identical(other.tripRequestStatus, tripRequestStatus) || other.tripRequestStatus == tripRequestStatus));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,getAllState,sheetMode,expandedStep,mapPickingTarget,mapCameraLatitude,mapCameraLongitude,mapCameraZoom,fromLocationState,toLocationState,savedLocationsState,fromSuggestionsState,toSuggestionsState,fromQuery,toQuery,pickupPointState,pickupStreetName,pickupHouseNumber,pickupConfirmationFeedbackState,tripRouteState,tripCarOptionsState,prefetchedTripRouteState,prefetchedTripCarOptionsState,prefetchedFromLocation,prefetchedToLocation,selectedCarTypeId,selectedQuoteId,scheduledAt,paymentMethodId,tripRequestStatus]);
+int get hashCode => Object.hashAll([runtimeType,getAllState,sheetMode,expandedStep,mapPickingTarget,mapCameraLatitude,mapCameraLongitude,mapCameraZoom,const DeepCollectionEquality().hash(stops),const DeepCollectionEquality().hash(stopQueries),const DeepCollectionEquality().hash(stopSuggestionsState),activeStopIndex,savedLocationsState,pickupPointState,pickupStreetName,pickupHouseNumber,pickupConfirmationFeedbackState,tripRouteState,tripCarOptionsState,prefetchedTripRouteState,prefetchedTripCarOptionsState,const DeepCollectionEquality().hash(prefetchedStops),selectedCarTypeId,selectedQuoteId,scheduledAt,paymentMethodId,tripRequestStatus]);
 
 @override
 String toString() {
-  return 'OrderState(getAllState: $getAllState, sheetMode: $sheetMode, expandedStep: $expandedStep, mapPickingTarget: $mapPickingTarget, mapCameraLatitude: $mapCameraLatitude, mapCameraLongitude: $mapCameraLongitude, mapCameraZoom: $mapCameraZoom, fromLocationState: $fromLocationState, toLocationState: $toLocationState, savedLocationsState: $savedLocationsState, fromSuggestionsState: $fromSuggestionsState, toSuggestionsState: $toSuggestionsState, fromQuery: $fromQuery, toQuery: $toQuery, pickupPointState: $pickupPointState, pickupStreetName: $pickupStreetName, pickupHouseNumber: $pickupHouseNumber, pickupConfirmationFeedbackState: $pickupConfirmationFeedbackState, tripRouteState: $tripRouteState, tripCarOptionsState: $tripCarOptionsState, prefetchedTripRouteState: $prefetchedTripRouteState, prefetchedTripCarOptionsState: $prefetchedTripCarOptionsState, prefetchedFromLocation: $prefetchedFromLocation, prefetchedToLocation: $prefetchedToLocation, selectedCarTypeId: $selectedCarTypeId, selectedQuoteId: $selectedQuoteId, scheduledAt: $scheduledAt, paymentMethodId: $paymentMethodId, tripRequestStatus: $tripRequestStatus)';
+  return 'OrderState(getAllState: $getAllState, sheetMode: $sheetMode, expandedStep: $expandedStep, mapPickingTarget: $mapPickingTarget, mapCameraLatitude: $mapCameraLatitude, mapCameraLongitude: $mapCameraLongitude, mapCameraZoom: $mapCameraZoom, stops: $stops, stopQueries: $stopQueries, stopSuggestionsState: $stopSuggestionsState, activeStopIndex: $activeStopIndex, savedLocationsState: $savedLocationsState, pickupPointState: $pickupPointState, pickupStreetName: $pickupStreetName, pickupHouseNumber: $pickupHouseNumber, pickupConfirmationFeedbackState: $pickupConfirmationFeedbackState, tripRouteState: $tripRouteState, tripCarOptionsState: $tripCarOptionsState, prefetchedTripRouteState: $prefetchedTripRouteState, prefetchedTripCarOptionsState: $prefetchedTripCarOptionsState, prefetchedStops: $prefetchedStops, selectedCarTypeId: $selectedCarTypeId, selectedQuoteId: $selectedQuoteId, scheduledAt: $scheduledAt, paymentMethodId: $paymentMethodId, tripRequestStatus: $tripRequestStatus)';
 }
 
 
@@ -1775,11 +1857,11 @@ abstract mixin class $OrderStateCopyWith<$Res>  {
   factory $OrderStateCopyWith(OrderState value, $Res Function(OrderState) _then) = _$OrderStateCopyWithImpl;
 @useResult
 $Res call({
- BlocStatus<List<OrderEntity>> getAllState, OrderSheetMode sheetMode, OrderExpandedStep expandedStep, OrderLocationTarget mapPickingTarget, double mapCameraLatitude, double mapCameraLongitude, double mapCameraZoom, BlocStatus<OrderLocationEntity> fromLocationState, BlocStatus<OrderLocationEntity> toLocationState, BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState, BlocStatus<List<OrderSavedLocationEntity>> fromSuggestionsState, BlocStatus<List<OrderSavedLocationEntity>> toSuggestionsState, String fromQuery, String toQuery, BlocStatus<OrderLocationEntity> pickupPointState, String pickupStreetName, String pickupHouseNumber, BlocStatus<String> pickupConfirmationFeedbackState, BlocStatus<OrderTripRouteEntity> tripRouteState, BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState, BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState, BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState, OrderLocationEntity? prefetchedFromLocation, OrderLocationEntity? prefetchedToLocation, String? selectedCarTypeId, String? selectedQuoteId, DateTime? scheduledAt, String? paymentMethodId, BlocStatus<OrderTripResponseEntity> tripRequestStatus
+ BlocStatus<List<OrderEntity>> getAllState, OrderSheetMode sheetMode, OrderExpandedStep expandedStep, OrderLocationTarget mapPickingTarget, double mapCameraLatitude, double mapCameraLongitude, double mapCameraZoom, List<OrderLocationEntity?> stops, List<String> stopQueries, List<BlocStatus<List<OrderSavedLocationEntity>>> stopSuggestionsState, int activeStopIndex, BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState, BlocStatus<OrderLocationEntity> pickupPointState, String pickupStreetName, String pickupHouseNumber, BlocStatus<String> pickupConfirmationFeedbackState, BlocStatus<OrderTripRouteEntity> tripRouteState, BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState, BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState, BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState, List<OrderLocationEntity> prefetchedStops, String? selectedCarTypeId, String? selectedQuoteId, DateTime? scheduledAt, String? paymentMethodId, BlocStatus<OrderTripResponseEntity> tripRequestStatus
 });
 
 
-$BlocStatusCopyWith<List<OrderEntity>, $Res> get getAllState;$BlocStatusCopyWith<OrderLocationEntity, $Res> get fromLocationState;$BlocStatusCopyWith<OrderLocationEntity, $Res> get toLocationState;$BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get savedLocationsState;$BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get fromSuggestionsState;$BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get toSuggestionsState;$BlocStatusCopyWith<OrderLocationEntity, $Res> get pickupPointState;$BlocStatusCopyWith<String, $Res> get pickupConfirmationFeedbackState;$BlocStatusCopyWith<OrderTripRouteEntity, $Res> get tripRouteState;$BlocStatusCopyWith<List<OrderTripCarOptionEntity>, $Res> get tripCarOptionsState;$BlocStatusCopyWith<OrderTripRouteEntity, $Res> get prefetchedTripRouteState;$BlocStatusCopyWith<List<OrderTripCarOptionEntity>, $Res> get prefetchedTripCarOptionsState;$BlocStatusCopyWith<OrderTripResponseEntity, $Res> get tripRequestStatus;
+$BlocStatusCopyWith<List<OrderEntity>, $Res> get getAllState;$BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get savedLocationsState;$BlocStatusCopyWith<OrderLocationEntity, $Res> get pickupPointState;$BlocStatusCopyWith<String, $Res> get pickupConfirmationFeedbackState;$BlocStatusCopyWith<OrderTripRouteEntity, $Res> get tripRouteState;$BlocStatusCopyWith<List<OrderTripCarOptionEntity>, $Res> get tripCarOptionsState;$BlocStatusCopyWith<OrderTripRouteEntity, $Res> get prefetchedTripRouteState;$BlocStatusCopyWith<List<OrderTripCarOptionEntity>, $Res> get prefetchedTripCarOptionsState;$BlocStatusCopyWith<OrderTripResponseEntity, $Res> get tripRequestStatus;
 
 }
 /// @nodoc
@@ -1792,7 +1874,7 @@ class _$OrderStateCopyWithImpl<$Res>
 
 /// Create a copy of OrderState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? getAllState = null,Object? sheetMode = null,Object? expandedStep = null,Object? mapPickingTarget = null,Object? mapCameraLatitude = null,Object? mapCameraLongitude = null,Object? mapCameraZoom = null,Object? fromLocationState = null,Object? toLocationState = null,Object? savedLocationsState = null,Object? fromSuggestionsState = null,Object? toSuggestionsState = null,Object? fromQuery = null,Object? toQuery = null,Object? pickupPointState = null,Object? pickupStreetName = null,Object? pickupHouseNumber = null,Object? pickupConfirmationFeedbackState = null,Object? tripRouteState = null,Object? tripCarOptionsState = null,Object? prefetchedTripRouteState = null,Object? prefetchedTripCarOptionsState = null,Object? prefetchedFromLocation = freezed,Object? prefetchedToLocation = freezed,Object? selectedCarTypeId = freezed,Object? selectedQuoteId = freezed,Object? scheduledAt = freezed,Object? paymentMethodId = freezed,Object? tripRequestStatus = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? getAllState = null,Object? sheetMode = null,Object? expandedStep = null,Object? mapPickingTarget = null,Object? mapCameraLatitude = null,Object? mapCameraLongitude = null,Object? mapCameraZoom = null,Object? stops = null,Object? stopQueries = null,Object? stopSuggestionsState = null,Object? activeStopIndex = null,Object? savedLocationsState = null,Object? pickupPointState = null,Object? pickupStreetName = null,Object? pickupHouseNumber = null,Object? pickupConfirmationFeedbackState = null,Object? tripRouteState = null,Object? tripCarOptionsState = null,Object? prefetchedTripRouteState = null,Object? prefetchedTripCarOptionsState = null,Object? prefetchedStops = null,Object? selectedCarTypeId = freezed,Object? selectedQuoteId = freezed,Object? scheduledAt = freezed,Object? paymentMethodId = freezed,Object? tripRequestStatus = null,}) {
   return _then(_self.copyWith(
 getAllState: null == getAllState ? _self.getAllState : getAllState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<List<OrderEntity>>,sheetMode: null == sheetMode ? _self.sheetMode : sheetMode // ignore: cast_nullable_to_non_nullable
@@ -1801,14 +1883,12 @@ as OrderExpandedStep,mapPickingTarget: null == mapPickingTarget ? _self.mapPicki
 as OrderLocationTarget,mapCameraLatitude: null == mapCameraLatitude ? _self.mapCameraLatitude : mapCameraLatitude // ignore: cast_nullable_to_non_nullable
 as double,mapCameraLongitude: null == mapCameraLongitude ? _self.mapCameraLongitude : mapCameraLongitude // ignore: cast_nullable_to_non_nullable
 as double,mapCameraZoom: null == mapCameraZoom ? _self.mapCameraZoom : mapCameraZoom // ignore: cast_nullable_to_non_nullable
-as double,fromLocationState: null == fromLocationState ? _self.fromLocationState : fromLocationState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<OrderLocationEntity>,toLocationState: null == toLocationState ? _self.toLocationState : toLocationState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<OrderLocationEntity>,savedLocationsState: null == savedLocationsState ? _self.savedLocationsState : savedLocationsState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<List<OrderSavedLocationEntity>>,fromSuggestionsState: null == fromSuggestionsState ? _self.fromSuggestionsState : fromSuggestionsState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<List<OrderSavedLocationEntity>>,toSuggestionsState: null == toSuggestionsState ? _self.toSuggestionsState : toSuggestionsState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<List<OrderSavedLocationEntity>>,fromQuery: null == fromQuery ? _self.fromQuery : fromQuery // ignore: cast_nullable_to_non_nullable
-as String,toQuery: null == toQuery ? _self.toQuery : toQuery // ignore: cast_nullable_to_non_nullable
-as String,pickupPointState: null == pickupPointState ? _self.pickupPointState : pickupPointState // ignore: cast_nullable_to_non_nullable
+as double,stops: null == stops ? _self.stops : stops // ignore: cast_nullable_to_non_nullable
+as List<OrderLocationEntity?>,stopQueries: null == stopQueries ? _self.stopQueries : stopQueries // ignore: cast_nullable_to_non_nullable
+as List<String>,stopSuggestionsState: null == stopSuggestionsState ? _self.stopSuggestionsState : stopSuggestionsState // ignore: cast_nullable_to_non_nullable
+as List<BlocStatus<List<OrderSavedLocationEntity>>>,activeStopIndex: null == activeStopIndex ? _self.activeStopIndex : activeStopIndex // ignore: cast_nullable_to_non_nullable
+as int,savedLocationsState: null == savedLocationsState ? _self.savedLocationsState : savedLocationsState // ignore: cast_nullable_to_non_nullable
+as BlocStatus<List<OrderSavedLocationEntity>>,pickupPointState: null == pickupPointState ? _self.pickupPointState : pickupPointState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<OrderLocationEntity>,pickupStreetName: null == pickupStreetName ? _self.pickupStreetName : pickupStreetName // ignore: cast_nullable_to_non_nullable
 as String,pickupHouseNumber: null == pickupHouseNumber ? _self.pickupHouseNumber : pickupHouseNumber // ignore: cast_nullable_to_non_nullable
 as String,pickupConfirmationFeedbackState: null == pickupConfirmationFeedbackState ? _self.pickupConfirmationFeedbackState : pickupConfirmationFeedbackState // ignore: cast_nullable_to_non_nullable
@@ -1816,9 +1896,8 @@ as BlocStatus<String>,tripRouteState: null == tripRouteState ? _self.tripRouteSt
 as BlocStatus<OrderTripRouteEntity>,tripCarOptionsState: null == tripCarOptionsState ? _self.tripCarOptionsState : tripCarOptionsState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<List<OrderTripCarOptionEntity>>,prefetchedTripRouteState: null == prefetchedTripRouteState ? _self.prefetchedTripRouteState : prefetchedTripRouteState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<OrderTripRouteEntity>,prefetchedTripCarOptionsState: null == prefetchedTripCarOptionsState ? _self.prefetchedTripCarOptionsState : prefetchedTripCarOptionsState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<List<OrderTripCarOptionEntity>>,prefetchedFromLocation: freezed == prefetchedFromLocation ? _self.prefetchedFromLocation : prefetchedFromLocation // ignore: cast_nullable_to_non_nullable
-as OrderLocationEntity?,prefetchedToLocation: freezed == prefetchedToLocation ? _self.prefetchedToLocation : prefetchedToLocation // ignore: cast_nullable_to_non_nullable
-as OrderLocationEntity?,selectedCarTypeId: freezed == selectedCarTypeId ? _self.selectedCarTypeId : selectedCarTypeId // ignore: cast_nullable_to_non_nullable
+as BlocStatus<List<OrderTripCarOptionEntity>>,prefetchedStops: null == prefetchedStops ? _self.prefetchedStops : prefetchedStops // ignore: cast_nullable_to_non_nullable
+as List<OrderLocationEntity>,selectedCarTypeId: freezed == selectedCarTypeId ? _self.selectedCarTypeId : selectedCarTypeId // ignore: cast_nullable_to_non_nullable
 as String?,selectedQuoteId: freezed == selectedQuoteId ? _self.selectedQuoteId : selectedQuoteId // ignore: cast_nullable_to_non_nullable
 as String?,scheduledAt: freezed == scheduledAt ? _self.scheduledAt : scheduledAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,paymentMethodId: freezed == paymentMethodId ? _self.paymentMethodId : paymentMethodId // ignore: cast_nullable_to_non_nullable
@@ -1839,46 +1918,10 @@ $BlocStatusCopyWith<List<OrderEntity>, $Res> get getAllState {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BlocStatusCopyWith<OrderLocationEntity, $Res> get fromLocationState {
-  
-  return $BlocStatusCopyWith<OrderLocationEntity, $Res>(_self.fromLocationState, (value) {
-    return _then(_self.copyWith(fromLocationState: value));
-  });
-}/// Create a copy of OrderState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<OrderLocationEntity, $Res> get toLocationState {
-  
-  return $BlocStatusCopyWith<OrderLocationEntity, $Res>(_self.toLocationState, (value) {
-    return _then(_self.copyWith(toLocationState: value));
-  });
-}/// Create a copy of OrderState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
 $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get savedLocationsState {
   
   return $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res>(_self.savedLocationsState, (value) {
     return _then(_self.copyWith(savedLocationsState: value));
-  });
-}/// Create a copy of OrderState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get fromSuggestionsState {
-  
-  return $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res>(_self.fromSuggestionsState, (value) {
-    return _then(_self.copyWith(fromSuggestionsState: value));
-  });
-}/// Create a copy of OrderState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get toSuggestionsState {
-  
-  return $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res>(_self.toSuggestionsState, (value) {
-    return _then(_self.copyWith(toSuggestionsState: value));
   });
 }/// Create a copy of OrderState
 /// with the given fields replaced by the non-null parameter values.
@@ -2025,10 +2068,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<List<OrderEntity>> getAllState,  OrderSheetMode sheetMode,  OrderExpandedStep expandedStep,  OrderLocationTarget mapPickingTarget,  double mapCameraLatitude,  double mapCameraLongitude,  double mapCameraZoom,  BlocStatus<OrderLocationEntity> fromLocationState,  BlocStatus<OrderLocationEntity> toLocationState,  BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,  BlocStatus<List<OrderSavedLocationEntity>> fromSuggestionsState,  BlocStatus<List<OrderSavedLocationEntity>> toSuggestionsState,  String fromQuery,  String toQuery,  BlocStatus<OrderLocationEntity> pickupPointState,  String pickupStreetName,  String pickupHouseNumber,  BlocStatus<String> pickupConfirmationFeedbackState,  BlocStatus<OrderTripRouteEntity> tripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState,  BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState,  OrderLocationEntity? prefetchedFromLocation,  OrderLocationEntity? prefetchedToLocation,  String? selectedCarTypeId,  String? selectedQuoteId,  DateTime? scheduledAt,  String? paymentMethodId,  BlocStatus<OrderTripResponseEntity> tripRequestStatus)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<List<OrderEntity>> getAllState,  OrderSheetMode sheetMode,  OrderExpandedStep expandedStep,  OrderLocationTarget mapPickingTarget,  double mapCameraLatitude,  double mapCameraLongitude,  double mapCameraZoom,  List<OrderLocationEntity?> stops,  List<String> stopQueries,  List<BlocStatus<List<OrderSavedLocationEntity>>> stopSuggestionsState,  int activeStopIndex,  BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,  BlocStatus<OrderLocationEntity> pickupPointState,  String pickupStreetName,  String pickupHouseNumber,  BlocStatus<String> pickupConfirmationFeedbackState,  BlocStatus<OrderTripRouteEntity> tripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState,  BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState,  List<OrderLocationEntity> prefetchedStops,  String? selectedCarTypeId,  String? selectedQuoteId,  DateTime? scheduledAt,  String? paymentMethodId,  BlocStatus<OrderTripResponseEntity> tripRequestStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderState() when $default != null:
-return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPickingTarget,_that.mapCameraLatitude,_that.mapCameraLongitude,_that.mapCameraZoom,_that.fromLocationState,_that.toLocationState,_that.savedLocationsState,_that.fromSuggestionsState,_that.toSuggestionsState,_that.fromQuery,_that.toQuery,_that.pickupPointState,_that.pickupStreetName,_that.pickupHouseNumber,_that.pickupConfirmationFeedbackState,_that.tripRouteState,_that.tripCarOptionsState,_that.prefetchedTripRouteState,_that.prefetchedTripCarOptionsState,_that.prefetchedFromLocation,_that.prefetchedToLocation,_that.selectedCarTypeId,_that.selectedQuoteId,_that.scheduledAt,_that.paymentMethodId,_that.tripRequestStatus);case _:
+return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPickingTarget,_that.mapCameraLatitude,_that.mapCameraLongitude,_that.mapCameraZoom,_that.stops,_that.stopQueries,_that.stopSuggestionsState,_that.activeStopIndex,_that.savedLocationsState,_that.pickupPointState,_that.pickupStreetName,_that.pickupHouseNumber,_that.pickupConfirmationFeedbackState,_that.tripRouteState,_that.tripCarOptionsState,_that.prefetchedTripRouteState,_that.prefetchedTripCarOptionsState,_that.prefetchedStops,_that.selectedCarTypeId,_that.selectedQuoteId,_that.scheduledAt,_that.paymentMethodId,_that.tripRequestStatus);case _:
   return orElse();
 
 }
@@ -2046,10 +2089,10 @@ return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPi
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<List<OrderEntity>> getAllState,  OrderSheetMode sheetMode,  OrderExpandedStep expandedStep,  OrderLocationTarget mapPickingTarget,  double mapCameraLatitude,  double mapCameraLongitude,  double mapCameraZoom,  BlocStatus<OrderLocationEntity> fromLocationState,  BlocStatus<OrderLocationEntity> toLocationState,  BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,  BlocStatus<List<OrderSavedLocationEntity>> fromSuggestionsState,  BlocStatus<List<OrderSavedLocationEntity>> toSuggestionsState,  String fromQuery,  String toQuery,  BlocStatus<OrderLocationEntity> pickupPointState,  String pickupStreetName,  String pickupHouseNumber,  BlocStatus<String> pickupConfirmationFeedbackState,  BlocStatus<OrderTripRouteEntity> tripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState,  BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState,  OrderLocationEntity? prefetchedFromLocation,  OrderLocationEntity? prefetchedToLocation,  String? selectedCarTypeId,  String? selectedQuoteId,  DateTime? scheduledAt,  String? paymentMethodId,  BlocStatus<OrderTripResponseEntity> tripRequestStatus)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<List<OrderEntity>> getAllState,  OrderSheetMode sheetMode,  OrderExpandedStep expandedStep,  OrderLocationTarget mapPickingTarget,  double mapCameraLatitude,  double mapCameraLongitude,  double mapCameraZoom,  List<OrderLocationEntity?> stops,  List<String> stopQueries,  List<BlocStatus<List<OrderSavedLocationEntity>>> stopSuggestionsState,  int activeStopIndex,  BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,  BlocStatus<OrderLocationEntity> pickupPointState,  String pickupStreetName,  String pickupHouseNumber,  BlocStatus<String> pickupConfirmationFeedbackState,  BlocStatus<OrderTripRouteEntity> tripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState,  BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState,  List<OrderLocationEntity> prefetchedStops,  String? selectedCarTypeId,  String? selectedQuoteId,  DateTime? scheduledAt,  String? paymentMethodId,  BlocStatus<OrderTripResponseEntity> tripRequestStatus)  $default,) {final _that = this;
 switch (_that) {
 case _OrderState():
-return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPickingTarget,_that.mapCameraLatitude,_that.mapCameraLongitude,_that.mapCameraZoom,_that.fromLocationState,_that.toLocationState,_that.savedLocationsState,_that.fromSuggestionsState,_that.toSuggestionsState,_that.fromQuery,_that.toQuery,_that.pickupPointState,_that.pickupStreetName,_that.pickupHouseNumber,_that.pickupConfirmationFeedbackState,_that.tripRouteState,_that.tripCarOptionsState,_that.prefetchedTripRouteState,_that.prefetchedTripCarOptionsState,_that.prefetchedFromLocation,_that.prefetchedToLocation,_that.selectedCarTypeId,_that.selectedQuoteId,_that.scheduledAt,_that.paymentMethodId,_that.tripRequestStatus);case _:
+return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPickingTarget,_that.mapCameraLatitude,_that.mapCameraLongitude,_that.mapCameraZoom,_that.stops,_that.stopQueries,_that.stopSuggestionsState,_that.activeStopIndex,_that.savedLocationsState,_that.pickupPointState,_that.pickupStreetName,_that.pickupHouseNumber,_that.pickupConfirmationFeedbackState,_that.tripRouteState,_that.tripCarOptionsState,_that.prefetchedTripRouteState,_that.prefetchedTripCarOptionsState,_that.prefetchedStops,_that.selectedCarTypeId,_that.selectedQuoteId,_that.scheduledAt,_that.paymentMethodId,_that.tripRequestStatus);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -2066,10 +2109,10 @@ return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPi
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<List<OrderEntity>> getAllState,  OrderSheetMode sheetMode,  OrderExpandedStep expandedStep,  OrderLocationTarget mapPickingTarget,  double mapCameraLatitude,  double mapCameraLongitude,  double mapCameraZoom,  BlocStatus<OrderLocationEntity> fromLocationState,  BlocStatus<OrderLocationEntity> toLocationState,  BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,  BlocStatus<List<OrderSavedLocationEntity>> fromSuggestionsState,  BlocStatus<List<OrderSavedLocationEntity>> toSuggestionsState,  String fromQuery,  String toQuery,  BlocStatus<OrderLocationEntity> pickupPointState,  String pickupStreetName,  String pickupHouseNumber,  BlocStatus<String> pickupConfirmationFeedbackState,  BlocStatus<OrderTripRouteEntity> tripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState,  BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState,  OrderLocationEntity? prefetchedFromLocation,  OrderLocationEntity? prefetchedToLocation,  String? selectedCarTypeId,  String? selectedQuoteId,  DateTime? scheduledAt,  String? paymentMethodId,  BlocStatus<OrderTripResponseEntity> tripRequestStatus)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<List<OrderEntity>> getAllState,  OrderSheetMode sheetMode,  OrderExpandedStep expandedStep,  OrderLocationTarget mapPickingTarget,  double mapCameraLatitude,  double mapCameraLongitude,  double mapCameraZoom,  List<OrderLocationEntity?> stops,  List<String> stopQueries,  List<BlocStatus<List<OrderSavedLocationEntity>>> stopSuggestionsState,  int activeStopIndex,  BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,  BlocStatus<OrderLocationEntity> pickupPointState,  String pickupStreetName,  String pickupHouseNumber,  BlocStatus<String> pickupConfirmationFeedbackState,  BlocStatus<OrderTripRouteEntity> tripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState,  BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState,  BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState,  List<OrderLocationEntity> prefetchedStops,  String? selectedCarTypeId,  String? selectedQuoteId,  DateTime? scheduledAt,  String? paymentMethodId,  BlocStatus<OrderTripResponseEntity> tripRequestStatus)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderState() when $default != null:
-return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPickingTarget,_that.mapCameraLatitude,_that.mapCameraLongitude,_that.mapCameraZoom,_that.fromLocationState,_that.toLocationState,_that.savedLocationsState,_that.fromSuggestionsState,_that.toSuggestionsState,_that.fromQuery,_that.toQuery,_that.pickupPointState,_that.pickupStreetName,_that.pickupHouseNumber,_that.pickupConfirmationFeedbackState,_that.tripRouteState,_that.tripCarOptionsState,_that.prefetchedTripRouteState,_that.prefetchedTripCarOptionsState,_that.prefetchedFromLocation,_that.prefetchedToLocation,_that.selectedCarTypeId,_that.selectedQuoteId,_that.scheduledAt,_that.paymentMethodId,_that.tripRequestStatus);case _:
+return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPickingTarget,_that.mapCameraLatitude,_that.mapCameraLongitude,_that.mapCameraZoom,_that.stops,_that.stopQueries,_that.stopSuggestionsState,_that.activeStopIndex,_that.savedLocationsState,_that.pickupPointState,_that.pickupStreetName,_that.pickupHouseNumber,_that.pickupConfirmationFeedbackState,_that.tripRouteState,_that.tripCarOptionsState,_that.prefetchedTripRouteState,_that.prefetchedTripCarOptionsState,_that.prefetchedStops,_that.selectedCarTypeId,_that.selectedQuoteId,_that.scheduledAt,_that.paymentMethodId,_that.tripRequestStatus);case _:
   return null;
 
 }
@@ -2081,7 +2124,7 @@ return $default(_that.getAllState,_that.sheetMode,_that.expandedStep,_that.mapPi
 
 
 class _OrderState implements OrderState {
-  const _OrderState({this.getAllState = const BlocStatus<List<OrderEntity>>.initial(), this.sheetMode = OrderSheetMode.collapsed, this.expandedStep = OrderExpandedStep.locationEntry, this.mapPickingTarget = OrderLocationTarget.from, this.mapCameraLatitude = MapConfig.defaultLat, this.mapCameraLongitude = MapConfig.defaultLng, this.mapCameraZoom = MapConfig.initialZoom, this.fromLocationState = const BlocStatus<OrderLocationEntity>.initial(), this.toLocationState = const BlocStatus<OrderLocationEntity>.initial(), this.savedLocationsState = const BlocStatus<List<OrderSavedLocationEntity>>.initial(), this.fromSuggestionsState = const BlocStatus<List<OrderSavedLocationEntity>>.initial(), this.toSuggestionsState = const BlocStatus<List<OrderSavedLocationEntity>>.initial(), this.fromQuery = '', this.toQuery = '', this.pickupPointState = const BlocStatus<OrderLocationEntity>.initial(), this.pickupStreetName = '', this.pickupHouseNumber = '', this.pickupConfirmationFeedbackState = const BlocStatus<String>.initial(), this.tripRouteState = const BlocStatus<OrderTripRouteEntity>.initial(), this.tripCarOptionsState = const BlocStatus<List<OrderTripCarOptionEntity>>.initial(), this.prefetchedTripRouteState = const BlocStatus<OrderTripRouteEntity>.initial(), this.prefetchedTripCarOptionsState = const BlocStatus<List<OrderTripCarOptionEntity>>.initial(), this.prefetchedFromLocation, this.prefetchedToLocation, this.selectedCarTypeId, this.selectedQuoteId, this.scheduledAt, this.paymentMethodId, this.tripRequestStatus = const BlocStatus<OrderTripResponseEntity>.initial()});
+  const _OrderState({this.getAllState = const BlocStatus<List<OrderEntity>>.initial(), this.sheetMode = OrderSheetMode.collapsed, this.expandedStep = OrderExpandedStep.locationEntry, this.mapPickingTarget = OrderLocationTarget.stop, this.mapCameraLatitude = MapConfig.defaultLat, this.mapCameraLongitude = MapConfig.defaultLng, this.mapCameraZoom = MapConfig.initialZoom, final  List<OrderLocationEntity?> stops = const [null, null], final  List<String> stopQueries = const ['', ''], final  List<BlocStatus<List<OrderSavedLocationEntity>>> stopSuggestionsState = const [BlocStatus<List<OrderSavedLocationEntity>>.initial(), BlocStatus<List<OrderSavedLocationEntity>>.initial()], this.activeStopIndex = 0, this.savedLocationsState = const BlocStatus<List<OrderSavedLocationEntity>>.initial(), this.pickupPointState = const BlocStatus<OrderLocationEntity>.initial(), this.pickupStreetName = '', this.pickupHouseNumber = '', this.pickupConfirmationFeedbackState = const BlocStatus<String>.initial(), this.tripRouteState = const BlocStatus<OrderTripRouteEntity>.initial(), this.tripCarOptionsState = const BlocStatus<List<OrderTripCarOptionEntity>>.initial(), this.prefetchedTripRouteState = const BlocStatus<OrderTripRouteEntity>.initial(), this.prefetchedTripCarOptionsState = const BlocStatus<List<OrderTripCarOptionEntity>>.initial(), final  List<OrderLocationEntity> prefetchedStops = const [], this.selectedCarTypeId, this.selectedQuoteId, this.scheduledAt, this.paymentMethodId, this.tripRequestStatus = const BlocStatus<OrderTripResponseEntity>.initial()}): _stops = stops,_stopQueries = stopQueries,_stopSuggestionsState = stopSuggestionsState,_prefetchedStops = prefetchedStops;
   
 
 @override@JsonKey() final  BlocStatus<List<OrderEntity>> getAllState;
@@ -2091,13 +2134,29 @@ class _OrderState implements OrderState {
 @override@JsonKey() final  double mapCameraLatitude;
 @override@JsonKey() final  double mapCameraLongitude;
 @override@JsonKey() final  double mapCameraZoom;
-@override@JsonKey() final  BlocStatus<OrderLocationEntity> fromLocationState;
-@override@JsonKey() final  BlocStatus<OrderLocationEntity> toLocationState;
+ final  List<OrderLocationEntity?> _stops;
+@override@JsonKey() List<OrderLocationEntity?> get stops {
+  if (_stops is EqualUnmodifiableListView) return _stops;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_stops);
+}
+
+ final  List<String> _stopQueries;
+@override@JsonKey() List<String> get stopQueries {
+  if (_stopQueries is EqualUnmodifiableListView) return _stopQueries;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_stopQueries);
+}
+
+ final  List<BlocStatus<List<OrderSavedLocationEntity>>> _stopSuggestionsState;
+@override@JsonKey() List<BlocStatus<List<OrderSavedLocationEntity>>> get stopSuggestionsState {
+  if (_stopSuggestionsState is EqualUnmodifiableListView) return _stopSuggestionsState;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_stopSuggestionsState);
+}
+
+@override@JsonKey() final  int activeStopIndex;
 @override@JsonKey() final  BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState;
-@override@JsonKey() final  BlocStatus<List<OrderSavedLocationEntity>> fromSuggestionsState;
-@override@JsonKey() final  BlocStatus<List<OrderSavedLocationEntity>> toSuggestionsState;
-@override@JsonKey() final  String fromQuery;
-@override@JsonKey() final  String toQuery;
 @override@JsonKey() final  BlocStatus<OrderLocationEntity> pickupPointState;
 @override@JsonKey() final  String pickupStreetName;
 @override@JsonKey() final  String pickupHouseNumber;
@@ -2106,8 +2165,13 @@ class _OrderState implements OrderState {
 @override@JsonKey() final  BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState;
 @override@JsonKey() final  BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState;
 @override@JsonKey() final  BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState;
-@override final  OrderLocationEntity? prefetchedFromLocation;
-@override final  OrderLocationEntity? prefetchedToLocation;
+ final  List<OrderLocationEntity> _prefetchedStops;
+@override@JsonKey() List<OrderLocationEntity> get prefetchedStops {
+  if (_prefetchedStops is EqualUnmodifiableListView) return _prefetchedStops;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_prefetchedStops);
+}
+
 @override final  String? selectedCarTypeId;
 @override final  String? selectedQuoteId;
 @override final  DateTime? scheduledAt;
@@ -2124,16 +2188,16 @@ _$OrderStateCopyWith<_OrderState> get copyWith => __$OrderStateCopyWithImpl<_Ord
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderState&&(identical(other.getAllState, getAllState) || other.getAllState == getAllState)&&(identical(other.sheetMode, sheetMode) || other.sheetMode == sheetMode)&&(identical(other.expandedStep, expandedStep) || other.expandedStep == expandedStep)&&(identical(other.mapPickingTarget, mapPickingTarget) || other.mapPickingTarget == mapPickingTarget)&&(identical(other.mapCameraLatitude, mapCameraLatitude) || other.mapCameraLatitude == mapCameraLatitude)&&(identical(other.mapCameraLongitude, mapCameraLongitude) || other.mapCameraLongitude == mapCameraLongitude)&&(identical(other.mapCameraZoom, mapCameraZoom) || other.mapCameraZoom == mapCameraZoom)&&(identical(other.fromLocationState, fromLocationState) || other.fromLocationState == fromLocationState)&&(identical(other.toLocationState, toLocationState) || other.toLocationState == toLocationState)&&(identical(other.savedLocationsState, savedLocationsState) || other.savedLocationsState == savedLocationsState)&&(identical(other.fromSuggestionsState, fromSuggestionsState) || other.fromSuggestionsState == fromSuggestionsState)&&(identical(other.toSuggestionsState, toSuggestionsState) || other.toSuggestionsState == toSuggestionsState)&&(identical(other.fromQuery, fromQuery) || other.fromQuery == fromQuery)&&(identical(other.toQuery, toQuery) || other.toQuery == toQuery)&&(identical(other.pickupPointState, pickupPointState) || other.pickupPointState == pickupPointState)&&(identical(other.pickupStreetName, pickupStreetName) || other.pickupStreetName == pickupStreetName)&&(identical(other.pickupHouseNumber, pickupHouseNumber) || other.pickupHouseNumber == pickupHouseNumber)&&(identical(other.pickupConfirmationFeedbackState, pickupConfirmationFeedbackState) || other.pickupConfirmationFeedbackState == pickupConfirmationFeedbackState)&&(identical(other.tripRouteState, tripRouteState) || other.tripRouteState == tripRouteState)&&(identical(other.tripCarOptionsState, tripCarOptionsState) || other.tripCarOptionsState == tripCarOptionsState)&&(identical(other.prefetchedTripRouteState, prefetchedTripRouteState) || other.prefetchedTripRouteState == prefetchedTripRouteState)&&(identical(other.prefetchedTripCarOptionsState, prefetchedTripCarOptionsState) || other.prefetchedTripCarOptionsState == prefetchedTripCarOptionsState)&&(identical(other.prefetchedFromLocation, prefetchedFromLocation) || other.prefetchedFromLocation == prefetchedFromLocation)&&(identical(other.prefetchedToLocation, prefetchedToLocation) || other.prefetchedToLocation == prefetchedToLocation)&&(identical(other.selectedCarTypeId, selectedCarTypeId) || other.selectedCarTypeId == selectedCarTypeId)&&(identical(other.selectedQuoteId, selectedQuoteId) || other.selectedQuoteId == selectedQuoteId)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.paymentMethodId, paymentMethodId) || other.paymentMethodId == paymentMethodId)&&(identical(other.tripRequestStatus, tripRequestStatus) || other.tripRequestStatus == tripRequestStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderState&&(identical(other.getAllState, getAllState) || other.getAllState == getAllState)&&(identical(other.sheetMode, sheetMode) || other.sheetMode == sheetMode)&&(identical(other.expandedStep, expandedStep) || other.expandedStep == expandedStep)&&(identical(other.mapPickingTarget, mapPickingTarget) || other.mapPickingTarget == mapPickingTarget)&&(identical(other.mapCameraLatitude, mapCameraLatitude) || other.mapCameraLatitude == mapCameraLatitude)&&(identical(other.mapCameraLongitude, mapCameraLongitude) || other.mapCameraLongitude == mapCameraLongitude)&&(identical(other.mapCameraZoom, mapCameraZoom) || other.mapCameraZoom == mapCameraZoom)&&const DeepCollectionEquality().equals(other._stops, _stops)&&const DeepCollectionEquality().equals(other._stopQueries, _stopQueries)&&const DeepCollectionEquality().equals(other._stopSuggestionsState, _stopSuggestionsState)&&(identical(other.activeStopIndex, activeStopIndex) || other.activeStopIndex == activeStopIndex)&&(identical(other.savedLocationsState, savedLocationsState) || other.savedLocationsState == savedLocationsState)&&(identical(other.pickupPointState, pickupPointState) || other.pickupPointState == pickupPointState)&&(identical(other.pickupStreetName, pickupStreetName) || other.pickupStreetName == pickupStreetName)&&(identical(other.pickupHouseNumber, pickupHouseNumber) || other.pickupHouseNumber == pickupHouseNumber)&&(identical(other.pickupConfirmationFeedbackState, pickupConfirmationFeedbackState) || other.pickupConfirmationFeedbackState == pickupConfirmationFeedbackState)&&(identical(other.tripRouteState, tripRouteState) || other.tripRouteState == tripRouteState)&&(identical(other.tripCarOptionsState, tripCarOptionsState) || other.tripCarOptionsState == tripCarOptionsState)&&(identical(other.prefetchedTripRouteState, prefetchedTripRouteState) || other.prefetchedTripRouteState == prefetchedTripRouteState)&&(identical(other.prefetchedTripCarOptionsState, prefetchedTripCarOptionsState) || other.prefetchedTripCarOptionsState == prefetchedTripCarOptionsState)&&const DeepCollectionEquality().equals(other._prefetchedStops, _prefetchedStops)&&(identical(other.selectedCarTypeId, selectedCarTypeId) || other.selectedCarTypeId == selectedCarTypeId)&&(identical(other.selectedQuoteId, selectedQuoteId) || other.selectedQuoteId == selectedQuoteId)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.paymentMethodId, paymentMethodId) || other.paymentMethodId == paymentMethodId)&&(identical(other.tripRequestStatus, tripRequestStatus) || other.tripRequestStatus == tripRequestStatus));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,getAllState,sheetMode,expandedStep,mapPickingTarget,mapCameraLatitude,mapCameraLongitude,mapCameraZoom,fromLocationState,toLocationState,savedLocationsState,fromSuggestionsState,toSuggestionsState,fromQuery,toQuery,pickupPointState,pickupStreetName,pickupHouseNumber,pickupConfirmationFeedbackState,tripRouteState,tripCarOptionsState,prefetchedTripRouteState,prefetchedTripCarOptionsState,prefetchedFromLocation,prefetchedToLocation,selectedCarTypeId,selectedQuoteId,scheduledAt,paymentMethodId,tripRequestStatus]);
+int get hashCode => Object.hashAll([runtimeType,getAllState,sheetMode,expandedStep,mapPickingTarget,mapCameraLatitude,mapCameraLongitude,mapCameraZoom,const DeepCollectionEquality().hash(_stops),const DeepCollectionEquality().hash(_stopQueries),const DeepCollectionEquality().hash(_stopSuggestionsState),activeStopIndex,savedLocationsState,pickupPointState,pickupStreetName,pickupHouseNumber,pickupConfirmationFeedbackState,tripRouteState,tripCarOptionsState,prefetchedTripRouteState,prefetchedTripCarOptionsState,const DeepCollectionEquality().hash(_prefetchedStops),selectedCarTypeId,selectedQuoteId,scheduledAt,paymentMethodId,tripRequestStatus]);
 
 @override
 String toString() {
-  return 'OrderState(getAllState: $getAllState, sheetMode: $sheetMode, expandedStep: $expandedStep, mapPickingTarget: $mapPickingTarget, mapCameraLatitude: $mapCameraLatitude, mapCameraLongitude: $mapCameraLongitude, mapCameraZoom: $mapCameraZoom, fromLocationState: $fromLocationState, toLocationState: $toLocationState, savedLocationsState: $savedLocationsState, fromSuggestionsState: $fromSuggestionsState, toSuggestionsState: $toSuggestionsState, fromQuery: $fromQuery, toQuery: $toQuery, pickupPointState: $pickupPointState, pickupStreetName: $pickupStreetName, pickupHouseNumber: $pickupHouseNumber, pickupConfirmationFeedbackState: $pickupConfirmationFeedbackState, tripRouteState: $tripRouteState, tripCarOptionsState: $tripCarOptionsState, prefetchedTripRouteState: $prefetchedTripRouteState, prefetchedTripCarOptionsState: $prefetchedTripCarOptionsState, prefetchedFromLocation: $prefetchedFromLocation, prefetchedToLocation: $prefetchedToLocation, selectedCarTypeId: $selectedCarTypeId, selectedQuoteId: $selectedQuoteId, scheduledAt: $scheduledAt, paymentMethodId: $paymentMethodId, tripRequestStatus: $tripRequestStatus)';
+  return 'OrderState(getAllState: $getAllState, sheetMode: $sheetMode, expandedStep: $expandedStep, mapPickingTarget: $mapPickingTarget, mapCameraLatitude: $mapCameraLatitude, mapCameraLongitude: $mapCameraLongitude, mapCameraZoom: $mapCameraZoom, stops: $stops, stopQueries: $stopQueries, stopSuggestionsState: $stopSuggestionsState, activeStopIndex: $activeStopIndex, savedLocationsState: $savedLocationsState, pickupPointState: $pickupPointState, pickupStreetName: $pickupStreetName, pickupHouseNumber: $pickupHouseNumber, pickupConfirmationFeedbackState: $pickupConfirmationFeedbackState, tripRouteState: $tripRouteState, tripCarOptionsState: $tripCarOptionsState, prefetchedTripRouteState: $prefetchedTripRouteState, prefetchedTripCarOptionsState: $prefetchedTripCarOptionsState, prefetchedStops: $prefetchedStops, selectedCarTypeId: $selectedCarTypeId, selectedQuoteId: $selectedQuoteId, scheduledAt: $scheduledAt, paymentMethodId: $paymentMethodId, tripRequestStatus: $tripRequestStatus)';
 }
 
 
@@ -2144,11 +2208,11 @@ abstract mixin class _$OrderStateCopyWith<$Res> implements $OrderStateCopyWith<$
   factory _$OrderStateCopyWith(_OrderState value, $Res Function(_OrderState) _then) = __$OrderStateCopyWithImpl;
 @override @useResult
 $Res call({
- BlocStatus<List<OrderEntity>> getAllState, OrderSheetMode sheetMode, OrderExpandedStep expandedStep, OrderLocationTarget mapPickingTarget, double mapCameraLatitude, double mapCameraLongitude, double mapCameraZoom, BlocStatus<OrderLocationEntity> fromLocationState, BlocStatus<OrderLocationEntity> toLocationState, BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState, BlocStatus<List<OrderSavedLocationEntity>> fromSuggestionsState, BlocStatus<List<OrderSavedLocationEntity>> toSuggestionsState, String fromQuery, String toQuery, BlocStatus<OrderLocationEntity> pickupPointState, String pickupStreetName, String pickupHouseNumber, BlocStatus<String> pickupConfirmationFeedbackState, BlocStatus<OrderTripRouteEntity> tripRouteState, BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState, BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState, BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState, OrderLocationEntity? prefetchedFromLocation, OrderLocationEntity? prefetchedToLocation, String? selectedCarTypeId, String? selectedQuoteId, DateTime? scheduledAt, String? paymentMethodId, BlocStatus<OrderTripResponseEntity> tripRequestStatus
+ BlocStatus<List<OrderEntity>> getAllState, OrderSheetMode sheetMode, OrderExpandedStep expandedStep, OrderLocationTarget mapPickingTarget, double mapCameraLatitude, double mapCameraLongitude, double mapCameraZoom, List<OrderLocationEntity?> stops, List<String> stopQueries, List<BlocStatus<List<OrderSavedLocationEntity>>> stopSuggestionsState, int activeStopIndex, BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState, BlocStatus<OrderLocationEntity> pickupPointState, String pickupStreetName, String pickupHouseNumber, BlocStatus<String> pickupConfirmationFeedbackState, BlocStatus<OrderTripRouteEntity> tripRouteState, BlocStatus<List<OrderTripCarOptionEntity>> tripCarOptionsState, BlocStatus<OrderTripRouteEntity> prefetchedTripRouteState, BlocStatus<List<OrderTripCarOptionEntity>> prefetchedTripCarOptionsState, List<OrderLocationEntity> prefetchedStops, String? selectedCarTypeId, String? selectedQuoteId, DateTime? scheduledAt, String? paymentMethodId, BlocStatus<OrderTripResponseEntity> tripRequestStatus
 });
 
 
-@override $BlocStatusCopyWith<List<OrderEntity>, $Res> get getAllState;@override $BlocStatusCopyWith<OrderLocationEntity, $Res> get fromLocationState;@override $BlocStatusCopyWith<OrderLocationEntity, $Res> get toLocationState;@override $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get savedLocationsState;@override $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get fromSuggestionsState;@override $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get toSuggestionsState;@override $BlocStatusCopyWith<OrderLocationEntity, $Res> get pickupPointState;@override $BlocStatusCopyWith<String, $Res> get pickupConfirmationFeedbackState;@override $BlocStatusCopyWith<OrderTripRouteEntity, $Res> get tripRouteState;@override $BlocStatusCopyWith<List<OrderTripCarOptionEntity>, $Res> get tripCarOptionsState;@override $BlocStatusCopyWith<OrderTripRouteEntity, $Res> get prefetchedTripRouteState;@override $BlocStatusCopyWith<List<OrderTripCarOptionEntity>, $Res> get prefetchedTripCarOptionsState;@override $BlocStatusCopyWith<OrderTripResponseEntity, $Res> get tripRequestStatus;
+@override $BlocStatusCopyWith<List<OrderEntity>, $Res> get getAllState;@override $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get savedLocationsState;@override $BlocStatusCopyWith<OrderLocationEntity, $Res> get pickupPointState;@override $BlocStatusCopyWith<String, $Res> get pickupConfirmationFeedbackState;@override $BlocStatusCopyWith<OrderTripRouteEntity, $Res> get tripRouteState;@override $BlocStatusCopyWith<List<OrderTripCarOptionEntity>, $Res> get tripCarOptionsState;@override $BlocStatusCopyWith<OrderTripRouteEntity, $Res> get prefetchedTripRouteState;@override $BlocStatusCopyWith<List<OrderTripCarOptionEntity>, $Res> get prefetchedTripCarOptionsState;@override $BlocStatusCopyWith<OrderTripResponseEntity, $Res> get tripRequestStatus;
 
 }
 /// @nodoc
@@ -2161,7 +2225,7 @@ class __$OrderStateCopyWithImpl<$Res>
 
 /// Create a copy of OrderState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? getAllState = null,Object? sheetMode = null,Object? expandedStep = null,Object? mapPickingTarget = null,Object? mapCameraLatitude = null,Object? mapCameraLongitude = null,Object? mapCameraZoom = null,Object? fromLocationState = null,Object? toLocationState = null,Object? savedLocationsState = null,Object? fromSuggestionsState = null,Object? toSuggestionsState = null,Object? fromQuery = null,Object? toQuery = null,Object? pickupPointState = null,Object? pickupStreetName = null,Object? pickupHouseNumber = null,Object? pickupConfirmationFeedbackState = null,Object? tripRouteState = null,Object? tripCarOptionsState = null,Object? prefetchedTripRouteState = null,Object? prefetchedTripCarOptionsState = null,Object? prefetchedFromLocation = freezed,Object? prefetchedToLocation = freezed,Object? selectedCarTypeId = freezed,Object? selectedQuoteId = freezed,Object? scheduledAt = freezed,Object? paymentMethodId = freezed,Object? tripRequestStatus = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? getAllState = null,Object? sheetMode = null,Object? expandedStep = null,Object? mapPickingTarget = null,Object? mapCameraLatitude = null,Object? mapCameraLongitude = null,Object? mapCameraZoom = null,Object? stops = null,Object? stopQueries = null,Object? stopSuggestionsState = null,Object? activeStopIndex = null,Object? savedLocationsState = null,Object? pickupPointState = null,Object? pickupStreetName = null,Object? pickupHouseNumber = null,Object? pickupConfirmationFeedbackState = null,Object? tripRouteState = null,Object? tripCarOptionsState = null,Object? prefetchedTripRouteState = null,Object? prefetchedTripCarOptionsState = null,Object? prefetchedStops = null,Object? selectedCarTypeId = freezed,Object? selectedQuoteId = freezed,Object? scheduledAt = freezed,Object? paymentMethodId = freezed,Object? tripRequestStatus = null,}) {
   return _then(_OrderState(
 getAllState: null == getAllState ? _self.getAllState : getAllState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<List<OrderEntity>>,sheetMode: null == sheetMode ? _self.sheetMode : sheetMode // ignore: cast_nullable_to_non_nullable
@@ -2170,14 +2234,12 @@ as OrderExpandedStep,mapPickingTarget: null == mapPickingTarget ? _self.mapPicki
 as OrderLocationTarget,mapCameraLatitude: null == mapCameraLatitude ? _self.mapCameraLatitude : mapCameraLatitude // ignore: cast_nullable_to_non_nullable
 as double,mapCameraLongitude: null == mapCameraLongitude ? _self.mapCameraLongitude : mapCameraLongitude // ignore: cast_nullable_to_non_nullable
 as double,mapCameraZoom: null == mapCameraZoom ? _self.mapCameraZoom : mapCameraZoom // ignore: cast_nullable_to_non_nullable
-as double,fromLocationState: null == fromLocationState ? _self.fromLocationState : fromLocationState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<OrderLocationEntity>,toLocationState: null == toLocationState ? _self.toLocationState : toLocationState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<OrderLocationEntity>,savedLocationsState: null == savedLocationsState ? _self.savedLocationsState : savedLocationsState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<List<OrderSavedLocationEntity>>,fromSuggestionsState: null == fromSuggestionsState ? _self.fromSuggestionsState : fromSuggestionsState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<List<OrderSavedLocationEntity>>,toSuggestionsState: null == toSuggestionsState ? _self.toSuggestionsState : toSuggestionsState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<List<OrderSavedLocationEntity>>,fromQuery: null == fromQuery ? _self.fromQuery : fromQuery // ignore: cast_nullable_to_non_nullable
-as String,toQuery: null == toQuery ? _self.toQuery : toQuery // ignore: cast_nullable_to_non_nullable
-as String,pickupPointState: null == pickupPointState ? _self.pickupPointState : pickupPointState // ignore: cast_nullable_to_non_nullable
+as double,stops: null == stops ? _self._stops : stops // ignore: cast_nullable_to_non_nullable
+as List<OrderLocationEntity?>,stopQueries: null == stopQueries ? _self._stopQueries : stopQueries // ignore: cast_nullable_to_non_nullable
+as List<String>,stopSuggestionsState: null == stopSuggestionsState ? _self._stopSuggestionsState : stopSuggestionsState // ignore: cast_nullable_to_non_nullable
+as List<BlocStatus<List<OrderSavedLocationEntity>>>,activeStopIndex: null == activeStopIndex ? _self.activeStopIndex : activeStopIndex // ignore: cast_nullable_to_non_nullable
+as int,savedLocationsState: null == savedLocationsState ? _self.savedLocationsState : savedLocationsState // ignore: cast_nullable_to_non_nullable
+as BlocStatus<List<OrderSavedLocationEntity>>,pickupPointState: null == pickupPointState ? _self.pickupPointState : pickupPointState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<OrderLocationEntity>,pickupStreetName: null == pickupStreetName ? _self.pickupStreetName : pickupStreetName // ignore: cast_nullable_to_non_nullable
 as String,pickupHouseNumber: null == pickupHouseNumber ? _self.pickupHouseNumber : pickupHouseNumber // ignore: cast_nullable_to_non_nullable
 as String,pickupConfirmationFeedbackState: null == pickupConfirmationFeedbackState ? _self.pickupConfirmationFeedbackState : pickupConfirmationFeedbackState // ignore: cast_nullable_to_non_nullable
@@ -2185,9 +2247,8 @@ as BlocStatus<String>,tripRouteState: null == tripRouteState ? _self.tripRouteSt
 as BlocStatus<OrderTripRouteEntity>,tripCarOptionsState: null == tripCarOptionsState ? _self.tripCarOptionsState : tripCarOptionsState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<List<OrderTripCarOptionEntity>>,prefetchedTripRouteState: null == prefetchedTripRouteState ? _self.prefetchedTripRouteState : prefetchedTripRouteState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<OrderTripRouteEntity>,prefetchedTripCarOptionsState: null == prefetchedTripCarOptionsState ? _self.prefetchedTripCarOptionsState : prefetchedTripCarOptionsState // ignore: cast_nullable_to_non_nullable
-as BlocStatus<List<OrderTripCarOptionEntity>>,prefetchedFromLocation: freezed == prefetchedFromLocation ? _self.prefetchedFromLocation : prefetchedFromLocation // ignore: cast_nullable_to_non_nullable
-as OrderLocationEntity?,prefetchedToLocation: freezed == prefetchedToLocation ? _self.prefetchedToLocation : prefetchedToLocation // ignore: cast_nullable_to_non_nullable
-as OrderLocationEntity?,selectedCarTypeId: freezed == selectedCarTypeId ? _self.selectedCarTypeId : selectedCarTypeId // ignore: cast_nullable_to_non_nullable
+as BlocStatus<List<OrderTripCarOptionEntity>>,prefetchedStops: null == prefetchedStops ? _self._prefetchedStops : prefetchedStops // ignore: cast_nullable_to_non_nullable
+as List<OrderLocationEntity>,selectedCarTypeId: freezed == selectedCarTypeId ? _self.selectedCarTypeId : selectedCarTypeId // ignore: cast_nullable_to_non_nullable
 as String?,selectedQuoteId: freezed == selectedQuoteId ? _self.selectedQuoteId : selectedQuoteId // ignore: cast_nullable_to_non_nullable
 as String?,scheduledAt: freezed == scheduledAt ? _self.scheduledAt : scheduledAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,paymentMethodId: freezed == paymentMethodId ? _self.paymentMethodId : paymentMethodId // ignore: cast_nullable_to_non_nullable
@@ -2209,46 +2270,10 @@ $BlocStatusCopyWith<List<OrderEntity>, $Res> get getAllState {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$BlocStatusCopyWith<OrderLocationEntity, $Res> get fromLocationState {
-  
-  return $BlocStatusCopyWith<OrderLocationEntity, $Res>(_self.fromLocationState, (value) {
-    return _then(_self.copyWith(fromLocationState: value));
-  });
-}/// Create a copy of OrderState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<OrderLocationEntity, $Res> get toLocationState {
-  
-  return $BlocStatusCopyWith<OrderLocationEntity, $Res>(_self.toLocationState, (value) {
-    return _then(_self.copyWith(toLocationState: value));
-  });
-}/// Create a copy of OrderState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
 $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get savedLocationsState {
   
   return $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res>(_self.savedLocationsState, (value) {
     return _then(_self.copyWith(savedLocationsState: value));
-  });
-}/// Create a copy of OrderState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get fromSuggestionsState {
-  
-  return $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res>(_self.fromSuggestionsState, (value) {
-    return _then(_self.copyWith(fromSuggestionsState: value));
-  });
-}/// Create a copy of OrderState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res> get toSuggestionsState {
-  
-  return $BlocStatusCopyWith<List<OrderSavedLocationEntity>, $Res>(_self.toSuggestionsState, (value) {
-    return _then(_self.copyWith(toSuggestionsState: value));
   });
 }/// Create a copy of OrderState
 /// with the given fields replaced by the non-null parameter values.

@@ -32,18 +32,21 @@ class _SplashMapWarmupWidgetState extends State<SplashMapWarmupWidget> {
     return IgnorePointer(
       child: Opacity(
         opacity: 0,
-        child: GoogleMap(
-          style: context.isDarkTheme ? AppMapStyles.dark : null,
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: const CameraPosition(
-            target: LatLng(MapConfig.defaultLat, MapConfig.defaultLng),
-            zoom: MapConfig.initialZoom,
+        // Suppress platform-view accessibility noise during warmup.
+        child: ExcludeSemantics(
+          child: GoogleMap(
+            style: context.isDarkTheme ? AppMapStyles.dark : null,
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(MapConfig.defaultLat, MapConfig.defaultLng),
+              zoom: MapConfig.initialZoom,
+            ),
+            myLocationButtonEnabled: false,
+            compassEnabled: false,
+            zoomControlsEnabled: false,
+            mapToolbarEnabled: false,
+            minMaxZoomPreference: const MinMaxZoomPreference(5, 19),
           ),
-          myLocationButtonEnabled: false,
-          compassEnabled: false,
-          zoomControlsEnabled: false,
-          mapToolbarEnabled: false,
-          minMaxZoomPreference: const MinMaxZoomPreference(5, 19),
         ),
       ),
     );

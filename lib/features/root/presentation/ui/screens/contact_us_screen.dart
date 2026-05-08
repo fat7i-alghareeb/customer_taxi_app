@@ -51,7 +51,7 @@ class ContactUsScreen extends StatelessWidget {
                   title: AppStrings.contactUsEmail,
                   icon: FontAwesomeIcons.solidEnvelope,
                   children: const [
-                    _ContactItem(value: 'info@admtaxitours.com'),
+                    _ContactItem(value: 'admin@fat7i.dev'),
                   ],
                 )
                 .animate()

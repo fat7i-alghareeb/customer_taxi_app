@@ -15,8 +15,7 @@ class OrderMapContextTriggerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final targetLabel = switch (target) {
-      OrderLocationTarget.from => AppStrings.from,
-      OrderLocationTarget.to => AppStrings.to,
+      OrderLocationTarget.stop => AppStrings.from,
       OrderLocationTarget.pickupPoint => AppStrings.pickupPoint,
     };
 

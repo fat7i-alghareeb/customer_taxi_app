@@ -34,6 +34,7 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
   @override
   void initState() {
     super.initState();
+    printM('[OrderLocationFieldWidget] initState controlName=${widget.formControlName}');
     _internalFocusNode = widget.focusNode ?? FocusNode();
     _internalFocusNode.addListener(_onFocusChanged);
   }
@@ -49,6 +50,7 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
   }
 
   void _onFocusChanged() {
+    printM('[OrderLocationFieldWidget] _onFocusChanged controlName=${widget.formControlName} hasFocus=${_internalFocusNode.hasFocus}');
     if (mounted) {
       setState(() {
         _hasFocus = _internalFocusNode.hasFocus;
@@ -113,6 +115,8 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                 final showClear =
                     _hasFocus && hasValue && widget.onClearPressed != null;
 
+                printM('[OrderLocationFieldWidget] build controlName=${widget.formControlName} value="${control.value}" hasFocus=$_hasFocus');
+
                 return AppReactiveTextField.text(
                   formControlName: widget.formControlName,
                   hintText: widget.hintText,
@@ -127,6 +131,7 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                         )
                       : const AppAffixes(),
                   onChangedDebounced: (value, _) {
+                    printM('[OrderLocationFieldWidget] onChangedDebounced controlName=${widget.formControlName} value="$value"');
                     widget.onQueryChanged(value);
                   },
                 );

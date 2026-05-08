@@ -12,6 +12,7 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/theme_controller.dart';
 import 'flavors.dart';
 import 'utils/constants/design_constants.dart';
+import 'utils/helpers/colored_print.dart';
 
 /// Root widget of the application.
 class App extends StatelessWidget {
@@ -19,6 +20,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[App] build start');
     final appRouterConfig = getIt<AppRouterConfig>();
     final themeController = getIt<ThemeController>();
     final stageDevicePreview = StageDevicePreviewController.tryGet();
@@ -26,7 +28,9 @@ class App extends StatelessWidget {
     return AnimatedBuilder(
       animation: themeController,
       builder: (context, _) {
+        printM('[App] AnimatedBuilder builder triggered');
         Widget buildMaterialApp({required bool devicePreviewEnabled}) {
+          printM('[App] buildMaterialApp devicePreviewEnabled=$devicePreviewEnabled');
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: F.title,
@@ -45,6 +49,7 @@ class App extends StatelessWidget {
             // bar, navigation bar) can adapt its colors and icon brightness
             // based on the active theme.
             builder: (context, child) {
+              printM('[App] MaterialApp.router builder triggered');
               final theme = Theme.of(context);
               final overlayStyle = AppSystemUiOverlay.forTheme(theme);
               SystemChrome.setSystemUIOverlayStyle(overlayStyle);

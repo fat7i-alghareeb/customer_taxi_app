@@ -31,6 +31,7 @@ class RootMapCanvasWidget extends StatelessWidget {
   Set<Marker> get _markers => <Marker>{...tripMarkers};
 
   Set<Polyline> _buildPolylines(BuildContext context) {
+    printM('[RootMapCanvasWidget] _buildPolylines tripPoints=${tripPolylinePoints.length}');
     if (tripPolylinePoints.length < 2) {
       return const <Polyline>{};
     }
@@ -87,8 +88,11 @@ class RootMapCanvasWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[RootMapCanvasWidget] build');
     return RepaintBoundary(
-      child: GoogleMap(
+      // Avoid noisy Android accessibility logs from the map platform view.
+      child: ExcludeSemantics(
+        child: GoogleMap(
         style: context.isDarkTheme ? AppMapStyles.dark : null,
         onMapCreated: onMapCreated,
         onCameraMove: onCameraMove,
@@ -105,6 +109,7 @@ class RootMapCanvasWidget extends StatelessWidget {
         zoomControlsEnabled: false,
         mapToolbarEnabled: false,
         minMaxZoomPreference: const MinMaxZoomPreference(5, 19),
+        ),
       ),
     );
   }

@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
-import 'package:customertaxi/features/order/domain/entities/order_location_entity.dart';
 import 'package:customertaxi/features/root/constants/root_constants.dart';
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
@@ -84,10 +83,13 @@ class _RootMapSectionState extends State<RootMapSection>
   }
 
   void _onCameraMove(CameraPosition position) {
+    // Too noisy for normal logs, but user asked for intensive
+    printGray('[RootMapSection] _onCameraMove target=${position.target.latitude},${position.target.longitude} zoom=${position.zoom}');
     _lastCameraPosition = position;
   }
 
   void _onCameraIdle() {
+    printM('[RootMapSection] _onCameraIdle');
     final target = _lastCameraPosition;
     if (target == null) return;
 
@@ -278,15 +280,6 @@ class _RootMapSectionState extends State<RootMapSection>
     );
   }
 
-  OrderLocationEntity? _extractOrderLocation(
-    BlocStatus<OrderLocationEntity> locationState,
-  ) {
-    return locationState.maybeWhen(
-      success: (location) => location,
-      orElse: () => null,
-    );
-  }
-
   List<LatLng> _extractTripPolylinePoints(OrderState orderState) {
     return orderState.tripRouteState.maybeWhen(
       success: (route) => route.points
@@ -302,8 +295,8 @@ class _RootMapSectionState extends State<RootMapSection>
   }
 
   Set<Marker> _buildTripMarkers(OrderState orderState) {
-    final fromLocation = _extractOrderLocation(orderState.fromLocationState);
-    final toLocation = _extractOrderLocation(orderState.toLocationState);
+    final fromLocation = orderState.stops.isNotEmpty ? orderState.stops.first : null;
+    final toLocation = orderState.stops.isNotEmpty ? orderState.stops.last : null;
 
     if (!orderState.tripRouteState.isSuccess ||
         fromLocation == null ||
@@ -368,8 +361,8 @@ class _RootMapSectionState extends State<RootMapSection>
       orElse: () => null,
     );
 
-    final fromLocation = _extractOrderLocation(orderState.fromLocationState);
-    final toLocation = _extractOrderLocation(orderState.toLocationState);
+    final fromLocation = orderState.stops.isNotEmpty ? orderState.stops.first : null;
+    final toLocation = orderState.stops.isNotEmpty ? orderState.stops.last : null;
 
     if (route == null || fromLocation == null || toLocation == null) {
       return;
@@ -447,6 +440,7 @@ class _RootMapSectionState extends State<RootMapSection>
 
   @override
   Widget build(BuildContext context) {
+    printM('[RootMapSection] build');
     return MultiBlocListener(
       listeners: [
         BlocListener<RootBloc, RootState>(
@@ -467,13 +461,11 @@ class _RootMapSectionState extends State<RootMapSection>
                   BlocBuilder<OrderBloc, OrderState>(
                     buildWhen: (previous, current) =>
                         previous.tripRouteState != current.tripRouteState ||
-                        previous.fromLocationState !=
-                            current.fromLocationState ||
-                        previous.toLocationState != current.toLocationState,
+                        previous.stops != current.stops,
                     builder: (context, orderState) {
-                      final toLocation = _extractOrderLocation(
-                        orderState.toLocationState,
-                      );
+                      final toLocation = orderState.stops.isNotEmpty
+                          ? orderState.stops.last
+                          : null;
 
                       return RootMapCanvasWidget(
                         currentLocation: _currentLocation,

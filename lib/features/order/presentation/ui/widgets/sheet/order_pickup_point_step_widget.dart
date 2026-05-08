@@ -19,6 +19,7 @@ class OrderPickupPointStepWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[OrderPickupPointStepWidget] build');
     final pickupLabel = state.pickupPointState.maybeWhen(
       success: (location) => location.label,
       orElse: () => null,

@@ -8,6 +8,7 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    printM('[OrderCollapsedSheetWidget] build');
     return Padding(
           padding: REdgeInsets.symmetric(
             vertical: OrderConstants.collapsedSheetVerticalPadding,

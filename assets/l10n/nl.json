@@ -219,6 +219,12 @@
   "orderQuoteExpired": "Uw prijsopgave is verlopen. Vraag een nieuwe opgave aan.",
   "orderQuoteAlreadyUsed": "Deze prijsopgave is al gebruikt.",
   "tripStatus": "Status",
-  "tripCreatedAt": "Aangevraagd op"
+  "tripCreatedAt": "Aangevraagd op",
+  "stop": "Stop",
+  "addStop": "Stop toevoegen",
+  "activeTrip": "Actieve Rit",
+  "tripHistory": "Ritgeschiedenis",
+  "completeProfile": "Voltooi Profiel",
+  "confirm": "Bevestigen"
 }
 

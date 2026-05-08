@@ -219,6 +219,12 @@
   "orderQuoteExpired": "Your price quote has expired. Please request a new quote.",
   "orderQuoteAlreadyUsed": "This quote has already been used.",
   "tripStatus": "Status",
-  "tripCreatedAt": "Requested at"
+  "tripCreatedAt": "Requested at",
+  "stop": "Stop",
+  "addStop": "Add stop",
+  "activeTrip": "Active Trip",
+  "tripHistory": "Trip History",
+  "completeProfile": "Complete Profile",
+  "confirm": "Confirm"
 }
 

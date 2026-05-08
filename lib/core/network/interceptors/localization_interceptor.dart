@@ -8,6 +8,7 @@ import '../../../utils/helpers/colored_print.dart';
 /// Adds localization-related headers to every request.
 ///
 /// - `lang`: current language code (e.g. `en`, `ar`).
+/// - `Accept-Language`: preferred language for the response (e.g. `en`, `ar`, `nl`).
 /// - `X-TimeZoneId`: device time zone identifier.
 @lazySingleton
 class LocalizationInterceptor extends Interceptor {
@@ -26,10 +27,13 @@ class LocalizationInterceptor extends Interceptor {
 
       options.headers.addAll(<String, Object?>{
         'lang': langCode,
+        'Accept-Language': langCode,
         'X-TimeZoneId': timeZone,
       });
 
-      printC('LocalizationInterceptor → lang=$langCode, tz=$timeZone');
+      printC(
+        'LocalizationInterceptor → lang=$langCode, Accept-Language=$langCode, tz=$timeZone',
+      );
     } catch (e) {
       // Fallback silently if anything goes wrong – network calls should
       // still proceed without localization headers.
