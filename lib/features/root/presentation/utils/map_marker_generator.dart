@@ -98,4 +98,89 @@ class MapMarkerGenerator {
 
     return BitmapDescriptor.bytes(uint8List);
   }
+
+  static Future<BitmapDescriptor> createLabelMarker({
+    required String text,
+    required Color color,
+    double height = 38, // Slightly smaller
+    double paddingHorizontal = 12, // More compact
+  }) async {
+    final TextPainter textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          fontSize: height * 0.38,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          letterSpacing: -0.5,
+        ),
+      ),
+    );
+    textPainter.layout();
+
+    final double headWidth = textPainter.width + (paddingHorizontal * 2);
+    final double tailHeight = 8;
+    final double totalHeight = height + tailHeight + 4; // Head + Tail + Shadow buffer
+    final double totalWidth = headWidth + 4;
+
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+
+    // 1. Draw Shadow
+    final Paint shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.25)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+    
+    final Path shadowPath = Path();
+    shadowPath.addRRect(RRect.fromLTRBR(2, 2, headWidth + 2, height + 2, Radius.circular(height / 2)));
+    // Add tail to shadow
+    shadowPath.moveTo(headWidth / 2 - 6 + 2, height + 2);
+    shadowPath.lineTo(headWidth / 2 + 2, height + tailHeight + 2);
+    shadowPath.lineTo(headWidth / 2 + 6 + 2, height + 2);
+    canvas.drawPath(shadowPath, shadowPaint);
+
+    // 2. Draw Pin Shape (Head + Tail)
+    final Paint pinPaint = Paint()..color = color;
+    final Path pinPath = Path();
+    
+    // Head (Pill shape)
+    pinPath.addRRect(RRect.fromLTRBR(0, 0, headWidth, height, Radius.circular(height / 2)));
+    
+    // Tail (Triangle)
+    pinPath.moveTo(headWidth / 2 - 6, height - 1); // Slight overlap to avoid gap
+    pinPath.lineTo(headWidth / 2, height + tailHeight);
+    pinPath.lineTo(headWidth / 2 + 6, height - 1);
+    
+    canvas.drawPath(pinPath, pinPaint);
+
+    // 3. White Border for Contrast
+    final Paint borderPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5;
+    
+    canvas.drawPath(pinPath, borderPaint);
+
+    // 4. Draw Text
+    textPainter.paint(
+      canvas,
+      Offset(
+        (headWidth - textPainter.width) / 2,
+        (height - textPainter.height) / 2,
+      ),
+    );
+
+    final ui.Image image = await pictureRecorder.endRecording().toImage(
+      totalWidth.toInt(),
+      totalHeight.toInt(),
+    );
+    final ByteData? byteData = await image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+    final Uint8List uint8List = byteData!.buffer.asUint8List();
+
+    return BitmapDescriptor.bytes(uint8List);
+  }
 }

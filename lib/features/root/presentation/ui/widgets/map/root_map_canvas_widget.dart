@@ -8,7 +8,7 @@ class RootMapCanvasWidget extends StatelessWidget {
     super.key,
     required this.currentLocation,
     required this.onMapCreated,
-    this.tripPolylinePoints = const <LatLng>[],
+    this.legPolylines = const <List<LatLng>>[],
     this.tripMarkers = const <Marker>{},
     this.onCameraMove,
     this.onCameraIdle,
@@ -18,7 +18,7 @@ class RootMapCanvasWidget extends StatelessWidget {
 
   final RootMapLocationEntity currentLocation;
   final void Function(GoogleMapController controller) onMapCreated;
-  final List<LatLng> tripPolylinePoints;
+  final List<List<LatLng>> legPolylines;
   final Set<Marker> tripMarkers;
   final void Function(CameraPosition position)? onCameraMove;
   final VoidCallback? onCameraIdle;
@@ -31,50 +31,70 @@ class RootMapCanvasWidget extends StatelessWidget {
   Set<Marker> get _markers => <Marker>{...tripMarkers};
 
   Set<Polyline> _buildPolylines(BuildContext context) {
-    printM('[RootMapCanvasWidget] _buildPolylines tripPoints=${tripPolylinePoints.length}');
-    if (tripPolylinePoints.length < 2) {
+    if (legPolylines.isEmpty) {
       return const <Polyline>{};
     }
 
     final polylines = <Polyline>{};
 
     // 1. Walking path from Current Location to Trip Start (Dashed)
-    polylines.add(
-      Polyline(
-        polylineId: const PolylineId('walking-to-start'),
-        points: [_latLng, tripPolylinePoints.first],
-        width: 3.r.toInt(),
-        color: context.primary.withValues(alpha: 0.45),
-        patterns: [PatternItem.dash(8), PatternItem.gap(6)],
-      ),
-    );
+    if (legPolylines.first.isNotEmpty) {
+      polylines.add(
+        Polyline(
+          polylineId: const PolylineId('walking-to-start'),
+          points: [_latLng, legPolylines.first.first],
+          width: 3.r.toInt(),
+          color: context.primary.withValues(alpha: 0.45),
+          patterns: [PatternItem.dash(8), PatternItem.gap(6)],
+        ),
+      );
+    }
 
-    // 2. Main Driving Path - Shadow (Thicker & Transparent)
-    polylines.add(
-      Polyline(
-        polylineId: const PolylineId('order-trip-route-shadow'),
-        points: tripPolylinePoints,
-        width: 6.r.toInt(),
-        color: context.primary.withValues(alpha: 0.15),
-      ),
-    );
+    // Colors for legs
+    final legColors = [
+      Colors.orange,
+      Colors.blue,
+      Colors.green,
+      Colors.purple,
+      Colors.red,
+      Colors.teal,
+      Colors.indigo,
+    ];
 
-    // 3. Main Driving Path (Solid - Primary)
-    polylines.add(
-      Polyline(
-        polylineId: const PolylineId('order-trip-route'),
-        points: tripPolylinePoints,
-        width: 4.r.toInt(),
-        color: context.primary,
-      ),
-    );
+    // 2. Render each leg
+    for (int i = 0; i < legPolylines.length; i++) {
+      final points = legPolylines[i];
+      if (points.length < 2) continue;
+
+      final color = legColors[i % legColors.length];
+
+      // Shadow
+      polylines.add(
+        Polyline(
+          polylineId: PolylineId('order-trip-leg-$i-shadow'),
+          points: points,
+          width: 6.r.toInt(),
+          color: color.withValues(alpha: 0.15),
+        ),
+      );
+
+      // Solid
+      polylines.add(
+        Polyline(
+          polylineId: PolylineId('order-trip-leg-$i'),
+          points: points,
+          width: 4.r.toInt(),
+          color: color,
+        ),
+      );
+    }
 
     // 4. Walking path from Trip End to Destination (Dashed)
-    if (destinationLocation != null) {
+    if (destinationLocation != null && legPolylines.last.isNotEmpty) {
       polylines.add(
         Polyline(
           polylineId: const PolylineId('walking-to-destination'),
-          points: [tripPolylinePoints.last, destinationLocation!],
+          points: [legPolylines.last.last, destinationLocation!],
           width: 3.r.toInt(),
           color: context.onSurface.withValues(alpha: 0.35),
           patterns: [PatternItem.dash(8), PatternItem.gap(6)],

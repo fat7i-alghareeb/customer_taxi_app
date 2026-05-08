@@ -235,8 +235,8 @@ void _configureJwtFlow({
           final response = await tokenDio.post<dynamic>(
             ApiEndpoints.refreshToken,
             data: <String, Object?>{
-              'userId': user!.id,
-              'refreshToken': token.refreshToken,
+              'RefreshToken': token.refreshToken,
+              'ExpiredAccessToken': token.accessToken,
             },
           );
 

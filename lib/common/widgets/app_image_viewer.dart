@@ -61,11 +61,9 @@ library;
 import 'dart:io';
  
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import '../../core/network/api_config.dart';
 import '../../utils/extensions/context_extensions.dart';
 
 import '../../utils/extensions/theme_extensions.dart';
@@ -194,10 +192,12 @@ class AppImageViewer extends StatelessWidget {
 
     Color? fullScreenBackgroundColor,
   }) {
+    final effectiveUrl = url.startsWith('/') ? '${ApiConfig.baseUrl}$url' : url;
+
     return AppImageViewer._(
       key: key,
 
-      source: url,
+      source: effectiveUrl,
 
       sourceType: AppImageViewerSourceType.network,
 

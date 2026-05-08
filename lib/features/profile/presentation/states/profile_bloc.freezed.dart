@@ -388,7 +388,7 @@ String toString() {
 /// @nodoc
 mixin _$ProfileState {
 
- BlocStatus<ProfileEntity> get loadStatus; BlocStatus<ProfileEntity> get saveStatus; BlocStatus<String> get photoStatus; ProfileEntity? get currentUser; String get pendingName; File? get pendingPhoto;
+ BlocStatus<ProfileEntity> get loadStatus; BlocStatus<ProfileEntity> get saveStatus; ProfileEntity? get currentUser; String get pendingName; File? get pendingPhoto;
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -399,16 +399,16 @@ $ProfileStateCopyWith<ProfileState> get copyWith => _$ProfileStateCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.photoStatus, photoStatus) || other.photoStatus == photoStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,photoStatus,currentUser,pendingName,pendingPhoto);
+int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,currentUser,pendingName,pendingPhoto);
 
 @override
 String toString() {
-  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, photoStatus: $photoStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto)';
+  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto)';
 }
 
 
@@ -419,11 +419,11 @@ abstract mixin class $ProfileStateCopyWith<$Res>  {
   factory $ProfileStateCopyWith(ProfileState value, $Res Function(ProfileState) _then) = _$ProfileStateCopyWithImpl;
 @useResult
 $Res call({
- BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, BlocStatus<String> photoStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto
+ BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto
 });
 
 
-$BlocStatusCopyWith<ProfileEntity, $Res> get loadStatus;$BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus;$BlocStatusCopyWith<String, $Res> get photoStatus;$ProfileEntityCopyWith<$Res>? get currentUser;
+$BlocStatusCopyWith<ProfileEntity, $Res> get loadStatus;$BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus;$ProfileEntityCopyWith<$Res>? get currentUser;
 
 }
 /// @nodoc
@@ -436,12 +436,11 @@ class _$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? photoStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,}) {
   return _then(_self.copyWith(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<ProfileEntity>,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<ProfileEntity>,photoStatus: null == photoStatus ? _self.photoStatus : photoStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<String>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
+as BlocStatus<ProfileEntity>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
 as ProfileEntity?,pendingName: null == pendingName ? _self.pendingName : pendingName // ignore: cast_nullable_to_non_nullable
 as String,pendingPhoto: freezed == pendingPhoto ? _self.pendingPhoto : pendingPhoto // ignore: cast_nullable_to_non_nullable
 as File?,
@@ -464,15 +463,6 @@ $BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus {
   
   return $BlocStatusCopyWith<ProfileEntity, $Res>(_self.saveStatus, (value) {
     return _then(_self.copyWith(saveStatus: value));
-  });
-}/// Create a copy of ProfileState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<String, $Res> get photoStatus {
-  
-  return $BlocStatusCopyWith<String, $Res>(_self.photoStatus, (value) {
-    return _then(_self.copyWith(photoStatus: value));
   });
 }/// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
@@ -568,10 +558,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<String> photoStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.loadStatus,_that.saveStatus,_that.photoStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
   return orElse();
 
 }
@@ -589,10 +579,10 @@ return $default(_that.loadStatus,_that.saveStatus,_that.photoStatus,_that.curren
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<String> photoStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState():
-return $default(_that.loadStatus,_that.saveStatus,_that.photoStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -609,10 +599,10 @@ return $default(_that.loadStatus,_that.saveStatus,_that.photoStatus,_that.curren
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<String> photoStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.loadStatus,_that.saveStatus,_that.photoStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
   return null;
 
 }
@@ -624,12 +614,11 @@ return $default(_that.loadStatus,_that.saveStatus,_that.photoStatus,_that.curren
 
 
 class _ProfileState implements ProfileState {
-  const _ProfileState({this.loadStatus = const BlocStatus<ProfileEntity>.initial(), this.saveStatus = const BlocStatus<ProfileEntity>.initial(), this.photoStatus = const BlocStatus<String>.initial(), this.currentUser, this.pendingName = '', this.pendingPhoto});
+  const _ProfileState({this.loadStatus = const BlocStatus<ProfileEntity>.initial(), this.saveStatus = const BlocStatus<ProfileEntity>.initial(), this.currentUser, this.pendingName = '', this.pendingPhoto});
   
 
 @override@JsonKey() final  BlocStatus<ProfileEntity> loadStatus;
 @override@JsonKey() final  BlocStatus<ProfileEntity> saveStatus;
-@override@JsonKey() final  BlocStatus<String> photoStatus;
 @override final  ProfileEntity? currentUser;
 @override@JsonKey() final  String pendingName;
 @override final  File? pendingPhoto;
@@ -644,16 +633,16 @@ _$ProfileStateCopyWith<_ProfileState> get copyWith => __$ProfileStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.photoStatus, photoStatus) || other.photoStatus == photoStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,photoStatus,currentUser,pendingName,pendingPhoto);
+int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,currentUser,pendingName,pendingPhoto);
 
 @override
 String toString() {
-  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, photoStatus: $photoStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto)';
+  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto)';
 }
 
 
@@ -664,11 +653,11 @@ abstract mixin class _$ProfileStateCopyWith<$Res> implements $ProfileStateCopyWi
   factory _$ProfileStateCopyWith(_ProfileState value, $Res Function(_ProfileState) _then) = __$ProfileStateCopyWithImpl;
 @override @useResult
 $Res call({
- BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, BlocStatus<String> photoStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto
+ BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto
 });
 
 
-@override $BlocStatusCopyWith<ProfileEntity, $Res> get loadStatus;@override $BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus;@override $BlocStatusCopyWith<String, $Res> get photoStatus;@override $ProfileEntityCopyWith<$Res>? get currentUser;
+@override $BlocStatusCopyWith<ProfileEntity, $Res> get loadStatus;@override $BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus;@override $ProfileEntityCopyWith<$Res>? get currentUser;
 
 }
 /// @nodoc
@@ -681,12 +670,11 @@ class __$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? photoStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,}) {
   return _then(_ProfileState(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<ProfileEntity>,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<ProfileEntity>,photoStatus: null == photoStatus ? _self.photoStatus : photoStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<String>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
+as BlocStatus<ProfileEntity>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
 as ProfileEntity?,pendingName: null == pendingName ? _self.pendingName : pendingName // ignore: cast_nullable_to_non_nullable
 as String,pendingPhoto: freezed == pendingPhoto ? _self.pendingPhoto : pendingPhoto // ignore: cast_nullable_to_non_nullable
 as File?,
@@ -710,15 +698,6 @@ $BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus {
   
   return $BlocStatusCopyWith<ProfileEntity, $Res>(_self.saveStatus, (value) {
     return _then(_self.copyWith(saveStatus: value));
-  });
-}/// Create a copy of ProfileState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$BlocStatusCopyWith<String, $Res> get photoStatus {
-  
-  return $BlocStatusCopyWith<String, $Res>(_self.photoStatus, (value) {
-    return _then(_self.copyWith(photoStatus: value));
   });
 }/// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.

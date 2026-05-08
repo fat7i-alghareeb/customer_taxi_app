@@ -3,7 +3,6 @@ import 'package:customertaxi/features/order/presentation/states/order_bloc.dart'
 import 'package:customertaxi/features/order/presentation/ui/widgets/order_body.dart';
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
-import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../map/root_map_loading_section.dart';
 import '../map/root_map_section.dart';

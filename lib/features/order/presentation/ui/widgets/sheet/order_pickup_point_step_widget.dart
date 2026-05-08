@@ -124,7 +124,11 @@ class OrderPickupPointStepWidget extends StatelessWidget {
         AppSpacing.md.verticalSpace,
         AppButton.success(
           onTap: onSetPickupOnMapPressed,
-          layout: AppButtonLayout(height: 48.sp, borderRadius: AppRadii.lg),
+          layout: AppButtonLayout(
+            width: double.infinity,
+            height: 48.sp,
+            borderRadius: AppRadii.lg,
+          ),
           child: AppButtonChild.label(AppStrings.setPickupPointOnMap),
         ).animate().fadeIn(delay: 180.ms).slideY(begin: 0.06),
         AppSpacing.lg.verticalSpace,

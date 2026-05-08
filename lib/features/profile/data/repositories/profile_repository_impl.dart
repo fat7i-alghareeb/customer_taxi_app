@@ -47,24 +47,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Result<ProfileEntity>> updateProfile(UpdateProfileParam param) {
+  Future<Result<ProfileEntity>> updateProfile(UpdateUserProfileRequest param) {
     return runAsResult(() async {
-      printM('[ProfileRepository] updateProfile name="${param.name}"');
+      printM('[ProfileRepository] updateProfile name="${param.name}" hasPhoto=${param.photo != null}');
       final model = await _remote.updateProfile(param);
       printG('[ProfileRepository] updateProfile success id=${model.id}');
       final entity = model.toEntity;
       await _syncAuthUser(entity);
       return entity;
-    });
-  }
-
-  @override
-  Future<Result<String>> uploadPhoto(UpdateProfilePhotoParam param) {
-    return runAsResult(() async {
-      printM('[ProfileRepository] uploadPhoto path="${param.photo.path}"');
-      final photoUrl = await _remote.uploadPhoto(param);
-      printG('[ProfileRepository] uploadPhoto success url=$photoUrl');
-      return photoUrl;
     });
   }
 }

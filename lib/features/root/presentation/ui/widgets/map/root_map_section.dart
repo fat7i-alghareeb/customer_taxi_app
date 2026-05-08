@@ -10,6 +10,8 @@ import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
 import '../../../../../../utils/constants/app_flow_constants.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
 import 'package:customertaxi/features/order/constants/order_constants.dart';
+import 'package:customertaxi/features/order/domain/entities/order_location_entity.dart';
+import 'package:customertaxi/features/order/domain/entities/order_trip_route_entity.dart';
 import 'root_map_canvas_widget.dart';
 import 'root_map_controls_section.dart';
 import 'root_map_eta_pill_widget.dart';
@@ -37,6 +39,7 @@ class _RootMapSectionState extends State<RootMapSection>
   late final AnimationController _flightController;
   CameraPosition? _lastCameraPosition;
   final Map<String, BitmapDescriptor> _customMarkers = {};
+  final Map<String, BitmapDescriptor> _stopMarkers = {};
   String? _lastEtaText;
 
   @override
@@ -125,6 +128,7 @@ class _RootMapSectionState extends State<RootMapSection>
     final controller = _mapController;
     if (controller == null) {
       printY('[RootMapSection] animate skipped (controller not ready)');
+      if (!mounted) return;
       setState(() {
         _currentLocation = location;
       });
@@ -160,9 +164,11 @@ class _RootMapSectionState extends State<RootMapSection>
       );
 
       // Update marker position immediately
-      setState(() {
-        _currentLocation = location;
-      });
+      if (mounted) {
+        setState(() {
+          _currentLocation = location;
+        });
+      }
 
       if (distance > 50) {
         // --- CUSTOM CINEMATIC FLIGHT ---
@@ -215,9 +221,11 @@ class _RootMapSectionState extends State<RootMapSection>
       }
     } catch (e) {
       printY('[RootMapSection] animation failed: $e');
-      setState(() {
-        _currentLocation = location;
-      });
+      if (mounted) {
+        setState(() {
+          _currentLocation = location;
+        });
+      }
     } finally {
       _isAnimating = false;
     }
@@ -280,13 +288,21 @@ class _RootMapSectionState extends State<RootMapSection>
     );
   }
 
-  List<LatLng> _extractTripPolylinePoints(OrderState orderState) {
+  List<List<LatLng>> _extractLegPolylinePoints(OrderState orderState) {
     return orderState.tripRouteState.maybeWhen(
-      success: (route) => route.points
-          .map((point) => LatLng(point.latitude, point.longitude))
+      success: (route) => route.legs
+          .map(
+            (leg) => leg.points
+                .map((p) => LatLng(p.latitude, p.longitude))
+                .toList(),
+          )
           .toList(),
-      orElse: () => const <LatLng>[],
+      orElse: () => const <List<LatLng>>[],
     );
+  }
+
+  String _cleanLabel(String label) {
+    return label.replaceAll('(', '').replaceAll(')', '').trim();
   }
 
   LatLng? _calculateMidpoint(List<LatLng> points) {
@@ -294,61 +310,112 @@ class _RootMapSectionState extends State<RootMapSection>
     return points[points.length ~/ 2];
   }
 
-  Set<Marker> _buildTripMarkers(OrderState orderState) {
-    final fromLocation = orderState.stops.isNotEmpty ? orderState.stops.first : null;
-    final toLocation = orderState.stops.isNotEmpty ? orderState.stops.last : null;
-
-    if (!orderState.tripRouteState.isSuccess ||
-        fromLocation == null ||
-        toLocation == null) {
-      return const <Marker>{};
+  Future<void> _generateStopMarkers(OrderTripRouteEntity route) async {
+    final Set<String> labels = {};
+    for (final leg in route.legs) {
+      final start = _cleanLabel(leg.startLabel);
+      final end = _cleanLabel(leg.endLabel);
+      if (start.isNotEmpty) labels.add(start);
+      if (end.isNotEmpty) labels.add(end);
     }
 
-    final points = _extractTripPolylinePoints(orderState);
-    final midpoint = _calculateMidpoint(points);
-    final etaText = orderState.tripRouteState.maybeWhen(
-      success: (route) => route.durationText,
+    for (final label in labels) {
+      if (_stopMarkers.containsKey(label)) continue;
+
+      final isStart = label == _cleanLabel(route.legs.first.startLabel);
+      final marker = await MapMarkerGenerator.createLabelMarker(
+        text: label,
+        color: isStart ? Colors.orange : Colors.blue,
+      );
+
+      if (mounted) {
+        setState(() {
+          _stopMarkers[label] = marker;
+        });
+      }
+    }
+  }
+
+  Set<Marker> _buildTripMarkers(OrderState orderState) {
+    final route = orderState.tripRouteState.maybeWhen(
+      success: (route) => route,
       orElse: () => null,
     );
 
-    if (etaText != null) {
-      _updateEtaMarker(etaText);
+    if (route == null || orderState.stops.isEmpty) {
+      return const <Marker>{};
     }
 
-    final markers = <Marker>{
-      Marker(
-        markerId: const MarkerId('trip-from-location'),
-        position: LatLng(fromLocation.latitude, fromLocation.longitude),
-        icon:
-            _customMarkers['A'] ??
-            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-        anchor: const Offset(0.5, 0.5),
-      ),
-      Marker(
-        markerId: const MarkerId('trip-to-location'),
-        position: LatLng(toLocation.latitude, toLocation.longitude),
-        icon:
-            _customMarkers['B'] ??
-            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-        anchor: const Offset(0.5, 0.5),
-      ),
-    };
+    final markers = <Marker>{};
+    final legs = route.legs;
+    final validStops =
+        orderState.stops.whereType<OrderLocationEntity>().toList();
 
-    if (midpoint != null && etaText != null && etaText.isNotEmpty) {
-      markers.add(
-        Marker(
-          markerId: const MarkerId('trip-eta'),
-          position: midpoint,
-          icon:
-              _customMarkers['ETA'] ??
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-          anchor: const Offset(0.5, 0.5),
-        ),
-      );
+    for (int i = 0; i < legs.length; i++) {
+      final leg = legs[i];
+
+      if (i == 0 && validStops.isNotEmpty) {
+        final label = _cleanLabel(leg.startLabel);
+        markers.add(
+          Marker(
+            markerId: const MarkerId('trip-stop-start'),
+            position: LatLng(validStops[0].latitude, validStops[0].longitude),
+            icon:
+                _stopMarkers[label] ??
+                BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueOrange,
+                ),
+            anchor: const Offset(0.5, 1.0),
+          ),
+        );
+      }
+
+      if (validStops.length > i + 1) {
+        final isLast = i == legs.length - 1;
+        final label = _cleanLabel(leg.endLabel);
+        markers.add(
+          Marker(
+            markerId: MarkerId('trip-stop-${isLast ? "end" : i + 1}'),
+            position: LatLng(
+              validStops[i + 1].latitude,
+              validStops[i + 1].longitude,
+            ),
+            icon:
+                _stopMarkers[label] ??
+                BitmapDescriptor.defaultMarkerWithHue(
+                  isLast ? BitmapDescriptor.hueBlue : BitmapDescriptor.hueOrange,
+                ),
+            anchor: const Offset(0.5, 1.0),
+          ),
+        );
+      }
+    }
+
+    final points = route.legs.expand((l) => l.points).map((p) => LatLng(p.latitude, p.longitude)).toList();
+    final midpoint = _calculateMidpoint(points);
+    final etaText = route.durationText;
+
+    if (etaText.isNotEmpty) {
+      _updateEtaMarker(etaText);
+      if (midpoint != null) {
+        markers.add(
+          Marker(
+            markerId: const MarkerId('trip-eta'),
+            position: midpoint,
+            icon:
+                _customMarkers['ETA'] ??
+                BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueOrange,
+                ),
+            anchor: const Offset(0.5, 0.5),
+          ),
+        );
+      }
     }
 
     return markers;
   }
+
 
   Future<void> _fitRouteBoundsForState(OrderState orderState) async {
     final controller = _mapController;
@@ -449,6 +516,11 @@ class _RootMapSectionState extends State<RootMapSection>
     }
 
     _fitRouteBoundsForState(orderState);
+
+    orderState.tripRouteState.maybeWhen(
+      success: (route) => _generateStopMarkers(route),
+      orElse: () {},
+    );
   }
 
   @override
@@ -480,21 +552,23 @@ class _RootMapSectionState extends State<RootMapSection>
                           ? orderState.stops.last
                           : null;
 
-                      return RootMapCanvasWidget(
-                        currentLocation: _currentLocation,
-                        destinationLocation: toLocation == null
-                            ? null
-                            : LatLng(toLocation.latitude, toLocation.longitude),
-                        tripPolylinePoints: _extractTripPolylinePoints(
-                          orderState,
-                        ),
-                        tripMarkers: _buildTripMarkers(orderState),
-                        onMapCreated: _onMapCreated,
-                        onCameraMove: _onCameraMove,
-                        onCameraIdle: _onCameraIdle,
-                        showMyLocationButton:
-                            orderState.sheetMode == OrderSheetMode.mapPicking,
-                      );
+                        return RootMapCanvasWidget(
+                          currentLocation: _currentLocation,
+                          destinationLocation:
+                              toLocation == null
+                                  ? null
+                                  : LatLng(
+                                    toLocation.latitude,
+                                    toLocation.longitude,
+                                  ),
+                          legPolylines: _extractLegPolylinePoints(orderState),
+                          tripMarkers: _buildTripMarkers(orderState),
+                          onMapCreated: _onMapCreated,
+                          onCameraMove: _onCameraMove,
+                          onCameraIdle: _onCameraIdle,
+                          showMyLocationButton:
+                              orderState.sheetMode == OrderSheetMode.mapPicking,
+                        );
                     },
                   ),
                   BlocBuilder<OrderBloc, OrderState>(

@@ -275,6 +275,8 @@ class AppStrings {
   static String get profileSave => 'profileSave'.tr();
   /// Save & Continue - حفظ ومتابعة - Opslaan & Doorgaan
   static String get profileSaveAndContinue => 'profileSaveAndContinue'.tr();
+  /// Profile updated successfully - تم تحديث الملف الشخصي بنجاح - Profiel succesvol bijgewerkt
+  static String get profileSaveSuccess => 'profileSaveSuccess'.tr();
   /// Complete Your Profile - أكمل ملفك الشخصي - Voltooi uw profiel
   static String get profileSetupTitle => 'profileSetupTitle'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd.

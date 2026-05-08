@@ -29,10 +29,36 @@ class OrderRemoteDataSource {
 
   Future<List<PointLatLng>> _decodeOptimized(String encoded) async {
     if (encoded.isEmpty) return const [];
+    final stopwatch = Stopwatch()..start();
+
+    printY(
+      '[OrderRemoteDataSource] _decodeOptimized: starting decode for string length=${encoded.length}',
+      tag: false,
+    );
+
+    List<PointLatLng> points;
     if (encoded.length >= _polylineDecodeIsolateThreshold) {
-      return compute(_decodePolyline, encoded);
+      printY('[OrderRemoteDataSource] _decodeOptimized: using compute (isolate)', tag: false);
+      points = await compute(_decodePolyline, encoded);
+    } else {
+      printY('[OrderRemoteDataSource] _decodeOptimized: using main thread', tag: false);
+      points = _decodePolyline(encoded);
     }
-    return _decodePolyline(encoded);
+
+    stopwatch.stop();
+    printY(
+      '[OrderRemoteDataSource] _decodeOptimized: finished in ${stopwatch.elapsedMilliseconds}ms. Points: ${points.length}',
+      tag: false,
+    );
+
+    if (points.isNotEmpty) {
+      printY(
+        '[OrderRemoteDataSource] _decodeOptimized: firstPoint=(${points.first.latitude}, ${points.first.longitude}), lastPoint=(${points.last.latitude}, ${points.last.longitude})',
+        tag: false,
+      );
+    }
+
+    return points;
   }
 
   Future<List<OrderModel>> getAllOrders() {
@@ -93,7 +119,7 @@ class OrderRemoteDataSource {
   Future<OrderTripRouteModel> getTripRoute(OrderTripRouteParams params) {
     return rethrowAsAppException(() async {
       printY(
-        '[OrderRemoteDataSource] getTripRoute stops=${params.stops.length}',
+        '[OrderRemoteDataSource] getTripRoute: requested for ${params.stops.length} stops',
         tag: false,
       );
       final res = await _dio.post(
@@ -101,6 +127,8 @@ class OrderRemoteDataSource {
         data: params.toJson(),
       );
       final json = res.data as Map<String, dynamic>;
+
+      printY('[OrderRemoteDataSource] getTripRoute: decoding main polyline...', tag: false);
       final encoded = json['encodedPolyline'] as String? ?? '';
       final decoded = await _decodeOptimized(encoded);
       final points = decoded
@@ -111,7 +139,34 @@ class OrderRemoteDataSource {
             ),
           )
           .toList();
-      return OrderTripRouteModel.fromBackend(json, points);
+
+      final legsJson = json['legs'] as List<dynamic>? ?? const [];
+      final List<List<OrderTripRoutePointModel>> legPoints = [];
+
+      printY(
+        '[OrderRemoteDataSource] getTripRoute: total distance=${json['totalDistanceMeters']}m, duration=${json['totalDurationSeconds']}s, legs=${legsJson.length}',
+        tag: false,
+      );
+
+      for (int i = 0; i < legsJson.length; i++) {
+        final leg = legsJson[i] as Map<String, dynamic>;
+        printY('[OrderRemoteDataSource] getTripRoute: decoding leg $i...', tag: false);
+        final legEncoded = leg['encodedPolyline'] as String? ?? '';
+        final legDecoded = await _decodeOptimized(legEncoded);
+        final pointsForLeg =
+            legDecoded
+                .map(
+                  (p) => OrderTripRoutePointModel(
+                    latitude: p.latitude,
+                    longitude: p.longitude,
+                  ),
+                )
+                .toList();
+
+        legPoints.add(pointsForLeg);
+      }
+
+      return OrderTripRouteModel.fromBackend(json, points, legPoints);
     });
   }
 
@@ -127,11 +182,25 @@ class OrderRemoteDataSource {
         ApiEndpoints.tripQuotes,
         data: params.toJson(),
       );
-      final list = res.data as List<dynamic>;
-      return list
-          .whereType<Map<String, dynamic>>()
-          .map(OrderPricingQuoteModel.fromJson)
-          .toList();
+      final json = res.data as Map<String, dynamic>;
+      final list = json['quotes'] as List<dynamic>? ?? const [];
+      final distance = (json['totalDistanceKm'] as num?)?.toDouble() ?? 0.0;
+      final duration = (json['totalDurationMin'] as num?)?.toDouble() ?? 0.0;
+
+      printY(
+        '[OrderRemoteDataSource] getPricingQuotes success distance=$distance duration=$duration quotes=${list.length}',
+        tag: false,
+      );
+
+      return list.whereType<Map<String, dynamic>>().map((quoteJson) {
+        // Inject top-level fields into each quote for model parsing
+        final fullQuoteJson = {
+          ...quoteJson,
+          'totalDistanceKm': distance,
+          'totalDurationMin': duration,
+        };
+        return OrderPricingQuoteModel.fromJson(fullQuoteJson);
+      }).toList();
     });
   }
 

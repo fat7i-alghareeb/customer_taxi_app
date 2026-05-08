@@ -40,24 +40,27 @@ class ProfilePhotoPicker extends StatelessWidget {
                 color: context.surface,
                 border: Border.all(color: context.primary, width: 3.r),
                 boxShadow: context.shadows.primary,
-                image: pendingPhoto != null
-                    ? DecorationImage(image: FileImage(pendingPhoto!), fit: BoxFit.cover)
-                    : (currentPhotoUrl != null
-                        ? DecorationImage(
-                            image: CachedNetworkImageProvider(currentPhotoUrl!),
-                            fit: BoxFit.cover,
-                          )
-                        : null),
               ),
-              child: (pendingPhoto == null && currentPhotoUrl == null)
-                  ? Center(
-                      child: FaIcon(
-                        FontAwesomeIcons.user,
-                        size: 48.r,
-                        color: context.primary.withValues(alpha: 0.3),
-                      ),
-                    )
-                  : null,
+              child: ClipOval(
+                child: pendingPhoto != null
+                    ? Image.file(
+                        pendingPhoto!,
+                        fit: BoxFit.cover,
+                      )
+                    : (currentPhotoUrl != null
+                        ? AppImageViewer.network(
+                            currentPhotoUrl!,
+                            fit: BoxFit.cover,
+                            borderRadius: 0,
+                          )
+                        : Center(
+                            child: FaIcon(
+                              FontAwesomeIcons.user,
+                              size: 48.r,
+                              color: context.primary.withValues(alpha: 0.3),
+                            ),
+                          )),
+              ),
             ),
             Positioned(
               bottom: 4.r,

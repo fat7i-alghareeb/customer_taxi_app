@@ -196,6 +196,7 @@
   "profilePhoto": "Profile Photo",
   "profileSaveAndContinue": "Save & Continue",
   "profileSave": "Save",
+  "profileSaveSuccess": "Profile updated successfully",
   "profilePhotoUploadError": "Photo upload failed",
   "tripActiveTitle": "Your Trip",
   "tripStatusScheduled": "Scheduled",

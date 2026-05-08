@@ -54,45 +54,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     final name = state.pendingName.trim();
-    if (name.isEmpty) return;
+    if (name.isEmpty && state.pendingPhoto == null) return;
 
     emit(state.copyWith(saveStatus: const BlocStatus.loading()));
 
-    // 1. Upload photo if pending
-    if (state.pendingPhoto != null) {
-      emit(state.copyWith(photoStatus: const BlocStatus<String>.loading()));
-      final photoResult = await _facade.uploadPhoto(
-        UpdateProfilePhotoParam(photo: state.pendingPhoto!),
-      );
-      
-      bool uploadFailed = false;
-      photoResult.when(
-        success: (url) {
-          emit(state.copyWith(
-            photoStatus: BlocStatus<String>.success(url),
-            pendingPhoto: null,
-          ));
-        },
-        failure: (msg) {
-          uploadFailed = true;
-          emit(state.copyWith(photoStatus: BlocStatus<String>.failure(msg)));
-        },
-      );
-      
-      if (uploadFailed) {
-        emit(state.copyWith(saveStatus: BlocStatus<ProfileEntity>.failure(AppStrings.profilePhotoUploadError)));
-        return;
-      }
-    }
+    final Result<ProfileEntity> result = await _facade.updateProfile(
+      UpdateUserProfileRequest(
+        name: name.isEmpty ? null : name,
+        photo: state.pendingPhoto,
+      ),
+    );
 
-    // 2. Update name
-    final Result<ProfileEntity> result = await _facade.updateProfile(UpdateProfileParam(name: name));
     result.when(
       success: (user) {
         printG('[ProfileBloc] save success id=${user.id}');
         emit(state.copyWith(
           saveStatus: BlocStatus<ProfileEntity>.success(user),
           currentUser: user,
+          pendingPhoto: null,
         ));
       },
       failure: (message) {

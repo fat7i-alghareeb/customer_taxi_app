@@ -21,28 +21,28 @@ class ProfileRemoteDataSource {
     });
   }
 
-  Future<ProfileModel> updateProfile(UpdateProfileParam param) {
+  Future<ProfileModel> updateProfile(UpdateUserProfileRequest param) {
     return rethrowAsAppException(() async {
-      printY('[ProfileRemoteDataSource] updateProfile name="${param.name}"');
-      final res = await _dio.patch<dynamic>(
-        ApiEndpoints.currentUser,
-        data: param.toJson(),
-      );
-      return ProfileModel.fromJson(res.data as Map<String, dynamic>);
-    });
-  }
+      printY('[ProfileRemoteDataSource] updateProfile name="${param.name}" hasPhoto=${param.photo != null}');
+      
+      final formData = FormData();
+      if (param.name != null) {
+        formData.fields.add(MapEntry('Name', param.name!));
+      }
+      if (param.photo != null) {
+        formData.files.add(
+          MapEntry(
+            'Photo',
+            await MultipartFile.fromFile(param.photo!.path),
+          ),
+        );
+      }
 
-  Future<String> uploadPhoto(UpdateProfilePhotoParam param) {
-    return rethrowAsAppException(() async {
-      printY('[ProfileRemoteDataSource] uploadPhoto path="${param.photo.path}"');
-      final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(param.photo.path),
-      });
       final res = await _dio.post<dynamic>(
-        ApiEndpoints.uploadPhoto,
+        ApiEndpoints.currentUser,
         data: formData,
       );
-      return (res.data as Map<String, dynamic>)['photoUrl'] as String;
+      return ProfileModel.fromJson(res.data as Map<String, dynamic>);
     });
   }
 }

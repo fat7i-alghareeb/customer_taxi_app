@@ -17,13 +17,8 @@ class ProfileFacade {
     return _repository.getCurrentUser();
   }
 
-  Future<Result<ProfileEntity>> updateProfile(UpdateProfileParam param) {
-    printC('[ProfileFacade] updateProfile name="${param.name}"');
+  Future<Result<ProfileEntity>> updateProfile(UpdateUserProfileRequest param) {
+    printC('[ProfileFacade] updateProfile name="${param.name}" hasPhoto=${param.photo != null}');
     return _repository.updateProfile(param);
-  }
-
-  Future<Result<String>> uploadPhoto(UpdateProfilePhotoParam param) {
-    printC('[ProfileFacade] uploadPhoto path="${param.photo.path}"');
-    return _repository.uploadPhoto(param);
   }
 }

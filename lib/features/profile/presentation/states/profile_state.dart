@@ -9,9 +9,6 @@ abstract class ProfileState with _$ProfileState {
     @Default(BlocStatus<ProfileEntity>.initial())
     BlocStatus<ProfileEntity> saveStatus,
 
-    @Default(BlocStatus<String>.initial())
-    BlocStatus<String> photoStatus,
-
     ProfileEntity? currentUser,
     @Default('') String pendingName,
     File? pendingPhoto,

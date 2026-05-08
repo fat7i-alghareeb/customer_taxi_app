@@ -1429,6 +1429,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       return;
     }
 
+    final paymentMethodId = state.paymentMethodId;
+    if (paymentMethodId == null) {
+      printY('[OrderBloc] confirmBookingDetailsPressed blocked (no payment method)');
+      return;
+    }
+
     emit(state.copyWith(tripRequestStatus: const BlocStatus.loading()));
 
     final pickupLocation = state.pickupPointState.maybeWhen(

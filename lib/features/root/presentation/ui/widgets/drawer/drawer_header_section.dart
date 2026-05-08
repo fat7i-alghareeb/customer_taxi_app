@@ -22,21 +22,30 @@ class DrawerHeaderSection extends StatelessWidget {
       child: Row(
         children: [
           // Profile Image
-          Container(
-            width: 80.r,
-            height: 80.r,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.primary.withValues(alpha: 0.1),
-            ),
-            child: Center(
-              child: FaIcon(
-                FontAwesomeIcons.solidUser,
-                size: 32.r,
-                color: context.primary,
-              ),
-            ),
-          ),
+          currentUser?.profilePhotoUrl != null
+              ? ClipOval(
+                  child: AppImageViewer.network(
+                    currentUser!.profilePhotoUrl!,
+                    width: 80,
+                    height: 80,
+                    borderRadius: 0,
+                  ),
+                )
+              : Container(
+                  width: 80.r,
+                  height: 80.r,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.primary.withValues(alpha: 0.1),
+                  ),
+                  child: Center(
+                    child: FaIcon(
+                      FontAwesomeIcons.solidUser,
+                      size: 32.r,
+                      color: context.primary,
+                    ),
+                  ),
+                ),
           AppSpacing.md.horizontalSpace,
           // User Info
           Expanded(

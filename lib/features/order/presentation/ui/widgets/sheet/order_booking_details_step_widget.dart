@@ -31,10 +31,17 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
         AppButton.primary(
           onTap: () {
             context.read<OrderBloc>().add(
-              const OrderEvent.confirmBookingDetailsPressed(),
-            );
+                  const OrderEvent.confirmBookingDetailsPressed(),
+                );
           },
-          layout: AppButtonLayout(height: 56.h, borderRadius: AppRadii.lg),
+          isActive: state.paymentMethodId != null &&
+              !state.tripRequestStatus.isLoading,
+          isLoading: state.tripRequestStatus.isLoading,
+          layout: AppButtonLayout(
+            width: double.infinity,
+            height: 56.h,
+            borderRadius: AppRadii.lg,
+          ),
           child: AppButtonChild.label(AppStrings.confirmBooking),
         ),
       ],

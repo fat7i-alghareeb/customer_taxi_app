@@ -14,7 +14,8 @@ class OrderBody extends StatelessWidget {
       listenWhen: (previous, current) =>
           previous.sheetMode != current.sheetMode ||
           previous.pickupConfirmationFeedbackState !=
-              current.pickupConfirmationFeedbackState,
+              current.pickupConfirmationFeedbackState ||
+          previous.tripRequestStatus != current.tripRequestStatus,
       listener: (context, state) {
         printM('[OrderBody] sheetMode=${state.sheetMode.name}');
 
@@ -40,6 +41,18 @@ class OrderBody extends StatelessWidget {
             context.read<OrderBloc>().add(
               const OrderEvent.pickupConfirmationFeedbackCleared(),
             );
+          },
+        );
+
+        state.tripRequestStatus.when(
+          initial: () {},
+          loading: () {},
+          success: (trip) {
+            showSuccessOverlay(context, AppStrings.orderConfirmedSuccess);
+            context.read<OrderBloc>().add(const OrderEvent.collapseRequested());
+          },
+          failure: (message) {
+            showErrorOverlay(context, message);
           },
         );
       },

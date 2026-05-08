@@ -43,8 +43,15 @@ class _ProfileBodyState extends State<ProfileBody> {
           success: (_) {
             if (widget.isSetupMode) {
               context.goNamed(RootScreen.pageName);
-            } else {
+            } else if (context.canPop()) {
               context.pop();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(AppStrings.profileSaveSuccess),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
             }
           },
           failure: (message) => ScaffoldMessenger.of(
