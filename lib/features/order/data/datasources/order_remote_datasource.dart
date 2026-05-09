@@ -214,4 +214,12 @@ class OrderRemoteDataSource {
       return OrderTripResponseModel.fromJson(res.data as Map<String, dynamic>);
     });
   }
+ 
+  Future<int> getPassengerTripCount() {
+    return rethrowAsAppException(() async {
+      printY('[OrderRemoteDataSource] getPassengerTripCount', tag: false);
+      final res = await _dio.get<dynamic>(ApiEndpoints.tripCount);
+      return res.data as int;
+    });
+  }
 }

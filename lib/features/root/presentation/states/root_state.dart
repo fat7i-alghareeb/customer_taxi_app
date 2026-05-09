@@ -8,5 +8,8 @@ abstract class RootState with _$RootState {
 
     @Default(BlocStatus<RootMapLocationEntity>.initial())
     BlocStatus<RootMapLocationEntity> recenterState,
+ 
+    @Default(BlocStatus<int>.initial())
+    BlocStatus<int> tripCountState,
   }) = _RootState;
 }

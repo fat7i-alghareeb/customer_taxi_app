@@ -1450,6 +1450,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           (s) => OrderStopCoordinateEntity(
             latitude: s.latitude,
             longitude: s.longitude,
+            label: s.label,
           ),
         )
         .toList();
@@ -1459,6 +1460,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         quoteId: quoteId,
         stops: stopCoords,
         scheduledAt: state.scheduledAt,
+        pickupLatitude: pickupLocation.latitude,
+        pickupLongitude: pickupLocation.longitude,
+        pickupAddress: pickupLocation.label,
+        pickupStreetName: state.pickupStreetName,
+        pickupHouseNumber: state.pickupHouseNumber,
       ),
     );
 

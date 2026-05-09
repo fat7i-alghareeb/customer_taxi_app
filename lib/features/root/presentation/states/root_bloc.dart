@@ -7,6 +7,8 @@ import 'package:customertaxi/utils/constants/app_flow_constants.dart';
 import 'package:customertaxi/utils/helpers/app_strings.dart';
 
 import '../../../../core/utils/bloc_status.dart';
+import '../../../../core/utils/result.dart';
+import '../../../order/domain/facade/order_facade.dart';
 import '../../domain/entities/root_map_location_entity.dart';
 
 part 'root_event.dart';
@@ -15,19 +17,25 @@ part 'root_bloc.freezed.dart';
 
 @injectable
 class RootBloc extends Bloc<RootEvent, RootState> {
-  RootBloc(this._permissionsCoordinator, this._locationService)
-    : super(const RootState()) {
+  RootBloc(
+    this._permissionsCoordinator,
+    this._locationService,
+    this._orderFacade,
+  ) : super(const RootState()) {
     on<_Started>(_onStarted);
     on<_MapBootstrapRequested>(_onMapBootstrapRequested);
     on<_RecenterRequested>(_onRecenterRequested);
     on<_AccurateLocationResolved>(_onAccurateLocationResolved);
+    on<_TripCountRequested>(_onTripCountRequested);
   }
 
   final PermissionsCoordinator _permissionsCoordinator;
   final LocationService _locationService;
+  final OrderFacade _orderFacade;
 
   Future<void> _onStarted(_Started event, Emitter<RootState> emit) async {
     add(const RootEvent.mapBootstrapRequested());
+    add(const RootEvent.tripCountRequested());
   }
 
   Future<void> _onMapBootstrapRequested(
@@ -135,6 +143,24 @@ class RootBloc extends Bloc<RootEvent, RootState> {
         AppStrings.rootMapCurrentLocationUnavailable,
       );
     }
+  }
+
+  Future<void> _onTripCountRequested(
+    _TripCountRequested event,
+    Emitter<RootState> emit,
+  ) async {
+    emit(state.copyWith(tripCountState: const BlocStatus.loading()));
+
+    final result = await _orderFacade.getTripCount();
+
+    result.when(
+      success: (count) {
+        emit(state.copyWith(tripCountState: BlocStatus.success(count)));
+      },
+      failure: (message) {
+        emit(state.copyWith(tripCountState: BlocStatus.failure(message)));
+      },
+    );
   }
 }
 

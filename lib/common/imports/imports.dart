@@ -14,6 +14,7 @@ export 'package:flutter_animate/flutter_animate.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
+export 'package:provider/provider.dart';
 export 'package:reactive_forms/reactive_forms.dart';
 export 'package:go_router/go_router.dart';
 

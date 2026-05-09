@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:customertaxi/common/imports/imports.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../states/profile_bloc.dart';
 
 class ProfilePhotoPicker extends StatelessWidget {
@@ -21,7 +20,9 @@ class ProfilePhotoPicker extends StatelessWidget {
       imageQuality: 70,
     );
     if (image != null && context.mounted) {
-      context.read<ProfileBloc>().add(ProfileEvent.photoSelected(File(image.path)));
+      context.read<ProfileBloc>().add(
+        ProfileEvent.photoSelected(File(image.path)),
+      );
     }
   }
 
@@ -43,23 +44,19 @@ class ProfilePhotoPicker extends StatelessWidget {
               ),
               child: ClipOval(
                 child: pendingPhoto != null
-                    ? Image.file(
-                        pendingPhoto!,
-                        fit: BoxFit.cover,
-                      )
+                    ? Image.file(pendingPhoto!, fit: BoxFit.cover)
                     : (currentPhotoUrl != null
-                        ? AppImageViewer.network(
-                            currentPhotoUrl!,
-                            fit: BoxFit.cover,
-                            borderRadius: 0,
-                          )
-                        : Center(
-                            child: FaIcon(
-                              FontAwesomeIcons.user,
-                              size: 48.r,
-                              color: context.primary.withValues(alpha: 0.3),
-                            ),
-                          )),
+                          ? AppImageViewer.network(
+                              currentPhotoUrl!,
+                              borderRadius: 0,
+                            )
+                          : Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.user,
+                                size: 48.r,
+                                color: context.primary.withValues(alpha: 0.3),
+                              ),
+                            )),
               ),
             ),
             Positioned(

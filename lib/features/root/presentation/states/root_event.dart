@@ -8,4 +8,5 @@ class RootEvent with _$RootEvent {
   const factory RootEvent.accurateLocationResolved(
     RootMapLocationEntity location,
   ) = _AccurateLocationResolved;
+  const factory RootEvent.tripCountRequested() = _TripCountRequested;
 }

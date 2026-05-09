@@ -9,8 +9,7 @@ class DrawerHeaderSection extends StatelessWidget {
     final currentUser = getIt<AuthManager>().currentUser;
     final nameText = currentUser?.name ?? 'Adam';
     final phoneText = currentUser?.phone ?? '+31 6 12345678';
-    // Dummy rating as per image
-    const rating = '4.8';
+
 
     return Padding(
       padding: REdgeInsets.fromLTRB(
@@ -59,19 +58,6 @@ class DrawerHeaderSection extends StatelessWidget {
                       nameText,
                       style: AppTextStyles.s24w700.copyWith(
                         color: context.onSurface,
-                      ),
-                    ),
-                    AppSpacing.sm.horizontalSpace,
-                    FaIcon(
-                      FontAwesomeIcons.solidStar,
-                      size: 14.r,
-                      color: context.primary,
-                    ),
-                    AppSpacing.xs.horizontalSpace,
-                    Text(
-                      rating,
-                      style: AppTextStyles.s14w400.copyWith(
-                        color: context.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],

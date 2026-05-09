@@ -23,20 +23,21 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ProfileFacade _facade;
 
   Future<void> _onStarted(_Started event, Emitter<ProfileState> emit) async {
-    emit(state.copyWith(loadStatus: const BlocStatus.loading()));
+    // Implicit fetch: we don't emit a loading state to avoid blocking the UI.
+    // The UI will read the initial data from AuthStateNotifier.
     final Result<ProfileEntity> result = await _facade.getCurrentUser();
     result.when(
       success: (user) {
         printG('[ProfileBloc] started loaded id=${user.id}');
         emit(state.copyWith(
-          loadStatus: BlocStatus<ProfileEntity>.success(user),
           currentUser: user,
           pendingName: user.name ?? '',
         ));
       },
       failure: (message) {
         printY('[ProfileBloc] started failed=$message');
-        emit(state.copyWith(loadStatus: BlocStatus<ProfileEntity>.failure(message)));
+        // We don't emit a failure status that blocks the UI here,
+        // as this is an implicit background refresh.
       },
     );
   }

@@ -39,4 +39,8 @@ abstract class OrderRepository {
   Future<Result<List<OrderSavedLocationEntity>>> togglePinnedLocation(
     OrderLocationEntity location,
   );
+ 
+  Future<Result<List<OrderSavedLocationEntity>>> removeSavedLocation(String identityKey);
+ 
+  Future<Result<int>> getTripCount();
 }

@@ -30,7 +30,7 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
   // Latest validity reported by intl_phone_number_input.
   bool _phoneIsValid = false;
 
-  // Last emitted valid E.164 string to dedupe callbacks.
+  // Last emitted valid E.164 string to de-duplicate callbacks.
   String? _phoneLastEmittedE164;
 
   // Debug: last computed error visibility to avoid spamming logs.
@@ -48,7 +48,8 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
   @override
   void initState() {
     super.initState();
-    _focusNode = (widget.focusNode ?? FocusNode())..addListener(_onFocusChanged);
+    _focusNode = (widget.focusNode ?? FocusNode())
+      ..addListener(_onFocusChanged);
 
     if (widget._type == _AppReactiveTextFieldType.password) {
       _obscure = widget.passwordObscureText;
@@ -64,7 +65,9 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
     if (oldWidget.formControlName != widget.formControlName ||
         oldWidget.validation.deferErrorsUntilFirstDebounce !=
             widget.validation.deferErrorsUntilFirstDebounce) {
-      printM('[AppReactiveTextField] controlName changed to ${widget.formControlName}');
+      printM(
+        '[AppReactiveTextField] controlName changed to ${widget.formControlName}',
+      );
       _deferValidationDebounce?.cancel();
       _deferValidationArmed = false;
     }
@@ -278,7 +281,9 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
       child: ReactiveStatusListenableBuilder(
         formControlName: widget.formControlName,
         builder: (context, control, child) {
-          printM('[AppReactiveTextField] build status listener controlName=${widget.formControlName} value="${control.value}" status=${control.status}');
+          printM(
+            '[AppReactiveTextField] build status listener controlName=${widget.formControlName} value="${control.value}" status=${control.status}',
+          );
           final resolvedPadding = outer.contentPadding.resolve(outer.direction);
 
           // The outer container has padding. This computes the remaining space
@@ -475,8 +480,6 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
     final isObscured = widget._type == _AppReactiveTextFieldType.password
         ? _obscure
         : false;
-    final isSingleLine = isObscured ? true : (widget.maxLines ?? 1) == 1;
-    final shouldExpand = fieldHeight != null && isSingleLine && !isObscured;
 
     return Directionality(
       textDirection: direction,
@@ -504,13 +507,8 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
               textInputAction: widget.textInputAction,
               obscureText: isObscured,
               style: textStyle,
-              maxLines: isObscured
-                  ? 1
-                  : (shouldExpand ? null : widget.maxLines),
-              minLines: isObscured
-                  ? 1
-                  : (shouldExpand ? null : widget.minLines),
-              expands: shouldExpand,
+              maxLines: isObscured ? 1 : widget.maxLines,
+              minLines: isObscured ? 1 : widget.minLines,
               textAlignVertical: TextAlignVertical.center,
 
               // reactive_forms doesn't accept `enabled:` like Flutter's
@@ -525,14 +523,18 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
               onChanged: (control) {
                 final value = (control.value ?? '').toString();
                 final isValid = control.valid;
-                printM('[AppReactiveTextField] onChanged controlName=${widget.formControlName} value="$value"');
+                printM(
+                  '[AppReactiveTextField] onChanged controlName=${widget.formControlName} value="$value"',
+                );
                 _armDeferredValidation();
                 widget.onChanged?.call(value, isValid);
                 scheduleDebounced(value, isValid);
               },
               onSubmitted: (control) {
                 final v = (control.value ?? '').toString();
-                printM('[AppReactiveTextField] onSubmitted controlName=${widget.formControlName} value="$v"');
+                printM(
+                  '[AppReactiveTextField] onSubmitted controlName=${widget.formControlName} value="$v"',
+                );
                 final normalized = normalizeNumericText(widget._type, v);
                 if (normalized != v) {
                   control.updateValue(normalized);
@@ -545,7 +547,8 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
           if (widget.suffix != null) ...[
             AppSpacing.sm.horizontalSpace,
             widget.suffix!,
-          ] else if (suffixWidget != null || widget.affixes.suffixIcon != null) ...[
+          ] else if (suffixWidget != null ||
+              widget.affixes.suffixIcon != null) ...[
             AppSpacing.sm.horizontalSpace,
             _PrefixSuffixSlot(
               onTap:

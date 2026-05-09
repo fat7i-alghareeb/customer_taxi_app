@@ -1,4 +1,5 @@
 {
+  "loading": "جاري التحميل...",
   "networkNoInternet": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.",
   "networkTimeout": "انتهت مهلة الطلب. حاول مرة أخرى.",
   "networkConnectionError": "تعذر الاتصال بالخادم. حاول مرة أخرى.",
@@ -227,6 +228,14 @@
   "activeTrip": "الرحلة الحالية",
   "tripHistory": "سجل الرحلات",
   "completeProfile": "إكمال الملف الشخصي",
-  "confirm": "تأكيد"
+  "confirm": "تأكيد",
+  "favoritesTitle": "العناوين المفضلة",
+  "favoritesAddAddress": "إضافة عنوان جديد",
+  "favoritesEmpty": "لم تقم بحفظ أي عناوين بعد.",
+  "favoritesSearchHint": "ابحث عن عنوان لإضافته...",
+  "favoritesRemoveConfirm": "هل أنت متأكد أنك تريد إزالة هذا العنوان؟",
+  "favoritesDelete": "حذف",
+  "favoritesPin": "تثبيت",
+  "favoritesUnpin": "إلغاء التثبيت"
 }
 

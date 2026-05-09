@@ -62,6 +62,8 @@ import 'package:customertaxi/features/auth/domain/repositories/auth_repository.d
     as _i618;
 import 'package:customertaxi/features/auth/presentation/states/auth_bloc.dart'
     as _i781;
+import 'package:customertaxi/features/favorites/presentation/states/favorites_bloc.dart'
+    as _i499;
 import 'package:customertaxi/features/order/data/datasources/order_local_datasource.dart'
     as _i588;
 import 'package:customertaxi/features/order/data/datasources/order_remote_datasource.dart'
@@ -184,12 +186,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i588.OrderLocalDataSource>(
       () => _i588.OrderLocalDataSource(gh<_i477.ObjectBoxService>()),
     );
-    gh.factory<_i144.RootBloc>(
-      () => _i144.RootBloc(
-        gh<_i102.PermissionsCoordinator>(),
-        gh<_i396.LocationService>(),
-      ),
-    );
     gh.lazySingleton<_i341.LocalizationInterceptor>(
       () => _i341.LocalizationInterceptor(gh<_i504.LocaleService>()),
     );
@@ -272,9 +268,22 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i753.TripBloc>(() => _i753.TripBloc(gh<_i224.TripFacade>()));
     gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
+    gh.factory<_i144.RootBloc>(
+      () => _i144.RootBloc(
+        gh<_i102.PermissionsCoordinator>(),
+        gh<_i396.LocationService>(),
+        gh<_i925.OrderFacade>(),
+      ),
+    );
     gh.factory<_i47.OrderBloc>(
       () =>
           _i47.OrderBloc(gh<_i925.OrderFacade>(), gh<_i396.LocationService>()),
+    );
+    gh.factory<_i499.FavoritesBloc>(
+      () => _i499.FavoritesBloc(
+        gh<_i925.OrderFacade>(),
+        gh<_i396.LocationService>(),
+      ),
     );
     return this;
   }

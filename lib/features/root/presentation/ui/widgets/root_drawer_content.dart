@@ -7,8 +7,10 @@ import 'package:customertaxi/core/theme/theme_controller.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/about_us_screen.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/contact_us_screen.dart';
 import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_screen.dart';
+import 'package:customertaxi/features/favorites/presentation/ui/screens/favorites_screen.dart';
 
 import 'package:customertaxi/common/widgets/show_overlay.dart';
+import '../../states/root_bloc.dart';
 
 import 'drawer/drawer_trips_count_card.dart';
 import 'drawer/drawer_header_section.dart';
@@ -30,8 +32,18 @@ class RootDrawerContent extends StatelessWidget {
               children: [
                 const DrawerHeaderSection(),
                 AppSpacing.md.verticalSpace,
-                const DrawerTripsCountCard(
-                  tripsCount: 12, // Mock data for now
+                BlocBuilder<RootBloc, RootState>(
+                  buildWhen: (p, c) => p.tripCountState != c.tripCountState,
+                  builder: (context, state) {
+                    return state.tripCountState.maybeWhen(
+                      success: (count) =>
+                          DrawerTripsCountCard(tripsCount: count),
+                      loading: () => const DrawerTripsCountCard(
+                        tripsCount: 0,
+                      ), // Could add shimmer here
+                      orElse: () => const DrawerTripsCountCard(tripsCount: 0),
+                    );
+                  },
                 ),
                 AppSpacing.xl.verticalSpace,
 
@@ -44,8 +56,7 @@ class RootDrawerContent extends StatelessWidget {
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.locationDot,
                   label: AppStrings.drawerFavorites,
-                  onTap: () =>
-                      showSuccessOverlay(context, AppStrings.comingSoon),
+                  onTap: () => context.pushNamed(FavoritesScreen.pageName),
                 ),
 
                 AppSpacing.xl.verticalSpace,

@@ -1,4 +1,5 @@
 {
+  "loading": "Laden...",
   "networkNoInternet": "Geen internetverbinding. Controleer uw netwerk.",
   "networkTimeout": "De aanvraag is verlopen. Probeer het opnieuw.",
   "networkConnectionError": "Kan geen verbinding maken met de server. Probeer het opnieuw.",
@@ -227,6 +228,14 @@
   "activeTrip": "Actieve Rit",
   "tripHistory": "Ritgeschiedenis",
   "completeProfile": "Voltooi Profiel",
-  "confirm": "Bevestigen"
+  "confirm": "Bevestigen",
+  "favoritesTitle": "Favoriete adressen",
+  "favoritesAddAddress": "Nieuw adres toevoegen",
+  "favoritesEmpty": "U heeft nog geen adressen opgeslagen.",
+  "favoritesSearchHint": "Zoek een adres om toe te voegen...",
+  "favoritesRemoveConfirm": "Weet u zeker dat u dit adres wilt verwijderen?",
+  "favoritesDelete": "Verwijderen",
+  "favoritesPin": "Vastzetten",
+  "favoritesUnpin": "Losmaken"
 }
 

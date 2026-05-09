@@ -23,5 +23,6 @@ class ApiEndpoints {
   static String tripById(String id) => '/api/v1/trips/$id';
   static String cancelTrip(String id) => '/api/v1/trips/$id/cancellations';
   static const String tripHistory = '/api/v1/trips';
+  static const String tripCount = '/api/v1/trips/count';
 }
 

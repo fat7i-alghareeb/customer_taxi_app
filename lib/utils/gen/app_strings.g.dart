@@ -113,6 +113,22 @@ class AppStrings {
   static String get enterPhone => 'enterPhone'.tr();
   /// Estimated trip time - الوقت التقريبي للرحلة - Geschatte reistijd
   static String get estimatedTripTime => 'estimatedTripTime'.tr();
+  /// Add new address - إضافة عنوان جديد - Nieuw adres toevoegen
+  static String get favoritesAddAddress => 'favoritesAddAddress'.tr();
+  /// Delete - حذف - Verwijderen
+  static String get favoritesDelete => 'favoritesDelete'.tr();
+  /// You haven't saved any addresses yet. - لم تقم بحفظ أي عناوين بعد. - U heeft nog geen adressen opgeslagen.
+  static String get favoritesEmpty => 'favoritesEmpty'.tr();
+  /// Pin - تثبيت - Vastzetten
+  static String get favoritesPin => 'favoritesPin'.tr();
+  /// Are you sure you want to remove this address? - هل أنت متأكد أنك تريد إزالة هذا العنوان؟ - Weet u zeker dat u dit adres wilt verwijderen?
+  static String get favoritesRemoveConfirm => 'favoritesRemoveConfirm'.tr();
+  /// Search for an address to add... - ابحث عن عنوان لإضافته... - Zoek een adres om toe te voegen...
+  static String get favoritesSearchHint => 'favoritesSearchHint'.tr();
+  /// Favorite addresses - العناوين المفضلة - Favoriete adressen
+  static String get favoritesTitle => 'favoritesTitle'.tr();
+  /// Unpin - إلغاء التثبيت - Losmaken
+  static String get favoritesUnpin => 'favoritesUnpin'.tr();
   /// Feb - فبر - Feb
   static String get feb => 'feb'.tr();
   /// February - فبراير - Februari
@@ -149,6 +165,8 @@ class AppStrings {
   static String get light => 'light'.tr();
   /// Light mode - الوضع النهاري - Lichte modus
   static String get lightMode => 'lightMode'.tr();
+  /// Loading... - جاري التحميل... - Laden...
+  static String get loading => 'loading'.tr();
   /// Login - تسجيل الدخول - Inloggen
   static String get login => 'login'.tr();
   /// Logout - تسجيل الخروج - Uitloggen

@@ -76,5 +76,17 @@ class AppRouteRegistry {
         pageBuilder: (context, state) =>
             AppPageTransitions.build(state: state, child: const TripHistoryScreen()),
       ),
+      GoRoute(
+        path: FavoritesScreen.pagePath,
+        name: FavoritesScreen.pageName,
+        pageBuilder: (context, state) =>
+            AppPageTransitions.build(state: state, child: const FavoritesScreen()),
+      ),
+      GoRoute(
+        path: LocationPickerScreen.pagePath,
+        name: LocationPickerScreen.pageName,
+        pageBuilder: (context, state) =>
+            AppPageTransitions.build(state: state, child: const LocationPickerScreen()),
+      ),
     ];
 }

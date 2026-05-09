@@ -117,6 +117,7 @@ class OrderRepositoryImpl implements OrderRepository {
                 (s) => OrderCoordinateParam(
                   latitude: s.latitude,
                   longitude: s.longitude,
+                  label: s.label,
                 ),
               )
               .toList(),
@@ -147,6 +148,7 @@ class OrderRepositoryImpl implements OrderRepository {
                 (s) => OrderCoordinateParam(
                   latitude: s.latitude,
                   longitude: s.longitude,
+                  label: s.label,
                 ),
               )
               .toList(),
@@ -178,9 +180,15 @@ class OrderRepositoryImpl implements OrderRepository {
                 (s) => OrderCoordinateParam(
                   latitude: s.latitude,
                   longitude: s.longitude,
+                  label: s.label,
                 ),
               )
               .toList(),
+          pickupLatitude: request.pickupLatitude,
+          pickupLongitude: request.pickupLongitude,
+          pickupAddress: request.pickupAddress,
+          pickupStreetName: request.pickupStreetName,
+          pickupHouseNumber: request.pickupHouseNumber,
           scheduledAt: request.scheduledAt,
         ),
       );
@@ -246,6 +254,26 @@ class OrderRepositoryImpl implements OrderRepository {
       printC('[OrderRepository] togglePinnedLocation count=${saved.length}');
 
       return saved.map((item) => item.toEntity).toList();
+    });
+  }
+
+  @override
+  Future<Result<int>> getTripCount() {
+    return runAsResult(() async {
+      printM('[OrderRepository] getTripCount start');
+      final count = await _remote.getPassengerTripCount();
+      printG('[OrderRepository] getTripCount success: $count');
+      return count;
+    });
+  }
+
+  @override
+  Future<Result<List<OrderSavedLocationEntity>>> removeSavedLocation(String identityKey) {
+    return runAsResult(() async {
+      printM('[OrderRepository] removeSavedLocation identity=$identityKey');
+      final models = await _local.removeSavedLocation(identityKey);
+      printG('[OrderRepository] removeSavedLocation success');
+      return models.map((e) => e.toEntity).toList();
     });
   }
 }
