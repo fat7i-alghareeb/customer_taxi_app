@@ -10,6 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
+import 'package:firebase_auth/firebase_auth.dart' as _i59;
+import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:customertaxi/core/injection/register_module.dart' as _i548;
 import 'package:customertaxi/core/network/interceptors/custom_dio_interceptor.dart'
@@ -52,6 +54,8 @@ import 'package:customertaxi/core/services/session/jwt_token_storage.dart'
     as _i247;
 import 'package:customertaxi/core/services/storage/storage_service.dart' as _i742;
 import 'package:customertaxi/core/theme/theme_controller.dart' as _i998;
+import 'package:customertaxi/features/auth/data/datasources/auth_firebase_datasource.dart'
+    as _i243;
 import 'package:customertaxi/features/auth/data/datasources/auth_remote_datasource.dart'
     as _i54;
 import 'package:customertaxi/features/auth/data/repositories/auth_repository_impl.dart'
@@ -124,6 +128,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.objectBoxService,
       preResolve: true,
     );
+    gh.singleton<_i59.FirebaseAuth>(() => registerModule.firebaseAuth);
+    gh.singleton<_i892.FirebaseMessaging>(
+      () => registerModule.firebaseMessaging,
+    );
     gh.lazySingleton<_i18.CustomDioInterceptor>(
       () => _i18.CustomDioInterceptor(),
     );
@@ -169,6 +177,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i511.NotificationCoordinator>(),
         gh<_i331.LocationPermissionService>(),
         gh<_i396.LocationService>(),
+      ),
+    );
+    gh.lazySingleton<_i243.AuthFirebaseDataSource>(
+      () => _i243.AuthFirebaseDataSource(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i892.FirebaseMessaging>(),
       ),
     );
     gh.lazySingleton<_i504.LocaleService>(
@@ -239,14 +253,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i224.TripFacade>(
       () => _i224.TripFacade(gh<_i133.TripRepository>()),
     );
-    gh.lazySingleton<_i618.AuthRepository>(
-      () => _i771.AuthRepositoryImpl(gh<_i54.AuthRemoteDataSource>()),
-    );
     gh.lazySingleton<_i549.RootRepository>(
       () => _i244.RootRepositoryImpl(gh<_i312.RootRemoteDataSource>()),
     );
-    gh.lazySingleton<_i239.AuthFacade>(
-      () => _i239.AuthFacade(gh<_i618.AuthRepository>()),
+    gh.lazySingleton<_i618.AuthRepository>(
+      () => _i771.AuthRepositoryImpl(
+        gh<_i243.AuthFirebaseDataSource>(),
+        gh<_i54.AuthRemoteDataSource>(),
+        gh<_i814.AuthManager>(),
+      ),
     );
     gh.lazySingleton<_i153.OrderRepository>(
       () => _i312.OrderRepositoryImpl(
@@ -267,7 +282,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
     );
     gh.factory<_i753.TripBloc>(() => _i753.TripBloc(gh<_i224.TripFacade>()));
-    gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
+    gh.lazySingleton<_i239.AuthFacade>(
+      () => _i239.AuthFacade(gh<_i618.AuthRepository>()),
+    );
     gh.factory<_i144.RootBloc>(
       () => _i144.RootBloc(
         gh<_i102.PermissionsCoordinator>(),
@@ -285,6 +302,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i396.LocationService>(),
       ),
     );
+    gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
     return this;
   }
 }

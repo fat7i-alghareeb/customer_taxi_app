@@ -11,4 +11,4 @@ PRODUCT_NAME = customertaxi
 PRODUCT_BUNDLE_IDENTIFIER = dev.fat7i.customertaxi
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 dev.fat7i. All rights reserved.

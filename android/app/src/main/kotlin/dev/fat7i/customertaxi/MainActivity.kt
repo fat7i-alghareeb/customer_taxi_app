@@ -1,4 +1,4 @@
-package com.example.customertaxi
+package dev.fat7i.customertaxi
 
 import io.flutter.embedding.android.FlutterActivity
 

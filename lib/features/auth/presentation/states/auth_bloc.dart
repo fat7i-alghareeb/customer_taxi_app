@@ -39,7 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       isOtpSent: false,
       phoneStatus: const BlocStatus.initial(),
       otpStatus: const BlocStatus.initial(),
-      sessionToken: null,
+      verificationId: null,
     ));
   }
 
@@ -51,13 +51,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(phoneStatus: const BlocStatus.loading()));
 
     _pendingPhone = event.phone;
-    final result = await _facade.sendOtp(event.phone);
+    final result = await _facade.requestSmsCode(event.phone);
 
     result.when(
-      success: (sessionToken) => emit(state.copyWith(
+      success: (verificationId) => emit(state.copyWith(
         phoneStatus: const BlocStatus.success(null),
         isOtpSent: true,
-        sessionToken: sessionToken,
+        verificationId: verificationId,
       )),
       failure: (message) => emit(state.copyWith(
         phoneStatus: BlocStatus.failure(message),
@@ -70,14 +70,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     if (state.otpStatus.isLoading) return;
-    if (_pendingPhone == null || state.sessionToken == null) return;
+    if (_pendingPhone == null || state.verificationId == null) return;
 
     emit(state.copyWith(otpStatus: const BlocStatus.loading()));
 
-    final result = await _facade.verifyOtp(
+    final result = await _facade.verifyAndLogin(
       phone: _pendingPhone!,
-      sessionToken: state.sessionToken!,
-      code: event.otp,
+      verificationId: state.verificationId!,
+      smsCode: event.otp,
     );
 
     result.when(

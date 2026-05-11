@@ -10,16 +10,17 @@ class AuthFacade {
 
   final AuthRepository _repository;
 
-  Future<Result<String>> sendOtp(String phone) => _repository.sendOtp(phone);
+  Future<Result<String>> requestSmsCode(String phone) =>
+      _repository.requestSmsCode(phone);
 
-  Future<Result<UserEntity>> verifyOtp({
+  Future<Result<UserEntity>> verifyAndLogin({
     required String phone,
-    required String sessionToken,
-    required String code,
+    required String verificationId,
+    required String smsCode,
   }) =>
-      _repository.verifyOtp(
+      _repository.verifyAndLogin(
         phone: phone,
-        sessionToken: sessionToken,
-        code: code,
+        verificationId: verificationId,
+        smsCode: smsCode,
       );
 }

@@ -107,7 +107,7 @@ class AppStrings {
   static String get droppedPin => 'droppedPin'.tr();
   /// No data available. - لا توجد بيانات متاحة. - Geen gegevens beschikbaar.
   static String get emptyStateNoData => 'emptyStateNoData'.tr();
-  /// Enter 4-digit code - أدخل الرمز المكون من 4 أرقام - Voer 4-cijferige code in
+  /// Enter 6-digit code - أدخل الرمز المكون من 6 أرقام - Voer 6-cijferige code in
   static String get enterOtp => 'enterOtp'.tr();
   /// Enter phone number - أدخل رقم الهاتف - Voer telefoonnummer in
   static String get enterPhone => 'enterPhone'.tr();
@@ -141,6 +141,8 @@ class AppStrings {
   static String get from => 'from'.tr();
   /// Invalid code. Please try again. - الرمز غير صحيح. يرجى المحاولة مرة أخرى. - Ongeldige code. Probeer het opnieuw.
   static String get invalidOtp => 'invalidOtp'.tr();
+  /// Please enter a valid phone number. - يرجى إدخال رقم هاتف صالح. - Voer een geldig telefoonnummer in.
+  static String get invalidPhoneNumber => 'invalidPhoneNumber'.tr();
   /// Jan - ينا - Jan
   static String get jan => 'jan'.tr();
   /// January - يناير - Januari
@@ -389,6 +391,8 @@ class AppStrings {
   static String get timeSelected => 'timeSelected'.tr();
   /// To - إلى - Naar
   static String get to => 'to'.tr();
+  /// Too many attempts. Please try again later. - محاولات كثيرة جداً. يرجى المحاولة لاحقاً. - Te veel pogingen. Probeer het later opnieuw.
+  static String get tooManyRequests => 'tooManyRequests'.tr();
   /// Your Trip - رحلتك - Uw Rit
   static String get tripActiveTitle => 'tripActiveTitle'.tr();
   /// Cancel Trip - إلغاء الرحلة - Rit annuleren

@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart'
     show SystemChrome, SystemUiMode, appFlavor;
 import 'core/config/localization_config.dart';
+import 'firebase_options.dart';
 import 'core/injection/injectable.dart';
 import 'core/notification/notification_config.dart';
 import 'core/notification/notification_coordinator.dart';
@@ -47,6 +49,12 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         (element) => element.name == appFlavor,
         orElse: () => Flavor.stage,
       );
+
+      printG('[Bootstrap] initializing Firebase...');
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      printG('[Bootstrap] Firebase initialized');
 
       printG('[Bootstrap] configureDependencies starting...');
       await configureDependencies();

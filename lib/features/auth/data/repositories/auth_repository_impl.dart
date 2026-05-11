@@ -2,44 +2,51 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/domain/user_entity.dart';
 import '../../../../core/error/global_error_handler.dart';
-import '../../../../core/injection/injectable.dart' show getIt;
 import '../../../../core/services/session/auth_manager.dart';
 import '../../../../core/utils/result.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../datasources/auth_firebase_datasource.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../mappers/auth_model_mapper.dart';
 import '../params/auth_params.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
-  const AuthRepositoryImpl(this._remote);
+  const AuthRepositoryImpl(this._firebase, this._remote, this._authManager);
 
+  final AuthFirebaseDataSource _firebase;
   final AuthRemoteDataSource _remote;
+  final AuthManager _authManager;
 
   @override
-  Future<Result<String>> sendOtp(String phone) {
-    return runAsResult(() async {
-      final response = await _remote.sendOtp(SendOtpParams(phone: phone));
-      return response.sessionToken;
-    });
+  Future<Result<String>> requestSmsCode(String phone) {
+    return runAsResult(() => _firebase.requestSmsCode(phone));
   }
 
   @override
-  Future<Result<UserEntity>> verifyOtp({
+  Future<Result<UserEntity>> verifyAndLogin({
     required String phone,
-    required String sessionToken,
-    required String code,
+    required String verificationId,
+    required String smsCode,
   }) {
     return runAsResult(() async {
-      final response = await _remote.verifyOtp(
-        VerifyOtpParams(phone: phone, sessionToken: sessionToken, code: code),
+      final idToken = await _firebase.signInAndGetIdToken(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
+      final fcmToken = await _firebase.getFcmToken();
+
+      final response = await _remote.login(
+        LoginParams(
+          phone: phone,
+          firebaseIdToken: idToken,
+          fcmToken: fcmToken,
+        ),
       );
 
       final user = response.toUserEntity();
       final token = response.toAuthTokenModel();
-
-      final authManager = getIt<AuthManager>();
-      await authManager.login(user: user, token: token);
+      await _authManager.login(user: user, token: token);
       return user;
     });
   }

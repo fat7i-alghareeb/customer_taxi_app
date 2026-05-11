@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCS3Cgm6KUt6v2tKgYbMnsAoFO-CcrF7B4',
-    appId: '1:313352230044:android:975a3c69d751140f59c959',
-    messagingSenderId: '313352230044',
-    projectId: 'taxi-app-4d09b',
-    storageBucket: 'taxi-app-4d09b.firebasestorage.app',
+    apiKey: 'AIzaSyBj7U9eBq4TsVk16pi9UvmE3T7jtBJQwNw',
+    appId: '1:74478390393:android:485121be381115063998a8',
+    messagingSenderId: '74478390393',
+    projectId: 'adam-otp',
+    storageBucket: 'adam-otp.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD0UtX-3yI0IN9EnjFcnpGu6EOg2xzQOjE',
-    appId: '1:313352230044:ios:a41d7632cb61b2f959c959',
-    messagingSenderId: '313352230044',
-    projectId: 'taxi-app-4d09b',
-    storageBucket: 'taxi-app-4d09b.firebasestorage.app',
+    apiKey: 'AIzaSyDm-E4yTangVD30orkrEk3oXVvfwAxzLnY',
+    appId: '1:74478390393:ios:b199e78ece3c58703998a8',
+    messagingSenderId: '74478390393',
+    projectId: 'adam-otp',
+    storageBucket: 'adam-otp.firebasestorage.app',
     iosBundleId: 'dev.fat7i.customertaxi',
   );
+
 }

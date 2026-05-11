@@ -1,25 +1,17 @@
-class SendOtpParams {
-  const SendOtpParams({required this.phone});
-
-  final String phone;
-
-  Map<String, dynamic> toJson() => {'phone': phone};
-}
-
-class VerifyOtpParams {
-  const VerifyOtpParams({
+class LoginParams {
+  const LoginParams({
     required this.phone,
-    required this.sessionToken,
-    required this.code,
+    required this.firebaseIdToken,
+    this.fcmToken,
   });
 
   final String phone;
-  final String sessionToken;
-  final String code;
+  final String firebaseIdToken;
+  final String? fcmToken;
 
   Map<String, dynamic> toJson() => {
         'phone': phone,
-        'sessionToken': sessionToken,
-        'code': code,
+        'firebaseIdToken': firebaseIdToken,
+        if (fcmToken != null) 'fcmToken': fcmToken,
       };
 }

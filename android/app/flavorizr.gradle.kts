@@ -8,7 +8,7 @@ android.apply {
     productFlavors {
         create("stage") {
             dimension = "flavor-type"
-            applicationId = "dev.fat7i.customertaxi.stage"
+            applicationId = "dev.fat7i.customertaxi"
             resValue(type = "string", name = "app_name", value = "customertaxi Stage")
         }
         create("production") {
