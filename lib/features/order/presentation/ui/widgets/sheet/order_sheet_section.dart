@@ -13,20 +13,25 @@ class OrderSheetSection extends StatelessWidget {
     return AppSpacing.md;
   }
 
-  double? _resolveSheetHeight(BuildContext context) {
+  BoxConstraints _resolveSheetConstraints(BuildContext context) {
     if (state.sheetMode == OrderSheetMode.expanded &&
         state.expandedStep == OrderExpandedStep.locationEntry) {
       final verticalPadding = _resolveSheetVerticalPadding();
       final targetHeight =
           context.screenHeight - (verticalPadding * 2) - context.bottomPadding;
-      printC('[OrderSheetSection] _resolveSheetHeight -> $targetHeight');
-      return targetHeight;
+      printC('[OrderSheetSection] constraints -> exact $targetHeight');
+      return BoxConstraints.tightFor(height: targetHeight);
     }
 
-    printC(
-      '[OrderSheetSection] _resolveSheetHeight -> null (adapt to content)',
-    );
-    return null;
+    if (state.sheetMode == OrderSheetMode.expanded &&
+        state.expandedStep == OrderExpandedStep.carSelection) {
+      final maxH = context.screenHeight * 0.74;
+      printC('[OrderSheetSection] constraints -> maxHeight $maxH');
+      return BoxConstraints(maxHeight: maxH);
+    }
+
+    printC('[OrderSheetSection] constraints -> unconstrained');
+    return const BoxConstraints();
   }
 
   Widget _resolveSheetContent(BuildContext context) {
@@ -90,8 +95,8 @@ class OrderSheetSection extends StatelessWidget {
           },
           child: KeyedSubtree(
             key: ValueKey<String>('order-sheet-${state.sheetMode.name}'),
-            child: SizedBox(
-              height: _resolveSheetHeight(context),
+            child: ConstrainedBox(
+              constraints: _resolveSheetConstraints(context),
               child: _resolveSheetContent(context).standardHorizontalPadding,
             ),
           ),

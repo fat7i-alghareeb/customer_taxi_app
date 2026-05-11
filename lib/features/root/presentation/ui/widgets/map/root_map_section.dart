@@ -365,7 +365,6 @@ class _RootMapSectionState extends State<RootMapSection>
                 BitmapDescriptor.defaultMarkerWithHue(
                   BitmapDescriptor.hueOrange,
                 ),
-            anchor: const Offset(0.5, 1.0),
           ),
         );
       }
@@ -385,7 +384,6 @@ class _RootMapSectionState extends State<RootMapSection>
                 BitmapDescriptor.defaultMarkerWithHue(
                   isLast ? BitmapDescriptor.hueBlue : BitmapDescriptor.hueOrange,
                 ),
-            anchor: const Offset(0.5, 1.0),
           ),
         );
       }

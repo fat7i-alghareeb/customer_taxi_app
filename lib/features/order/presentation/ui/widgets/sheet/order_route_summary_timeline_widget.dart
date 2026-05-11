@@ -5,9 +5,13 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
   const OrderRouteSummaryTimelineWidget({
     super.key,
     required this.stops,
+    this.durationText,
+    this.onEditStop,
   });
 
   final List<OrderLocationEntity> stops;
+  final String? durationText;
+  final ValueChanged<int>? onEditStop;
 
   @override
   Widget build(BuildContext context) {
@@ -20,45 +24,71 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.lg.r),
         boxShadow: context.shadows.grey,
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (var i = 0; i < stops.length; i++) ...[
-                _buildPin(
-                  context,
-                  _getPinColor(context, i, stops.length),
-                  _getPinIcon(i, stops.length),
-                ),
-                if (i < stops.length - 1)
-                  Container(
-                    width: 2.w,
-                    height: 44.h,
-                    margin: REdgeInsets.symmetric(vertical: 2),
-                    decoration: BoxDecoration(
-                      color: context.onSurface.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(1.r),
+              Column(
+                children: [
+                  for (var i = 0; i < stops.length; i++) ...[
+                    _buildPin(
+                      context,
+                      _getPinColor(context, i, stops.length),
+                      _getPinIcon(i, stops.length),
                     ),
-                  ),
-              ],
-            ],
-          ),
-          AppSpacing.md.horizontalSpace,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var i = 0; i < stops.length; i++) ...[
-                  _buildLocationText(
-                    context,
-                    _getTitle(i, stops.length),
-                    stops[i],
-                  ),
-                  if (i < stops.length - 1) 28.h.verticalSpace,
+                    if (i < stops.length - 1)
+                      Container(
+                        width: 2.w,
+                        height: 44.h,
+                        margin: REdgeInsets.symmetric(vertical: 2),
+                        decoration: BoxDecoration(
+                          color: context.onSurface.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(1.r),
+                        ),
+                      ),
+                  ],
                 ],
-              ],
-            ),
+              ),
+              AppSpacing.md.horizontalSpace,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (var i = 0; i < stops.length; i++) ...[
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildLocationText(
+                              context,
+                              _getTitle(i, stops.length),
+                              stops[i],
+                            ),
+                          ),
+                          if (onEditStop != null) ...[
+                            AppSpacing.sm.horizontalSpace,
+                            GestureDetector(
+                              onTap: () => onEditStop!(i),
+                              behavior: HitTestBehavior.opaque,
+                              child: Padding(
+                                padding: REdgeInsets.all(AppSpacing.sm),
+                                child: FaIcon(
+                                  FontAwesomeIcons.penToSquare,
+                                  size: 16.r,
+                                  color: context.primary.withValues(alpha: 0.7),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      if (i < stops.length - 1) 28.h.verticalSpace,
+                    ],
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

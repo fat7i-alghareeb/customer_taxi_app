@@ -77,31 +77,16 @@ class OrderRequestTripParams {
   const OrderRequestTripParams({
     required this.quoteId,
     required this.stops,
-    required this.pickupLatitude,
-    required this.pickupLongitude,
-    this.pickupAddress,
-    this.pickupStreetName,
-    this.pickupHouseNumber,
     this.scheduledAt,
   });
 
   final String quoteId;
   final List<OrderCoordinateParam> stops;
-  final double pickupLatitude;
-  final double pickupLongitude;
-  final String? pickupAddress;
-  final String? pickupStreetName;
-  final String? pickupHouseNumber;
   final DateTime? scheduledAt;
 
   Map<String, dynamic> toJson() => {
         'quoteId': quoteId,
         'stops': stops.map((s) => s.toJson()).toList(),
-        'pickupLatitude': pickupLatitude,
-        'pickupLongitude': pickupLongitude,
-        if (pickupAddress != null) 'pickupAddress': pickupAddress,
-        if (pickupStreetName != null) 'pickupStreetName': pickupStreetName,
-        if (pickupHouseNumber != null) 'pickupHouseNumber': pickupHouseNumber,
         if (scheduledAt != null)
           'scheduledAt': scheduledAt!.toUtc().toIso8601String(),
       };

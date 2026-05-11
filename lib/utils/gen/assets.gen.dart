@@ -94,14 +94,26 @@ class $AssetsL10nGen {
   /// File path: assets/l10n/ar.json
   String get ar => 'assets/l10n/ar.json';
 
+  /// File path: assets/l10n/de.json
+  String get de => 'assets/l10n/de.json';
+
   /// File path: assets/l10n/en.json
   String get en => 'assets/l10n/en.json';
+
+  /// File path: assets/l10n/fr.json
+  String get fr => 'assets/l10n/fr.json';
 
   /// File path: assets/l10n/nl.json
   String get nl => 'assets/l10n/nl.json';
 
+  /// File path: assets/l10n/pl.json
+  String get pl => 'assets/l10n/pl.json';
+
+  /// File path: assets/l10n/uk.json
+  String get uk => 'assets/l10n/uk.json';
+
   /// List of all assets
-  List<String> get values => [ar, en, nl];
+  List<String> get values => [ar, de, en, fr, nl, pl, uk];
 }
 
 class $AssetsSvgIconsGen {

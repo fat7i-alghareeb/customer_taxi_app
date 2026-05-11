@@ -12,7 +12,6 @@ abstract class OrderConstants {
   static const double expandedRouteFitPaddingFactor = 0.24;
   static const double vehicleCardWidth = 240;
   static const double vehicleCardsViewportHeight = 74;
-  static const int pickupPointMaxDistanceMeters = 50;
 
   static const double expandedHeaderHeight = 72;
   static const double mapContextStripHeight = 48;

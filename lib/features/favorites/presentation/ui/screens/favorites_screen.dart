@@ -410,7 +410,6 @@ class _SetOnMapCard extends StatelessWidget {
         boxShadow: context.shadows.primary,
         border: Border.all(
           color: context.primary.withValues(alpha: 0.2),
-          width: 1,
         ),
       ),
       child: Material(

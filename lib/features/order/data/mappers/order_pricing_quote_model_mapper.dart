@@ -11,7 +11,10 @@ extension OrderPricingQuoteModelMapper on OrderPricingQuoteModel {
         typeId: vehicleTypeId,
         typeCode: vehicleTypeCode,
         name: vehicleTypeName,
+        passengerCapacity: capacity,
+        originalPrice: originalFare,
         price: finalFare,
+        discountPercent: discountPercent,
         currency: currencyCode,
         validUntil: validUntil,
       );

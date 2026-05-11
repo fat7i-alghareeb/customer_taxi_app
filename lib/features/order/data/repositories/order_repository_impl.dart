@@ -184,11 +184,6 @@ class OrderRepositoryImpl implements OrderRepository {
                 ),
               )
               .toList(),
-          pickupLatitude: request.pickupLatitude,
-          pickupLongitude: request.pickupLongitude,
-          pickupAddress: request.pickupAddress,
-          pickupStreetName: request.pickupStreetName,
-          pickupHouseNumber: request.pickupHouseNumber,
           scheduledAt: request.scheduledAt,
         ),
       );

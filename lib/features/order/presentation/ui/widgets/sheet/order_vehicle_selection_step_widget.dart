@@ -89,11 +89,25 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final durationText = state.tripRouteState.maybeWhen(
+      success: (route) => route.durationText,
+      orElse: () => '',
+    );
+
+    final discountPercent = state.tripCarOptionsState.maybeWhen(
+      success: (opts) => opts.isNotEmpty ? opts.first.discountPercent : 0.0,
+      orElse: () => 0.0,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         OrderRouteSummaryTimelineWidget(
           stops: stops,
+          durationText: durationText,
+          onEditStop: (index) {
+            context.read<OrderBloc>().add(OrderEvent.setOnMapPressed(index: index));
+          },
         ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
         AppSpacing.lg.verticalSpace,
         Row(
@@ -117,48 +131,92 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
             ),
           ],
         ).animate().fadeIn(delay: 300.ms),
+        if (discountPercent > 0) ...[
+          AppSpacing.md.verticalSpace,
+          _DiscountBanner(discountPercent: discountPercent)
+              .animate()
+              .fadeIn(delay: 300.ms),
+        ],
         AppSpacing.md.verticalSpace,
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: REdgeInsets.only(bottom: AppSpacing.xs),
-          physics: const BouncingScrollPhysics(),
-          child: Row(
-            children: state.tripCarOptionsState.maybeWhen(
-              success: (options) {
-                return [
-                  for (var i = 0; i < options.length; i++) ...[
-                    if (i > 0) AppSpacing.md.horizontalSpace,
-                    OrderCarOptionCardWidget(
-                      title: _resolveLabel(options[i], options[i].typeId),
-                      imagePath: _resolveImagePath(
-                        options[i],
-                        options[i].typeId,
-                      ),
-                      isSelected: state.selectedCarTypeId == options[i].typeId,
-                      isPriceLoading: false,
-                      priceText:
-                          '${options[i].currency} ${options[i].price.toStringAsFixed(2)}',
-                      onTap: () => onCarTypeTapped(options[i].typeId),
-                    ),
-                  ],
-                ];
-              },
-              orElse: () => [
-                for (var i = 0; i < _fallbackTypeIds.length; i++) ...[
-                  if (i > 0) AppSpacing.md.horizontalSpace,
-                  OrderCarOptionCardWidget(
-                    title: _resolveLabel(null, _fallbackTypeIds[i]),
-                    imagePath: _resolveImagePath(null, _fallbackTypeIds[i]),
-                    isSelected: state.selectedCarTypeId == _fallbackTypeIds[i],
-                    isPriceLoading: isPriceLoading,
-                    onTap: () => onCarTypeTapped(_fallbackTypeIds[i]),
-                  ),
-                ],
-              ],
+        ...state.tripCarOptionsState.maybeWhen(
+          success: (options) => [
+            for (var i = 0; i < options.length; i++) ...[
+              if (i > 0) SizedBox(height: AppSpacing.sm.h),
+              OrderCarOptionCardWidget(
+                title: _resolveLabel(options[i], options[i].typeId),
+                imagePath: _resolveImagePath(options[i], options[i].typeId),
+                isSelected: state.selectedCarTypeId == options[i].typeId,
+                isPriceLoading: false,
+                passengerCapacity: options[i].passengerCapacity,
+                priceText:
+                    '${options[i].currency} ${options[i].price.toStringAsFixed(2)}',
+                originalPriceText: options[i].discountPercent > 0
+                    ? '${options[i].currency} ${options[i].originalPrice.toStringAsFixed(2)}'
+                    : null,
+                onTap: () => onCarTypeTapped(options[i].typeId),
+              ),
+            ],
+          ],
+          orElse: () => [
+            for (var i = 0; i < _fallbackTypeIds.length; i++) ...[
+              if (i > 0) SizedBox(height: AppSpacing.sm.h),
+              OrderCarOptionCardWidget(
+                title: _resolveLabel(null, _fallbackTypeIds[i]),
+                imagePath: _resolveImagePath(null, _fallbackTypeIds[i]),
+                isSelected: state.selectedCarTypeId == _fallbackTypeIds[i],
+                isPriceLoading: isPriceLoading,
+                passengerCapacity: 0,
+                priceText: null,
+                onTap: () => onCarTypeTapped(_fallbackTypeIds[i]),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _DiscountBanner extends StatelessWidget {
+  const _DiscountBanner({required this.discountPercent});
+
+  final double discountPercent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: REdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            context.primary,
+            context.primary.withValues(alpha: 0.85),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+      ),
+      child: Row(
+        children: [
+          FaIcon(
+            FontAwesomeIcons.tag,
+            size: 14.r,
+            color: context.onPrimary,
+          ),
+          AppSpacing.sm.horizontalSpace,
+          Text(
+            AppStrings.discountApplied.replaceAll(
+              '{percent}',
+              discountPercent.toStringAsFixed(0),
+            ),
+            style: AppTextStyles.s14w700.copyWith(
+              color: context.onPrimary,
             ),
           ),
-        ).animate().fadeIn(delay: 400.ms).moveY(begin: 16, end: 0),
-      ],
+        ],
+      ),
     );
   }
 }

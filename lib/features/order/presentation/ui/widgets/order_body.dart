@@ -13,36 +13,9 @@ class OrderBody extends StatelessWidget {
     return BlocConsumer<OrderBloc, OrderState>(
       listenWhen: (previous, current) =>
           previous.sheetMode != current.sheetMode ||
-          previous.pickupConfirmationFeedbackState !=
-              current.pickupConfirmationFeedbackState ||
           previous.tripRequestStatus != current.tripRequestStatus,
       listener: (context, state) {
         printM('[OrderBody] sheetMode=${state.sheetMode.name}');
-
-        state.pickupConfirmationFeedbackState.when(
-          initial: () {},
-          loading: () {},
-          success: (message) {
-            if (message.trim().isEmpty) {
-              return;
-            }
-
-            showSuccessOverlay(context, message);
-            context.read<OrderBloc>().add(
-              const OrderEvent.pickupConfirmationFeedbackCleared(),
-            );
-          },
-          failure: (message) {
-            if (message.trim().isEmpty) {
-              return;
-            }
-
-            showErrorOverlay(context, message);
-            context.read<OrderBloc>().add(
-              const OrderEvent.pickupConfirmationFeedbackCleared(),
-            );
-          },
-        );
 
         state.tripRequestStatus.when(
           initial: () {},
@@ -61,13 +34,11 @@ class OrderBody extends StatelessWidget {
             previous.expandedStep != current.expandedStep ||
             previous.mapPickingTarget != current.mapPickingTarget ||
             previous.stops != current.stops ||
-            previous.pickupPointState != current.pickupPointState ||
             previous.stopSuggestionsState != current.stopSuggestionsState ||
-            previous.pickupStreetName != current.pickupStreetName ||
-            previous.pickupHouseNumber != current.pickupHouseNumber ||
             previous.tripRouteState != current.tripRouteState ||
             previous.tripCarOptionsState != current.tripCarOptionsState ||
             previous.selectedCarTypeId != current.selectedCarTypeId ||
+            previous.scheduleMode != current.scheduleMode ||
             previous.scheduledAt != current.scheduledAt ||
             previous.paymentMethodId != current.paymentMethodId;
         
@@ -100,15 +71,6 @@ class OrderBody extends StatelessWidget {
               }
 
               if (state.sheetMode == OrderSheetMode.expanded &&
-                  state.expandedStep == OrderExpandedStep.pickupPoint) {
-                printM('[OrderBody] system back -> pickupPointBackPressed');
-                context.read<OrderBloc>().add(
-                  const OrderEvent.pickupPointBackPressed(),
-                );
-                return;
-              }
-
-              if (state.sheetMode == OrderSheetMode.expanded &&
                   state.expandedStep == OrderExpandedStep.carSelection) {
                 printM('[OrderBody] system back -> vehicleStepBackPressed');
                 context.read<OrderBloc>().add(
@@ -136,10 +98,8 @@ class OrderBody extends StatelessWidget {
                       bottom:
                           context.bottomPadding +
                           (state.sheetMode == OrderSheetMode.expanded &&
-                                  (state.expandedStep ==
-                                          OrderExpandedStep.pickupPoint ||
-                                      state.expandedStep ==
-                                          OrderExpandedStep.carSelection)
+                                  state.expandedStep ==
+                                      OrderExpandedStep.carSelection
                               ? context.bottomInset
                               : 0),
                     ),

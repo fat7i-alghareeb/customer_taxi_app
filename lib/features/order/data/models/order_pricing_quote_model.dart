@@ -10,9 +10,12 @@ abstract class OrderPricingQuoteModel with _$OrderPricingQuoteModel {
     required String vehicleTypeId,
     String? vehicleTypeCode,
     required String vehicleTypeName,
+    @Default(0) int capacity,
     required double totalDistanceKm,
     required double totalDurationMin,
+    @Default(0.0) double originalFare,
     required double finalFare,
+    @Default(0.0) double discountPercent,
     required String currencyCode,
     required DateTime validUntil,
   }) = _OrderPricingQuoteModel;

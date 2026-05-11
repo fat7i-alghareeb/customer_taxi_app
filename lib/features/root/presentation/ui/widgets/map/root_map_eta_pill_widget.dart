@@ -27,7 +27,7 @@ class RootMapEtaPillWidget extends StatelessWidget {
               ),
               AppSpacing.sm.horizontalSpace,
               Text(
-                durationText,
+                '${AppStrings.estimatedTripTime}: $durationText',
                 style: AppTextStyles.s14w600.copyWith(
                   color: AppColors.backGroundLight,
                   fontWeight: FontWeight.w900,

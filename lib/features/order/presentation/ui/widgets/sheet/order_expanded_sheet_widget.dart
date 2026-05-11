@@ -8,7 +8,7 @@ import 'order_location_field_widget.dart';
 import 'order_location_suggestions_widget.dart';
 import 'order_booking_details_step_widget.dart';
 import 'order_map_context_trigger_widget.dart';
-import 'order_pickup_point_step_widget.dart';
+import 'order_schedule_picker_widget.dart';
 import 'order_vehicle_selection_step_widget.dart';
 
 class OrderExpandedSheetWidget extends StatefulWidget {
@@ -149,29 +149,24 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
       }
     }
 
-    _syncControlValue(OrderForms.pickupStreetField, state.pickupStreetName);
-    _syncControlValue(OrderForms.pickupHouseNumberField, state.pickupHouseNumber);
-
     _isSyncing = false;
     printM('[OrderExpandedSheetWidget] _syncFormWithState completed');
   }
 
-  void _syncControlValue(String field, String value) {
-    final control = _form.control(field);
-    if (control.value?.toString() != value) {
-      printG('[OrderExpandedSheetWidget] syncing $field to "$value"');
-      control.updateValue(value, emitEvent: true);
+  bool get _isConfirmActive {
+    final allStopsResolved = widget.state.stops.every((s) => s != null);
+    if (!allStopsResolved) return false;
+    if (widget.state.scheduleMode == OrderScheduleMode.later &&
+        widget.state.scheduledAt == null) {
+      return false;
     }
+    return true;
   }
 
-  bool get _isConfirmActive => widget.state.stops.every((s) => s != null);
-
   bool get _isVehicleSelectionStep => widget.state.expandedStep == OrderExpandedStep.carSelection;
-  bool get _isPickupPointStep => widget.state.expandedStep == OrderExpandedStep.pickupPoint;
   bool get _isBookingDetailsStep => widget.state.expandedStep == OrderExpandedStep.bookingDetails;
 
   bool get _isVehicleConfirmActive => widget.state.selectedCarTypeId?.trim().isNotEmpty ?? false;
-  bool get _isPickupConfirmActive => widget.state.pickupPointState.isSuccess;
 
   BlocStatus<List<OrderSavedLocationEntity>> get _activeSuggestionsState {
     if (_activeSearchIndex < 0 || _activeSearchIndex >= widget.state.stopSuggestionsState.length) {
@@ -197,15 +192,6 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
   void _clearField(int index) {
     context.read<OrderBloc>().add(OrderEvent.stopCleared(index));
-  }
-
-  bool _consumeIgnoredValueIfNeeded({
-    required String field,
-    required String value,
-  }) {
-    final control = _form.control(field);
-    final current = control.value?.toString() ?? '';
-    return current == value;
   }
 
   @override
@@ -240,13 +226,6 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         return;
                       }
 
-                      if (_isPickupPointStep) {
-                        context.read<OrderBloc>().add(
-                          const OrderEvent.pickupPointBackPressed(),
-                        );
-                        return;
-                      }
-
                       if (_isVehicleSelectionStep) {
                         context.read<OrderBloc>().add(
                           const OrderEvent.vehicleStepBackPressed(),
@@ -275,8 +254,6 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         ? AppStrings.bookingDetails
                         : _isVehicleSelectionStep
                         ? AppStrings.selectCarType
-                        : _isPickupPointStep
-                        ? AppStrings.selectPickupPoint
                         : AppStrings.planYourTrip,
                     style: AppTextStyles.s16w600.copyWith(
                       color: context.onPrimary,
@@ -357,7 +334,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
               printM('[OrderExpandedSheetWidget] mapTrigger onTap');
               FocusScope.of(context).unfocus();
               context.read<OrderBloc>().add(
-                const OrderEvent.setOnMapPressed(),
+                OrderEvent.setOnMapPressed(index: _focusedFieldIndex ?? _activeSearchIndex),
               );
             },
           );
@@ -390,22 +367,6 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
               borderRadius: AppRadii.lg,
             ),
             child: AppButtonChild.label(AppStrings.done),
-          );
-
-          final pickupConfirmButton = AppButton.primary(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-              context.read<OrderBloc>().add(
-                const OrderEvent.confirmPickupPointPressed(),
-              );
-            },
-            isActive: _isPickupConfirmActive,
-            layout: AppButtonLayout(
-              width: double.infinity,
-              height: 54.sp,
-              borderRadius: AppRadii.lg,
-            ),
-            child: AppButtonChild.label(AppStrings.confirmOrder),
           );
 
           if (_isVehicleSelectionStep) {
@@ -447,78 +408,6 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
             );
           }
 
-          if (_isPickupPointStep) {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: REdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.sm,
-                    ),
-                    child: OrderPickupPointStepWidget(
-                      state: widget.state,
-                      onSetPickupOnMapPressed: () {
-                        FocusScope.of(context).unfocus();
-                        context.read<OrderBloc>().add(
-                          const OrderEvent.setOnMapPressed(),
-                        );
-                      },
-                      onPickupStreetChanged: (value) {
-                        if (_isSyncing) {
-                          return;
-                        }
-
-                        if (_consumeIgnoredValueIfNeeded(
-                          field: OrderForms.pickupStreetField,
-                          value: value,
-                        )) {
-                          return;
-                        }
-
-                        context.read<OrderBloc>().add(
-                          OrderEvent.pickupStreetChanged(value),
-                        );
-                      },
-                      onPickupHouseNumberChanged: (value) {
-                        if (_isSyncing) {
-                          return;
-                        }
-
-                        if (_consumeIgnoredValueIfNeeded(
-                          field: OrderForms.pickupHouseNumberField,
-                          value: value,
-                        )) {
-                          return;
-                        }
-
-                        context.read<OrderBloc>().add(
-                          OrderEvent.pickupHouseNumberChanged(value),
-                        );
-                      },
-                    ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.08),
-                  ),
-                  if (!isKeyboardOpen)
-                    Padding(
-                          padding: REdgeInsets.only(bottom: AppSpacing.lg),
-                          child: pickupConfirmButton,
-                        )
-                        .animate()
-                        .fadeIn(duration: AppDurations.fast)
-                        .moveY(
-                          begin: 16,
-                          end: 0,
-                          duration: AppDurations.slow,
-                          curve: Curves.easeOutCubic,
-                        ),
-                ],
-              ),
-            );
-          }
-
           if (_isBookingDetailsStep) {
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -531,10 +420,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                       horizontal: AppSpacing.md,
                       vertical: AppSpacing.sm,
                     ),
-                    child: SizedBox(
-                      height: 420.h,
-                      child: OrderBookingDetailsStepWidget(state: widget.state),
-                    ),
+                    child: OrderBookingDetailsStepWidget(state: widget.state),
                   ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.08),
                 ],
               ),
@@ -570,6 +456,11 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          OrderSchedulePickerWidget(state: widget.state)
+                              .animate()
+                              .fadeIn(delay: 150.ms)
+                              .slideY(begin: 0.1, curve: Curves.easeOutCubic),
+                          AppSpacing.md.verticalSpace,
                           fieldsSection
                               .animate()
                               .fadeIn(delay: 200.ms)

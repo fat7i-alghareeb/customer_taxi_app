@@ -9,9 +9,8 @@ class OrderEvent with _$OrderEvent {
   const factory OrderEvent.collapseRequested() = _CollapseRequested;
   const factory OrderEvent.mapPickCancelled() = _MapPickCancelled;
   const factory OrderEvent.vehicleStepBackPressed() = _VehicleStepBackPressed;
-  const factory OrderEvent.pickupPointBackPressed() = _PickupPointBackPressed;
 
-  const factory OrderEvent.setOnMapPressed() = _SetOnMapPressed;
+  const factory OrderEvent.setOnMapPressed({required int index}) = _SetOnMapPressed;
 
   const factory OrderEvent.mapCameraTargetUpdated({
     required double latitude,
@@ -40,11 +39,6 @@ class OrderEvent with _$OrderEvent {
 
   const factory OrderEvent.carTypeToggled(String typeId) = _CarTypeToggled;
 
-  const factory OrderEvent.pickupStreetChanged(String value) =
-      _PickupStreetChanged;
-  const factory OrderEvent.pickupHouseNumberChanged(String value) =
-      _PickupHouseNumberChanged;
-
   factory OrderEvent.tripPrefetchCompleted({
     required int token,
     required List<OrderLocationEntity> stops,
@@ -55,12 +49,10 @@ class OrderEvent with _$OrderEvent {
   const factory OrderEvent.confirmOrderPressed() = _ConfirmOrderPressed;
   const factory OrderEvent.confirmCarSelectionPressed() =
       _ConfirmCarSelectionPressed;
-  const factory OrderEvent.confirmPickupPointPressed() =
-      _ConfirmPickupPointPressed;
-  const factory OrderEvent.pickupConfirmationFeedbackCleared() =
-      _PickupConfirmationFeedbackCleared;
   const factory OrderEvent.bookingDetailsBackPressed() =
       _BookingDetailsBackPressed;
+  const factory OrderEvent.scheduleModeChanged(OrderScheduleMode mode) =
+      _ScheduleModeChanged;
   const factory OrderEvent.scheduleTimeChanged(DateTime? time) =
       _ScheduleTimeChanged;
   const factory OrderEvent.paymentMethodChanged(String methodId) =

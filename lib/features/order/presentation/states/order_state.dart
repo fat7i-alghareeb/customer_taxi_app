@@ -29,15 +29,6 @@ abstract class OrderState with _$OrderState {
     @Default(BlocStatus<List<OrderSavedLocationEntity>>.initial())
     BlocStatus<List<OrderSavedLocationEntity>> savedLocationsState,
 
-    @Default(BlocStatus<OrderLocationEntity>.initial())
-    BlocStatus<OrderLocationEntity> pickupPointState,
-
-    @Default('') String pickupStreetName,
-    @Default('') String pickupHouseNumber,
-
-    @Default(BlocStatus<String>.initial())
-    BlocStatus<String> pickupConfirmationFeedbackState,
-
     @Default(BlocStatus<OrderTripRouteEntity>.initial())
     BlocStatus<OrderTripRouteEntity> tripRouteState,
 
@@ -54,6 +45,7 @@ abstract class OrderState with _$OrderState {
 
     String? selectedCarTypeId,
     String? selectedQuoteId,
+    @Default(OrderScheduleMode.now) OrderScheduleMode scheduleMode,
     DateTime? scheduledAt,
     String? paymentMethodId,
 

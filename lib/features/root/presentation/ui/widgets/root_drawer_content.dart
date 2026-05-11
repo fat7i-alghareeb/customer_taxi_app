@@ -164,6 +164,10 @@ class RootDrawerContent extends StatelessWidget {
             SelectionItem(label: AppStrings.languageEN, value: AppLanguage.en),
             SelectionItem(label: AppStrings.languageAR, value: AppLanguage.ar),
             SelectionItem(label: AppStrings.languageNL, value: AppLanguage.nl),
+            SelectionItem(label: AppStrings.languageDE, value: AppLanguage.de),
+            SelectionItem(label: AppStrings.languagePL, value: AppLanguage.pl),
+            SelectionItem(label: AppStrings.languageUK, value: AppLanguage.uk),
+            SelectionItem(label: AppStrings.languageFR, value: AppLanguage.fr),
           ],
         );
 
@@ -182,6 +186,14 @@ class RootDrawerContent extends StatelessWidget {
         return AppStrings.languageAR;
       case 'nl':
         return AppStrings.languageNL;
+      case 'de':
+        return AppStrings.languageDE;
+      case 'pl':
+        return AppStrings.languagePL;
+      case 'uk':
+        return AppStrings.languageUK;
+      case 'fr':
+        return AppStrings.languageFR;
       default:
         return AppStrings.languageEN;
     }
@@ -195,6 +207,14 @@ class RootDrawerContent extends StatelessWidget {
         return AppLanguage.ar;
       case 'nl':
         return AppLanguage.nl;
+      case 'de':
+        return AppLanguage.de;
+      case 'pl':
+        return AppLanguage.pl;
+      case 'uk':
+        return AppLanguage.uk;
+      case 'fr':
+        return AppLanguage.fr;
       default:
         return AppLanguage.en;
     }

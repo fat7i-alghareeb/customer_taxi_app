@@ -9,16 +9,11 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     printM('[OrderBookingDetailsStepWidget] build');
+    
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _SectionHeader(title: AppStrings.scheduleTime),
-        AppSpacing.md.verticalSpace,
-        _ScheduleSelector(
-          scheduledAt: state.scheduledAt,
-          onTap: () => _selectDateTime(context),
-        ),
-        AppSpacing.xl.verticalSpace,
         _SectionHeader(title: AppStrings.paymentMethod),
         AppSpacing.md.verticalSpace,
         _PaymentMethodSelector(
@@ -27,7 +22,7 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
             context.read<OrderBloc>().add(OrderEvent.paymentMethodChanged(id));
           },
         ),
-        const Spacer(),
+        AppSpacing.xl.verticalSpace,
         AppButton.primary(
           onTap: () {
             context.read<OrderBloc>().add(
@@ -47,60 +42,6 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
       ],
     );
   }
-
-  Future<void> _selectDateTime(BuildContext context) async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: context.primary,
-              onPrimary: context.onPrimary,
-              surface: context.surface,
-              onSurface: context.onSurface,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (date == null || !context.mounted) return;
-
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: context.primary,
-              onPrimary: context.onPrimary,
-              surface: context.surface,
-              onSurface: context.onSurface,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (time == null || !context.mounted) return;
-
-    final scheduledAt = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
-
-    context.read<OrderBloc>().add(OrderEvent.scheduleTimeChanged(scheduledAt));
-  }
 }
 
 class _SectionHeader extends StatelessWidget {
@@ -116,88 +57,6 @@ class _SectionHeader extends StatelessWidget {
       style: AppTextStyles.s16w600.copyWith(
         color: context.onSurface,
         fontWeight: FontWeight.w900,
-      ),
-    );
-  }
-}
-
-class _ScheduleSelector extends StatelessWidget {
-  const _ScheduleSelector({this.scheduledAt, required this.onTap});
-
-  final DateTime? scheduledAt;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    printM('[_ScheduleSelector] build scheduledAt=$scheduledAt');
-    final isNow = scheduledAt == null;
-    final label = isNow
-        ? AppStrings.now
-        : DateFormat('EEE, MMM d, HH:mm').format(scheduledAt!);
-
-    return Material(
-      color: context.surface,
-      borderRadius: BorderRadius.circular(AppRadii.lg.r),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        child: AnimatedContainer(
-          duration: AppDurations.normal,
-          padding: REdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            border: Border.all(
-              color: isNow
-                  ? context.onSurface.withValues(alpha: 0.1)
-                  : context.primary,
-              width: isNow ? 1.r : 2.r,
-            ),
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: REdgeInsets.all(AppSpacing.sm),
-                decoration: BoxDecoration(
-                  color: isNow
-                      ? context.onSurface.withValues(alpha: 0.05)
-                      : context.primary.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: FaIcon(
-                  FontAwesomeIcons.clock,
-                  size: 18.r,
-                  color: isNow ? context.onSurface : context.primary,
-                ),
-              ),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      isNow ? AppStrings.now : AppStrings.timeSelected,
-                      style: AppTextStyles.s12w400.copyWith(
-                        color: context.onSurface.withValues(alpha: 0.6),
-                      ),
-                    ),
-                    Text(
-                      label,
-                      style: AppTextStyles.s16w600.copyWith(
-                        color: context.onSurface,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              FaIcon(
-                FontAwesomeIcons.chevronRight,
-                size: 14.r,
-                color: context.onSurface.withValues(alpha: 0.3),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

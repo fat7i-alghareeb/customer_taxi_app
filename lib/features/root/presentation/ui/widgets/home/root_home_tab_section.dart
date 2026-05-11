@@ -31,7 +31,9 @@ class RootHomeTabSection extends StatelessWidget {
             );
           },
           success: (location) {
-            printG('[RootHomeTabSection] StatusBuilder success location=(${location.latitude},${location.longitude})');
+            printG(
+              '[RootHomeTabSection] StatusBuilder success location=(${location.latitude},${location.longitude})',
+            );
             return Stack(
               fit: StackFit.expand,
               children: [
@@ -54,14 +56,7 @@ class RootHomeTabSection extends StatelessWidget {
                     if (orderState.sheetMode != OrderSheetMode.collapsed) {
                       return const SizedBox.shrink();
                     }
-
-                    return RootHeaderSearchPillWidget(
-                      onSearchTap: () {
-                        context.read<OrderBloc>().add(
-                          const OrderEvent.orderNowPressed(),
-                        );
-                      },
-                    );
+                    return const _HomeCollapsedOverlay();
                   },
                 ),
                 const OrderBody(),
@@ -70,6 +65,36 @@ class RootHomeTabSection extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _HomeCollapsedOverlay extends StatelessWidget {
+  const _HomeCollapsedOverlay();
+
+  void _openNow(BuildContext context) {
+    context.read<OrderBloc>().add(
+      const OrderEvent.scheduleModeChanged(OrderScheduleMode.now),
+    );
+    context.read<OrderBloc>().add(const OrderEvent.orderNowPressed());
+  }
+
+  void _openLater(BuildContext context) {
+    context.read<OrderBloc>().add(
+      const OrderEvent.scheduleModeChanged(OrderScheduleMode.later),
+    );
+    context.read<OrderBloc>().add(const OrderEvent.orderNowPressed());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        RootHeaderSearchPillWidget(
+          onSearchTap: () => _openNow(context),
+          onLaterTap: () => _openLater(context),
+        ),
+      ],
     );
   }
 }

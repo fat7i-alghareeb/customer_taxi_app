@@ -11,7 +11,6 @@ class OrderMapPickSheetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectingLabel = switch (state.mapPickingTarget) {
       OrderLocationTarget.stop => AppStrings.from,
-      OrderLocationTarget.pickupPoint => AppStrings.pickupPoint,
     };
 
     return Column(

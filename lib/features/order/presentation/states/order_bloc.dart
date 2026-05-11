@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
 import 'package:customertaxi/core/services/location/location_service.dart';
 import 'package:customertaxi/utils/constants/app_flow_constants.dart';
@@ -11,7 +10,6 @@ import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/utils/bloc_status.dart';
 import '../../../../core/utils/result.dart';
-import '../../constants/order_constants.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/entities/order_location_entity.dart';
 import '../../domain/entities/order_location_request_entity.dart';
@@ -27,14 +25,15 @@ part 'order_bloc.freezed.dart';
 
 enum OrderSheetMode { collapsed, expanded, mapPicking }
 
-enum OrderLocationTarget { stop, pickupPoint }
+enum OrderLocationTarget { stop }
 
 enum OrderExpandedStep {
   locationEntry,
   carSelection,
-  pickupPoint,
   bookingDetails,
 }
+
+enum OrderScheduleMode { now, later }
 
 @injectable
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
@@ -46,7 +45,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<_CollapseRequested>(_onCollapseRequested);
     on<_MapPickCancelled>(_onMapPickCancelled);
     on<_VehicleStepBackPressed>(_onVehicleStepBackPressed);
-    on<_PickupPointBackPressed>(_onPickupPointBackPressed);
     on<_SetOnMapPressed>(_onSetOnMapPressed);
     on<_MapCameraTargetUpdated>(_onMapCameraTargetUpdated);
     on<_ConfirmMapPointPressed>(_onConfirmMapPointPressed);
@@ -59,17 +57,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<_StopReordered>(_onStopReordered);
     on<_SavedLocationPinToggled>(_onSavedLocationPinToggled);
     on<_CarTypeToggled>(_onCarTypeToggled);
-    on<_PickupStreetChanged>(_onPickupStreetChanged);
-    on<_PickupHouseNumberChanged>(_onPickupHouseNumberChanged);
     on<_TripPrefetchCompleted>(_onTripPrefetchCompleted);
     on<_ConfirmOrderPressed>(_onConfirmOrderPressed);
     on<_ConfirmCarSelectionPressed>(_onConfirmCarSelectionPressed);
-    on<_ConfirmPickupPointPressed>(_onConfirmPickupPointPressed);
-    on<_PickupConfirmationFeedbackCleared>(
-      _onPickupConfirmationFeedbackCleared,
-    );
     on<_ConfirmBookingDetailsPressed>(_onConfirmBookingDetailsPressed);
     on<_BookingDetailsBackPressed>(_onBookingDetailsBackPressed);
+    on<_ScheduleModeChanged>(_onScheduleModeChanged);
     on<_ScheduleTimeChanged>(_onScheduleTimeChanged);
     on<_PaymentMethodChanged>(_onPaymentMethodChanged);
   }
@@ -376,11 +369,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     _ConfirmMapPointPressed event,
     Emitter<OrderState> emit,
   ) async {
-    if (state.mapPickingTarget == OrderLocationTarget.pickupPoint) {
-      await _handlePickupMapPointConfirmation(emit);
-      return;
-    }
-
     _invalidateTripResolution();
     _invalidatePrefetch();
     final token = _tripResolutionToken;
@@ -421,16 +409,39 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           orElse: () => const BlocStatus.initial(),
         );
 
-        final nextState = _resetTripFlowState(state).copyWith(
-          stops: nextStops,
-          stopQueries: nextQueries,
-          stopSuggestionsState: nextSuggestions,
-          sheetMode: OrderSheetMode.expanded,
-        );
+        final wasInCarSelectionOrBooking = state.expandedStep == OrderExpandedStep.carSelection || 
+                                           state.expandedStep == OrderExpandedStep.bookingDetails;
+
+        OrderState nextState;
+        if (wasInCarSelectionOrBooking) {
+          nextState = state.copyWith(
+            stops: nextStops,
+            stopQueries: nextQueries,
+            stopSuggestionsState: nextSuggestions,
+            sheetMode: OrderSheetMode.expanded,
+            expandedStep: OrderExpandedStep.carSelection,
+            selectedCarTypeId: null,
+            selectedQuoteId: null,
+            tripRouteState: const BlocStatus.initial(),
+            tripCarOptionsState: const BlocStatus.initial(),
+          );
+        } else {
+          nextState = _resetTripFlowState(state).copyWith(
+            stops: nextStops,
+            stopQueries: nextQueries,
+            stopSuggestionsState: nextSuggestions,
+            sheetMode: OrderSheetMode.expanded,
+          );
+        }
 
         emit(nextState);
         await _saveSelectedLocationAndRefresh(emit, location);
-        _tryStartTripPrefetch(emit: emit, currentStops: nextStops);
+        
+        if (wasInCarSelectionOrBooking) {
+          add(const OrderEvent.confirmOrderPressed());
+        } else {
+          _tryStartTripPrefetch(emit: emit, currentStops: nextStops);
+        }
       },
       failure: (_) async {
         if (!_isTripResolutionTokenCurrent(token)) return;
@@ -589,10 +600,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       stops: initialStops,
       stopQueries: initialQueries,
       stopSuggestionsState: initialSuggestions,
-      pickupPointState: const BlocStatus.initial(),
-      pickupStreetName: '',
-      pickupHouseNumber: '',
-      pickupConfirmationFeedbackState: const BlocStatus.initial(),
       tripRouteState: const BlocStatus.initial(),
       tripCarOptionsState: const BlocStatus.initial(),
       prefetchedTripRouteState: const BlocStatus.initial(),
@@ -600,6 +607,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       prefetchedStops: [],
       selectedCarTypeId: null,
       selectedQuoteId: null,
+      scheduleMode: source.scheduleMode,
       scheduledAt: null,
       paymentMethodId: null,
       tripRequestStatus: const BlocStatus.initial(),
@@ -1036,31 +1044,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
   }
 
-  void _onPickupStreetChanged(
-    _PickupStreetChanged event,
-    Emitter<OrderState> emit,
-  ) {
-    emit(state.copyWith(pickupStreetName: event.value));
-  }
-
-  void _onPickupHouseNumberChanged(
-    _PickupHouseNumberChanged event,
-    Emitter<OrderState> emit,
-  ) {
-    emit(state.copyWith(pickupHouseNumber: event.value));
-  }
-
   void _onMapPickCancelled(_MapPickCancelled event, Emitter<OrderState> emit) {
-    if (state.mapPickingTarget == OrderLocationTarget.pickupPoint) {
-      emit(
-        state.copyWith(
-          sheetMode: OrderSheetMode.expanded,
-          expandedStep: OrderExpandedStep.pickupPoint,
-        ),
-      );
-      return;
-    }
-
     _invalidateTripResolution();
     _invalidatePrefetch();
     emit(
@@ -1078,28 +1062,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     emit(_resetTripFlowState(state));
   }
 
-  void _onPickupPointBackPressed(
-    _PickupPointBackPressed event,
-    Emitter<OrderState> emit,
-  ) {
-    printM('[OrderBloc] pickupPointBackPressed -> carSelection');
-    emit(
-      state.copyWith(
-        sheetMode: OrderSheetMode.expanded,
-        expandedStep: OrderExpandedStep.carSelection,
-      ),
-    );
-  }
-
   void _onSetOnMapPressed(_SetOnMapPressed event, Emitter<OrderState> emit) {
-    final target = state.expandedStep == OrderExpandedStep.pickupPoint
-        ? OrderLocationTarget.pickupPoint
-        : OrderLocationTarget.stop;
-    printM('[OrderBloc] setOnMapPressed target=${target.name}');
+    printM('[OrderBloc] setOnMapPressed target=stop index=${event.index}');
     emit(
       state.copyWith(
         sheetMode: OrderSheetMode.mapPicking,
-        mapPickingTarget: target,
+        mapPickingTarget: OrderLocationTarget.stop,
+        activeStopIndex: event.index,
       ),
     );
   }
@@ -1120,85 +1089,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
   }
 
-  Future<void> _handlePickupMapPointConfirmation(
-    Emitter<OrderState> emit,
-  ) async {
-    printM(
-      '[OrderBloc] confirmPickupMapPointPressed lat=${state.mapCameraLatitude} lng=${state.mapCameraLongitude}',
-    );
-
-    final fromLocation = state.stops.first;
-    if (fromLocation == null) {
-      emit(
-        state.copyWith(
-          sheetMode: OrderSheetMode.expanded,
-          expandedStep: OrderExpandedStep.pickupPoint,
-          pickupPointState: const BlocStatus.initial(),
-          pickupConfirmationFeedbackState: BlocStatus.failure(
-            AppStrings.somethingWentWrong,
-          ),
-        ),
-      );
-      return;
-    }
-
-    final result = await _facade.reverseGeocode(
-      OrderReverseGeocodeRequestEntity(
-        latitude: state.mapCameraLatitude,
-        longitude: state.mapCameraLongitude,
-      ),
-    );
-
-    if (state.sheetMode != OrderSheetMode.mapPicking ||
-        state.mapPickingTarget != OrderLocationTarget.pickupPoint) {
-      return;
-    }
-
-    final pickupLocation = result.when(
-      success: (location) => location,
-      failure: (_) => _buildFallbackLocation(
-        latitude: state.mapCameraLatitude,
-        longitude: state.mapCameraLongitude,
-      ),
-    );
-
-    final distanceMeters = Geolocator.distanceBetween(
-      fromLocation.latitude,
-      fromLocation.longitude,
-      pickupLocation.latitude,
-      pickupLocation.longitude,
-    );
-
-    if (distanceMeters > OrderConstants.pickupPointMaxDistanceMeters) {
-      printY(
-        '[OrderBloc] pickupPoint rejected distance=${distanceMeters.toStringAsFixed(1)}m',
-      );
-      emit(
-        state.copyWith(
-          sheetMode: OrderSheetMode.expanded,
-          expandedStep: OrderExpandedStep.pickupPoint,
-          pickupPointState: const BlocStatus.initial(),
-          pickupConfirmationFeedbackState: BlocStatus.failure(
-            AppStrings.pickupPointTooFar,
-          ),
-        ),
-      );
-      return;
-    }
-
-    printG(
-      '[OrderBloc] pickupPoint selected distance=${distanceMeters.toStringAsFixed(1)}m label="${pickupLocation.label}"',
-    );
-    emit(
-      state.copyWith(
-        sheetMode: OrderSheetMode.expanded,
-        expandedStep: OrderExpandedStep.pickupPoint,
-        pickupPointState: BlocStatus.success(pickupLocation),
-        pickupConfirmationFeedbackState: const BlocStatus.initial(),
-      ),
-    );
-  }
-
   void _onConfirmCarSelectionPressed(
     _ConfirmCarSelectionPressed event,
     Emitter<OrderState> emit,
@@ -1215,75 +1105,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     if (startLocation == null) return;
 
     printC(
-      '[OrderBloc] confirmCarSelectionPressed -> pickupPoint selectedType=${state.selectedCarTypeId}',
+      '[OrderBloc] confirmCarSelectionPressed -> bookingDetails selectedType=${state.selectedCarTypeId}',
     );
     emit(
       state.copyWith(
         sheetMode: OrderSheetMode.expanded,
-        expandedStep: OrderExpandedStep.pickupPoint,
-        mapPickingTarget: OrderLocationTarget.pickupPoint,
-        pickupPointState: BlocStatus.success(startLocation),
-      ),
-    );
-  }
-
-  void _onConfirmPickupPointPressed(
-    _ConfirmPickupPointPressed event,
-    Emitter<OrderState> emit,
-  ) {
-    final fromLocation = state.stops.first;
-    final pickupLocation = state.pickupPointState.maybeWhen(
-      success: (location) => location,
-      orElse: () => null,
-    );
-
-    if (fromLocation == null) {
-      emit(
-        state.copyWith(
-          pickupConfirmationFeedbackState: BlocStatus.failure(
-            AppStrings.somethingWentWrong,
-          ),
-        ),
-      );
-      return;
-    }
-
-    if (pickupLocation == null) {
-      emit(
-        state.copyWith(
-          pickupConfirmationFeedbackState: BlocStatus.failure(
-            AppStrings.pickupPointRequired,
-          ),
-        ),
-      );
-      return;
-    }
-
-    final distanceMeters = Geolocator.distanceBetween(
-      fromLocation.latitude,
-      fromLocation.longitude,
-      pickupLocation.latitude,
-      pickupLocation.longitude,
-    );
-
-    if (distanceMeters > OrderConstants.pickupPointMaxDistanceMeters) {
-      emit(
-        state.copyWith(
-          pickupConfirmationFeedbackState: BlocStatus.failure(
-            AppStrings.pickupPointTooFar,
-          ),
-        ),
-      );
-      return;
-    }
-
-    printG(
-      '[OrderBloc] confirmPickupPointPressed success pickup="${pickupLocation.label}" street="${state.pickupStreetName}" house="${state.pickupHouseNumber}" -> move to bookingDetails',
-    );
-    emit(
-      state.copyWith(
         expandedStep: OrderExpandedStep.bookingDetails,
-        sheetMode: OrderSheetMode.expanded,
       ),
     );
   }
@@ -1321,10 +1148,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             : const BlocStatus.loading(),
         selectedCarTypeId: null,
         selectedQuoteId: null,
-        pickupPointState: const BlocStatus.initial(),
-        pickupStreetName: '',
-        pickupHouseNumber: '',
-        pickupConfirmationFeedbackState: const BlocStatus.initial(),
       ),
     );
 
@@ -1394,14 +1217,37 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     _BookingDetailsBackPressed event,
     Emitter<OrderState> emit,
   ) {
-    emit(state.copyWith(expandedStep: OrderExpandedStep.pickupPoint));
+    emit(state.copyWith(expandedStep: OrderExpandedStep.carSelection));
+  }
+
+  void _onScheduleModeChanged(
+    _ScheduleModeChanged event,
+    Emitter<OrderState> emit,
+  ) {
+    if (event.mode == OrderScheduleMode.now) {
+      emit(state.copyWith(
+        scheduleMode: OrderScheduleMode.now,
+        scheduledAt: null,
+      ));
+      return;
+    }
+
+    emit(state.copyWith(scheduleMode: OrderScheduleMode.later));
   }
 
   void _onScheduleTimeChanged(
     _ScheduleTimeChanged event,
     Emitter<OrderState> emit,
   ) {
-    emit(state.copyWith(scheduledAt: event.time));
+    if (event.time == null) {
+      emit(state.copyWith(scheduledAt: null));
+      return;
+    }
+
+    emit(state.copyWith(
+      scheduleMode: OrderScheduleMode.later,
+      scheduledAt: event.time,
+    ));
   }
 
   void _onPaymentMethodChanged(
@@ -1437,15 +1283,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
     emit(state.copyWith(tripRequestStatus: const BlocStatus.loading()));
 
-    final pickupLocation = state.pickupPointState.maybeWhen(
-      success: (loc) => loc,
-      orElse: () => resolvedStops.first,
-    );
-
-    final finalStops = List<OrderLocationEntity>.from(resolvedStops);
-    finalStops[0] = pickupLocation;
-
-    final stopCoords = finalStops
+    final stopCoords = resolvedStops
         .map(
           (s) => OrderStopCoordinateEntity(
             latitude: s.latitude,
@@ -1455,16 +1293,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         )
         .toList();
 
+    final scheduledAtToSend = state.scheduleMode == OrderScheduleMode.later
+        ? state.scheduledAt
+        : null;
+
     final result = await _facade.requestTrip(
       OrderRequestTripEntity(
         quoteId: quoteId,
         stops: stopCoords,
-        scheduledAt: state.scheduledAt,
-        pickupLatitude: pickupLocation.latitude,
-        pickupLongitude: pickupLocation.longitude,
-        pickupAddress: pickupLocation.label,
-        pickupStreetName: state.pickupStreetName,
-        pickupHouseNumber: state.pickupHouseNumber,
+        scheduledAt: scheduledAtToSend,
       ),
     );
 
@@ -1480,18 +1317,4 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
   }
 
-  void _onPickupConfirmationFeedbackCleared(
-    _PickupConfirmationFeedbackCleared event,
-    Emitter<OrderState> emit,
-  ) {
-    if (state.pickupConfirmationFeedbackState.isInit) {
-      return;
-    }
-
-    emit(
-      state.copyWith(
-        pickupConfirmationFeedbackState: const BlocStatus.initial(),
-      ),
-    );
-  }
 }
