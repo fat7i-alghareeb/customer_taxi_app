@@ -4,6 +4,7 @@ import 'package:customertaxi/common/widgets/show_overlay.dart';
 
 import 'package:customertaxi/features/auth/constants/forms/auth_forms.dart';
 import 'package:customertaxi/features/auth/presentation/states/auth_bloc.dart';
+import 'package:customertaxi/features/auth/presentation/ui/widgets/login/login_landing_section.dart';
 import 'package:customertaxi/features/auth/presentation/ui/widgets/login/login_otp_section.dart';
 import 'package:customertaxi/features/auth/presentation/ui/widgets/login/login_phone_section.dart';
 
@@ -57,10 +58,12 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
       },
       builder: (context, state) {
         return PopScope(
-          canPop: !state.isOtpSent,
+          canPop: state.isLanding,
           onPopInvokedWithResult: (didPop, result) {
             if (didPop) return;
             if (state.isOtpSent) {
+              context.read<AuthBloc>().add(const AuthEvent.resetRequested());
+            } else if (!state.isLanding) {
               context.read<AuthBloc>().add(const AuthEvent.resetRequested());
             }
           },
@@ -68,148 +71,180 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
             formGroup: _form,
             child: AppScaffold.body(
               scaffoldConfig: AppScaffoldConfig(
-                backgroundColor: context.surface,
-                safeArea: [AppScaffoldSafeArea.top, AppScaffoldSafeArea.bottom],
+                backgroundColor: state.isLanding
+                    ? Colors.black
+                    : context.surface,
+                safeArea: [],
               ),
-              child: Stack(
-                children: [
-                  // Content
-                  CustomScrollView(
-                    slivers: [
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Padding(
-                          padding: REdgeInsets.symmetric(
-                            horizontal: AppSpacing.xl,
-                            vertical: AppSpacing.xxl,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              if (state.isOtpSent)
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      context.read<AuthBloc>().add(
-                                        const AuthEvent.resetRequested(),
-                                      );
-                                    },
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.chevronLeft,
-                                      size: 20.r,
-                                      color: context.onSurface,
-                                    ),
-                                  ),
-                                ).animate().fadeIn().slideX(begin: -0.2),
-
-                              (state.isOtpSent
-                                      ? AppSpacing.xl
-                                      : AppSpacing.xxl * 2)
-                                  .verticalSpace,
-
-                              // Logo
-                              Center(
-                                    child: Assets.images.oranjeLogo.image(
-                                      height: 140.h,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  )
-                                  .animate()
-                                  .fadeIn(duration: 600.ms)
-                                  .scale(
-                                    begin: const Offset(0.8, 0.8),
-                                    curve: Curves.easeOutBack,
-                                  ),
-
-                              AppSpacing.xxl.verticalSpace,
-
-                              // Welcome Text
-                              Column(
-                                    children: [
-                                      Text(
-                                        state.isOtpSent
-                                            ? AppStrings.otp
-                                            : AppStrings.login,
-                                        style: AppTextStyles.s40w700.copyWith(
-                                          color: context.onSurface,
-                                          height: 1.1,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      AppSpacing.sm.verticalSpace,
-                                      Text(
-                                        state.isOtpSent
-                                            ? AppStrings.enterOtp
-                                            : AppStrings.enterPhone,
-                                        style: AppTextStyles.s16w400.copyWith(
-                                          color: context.onSurfaceVariant,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  )
-                                  .animate()
-                                  .fadeIn(delay: 200.ms)
-                                  .slideY(begin: 0.2),
-
-                              (AppSpacing.xxl * 1.5).verticalSpace,
-
-                              // Input Section
-                              Container(
-                                    padding: REdgeInsets.all(AppSpacing.xl),
-                                    decoration: BoxDecoration(
-                                      color: context.surface,
-                                      borderRadius: BorderRadius.circular(
-                                        AppRadii.xl.r,
-                                      ),
-                                      boxShadow: context.shadows.primary,
-                                      border: Border.all(
-                                        color: context.primary.withValues(
-                                          alpha: 0.1,
-                                        ),
-                                      ),
-                                    ),
-                                    child: AnimatedSwitcher(
-                                      duration: const Duration(
-                                        milliseconds: 400,
-                                      ),
-                                      transitionBuilder: (child, animation) =>
-                                          FadeTransition(
-                                            opacity: animation,
-                                            child: SlideTransition(
-                                              position: Tween<Offset>(
-                                                begin: const Offset(0, 0.1),
-                                                end: Offset.zero,
-                                              ).animate(animation),
-                                              child: child,
-                                            ),
-                                          ),
-                                      child: !state.isOtpSent
-                                          ? LoginPhoneSection(
-                                              key: const ValueKey('phone'),
-                                              form: _form,
-                                            )
-                                          : LoginOtpSection(
-                                              key: const ValueKey('otp'),
-                                              form: _form,
-                                            ),
-                                    ),
-                                  )
-                                  .animate()
-                                  .fadeIn(delay: 400.ms)
-                                  .scale(
-                                    begin: const Offset(0.95, 0.95),
-                                    curve: Curves.easeOut,
-                                  ),
-                            ],
+              child: state.isLanding
+                  ? Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Assets.images.loginLandingBg.image(
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                        Positioned.fill(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.black.withValues(alpha: 0.1),
+                                  Colors.black.withValues(alpha: 0.4),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox.expand(
+                          child: Padding(
+                            padding: REdgeInsets.only(
+                              left: AppSpacing.xl,
+                              right: AppSpacing.xl,
+                              top: AppSpacing.lg,
+                              bottom: AppSpacing.xxl,
+                            ),
+                            child: const LoginLandingSection(),
+                          ),
+                        ),
+                      ],
+                    )
+                  : CustomScrollView(
+                      slivers: [
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Padding(
+                            padding: REdgeInsets.symmetric(
+                              horizontal: AppSpacing.xl,
+                              vertical: AppSpacing.xxl,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (state.isOtpSent)
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        context.read<AuthBloc>().add(
+                                          const AuthEvent.resetRequested(),
+                                        );
+                                      },
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.chevronLeft,
+                                        size: 20.r,
+                                        color: context.onSurface,
+                                      ),
+                                    ),
+                                  ).animate().fadeIn().slideX(begin: -0.2),
+
+                                (state.isOtpSent
+                                        ? AppSpacing.xl
+                                        : AppSpacing.xxl * 2)
+                                    .verticalSpace,
+
+                                // Logo
+                                Center(
+                                      child: Assets.images.oranjeLogo.image(
+                                        height: 140.h,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )
+                                    .animate()
+                                    .fadeIn(duration: 600.ms)
+                                    .scale(
+                                      begin: const Offset(0.8, 0.8),
+                                      curve: Curves.easeOutBack,
+                                    ),
+
+                                AppSpacing.xxl.verticalSpace,
+
+                                // Welcome Text
+                                Column(
+                                      children: [
+                                        Text(
+                                          state.isOtpSent
+                                              ? AppStrings.otp
+                                              : AppStrings.login,
+                                          style: AppTextStyles.s40w700.copyWith(
+                                            color: context.onSurface,
+                                            height: 1.1,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        AppSpacing.sm.verticalSpace,
+                                        Text(
+                                          state.isOtpSent
+                                              ? AppStrings.enterOtp
+                                              : AppStrings.enterPhone,
+                                          style: AppTextStyles.s16w400.copyWith(
+                                            color: context.onSurfaceVariant,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    )
+                                    .animate()
+                                    .fadeIn(delay: 200.ms)
+                                    .slideY(begin: 0.2),
+
+                                (AppSpacing.xxl * 1.5).verticalSpace,
+
+                                // Input Section
+                                Container(
+                                      padding: REdgeInsets.all(AppSpacing.xl),
+                                      decoration: BoxDecoration(
+                                        color: context.surface,
+                                        borderRadius: BorderRadius.circular(
+                                          AppRadii.xl.r,
+                                        ),
+                                        boxShadow: context.shadows.primary,
+                                        border: Border.all(
+                                          color: context.primary.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: AnimatedSwitcher(
+                                        duration: const Duration(
+                                          milliseconds: 400,
+                                        ),
+                                        transitionBuilder: (child, animation) =>
+                                            FadeTransition(
+                                              opacity: animation,
+                                              child: SlideTransition(
+                                                position: Tween<Offset>(
+                                                  begin: const Offset(0, 0.1),
+                                                  end: Offset.zero,
+                                                ).animate(animation),
+                                                child: child,
+                                              ),
+                                            ),
+                                        child: !state.isOtpSent
+                                            ? LoginPhoneSection(
+                                                key: const ValueKey('phone'),
+                                                form: _form,
+                                              )
+                                            : LoginOtpSection(
+                                                key: const ValueKey('otp'),
+                                                form: _form,
+                                              ),
+                                      ),
+                                    )
+                                    .animate()
+                                    .fadeIn(delay: 400.ms)
+                                    .scale(
+                                      begin: const Offset(0.95, 0.95),
+                                      curve: Curves.easeOut,
+                                    ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
             ),
           ),
         );

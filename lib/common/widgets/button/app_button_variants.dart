@@ -3,7 +3,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../utils/extensions/theme_extensions.dart';
 
 /// Shared types and style resolution for [AppButton].
-enum AppButtonFill { solid, gradient }
+enum AppButtonFill { solid, gradient, outline }
 
 /// Shadow style used by [AppButtonStyleResolver].
 ///
@@ -67,6 +67,7 @@ class AppButtonResolvedStyle {
     required this.gradient,
     required this.foreground,
     required this.shadows,
+    this.border,
   });
 
   final AppButtonFill fill;
@@ -74,6 +75,7 @@ class AppButtonResolvedStyle {
   final LinearGradient? gradient;
   final Color foreground;
   final List<BoxShadow> shadows;
+  final BoxBorder? border;
 }
 
 class AppButtonStyleResolver {
@@ -91,7 +93,8 @@ class AppButtonStyleResolver {
   }) {
     final effectiveVariant = isActive ? variant : AppButtonVariant.grey;
 
-    final color = layout.backgroundColor ??
+    final color =
+        layout.backgroundColor ??
         (fill == AppButtonFill.solid
             ? effectiveVariant.solidColor(context)
             : null);
@@ -112,12 +115,22 @@ class AppButtonStyleResolver {
                 shadowVariant ?? AppButtonShadowVariant.grey,
               ));
 
+    final border = fill == AppButtonFill.outline
+        ? Border.all(
+            color: isActive
+                ? (layout.backgroundColor ??
+                      effectiveVariant.solidColor(context))
+                : context.grey,
+          )
+        : null;
+
     return AppButtonResolvedStyle(
       fill: fill,
       color: color,
       gradient: gradient,
       foreground: foreground,
       shadows: shadows,
+      border: border,
     );
   }
 
@@ -202,8 +215,13 @@ class _GreyButtonVariant extends AppButtonVariant {
 
 class CustomButtonVariant extends AppButtonVariant {
   final Color? color;
+  final Color? foregroundColor;
   final LinearGradient? gradientColor;
-  const CustomButtonVariant({this.color, this.gradientColor});
+  const CustomButtonVariant({
+    this.color,
+    this.foregroundColor,
+    this.gradientColor,
+  });
 
   @override
   Color solidColor(BuildContext context) => color ?? context.grey;
@@ -213,5 +231,6 @@ class CustomButtonVariant extends AppButtonVariant {
       gradientColor ?? context.gradients.grey;
 
   @override
-  Color foreground(BuildContext context) => context.background;
+  Color foreground(BuildContext context) =>
+      foregroundColor ?? context.background;
 }

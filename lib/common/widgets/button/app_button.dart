@@ -178,6 +178,35 @@ class AppButton extends StatefulWidget {
     );
   }
 
+  factory AppButton.outline({
+    Key? key,
+    required AppButtonChild child,
+    required VoidCallback? onTap,
+    VoidCallback? onTapWhenInactive,
+    AppButtonLayout layout = const AppButtonLayout(),
+    AppButtonVariant variant = AppButtonVariant.primary,
+    bool isActive = true,
+    bool isLoading = false,
+    bool noShadow = true,
+    AppButtonShadowVariant? shadowVariant,
+    List<BoxShadow>? customShadows,
+  }) {
+    return AppButton._(
+      key: key,
+      child: child,
+      onTap: onTap,
+      onTapWhenInactive: onTapWhenInactive,
+      variant: variant,
+      fill: AppButtonFill.outline,
+      layout: layout,
+      isActive: isActive,
+      isLoading: isLoading,
+      noShadow: noShadow,
+      shadowVariant: shadowVariant,
+      customShadows: customShadows,
+    );
+  }
+
   factory AppButton.success({
     Key? key,
     required AppButtonChild child,
@@ -566,6 +595,7 @@ class _AppButtonState extends State<AppButton>
             gradient: style.gradient,
             borderRadius: borderRadius,
             boxShadow: style.shadows,
+            border: style.border,
           ),
           // Align (instead of Center) keeps the widget shrink-wrappable.
           child: Align(widthFactor: 1, heightFactor: 1, child: content),

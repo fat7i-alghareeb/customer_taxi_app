@@ -143,6 +143,8 @@
   "languagePL": "Polski",
   "languageUK": "Українська",
   "languageFR": "Français",
+  "languageES": "Spanisch",
+  "languageRO": "Rumänisch",
   "selectLanguage": "Sprache wählen",
   "selectTheme": "Design wählen",
   "light": "Hell",
@@ -242,5 +244,12 @@
   "favoritesUnpin": "Lösen",
   "discountApplied": "Rabatt angewendet: {percent}%",
   "carType": "Fahrzeugtyp",
-  "change": "Ändern"
+  "change": "Ändern",
+  "loginLandingTagline": "Deine Fahrt, unsere Priorität.",
+  "loginLandingDiscountTitle": "Melde dich an und erhalte",
+  "loginLandingDiscountSubtitle": "5% Rabatt",
+  "loginLandingDiscountFooter": "auf deine erste Fahrt!",
+  "loginLandingRegister": "Registrieren",
+  "loginLandingLogin": "Anmelden",
+  "loginLandingFooter": "Sicher und zuverlässig"
 }

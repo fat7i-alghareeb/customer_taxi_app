@@ -143,6 +143,8 @@
   "languagePL": "Polski",
   "languageUK": "Українська",
   "languageFR": "Français",
+  "languageES": "Іспанська",
+  "languageRO": "Румунська",
   "selectLanguage": "Вибрати мову",
   "selectTheme": "Вибрати тему",
   "light": "Світла",
@@ -242,5 +244,12 @@
   "favoritesUnpin": "Відкріпити",
   "discountApplied": "Знижка застосована: {percent}%",
   "carType": "Тип автомобіля",
-  "change": "Змінити"
+  "change": "Змінити",
+  "loginLandingTagline": "Ваша поїздка — наш пріоритет.",
+  "loginLandingDiscountTitle": "Зареєструйтеся та отримайте",
+  "loginLandingDiscountSubtitle": "5% знижки",
+  "loginLandingDiscountFooter": "на першу поїздку!",
+  "loginLandingRegister": "Зареєструватися",
+  "loginLandingLogin": "Увійти",
+  "loginLandingFooter": "Надійно та безпечно"
 }

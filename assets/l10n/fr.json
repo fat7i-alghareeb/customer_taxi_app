@@ -143,6 +143,8 @@
   "languagePL": "Polski",
   "languageUK": "Українська",
   "languageFR": "Français",
+  "languageES": "Espagnol",
+  "languageRO": "Roumain",
   "selectLanguage": "Choisir la langue",
   "selectTheme": "Choisir le thème",
   "light": "Clair",
@@ -242,5 +244,12 @@
   "favoritesUnpin": "Désépingler",
   "discountApplied": "Remise appliquée : {percent}%",
   "carType": "Type de véhicule",
-  "change": "Changer"
+  "change": "Modifier",
+  "loginLandingTagline": "Votre trajet, notre priorité.",
+  "loginLandingDiscountTitle": "Inscrivez-vous et recevez",
+  "loginLandingDiscountSubtitle": "5% de réduction",
+  "loginLandingDiscountFooter": "sur votre premier trajet !",
+  "loginLandingRegister": "S'inscrire",
+  "loginLandingLogin": "Se connecter",
+  "loginLandingFooter": "Sûr et fiable"
 }

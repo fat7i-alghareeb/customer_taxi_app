@@ -45,6 +45,10 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
   // Password visibility state.
   bool _obscure = true;
 
+  // Phone initial value cache to prevent infinite rebuild loops in intl_phone_number_input.
+  PhoneNumber? _phoneInitialValueCached;
+  String? _phoneInitialValueSignature;
+
   @override
   void initState() {
     super.initState();
@@ -281,9 +285,6 @@ class _AppReactiveTextFieldState extends State<AppReactiveTextField>
       child: ReactiveStatusListenableBuilder(
         formControlName: widget.formControlName,
         builder: (context, control, child) {
-          printM(
-            '[AppReactiveTextField] build status listener controlName=${widget.formControlName} value="${control.value}" status=${control.status}',
-          );
           final resolvedPadding = outer.contentPadding.resolve(outer.direction);
 
           // The outer container has padding. This computes the remaining space

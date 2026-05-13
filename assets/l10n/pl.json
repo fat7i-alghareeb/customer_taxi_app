@@ -143,6 +143,8 @@
   "languagePL": "Polski",
   "languageUK": "Українська",
   "languageFR": "Français",
+  "languageES": "Hiszpański",
+  "languageRO": "Rumuński",
   "selectLanguage": "Wybierz język",
   "selectTheme": "Wybierz motyw",
   "light": "Jasny",
@@ -242,5 +244,12 @@
   "favoritesUnpin": "Odepnij",
   "discountApplied": "Zniżka zastosowana: {percent}%",
   "carType": "Typ pojazdu",
-  "change": "Zmień"
+  "change": "Zmień",
+  "loginLandingTagline": "Twój przejazd, nasz priorytet.",
+  "loginLandingDiscountTitle": "Zarejestruj się i otrzymaj",
+  "loginLandingDiscountSubtitle": "5% zniżki",
+  "loginLandingDiscountFooter": "na pierwszy przejazd!",
+  "loginLandingRegister": "Zarejestruj się",
+  "loginLandingLogin": "Zaloguj się",
+  "loginLandingFooter": "Bezpiecznie i solidnie"
 }

@@ -6,4 +6,5 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.sendOtpRequested(String phone) = _SendOtpRequested;
   const factory AuthEvent.verifyOtpRequested(String otp) = _VerifyOtpRequested;
   const factory AuthEvent.resetRequested() = _ResetRequested;
+  const factory AuthEvent.landingProceedRequested() = _LandingProceedRequested;
 }

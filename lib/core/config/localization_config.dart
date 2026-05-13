@@ -16,13 +16,15 @@ class AppLocalizationConfig {
     'pl',
     'uk',
     'fr',
+    'es',
+    'ro',
   ];
 }
 
 /// High-level language enum used across the app.
 ///
 /// Keep this in sync with [AppLocalizationConfig.supportedLanguageCodes].
-enum AppLanguage { ar, en, nl, de, pl, uk, fr }
+enum AppLanguage { ar, en, nl, de, pl, uk, fr, es, ro }
 
 extension AppLanguageX on AppLanguage {
   /// Returns the language code as used in JSON files and headers.
@@ -42,6 +44,10 @@ extension AppLanguageX on AppLanguage {
         return 'uk';
       case AppLanguage.fr:
         return 'fr';
+      case AppLanguage.es:
+        return 'es';
+      case AppLanguage.ro:
+        return 'ro';
     }
   }
 }

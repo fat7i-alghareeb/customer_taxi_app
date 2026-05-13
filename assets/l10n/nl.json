@@ -143,6 +143,8 @@
   "languagePL": "Pools",
   "languageUK": "Oekraïens",
   "languageFR": "Frans",
+  "languageES": "Spaans",
+  "languageRO": "Roemeens",
   "selectLanguage": "Selecteer taal",
   "selectTheme": "Selecteer thema",
   "light": "Licht",
@@ -242,5 +244,12 @@
   "favoritesUnpin": "Losmaken",
   "discountApplied": "Korting toegepast: {percent}%",
   "carType": "Autotype",
-  "change": "Wijzigen"
+  "change": "Wijzigen",
+  "loginLandingTagline": "Jouw rit, onze prioriteit.",
+  "loginLandingDiscountTitle": "Meld je aan en krijg",
+  "loginLandingDiscountSubtitle": "5% korting",
+  "loginLandingDiscountFooter": "op je eerste rit!",
+  "loginLandingRegister": "Aanmelden",
+  "loginLandingLogin": "Inloggen",
+  "loginLandingFooter": "Veilig en betrouwbaar"
 }

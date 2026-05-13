@@ -54,4 +54,7 @@ class AppColors {
 
   /// Brand Gold color.
   static const Color brandGold = Color(0xFFF1B94A);
+
+  /// Landing screen specific gold color.
+  static const Color landingGold = Color(0xFFE4A030);
 }

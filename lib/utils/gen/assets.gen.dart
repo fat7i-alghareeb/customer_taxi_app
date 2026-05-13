@@ -32,8 +32,16 @@ class $AssetsImagesGen {
   AssetGenImage get adamLogo =>
       const AssetGenImage('assets/images/adam_logo.png');
 
+  /// File path: assets/images/buildings.png
+  AssetGenImage get buildings =>
+      const AssetGenImage('assets/images/buildings.png');
+
   /// File path: assets/images/comfort.png
   AssetGenImage get comfort => const AssetGenImage('assets/images/comfort.png');
+
+  /// File path: assets/images/login_landing_bg.png
+  AssetGenImage get loginLandingBg =>
+      const AssetGenImage('assets/images/login_landing_bg.png');
 
   /// File path: assets/images/logo_launcher.png
   AssetGenImage get logoLauncher =>
@@ -51,6 +59,10 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding3 =>
       const AssetGenImage('assets/images/onboarding_3.png');
 
+  /// File path: assets/images/legacyCar.png
+  AssetGenImage get legacyCar =>
+      const AssetGenImage('assets/images/legacyCar.png');
+
   /// File path: assets/images/oranje_logo.png
   AssetGenImage get oranjeLogo =>
       const AssetGenImage('assets/images/oranje_logo.png');
@@ -58,6 +70,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/order_now_car.png
   AssetGenImage get orderNowCar =>
       const AssetGenImage('assets/images/order_now_car.png');
+
+  /// File path: assets/images/road_and_buildings.png
+  AssetGenImage get roadAndBuildings =>
+      const AssetGenImage('assets/images/road_and_buildings.png');
+
+  /// File path: assets/images/road_light_trails.png
+  AssetGenImage get roadLightTrails =>
+      const AssetGenImage('assets/images/road_light_trails.png');
 
   /// File path: assets/images/splash_dark.png
   AssetGenImage get splashDark =>
@@ -71,20 +91,29 @@ class $AssetsImagesGen {
   AssetGenImage get standered =>
       const AssetGenImage('assets/images/standered.png');
 
+  /// File path: assets/images/topText.png
+  AssetGenImage get topText => const AssetGenImage('assets/images/topText.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     a8Passengeres,
     adamLogo,
+    buildings,
     comfort,
+    loginLandingBg,
     logoLauncher,
     onboarding1,
     onboarding2,
     onboarding3,
+    legacyCar,
     oranjeLogo,
     orderNowCar,
+    roadAndBuildings,
+    roadLightTrails,
     splashDark,
     splashLight,
     standered,
+    topText,
   ];
 }
 
@@ -100,6 +129,9 @@ class $AssetsL10nGen {
   /// File path: assets/l10n/en.json
   String get en => 'assets/l10n/en.json';
 
+  /// File path: assets/l10n/es.json
+  String get es => 'assets/l10n/es.json';
+
   /// File path: assets/l10n/fr.json
   String get fr => 'assets/l10n/fr.json';
 
@@ -109,11 +141,14 @@ class $AssetsL10nGen {
   /// File path: assets/l10n/pl.json
   String get pl => 'assets/l10n/pl.json';
 
+  /// File path: assets/l10n/ro.json
+  String get ro => 'assets/l10n/ro.json';
+
   /// File path: assets/l10n/uk.json
   String get uk => 'assets/l10n/uk.json';
 
   /// List of all assets
-  List<String> get values => [ar, de, en, fr, nl, pl, uk];
+  List<String> get values => [ar, de, en, es, fr, nl, pl, ro, uk];
 }
 
 class $AssetsSvgIconsGen {

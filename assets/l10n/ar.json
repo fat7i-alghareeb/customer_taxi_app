@@ -143,6 +143,8 @@
   "languagePL": "البولندية",
   "languageUK": "الأوكرانية",
   "languageFR": "الفرنسية",
+  "languageES": "الإسبانية",
+  "languageRO": "الرومانية",
   "selectLanguage": "اختر اللغة",
   "selectTheme": "اختر السمة",
   "light": "الفاتح",
@@ -242,5 +244,12 @@
   "favoritesUnpin": "إلغاء التثبيت",
   "discountApplied": "تم تطبيق خصم {percent}%",
   "carType": "نوع السيارة",
-  "change": "تغيير"
+  "change": "تغيير",
+  "loginLandingTagline": "رحلتك هي أولويتنا.",
+  "loginLandingDiscountTitle": "سجل واحصل على",
+  "loginLandingDiscountSubtitle": "خصم 5%",
+  "loginLandingDiscountFooter": "على رحلتك الأولى!",
+  "loginLandingRegister": "تسجيل",
+  "loginLandingLogin": "تسجيل الدخول",
+  "loginLandingFooter": "آمن وموثوق"
 }

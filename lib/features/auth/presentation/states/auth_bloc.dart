@@ -18,6 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<_SendOtpRequested>(_onSendOtpRequested);
     on<_VerifyOtpRequested>(_onVerifyOtpRequested);
     on<_ResetRequested>(_onResetRequested);
+    on<_LandingProceedRequested>(_onLandingProceedRequested);
   }
 
   final AuthFacade _facade;
@@ -37,10 +38,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _pendingPhone = null;
     emit(state.copyWith(
       isOtpSent: false,
+      isLanding: true,
       phoneStatus: const BlocStatus.initial(),
       otpStatus: const BlocStatus.initial(),
       verificationId: null,
     ));
+  }
+
+  Future<void> _onLandingProceedRequested(
+    _LandingProceedRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(state.copyWith(isLanding: false));
   }
 
   Future<void> _onSendOtpRequested(

@@ -7,6 +7,7 @@ abstract class AuthState with _$AuthState {
     @Default(BlocStatus<UserEntity>.initial())
     BlocStatus<UserEntity> otpStatus,
     @Default(false) bool isOtpSent,
+    @Default(true) bool isLanding,
     String? verificationId,
   }) = _AuthState;
 }

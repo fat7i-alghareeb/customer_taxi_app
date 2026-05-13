@@ -143,6 +143,8 @@
   "languagePL": "Polish",
   "languageUK": "Ukrainian",
   "languageFR": "French",
+  "languageES": "Spanish",
+  "languageRO": "Romanian",
   "selectLanguage": "Select Language",
   "selectTheme": "Select Theme",
   "light": "Light",
@@ -242,5 +244,12 @@
   "favoritesUnpin": "Unpin",
   "discountApplied": "Discount applied: {percent}%",
   "carType": "Car Type",
-  "change": "Change"
+  "change": "Change",
+  "loginLandingTagline": "Your ride, our priority.",
+  "loginLandingDiscountTitle": "Sign up and get",
+  "loginLandingDiscountSubtitle": "5% discount",
+  "loginLandingDiscountFooter": "on your first ride!",
+  "loginLandingRegister": "Register",
+  "loginLandingLogin": "Login",
+  "loginLandingFooter": "Safe and reliable"
 }
