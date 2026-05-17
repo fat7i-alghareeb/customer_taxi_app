@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'order_stripe_payment_model.dart';
 import 'order_trip_stop_model.dart';
 
 part 'order_trip_response_model.freezed.dart';
@@ -21,6 +22,7 @@ abstract class OrderTripResponseModel with _$OrderTripResponseModel {
     required DateTime createdAtUtc,
     DateTime? scheduledAtUtc,
     required List<OrderTripStopModel> stops,
+    OrderStripePaymentModel? stripePayment,
   }) = _OrderTripResponseModel;
 
   factory OrderTripResponseModel.fromJson(Map<String, dynamic> json) =>

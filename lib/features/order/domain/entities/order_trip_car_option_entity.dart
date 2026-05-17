@@ -5,6 +5,7 @@ class OrderTripCarOptionEntity {
     this.typeCode,
     required this.name,
     required this.passengerCapacity,
+    required this.totalDistanceKm,
     required this.originalPrice,
     required this.price,
     required this.discountPercent,
@@ -17,6 +18,7 @@ class OrderTripCarOptionEntity {
   final String? typeCode;
   final String name;
   final int passengerCapacity;
+  final double totalDistanceKm;
   final double originalPrice;
   final double price;
   final double discountPercent;
@@ -29,6 +31,7 @@ class OrderTripCarOptionEntity {
     String? typeCode,
     String? name,
     int? passengerCapacity,
+    double? totalDistanceKm,
     double? originalPrice,
     double? price,
     double? discountPercent,
@@ -41,6 +44,7 @@ class OrderTripCarOptionEntity {
       typeCode: typeCode ?? this.typeCode,
       name: name ?? this.name,
       passengerCapacity: passengerCapacity ?? this.passengerCapacity,
+      totalDistanceKm: totalDistanceKm ?? this.totalDistanceKm,
       originalPrice: originalPrice ?? this.originalPrice,
       price: price ?? this.price,
       discountPercent: discountPercent ?? this.discountPercent,

@@ -9,7 +9,7 @@ class OrderMapPickSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectingLabel = switch (state.mapPickingTarget) {
+    final selectingLabel = switch (state.sheet.mapPickingTarget) {
       OrderLocationTarget.stop => AppStrings.from,
     };
 

@@ -9,7 +9,7 @@ class OrderSchedulePickerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLater = state.scheduleMode == OrderScheduleMode.later;
+    final isLater = state.booking.scheduleMode == OrderScheduleMode.later;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -24,7 +24,7 @@ class OrderSchedulePickerWidget extends StatelessWidget {
               ? Padding(
                   padding: REdgeInsets.only(top: AppSpacing.sm),
                   child: _DateTimeField(
-                    scheduledAt: state.scheduledAt,
+                    scheduledAt: state.booking.scheduledAt,
                     onTap: () => _selectDateTime(context),
                   ),
                 )
@@ -35,7 +35,7 @@ class OrderSchedulePickerWidget extends StatelessWidget {
   }
 
   Future<void> _selectDateTime(BuildContext context) async {
-    final initial = state.scheduledAt ?? DateTime.now();
+    final initial = state.booking.scheduledAt ?? DateTime.now();
     final date = await showDatePicker(
       context: context,
       initialDate: initial,

@@ -2,6 +2,8 @@ import 'package:customertaxi/common/imports/imports.dart';
 import 'package:injectable/injectable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:customertaxi/core/services/realtime/realtime_event.dart';
+import 'package:customertaxi/core/services/realtime/realtime_service.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/facade/trip_facade.dart';
@@ -11,11 +13,13 @@ part 'trip_event.dart';
 part 'trip_state.dart';
 part 'trip_bloc.freezed.dart';
 
-const _pollingInterval = Duration(seconds: 5);
+// SignalR is the primary update channel; polling is a defense-in-depth
+// fallback that reconciles missed pushes (e.g. transient socket drops).
+const _pollingInterval = Duration(seconds: 30);
 
 @injectable
 class TripBloc extends Bloc<TripEvent, TripState> {
-  TripBloc(this._facade) : super(const TripState()) {
+  TripBloc(this._facade, this._realtime) : super(const TripState()) {
     on<_Started>(_onStarted);
     on<_PollingTick>(_onPollingTick);
     on<_CancelRequested>(_onCancelRequested);
@@ -25,7 +29,10 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   }
 
   final TripFacade _facade;
+  final RealtimeService _realtime;
   Timer? _pollingTimer;
+  StreamSubscription<RealtimeEvent>? _realtimeSub;
+  String? _joinedTripId;
 
   bool _isTerminal(TripStatus status) => status.isTerminal;
 
@@ -41,9 +48,36 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     _pollingTimer = null;
   }
 
+  Future<void> _subscribeToRealtime(String tripId) async {
+    await _unsubscribeFromRealtime();
+    _joinedTripId = tripId;
+    await _realtime.joinTripGroup(tripId);
+    _realtimeSub = _realtime.events
+        .where((event) => event.tripId == tripId)
+        .listen(_onRealtimeEvent);
+  }
+
+  Future<void> _unsubscribeFromRealtime() async {
+    await _realtimeSub?.cancel();
+    _realtimeSub = null;
+    final tripId = _joinedTripId;
+    _joinedTripId = null;
+    if (tripId != null) {
+      await _realtime.leaveTripGroup(tripId);
+    }
+  }
+
+  void _onRealtimeEvent(RealtimeEvent event) {
+    if (isClosed) return;
+    // Events carry IDs only — re-fetch the trip to get authoritative state.
+    printC('[TripBloc] realtime event ${event.runtimeType} -> refreshing trip');
+    add(const TripEvent.pollingTick());
+  }
+
   @override
-  Future<void> close() {
+  Future<void> close() async {
     _stopPolling();
+    await _unsubscribeFromRealtime();
     return super.close();
   }
 
@@ -53,6 +87,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       activeTripId: event.tripId,
       isPolling: false,
     ));
+    await _subscribeToRealtime(event.tripId);
     final Result<TripEntity> result = await _facade.getTripById(event.tripId);
     result.when(
       success: (trip) {
@@ -79,6 +114,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
         emit(state.copyWith(tripStatus: BlocStatus<TripEntity>.success(trip)));
         if (_isTerminal(trip.status)) {
           _stopPolling();
+          unawaited(_unsubscribeFromRealtime());
           emit(state.copyWith(isPolling: false));
         }
       },
@@ -98,6 +134,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       success: (trip) {
         printG('[TripBloc] cancel success');
         _stopPolling();
+        unawaited(_unsubscribeFromRealtime());
         emit(state.copyWith(
           cancelStatus: const BlocStatus<void>.success(null),
           tripStatus: BlocStatus<TripEntity>.success(trip),
@@ -113,6 +150,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
   void _onStopPolling(_StopPolling event, Emitter<TripState> emit) {
     _stopPolling();
+    unawaited(_unsubscribeFromRealtime());
     emit(state.copyWith(isPolling: false));
   }
 

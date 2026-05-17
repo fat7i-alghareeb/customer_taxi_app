@@ -289,7 +289,7 @@ class _RootMapSectionState extends State<RootMapSection>
   }
 
   List<List<LatLng>> _extractLegPolylinePoints(OrderState orderState) {
-    return orderState.tripRouteState.maybeWhen(
+    return orderState.trip.routeState.maybeWhen(
       success: (route) => route.legs
           .map(
             (leg) => leg.points
@@ -337,19 +337,19 @@ class _RootMapSectionState extends State<RootMapSection>
   }
 
   Set<Marker> _buildTripMarkers(OrderState orderState) {
-    final route = orderState.tripRouteState.maybeWhen(
+    final route = orderState.trip.routeState.maybeWhen(
       success: (route) => route,
       orElse: () => null,
     );
 
-    if (route == null || orderState.stops.isEmpty) {
+    if (route == null || orderState.stops.list.isEmpty) {
       return const <Marker>{};
     }
 
     final markers = <Marker>{};
     final legs = route.legs;
     final validStops =
-        orderState.stops.whereType<OrderLocationEntity>().toList();
+        orderState.stops.list.whereType<OrderLocationEntity>().toList();
 
     for (int i = 0; i < legs.length; i++) {
       final leg = legs[i];
@@ -417,17 +417,17 @@ class _RootMapSectionState extends State<RootMapSection>
 
   Future<void> _fitRouteBoundsForState(OrderState orderState) async {
     final controller = _mapController;
-    if (controller == null || !orderState.tripRouteState.isSuccess) {
+    if (controller == null || !orderState.trip.routeState.isSuccess) {
       return;
     }
 
-    final route = orderState.tripRouteState.maybeWhen(
+    final route = orderState.trip.routeState.maybeWhen(
       success: (value) => value,
       orElse: () => null,
     );
 
-    final fromLocation = orderState.stops.isNotEmpty ? orderState.stops.first : null;
-    final toLocation = orderState.stops.isNotEmpty ? orderState.stops.last : null;
+    final fromLocation = orderState.stops.list.isNotEmpty ? orderState.stops.list.first : null;
+    final toLocation = orderState.stops.list.isNotEmpty ? orderState.stops.list.last : null;
 
     if (route == null || fromLocation == null || toLocation == null) {
       return;
@@ -444,7 +444,7 @@ class _RootMapSectionState extends State<RootMapSection>
     }
 
     final bounds = _resolveBounds(points);
-    final fitPadding = orderState.sheetMode == OrderSheetMode.expanded
+    final fitPadding = orderState.sheet.mode == OrderSheetMode.expanded
         ? context.screenHeight * OrderConstants.expandedRouteFitPaddingFactor
         : 72.w;
 
@@ -509,13 +509,13 @@ class _RootMapSectionState extends State<RootMapSection>
   }
 
   void _handleTripRouteState(BuildContext context, OrderState orderState) {
-    if (!orderState.tripRouteState.isSuccess) {
+    if (!orderState.trip.routeState.isSuccess) {
       return;
     }
 
     _fitRouteBoundsForState(orderState);
 
-    orderState.tripRouteState.maybeWhen(
+    orderState.trip.routeState.maybeWhen(
       success: (route) => _generateStopMarkers(route),
       orElse: () {},
     );
@@ -533,7 +533,7 @@ class _RootMapSectionState extends State<RootMapSection>
         ),
         BlocListener<OrderBloc, OrderState>(
           listenWhen: (previous, current) =>
-              previous.tripRouteState != current.tripRouteState,
+              previous.trip.routeState != current.trip.routeState,
           listener: _handleTripRouteState,
         ),
       ],
@@ -543,11 +543,11 @@ class _RootMapSectionState extends State<RootMapSection>
                 children: [
                   BlocBuilder<OrderBloc, OrderState>(
                     buildWhen: (previous, current) =>
-                        previous.tripRouteState != current.tripRouteState ||
+                        previous.trip.routeState != current.trip.routeState ||
                         previous.stops != current.stops,
                     builder: (context, orderState) {
-                      final toLocation = orderState.stops.isNotEmpty
-                          ? orderState.stops.last
+                      final toLocation = orderState.stops.list.isNotEmpty
+                          ? orderState.stops.list.last
                           : null;
 
                         return RootMapCanvasWidget(
@@ -565,14 +565,14 @@ class _RootMapSectionState extends State<RootMapSection>
                           onCameraMove: _onCameraMove,
                           onCameraIdle: _onCameraIdle,
                           showMyLocationButton:
-                              orderState.sheetMode == OrderSheetMode.mapPicking,
+                              orderState.sheet.mode == OrderSheetMode.mapPicking,
                         );
                     },
                   ),
                   BlocBuilder<OrderBloc, OrderState>(
-                    buildWhen: (p, c) => p.sheetMode != c.sheetMode,
+                    buildWhen: (p, c) => p.sheet.mode != c.sheet.mode,
                     builder: (context, orderState) {
-                      final double sheetHeight = switch (orderState.sheetMode) {
+                      final double sheetHeight = switch (orderState.sheet.mode) {
                         OrderSheetMode.collapsed =>
                           RootConstants.bottomNavHeight.sp + AppSpacing.md.h,
                         OrderSheetMode.mapPicking => 160.sp,
@@ -582,7 +582,7 @@ class _RootMapSectionState extends State<RootMapSection>
                       };
 
                       // Only show controls if the sheet is not expanded
-                      if (orderState.sheetMode == OrderSheetMode.expanded) {
+                      if (orderState.sheet.mode == OrderSheetMode.expanded) {
                         return const SizedBox.shrink();
                       }
 
@@ -609,9 +609,9 @@ class _RootMapSectionState extends State<RootMapSection>
                   ),
                   BlocBuilder<OrderBloc, OrderState>(
                     buildWhen: (previous, current) =>
-                        previous.tripRouteState != current.tripRouteState,
+                        previous.trip.routeState != current.trip.routeState,
                     builder: (context, orderState) {
-                      return orderState.tripRouteState.maybeWhen(
+                      return orderState.trip.routeState.maybeWhen(
                         success: (route) => Positioned(
                           top: 50.h,
                           left: 0,

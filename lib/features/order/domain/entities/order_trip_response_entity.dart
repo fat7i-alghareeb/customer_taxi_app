@@ -1,3 +1,5 @@
+import 'order_stripe_payment_entity.dart';
+
 class OrderTripStopCoordinate {
   const OrderTripStopCoordinate({
     required this.latitude,
@@ -21,6 +23,7 @@ class OrderTripResponseEntity {
     required this.createdAtUtc,
     this.scheduledAtUtc,
     required this.stops,
+    this.stripePayment,
   });
 
   final String id;
@@ -34,4 +37,5 @@ class OrderTripResponseEntity {
   final DateTime createdAtUtc;
   final DateTime? scheduledAtUtc;
   final List<OrderTripStopCoordinate> stops;
+  final OrderStripePaymentEntity? stripePayment;
 }

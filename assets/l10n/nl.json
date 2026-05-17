@@ -251,5 +251,12 @@
   "loginLandingDiscountFooter": "op je eerste rit!",
   "loginLandingRegister": "Aanmelden",
   "loginLandingLogin": "Inloggen",
-  "loginLandingFooter": "Veilig en betrouwbaar"
+  "loginLandingFooter": "Veilig en betrouwbaar",
+  "payViaStripe": "Betaal veilig via Stripe",
+  "confirmAndPay": "Bevestigen en betalen",
+  "selectAndPay": "Selecteren en betalen",
+  "paymentFailed": "Betaling mislukt. Probeer het opnieuw.",
+  "paymentCanceled": "Betaling geannuleerd.",
+  "awaitingPayment": "Betaling bevestigen…",
+  "paymentNotEnabled": "Betalingen zijn tijdelijk niet beschikbaar."
 }

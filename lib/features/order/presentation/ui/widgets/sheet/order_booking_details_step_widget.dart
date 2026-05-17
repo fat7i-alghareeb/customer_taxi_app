@@ -9,19 +9,16 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     printM('[OrderBookingDetailsStepWidget] build');
-    
+
+    final isLoading = state.booking.tripRequestStatus.isLoading ||
+        state.booking.paymentSheetState.isLoading;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _SectionHeader(title: AppStrings.paymentMethod),
         AppSpacing.md.verticalSpace,
-        _PaymentMethodSelector(
-          selectedMethodId: state.paymentMethodId,
-          onMethodSelected: (id) {
-            context.read<OrderBloc>().add(OrderEvent.paymentMethodChanged(id));
-          },
-        ),
+        const _StripePaymentRow(),
         AppSpacing.xl.verticalSpace,
         AppButton.primary(
           onTap: () {
@@ -29,15 +26,14 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
                   const OrderEvent.confirmBookingDetailsPressed(),
                 );
           },
-          isActive: state.paymentMethodId != null &&
-              !state.tripRequestStatus.isLoading,
-          isLoading: state.tripRequestStatus.isLoading,
+          isActive: !isLoading,
+          isLoading: isLoading,
           layout: AppButtonLayout(
             width: double.infinity,
             height: 56.h,
             borderRadius: AppRadii.lg,
           ),
-          child: AppButtonChild.label(AppStrings.confirmBooking),
+          child: AppButtonChild.label(AppStrings.confirmAndPay),
         ),
       ],
     );
@@ -51,7 +47,6 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    printM('[_SectionHeader] build title=$title');
     return Text(
       title,
       style: AppTextStyles.s16w600.copyWith(
@@ -62,122 +57,46 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _PaymentMethodSelector extends StatelessWidget {
-  const _PaymentMethodSelector({
-    this.selectedMethodId,
-    required this.onMethodSelected,
-  });
-
-  final String? selectedMethodId;
-  final ValueChanged<String> onMethodSelected;
+class _StripePaymentRow extends StatelessWidget {
+  const _StripePaymentRow();
 
   @override
   Widget build(BuildContext context) {
-    printM('[_PaymentMethodSelector] build selectedMethodId=$selectedMethodId');
-    final methods = [
-      _PaymentMethod(
-        id: 'visa',
-        icon: FontAwesomeIcons.ccVisa,
-        label: 'Visa',
-        color: const Color(0xFF1A1F71),
+    return Container(
+      padding: REdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
       ),
-      _PaymentMethod(
-        id: 'mastercard',
-        icon: FontAwesomeIcons.ccMastercard,
-        label: 'Mastercard',
-        color: const Color(0xFFEB001B),
+      decoration: BoxDecoration(
+        color: context.surface,
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+        border: Border.all(
+          color: context.onSurface.withValues(alpha: 0.1),
+        ),
       ),
-      _PaymentMethod(
-        id: 'apple_pay',
-        icon: FontAwesomeIcons.applePay,
-        label: 'Apple Pay',
-        color: Colors.black,
-      ),
-      _PaymentMethod(
-        id: 'google_pay',
-        icon: FontAwesomeIcons.googlePay,
-        label: 'Google Pay',
-        color: const Color(0xFF4285F4),
-      ),
-      _PaymentMethod(
-        id: 'paypal',
-        icon: FontAwesomeIcons.paypal,
-        label: 'PayPal',
-        color: const Color(0xFF003087),
-      ),
-    ];
-
-    return SizedBox(
-      height: 100.h,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: REdgeInsets.symmetric(vertical: AppSpacing.xs),
-        itemCount: methods.length,
-        separatorBuilder: (context, index) => AppSpacing.md.horizontalSpace,
-        itemBuilder: (context, index) {
-          final method = methods[index];
-          final isSelected = selectedMethodId == method.id;
-
-          return Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () => onMethodSelected(method.id),
-              borderRadius: BorderRadius.circular(AppRadii.lg.r),
-              child: AnimatedContainer(
-                duration: AppDurations.normal,
-                width: 110.w,
-                padding: REdgeInsets.all(AppSpacing.sm),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? context.primary.withValues(alpha: 0.08)
-                      : context.surface,
-                  borderRadius: BorderRadius.circular(AppRadii.lg.r),
-                  boxShadow: isSelected ? context.shadows.primary : null,
-                  border: Border.all(
-                    color: isSelected
-                        ? context.primary
-                        : context.onSurface.withValues(alpha: 0.1),
-                    width: isSelected ? 2.5.r : 1.r,
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FaIcon(
-                      method.icon,
-                      size: 32.r,
-                      color: isSelected ? context.primary : method.color,
-                    ),
-                    AppSpacing.sm.verticalSpace,
-                    Text(
-                      method.label,
-                      style: AppTextStyles.s12w700.copyWith(
-                        color: isSelected ? context.primary : context.onSurface,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+      child: Row(
+        children: [
+          FaIcon(
+            FontAwesomeIcons.stripe,
+            size: 28.r,
+            color: const Color(0xFF635BFF),
+          ),
+          AppSpacing.md.horizontalSpace,
+          Expanded(
+            child: Text(
+              AppStrings.payViaStripe,
+              style: AppTextStyles.s14w500.copyWith(
+                color: context.onSurface,
               ),
             ),
-          );
-        },
+          ),
+          Icon(
+            Icons.lock_outline_rounded,
+            size: 18.r,
+            color: context.onSurface.withValues(alpha: 0.4),
+          ),
+        ],
       ),
     );
   }
-}
-
-class _PaymentMethod {
-  final String id;
-  final IconData icon;
-  final String label;
-  final Color color;
-
-  _PaymentMethod({
-    required this.id,
-    required this.icon,
-    required this.label,
-    required this.color,
-  });
 }

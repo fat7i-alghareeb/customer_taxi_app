@@ -72,17 +72,53 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>GoogleMapsApiKey</key>
-		<string>{apiKey}</string>
-		<!-- Location Permissions -->
+		<string>AIzaSyBf8kdl6hPIsvXPEar7-tiOYXNAAmantj8</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app needs access to location when open to show your current position on the map and find nearby rides.</string>
 		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 		<string>This app needs access to location to provide ride updates and safety features even in the background.</string>
 		<key>NSLocationAlwaysUsageDescription</key>
 		<string>This app needs access to location to provide ride updates and safety features even in the background.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>This app needs access to your photo library to let you choose a profile photo.</string>
+		<key>NSPhotoLibraryAddOnlyUsageDescription</key>
+		<string>This app needs permission to save photos to your library.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>This app needs access to your camera to take a profile photo.</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>location</string>
+			<string>remote-notification</string>
+			<string>processing</string>
+		</array>
+		<key>CFBundleLocalizations</key>
+		<array>
+			<string>en</string>
+			<string>ar</string>
+			<string>nl</string>
+			<string>de</string>
+			<string>pl</string>
+			<string>uk</string>
+			<string>fr</string>
+			<string>es</string>
+			<string>ro</string>
+		</array>
 		<key>UIStatusBarHidden</key>
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>dev.fat7i.customertaxi.stripe</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>customertaxi</string>
+				</array>
+			</dict>
+		</array>
 	</dict>
 </plist>

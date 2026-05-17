@@ -24,6 +24,11 @@ _OrderTripResponseModel _$OrderTripResponseModelFromJson(
   stops: (json['stops'] as List<dynamic>)
       .map((e) => OrderTripStopModel.fromJson(e as Map<String, dynamic>))
       .toList(),
+  stripePayment: json['stripePayment'] == null
+      ? null
+      : OrderStripePaymentModel.fromJson(
+          json['stripePayment'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$OrderTripResponseModelToJson(
@@ -40,4 +45,5 @@ Map<String, dynamic> _$OrderTripResponseModelToJson(
   'createdAtUtc': instance.createdAtUtc.toIso8601String(),
   'scheduledAtUtc': instance.scheduledAtUtc?.toIso8601String(),
   'stops': instance.stops,
+  'stripePayment': instance.stripePayment,
 };

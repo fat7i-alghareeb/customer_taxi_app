@@ -16,6 +16,9 @@ class ApiEndpoints {
   // Vehicle types
   static const String vehicleTypes = '/api/v1/vehicle-types';
 
+  // App config
+  static const String clientConfig = '/api/v1/app-config/client';
+
   // Trips
   static const String tripQuotes = '/api/v1/trips/quotes';
   static const String requestTrip = '/api/v1/trips';

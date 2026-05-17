@@ -1,112 +1,289 @@
 # Order Feature Guide
 
-## Purpose
+The Order feature overlays the Root map with a bottom-sheet booking flow:
+**location entry → car selection → booking details → Stripe Payment Sheet.**
 
-Order overlays the Root map with a bottom sheet flow for selecting ride locations,
-then choosing a ride type. The flow is triggered from the Home header search
-pill.
+Everything lives under [lib/features/order/](lib/features/order/). One `OrderBloc` drives all state; the sheet renders into the Root map's `Stack` via `OrderBody`.
 
-- Expanded (step 1): immersive modular layout with pickup/destination blocks, smart map trigger, suggestions, and conditional confirm dock.
-- Expanded (step 2): route summary with Google-estimated trip time and selectable vehicle cards with price-only loading.
-- Expanded (step 3): pickup-point refinement (map selection) with optional street and house-number details.
-- Map pick: collapsed control bar with center pin and Confirm point.
+---
 
-The user stays on Root screen while all Order interaction logic remains inside the Order feature.
+## State architecture
 
-## Interaction Flow
+`OrderState` is a composed Freezed value holding **5 independent slices**. Each slice owns a cohesive concern; UI widgets read only the slice(s) they care about.
 
-1. Order starts in collapsed (idle) mode with no visible sheet.
-2. Tapping the Home header search pill expands to a full-height immersive sheet.
-3. From is initialized from current location and reverse-geocoded into a readable address.
-4. To starts empty.
-5. Each field supports text search through Google geocoding and map-based picking.
-6. Each field shows an in-field clear action while focused and non-empty; clearing resets only that field selection and suggestions while keeping focus.
-7. Before typing, suggestions are sourced from persisted saved locations (From/To only) stored in ObjectBox.
-8. Pressing Order Now reloads saved locations from local cache before interaction, so expanded suggestions always reflect latest persisted entries.
-9. While typing, suggestions switch to remote Google results for the active field.
-10. Each suggestion supports pin toggle from both long-press and dedicated pin icon.
-11. Saved locations are capped to 10 items total (pinned + unpinned); overflow removes oldest unpinned first, then oldest pinned.
-12. Selecting a suggestion or confirming a map point for From/To saves it to persistent history.
-13. Text search results are rendered in the dedicated area below the two fields inside expanded mode.
-14. A single smart inline map trigger (context-aware by field focus) switches to map-pick mode with a visible center pin.
-15. Confirm point reverse-geocodes the current map center and returns to expanded mode.
-16. Confirm locations is enabled only when both From and To are selected.
-17. When both From and To are selected (suggestion or map confirm), Order starts a silent background prefetch for route and pricing.
-18. Confirm locations keeps the same UX flow, but reuses prefetched data instantly when cache matches current From/To; missing pieces continue loading and stale cache is discarded.
-19. Route camera bounds auto-fit after route success and show explicit From/To markers.
-20. Vehicle cards always render (Standard, Comfort, 8-passenger bus), while only price slots stay in loading state until pricing response arrives.
-21. Vehicle selection is single-select with tap-again-to-deselect behavior.
-22. Confirming car selection transitions to pickup-point step.
-23. Pickup point is selected manually on map, reverse-geocoded, and accepted only if it is within 300 meters of the selected From location.
-24. Street name and house number are optional fields stored in state and kept while navigating between pickup step and map pick mode.
-25. Final confirm validates pickup selection, shows mocked overlay feedback, and then collapses/reset flow.
-26. Back from pickup step returns to vehicle step without refetching route/pricing.
-27. Back from vehicle step returns to location-entry step and clears route/pricing/selection so a fresh confirmation is required.
-28. Expanded mode close returns to collapsed mode, clears destination/suggestions, clears route/pricing/selection, and restores pickup (From) to current location.
-29. System back order: map-pick -> previous expanded step, pickup step -> vehicle step, vehicle step -> location step, then collapse.
+```dart
+@freezed
+abstract class OrderState with _$OrderState {
+  const factory OrderState({
+    @Default(OrderSheetSlice())  OrderSheetSlice  sheet,
+    @Default(OrderMapSlice())    OrderMapSlice    map,
+    @Default(OrderStopsSlice())  OrderStopsSlice  stops,
+    @Default(OrderTripSlice())   OrderTripSlice   trip,
+    @Default(OrderBookingSlice()) OrderBookingSlice booking,
+  }) = _OrderState;
+}
+```
 
-## Core State Model
+### Slices
 
-OrderBloc uses a UI state machine with:
+| Slice               | File                                                                                   | Key fields                                                                                                                                      |
+| ------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OrderSheetSlice`   | [slices/order_sheet_slice.dart](presentation/states/slices/order_sheet_slice.dart)     | `mode`, `expandedStep`, `mapPickingTarget`, `activeStopIndex`                                                                                   |
+| `OrderMapSlice`     | [slices/order_map_slice.dart](presentation/states/slices/order_map_slice.dart)         | `latitude`, `longitude`, `zoom`                                                                                                                 |
+| `OrderStopsSlice`   | [slices/order_stops_slice.dart](presentation/states/slices/order_stops_slice.dart)     | `list`, `queries`, `suggestionsState`, `savedState`                                                                                             |
+| `OrderTripSlice`    | [slices/order_trip_slice.dart](presentation/states/slices/order_trip_slice.dart)       | `routeState`, `carOptionsState`, `prefetchedRouteState`, `prefetchedCarOptionsState`, `prefetchedStops`, `selectedCarTypeId`, `selectedQuoteId` |
+| `OrderBookingSlice` | [slices/order_booking_slice.dart](presentation/states/slices/order_booking_slice.dart) | `scheduleMode`, `scheduledAt`, `tripRequestStatus`, `paymentSheetState`                                                                         |
 
-- sheetMode: collapsed, expanded, mapPicking
-- expandedStep: locationEntry, carSelection, pickupPoint
-- mapPickingTarget: from, to, or pickupPoint
-- map camera center snapshot (latitude, longitude, zoom)
-- fromLocationState / toLocationState
-- savedLocationsState
-- fromSuggestionsState / toSuggestionsState
-- fromQuery / toQuery
-- pickupPointState
-- pickupStreetName / pickupHouseNumber
-- pickupConfirmationFeedbackState (one-shot success/failure overlay trigger)
-- tripRouteState (polyline points + Google ETA + distance)
-- tripCarOptionsState (mocked car prices)
-- prefetchedTripRouteState / prefetchedTripCarOptionsState
-- prefetchedFromLocation / prefetchedToLocation (cache identity snapshot)
-- selectedCarTypeId
+### Enums
 
-## Data Layer
+| Enum                  | Values                                              |
+| --------------------- | --------------------------------------------------- |
+| `OrderSheetMode`      | `collapsed` · `expanded` · `mapPicking`             |
+| `OrderExpandedStep`   | `locationEntry` · `carSelection` · `bookingDetails` |
+| `OrderLocationTarget` | `stop`                                              |
+| `OrderScheduleMode`   | `now` · `later`                                     |
 
-Order feature uses Google geocoding APIs via Env.googleMapsApiKey:
+---
 
-- searchLocations(query) merges Geocode + Places Text Search results, then de-duplicates and caps list size.
-- searchLocations always includes the current location latitude/longitude (when available) as a bias.
-- reverseGeocode(lat,lng)
-- getTripRoute(from,to) via Google Directions API (driving), with overview polyline decode and duration extraction.
-- overview polyline decode uses a hybrid strategy: long encoded paths run in a background isolate, while short paths decode inline to avoid isolate overhead.
-- getTripCarOptions(from,to) currently mocked with one response containing all three vehicle categories and USD prices.
-- getSavedLocations()/saveSelectedLocation()/togglePinnedLocation() persist suggestions in ObjectBox local cache (`order.saved_locations.v1`).
-- ObjectBox cache key uses unique-conflict replace strategy to keep cache upsert idempotent under fast repeated writes.
-- Local cache upsert performs duplicate-row repair and recovery-by-recreate if ObjectBox write conflicts occur.
-- If local persistence fails, OrderBloc applies an in-memory fallback update so suggestions still appear in the current session.
-- From/To selection persistence is awaited inside event handlers so saved-suggestions refresh emits only while the handler is active (prevents late-emitter assertion).
-- location labels are sanitized and rendered with a street-first priority (street number + route, then POI/premise, then neighborhood/sublocality), while city/country-only and coordinate labels are not used for user-facing output
+## Handler organization
 
-Data contracts:
+`OrderBloc` is ~90 lines: constructor, `on<>` wiring for all 25 events, and two token-pair helpers. All handler logic lives in **6 `part` files** under [handlers/](presentation/states/handlers/) via private Dart extensions on `OrderBloc`. Dart resolves extension methods on `this` when calling `on<_E>(_handler)`, so handler tearoffs work transparently.
 
-- domain/entities/order_location_entity.dart
-- domain/entities/order_location_request_entity.dart
-- domain/entities/order_trip_route_entity.dart
-- domain/entities/order_trip_car_option_entity.dart
-- data/models/order_location_model.dart
-- data/models/order_trip_route_model.dart
-- data/models/order_trip_car_option_model.dart
-- data/models/order_saved_location_cache_model.dart
-- data/params/order_params.dart
-- data/mappers/order_location_model_mapper.dart
-- data/mappers/order_trip_route_model_mapper.dart
-- data/mappers/order_trip_car_option_model_mapper.dart
-- data/mappers/order_saved_location_cache_model_mapper.dart
-- data/datasources/order_local_datasource.dart
+| Part file                                                                                   | Extension                 | Responsibility                                                                                                                            |
+| ------------------------------------------------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [lifecycle_handlers.dart](presentation/states/handlers/lifecycle_handlers.dart)             | `_LifecycleHandlers`      | `_resetTripFlowState`, started, orderNowPressed, collapseRequested                                                                        |
+| [map_handlers.dart](presentation/states/handlers/map_handlers.dart)                         | `_MapHandlers`            | setOnMapPressed, mapCameraTargetUpdated, confirmMapPointPressed, mapPickCancelled, vehicleStepBackPressed                                 |
+| [stops_handlers.dart](presentation/states/handlers/stops_handlers.dart)                     | `_StopsHandlers`          | activeStopChanged, stopQueryChanged, stopCleared, stopSuggestionSelected, stopAdded, stopRemoved, stopReordered, savedLocationPinToggled  |
+| [suggestions_helpers.dart](presentation/states/handlers/suggestions_helpers.dart)           | `_SuggestionsHelpers`     | `_buildSuggestionsState`, `_refreshSuggestionsFromSavedLocations`, `_saveSelectedLocationAndRefresh`, `_toggleSavedLocationPinAndRefresh` |
+| [trip_resolution_handlers.dart](presentation/states/handlers/trip_resolution_handlers.dart) | `_TripResolutionHandlers` | `_isPrefetchCacheValid`, `_tryStartTripPrefetch`, prefetch completion, carTypeToggled, confirmCarSelectionPressed, confirmOrderPressed    |
+| [booking_handlers.dart](presentation/states/handlers/booking_handlers.dart)                 | `_BookingHandlers`        | bookingDetailsBackPressed, scheduleModeChanged, scheduleTimeChanged, paymentSheetDismissed, **confirmBookingDetailsPressed (Stripe)**     |
 
-## Root Integration Boundary
+Pure sorting/normalization helpers live in [helpers/saved_locations_helper.dart](presentation/helpers/saved_locations_helper.dart) as a static class `SavedLocationsHelper`.
 
-Root integration remains thin:
+---
 
-- RootScreen provides OrderBloc together with RootBloc.
-- RootHomeTabSection renders OrderBody as an overlay above RootMapSection.
-- RootMapSection exposes camera-idle location callback so Order can confirm map center.
-- RootMapSection renders trip polyline + From/To markers from Order state and auto-fits camera bounds on route success.
+## Event surface
 
-No additional route registration is required for this milestone.
+| Event factory                                                     | Parameters                          | Fired by                                    |
+| ----------------------------------------------------------------- | ----------------------------------- | ------------------------------------------- |
+| `started()`                                                       | —                                   | OrderView initState                         |
+| `orderNowPressed()`                                               | —                                   | search pill / \_HomeCollapsedOverlay        |
+| `collapseRequested()`                                             | —                                   | order_body listener on success, system back |
+| `mapPickCancelled()`                                              | —                                   | map pick sheet cancel button, system back   |
+| `vehicleStepBackPressed()`                                        | —                                   | system back when expandedStep=carSelection  |
+| `setOnMapPressed({index})`                                        | `int index`                         | location entry "set on map" button          |
+| `mapCameraTargetUpdated(lat, lng, zoom)`                          | `double` × 3                        | root_map_section camera-idle callback       |
+| `confirmMapPointPressed()`                                        | —                                   | map pick sheet confirm button               |
+| `activeStopChanged(index)`                                        | `int index`                         | stop tab tap                                |
+| `stopQueryChanged(index, query)`                                  | `int, String`                       | text field onChange                         |
+| `stopCleared(index)`                                              | `int index`                         | stop clear button                           |
+| `stopSuggestionSelected(index, location)`                         | `int, OrderSavedLocationEntity`     | suggestion list tap                         |
+| `stopAdded()`                                                     | —                                   | add-stop button                             |
+| `stopRemoved(index)`                                              | `int index`                         | stop delete icon                            |
+| `stopReordered(oldIndex, newIndex)`                               | `int, int`                          | drag-reorder handle                         |
+| `savedLocationPinToggled({stopIndex, location})`                  | `int, OrderSavedLocationEntity`     | pin icon in suggestion row                  |
+| `carTypeToggled(typeId)`                                          | `String typeId`                     | vehicle card tap                            |
+| `tripPrefetchCompleted({token, stops, routeState, pricingState})` | `int, List, BlocStatus, BlocStatus` | internal prefetch futures                   |
+| `confirmOrderPressed()`                                           | —                                   | location entry confirm button               |
+| `confirmCarSelectionPressed()`                                    | —                                   | car selection confirm button                |
+| `bookingDetailsBackPressed()`                                     | —                                   | booking details back button, system back    |
+| `scheduleModeChanged(mode)`                                       | `OrderScheduleMode`                 | schedule toggle                             |
+| `scheduleTimeChanged(time)`                                       | `DateTime?`                         | date/time picker                            |
+| `confirmBookingDetailsPressed()`                                  | —                                   | "Confirm & Pay" button                      |
+| `paymentSheetDismissed()`                                         | —                                   | dismissal of Stripe sheet                   |
+
+---
+
+## Canonical happy path
+
+**1. Cold start** (`started`)
+
+- Loads saved locations from ObjectBox → `stops.savedState = success([...sorted])`
+- Reverse-geocodes current device position → `stops.list[0] = currentLocation`
+- Sheet stays `collapsed`
+
+**2. Tap "Order Now"** (`orderNowPressed`)
+
+- `_resetTripFlowState`: clears trip slice, keeps `stops.list[0]`, resets `list[1]` → null
+- `sheet.mode = expanded`, `sheet.expandedStep = locationEntry`, `sheet.activeStopIndex = 1`
+
+**3. Type destination** (`stopQueryChanged(1, query)`)
+
+- `stops.queries[1] = query`
+- `stops.suggestionsState[1] = loading` → remote search → `success([results])`
+- When query is empty, falls back to filtered saved locations
+
+**4. Pick a suggestion** (`stopSuggestionSelected(1, location)`)
+
+- `stops.list[1] = location.toOrderLocationEntity()`
+- Saves location to ObjectBox in background
+- **Prefetch fires**: `_tryStartTripPrefetch` increments `_prefetchToken` and launches two independent futures (route + pricing)
+
+**5. Confirm locations** (`confirmOrderPressed`)
+
+- `sheet.expandedStep = carSelection`
+- If `_isPrefetchCacheValid(resolvedStops)` → promotes prefetched route/pricing to `trip.routeState` / `trip.carOptionsState`
+- Otherwise fires fresh parallel fetch guarded by `_tripResolutionToken`
+
+**6. Select a car** (`carTypeToggled(typeId)`)
+
+- `trip.selectedCarTypeId = typeId`
+- Looks up matching `quoteId` from `trip.carOptionsState.success.options`
+- `trip.selectedQuoteId = quoteId`
+
+**7. Confirm car** (`confirmCarSelectionPressed`)
+
+- `sheet.expandedStep = bookingDetails`
+
+**8. (Optional) Schedule** (`scheduleModeChanged(later)` + `scheduleTimeChanged(dt)`)
+
+- `booking.scheduleMode = later`, `booking.scheduledAt = dt`
+
+**9. Confirm & Pay** (`confirmBookingDetailsPressed`)
+
+- `booking.tripRequestStatus = loading`
+- Calls `_facade.requestTrip(OrderRequestTripEntity(quoteId, stops, scheduledAt?))`
+- **If** `ClientConfigService.current.stripeEnabled` **and** `trip.stripePayment != null`:
+  - `Stripe.instance.initPaymentSheet(clientSecret, merchantDisplayName:'customertaxi', country:'NL', email:always)`
+  - `Stripe.instance.presentPaymentSheet()`
+  - Success → `booking.paymentSheetState = success(null)`
+  - `StripeException.Canceled` → `booking.tripRequestStatus = failure(paymentCanceled)`
+  - Other `StripeException` → `booking.tripRequestStatus = failure(paymentFailed)`
+- **If** Stripe disabled or no payment block: `booking.tripRequestStatus = success(trip)` directly
+
+**10. Success listener** (in `order_body.dart`)
+
+- `booking.tripRequestStatus.success` → shows success overlay → adds `collapseRequested`
+- Sheet returns to `collapsed`
+
+---
+
+## Trip prefetch coordinator
+
+`_tryStartTripPrefetch` fires after every stop mutation that produces ≥ 2 resolved stops.
+
+- **Cache check**: `_isPrefetchCacheValid` compares each prefetched stop against current stops using `SavedLocationsHelper.isSameCoordinates` (epsilon 0.0001°). If all match, skips re-fetch.
+- **Token**: `_prefetchToken` increments on every `_tryStartTripPrefetch` call. The token is captured before any async work.
+- **Two independent futures**: `_resolveTripPrefetch` fires `getTripRoute` and `getPricingQuotes` in parallel. Each `.then()` checks `_isPrefetchTokenCurrent(token)` before calling `add(tripPrefetchCompleted(...))`.
+- **Partial completion**: Each future emits its own `tripPrefetchCompleted` event. The handler merges: whichever of `routeState`/`pricingState` is not `loading` in the event replaces the corresponding slice field.
+- **Promotion at confirmOrderPressed**: If the cache is valid, prefetched results move into `trip.routeState` / `trip.carOptionsState`, skipping a redundant network round-trip.
+
+---
+
+## Saved locations and suggestions
+
+`stops.savedState` — global cache of `OrderSavedLocationEntity` from ObjectBox, loaded once at `started`. Updated after every `saveSelectedLocation` / `togglePinnedLocation` / `removeSavedLocation`.
+
+`stops.suggestionsState[i]` — per-stop async list displayed in the suggestion panel:
+
+- When `stops.queries[i]` is **empty**: shows filtered saved locations (sorted: pinned first, then recency).
+- When **typed**: shows remote `searchLocations` results promoted to `OrderSavedLocationEntity` shape.
+
+Pin toggle (`savedLocationPinToggled`) calls `_facade.togglePinnedLocation`, refreshes `stops.savedState`, then re-runs `_refreshSuggestionsFromSavedLocations` for all open stops whose queries are empty, keeping visible lists in sync without re-fetching.
+
+---
+
+## Stripe payment flow
+
+Feature-gated by `ClientConfigService.current.stripeEnabled` (read from `/api/config` on app start).
+
+If the backend returns an `OrderStripePaymentEntity` in the trip response:
+
+```dart
+await Stripe.instance.initPaymentSheet(
+  paymentSheetParameters: SetupPaymentSheetParameters(
+    paymentIntentClientSecret: stripePayment.clientSecret,
+    merchantDisplayName: 'customertaxi',
+    style: ThemeMode.system,
+    returnURL: 'customertaxi://stripe-redirect',
+    billingDetailsCollectionConfiguration:
+        BillingDetailsCollectionConfiguration(email: CollectionMode.always),
+    billingDetails: BillingDetails(address: Address(country: 'NL', ...)),
+  ),
+);
+await Stripe.instance.presentPaymentSheet();
+```
+
+`StripeException.FailureCode.Canceled` is distinguished from other failures for user-facing messaging. The backend Stripe webhook (`POST /api/webhooks/stripe`) drives the final trip state machine; the bloc emits `tripRequestStatus = success` optimistically when the sheet succeeds.
+
+---
+
+## Data layer and facade
+
+All domain interactions go through `OrderFacade` — a `@lazySingleton` delegating to `OrderRepository`.
+
+| Method                             | Transport         | Purpose                                              |
+| ---------------------------------- | ----------------- | ---------------------------------------------------- |
+| `searchLocations(request)`         | Remote            | Text search for location suggestions                 |
+| `reverseGeocode(request)`          | Remote            | Lat/lng → human-readable label                       |
+| `getTripRoute(request)`            | Remote            | Polyline + distance/duration for stops               |
+| `getPricingQuotes(request)`        | Remote            | Car options with prices per stop list                |
+| `requestTrip(request)`             | Remote            | Create trip; returns trip id + optional Stripe block |
+| `getTripCount()`                   | Remote            | Aggregate trip count for the passenger               |
+| `getSavedLocations()`              | Local (ObjectBox) | Fetch passenger's saved + pinned locations           |
+| `saveSelectedLocation(location)`   | Local (ObjectBox) | Upsert a picked location into saved list             |
+| `togglePinnedLocation(location)`   | Local (ObjectBox) | Toggle pin flag; returns updated saved list          |
+| `removeSavedLocation(identityKey)` | Local (ObjectBox) | Delete a saved location by identity key              |
+
+Remote calls use Dio via [order_remote_datasource.dart](data/datasources/order_remote_datasource.dart). Local calls use ObjectBox via [order_local_datasource.dart](data/datasources/order_local_datasource.dart).
+
+---
+
+## Domain entities
+
+| Entity                       | File                                                                                              | Purpose                                                                                                                                                                                                              |
+| ---------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OrderLocationEntity`        | [entities/order_location_entity.dart](domain/entities/order_location_entity.dart)                 | A resolved lat/lng + label. Used for stops.                                                                                                                                                                          |
+| `OrderSavedLocationEntity`   | [entities/order_saved_location_entity.dart](domain/entities/order_saved_location_entity.dart)     | Saved location with `isPinned`, `usageCount`, timestamps                                                                                                                                                             |
+| `OrderTripRouteEntity`       | [entities/order_trip_route_entity.dart](domain/entities/order_trip_route_entity.dart)             | Encoded polyline points + distance/duration                                                                                                                                                                          |
+| `OrderTripCarOptionEntity`   | [entities/order_trip_car_option_entity.dart](domain/entities/order_trip_car_option_entity.dart)   | Vehicle type card: `typeId`, `quoteId`, `name`, `price`                                                                                                                                                              |
+| `OrderTripResponseEntity`    | [entities/order_trip_response_entity.dart](domain/entities/order_trip_response_entity.dart)       | Trip creation result: `id`, `status`, optional `stripePayment`                                                                                                                                                       |
+| `OrderStripePaymentEntity`   | [entities/order_stripe_payment_entity.dart](domain/entities/order_stripe_payment_entity.dart)     | `clientSecret`, `publishableKey`, `paymentIntentId`                                                                                                                                                                  |
+| `OrderLocationRequestEntity` | [entities/order_location_request_entity.dart](domain/entities/order_location_request_entity.dart) | Request param types: `OrderLocationSearchRequestEntity`, `OrderReverseGeocodeRequestEntity`, `OrderTripRouteRequestEntity`, `OrderPricingQuotesRequestEntity`, `OrderRequestTripEntity`, `OrderStopCoordinateEntity` |
+
+---
+
+## UI widget tree
+
+```
+RootScreen
+└── BlocProvider<OrderBloc>           (order_view.dart)
+    └── OrderBody                     (order_body.dart — BlocConsumer)
+        ├── OrderCenterPinWidget      (when sheet.mode == mapPicking)
+        └── OrderSheetSection         (when sheet.mode != collapsed)
+            ├── OrderExpandedSheetWidget       (expanded)
+            │   ├── OrderLocationEntryStepWidget   (expandedStep == locationEntry)
+            │   ├── OrderVehicleSelectionStepWidget (expandedStep == carSelection)
+            │   └── OrderBookingDetailsStepWidget  (expandedStep == bookingDetails)
+            │       └── OrderSchedulePickerWidget
+            └── OrderMapPickSheetWidget        (mapPicking)
+```
+
+`OrderBody` is the single `BlocConsumer`. Its `listener` handles:
+
+- `booking.tripRequestStatus.success` → shows success overlay, adds `collapseRequested`
+- `booking.tripRequestStatus.failure` → shows error overlay
+
+`PopScope` in `OrderBody` intercepts system back and maps it to the correct collapse event based on `sheet.mode` + `sheet.expandedStep`.
+
+---
+
+## Root integration boundary
+
+`RootScreen` provides both `RootBloc` and `OrderBloc` at the same scope level.
+
+**[root_map_section.dart](../root/presentation/ui/widgets/map/root_map_section.dart)**
+
+- Reads `orderState.trip.routeState` to draw the polyline overlay
+- Reads `orderState.stops.list.first` / `.last` for pickup/dropoff markers
+- Dispatches `mapCameraTargetUpdated(lat, lng, zoom)` on every `onCameraIdle`
+
+**[root_body.dart](../root/presentation/ui/widgets/root_body.dart)**
+
+- Reads `state.sheet.mode != OrderSheetMode.collapsed` to hide the bottom navigation bar when the sheet is open
+
+**[root_home_tab_section.dart](../root/presentation/ui/widgets/home/root_home_tab_section.dart)**
+
+- Shows `_HomeCollapsedOverlay` (search pill with "Now" and "Later" buttons) only when `sheet.mode == collapsed`
+- "Now" → `scheduleModeChanged(now)` + `orderNowPressed`
+- "Later" → `scheduleModeChanged(later)` + `orderNowPressed`

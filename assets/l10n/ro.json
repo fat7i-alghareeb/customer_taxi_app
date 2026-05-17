@@ -251,5 +251,12 @@
   "loginLandingDiscountFooter": "la prima ta cursă!",
   "loginLandingRegister": "Înregistrare",
   "loginLandingLogin": "Autentificare",
-  "loginLandingFooter": "Sigur și de încredere"
+  "loginLandingFooter": "Sigur și de încredere",
+  "payViaStripe": "Plătește în siguranță cu Stripe",
+  "confirmAndPay": "Confirmă și plătește",
+  "selectAndPay": "Selectează și plătește",
+  "paymentFailed": "Plată eșuată. Vă rugăm să încercați din nou.",
+  "paymentCanceled": "Plată anulată.",
+  "awaitingPayment": "Se confirmă plata…",
+  "paymentNotEnabled": "Plățile sunt temporar indisponibile."
 }

@@ -3,7 +3,6 @@ part of 'order_bloc.dart';
 @freezed
 class OrderEvent with _$OrderEvent {
   const factory OrderEvent.started() = _Started;
-  const factory OrderEvent.getAllRequested() = _GetAllRequested;
 
   const factory OrderEvent.orderNowPressed() = _OrderNowPressed;
   const factory OrderEvent.collapseRequested() = _CollapseRequested;
@@ -55,8 +54,7 @@ class OrderEvent with _$OrderEvent {
       _ScheduleModeChanged;
   const factory OrderEvent.scheduleTimeChanged(DateTime? time) =
       _ScheduleTimeChanged;
-  const factory OrderEvent.paymentMethodChanged(String methodId) =
-      _PaymentMethodChanged;
   const factory OrderEvent.confirmBookingDetailsPressed() =
       _ConfirmBookingDetailsPressed;
+  const factory OrderEvent.paymentSheetDismissed() = _PaymentSheetDismissed;
 }

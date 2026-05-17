@@ -1,4 +1,5 @@
 import '../../domain/entities/order_trip_response_entity.dart';
+import '../mappers/order_stripe_payment_model_mapper.dart';
 import '../models/order_trip_response_model.dart';
 
 extension OrderTripResponseModelMapper on OrderTripResponseModel {
@@ -22,6 +23,7 @@ extension OrderTripResponseModelMapper on OrderTripResponseModel {
             ),
           )
           .toList(),
+      stripePayment: stripePayment?.toEntity,
     );
   }
 }

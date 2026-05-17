@@ -3,7 +3,6 @@ import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/error/global_error_handler.dart';
 import '../../../../core/utils/result.dart';
-import '../../domain/entities/order_entity.dart';
 import '../../domain/entities/order_location_entity.dart';
 import '../../domain/entities/order_location_request_entity.dart';
 import '../../domain/entities/order_saved_location_entity.dart';
@@ -14,7 +13,6 @@ import '../../domain/repositories/order_repository.dart';
 import '../datasources/order_local_datasource.dart';
 import '../datasources/order_remote_datasource.dart';
 import '../mappers/order_location_model_mapper.dart';
-import '../mappers/order_model_mapper.dart';
 import '../mappers/order_pricing_quote_model_mapper.dart';
 import '../mappers/order_saved_location_cache_model_mapper.dart';
 import '../mappers/order_trip_response_model_mapper.dart';
@@ -45,16 +43,6 @@ class OrderRepositoryImpl implements OrderRepository {
       isPinned: false,
       touchedAtMillis: 0,
     );
-  }
-
-  @override
-  Future<Result<List<OrderEntity>>> getAllOrders() {
-    return runAsResult(() async {
-      printM('[OrderRepository] getAllOrders start');
-      final models = await _remote.getAllOrders();
-      printG('[OrderRepository] getAllOrders success count=${models.length}');
-      return models.map((e) => e.toEntity).toList();
-    });
   }
 
   @override

@@ -251,5 +251,12 @@
   "loginLandingDiscountFooter": "на першу поїздку!",
   "loginLandingRegister": "Зареєструватися",
   "loginLandingLogin": "Увійти",
-  "loginLandingFooter": "Надійно та безпечно"
+  "loginLandingFooter": "Надійно та безпечно",
+  "payViaStripe": "Безпечна оплата через Stripe",
+  "confirmAndPay": "Підтвердити та оплатити",
+  "selectAndPay": "Вибрати та оплатити",
+  "paymentFailed": "Платіж не вдався. Спробуйте ще раз.",
+  "paymentCanceled": "Платіж скасовано.",
+  "awaitingPayment": "Підтвердження платежу…",
+  "paymentNotEnabled": "Платежі тимчасово недоступні."
 }

@@ -14,8 +14,8 @@ class OrderSheetSection extends StatelessWidget {
   }
 
   BoxConstraints _resolveSheetConstraints(BuildContext context) {
-    if (state.sheetMode == OrderSheetMode.expanded &&
-        state.expandedStep == OrderExpandedStep.locationEntry) {
+    if (state.sheet.mode == OrderSheetMode.expanded &&
+        state.sheet.expandedStep == OrderExpandedStep.locationEntry) {
       final verticalPadding = _resolveSheetVerticalPadding();
       final targetHeight =
           context.screenHeight - (verticalPadding * 2) - context.bottomPadding;
@@ -23,8 +23,8 @@ class OrderSheetSection extends StatelessWidget {
       return BoxConstraints.tightFor(height: targetHeight);
     }
 
-    if (state.sheetMode == OrderSheetMode.expanded &&
-        state.expandedStep == OrderExpandedStep.carSelection) {
+    if (state.sheet.mode == OrderSheetMode.expanded &&
+        state.sheet.expandedStep == OrderExpandedStep.carSelection) {
       final maxH = context.screenHeight * 0.74;
       printC('[OrderSheetSection] constraints -> maxHeight $maxH');
       return BoxConstraints(maxHeight: maxH);
@@ -35,7 +35,7 @@ class OrderSheetSection extends StatelessWidget {
   }
 
   Widget _resolveSheetContent(BuildContext context) {
-    switch (state.sheetMode) {
+    switch (state.sheet.mode) {
       case OrderSheetMode.expanded:
         return OrderExpandedSheetWidget(state: state);
       case OrderSheetMode.mapPicking:
@@ -55,11 +55,11 @@ class OrderSheetSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state.sheetMode == OrderSheetMode.collapsed) {
+    if (state.sheet.mode == OrderSheetMode.collapsed) {
       return const SizedBox.shrink();
     }
 
-    printC('[OrderSheetSection] build mode=${state.sheetMode.name}');
+    printC('[OrderSheetSection] build mode=${state.sheet.mode.name}');
     return AnimatedSize(
       duration: AppDurations.slow,
       curve: Curves.easeInOut,
@@ -94,7 +94,7 @@ class OrderSheetSection extends StatelessWidget {
             );
           },
           child: KeyedSubtree(
-            key: ValueKey<String>('order-sheet-${state.sheetMode.name}'),
+            key: ValueKey<String>('order-sheet-${state.sheet.mode.name}'),
             child: ConstrainedBox(
               constraints: _resolveSheetConstraints(context),
               child: _resolveSheetContent(context).standardHorizontalPadding,

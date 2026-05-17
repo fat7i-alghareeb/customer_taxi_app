@@ -33,6 +33,8 @@ import 'package:customertaxi/core/notification/notification_permission_service.d
 import 'package:customertaxi/core/notification/notification_timezone_service.dart'
     as _i661;
 import 'package:customertaxi/core/router/router_config.dart' as _i434;
+import 'package:customertaxi/core/services/client_config/client_config_service.dart'
+    as _i768;
 import 'package:customertaxi/core/services/localization/locale_service.dart'
     as _i504;
 import 'package:customertaxi/core/services/location/location_service.dart'
@@ -47,6 +49,12 @@ import 'package:customertaxi/core/services/permissions/location_permission_servi
     as _i331;
 import 'package:customertaxi/core/services/permissions/permissions_coordinator.dart'
     as _i102;
+import 'package:customertaxi/core/services/realtime/realtime_lifecycle_coordinator.dart'
+    as _i1032;
+import 'package:customertaxi/core/services/realtime/realtime_service.dart'
+    as _i404;
+import 'package:customertaxi/core/services/realtime/signalr_realtime_service.dart'
+    as _i856;
 import 'package:customertaxi/core/services/session/auth_manager.dart' as _i814;
 import 'package:customertaxi/core/services/session/auth_state_notifier.dart'
     as _i32;
@@ -210,6 +218,9 @@ extension GetItInjectableX on _i174.GetIt {
         tokenStorage: gh<_i247.JwtTokenStorage>(),
       ),
     );
+    gh.lazySingleton<_i404.RealtimeService>(
+      () => _i856.SignalRRealtimeService(gh<_i247.JwtTokenStorage>()),
+    );
     gh.singleton<_i361.Dio>(
       () => registerModule.dio(
         gh<_i918.MemoryAwareInterceptor>(),
@@ -219,6 +230,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i814.AuthManager>(),
         gh<_i247.JwtTokenStorage>(),
       ),
+    );
+    gh.singleton<_i768.ClientConfigService>(
+      () => _i768.ClientConfigService(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i54.AuthRemoteDataSource>(
       () => _i54.AuthRemoteDataSource(gh<_i361.Dio>()),
@@ -256,6 +270,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i549.RootRepository>(
       () => _i244.RootRepositoryImpl(gh<_i312.RootRemoteDataSource>()),
     );
+    gh.factory<_i753.TripBloc>(
+      () => _i753.TripBloc(gh<_i224.TripFacade>(), gh<_i404.RealtimeService>()),
+    );
+    gh.lazySingleton<_i1032.RealtimeLifecycleCoordinator>(
+      () => _i1032.RealtimeLifecycleCoordinator(
+        gh<_i404.RealtimeService>(),
+        gh<_i814.AuthManager>(),
+        gh<_i768.ClientConfigService>(),
+      ),
+    );
     gh.lazySingleton<_i618.AuthRepository>(
       () => _i771.AuthRepositoryImpl(
         gh<_i243.AuthFirebaseDataSource>(),
@@ -281,7 +305,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i925.OrderFacade>(
       () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
     );
-    gh.factory<_i753.TripBloc>(() => _i753.TripBloc(gh<_i224.TripFacade>()));
     gh.lazySingleton<_i239.AuthFacade>(
       () => _i239.AuthFacade(gh<_i618.AuthRepository>()),
     );
@@ -293,8 +316,12 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i47.OrderBloc>(
-      () =>
-          _i47.OrderBloc(gh<_i925.OrderFacade>(), gh<_i396.LocationService>()),
+      () => _i47.OrderBloc(
+        gh<_i925.OrderFacade>(),
+        gh<_i396.LocationService>(),
+        gh<_i768.ClientConfigService>(),
+        gh<_i404.RealtimeService>(),
+      ),
     );
     gh.factory<_i499.FavoritesBloc>(
       () => _i499.FavoritesBloc(

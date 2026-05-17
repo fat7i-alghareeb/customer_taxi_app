@@ -251,5 +251,12 @@
   "loginLandingDiscountFooter": "¡en tu primer viaje!",
   "loginLandingRegister": "Registrarse",
   "loginLandingLogin": "Iniciar sesión",
-  "loginLandingFooter": "Seguro y confiable"
+  "loginLandingFooter": "Seguro y confiable",
+  "payViaStripe": "Paga de forma segura con Stripe",
+  "confirmAndPay": "Confirmar y pagar",
+  "selectAndPay": "Seleccionar y pagar",
+  "paymentFailed": "Pago fallido. Por favor, inténtalo de nuevo.",
+  "paymentCanceled": "Pago cancelado.",
+  "awaitingPayment": "Confirmando pago…",
+  "paymentNotEnabled": "Los pagos no están disponibles temporalmente."
 }

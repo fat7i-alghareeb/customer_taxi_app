@@ -251,5 +251,12 @@
   "loginLandingDiscountFooter": "على رحلتك الأولى!",
   "loginLandingRegister": "تسجيل",
   "loginLandingLogin": "تسجيل الدخول",
-  "loginLandingFooter": "آمن وموثوق"
+  "loginLandingFooter": "آمن وموثوق",
+  "payViaStripe": "ادفع بأمان عبر Stripe",
+  "confirmAndPay": "تأكيد والدفع",
+  "selectAndPay": "اختر وادفع",
+  "paymentFailed": "فشل الدفع. يرجى المحاولة مجدداً.",
+  "paymentCanceled": "تم إلغاء الدفع.",
+  "awaitingPayment": "جارٍ تأكيد الدفع…",
+  "paymentNotEnabled": "المدفوعات غير متاحة مؤقتاً."
 }

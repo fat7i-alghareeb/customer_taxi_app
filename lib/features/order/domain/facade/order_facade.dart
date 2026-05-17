@@ -2,7 +2,6 @@ import 'package:injectable/injectable.dart';
 import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/utils/result.dart';
-import '../entities/order_entity.dart';
 import '../entities/order_location_entity.dart';
 import '../entities/order_location_request_entity.dart';
 import '../entities/order_saved_location_entity.dart';
@@ -16,11 +15,6 @@ class OrderFacade {
   const OrderFacade(this._repository);
 
   final OrderRepository _repository;
-
-  Future<Result<List<OrderEntity>>> getAllOrders() {
-    printC('[OrderFacade] getAllOrders');
-    return _repository.getAllOrders();
-  }
 
   Future<Result<List<OrderLocationEntity>>> searchLocations(
     OrderLocationSearchRequestEntity request,

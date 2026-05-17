@@ -509,5 +509,19 @@ class AppStrings {
   static String get wednesday => 'wednesday'.tr();
   /// Where to? - إلى أين؟ - Waarheen? - Wohin? - Dokąd jedziemy? - Куди їдемо? - Où allez-vous ? - ¿A dónde vas? - Încotro?
   static String get whereTo => 'whereTo'.tr();
+  /// Confirming payment… - جارٍ تأكيد الدفع… - Betaling bevestigen… - Zahlung wird bestätigt… - Potwierdzanie płatności… - Підтвердження платежу… - Confirmation du paiement… - Confirmando pago… - Se confirmă plata…
+  static String get awaitingPayment => 'awaitingPayment'.tr();
+  /// Confirm and pay - تأكيد والدفع - Bevestigen en betalen - Bestätigen und bezahlen - Potwierdź i zapłać - Підтвердити та оплатити - Confirmer et payer - Confirmar y pagar - Confirmă și plătește
+  static String get confirmAndPay => 'confirmAndPay'.tr();
+  /// Select and Pay - اختر وادفع - Selecteren en betalen - Auswählen und bezahlen - Wybierz i zapłać - Вибрати та оплатити - Sélectionner et payer - Seleccionar y pagar - Selectează și plătește
+  static String get selectAndPay => 'selectAndPay'.tr();
+  /// Payment canceled. - تم إلغاء الدفع. - Betaling geannuleerd. - Zahlung abgebrochen. - Płatność anulowana. - Платіж скасовано. - Paiement annulé. - Pago cancelado. - Plată anulată.
+  static String get paymentCanceled => 'paymentCanceled'.tr();
+  /// Payment failed. Please try again. - فشل الدفع. يرجى المحاولة مجدداً. - Betaling mislukt. Probeer het opnieuw. - Zahlung fehlgeschlagen. Bitte versuche es erneut. - Płatność nieudana. Spróbuj ponownie. - Платіж не вдався. Спробуйте ще раз. - Paiement échoué. Veuillez réessayer. - Pago fallido. Por favor, inténtalo de nuevo. - Plată eșuată. Vă rugăm să încercați din nou.
+  static String get paymentFailed => 'paymentFailed'.tr();
+  /// Payments are temporarily unavailable. - المدفوعات غير متاحة مؤقتاً. - Betalingen zijn tijdelijk niet beschikbaar. - Zahlungen sind vorübergehend nicht verfügbar. - Płatności są tymczasowo niedostępne. - Платежі тимчасово недоступні. - Les paiements sont temporairement indisponibles. - Los pagos no están disponibles temporalmente. - Plățile sunt temporar indisponibile.
+  static String get paymentNotEnabled => 'paymentNotEnabled'.tr();
+  /// Pay securely with Stripe - ادفع بأمان عبر Stripe - Betaal veilig via Stripe - Sicher bezahlen mit Stripe - Zapłać bezpiecznie przez Stripe - Безпечна оплата через Stripe - Payez en toute sécurité avec Stripe - Paga de forma segura con Stripe - Plătește în siguranță cu Stripe
+  static String get payViaStripe => 'payViaStripe'.tr();
 }
 

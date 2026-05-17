@@ -12,6 +12,7 @@ extension OrderPricingQuoteModelMapper on OrderPricingQuoteModel {
         typeCode: vehicleTypeCode,
         name: vehicleTypeName,
         passengerCapacity: capacity,
+        totalDistanceKm: totalDistanceKm,
         originalPrice: originalFare,
         price: finalFare,
         discountPercent: discountPercent,

@@ -20,7 +20,7 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
   String _resolveLabel(OrderTripCarOptionEntity? option, String fallbackId) {
     if (option != null) return option.name;
 
-    return state.tripCarOptionsState.maybeWhen(
+    return state.trip.carOptionsState.maybeWhen(
       loading: () => '...',
       failure: (msg) => '!',
       orElse: () => '...',
@@ -82,20 +82,25 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     printM('[OrderVehicleSelectionStepWidget] build');
 
-    final isPriceLoading = state.tripCarOptionsState.isLoading;
+    final isPriceLoading = state.trip.carOptionsState.isLoading;
 
-    final stops = state.stops.whereType<OrderLocationEntity>().toList();
+    final stops = state.stops.list.whereType<OrderLocationEntity>().toList();
     if (stops.length < 2) {
       return const SizedBox.shrink();
     }
 
-    final durationText = state.tripRouteState.maybeWhen(
+    final durationText = state.trip.routeState.maybeWhen(
       success: (route) => route.durationText,
       orElse: () => '',
     );
 
-    final discountPercent = state.tripCarOptionsState.maybeWhen(
+    final discountPercent = state.trip.carOptionsState.maybeWhen(
       success: (opts) => opts.isNotEmpty ? opts.first.discountPercent : 0.0,
+      orElse: () => 0.0,
+    );
+
+    final totalDistanceKm = state.trip.carOptionsState.maybeWhen(
+      success: (opts) => opts.isNotEmpty ? opts.first.totalDistanceKm : 0.0,
       orElse: () => 0.0,
     );
 
@@ -105,6 +110,7 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
         OrderRouteSummaryTimelineWidget(
           stops: stops,
           durationText: durationText,
+          distanceKm: totalDistanceKm,
           onEditStop: (index) {
             context.read<OrderBloc>().add(OrderEvent.setOnMapPressed(index: index));
           },
@@ -138,14 +144,14 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
               .fadeIn(delay: 300.ms),
         ],
         AppSpacing.md.verticalSpace,
-        ...state.tripCarOptionsState.maybeWhen(
+        ...state.trip.carOptionsState.maybeWhen(
           success: (options) => [
             for (var i = 0; i < options.length; i++) ...[
               if (i > 0) SizedBox(height: AppSpacing.sm.h),
               OrderCarOptionCardWidget(
                 title: _resolveLabel(options[i], options[i].typeId),
                 imagePath: _resolveImagePath(options[i], options[i].typeId),
-                isSelected: state.selectedCarTypeId == options[i].typeId,
+                isSelected: state.trip.selectedCarTypeId == options[i].typeId,
                 isPriceLoading: false,
                 passengerCapacity: options[i].passengerCapacity,
                 priceText:
@@ -163,7 +169,7 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
               OrderCarOptionCardWidget(
                 title: _resolveLabel(null, _fallbackTypeIds[i]),
                 imagePath: _resolveImagePath(null, _fallbackTypeIds[i]),
-                isSelected: state.selectedCarTypeId == _fallbackTypeIds[i],
+                isSelected: state.trip.selectedCarTypeId == _fallbackTypeIds[i],
                 isPriceLoading: isPriceLoading,
                 passengerCapacity: 0,
                 priceText: null,

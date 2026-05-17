@@ -11,7 +11,6 @@ import '../models/order_location_model.dart';
 import '../models/order_trip_route_model.dart';
 import '../models/order_pricing_quote_model.dart';
 import '../models/order_trip_response_model.dart';
-import '../models/order_model.dart';
 import '../params/order_params.dart';
 
 List<PointLatLng> _decodePolyline(String encoded) {
@@ -59,16 +58,6 @@ class OrderRemoteDataSource {
     }
 
     return points;
-  }
-
-  Future<List<OrderModel>> getAllOrders() {
-    return rethrowAsAppException(() async {
-      printY('[OrderRemoteDataSource] getAllOrders -> /order', tag: false);
-      final response = await _dio.get<dynamic>('/order');
-      final data = response.data;
-      final dataList = data['data'] as List<dynamic>;
-      return dataList.map((e) => OrderModel.fromJson(e)).toList();
-    });
   }
 
   Future<List<OrderLocationModel>> searchLocations(

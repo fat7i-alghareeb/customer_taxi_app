@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderTripResponseModel {
 
- String get id; String get referenceCode; String get passengerId; String? get driverId; String get vehicleTypeId; String get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; List<OrderTripStopModel> get stops;
+ String get id; String get referenceCode; String get passengerId; String? get driverId; String get vehicleTypeId; String get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; List<OrderTripStopModel> get stops; OrderStripePaymentModel? get stripePayment;
 /// Create a copy of OrderTripResponseModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $OrderTripResponseModelCopyWith<OrderTripResponseModel> get copyWith => _$OrderT
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderTripResponseModel&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.passengerId, passengerId) || other.passengerId == passengerId)&&(identical(other.driverId, driverId) || other.driverId == driverId)&&(identical(other.vehicleTypeId, vehicleTypeId) || other.vehicleTypeId == vehicleTypeId)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderTripResponseModel&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.passengerId, passengerId) || other.passengerId == passengerId)&&(identical(other.driverId, driverId) || other.driverId == driverId)&&(identical(other.vehicleTypeId, vehicleTypeId) || other.vehicleTypeId == vehicleTypeId)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.stripePayment, stripePayment) || other.stripePayment == stripePayment));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,referenceCode,passengerId,driverId,vehicleTypeId,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(stops));
+int get hashCode => Object.hash(runtimeType,id,referenceCode,passengerId,driverId,vehicleTypeId,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(stops),stripePayment);
 
 @override
 String toString() {
-  return 'OrderTripResponseModel(id: $id, referenceCode: $referenceCode, passengerId: $passengerId, driverId: $driverId, vehicleTypeId: $vehicleTypeId, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops)';
+  return 'OrderTripResponseModel(id: $id, referenceCode: $referenceCode, passengerId: $passengerId, driverId: $driverId, vehicleTypeId: $vehicleTypeId, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, stripePayment: $stripePayment)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $OrderTripResponseModelCopyWith<$Res>  {
   factory $OrderTripResponseModelCopyWith(OrderTripResponseModel value, $Res Function(OrderTripResponseModel) _then) = _$OrderTripResponseModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String referenceCode, String passengerId, String? driverId, String vehicleTypeId, String status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<OrderTripStopModel> stops
+ String id, String referenceCode, String passengerId, String? driverId, String vehicleTypeId, String status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<OrderTripStopModel> stops, OrderStripePaymentModel? stripePayment
 });
 
 
-
+$OrderStripePaymentModelCopyWith<$Res>? get stripePayment;
 
 }
 /// @nodoc
@@ -65,7 +65,7 @@ class _$OrderTripResponseModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderTripResponseModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? passengerId = null,Object? driverId = freezed,Object? vehicleTypeId = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? passengerId = null,Object? driverId = freezed,Object? vehicleTypeId = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? stripePayment = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -78,10 +78,23 @@ as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode
 as String,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime,scheduledAtUtc: freezed == scheduledAtUtc ? _self.scheduledAtUtc : scheduledAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,stops: null == stops ? _self.stops : stops // ignore: cast_nullable_to_non_nullable
-as List<OrderTripStopModel>,
+as List<OrderTripStopModel>,stripePayment: freezed == stripePayment ? _self.stripePayment : stripePayment // ignore: cast_nullable_to_non_nullable
+as OrderStripePaymentModel?,
   ));
 }
+/// Create a copy of OrderTripResponseModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrderStripePaymentModelCopyWith<$Res>? get stripePayment {
+    if (_self.stripePayment == null) {
+    return null;
+  }
 
+  return $OrderStripePaymentModelCopyWith<$Res>(_self.stripePayment!, (value) {
+    return _then(_self.copyWith(stripePayment: value));
+  });
+}
 }
 
 
@@ -163,10 +176,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  String passengerId,  String? driverId,  String vehicleTypeId,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<OrderTripStopModel> stops)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  String passengerId,  String? driverId,  String vehicleTypeId,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<OrderTripStopModel> stops,  OrderStripePaymentModel? stripePayment)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderTripResponseModel() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_that.vehicleTypeId,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops);case _:
+return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_that.vehicleTypeId,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.stripePayment);case _:
   return orElse();
 
 }
@@ -184,10 +197,10 @@ return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  String passengerId,  String? driverId,  String vehicleTypeId,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<OrderTripStopModel> stops)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  String passengerId,  String? driverId,  String vehicleTypeId,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<OrderTripStopModel> stops,  OrderStripePaymentModel? stripePayment)  $default,) {final _that = this;
 switch (_that) {
 case _OrderTripResponseModel():
-return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_that.vehicleTypeId,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops);case _:
+return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_that.vehicleTypeId,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.stripePayment);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +217,10 @@ return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  String passengerId,  String? driverId,  String vehicleTypeId,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<OrderTripStopModel> stops)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  String passengerId,  String? driverId,  String vehicleTypeId,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<OrderTripStopModel> stops,  OrderStripePaymentModel? stripePayment)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderTripResponseModel() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_that.vehicleTypeId,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops);case _:
+return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_that.vehicleTypeId,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.stripePayment);case _:
   return null;
 
 }
@@ -219,7 +232,7 @@ return $default(_that.id,_that.referenceCode,_that.passengerId,_that.driverId,_t
 @JsonSerializable()
 
 class _OrderTripResponseModel extends OrderTripResponseModel {
-  const _OrderTripResponseModel({required this.id, required this.referenceCode, required this.passengerId, this.driverId, required this.vehicleTypeId, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, required final  List<OrderTripStopModel> stops}): _stops = stops,super._();
+  const _OrderTripResponseModel({required this.id, required this.referenceCode, required this.passengerId, this.driverId, required this.vehicleTypeId, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, required final  List<OrderTripStopModel> stops, this.stripePayment}): _stops = stops,super._();
   factory _OrderTripResponseModel.fromJson(Map<String, dynamic> json) => _$OrderTripResponseModelFromJson(json);
 
 @override final  String id;
@@ -239,6 +252,7 @@ class _OrderTripResponseModel extends OrderTripResponseModel {
   return EqualUnmodifiableListView(_stops);
 }
 
+@override final  OrderStripePaymentModel? stripePayment;
 
 /// Create a copy of OrderTripResponseModel
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +267,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderTripResponseModel&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.passengerId, passengerId) || other.passengerId == passengerId)&&(identical(other.driverId, driverId) || other.driverId == driverId)&&(identical(other.vehicleTypeId, vehicleTypeId) || other.vehicleTypeId == vehicleTypeId)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderTripResponseModel&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.passengerId, passengerId) || other.passengerId == passengerId)&&(identical(other.driverId, driverId) || other.driverId == driverId)&&(identical(other.vehicleTypeId, vehicleTypeId) || other.vehicleTypeId == vehicleTypeId)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.stripePayment, stripePayment) || other.stripePayment == stripePayment));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,referenceCode,passengerId,driverId,vehicleTypeId,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(_stops));
+int get hashCode => Object.hash(runtimeType,id,referenceCode,passengerId,driverId,vehicleTypeId,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(_stops),stripePayment);
 
 @override
 String toString() {
-  return 'OrderTripResponseModel(id: $id, referenceCode: $referenceCode, passengerId: $passengerId, driverId: $driverId, vehicleTypeId: $vehicleTypeId, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops)';
+  return 'OrderTripResponseModel(id: $id, referenceCode: $referenceCode, passengerId: $passengerId, driverId: $driverId, vehicleTypeId: $vehicleTypeId, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, stripePayment: $stripePayment)';
 }
 
 
@@ -273,11 +287,11 @@ abstract mixin class _$OrderTripResponseModelCopyWith<$Res> implements $OrderTri
   factory _$OrderTripResponseModelCopyWith(_OrderTripResponseModel value, $Res Function(_OrderTripResponseModel) _then) = __$OrderTripResponseModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String referenceCode, String passengerId, String? driverId, String vehicleTypeId, String status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<OrderTripStopModel> stops
+ String id, String referenceCode, String passengerId, String? driverId, String vehicleTypeId, String status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<OrderTripStopModel> stops, OrderStripePaymentModel? stripePayment
 });
 
 
-
+@override $OrderStripePaymentModelCopyWith<$Res>? get stripePayment;
 
 }
 /// @nodoc
@@ -290,7 +304,7 @@ class __$OrderTripResponseModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderTripResponseModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? passengerId = null,Object? driverId = freezed,Object? vehicleTypeId = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? passengerId = null,Object? driverId = freezed,Object? vehicleTypeId = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? stripePayment = freezed,}) {
   return _then(_OrderTripResponseModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -303,11 +317,24 @@ as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode
 as String,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime,scheduledAtUtc: freezed == scheduledAtUtc ? _self.scheduledAtUtc : scheduledAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,stops: null == stops ? _self._stops : stops // ignore: cast_nullable_to_non_nullable
-as List<OrderTripStopModel>,
+as List<OrderTripStopModel>,stripePayment: freezed == stripePayment ? _self.stripePayment : stripePayment // ignore: cast_nullable_to_non_nullable
+as OrderStripePaymentModel?,
   ));
 }
 
+/// Create a copy of OrderTripResponseModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrderStripePaymentModelCopyWith<$Res>? get stripePayment {
+    if (_self.stripePayment == null) {
+    return null;
+  }
 
+  return $OrderStripePaymentModelCopyWith<$Res>(_self.stripePayment!, (value) {
+    return _then(_self.copyWith(stripePayment: value));
+  });
+}
 }
 
 // dart format on

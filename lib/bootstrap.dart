@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart'
     show SystemChrome, SystemUiMode, appFlavor;
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'core/config/localization_config.dart';
 import 'firebase_options.dart';
 import 'core/injection/injectable.dart';
@@ -15,7 +16,9 @@ import 'core/notification/notification_coordinator.dart';
 import 'core/notification/notification_init_options.dart';
 import 'core/notification/notification_payload.dart';
 import 'core/router/router_config.dart';
+import 'core/services/client_config/client_config_service.dart';
 import 'core/services/localization/locale_service.dart';
+import 'core/services/realtime/realtime_lifecycle_coordinator.dart';
 import 'core/services/session/auth_manager.dart';
 import 'core/theme/theme_controller.dart';
 import 'common/widgets/stage_tools/stage_device_preview_controller.dart';
@@ -84,6 +87,14 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       printG('[Bootstrap] initializing Auth and Network...');
       await _initializeAuthAndNetwork();
       printG('[Bootstrap] Auth and Network ready');
+
+      printG('[Bootstrap] fetching client config...');
+      await _initializeClientConfig();
+      printG('[Bootstrap] client config ready');
+
+      printG('[Bootstrap] starting realtime coordinator...');
+      _initializeRealtime();
+      printG('[Bootstrap] realtime coordinator started');
 
       printG('[Bootstrap] resolving initial locale...');
       final initialLocale = await getIt<LocaleService>().resolveInitialLocale();
@@ -157,6 +168,33 @@ Future<void> _handleNotificationNavigation(
 Future<void> _initializeAuthAndNetwork() async {
   final authManager = getIt<AuthManager>();
   await authManager.initialize();
+}
+
+/// Fetches remote client config and initializes Stripe if enabled.
+Future<void> _initializeClientConfig() async {
+  final configService = getIt<ClientConfigService>();
+  await configService.fetch();
+
+  final config = configService.current;
+  if (config.stripeEnabled && config.stripePublishableKey.isNotEmpty) {
+    Stripe.publishableKey = config.stripePublishableKey;
+    Stripe.merchantIdentifier = 'merchant.dev.fat7i.customertaxi';
+    Stripe.urlScheme = 'customertaxi';
+    await Stripe.instance.applySettings();
+    printG('[Bootstrap] Stripe initialized publishableKey=${config.stripePublishableKey.substring(0, 8)}…');
+  } else {
+    printY('[Bootstrap] Stripe disabled or no publishable key — skipping init');
+  }
+}
+
+/// Starts the realtime coordinator.
+///
+/// The coordinator owns the SignalR connection lifecycle: it subscribes to
+/// [AuthManager.authStatusStream] (connect on authenticated, disconnect on
+/// unauthenticated) and to [WidgetsBindingObserver] (pause/resume with the
+/// app). Gated by `ClientConfig.signalREnabled`.
+void _initializeRealtime() {
+  getIt<RealtimeLifecycleCoordinator>().start();
 }
 
 /// Runs the application inside a guarded zone and wraps it with

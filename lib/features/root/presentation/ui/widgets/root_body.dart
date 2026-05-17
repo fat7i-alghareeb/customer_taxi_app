@@ -84,11 +84,11 @@ class _RootBodyState extends State<RootBody> {
     final navItems = _buildNavItems();
 
     return BlocBuilder<OrderBloc, OrderState>(
-      buildWhen: (previous, current) => previous.sheetMode != current.sheetMode,
+      buildWhen: (previous, current) => previous.sheet.mode != current.sheet.mode,
       builder: (context, state) {
         final hideNav =
             _currentIndex == RootTab.home.index &&
-            state.sheetMode != OrderSheetMode.collapsed;
+            state.sheet.mode != OrderSheetMode.collapsed;
 
         return Stack(
           fit: StackFit.expand,

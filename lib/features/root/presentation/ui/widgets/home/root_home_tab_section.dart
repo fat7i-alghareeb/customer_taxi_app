@@ -51,9 +51,9 @@ class RootHomeTabSection extends StatelessWidget {
                 ),
                 BlocBuilder<OrderBloc, OrderState>(
                   buildWhen: (previous, current) =>
-                      previous.sheetMode != current.sheetMode,
+                      previous.sheet.mode != current.sheet.mode,
                   builder: (context, orderState) {
-                    if (orderState.sheetMode != OrderSheetMode.collapsed) {
+                    if (orderState.sheet.mode != OrderSheetMode.collapsed) {
                       return const SizedBox.shrink();
                     }
                     return const _HomeCollapsedOverlay();

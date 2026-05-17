@@ -6,11 +6,13 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
     super.key,
     required this.stops,
     this.durationText,
+    this.distanceKm = 0.0,
     this.onEditStop,
   });
 
   final List<OrderLocationEntity> stops;
   final String? durationText;
+  final double distanceKm;
   final ValueChanged<int>? onEditStop;
 
   @override
@@ -27,6 +29,47 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if ((durationText ?? '').isNotEmpty || distanceKm > 0) ...[
+            Row(
+              children: [
+                if ((durationText ?? '').isNotEmpty) ...[
+                  FaIcon(
+                    FontAwesomeIcons.clock,
+                    size: 12.r,
+                    color: context.primary,
+                  ),
+                  AppSpacing.xs.horizontalSpace,
+                  Text(
+                    durationText!,
+                    style: AppTextStyles.s12w500.copyWith(color: context.primary),
+                  ),
+                ],
+                if ((durationText ?? '').isNotEmpty && distanceKm > 0) ...[
+                  AppSpacing.sm.horizontalSpace,
+                  Text(
+                    '•',
+                    style: AppTextStyles.s12w500.copyWith(
+                      color: context.onSurface.withValues(alpha: 0.4),
+                    ),
+                  ),
+                  AppSpacing.sm.horizontalSpace,
+                ],
+                if (distanceKm > 0) ...[
+                  FaIcon(
+                    FontAwesomeIcons.route,
+                    size: 12.r,
+                    color: context.primary,
+                  ),
+                  AppSpacing.xs.horizontalSpace,
+                  Text(
+                    '${distanceKm.toStringAsFixed(1)} km',
+                    style: AppTextStyles.s12w500.copyWith(color: context.primary),
+                  ),
+                ],
+              ],
+            ),
+            AppSpacing.md.verticalSpace,
+          ],
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

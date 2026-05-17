@@ -12,12 +12,13 @@ class OrderBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<OrderBloc, OrderState>(
       listenWhen: (previous, current) =>
-          previous.sheetMode != current.sheetMode ||
-          previous.tripRequestStatus != current.tripRequestStatus,
+          previous.sheet.mode != current.sheet.mode ||
+          previous.booking.tripRequestStatus !=
+              current.booking.tripRequestStatus,
       listener: (context, state) {
-        printM('[OrderBody] sheetMode=${state.sheetMode.name}');
+        printM('[OrderBody] sheetMode=${state.sheet.mode.name}');
 
-        state.tripRequestStatus.when(
+        state.booking.tripRequestStatus.when(
           initial: () {},
           loading: () {},
           success: (trip) {
@@ -30,75 +31,71 @@ class OrderBody extends StatelessWidget {
         );
       },
       buildWhen: (previous, current) {
-        final shouldBuild = previous.sheetMode != current.sheetMode ||
-            previous.expandedStep != current.expandedStep ||
-            previous.mapPickingTarget != current.mapPickingTarget ||
+        final shouldBuild =
+            previous.sheet != current.sheet ||
             previous.stops != current.stops ||
-            previous.stopSuggestionsState != current.stopSuggestionsState ||
-            previous.tripRouteState != current.tripRouteState ||
-            previous.tripCarOptionsState != current.tripCarOptionsState ||
-            previous.selectedCarTypeId != current.selectedCarTypeId ||
-            previous.scheduleMode != current.scheduleMode ||
-            previous.scheduledAt != current.scheduledAt ||
-            previous.paymentMethodId != current.paymentMethodId;
-        
+            previous.trip != current.trip ||
+            previous.booking != current.booking;
+
         if (shouldBuild) {
-          printC('[OrderBody] buildWhen -> true (state changed)');
+          printC('[OrderBody] buildWhen -> true (slice changed)');
         }
         return shouldBuild;
       },
       builder: (context, state) {
-        printC('[OrderBody] builder rendering sheetMode=${state.sheetMode.name}');
+        printC(
+          '[OrderBody] builder rendering sheetMode=${state.sheet.mode.name}',
+        );
         return PopScope(
-          canPop: state.sheetMode == OrderSheetMode.collapsed,
+          canPop: state.sheet.mode == OrderSheetMode.collapsed,
           onPopInvokedWithResult: (_, _) {
-            if (state.sheetMode != OrderSheetMode.collapsed) {
-              if (state.sheetMode == OrderSheetMode.mapPicking) {
-                printM('[OrderBody] system back -> mapPickCancelled');
-                context.read<OrderBloc>().add(
-                  const OrderEvent.mapPickCancelled(),
-                );
-                return;
-              }
+            if (state.sheet.mode == OrderSheetMode.collapsed) return;
 
-              if (state.sheetMode == OrderSheetMode.expanded &&
-                  state.expandedStep == OrderExpandedStep.bookingDetails) {
-                printM('[OrderBody] system back -> bookingDetailsBackPressed');
-                context.read<OrderBloc>().add(
-                  const OrderEvent.bookingDetailsBackPressed(),
-                );
-                return;
-              }
-
-              if (state.sheetMode == OrderSheetMode.expanded &&
-                  state.expandedStep == OrderExpandedStep.carSelection) {
-                printM('[OrderBody] system back -> vehicleStepBackPressed');
-                context.read<OrderBloc>().add(
-                  const OrderEvent.vehicleStepBackPressed(),
-                );
-                return;
-              }
-
-              printM('[OrderBody] system back -> collapseRequested');
+            if (state.sheet.mode == OrderSheetMode.mapPicking) {
+              printM('[OrderBody] system back -> mapPickCancelled');
               context.read<OrderBloc>().add(
-                const OrderEvent.collapseRequested(),
+                const OrderEvent.mapPickCancelled(),
               );
+              return;
             }
+
+            if (state.sheet.mode == OrderSheetMode.expanded &&
+                state.sheet.expandedStep == OrderExpandedStep.bookingDetails) {
+              printM('[OrderBody] system back -> bookingDetailsBackPressed');
+              context.read<OrderBloc>().add(
+                const OrderEvent.bookingDetailsBackPressed(),
+              );
+              return;
+            }
+
+            if (state.sheet.mode == OrderSheetMode.expanded &&
+                state.sheet.expandedStep == OrderExpandedStep.carSelection) {
+              printM('[OrderBody] system back -> vehicleStepBackPressed');
+              context.read<OrderBloc>().add(
+                const OrderEvent.vehicleStepBackPressed(),
+              );
+              return;
+            }
+
+            printM('[OrderBody] system back -> collapseRequested');
+            context.read<OrderBloc>().add(
+              const OrderEvent.collapseRequested(),
+            );
           },
           child: Stack(
             fit: StackFit.expand,
             children: [
-              if (state.sheetMode == OrderSheetMode.mapPicking)
+              if (state.sheet.mode == OrderSheetMode.mapPicking)
                 const IgnorePointer(child: OrderCenterPinWidget()),
-              if (state.sheetMode != OrderSheetMode.collapsed)
+              if (state.sheet.mode != OrderSheetMode.collapsed)
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     padding: REdgeInsets.only(
                       bottom:
                           context.bottomPadding +
-                          (state.sheetMode == OrderSheetMode.expanded &&
-                                  state.expandedStep ==
+                          (state.sheet.mode == OrderSheetMode.expanded &&
+                                  state.sheet.expandedStep ==
                                       OrderExpandedStep.carSelection
                               ? context.bottomInset
                               : 0),

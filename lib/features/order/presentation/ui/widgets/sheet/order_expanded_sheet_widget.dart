@@ -33,7 +33,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
   void initState() {
     super.initState();
     _form = OrderForms.formGroup();
-    _updateFocusNodes(widget.state.stops.length);
+    _updateFocusNodes(widget.state.stops.list.length);
     _syncFormWithState(widget.state);
   }
 
@@ -66,18 +66,18 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
       _syncFormWithState(widget.state);
     }
 
-    if (widget.state.stops.isEmpty) {
+    if (widget.state.stops.list.isEmpty) {
       _activeSearchIndex = 0;
       _focusedFieldIndex = null;
       return;
     }
 
-    if (_activeSearchIndex >= widget.state.stops.length) {
-      _activeSearchIndex = widget.state.stops.length - 1;
+    if (_activeSearchIndex >= widget.state.stops.list.length) {
+      _activeSearchIndex = widget.state.stops.list.length - 1;
     }
 
     if (_focusedFieldIndex != null &&
-        _focusedFieldIndex! >= widget.state.stops.length) {
+        _focusedFieldIndex! >= widget.state.stops.list.length) {
       _focusedFieldIndex = null;
     }
   }
@@ -118,25 +118,27 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     _isSyncing = true;
 
     final array = _form.control(OrderForms.stopsArray) as FormArray<String>;
-    
+    final stopsList = state.stops.list;
+    final queries = state.stops.queries;
+
     // Adjust FormArray length
-    if (array.controls.length != state.stops.length) {
-      printM('[OrderExpandedSheetWidget] adjusting array length from ${array.controls.length} to ${state.stops.length}');
-      while (array.controls.length < state.stops.length) {
+    if (array.controls.length != stopsList.length) {
+      printM('[OrderExpandedSheetWidget] adjusting array length from ${array.controls.length} to ${stopsList.length}');
+      while (array.controls.length < stopsList.length) {
         array.add(FormControl<String>(validators: [Validators.required]));
       }
-      while (array.controls.length > state.stops.length) {
+      while (array.controls.length > stopsList.length) {
         array.removeAt(array.controls.length - 1);
       }
     }
-    
-    _updateFocusNodes(state.stops.length);
 
-    for (var i = 0; i < state.stops.length; i++) {
-      // Keep field text in sync with stopQueries to preserve user input.
-      final query = i < state.stopQueries.length
-          ? state.stopQueries[i]
-          : (state.stops[i]?.label ?? '');
+    _updateFocusNodes(stopsList.length);
+
+    for (var i = 0; i < stopsList.length; i++) {
+      // Keep field text in sync with stop queries to preserve user input.
+      final query = i < queries.length
+          ? queries[i]
+          : (stopsList[i]?.label ?? '');
       final control = array.controls[i] as FormControl<String>;
       
       if ((control.value ?? '') != query) {
@@ -154,25 +156,29 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
   }
 
   bool get _isConfirmActive {
-    final allStopsResolved = widget.state.stops.every((s) => s != null);
+    final allStopsResolved = widget.state.stops.list.every((s) => s != null);
     if (!allStopsResolved) return false;
-    if (widget.state.scheduleMode == OrderScheduleMode.later &&
-        widget.state.scheduledAt == null) {
+    if (widget.state.booking.scheduleMode == OrderScheduleMode.later &&
+        widget.state.booking.scheduledAt == null) {
       return false;
     }
     return true;
   }
 
-  bool get _isVehicleSelectionStep => widget.state.expandedStep == OrderExpandedStep.carSelection;
-  bool get _isBookingDetailsStep => widget.state.expandedStep == OrderExpandedStep.bookingDetails;
+  bool get _isVehicleSelectionStep =>
+      widget.state.sheet.expandedStep == OrderExpandedStep.carSelection;
+  bool get _isBookingDetailsStep =>
+      widget.state.sheet.expandedStep == OrderExpandedStep.bookingDetails;
 
-  bool get _isVehicleConfirmActive => widget.state.selectedCarTypeId?.trim().isNotEmpty ?? false;
+  bool get _isVehicleConfirmActive =>
+      widget.state.trip.selectedCarTypeId?.trim().isNotEmpty ?? false;
 
   BlocStatus<List<OrderSavedLocationEntity>> get _activeSuggestionsState {
-    if (_activeSearchIndex < 0 || _activeSearchIndex >= widget.state.stopSuggestionsState.length) {
+    final suggestions = widget.state.stops.suggestionsState;
+    if (_activeSearchIndex < 0 || _activeSearchIndex >= suggestions.length) {
       return const BlocStatus.initial();
     }
-    return widget.state.stopSuggestionsState[_activeSearchIndex];
+    return suggestions[_activeSearchIndex];
   }
 
   void _onSharedSuggestionSelected(OrderSavedLocationEntity location) {
@@ -292,7 +298,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
               ReorderableListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: widget.state.stops.length,
+                itemCount: widget.state.stops.list.length,
                 onReorder: (oldIndex, newIndex) {
                   printM('[OrderExpandedSheetWidget] onReorder old=$oldIndex new=$newIndex');
                   if (newIndex > oldIndex) newIndex -= 1;
@@ -301,7 +307,8 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                 itemBuilder: (context, index) {
                   printM('[OrderExpandedSheetWidget] itemBuilder index=$index');
                   final isFirst = index == 0;
-                  final isLast = index == widget.state.stops.length - 1;
+                  final stopsLen = widget.state.stops.list.length;
+                  final isLast = index == stopsLen - 1;
                   final title = isFirst ? AppStrings.from : (isLast ? AppStrings.to : AppStrings.stop);
                   
                   return Padding(
@@ -314,8 +321,11 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                       iconData: isFirst ? FontAwesomeIcons.circleDot : FontAwesomeIcons.locationDot,
                       focusNode: _focusNodes[index],
                       onClearPressed: () => _clearField(index),
-                      onAddPressed: isLast && widget.state.stops.length < 5
+                      onAddPressed: isLast && stopsLen < 5
                           ? () => context.read<OrderBloc>().add(const OrderEvent.stopAdded())
+                          : null,
+                      onRemovePressed: !isFirst && !isLast
+                          ? () => context.read<OrderBloc>().add(OrderEvent.stopRemoved(index))
                           : null,
                       onQueryChanged: (value) {
                         if (_isSyncing) return;
@@ -355,18 +365,24 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
             child: AppButtonChild.label(AppStrings.confirmLocations),
           );
 
+          final isPaymentLoading =
+              widget.state.booking.tripRequestStatus.isLoading ||
+              widget.state.booking.paymentSheetState.isLoading;
+
           final vehicleConfirmButton = AppButton.primary(
             onTap: () {
               context.read<OrderBloc>().add(
-                const OrderEvent.confirmCarSelectionPressed(),
+                const OrderEvent.confirmBookingDetailsPressed(),
               );
             },
+            isActive: _isVehicleConfirmActive && !isPaymentLoading,
+            isLoading: isPaymentLoading,
             layout: AppButtonLayout(
               width: double.infinity,
               height: 54.sp,
               borderRadius: AppRadii.lg,
             ),
-            child: AppButtonChild.label(AppStrings.done),
+            child: AppButtonChild.label(AppStrings.selectAndPay),
           );
 
           if (_isVehicleSelectionStep) {

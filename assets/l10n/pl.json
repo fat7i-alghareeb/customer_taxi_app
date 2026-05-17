@@ -251,5 +251,12 @@
   "loginLandingDiscountFooter": "na pierwszy przejazd!",
   "loginLandingRegister": "Zarejestruj się",
   "loginLandingLogin": "Zaloguj się",
-  "loginLandingFooter": "Bezpiecznie i solidnie"
+  "loginLandingFooter": "Bezpiecznie i solidnie",
+  "payViaStripe": "Zapłać bezpiecznie przez Stripe",
+  "confirmAndPay": "Potwierdź i zapłać",
+  "selectAndPay": "Wybierz i zapłać",
+  "paymentFailed": "Płatność nieudana. Spróbuj ponownie.",
+  "paymentCanceled": "Płatność anulowana.",
+  "awaitingPayment": "Potwierdzanie płatności…",
+  "paymentNotEnabled": "Płatności są tymczasowo niedostępne."
 }

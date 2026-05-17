@@ -12,6 +12,7 @@ class OrderLocationFieldWidget extends StatefulWidget {
     required this.onQueryChanged,
     this.onClearPressed,
     this.onAddPressed,
+    this.onRemovePressed,
     this.focusNode,
   });
 
@@ -22,6 +23,7 @@ class OrderLocationFieldWidget extends StatefulWidget {
   final ValueChanged<String> onQueryChanged;
   final VoidCallback? onClearPressed;
   final VoidCallback? onAddPressed;
+  final VoidCallback? onRemovePressed;
   final FocusNode? focusNode;
 
   @override
@@ -116,31 +118,52 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                 final hasValue = (control.value ?? '').trim().isNotEmpty;
                 final showClear = _hasFocus && hasValue && widget.onClearPressed != null;
                 final showAdd = widget.onAddPressed != null;
+                final showRemove = widget.onRemovePressed != null;
 
                 printM('[OrderLocationFieldWidget] build controlName=${widget.formControlName} value="${control.value}" hasFocus=$_hasFocus');
 
+                Widget? suffixWidget;
                 IconSource? suffixIcon;
                 VoidCallback? onSuffixTap;
 
                 if (showClear && showAdd) {
-                  suffixIcon = IconSource.widget(
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _SuffixIconButton(
-                          icon: FontAwesomeIcons.xmark,
-                          onTap: widget.onClearPressed!,
-                        ),
-                        AppSpacing.sm.horizontalSpace,
-                        _SuffixIconButton(
-                          icon: FontAwesomeIcons.plus,
-                          color: context.primary,
-                          onTap: widget.onAddPressed!,
-                        ),
-                      ],
-                    ),
+                  suffixWidget = Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _SuffixIconButton(
+                        icon: FontAwesomeIcons.xmark,
+                        onTap: widget.onClearPressed!,
+                      ),
+                      AppSpacing.xs.horizontalSpace,
+                      _SuffixIconButton(
+                        icon: FontAwesomeIcons.plus,
+                        color: context.primary,
+                        onTap: widget.onAddPressed!,
+                      ),
+                    ],
                   );
-                  onSuffixTap = null;
+                } else if (showClear && showRemove) {
+                  suffixWidget = Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _SuffixIconButton(
+                        icon: FontAwesomeIcons.xmark,
+                        onTap: widget.onClearPressed!,
+                      ),
+                      AppSpacing.xs.horizontalSpace,
+                      _SuffixIconButton(
+                        icon: FontAwesomeIcons.minus,
+                        color: context.onSurface.withValues(alpha: 0.5),
+                        onTap: widget.onRemovePressed!,
+                      ),
+                    ],
+                  );
+                } else if (showRemove) {
+                  suffixWidget = _SuffixIconButton(
+                    icon: FontAwesomeIcons.minus,
+                    color: context.onSurface.withValues(alpha: 0.5),
+                    onTap: widget.onRemovePressed!,
+                  );
                 } else if (showClear) {
                   suffixIcon = IconSource.icon(FontAwesomeIcons.xmark, size: 14.r);
                   onSuffixTap = widget.onClearPressed;
@@ -153,6 +176,7 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                   formControlName: widget.formControlName,
                   hintText: widget.hintText,
                   focusNode: _internalFocusNode,
+                  suffix: suffixWidget,
                   affixes: suffixIcon != null
                       ? AppAffixes(
                           suffixIcon: suffixIcon,
@@ -190,10 +214,10 @@ class _SuffixIconButton extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Padding(
-        padding: REdgeInsets.all(AppSpacing.xs),
+        padding: REdgeInsets.all(AppSpacing.sm),
         child: FaIcon(
           icon,
-          size: 14.r,
+          size: 16.r,
           color: color ?? context.onSurface.withValues(alpha: 0.5),
         ),
       ),
