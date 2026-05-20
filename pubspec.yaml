@@ -2,7 +2,7 @@ name: "customertaxi"
 # name: "test_name_to_delete"
 description: "A Flutter Clean Architecture project."
 publish_to: "none"
-version: 1.1.2+3
+version: 1.2.3+4
 
 environment:
   sdk: ^3.10.1
