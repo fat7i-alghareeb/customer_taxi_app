@@ -1,5 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/root/constants/root_constants.dart';
+import 'package:customertaxi/features/root/presentation/ui/widgets/home/root_header_cta_card.dart';
 
 class RootHeaderSearchPillWidget extends StatelessWidget {
   const RootHeaderSearchPillWidget({
@@ -64,17 +65,25 @@ class RootHeaderSearchPillWidget extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: _SimpleHeaderCta(
-                          icon: FontAwesomeIcons.car,
-                          label: AppStrings.bookARideNow,
+                        child: RootHeaderCtaCard(
+                          title: AppStrings.homeCtaTrips,
+                          subtitle: AppStrings.homeCtaLetMove,
+                          image: Image.asset(
+                            Assets.images.normalTrip.path,
+                            fit: BoxFit.contain,
+                          ),
                           onTap: onSearchTap,
                         ),
                       ),
                       AppSpacing.md.horizontalSpace,
                       Expanded(
-                        child: _SimpleHeaderCta(
-                          icon: FontAwesomeIcons.calendarCheck,
-                          label: AppStrings.scheduleARideInAdvance,
+                        child: RootHeaderCtaCard(
+                          title: AppStrings.homeCtaSchedule,
+                          subtitle: AppStrings.homeCtaBookInAdvance,
+                          image: Image.asset(
+                            Assets.images.schdedulTrip.path,
+                            fit: BoxFit.contain,
+                          ),
                           onTap: onLaterTap,
                         ),
                       ),
@@ -161,51 +170,6 @@ class RootHeaderSearchPillWidget extends StatelessWidget {
               .animate()
               .fadeIn(duration: AppDurations.normal)
               .slideY(begin: -0.1, end: 0, curve: Curves.easeOutCubic),
-    );
-  }
-}
-
-class _SimpleHeaderCta extends StatelessWidget {
-  const _SimpleHeaderCta({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: REdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          color: context.surface,
-          borderRadius: BorderRadius.circular(AppRadii.lg.r),
-          boxShadow: context.shadows.grey,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FaIcon(icon, size: 14.r, color: context.primary),
-            AppSpacing.sm.horizontalSpace,
-            Expanded(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.s12w700.copyWith(color: context.onSurface),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

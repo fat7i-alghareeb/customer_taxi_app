@@ -258,5 +258,9 @@
   "paymentFailed": "Pago fallido. Por favor, inténtalo de nuevo.",
   "paymentCanceled": "Pago cancelado.",
   "awaitingPayment": "Confirmando pago…",
-  "paymentNotEnabled": "Los pagos no están disponibles temporalmente."
+  "paymentNotEnabled": "Los pagos no están disponibles temporalmente.",
+  "homeCtaTrips": "Trips",
+  "homeCtaLetMove": "Let's move",
+  "homeCtaSchedule": "Schedule",
+  "homeCtaBookInAdvance": "Book in advance"
 }

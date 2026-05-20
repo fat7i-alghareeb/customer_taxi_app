@@ -47,6 +47,10 @@ class $AssetsImagesGen {
   AssetGenImage get logoLauncher =>
       const AssetGenImage('assets/images/logo_launcher.png');
 
+  /// File path: assets/images/normalTrip.png
+  AssetGenImage get normalTrip =>
+      const AssetGenImage('assets/images/normalTrip.png');
+
   /// File path: assets/images/onboarding_1.png
   AssetGenImage get onboarding1 =>
       const AssetGenImage('assets/images/onboarding_1.png');
@@ -79,6 +83,10 @@ class $AssetsImagesGen {
   AssetGenImage get roadLightTrails =>
       const AssetGenImage('assets/images/road_light_trails.png');
 
+  /// File path: assets/images/schdedulTrip.png
+  AssetGenImage get schdedulTrip =>
+      const AssetGenImage('assets/images/schdedulTrip.png');
+
   /// File path: assets/images/splash_dark.png
   AssetGenImage get splashDark =>
       const AssetGenImage('assets/images/splash_dark.png');
@@ -102,6 +110,7 @@ class $AssetsImagesGen {
     comfort,
     loginLandingBg,
     logoLauncher,
+    normalTrip,
     onboarding1,
     onboarding2,
     onboarding3,
@@ -110,6 +119,7 @@ class $AssetsImagesGen {
     orderNowCar,
     roadAndBuildings,
     roadLightTrails,
+    schdedulTrip,
     splashDark,
     splashLight,
     standered,

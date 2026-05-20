@@ -4,7 +4,7 @@ part of 'app_scaffold.dart';
 ///
 /// This is intentionally a minimal container:
 /// - It only allocates when drawer is enabled.
-/// - Width is fixed to 75% of the screen as a consistent compact drawer rule.
+/// - Width is fixed to 85% of the screen as a consistent compact drawer rule.
 class _AppDrawerShell extends StatelessWidget {
   const _AppDrawerShell.start({required this.child})
     : alignment = AlignmentDirectional.centerStart;
@@ -16,8 +16,8 @@ class _AppDrawerShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// Drawer width rule: 75% of the screen width.
-    final width = context.screenWidth * 0.75;
+    /// Drawer width rule: 85% of the screen width.
+    final width = context.screenWidth * 0.85;
     return Align(
       alignment: alignment,
       child: Material(

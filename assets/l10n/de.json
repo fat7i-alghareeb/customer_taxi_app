@@ -258,5 +258,9 @@
   "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuche es erneut.",
   "paymentCanceled": "Zahlung abgebrochen.",
   "awaitingPayment": "Zahlung wird bestätigt…",
-  "paymentNotEnabled": "Zahlungen sind vorübergehend nicht verfügbar."
+  "paymentNotEnabled": "Zahlungen sind vorübergehend nicht verfügbar.",
+  "homeCtaTrips": "Trips",
+  "homeCtaLetMove": "Let's move",
+  "homeCtaSchedule": "Schedule",
+  "homeCtaBookInAdvance": "Book in advance"
 }

@@ -8,9 +8,9 @@ class AppColors {
   AppColors._();
 
   /// Primary Color (Vibrant Orange)
-  static const Color primary = Color(0xFFF5671D);
-  static const Color primaryLight = Color(0xFFF8925A);
-  static const Color primaryDark = Color(0xFFD14F0D);
+  static const Color primary = Color(0xFFd79c5c);
+  static const Color primaryLight = Color.fromARGB(255, 211, 144, 71);
+  static const Color primaryDark = Color(0xFFd79c5c);
 
   /// Secondary Color (Deep Slate)
   /// Provides a clean, modern, cool-toned contrast to the warm orange primary.

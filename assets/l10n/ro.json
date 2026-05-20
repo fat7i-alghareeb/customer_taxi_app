@@ -258,5 +258,9 @@
   "paymentFailed": "Plată eșuată. Vă rugăm să încercați din nou.",
   "paymentCanceled": "Plată anulată.",
   "awaitingPayment": "Se confirmă plata…",
-  "paymentNotEnabled": "Plățile sunt temporar indisponibile."
+  "paymentNotEnabled": "Plățile sunt temporar indisponibile.",
+  "homeCtaTrips": "Trips",
+  "homeCtaLetMove": "Let's move",
+  "homeCtaSchedule": "Schedule",
+  "homeCtaBookInAdvance": "Book in advance"
 }

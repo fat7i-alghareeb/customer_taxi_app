@@ -258,5 +258,9 @@
   "paymentFailed": "Betaling mislukt. Probeer het opnieuw.",
   "paymentCanceled": "Betaling geannuleerd.",
   "awaitingPayment": "Betaling bevestigen…",
-  "paymentNotEnabled": "Betalingen zijn tijdelijk niet beschikbaar."
+  "paymentNotEnabled": "Betalingen zijn tijdelijk niet beschikbaar.",
+  "homeCtaTrips": "Trips",
+  "homeCtaLetMove": "Let's move",
+  "homeCtaSchedule": "Schedule",
+  "homeCtaBookInAdvance": "Book in advance"
 }

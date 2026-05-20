@@ -20,31 +20,41 @@ class DrawerHeaderSection extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Profile Image
-          currentUser?.profilePhotoUrl != null
-              ? ClipOval(
-                  child: AppImageViewer.network(
-                    currentUser!.profilePhotoUrl!,
-                    width: 80,
-                    height: 80,
-                    borderRadius: 0,
-                  ),
-                )
-              : Container(
-                  width: 80.r,
-                  height: 80.r,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: context.primary.withValues(alpha: 0.1),
-                  ),
-                  child: Center(
-                    child: FaIcon(
-                      FontAwesomeIcons.solidUser,
-                      size: 32.r,
-                      color: context.primary,
+          // Profile Image wrapped in circular primary-colored border
+          Container(
+            padding: REdgeInsets.all(AppSpacing.xs.r),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: context.primary,
+                width: 1.5.r,
+              ),
+            ),
+            child: currentUser?.profilePhotoUrl != null
+                ? ClipOval(
+                    child: AppImageViewer.network(
+                      currentUser!.profilePhotoUrl!,
+                      width: 72.r,
+                      height: 72.r,
+                      borderRadius: 0,
+                    ),
+                  )
+                : Container(
+                    width: 72.r,
+                    height: 72.r,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: context.primary.withValues(alpha: 0.1),
+                    ),
+                    child: Center(
+                      child: FaIcon(
+                        FontAwesomeIcons.solidUser,
+                        size: 28.r,
+                        color: context.primary,
+                      ),
                     ),
                   ),
-                ),
+          ),
           AppSpacing.md.horizontalSpace,
           // User Info
           Expanded(

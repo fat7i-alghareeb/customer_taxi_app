@@ -258,5 +258,9 @@
   "paymentFailed": "Платіж не вдався. Спробуйте ще раз.",
   "paymentCanceled": "Платіж скасовано.",
   "awaitingPayment": "Підтвердження платежу…",
-  "paymentNotEnabled": "Платежі тимчасово недоступні."
+  "paymentNotEnabled": "Платежі тимчасово недоступні.",
+  "homeCtaTrips": "Trips",
+  "homeCtaLetMove": "Let's move",
+  "homeCtaSchedule": "Schedule",
+  "homeCtaBookInAdvance": "Book in advance"
 }

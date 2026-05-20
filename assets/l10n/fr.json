@@ -258,5 +258,9 @@
   "paymentFailed": "Paiement échoué. Veuillez réessayer.",
   "paymentCanceled": "Paiement annulé.",
   "awaitingPayment": "Confirmation du paiement…",
-  "paymentNotEnabled": "Les paiements sont temporairement indisponibles."
+  "paymentNotEnabled": "Les paiements sont temporairement indisponibles.",
+  "homeCtaTrips": "Trips",
+  "homeCtaLetMove": "Let's move",
+  "homeCtaSchedule": "Schedule",
+  "homeCtaBookInAdvance": "Book in advance"
 }

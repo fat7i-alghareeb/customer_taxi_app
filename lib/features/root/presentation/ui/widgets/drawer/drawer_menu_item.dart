@@ -16,50 +16,64 @@ class DrawerMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadii.md.r),
-      child: Padding(
-        padding: REdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.lg,
+    return Container(
+      margin: REdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        color: context.onSurface.withValues(alpha: 0.03),
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+        border: Border.all(
+          color: context.onSurface.withValues(alpha: 0.05),
+          width: 1.r,
         ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 24.r,
-              child: Center(
-                child: FaIcon(
-                  icon,
-                  size: 20.r,
-                  color: context.primary,
-                ),
-              ),
-            ),
-            AppSpacing.xl.horizontalSpace,
-            Expanded(
-              child: Text(
-                label,
-                style: AppTextStyles.s16w600.copyWith(
-                  color: context.onSurface,
-                ),
-              ),
-            ),
-            if (value != null) ...[
-              Text(
-                value!,
-                style: AppTextStyles.s14w400.copyWith(
-                  color: context.onSurface.withValues(alpha: 0.6),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+        child: Padding(
+          padding: REdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.lg,
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 24.sp,
+                child: Center(
+                  child: FaIcon(
+                    icon,
+                    size: 18.r,
+                    color: context.primary,
+                  ),
                 ),
               ),
               AppSpacing.md.horizontalSpace,
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyles.s16w600.copyWith(
+                    color: context.onSurface,
+                  ),
+                ),
+              ),
+              if (value != null) ...[
+                Text(
+                  value!,
+                  style: AppTextStyles.s14w400.copyWith(
+                    color: context.onSurface.withValues(alpha: 0.6),
+                  ),
+                ),
+                AppSpacing.sm.horizontalSpace,
+              ],
+              FaIcon(
+                FontAwesomeIcons.chevronRight,
+                size: 12.r,
+                color: context.primary,
+              ),
             ],
-            FaIcon(
-              FontAwesomeIcons.chevronRight,
-              size: 14.r,
-              color: context.onSurface.withValues(alpha: 0.3),
-            ),
-          ],
+          ),
         ),
       ),
     ).animate().fadeIn().slideX(begin: 0.05, duration: AppDurations.normal);

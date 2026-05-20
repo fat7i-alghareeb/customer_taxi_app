@@ -25,6 +25,8 @@ class AppStrings {
   static String get authUnauthorized => 'authUnauthorized'.tr();
   /// Verify - تحقق - Verifiëren - Verifizieren - Weryfikuj - Підтвердити - Vérifier - Verificar - Verifică
   static String get authVerifyOtp => 'authVerifyOtp'.tr();
+  /// Confirming payment… - جارٍ تأكيد الدفع… - Betaling bevestigen… - Zahlung wird bestätigt… - Potwierdzanie płatności… - Підтвердження платежу… - Confirmation du paiement… - Confirmando pago… - Se confirmă plata…
+  static String get awaitingPayment => 'awaitingPayment'.tr();
   /// Book a Ride Now - احجز رحلة الآن - Boek nu een rit - Jetzt eine Fahrt buchen - Zamów przejazd teraz - Замовити поїздку зараз - Réserver une course maintenant - Reservar un viaje ahora - Rezervă o cursă acum
   static String get bookARideNow => 'bookARideNow'.tr();
   /// Get matched with a driver right away - احصل على سائق على الفور - Word direct gekoppeld aan een chauffeur - Werde sofort mit einem Fahrer verbunden - Zostań natychmiast połączony z kierowcą - Отримайте водія негайно - Trouvez un chauffeur immédiatement - Encuentre un conductor de inmediato - Găsește un șofer imediat
@@ -59,6 +61,8 @@ class AppStrings {
   static String get completeProfile => 'completeProfile'.tr();
   /// Confirm - تأكيد - Bevestigen - Bestätigen - Potwierdź - Підтвердити - Confirmer - Confirmar - Confirmă
   static String get confirm => 'confirm'.tr();
+  /// Confirm and pay - تأكيد والدفع - Bevestigen en betalen - Bestätigen und bezahlen - Potwierdź i zapłać - Підтвердити та оплатити - Confirmer et payer - Confirmar y pagar - Confirmă și plătește
+  static String get confirmAndPay => 'confirmAndPay'.tr();
   /// Confirm Booking - تأكيد الحجز - Boeking bevestigen - Buchung bestätigen - Potwierdź rezerwację - Підтвердити бронювання - Confirmer la réservation - Confirmar reserva - Confirmă rezervarea
   static String get confirmBooking => 'confirmBooking'.tr();
   /// Confirm locations - تأكيد المواقع - Locaties bevestigen - Standorte bestätigen - Potwierdź lokalizacje - Підтвердити маршрут - Confirmer les lieux - Confirmar ubicaciones - Confirmă locațiile
@@ -151,6 +155,14 @@ class AppStrings {
   static String get from => 'from'.tr();
   /// Happy to see you - سعداء برؤيتك - Leuk je te zien - Schön, dich zu sehen - Miło Cię widzieć - Раді вас бачити - Heureux de vous voir - Felices de verte - Mă bucur să te văd
   static String get happyToSeeYou => 'happyToSeeYou'.tr();
+  /// Book in advance - احجز مسبقاً - Book in advance - Book in advance - Book in advance - Book in advance - Book in advance - Book in advance - Book in advance
+  static String get homeCtaBookInAdvance => 'homeCtaBookInAdvance'.tr();
+  /// Let's move - هيا لنتحرك - Let's move - Let's move - Let's move - Let's move - Let's move - Let's move - Let's move
+  static String get homeCtaLetMove => 'homeCtaLetMove'.tr();
+  /// Schedule - جدولة - Schedule - Schedule - Schedule - Schedule - Schedule - Schedule - Schedule
+  static String get homeCtaSchedule => 'homeCtaSchedule'.tr();
+  /// Trips - الرحلات - Trips - Trips - Trips - Trips - Trips - Trips - Trips
+  static String get homeCtaTrips => 'homeCtaTrips'.tr();
   /// Invalid code. Please try again. - الرمز غير صحيح. يرجى المحاولة مرة أخرى. - Ongeldige code. Probeer het opnieuw. - Ungültiger Code. Bitte versuchen Sie es erneut. - Nieprawidłowy kod. Spróbuj ponownie. - Неправильний код. Спробуйте ще раз. - Code invalide. Veuillez réessayer. - Código inválido. Por favor, inténtelo de nuevo. - Cod invalid. Vă rugăm să încercați din nou.
   static String get invalidOtp => 'invalidOtp'.tr();
   /// Please enter a valid phone number. - يرجى إدخال رقم هاتف صالح. - Voer een geldig telefoonnummer in. - Bitte geben Sie eine gültige Telefonnummer ein. - Wprowadź prawidłowy numer telefonu. - Введіть правильний номер телефону. - Veuillez entrer un numéro valide. - Por favor, introduzca un número de teléfono válido. - Vă rugăm să introduceți un număr de telefon valid.
@@ -279,8 +291,16 @@ class AppStrings {
   static String get orderStopLabel => 'orderStopLabel'.tr();
   /// Verification - التحقق - Verificatie - Verifizierung - Weryfikacja - Верифікація - Vérification - Verificación - Verificare
   static String get otp => 'otp'.tr();
+  /// Pay securely with Stripe - ادفع بأمان عبر Stripe - Betaal veilig via Stripe - Sicher bezahlen mit Stripe - Zapłać bezpiecznie przez Stripe - Безпечна оплата через Stripe - Payez en toute sécurité avec Stripe - Paga de forma segura con Stripe - Plătește în siguranță cu Stripe
+  static String get payViaStripe => 'payViaStripe'.tr();
+  /// Payment canceled. - تم إلغاء الدفع. - Betaling geannuleerd. - Zahlung abgebrochen. - Płatność anulowana. - Платіж скасовано. - Paiement annulé. - Pago cancelado. - Plată anulată.
+  static String get paymentCanceled => 'paymentCanceled'.tr();
+  /// Payment failed. Please try again. - فشل الدفع. يرجى المحاولة مجدداً. - Betaling mislukt. Probeer het opnieuw. - Zahlung fehlgeschlagen. Bitte versuche es erneut. - Płatność nieudana. Spróbuj ponownie. - Платіж не вдався. Спробуйте ще раз. - Paiement échoué. Veuillez réessayer. - Pago fallido. Por favor, inténtalo de nuevo. - Plată eșuată. Vă rugăm să încercați din nou.
+  static String get paymentFailed => 'paymentFailed'.tr();
   /// Payment Method - طريقة الدفع - Betalingsmethode - Zahlungsart - Metoda płatności - Спосіб оплати - Mode de paiement - Método de pago - Metodă de plată
   static String get paymentMethod => 'paymentMethod'.tr();
+  /// Payments are temporarily unavailable. - المدفوعات غير متاحة مؤقتاً. - Betalingen zijn tijdelijk niet beschikbaar. - Zahlungen sind vorübergehend nicht verfügbar. - Płatności są tymczasowo niedostępne. - Платежі тимчасово недоступні. - Les paiements sont temporairement indisponibles. - Los pagos no están disponibles temporalmente. - Plățile sunt temporar indisponibile.
+  static String get paymentNotEnabled => 'paymentNotEnabled'.tr();
   /// You cannot continue using the app until location permission is granted. - لا يمكنك متابعة استخدام التطبيق حتى تمنح صلاحية الموقع. - U kunt de app niet blijven gebruiken totdat de locatiepermissie is verleend. - Sie können die App erst weiter nutzen, wenn die Standortberechtigung erteilt wurde. - Nie możesz korzystać z aplikacji bez zgody na lokalizację. - Ви не можете користуватися додатком без доступу до геопозиції. - Vous ne pouvez pas utiliser l'application sans la permission de localisation. - No puede seguir usando la aplicación hasta que se conceda el permiso de ubicación. - Nu puteți continua să utilizați aplicația până când nu este acordată permisiunea de locație.
   static String get permissionGateBlockingHint => 'permissionGateBlockingHint'.tr();
   /// Location permission is still denied. Please allow it to continue. - ما زالت صلاحية الموقع مرفوضة. يرجى السماح بها للمتابعة. - Locatiepermissie is nog steeds geweigerd. Sta dit toe om door te gaan. - Standortberechtigung wurde abgelehnt. Bitte erlauben Sie diese, um fortzufahren. - Odmówiono dostępu do lokalizacji. Zezwól na dostęp, aby kontynuować. - Доступ до геопозиції відхилено. Будь ласка, дозвольте доступ. - La permission est refusée. Veuillez l'autoriser pour continuer. - El permiso de ubicación sigue denegado. Por favor, permítalo para continuar. - Permisiunea de locație este în continuare refuzată. Vă rugăm să o permiteți pentru a continua.
@@ -355,6 +375,8 @@ class AppStrings {
   static String get searchFromLocation => 'searchFromLocation'.tr();
   /// Search destination location - ابحث عن موقع الوجهة - Zoek bestemmingslocatie - Zielort suchen - Szukaj miejsca docelowego - Пошук місця призначення - Lieu de destination - Buscar destino - Caută destinația
   static String get searchToLocation => 'searchToLocation'.tr();
+  /// Select and Pay - اختر وادفع - Selecteren en betalen - Auswählen und bezahlen - Wybierz i zapłać - Вибрати та оплатити - Sélectionner et payer - Seleccionar y pagar - Selectează și plătește
+  static String get selectAndPay => 'selectAndPay'.tr();
   /// Select car type - اختر نوع السيارة - Selecteer voertuigtype - Fahrzeugtyp wählen - Wybierz typ samochodu - Виберіть тип авто - Choisir le type de voiture - Seleccionar tipo de coche - Selectează tipul mașinii
   static String get selectCarType => 'selectCarType'.tr();
   /// Select date - اختر التاريخ - Datum selecteren - Datum wählen - Wybierz datę - Вибрати дату - Choisir la date - Seleccionar fecha - Selectează data
@@ -509,19 +531,5 @@ class AppStrings {
   static String get wednesday => 'wednesday'.tr();
   /// Where to? - إلى أين؟ - Waarheen? - Wohin? - Dokąd jedziemy? - Куди їдемо? - Où allez-vous ? - ¿A dónde vas? - Încotro?
   static String get whereTo => 'whereTo'.tr();
-  /// Confirming payment… - جارٍ تأكيد الدفع… - Betaling bevestigen… - Zahlung wird bestätigt… - Potwierdzanie płatności… - Підтвердження платежу… - Confirmation du paiement… - Confirmando pago… - Se confirmă plata…
-  static String get awaitingPayment => 'awaitingPayment'.tr();
-  /// Confirm and pay - تأكيد والدفع - Bevestigen en betalen - Bestätigen und bezahlen - Potwierdź i zapłać - Підтвердити та оплатити - Confirmer et payer - Confirmar y pagar - Confirmă și plătește
-  static String get confirmAndPay => 'confirmAndPay'.tr();
-  /// Select and Pay - اختر وادفع - Selecteren en betalen - Auswählen und bezahlen - Wybierz i zapłać - Вибрати та оплатити - Sélectionner et payer - Seleccionar y pagar - Selectează și plătește
-  static String get selectAndPay => 'selectAndPay'.tr();
-  /// Payment canceled. - تم إلغاء الدفع. - Betaling geannuleerd. - Zahlung abgebrochen. - Płatność anulowana. - Платіж скасовано. - Paiement annulé. - Pago cancelado. - Plată anulată.
-  static String get paymentCanceled => 'paymentCanceled'.tr();
-  /// Payment failed. Please try again. - فشل الدفع. يرجى المحاولة مجدداً. - Betaling mislukt. Probeer het opnieuw. - Zahlung fehlgeschlagen. Bitte versuche es erneut. - Płatność nieudana. Spróbuj ponownie. - Платіж не вдався. Спробуйте ще раз. - Paiement échoué. Veuillez réessayer. - Pago fallido. Por favor, inténtalo de nuevo. - Plată eșuată. Vă rugăm să încercați din nou.
-  static String get paymentFailed => 'paymentFailed'.tr();
-  /// Payments are temporarily unavailable. - المدفوعات غير متاحة مؤقتاً. - Betalingen zijn tijdelijk niet beschikbaar. - Zahlungen sind vorübergehend nicht verfügbar. - Płatności są tymczasowo niedostępne. - Платежі тимчасово недоступні. - Les paiements sont temporairement indisponibles. - Los pagos no están disponibles temporalmente. - Plățile sunt temporar indisponibile.
-  static String get paymentNotEnabled => 'paymentNotEnabled'.tr();
-  /// Pay securely with Stripe - ادفع بأمان عبر Stripe - Betaal veilig via Stripe - Sicher bezahlen mit Stripe - Zapłać bezpiecznie przez Stripe - Безпечна оплата через Stripe - Payez en toute sécurité avec Stripe - Paga de forma segura con Stripe - Plătește în siguranță cu Stripe
-  static String get payViaStripe => 'payViaStripe'.tr();
 }
 

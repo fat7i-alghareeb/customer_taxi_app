@@ -24,6 +24,8 @@ The root map implementation is optimized for first-release performance:
   - Home tab map bootstrap + overlays.
 - presentation/ui/widgets/home/root_header_search_pill_widget.dart
   - Tappable header search pill overlay.
+- presentation/ui/widgets/home/root_header_cta_card.dart
+  - Premium CTA card with localized strings, 3D assets, and top-right tag badge for scheduling.
 - presentation/ui/widgets/nav/root_bottom_nav_bar.dart
   - Bottom nav container.
 - presentation/ui/widgets/nav/root_bottom_nav_item.dart

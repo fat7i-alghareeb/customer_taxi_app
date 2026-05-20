@@ -10,9 +10,7 @@ import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_
 import 'package:customertaxi/features/favorites/presentation/ui/screens/favorites_screen.dart';
 
 import 'package:customertaxi/common/widgets/show_overlay.dart';
-import '../../states/root_bloc.dart';
 
-import 'drawer/drawer_trips_count_card.dart';
 import 'drawer/drawer_header_section.dart';
 import 'drawer/drawer_logout_footer.dart';
 import 'drawer/drawer_menu_item.dart';
@@ -25,31 +23,21 @@ class RootDrawerContent extends StatelessWidget {
     return Container(
       color: context.surface,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: ListView(
-              padding: REdgeInsets.only(bottom: AppSpacing.xl),
+              padding: REdgeInsets.only(
+                top: AppSpacing.sm.h,
+                bottom: AppSpacing.xl.h,
+              ),
               children: [
                 const DrawerHeaderSection(),
                 AppSpacing.md.verticalSpace,
-                BlocBuilder<RootBloc, RootState>(
-                  buildWhen: (p, c) => p.tripCountState != c.tripCountState,
-                  builder: (context, state) {
-                    return state.tripCountState.maybeWhen(
-                      success: (count) =>
-                          DrawerTripsCountCard(tripsCount: count),
-                      loading: () => const DrawerTripsCountCard(
-                        tripsCount: 0,
-                      ), // Could add shimmer here
-                      orElse: () => const DrawerTripsCountCard(tripsCount: 0),
-                    );
-                  },
-                ),
-                AppSpacing.xl.verticalSpace,
 
                 // Primary Menu
                 DrawerMenuItem(
-                  icon: FontAwesomeIcons.carSide,
+                  icon: FontAwesomeIcons.clockRotateLeft,
                   label: AppStrings.drawerTrips,
                   onTap: () => context.pushNamed(TripHistoryScreen.pageName),
                 ),
@@ -58,11 +46,6 @@ class RootDrawerContent extends StatelessWidget {
                   label: AppStrings.drawerFavorites,
                   onTap: () => context.pushNamed(FavoritesScreen.pageName),
                 ),
-
-                AppSpacing.xl.verticalSpace,
-
-                // Support Section
-                _buildSectionHeader(context, AppStrings.drawerSupport),
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.circleInfo,
                   label: AppStrings.profileAboutUs,
@@ -73,11 +56,6 @@ class RootDrawerContent extends StatelessWidget {
                   label: AppStrings.profileContactUs,
                   onTap: () => context.pushNamed(ContactUsScreen.pageName),
                 ),
-
-                AppSpacing.xl.verticalSpace,
-
-                // Settings Section
-                _buildSectionHeader(context, AppStrings.settings),
                 _buildLanguageSelector(context),
                 _buildThemeSelector(context),
                 DrawerMenuItem(
@@ -91,21 +69,6 @@ class RootDrawerContent extends StatelessWidget {
           ),
           DrawerLogoutFooter(onLogoutTap: () => _handleLogout(context)),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(BuildContext context, String title) {
-    return Padding(
-      padding: REdgeInsets.symmetric(
-        horizontal: AppSpacing.xl,
-        vertical: AppSpacing.sm,
-      ),
-      child: Text(
-        title,
-        style: AppTextStyles.s14w400.copyWith(
-          color: context.onSurface.withValues(alpha: 0.4),
-        ),
       ),
     );
   }

@@ -258,5 +258,9 @@
   "paymentFailed": "Płatność nieudana. Spróbuj ponownie.",
   "paymentCanceled": "Płatność anulowana.",
   "awaitingPayment": "Potwierdzanie płatności…",
-  "paymentNotEnabled": "Płatności są tymczasowo niedostępne."
+  "paymentNotEnabled": "Płatności są tymczasowo niedostępne.",
+  "homeCtaTrips": "Trips",
+  "homeCtaLetMove": "Let's move",
+  "homeCtaSchedule": "Schedule",
+  "homeCtaBookInAdvance": "Book in advance"
 }
