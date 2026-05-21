@@ -50,6 +50,7 @@ export "../widgets/app_icon_source.dart";
 export "../widgets/app_image_viewer.dart";
 export "../widgets/app_shimmer.dart";
 // widgets
+export "../widgets/app_discount_banner.dart";
 export "../widgets/button/app_button.dart";
 export "../widgets/button/app_button_child.dart";
 export "../widgets/button/app_button_variants.dart";

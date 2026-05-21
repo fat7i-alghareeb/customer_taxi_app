@@ -4,9 +4,10 @@ import 'package:customertaxi/features/order/presentation/ui/widgets/order_body.d
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
 import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
 
+import 'package:customertaxi/features/root/constants/root_constants.dart';
 import '../map/root_map_loading_section.dart';
 import '../map/root_map_section.dart';
-import 'root_header_search_pill_widget.dart';
+import 'root_home_bottom_sheet.dart';
 
 class RootHomeTabSection extends StatelessWidget {
   const RootHomeTabSection({super.key});
@@ -51,12 +52,19 @@ class RootHomeTabSection extends StatelessWidget {
                 ),
                 BlocBuilder<OrderBloc, OrderState>(
                   buildWhen: (previous, current) =>
-                      previous.sheet.mode != current.sheet.mode,
+                      previous.sheet.mode != current.sheet.mode ||
+                      previous.trip.carOptionsState != current.trip.carOptionsState,
                   builder: (context, orderState) {
                     if (orderState.sheet.mode != OrderSheetMode.collapsed) {
                       return const SizedBox.shrink();
                     }
-                    return const _HomeCollapsedOverlay();
+                    
+                    final discountPercent = orderState.trip.carOptionsState.maybeWhen(
+                      success: (opts) => opts.isNotEmpty ? opts.first.discountPercent : 0.0,
+                      orElse: () => 5.0, // Forced to 5.0 so the banner is visible
+                    );
+                    
+                    return _HomeCollapsedOverlay(discountPercent: discountPercent);
                   },
                 ),
                 const OrderBody(),
@@ -70,7 +78,9 @@ class RootHomeTabSection extends StatelessWidget {
 }
 
 class _HomeCollapsedOverlay extends StatelessWidget {
-  const _HomeCollapsedOverlay();
+  const _HomeCollapsedOverlay({this.discountPercent = 0.0});
+
+  final double discountPercent;
 
   void _openNow(BuildContext context) {
     context.read<OrderBloc>().add(
@@ -86,11 +96,43 @@ class _HomeCollapsedOverlay extends StatelessWidget {
     context.read<OrderBloc>().add(const OrderEvent.orderNowPressed());
   }
 
+  void _openDrawer(BuildContext context) {
+    Scaffold.maybeOf(context)?.openDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        RootHeaderSearchPillWidget(
+        Align(
+          alignment: AlignmentDirectional.topStart,
+          child: SafeArea(
+            child: Padding(
+              padding: REdgeInsets.all(AppSpacing.md),
+              child: AppButton.variant(
+                variant: AppButtonVariant.grey,
+                fill: AppButtonFill.solid,
+                onTap: () => _openDrawer(context),
+                layout: AppButtonLayout(
+                  shape: AppButtonShape.circle,
+                  height: RootConstants.headerMenuSize.sp,
+                  backgroundColor: context.surface,
+                  contentPadding: REdgeInsets.all(AppSpacing.sm),
+                ),
+                customShadows: context.shadows.grey,
+                child: AppButtonChild.custom(
+                  FaIcon(
+                    FontAwesomeIcons.bars,
+                    size: 18.r,
+                    color: context.onSurface,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        RootHomeBottomSheet(
+          discountPercent: discountPercent,
           onSearchTap: () => _openNow(context),
           onLaterTap: () => _openLater(context),
         ),

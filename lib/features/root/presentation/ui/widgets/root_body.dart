@@ -6,6 +6,8 @@ import 'nav/root_bottom_nav_bar.dart';
 import 'profile/root_profile_tab_section.dart';
 import 'trip/root_trip_tab_section.dart';
 
+import 'package:customertaxi/features/root/presentation/ui/widgets/root_drawer_content.dart';
+
 enum RootTab { account, home, trips }
 
 class RootBody extends StatefulWidget {
@@ -90,27 +92,26 @@ class _RootBodyState extends State<RootBody> {
             _currentIndex == RootTab.home.index &&
             state.sheet.mode != OrderSheetMode.collapsed;
 
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: _onPageChanged,
-              children: pages,
-            ),
-            if (!hideNav)
-              Positioned(
-                left: AppSpacing.md.w,
-                right: AppSpacing.md.w,
-                bottom: context.bottomPadding + AppSpacing.md.h,
-                child: RootBottomNavBar(
+        return AppScaffold.body(
+          scaffoldConfig: const AppScaffoldConfig(
+            safeArea: [],
+            resizeToAvoidBottomInset: false,
+          ),
+          enableLeadingDrawer: true,
+          drawer: const RootDrawerContent(),
+          bottomNavigationBar: hideNav
+              ? null
+              : RootBottomNavBar(
                   items: navItems,
                   currentIndex: _currentIndex,
                   onItemSelected: _onTabSelected,
                 ),
-              ),
-          ],
+          child: PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            onPageChanged: _onPageChanged,
+            children: pages,
+          ),
         );
       },
     );

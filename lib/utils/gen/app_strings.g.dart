@@ -345,6 +345,8 @@ class AppStrings {
   static String get profileSaveSuccess => 'profileSaveSuccess'.tr();
   /// Complete Your Profile - أكمل ملفك الشخصي - Voltooi uw profiel - Profil vervollständigen - Uzupełnij profil - Заповніть профіль - Complétez votre profil - Complete su perfil - Completează profilul
   static String get profileSetupTitle => 'profileSetupTitle'.tr();
+  /// Recent locations - المواقع الأخيرة - Recent locations - Recent locations - Recent locations - Recent locations - Recent locations - Recent locations - Recent locations
+  static String get recentLocations => 'recentLocations'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd. - Anfrage wurde abgebrochen. - Żądanie zostało anulowane. - Запит скасовано. - La demande a été annulée. - La solicitud fue cancelada. - Solicitarea a fost anulată.
   static String get requestCancelled => 'requestCancelled'.tr();
   /// Retry - إعادة المحاولة - Opnieuw - Wiederholen - Ponów - Повторити - Réessayer - Reintentar - Reîncearcă
@@ -531,5 +533,7 @@ class AppStrings {
   static String get wednesday => 'wednesday'.tr();
   /// Where to? - إلى أين؟ - Waarheen? - Wohin? - Dokąd jedziemy? - Куди їдемо? - Où allez-vous ? - ¿A dónde vas? - Încotro?
   static String get whereTo => 'whereTo'.tr();
+  /// Your journey begins here. - رحلتك تبدأ هنا. - Your journey begins here. - Your journey begins here. - Your journey begins here. - Your journey begins here. - Your journey begins here. - Your journey begins here. - Your journey begins here.
+  static String get yourJourneyBeginsHere => 'yourJourneyBeginsHere'.tr();
 }
 

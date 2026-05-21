@@ -24,23 +24,28 @@ class RootBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-          height: RootConstants.bottomNavHeight.sp,
-          padding: REdgeInsets.symmetric(
-            horizontal: AppSpacing.sm,
-            vertical: AppSpacing.sm,
-          ),
-          decoration: BoxDecoration(
-            color: context.surface,
-            borderRadius: BorderRadius.circular(
+    return SafeArea(
+      child: Container(
+        height: RootConstants.bottomNavHeight.sp,
+        padding: REdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: context.surface,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(
               RootConstants.bottomNavRadius.r,
             ),
-            boxShadow: context.shadows.grey,
-            border: Border.all(
+          ),
+          boxShadow: context.shadows.grey,
+          border: Border(
+            top: BorderSide(
               color: context.onSurface.withValues(alpha: 0.06),
             ),
           ),
-          child: Row(
+        ),
+        child: Row(
             children: [
               for (var i = 0; i < items.length; i++)
                 Expanded(
@@ -53,8 +58,9 @@ class RootBottomNavBar extends StatelessWidget {
                 ),
             ],
           ),
-        )
-        .animate()
+        ),
+      )
+      .animate()
         .fadeIn(duration: AppDurations.normal)
         .slideY(begin: 0.2, end: 0, curve: Curves.easeOutCubic);
   }
