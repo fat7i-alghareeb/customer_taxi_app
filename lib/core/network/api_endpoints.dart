@@ -7,6 +7,8 @@ class ApiEndpoints {
 
   // Users
   static const String currentUser = '/api/v1/users/me';
+  static const String updateFcmToken = '/api/v1/users/me/fcm-token';
+  static const String updatePreferredLanguage = '/api/v1/users/me/language';
 
   // Maps
   static const String mapsSearch = '/api/v1/maps/search';
@@ -24,6 +26,8 @@ class ApiEndpoints {
   static const String requestTrip = '/api/v1/trips';
   static String tripById(String id) => '/api/v1/trips/$id';
   static String cancelTrip(String id) => '/api/v1/trips/$id/cancellations';
+  static String submitCompensationClaim(String id) =>
+      '/api/v1/trips/$id/compensation-claims';
   static const String tripHistory = '/api/v1/trips';
   static const String tripCount = '/api/v1/trips/count';
 }

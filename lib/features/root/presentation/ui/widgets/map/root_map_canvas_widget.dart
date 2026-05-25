@@ -1,6 +1,7 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
 import 'package:customertaxi/core/theme/app_map_styles.dart';
 
 class RootMapCanvasWidget extends StatelessWidget {
@@ -14,6 +15,8 @@ class RootMapCanvasWidget extends StatelessWidget {
     this.onCameraIdle,
     this.destinationLocation,
     this.showMyLocationButton = false,
+    this.driverLocation,
+    this.driverMarkerIcon,
   });
 
   final RootMapLocationEntity currentLocation;
@@ -24,11 +27,28 @@ class RootMapCanvasWidget extends StatelessWidget {
   final VoidCallback? onCameraIdle;
   final LatLng? destinationLocation;
   final bool showMyLocationButton;
+  final DriverLocationEntity? driverLocation;
+  final BitmapDescriptor? driverMarkerIcon;
 
   LatLng get _latLng =>
       LatLng(currentLocation.latitude, currentLocation.longitude);
 
-  Set<Marker> get _markers => <Marker>{...tripMarkers};
+  Set<Marker> get _markers {
+    final markers = <Marker>{...tripMarkers};
+    if (driverLocation != null && driverMarkerIcon != null) {
+      markers.add(
+        Marker(
+          markerId: const MarkerId('active-driver-vehicle'),
+          position: LatLng(driverLocation!.latitude, driverLocation!.longitude),
+          icon: driverMarkerIcon!,
+          rotation: driverLocation!.bearing ?? 0.0,
+          flat: true,
+          anchor: const Offset(0.5, 0.5),
+        ),
+      );
+    }
+    return markers;
+  }
 
   Set<Polyline> _buildPolylines(BuildContext context) {
     if (legPolylines.isEmpty) {

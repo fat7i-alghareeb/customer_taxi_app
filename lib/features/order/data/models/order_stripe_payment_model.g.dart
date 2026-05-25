@@ -12,6 +12,8 @@ _OrderStripePaymentModel _$OrderStripePaymentModelFromJson(
   paymentIntentId: json['paymentIntentId'] as String,
   clientSecret: json['clientSecret'] as String,
   publishableKey: json['publishableKey'] as String,
+  customerId: json['customerId'] as String,
+  ephemeralKeySecret: json['ephemeralKeySecret'] as String,
 );
 
 Map<String, dynamic> _$OrderStripePaymentModelToJson(
@@ -20,4 +22,6 @@ Map<String, dynamic> _$OrderStripePaymentModelToJson(
   'paymentIntentId': instance.paymentIntentId,
   'clientSecret': instance.clientSecret,
   'publishableKey': instance.publishableKey,
+  'customerId': instance.customerId,
+  'ephemeralKeySecret': instance.ephemeralKeySecret,
 };

@@ -20,6 +20,8 @@ import 'core/services/client_config/client_config_service.dart';
 import 'core/services/localization/locale_service.dart';
 import 'core/services/realtime/realtime_lifecycle_coordinator.dart';
 import 'core/services/session/auth_manager.dart';
+import 'core/services/session/auth_state_notifier.dart';
+import 'features/auth/domain/repositories/auth_repository.dart';
 import 'core/theme/theme_controller.dart';
 import 'common/widgets/stage_tools/stage_device_preview_controller.dart';
 import 'flavors.dart' show F, Flavor;
@@ -88,6 +90,24 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       await _initializeAuthAndNetwork();
       printG('[Bootstrap] Auth and Network ready');
 
+      // Backup FCM token check on startup if authenticated
+      final authState = getIt<AuthStateNotifier>();
+      if (authState.isAuthenticated) {
+        try {
+          final coordinator = getIt<NotificationCoordinator>();
+          final token = await coordinator.getDeviceToken();
+          if (token != null && token.isNotEmpty) {
+            final authRepo = getIt<AuthRepository>();
+            await authRepo.updateFcmToken(token);
+            printG(
+              '[Bootstrap] Startup backup FCM token update SUCCESS: $token',
+            );
+          }
+        } catch (e) {
+          printY('[Bootstrap] Startup backup FCM token update failed: $e');
+        }
+      }
+
       printG('[Bootstrap] fetching client config...');
       await _initializeClientConfig();
       printG('[Bootstrap] client config ready');
@@ -123,13 +143,21 @@ Future<void> _initializeNotifications() async {
 
     await coordinator.initialize(
       config: AppNotificationConfig.defaults(),
-      options: const NotificationInitOptions(
-        initializeFirebase: false,
-        enableFcm: false,
-        requestPermissionsAtStartup: false,
-      ),
+      options: const NotificationInitOptions(initializeFirebase: false),
       onNotificationTap: (payload) async {
         await _handleNotificationNavigation(payload);
+      },
+      onTokenRefresh: (token) async {
+        final authState = getIt<AuthStateNotifier>();
+        if (authState.isAuthenticated) {
+          try {
+            final authRepo = getIt<AuthRepository>();
+            await authRepo.updateFcmToken(token);
+            printG('[Bootstrap] Dynamic FCM token refresh SUCCESS: $token');
+          } catch (e) {
+            printY('[Bootstrap] Dynamic FCM token refresh failed: $e');
+          }
+        }
       },
     );
 
@@ -181,7 +209,9 @@ Future<void> _initializeClientConfig() async {
     Stripe.merchantIdentifier = 'merchant.dev.fat7i.customertaxi';
     Stripe.urlScheme = 'customertaxi';
     await Stripe.instance.applySettings();
-    printG('[Bootstrap] Stripe initialized publishableKey=${config.stripePublishableKey.substring(0, 8)}…');
+    printG(
+      '[Bootstrap] Stripe initialized publishableKey=${config.stripePublishableKey.substring(0, 8)}…',
+    );
   } else {
     printY('[Bootstrap] Stripe disabled or no publishable key — skipping init');
   }

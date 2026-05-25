@@ -9,6 +9,8 @@ abstract class OrderStripePaymentModel with _$OrderStripePaymentModel {
     required String paymentIntentId,
     required String clientSecret,
     required String publishableKey,
+    required String customerId,
+    required String ephemeralKeySecret,
   }) = _OrderStripePaymentModel;
 
   factory OrderStripePaymentModel.fromJson(Map<String, dynamic> json) =>

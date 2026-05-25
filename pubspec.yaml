@@ -130,7 +130,7 @@ flavorizr:
         applicationId: "dev.fat7i.customertaxi"
     production:
       app:
-        name: "customertaxi"
+        name: "Fat7i"
         package_name: "dev.fat7i.customertaxi"
       android:
         applicationId: "dev.fat7i.customertaxi"

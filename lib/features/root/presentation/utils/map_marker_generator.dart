@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapMarkerGenerator {
@@ -182,5 +183,20 @@ class MapMarkerGenerator {
     final Uint8List uint8List = byteData!.buffer.asUint8List();
 
     return BitmapDescriptor.bytes(uint8List);
+  }
+
+  static Future<BitmapDescriptor> createVehicleMarker({
+    double width = 80,
+  }) async {
+    final ByteData data = await rootBundle.load('assets/images/legacyCar.png');
+    final ui.Codec codec = await ui.instantiateImageCodec(
+      data.buffer.asUint8List(),
+      targetWidth: width.toInt(),
+    );
+    final ui.FrameInfo fi = await codec.getNextFrame();
+    final ByteData? scaledData = await fi.image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+    return BitmapDescriptor.bytes(scaledData!.buffer.asUint8List());
   }
 }

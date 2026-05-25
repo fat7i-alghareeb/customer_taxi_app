@@ -22,4 +22,20 @@ class AuthRemoteDataSource {
           res.data as Map<String, dynamic>,
         );
       });
+
+  Future<void> updateFcmToken(String token) =>
+      rethrowAsAppException(() async {
+        await _dio.put(
+          ApiEndpoints.updateFcmToken,
+          data: {'fcmToken': token},
+        );
+      });
+
+  Future<void> updatePreferredLanguage(String languageCode) =>
+      rethrowAsAppException(() async {
+        await _dio.put(
+          ApiEndpoints.updatePreferredLanguage,
+          data: {'languageCode': languageCode},
+        );
+      });
 }

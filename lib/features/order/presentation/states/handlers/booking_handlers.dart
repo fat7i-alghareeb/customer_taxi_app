@@ -245,23 +245,17 @@ extension _BookingHandlers on OrderBloc {
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: stripePayment.clientSecret,
+          customerId: stripePayment.customerId,
+          customerEphemeralKeySecret: stripePayment.ephemeralKeySecret,
           merchantDisplayName: 'customertaxi',
           style: ThemeMode.system,
           returnURL: 'customertaxi://stripe-redirect',
           billingDetailsCollectionConfiguration:
               const BillingDetailsCollectionConfiguration(
                 email: CollectionMode.always,
+                name: CollectionMode.always,
+                address: AddressCollectionMode.full,
               ),
-          billingDetails: const BillingDetails(
-            address: Address(
-              country: 'NL',
-              city: null,
-              line1: null,
-              line2: null,
-              postalCode: null,
-              state: null,
-            ),
-          ),
         ),
       );
       printG('[Payment] initPaymentSheet done');

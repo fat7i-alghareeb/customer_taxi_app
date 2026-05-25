@@ -35,6 +35,24 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  Future<Result<TripCompensationClaimEntity>> submitCompensationClaim({
+    required String tripId,
+    required String note,
+    List<String> evidenceUrls = const [],
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] submitCompensationClaim trip=$tripId');
+      final model = await _remote.submitCompensationClaim(
+        tripId: tripId,
+        note: note,
+        evidenceUrls: evidenceUrls,
+      );
+      printG('[TripRepository] submitCompensationClaim success');
+      return model.toEntity;
+    });
+  }
+
+  @override
   Future<Result<PagedResult<TripSummaryEntity>>> getTripHistory({
     int page = 1,
     int pageSize = 20,

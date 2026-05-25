@@ -156,6 +156,9 @@ class SignalRRealtimeService implements RealtimeService {
     hub.on(RealtimeMethodNames.paymentConfirmed, _onPaymentConfirmed);
     hub.on(RealtimeMethodNames.paymentFailed, _onPaymentFailed);
     hub.on(RealtimeMethodNames.tripRefunded, _onTripRefunded);
+    hub.on(RealtimeMethodNames.driverEnRoute, _onDriverEnRoute);
+    hub.on(RealtimeMethodNames.driverArrived, _onDriverArrived);
+    hub.on(RealtimeMethodNames.driverLocationUpdated, _onDriverLocationUpdated);
 
     hub.onclose(({Exception? error}) {
       printY('$_logTag connection closed (error=$error)');
@@ -294,6 +297,37 @@ class SignalRRealtimeService implements RealtimeService {
       tripId: _readString(p, 'tripId'),
       passengerId: _readString(p, 'passengerId'),
       amount: _readDouble(p, 'amount'),
+    ));
+  }
+
+  void _onDriverEnRoute(List<Object?>? args) {
+    final p = _payload(args);
+    if (p == null) return;
+    _eventsController.add(RealtimeEvent.driverEnRoute(
+      tripId: _readString(p, 'tripId'),
+      passengerId: _readString(p, 'passengerId'),
+      driverId: _readString(p, 'driverId'),
+    ));
+  }
+
+  void _onDriverArrived(List<Object?>? args) {
+    final p = _payload(args);
+    if (p == null) return;
+    _eventsController.add(RealtimeEvent.driverArrived(
+      tripId: _readString(p, 'tripId'),
+      passengerId: _readString(p, 'passengerId'),
+      driverId: _readString(p, 'driverId'),
+    ));
+  }
+
+  void _onDriverLocationUpdated(List<Object?>? args) {
+    final p = _payload(args);
+    if (p == null) return;
+    _eventsController.add(RealtimeEvent.driverLocationUpdated(
+      tripId: _readString(p, 'tripId'),
+      driverId: _readString(p, 'driverId'),
+      latitude: _readDouble(p, 'latitude'),
+      longitude: _readDouble(p, 'longitude'),
     ));
   }
 }

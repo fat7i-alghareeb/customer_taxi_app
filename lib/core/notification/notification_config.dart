@@ -243,6 +243,7 @@ class AppNotificationConfig {
   /// - You should ensure `defaultAndroidSmallIcon` exists as a drawable.
   factory AppNotificationConfig.defaults() {
     return const AppNotificationConfig(
+      initialTopics: <String>['customers'],
       androidChannels: <AppAndroidNotificationChannelConfig>[
         AppAndroidNotificationChannelConfig(
           id: 'high_importance',

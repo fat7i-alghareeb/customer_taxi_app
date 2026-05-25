@@ -14,6 +14,13 @@ abstract class TripModel with _$TripModel {
     required DateTime createdAtUtc,
     DateTime? scheduledAtUtc,
     @Default([]) List<TripStopModel> stops,
+    String? vehicleTypeName,
+    double? driverLat,
+    double? driverLng,
+    DateTime? etaToPickup,
+    TripCancellationModel? cancellation,
+    TripCompensationClaimModel? compensationClaim,
+    TripWaitingSessionModel? activeWaitingSession,
   }) = _TripModel;
 
   factory TripModel.fromJson(Map<String, dynamic> json) =>
@@ -29,6 +36,59 @@ abstract class TripStopModel with _$TripStopModel {
 
   factory TripStopModel.fromJson(Map<String, dynamic> json) =>
       _$TripStopModelFromJson(json);
+}
+
+@freezed
+abstract class TripCancellationModel with _$TripCancellationModel {
+  const factory TripCancellationModel({
+    required String actor,
+    required String reason,
+    required double refundPercent,
+    required double refundAmount,
+    required String currencyCode,
+    String? note,
+    DateTime? createdAtUtc,
+  }) = _TripCancellationModel;
+
+  factory TripCancellationModel.fromJson(Map<String, dynamic> json) =>
+      _$TripCancellationModelFromJson(json);
+}
+
+@freezed
+abstract class TripCompensationClaimModel with _$TripCompensationClaimModel {
+  const factory TripCompensationClaimModel({
+    required String id,
+    required String tripId,
+    required String passengerId,
+    required String note,
+    @Default([]) List<String> evidenceUrls,
+    required double requestedAmount,
+    required String currencyCode,
+    required String status,
+    String? reviewNotes,
+    DateTime? createdAtUtc,
+    DateTime? reviewedAtUtc,
+  }) = _TripCompensationClaimModel;
+
+  factory TripCompensationClaimModel.fromJson(Map<String, dynamic> json) =>
+      _$TripCompensationClaimModelFromJson(json);
+}
+
+@freezed
+abstract class TripWaitingSessionModel with _$TripWaitingSessionModel {
+  const factory TripWaitingSessionModel({
+    required String id,
+    required String tripId,
+    required String driverId,
+    required DateTime startedAtUtc,
+    DateTime? stoppedAtUtc,
+    int? minutes,
+    double? estimatedFee,
+    @Default(false) bool isActive,
+  }) = _TripWaitingSessionModel;
+
+  factory TripWaitingSessionModel.fromJson(Map<String, dynamic> json) =>
+      _$TripWaitingSessionModelFromJson(json);
 }
 
 @freezed

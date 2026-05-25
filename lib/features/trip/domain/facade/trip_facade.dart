@@ -22,6 +22,19 @@ class TripFacade {
     return _repository.cancelTrip(id);
   }
 
+  Future<Result<TripCompensationClaimEntity>> submitCompensationClaim({
+    required String tripId,
+    required String note,
+    List<String> evidenceUrls = const [],
+  }) {
+    printC('[TripFacade] submitCompensationClaim trip=$tripId');
+    return _repository.submitCompensationClaim(
+      tripId: tripId,
+      note: note,
+      evidenceUrls: evidenceUrls,
+    );
+  }
+
   Future<Result<PagedResult<TripSummaryEntity>>> getTripHistory({
     int page = 1,
     int pageSize = 20,

@@ -48,8 +48,31 @@ class TripRemoteDataSource {
   Future<TripModel> cancelTrip(String id) {
     return rethrowAsAppException(() async {
       printY('[TripRemoteDataSource] cancelTrip id=$id');
-      final res = await _dio.post<dynamic>(ApiEndpoints.cancelTrip(id));
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.cancelTrip(id),
+        data: {
+          'reason': 'PassengerWithinOneHour',
+          'note': 'Passenger requested cancellation from customer app',
+        },
+      );
       return TripModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<TripCompensationClaimModel> submitCompensationClaim({
+    required String tripId,
+    required String note,
+    List<String> evidenceUrls = const [],
+  }) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] submitCompensationClaim trip=$tripId');
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.submitCompensationClaim(tripId),
+        data: {'note': note, 'evidenceUrls': evidenceUrls},
+      );
+      return TripCompensationClaimModel.fromJson(
+        res.data as Map<String, dynamic>,
+      );
     });
   }
 

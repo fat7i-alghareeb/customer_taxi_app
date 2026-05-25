@@ -5,6 +5,14 @@ part of app_strings;
 class AppStrings {
   /// Active Trip - الرحلة الحالية - Actieve Rit - Aktive Fahrt - Aktywny przejazd - Активна поїздка - Trajet Actif - Viaje activo - Cursă activă
   static String get activeTrip => 'activeTrip'.tr();
+  /// Cancel Ride - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulați cursa
+  static String get activeTripCancelRide => 'activeTripCancelRide'.tr();
+  /// Your driver is outside - سائقك بالخارج الآن - Je chauffeur staat buiten - Ihr Fahrer ist draußen - Twój kierowca czeka na zewnątrz - Ваш водій очікує на вулиці - Votre chauffeur est à l'extérieur - Su conductor está afuera - Șoferul dvs. este afară
+  static String get activeTripDriverOutside => 'activeTripDriverOutside'.tr();
+  /// Arriving in ~{time} - يصل خلال ~{time} - Aankomst over ~{time} - Ankunft in ~{time} - Dojechał za ~{time} - Прибуття за ~{time} - Arrivée dans ~{time} - Llegando en ~{time} - Sosește în ~{time}
+  static String get activeTripLiveEta => 'activeTripLiveEta'.tr();
+  /// Vehicle type: {type} - نوع المركبة: {type} - Voertuigtype: {type} - Fahrzeugtyp: {type} - Typ pojazdu: {type} - Тип авто: {type} - Type de véhicule : {type} - Tipo de vehículo: {type} - Tip vehicul: {type}
+  static String get activeTripLookForCar => 'activeTripLookForCar'.tr();
   /// Add stop - إضافة توقف - Stop toevoegen - Halt hinzufügen - Dodaj przystanek - Додати зупинку - Ajouter un arrêt - Añadir parada - Adaugă oprire
   static String get addStop => 'addStop'.tr();
   /// Apr - أبر - Apr - Apr - Kwi - Квіт - Avril - Abr - Apr
@@ -35,6 +43,20 @@ class AppStrings {
   static String get bookingDetails => 'bookingDetails'.tr();
   /// Cancel - إلغاء - Annuleren - Abbrechen - Anuluj - Скасувати - Annuler - Cancelar - Anulează
   static String get cancel => 'cancel'.tr();
+  /// You can cancel within 1 hour of booking. Refunds for online payments are processed within 4 business days. After 1 hour, cancellation is blocked unless you submit a driver-delay compensation claim. - يمكنك الإلغاء خلال ساعة واحدة من الحجز. تتم معالجة المبالغ المستردة للمدفوعات الإلكترونية خلال 4 أيام عمل. بعد ساعة، يُحظر الإلغاء إلا إذا قدّمت مطالبة تعويض بسبب تأخر السائق. - U kunt annuleren binnen 1 uur na boeking. Terugbetalingen voor online betalingen worden verwerkt binnen 4 werkdagen. Na 1 uur is annulering geblokkeerd, tenzij u een schadeclaim indient wegens vertraging van de chauffeur. - Sie können innerhalb von 1 Stunde nach der Buchung stornieren. Rückerstattungen für Online-Zahlungen werden innerhalb von 4 Werktagen bearbeitet. Nach 1 Stunde ist die Stornierung gesperrt, es sei denn, Sie reichen einen Entschädigungsantrag wegen Fahrerverspätung ein. - Możesz anulować w ciągu 1 godziny od dokonania rezerwacji. Zwroty środków za płatności online są przetwarzane w ciągu 4 dni roboczych. Po 1 godzinie anulowanie jest zablokowane, chyba że złożysz wniosek o odszkodowanie za opóźnienie kierowcy. - Ви можете скасувати протягом 1 години після бронювання. Відшкодування за онлайн-платежами обробляються протягом 4 робочих днів. Після 1 години скасування заблоковано, якщо ви не подасте претензію на компенсацію за затримку водія. - Vous pouvez annuler dans l'heure suivant la réservation. Les remboursements pour les paiements en ligne sont traités dans les 4 jours ouvrables. Après 1 heure, l'annulation est bloquée sauf si vous soumettez une demande d'indemnisation pour retard du chauffeur. - Puedes cancelar dentro de 1 hora desde la reserva. Los reembolsos por pagos en línea se procesan dentro de 4 días hábiles. Después de 1 hora, la cancelación está bloqueada a menos que presentes una reclamación de compensación por retraso del conductor. - Puteți anula în termen de 1 oră de la rezervare. Rambursările pentru plățile online sunt procesate în termen de 4 zile lucrătoare. După 1 oră, anularea este blocată dacă nu depuneți o cerere de compensație pentru întârzierea șoferului.
+  static String get cancellationPolicyCancelDialog => 'cancellationPolicyCancelDialog'.tr();
+  /// If the driver arrives more than 20 minutes later than the agreed time and proof is provided, the passenger may submit a compensation claim for 2% of the ride amount. - إذا وصل السائق بعد أكثر من 20 دقيقة من الوقت المتفق عليه وتم تقديم دليل، يحق للراكب تقديم مطالبة تعويض بنسبة 2% من قيمة الرحلة. - Als de chauffeur meer dan 20 minuten later arriveert dan de afgesproken tijd en er bewijs is, kan de passagier een schadevergoedingsverzoek indienen voor 2% van het ritbedrag. - Wenn der Fahrer mehr als 20 Minuten später als die vereinbarte Zeit ankommt und ein Nachweis vorliegt, kann der Fahrgast eine Entschädigungsforderung über 2 % des Fahrtbetrags einreichen. - Jeśli kierowca przyjedzie ponad 20 minut po uzgodnionym czasie i zostanie dostarczone potwierdzenie, pasażer może złożyć wniosek o odszkodowanie w wysokości 2% kwoty przejazdu. - Якщо водій прибуває більш ніж на 20 хвилин пізніше за узгоджений час і надано підтвердження, пасажир може подати претензію на компенсацію в розмірі 2% від вартості поїздки. - Si le chauffeur arrive plus de 20 minutes après l'heure convenue et qu'une preuve est fournie, le passager peut soumettre une demande d'indemnisation de 2 % du montant du trajet. - Si el conductor llega más de 20 minutos después de la hora acordada y se proporciona prueba, el pasajero puede presentar una reclamación de compensación por el 2 % del importe del viaje. - Dacă șoferul sosește cu mai mult de 20 de minute întârziere față de ora convenită și se furnizează dovezi, pasagerul poate depune o cerere de compensație de 2% din valoarea cursei.
+  static String get cancellationPolicyDriverLate => 'cancellationPolicyDriverLate'.tr();
+  /// If the passenger is more than 10 minutes late, does not show up, or cannot be contacted, the driver may cancel the ride. In this case, 20% of the ride amount is refunded. - إذا تأخر الراكب أكثر من 10 دقائق أو لم يحضر أو تعذّر التواصل معه، يحق للسائق إلغاء الرحلة. في هذه الحالة، يُعاد 20% من قيمة الرحلة. - Als de passagier meer dan 10 minuten te laat is, niet komt opdagen of niet bereikbaar is, mag de chauffeur de rit annuleren. In dit geval wordt 20% van het ritbedrag terugbetaald. - Wenn der Fahrgast mehr als 10 Minuten zu spät ist, nicht erscheint oder nicht erreichbar ist, darf der Fahrer die Fahrt stornieren. In diesem Fall werden 20 % des Fahrtbetrags erstattet. - Jeśli pasażer spóźni się o więcej niż 10 minut, nie zjawi się lub nie będzie można się z nim skontaktować, kierowca może anulować przejazd. W takim przypadku zwrócone zostanie 20% kwoty przejazdu. - Якщо пасажир запізнюється більш ніж на 10 хвилин, не з'являється або з ним неможливо зв'язатися, водій може скасувати поїздку. У цьому випадку повертається 20% вартості поїздки. - Si le passager a plus de 10 minutes de retard, ne se présente pas ou ne peut pas être contacté, le chauffeur peut annuler le trajet. Dans ce cas, 20 % du montant du trajet est remboursé. - Si el pasajero llega con más de 10 minutos de retraso, no se presenta o no se puede contactar, el conductor puede cancelar el viaje. En este caso, se reembolsa el 20 % del importe del viaje. - Dacă pasagerul întârzie mai mult de 10 minute, nu se prezintă sau nu poate fi contactat, șoferul poate anula cursa. În acest caz, se rambursează 20% din valoarea cursei.
+  static String get cancellationPolicyPassengerLate => 'cancellationPolicyPassengerLate'.tr();
+  /// Passengers may cancel their reservation within 1 hour of booking. After 1 hour, normal cancellation is no longer permitted. - يمكن للراكب إلغاء الحجز خلال ساعة واحدة من تاريخ الحجز. بعد ساعة واحدة، لا يُسمح بالإلغاء العادي. - Passagiers kunnen hun reservering annuleren binnen 1 uur na boeking. Na 1 uur is normale annulering niet meer toegestaan. - Fahrgäste können ihre Reservierung innerhalb von 1 Stunde nach der Buchung stornieren. Nach 1 Stunde ist eine normale Stornierung nicht mehr möglich. - Pasażerowie mogą anulować rezerwację w ciągu 1 godziny od jej dokonania. Po upływie 1 godziny normalne anulowanie nie jest już możliwe. - Пасажири можуть скасувати бронювання протягом 1 години після оформлення. Після 1 години звичайне скасування більше не дозволяється. - Les passagers peuvent annuler leur réservation dans l'heure suivant la réservation. Après 1 heure, l'annulation normale n'est plus autorisée. - Los pasajeros pueden cancelar su reserva dentro de 1 hora desde la reserva. Después de 1 hora, la cancelación normal ya no está permitida. - Pasagerii pot anula rezervarea în termen de 1 oră de la efectuarea acesteia. După 1 oră, anularea normală nu mai este permisă.
+  static String get cancellationPolicyPassengerWindow => 'cancellationPolicyPassengerWindow'.tr();
+  /// Refunds for online payments are processed within 4 business days. - تتم معالجة المبالغ المستردة للمدفوعات الإلكترونية خلال 4 أيام عمل. - Terugbetalingen voor online betalingen worden verwerkt binnen 4 werkdagen. - Rückerstattungen für Online-Zahlungen werden innerhalb von 4 Werktagen bearbeitet. - Zwroty środków za płatności online są przetwarzane w ciągu 4 dni roboczych. - Відшкодування за онлайн-платежами обробляються протягом 4 робочих днів. - Les remboursements pour les paiements en ligne sont traités dans les 4 jours ouvrables. - Los reembolsos por pagos en línea se procesan dentro de 4 días hábiles. - Rambursările pentru plățile online sunt procesate în termen de 4 zile lucrătoare.
+  static String get cancellationPolicyRefundTiming => 'cancellationPolicyRefundTiming'.tr();
+  /// Cancellation policy - سياسة الإلغاء - Annuleringsbeleid - Stornierungsrichtlinie - Polityka anulowania - Політика скасування - Politique d'annulation - Política de cancelación - Politica de anulare
+  static String get cancellationPolicyTitle => 'cancellationPolicyTitle'.tr();
+  /// At European airports, waiting time may be estimated at EUR 0.15 per minute only after the driver agrees to wait. - في المطارات الأوروبية، يمكن تقدير وقت الانتظار بـ 0.15 يورو في الدقيقة، وذلك فقط بعد موافقة السائق على الانتظار. - Op Europese luchthavens kan de wachttijd worden geschat op EUR 0,15 per minuut, maar alleen nadat de chauffeur akkoord gaat met wachten. - An europäischen Flughäfen kann die Wartezeit auf EUR 0,15 pro Minute geschätzt werden, jedoch nur, wenn der Fahrer zustimmt zu warten. - Na europejskich lotniskach czas oczekiwania może być szacowany na 0,15 EUR za minutę, ale tylko po tym, jak kierowca wyrazi zgodę na oczekiwanie. - В європейських аеропортах час очікування може бути оцінений у 0,15 EUR за хвилину лише після того, як водій погодиться чекати. - Dans les aéroports européens, le temps d'attente peut être estimé à 0,15 EUR par minute, uniquement après que le chauffeur ait accepté d'attendre. - En los aeropuertos europeos, el tiempo de espera puede estimarse en EUR 0,15 por minuto solo después de que el conductor acepte esperar. - La aeroporturile europene, timpul de așteptare poate fi estimat la EUR 0,15 pe minut numai după ce șoferul este de acord să aștepte.
+  static String get cancellationPolicyWaitingFee => 'cancellationPolicyWaitingFee'.tr();
   /// Car Type - نوع السيارة - Autotype - Fahrzeugtyp - Typ pojazdu - Тип автомобіля - Type de véhicule - Tipo de coche - Tip mașină
   static String get carType => 'carType'.tr();
   /// 8-passenger bus - باص 8 ركاب - Bus voor 8 passagiers - 8-Personen-Bus - Bus (8 osób) - Бус (8 місць) - Bus 8 passagers - Autobús de 8 pasajeros - Autobuz cu 8 locuri
@@ -57,6 +79,10 @@ class AppStrings {
   static String get clientUnprocessableEntity => 'clientUnprocessableEntity'.tr();
   /// Coming Soon - قريباً - Binnenkort beschikbaar - Demnächst verfügbar - Wkrótce dostępne - Незабаром - Bientôt disponible - Próximamente - În curând
   static String get comingSoon => 'comingSoon'.tr();
+  /// Describe the delay and add proof links if available. - صف التأخير وأضف روابط الإثبات إن وُجدت. - Beschrijf de vertraging en voeg bewijslinks toe indien beschikbaar. - Beschreiben Sie die Verzögerung und fügen Sie Nachweislinks hinzu, falls verfügbar. - Opisz opóźnienie i dodaj linki do dowodów, jeśli są dostępne. - Опишіть затримку та додайте посилання на докази, якщо є. - Décrivez le retard et ajoutez des liens de preuve si disponibles. - Describa el retraso y agregue enlaces de prueba si están disponibles. - Descrieți întârzierea și adăugați linkuri cu dovezi dacă sunt disponibile.
+  static String get compensationClaimNoteHint => 'compensationClaimNoteHint'.tr();
+  /// Compensation claim submitted for admin review. - تم تقديم مطالبة التعويض لمراجعة المشرف. - Schadevergoedingsverzoek ingediend voor beoordeling door de beheerder. - Entschädigungsanspruch zur Überprüfung durch den Administrator eingereicht. - Wniosek o odszkodowanie został złożony do weryfikacji przez administratora. - Претензію на компенсацію подано на розгляд адміністратора. - Demande d'indemnisation soumise pour examen par l'administrateur. - Reclamación de compensación enviada para revisión del administrador. - Cererea de compensație a fost depusă pentru revizuire de către administrator.
+  static String get compensationClaimSubmitted => 'compensationClaimSubmitted'.tr();
   /// Complete Profile - إكمال الملف الشخصي - Voltooi Profiel - Profil vervollständigen - Uzupełnij profil - Заповнити профіль - Compléter le profil - Completar perfil - Completează profilul
   static String get completeProfile => 'completeProfile'.tr();
   /// Confirm - تأكيد - Bevestigen - Bestätigen - Potwierdź - Підтвердити - Confirmer - Confirmar - Confirmă
@@ -155,13 +181,13 @@ class AppStrings {
   static String get from => 'from'.tr();
   /// Happy to see you - سعداء برؤيتك - Leuk je te zien - Schön, dich zu sehen - Miło Cię widzieć - Раді вас бачити - Heureux de vous voir - Felices de verte - Mă bucur să te văd
   static String get happyToSeeYou => 'happyToSeeYou'.tr();
-  /// Book in advance - احجز مسبقاً - Book in advance - Book in advance - Book in advance - Book in advance - Book in advance - Book in advance - Book in advance
+  /// Book in advance - احجز مسبقاً - Vooraf boeken - Im Voraus buchen - Zarezerwuj wcześniej - Забронювати заздалегідь - Réserver à l'avance - Reservar con antelación - Rezervă în avans
   static String get homeCtaBookInAdvance => 'homeCtaBookInAdvance'.tr();
-  /// Let's move - هيا لنتحرك - Let's move - Let's move - Let's move - Let's move - Let's move - Let's move - Let's move
+  /// Let's move - هيا لنتحرك - Laten we gaan - Los geht's - Ruszajmy - Поїхали - C'est parti - Vamos - Să pornim
   static String get homeCtaLetMove => 'homeCtaLetMove'.tr();
-  /// Schedule - جدولة - Schedule - Schedule - Schedule - Schedule - Schedule - Schedule - Schedule
+  /// Schedule - جدولة - Plannen - Planen - Zaplanuj - Запланувати - Planifier - Programar - Programează
   static String get homeCtaSchedule => 'homeCtaSchedule'.tr();
-  /// Trips - الرحلات - Trips - Trips - Trips - Trips - Trips - Trips - Trips
+  /// Trips - الرحلات - Ritten - Fahrten - Przejazdy - Поїздки - Trajets - Viajes - Curse
   static String get homeCtaTrips => 'homeCtaTrips'.tr();
   /// Invalid code. Please try again. - الرمز غير صحيح. يرجى المحاولة مرة أخرى. - Ongeldige code. Probeer het opnieuw. - Ungültiger Code. Bitte versuchen Sie es erneut. - Nieprawidłowy kod. Spróbuj ponownie. - Неправильний код. Спробуйте ще раз. - Code invalide. Veuillez réessayer. - Código inválido. Por favor, inténtelo de nuevo. - Cod invalid. Vă rugăm să încercați din nou.
   static String get invalidOtp => 'invalidOtp'.tr();
@@ -345,8 +371,10 @@ class AppStrings {
   static String get profileSaveSuccess => 'profileSaveSuccess'.tr();
   /// Complete Your Profile - أكمل ملفك الشخصي - Voltooi uw profiel - Profil vervollständigen - Uzupełnij profil - Заповніть профіль - Complétez votre profil - Complete su perfil - Completează profilul
   static String get profileSetupTitle => 'profileSetupTitle'.tr();
-  /// Recent locations - المواقع الأخيرة - Recent locations - Recent locations - Recent locations - Recent locations - Recent locations - Recent locations - Recent locations
+  /// Recent locations - المواقع الأخيرة - Recente locaties - Letzte Standorte - Ostatnie lokalizacje - Останні адреси - Lieux récents - Ubicaciones recientes - Locații recente
   static String get recentLocations => 'recentLocations'.tr();
+  /// Report driver delay - الإبلاغ عن تأخر السائق - Vertraging chauffeur melden - Fahrverzögerung melden - Zgłoś opóźnienie kierowcy - Повідомити про затримку водія - Signaler le retard du chauffeur - Reportar retraso del conductor - Raportați întârzierea șoferului
+  static String get reportDriverDelay => 'reportDriverDelay'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd. - Anfrage wurde abgebrochen. - Żądanie zostało anulowane. - Запит скасовано. - La demande a été annulée. - La solicitud fue cancelada. - Solicitarea a fost anulată.
   static String get requestCancelled => 'requestCancelled'.tr();
   /// Retry - إعادة المحاولة - Opnieuw - Wiederholen - Ponów - Повторити - Réessayer - Reintentar - Reîncearcă
@@ -475,9 +503,13 @@ class AppStrings {
   static String get tripStatusCancelled => 'tripStatusCancelled'.tr();
   /// Completed - مكتملة - Voltooid - Abgeschlossen - Zakończony - Завершено - Terminé - Completado - Finalizată
   static String get tripStatusCompleted => 'tripStatusCompleted'.tr();
+  /// Driver Arrived - وصل السائق - Chauffeur gearriveerd - Fahrer angekommen - Kierowca dojechał - Водій прибув - Chauffeur arrivé - Conductor ha llegado - Șofer sosit
+  static String get tripStatusDriverArrived => 'tripStatusDriverArrived'.tr();
   /// Driver Assigned - تم تعيين سائق - Chauffeur toegewezen - Fahrer zugewiesen - Kierowca przypisany - Водія призначено - Chauffeur assigné - Conductor asignado - Șofer alocat
   static String get tripStatusDriverAssigned => 'tripStatusDriverAssigned'.tr();
-  /// In Progress - في الطريق - Onderweg - Unterwegs - W trakcie - У дорозі - En cours - En curso - În desfășurare
+  /// Driver En Route - سائق في الطريق - Chauffeur onderweg - Fahrer auf dem Weg - Kierowca w drodze - Водій в дорозі - Chauffeur en route - Conductor en camino - Șofer pe drum
+  static String get tripStatusDriverEnRoute => 'tripStatusDriverEnRoute'.tr();
+  /// In Progress - في الطريق - Onderweg - Unterwegs - W trasie - У дорозі - En cours - En curso - În desfășurare
   static String get tripStatusInProgress => 'tripStatusInProgress'.tr();
   /// Finding Driver - جاري البحث عن سائق - Chauffeur zoeken - Fahrer wird gesucht - Szukanie kierowcy - Пошук водія - Recherche de chauffeur - Buscando conductor - Se caută șofer
   static String get tripStatusPendingDriver => 'tripStatusPendingDriver'.tr();
@@ -533,7 +565,7 @@ class AppStrings {
   static String get wednesday => 'wednesday'.tr();
   /// Where to? - إلى أين؟ - Waarheen? - Wohin? - Dokąd jedziemy? - Куди їдемо? - Où allez-vous ? - ¿A dónde vas? - Încotro?
   static String get whereTo => 'whereTo'.tr();
-  /// Your journey begins here. - رحلتك تبدأ هنا. - Your journey begins here. - Your journey begins here. - Your journey begins here. - Your journey begins here. - Your journey begins here. - Your journey begins here. - Your journey begins here.
+  /// Your journey begins here. - رحلتك تبدأ هنا. - Je reis begint hier. - Deine Reise beginnt hier. - Twoja podróż zaczyna się tutaj. - Ваша подорож починається тут. - Votre voyage commence ici. - Tu viaje comienza aquí. - Călătoria ta începe aici.
   static String get yourJourneyBeginsHere => 'yourJourneyBeginsHere'.tr();
 }
 

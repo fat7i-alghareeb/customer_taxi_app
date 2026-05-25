@@ -21,6 +21,27 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
           ?.map((e) => TripStopModel.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
+  vehicleTypeName: json['vehicleTypeName'] as String?,
+  driverLat: (json['driverLat'] as num?)?.toDouble(),
+  driverLng: (json['driverLng'] as num?)?.toDouble(),
+  etaToPickup: json['etaToPickup'] == null
+      ? null
+      : DateTime.parse(json['etaToPickup'] as String),
+  cancellation: json['cancellation'] == null
+      ? null
+      : TripCancellationModel.fromJson(
+          json['cancellation'] as Map<String, dynamic>,
+        ),
+  compensationClaim: json['compensationClaim'] == null
+      ? null
+      : TripCompensationClaimModel.fromJson(
+          json['compensationClaim'] as Map<String, dynamic>,
+        ),
+  activeWaitingSession: json['activeWaitingSession'] == null
+      ? null
+      : TripWaitingSessionModel.fromJson(
+          json['activeWaitingSession'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
@@ -33,6 +54,13 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'createdAtUtc': instance.createdAtUtc.toIso8601String(),
       'scheduledAtUtc': instance.scheduledAtUtc?.toIso8601String(),
       'stops': instance.stops,
+      'vehicleTypeName': instance.vehicleTypeName,
+      'driverLat': instance.driverLat,
+      'driverLng': instance.driverLng,
+      'etaToPickup': instance.etaToPickup?.toIso8601String(),
+      'cancellation': instance.cancellation,
+      'compensationClaim': instance.compensationClaim,
+      'activeWaitingSession': instance.activeWaitingSession,
     };
 
 _TripStopModel _$TripStopModelFromJson(Map<String, dynamic> json) =>
@@ -46,6 +74,100 @@ Map<String, dynamic> _$TripStopModelToJson(_TripStopModel instance) =>
       'latitude': instance.latitude,
       'longitude': instance.longitude,
     };
+
+_TripCancellationModel _$TripCancellationModelFromJson(
+  Map<String, dynamic> json,
+) => _TripCancellationModel(
+  actor: json['actor'] as String,
+  reason: json['reason'] as String,
+  refundPercent: (json['refundPercent'] as num).toDouble(),
+  refundAmount: (json['refundAmount'] as num).toDouble(),
+  currencyCode: json['currencyCode'] as String,
+  note: json['note'] as String?,
+  createdAtUtc: json['createdAtUtc'] == null
+      ? null
+      : DateTime.parse(json['createdAtUtc'] as String),
+);
+
+Map<String, dynamic> _$TripCancellationModelToJson(
+  _TripCancellationModel instance,
+) => <String, dynamic>{
+  'actor': instance.actor,
+  'reason': instance.reason,
+  'refundPercent': instance.refundPercent,
+  'refundAmount': instance.refundAmount,
+  'currencyCode': instance.currencyCode,
+  'note': instance.note,
+  'createdAtUtc': instance.createdAtUtc?.toIso8601String(),
+};
+
+_TripCompensationClaimModel _$TripCompensationClaimModelFromJson(
+  Map<String, dynamic> json,
+) => _TripCompensationClaimModel(
+  id: json['id'] as String,
+  tripId: json['tripId'] as String,
+  passengerId: json['passengerId'] as String,
+  note: json['note'] as String,
+  evidenceUrls:
+      (json['evidenceUrls'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
+  requestedAmount: (json['requestedAmount'] as num).toDouble(),
+  currencyCode: json['currencyCode'] as String,
+  status: json['status'] as String,
+  reviewNotes: json['reviewNotes'] as String?,
+  createdAtUtc: json['createdAtUtc'] == null
+      ? null
+      : DateTime.parse(json['createdAtUtc'] as String),
+  reviewedAtUtc: json['reviewedAtUtc'] == null
+      ? null
+      : DateTime.parse(json['reviewedAtUtc'] as String),
+);
+
+Map<String, dynamic> _$TripCompensationClaimModelToJson(
+  _TripCompensationClaimModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'tripId': instance.tripId,
+  'passengerId': instance.passengerId,
+  'note': instance.note,
+  'evidenceUrls': instance.evidenceUrls,
+  'requestedAmount': instance.requestedAmount,
+  'currencyCode': instance.currencyCode,
+  'status': instance.status,
+  'reviewNotes': instance.reviewNotes,
+  'createdAtUtc': instance.createdAtUtc?.toIso8601String(),
+  'reviewedAtUtc': instance.reviewedAtUtc?.toIso8601String(),
+};
+
+_TripWaitingSessionModel _$TripWaitingSessionModelFromJson(
+  Map<String, dynamic> json,
+) => _TripWaitingSessionModel(
+  id: json['id'] as String,
+  tripId: json['tripId'] as String,
+  driverId: json['driverId'] as String,
+  startedAtUtc: DateTime.parse(json['startedAtUtc'] as String),
+  stoppedAtUtc: json['stoppedAtUtc'] == null
+      ? null
+      : DateTime.parse(json['stoppedAtUtc'] as String),
+  minutes: (json['minutes'] as num?)?.toInt(),
+  estimatedFee: (json['estimatedFee'] as num?)?.toDouble(),
+  isActive: json['isActive'] as bool? ?? false,
+);
+
+Map<String, dynamic> _$TripWaitingSessionModelToJson(
+  _TripWaitingSessionModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'tripId': instance.tripId,
+  'driverId': instance.driverId,
+  'startedAtUtc': instance.startedAtUtc.toIso8601String(),
+  'stoppedAtUtc': instance.stoppedAtUtc?.toIso8601String(),
+  'minutes': instance.minutes,
+  'estimatedFee': instance.estimatedFee,
+  'isActive': instance.isActive,
+};
 
 _TripSummaryModel _$TripSummaryModelFromJson(Map<String, dynamic> json) =>
     _TripSummaryModel(

@@ -50,4 +50,14 @@ class AuthRepositoryImpl implements AuthRepository {
       return user;
     });
   }
+
+  @override
+  Future<Result<void>> updateFcmToken(String token) {
+    return runAsResult(() => _remote.updateFcmToken(token));
+  }
+
+  @override
+  Future<Result<void>> updatePreferredLanguage(String languageCode) {
+    return runAsResult(() => _remote.updatePreferredLanguage(languageCode));
+  }
 }

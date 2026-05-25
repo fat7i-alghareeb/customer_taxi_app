@@ -5,6 +5,7 @@ import 'package:customertaxi/core/services/localization/locale_service.dart';
 import 'package:customertaxi/core/services/session/auth_manager.dart';
 import 'package:customertaxi/core/theme/theme_controller.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/about_us_screen.dart';
+import 'package:customertaxi/features/root/presentation/ui/screens/cancellation_policy_screen.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/contact_us_screen.dart';
 import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_screen.dart';
 import 'package:customertaxi/features/favorites/presentation/ui/screens/favorites_screen.dart';
@@ -50,6 +51,12 @@ class RootDrawerContent extends StatelessWidget {
                   icon: FontAwesomeIcons.circleInfo,
                   label: AppStrings.profileAboutUs,
                   onTap: () => context.pushNamed(AboutUsScreen.pageName),
+                ),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.fileContract,
+                  label: AppStrings.cancellationPolicyTitle,
+                  onTap: () =>
+                      context.pushNamed(CancellationPolicyScreen.pageName),
                 ),
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.headset,

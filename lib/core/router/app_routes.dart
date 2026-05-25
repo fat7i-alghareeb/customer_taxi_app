@@ -53,6 +53,14 @@ class AppRouteRegistry {
             AppPageTransitions.build(state: state, child: const AboutUsScreen()),
       ),
       GoRoute(
+        path: CancellationPolicyScreen.pagePath,
+        name: CancellationPolicyScreen.pageName,
+        pageBuilder: (context, state) => AppPageTransitions.build(
+          state: state,
+          child: const CancellationPolicyScreen(),
+        ),
+      ),
+      GoRoute(
         path: ContactUsScreen.pagePath,
         name: ContactUsScreen.pageName,
         pageBuilder: (context, state) =>

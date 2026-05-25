@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderStripePaymentModel {
 
- String get paymentIntentId; String get clientSecret; String get publishableKey;
+ String get paymentIntentId; String get clientSecret; String get publishableKey; String get customerId; String get ephemeralKeySecret;
 /// Create a copy of OrderStripePaymentModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $OrderStripePaymentModelCopyWith<OrderStripePaymentModel> get copyWith => _$Orde
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderStripePaymentModel&&(identical(other.paymentIntentId, paymentIntentId) || other.paymentIntentId == paymentIntentId)&&(identical(other.clientSecret, clientSecret) || other.clientSecret == clientSecret)&&(identical(other.publishableKey, publishableKey) || other.publishableKey == publishableKey));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderStripePaymentModel&&(identical(other.paymentIntentId, paymentIntentId) || other.paymentIntentId == paymentIntentId)&&(identical(other.clientSecret, clientSecret) || other.clientSecret == clientSecret)&&(identical(other.publishableKey, publishableKey) || other.publishableKey == publishableKey)&&(identical(other.customerId, customerId) || other.customerId == customerId)&&(identical(other.ephemeralKeySecret, ephemeralKeySecret) || other.ephemeralKeySecret == ephemeralKeySecret));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,paymentIntentId,clientSecret,publishableKey);
+int get hashCode => Object.hash(runtimeType,paymentIntentId,clientSecret,publishableKey,customerId,ephemeralKeySecret);
 
 @override
 String toString() {
-  return 'OrderStripePaymentModel(paymentIntentId: $paymentIntentId, clientSecret: $clientSecret, publishableKey: $publishableKey)';
+  return 'OrderStripePaymentModel(paymentIntentId: $paymentIntentId, clientSecret: $clientSecret, publishableKey: $publishableKey, customerId: $customerId, ephemeralKeySecret: $ephemeralKeySecret)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $OrderStripePaymentModelCopyWith<$Res>  {
   factory $OrderStripePaymentModelCopyWith(OrderStripePaymentModel value, $Res Function(OrderStripePaymentModel) _then) = _$OrderStripePaymentModelCopyWithImpl;
 @useResult
 $Res call({
- String paymentIntentId, String clientSecret, String publishableKey
+ String paymentIntentId, String clientSecret, String publishableKey, String customerId, String ephemeralKeySecret
 });
 
 
@@ -65,11 +65,13 @@ class _$OrderStripePaymentModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderStripePaymentModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? paymentIntentId = null,Object? clientSecret = null,Object? publishableKey = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? paymentIntentId = null,Object? clientSecret = null,Object? publishableKey = null,Object? customerId = null,Object? ephemeralKeySecret = null,}) {
   return _then(_self.copyWith(
 paymentIntentId: null == paymentIntentId ? _self.paymentIntentId : paymentIntentId // ignore: cast_nullable_to_non_nullable
 as String,clientSecret: null == clientSecret ? _self.clientSecret : clientSecret // ignore: cast_nullable_to_non_nullable
 as String,publishableKey: null == publishableKey ? _self.publishableKey : publishableKey // ignore: cast_nullable_to_non_nullable
+as String,customerId: null == customerId ? _self.customerId : customerId // ignore: cast_nullable_to_non_nullable
+as String,ephemeralKeySecret: null == ephemeralKeySecret ? _self.ephemeralKeySecret : ephemeralKeySecret // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -155,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String paymentIntentId,  String clientSecret,  String publishableKey)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String paymentIntentId,  String clientSecret,  String publishableKey,  String customerId,  String ephemeralKeySecret)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderStripePaymentModel() when $default != null:
-return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey);case _:
+return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey,_that.customerId,_that.ephemeralKeySecret);case _:
   return orElse();
 
 }
@@ -176,10 +178,10 @@ return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey);c
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String paymentIntentId,  String clientSecret,  String publishableKey)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String paymentIntentId,  String clientSecret,  String publishableKey,  String customerId,  String ephemeralKeySecret)  $default,) {final _that = this;
 switch (_that) {
 case _OrderStripePaymentModel():
-return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey);case _:
+return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey,_that.customerId,_that.ephemeralKeySecret);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +198,10 @@ return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey);c
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String paymentIntentId,  String clientSecret,  String publishableKey)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String paymentIntentId,  String clientSecret,  String publishableKey,  String customerId,  String ephemeralKeySecret)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderStripePaymentModel() when $default != null:
-return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey);case _:
+return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey,_that.customerId,_that.ephemeralKeySecret);case _:
   return null;
 
 }
@@ -211,12 +213,14 @@ return $default(_that.paymentIntentId,_that.clientSecret,_that.publishableKey);c
 @JsonSerializable()
 
 class _OrderStripePaymentModel implements OrderStripePaymentModel {
-  const _OrderStripePaymentModel({required this.paymentIntentId, required this.clientSecret, required this.publishableKey});
+  const _OrderStripePaymentModel({required this.paymentIntentId, required this.clientSecret, required this.publishableKey, required this.customerId, required this.ephemeralKeySecret});
   factory _OrderStripePaymentModel.fromJson(Map<String, dynamic> json) => _$OrderStripePaymentModelFromJson(json);
 
 @override final  String paymentIntentId;
 @override final  String clientSecret;
 @override final  String publishableKey;
+@override final  String customerId;
+@override final  String ephemeralKeySecret;
 
 /// Create a copy of OrderStripePaymentModel
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderStripePaymentModel&&(identical(other.paymentIntentId, paymentIntentId) || other.paymentIntentId == paymentIntentId)&&(identical(other.clientSecret, clientSecret) || other.clientSecret == clientSecret)&&(identical(other.publishableKey, publishableKey) || other.publishableKey == publishableKey));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderStripePaymentModel&&(identical(other.paymentIntentId, paymentIntentId) || other.paymentIntentId == paymentIntentId)&&(identical(other.clientSecret, clientSecret) || other.clientSecret == clientSecret)&&(identical(other.publishableKey, publishableKey) || other.publishableKey == publishableKey)&&(identical(other.customerId, customerId) || other.customerId == customerId)&&(identical(other.ephemeralKeySecret, ephemeralKeySecret) || other.ephemeralKeySecret == ephemeralKeySecret));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,paymentIntentId,clientSecret,publishableKey);
+int get hashCode => Object.hash(runtimeType,paymentIntentId,clientSecret,publishableKey,customerId,ephemeralKeySecret);
 
 @override
 String toString() {
-  return 'OrderStripePaymentModel(paymentIntentId: $paymentIntentId, clientSecret: $clientSecret, publishableKey: $publishableKey)';
+  return 'OrderStripePaymentModel(paymentIntentId: $paymentIntentId, clientSecret: $clientSecret, publishableKey: $publishableKey, customerId: $customerId, ephemeralKeySecret: $ephemeralKeySecret)';
 }
 
 
@@ -251,7 +255,7 @@ abstract mixin class _$OrderStripePaymentModelCopyWith<$Res> implements $OrderSt
   factory _$OrderStripePaymentModelCopyWith(_OrderStripePaymentModel value, $Res Function(_OrderStripePaymentModel) _then) = __$OrderStripePaymentModelCopyWithImpl;
 @override @useResult
 $Res call({
- String paymentIntentId, String clientSecret, String publishableKey
+ String paymentIntentId, String clientSecret, String publishableKey, String customerId, String ephemeralKeySecret
 });
 
 
@@ -268,11 +272,13 @@ class __$OrderStripePaymentModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderStripePaymentModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? paymentIntentId = null,Object? clientSecret = null,Object? publishableKey = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? paymentIntentId = null,Object? clientSecret = null,Object? publishableKey = null,Object? customerId = null,Object? ephemeralKeySecret = null,}) {
   return _then(_OrderStripePaymentModel(
 paymentIntentId: null == paymentIntentId ? _self.paymentIntentId : paymentIntentId // ignore: cast_nullable_to_non_nullable
 as String,clientSecret: null == clientSecret ? _self.clientSecret : clientSecret // ignore: cast_nullable_to_non_nullable
 as String,publishableKey: null == publishableKey ? _self.publishableKey : publishableKey // ignore: cast_nullable_to_non_nullable
+as String,customerId: null == customerId ? _self.customerId : customerId // ignore: cast_nullable_to_non_nullable
+as String,ephemeralKeySecret: null == ephemeralKeySecret ? _self.ephemeralKeySecret : ephemeralKeySecret // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

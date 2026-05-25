@@ -11,6 +11,7 @@ import '../../features/onboarding/presentation/ui/screens/onboarding_screen.dart
 import '../../features/permissions/presentation/ui/screens/permission_gate_screen.dart';
 import '../../features/root/presentation/ui/screens/root_screen.dart';
 import '../../features/root/presentation/ui/screens/about_us_screen.dart';
+import '../../features/root/presentation/ui/screens/cancellation_policy_screen.dart';
 import '../../features/root/presentation/ui/screens/contact_us_screen.dart';
 import '../../features/profile/presentation/ui/screens/profile_setup_screen.dart';
 import '../../features/trip/presentation/ui/screens/active_trip_screen.dart';

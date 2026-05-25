@@ -1,11 +1,13 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:injectable/injectable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:customertaxi/core/services/realtime/realtime_event.dart';
 import 'package:customertaxi/core/services/realtime/realtime_service.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
+import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
 import 'package:customertaxi/features/trip/domain/facade/trip_facade.dart';
 import 'package:customertaxi/features/trip/data/datasources/trip_remote_datasource.dart';
 
@@ -23,9 +25,11 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<_Started>(_onStarted);
     on<_PollingTick>(_onPollingTick);
     on<_CancelRequested>(_onCancelRequested);
+    on<_CompensationClaimSubmitted>(_onCompensationClaimSubmitted);
     on<_StopPolling>(_onStopPolling);
     on<_HistoryStarted>(_onHistoryStarted);
     on<_NextPageRequested>(_onNextPageRequested);
+    on<_DriverLocationUpdated>(_onDriverLocationUpdated);
   }
 
   final TripFacade _facade;
@@ -37,6 +41,9 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   bool _isTerminal(TripStatus status) => status.isTerminal;
 
   void _startPolling() {
+    printC(
+      '[TripBloc] polling started interval=${_pollingInterval.inSeconds}s',
+    );
     _pollingTimer?.cancel();
     _pollingTimer = Timer.periodic(_pollingInterval, (_) {
       if (!isClosed) add(const TripEvent.pollingTick());
@@ -44,11 +51,13 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   }
 
   void _stopPolling() {
+    printC('[TripBloc] polling stopped');
     _pollingTimer?.cancel();
     _pollingTimer = null;
   }
 
   Future<void> _subscribeToRealtime(String tripId) async {
+    printC('[TripBloc] subscribing realtime trip=$tripId');
     await _unsubscribeFromRealtime();
     _joinedTripId = tripId;
     await _realtime.joinTripGroup(tripId);
@@ -63,12 +72,17 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     final tripId = _joinedTripId;
     _joinedTripId = null;
     if (tripId != null) {
+      printC('[TripBloc] unsubscribing realtime trip=$tripId');
       await _realtime.leaveTripGroup(tripId);
     }
   }
 
   void _onRealtimeEvent(RealtimeEvent event) {
     if (isClosed) return;
+    if (event is RealtimeDriverLocationUpdated) {
+      add(TripEvent.driverLocationUpdated(event.latitude, event.longitude));
+      return;
+    }
     // Events carry IDs only — re-fetch the trip to get authoritative state.
     printC('[TripBloc] realtime event ${event.runtimeType} -> refreshing trip');
     add(const TripEvent.pollingTick());
@@ -82,11 +96,13 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   }
 
   Future<void> _onStarted(_Started event, Emitter<TripState> emit) async {
-    emit(state.copyWith(
-      tripStatus: const BlocStatus.loading(),
-      activeTripId: event.tripId,
-      isPolling: false,
-    ));
+    emit(
+      state.copyWith(
+        tripStatus: const BlocStatus.loading(),
+        activeTripId: event.tripId,
+        isPolling: false,
+      ),
+    );
     await _subscribeToRealtime(event.tripId);
     final Result<TripEntity> result = await _facade.getTripById(event.tripId);
     result.when(
@@ -105,12 +121,17 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     );
   }
 
-  Future<void> _onPollingTick(_PollingTick event, Emitter<TripState> emit) async {
+  Future<void> _onPollingTick(
+    _PollingTick event,
+    Emitter<TripState> emit,
+  ) async {
     final id = state.activeTripId;
     if (id == null) return;
+    printC('[TripBloc] polling tick trip=$id');
     final Result<TripEntity> result = await _facade.getTripById(id);
     result.when(
       success: (trip) {
+        printG('[TripBloc] polling refreshed status=${trip.status}');
         emit(state.copyWith(tripStatus: BlocStatus<TripEntity>.success(trip)));
         if (_isTerminal(trip.status)) {
           _stopPolling();
@@ -118,7 +139,9 @@ class TripBloc extends Bloc<TripEvent, TripState> {
           emit(state.copyWith(isPolling: false));
         }
       },
-      failure: (_) {},
+      failure: (msg) {
+        printY('[TripBloc] polling refresh failed=$msg');
+      },
     );
   }
 
@@ -135,15 +158,58 @@ class TripBloc extends Bloc<TripEvent, TripState> {
         printG('[TripBloc] cancel success');
         _stopPolling();
         unawaited(_unsubscribeFromRealtime());
-        emit(state.copyWith(
-          cancelStatus: const BlocStatus<void>.success(null),
-          tripStatus: BlocStatus<TripEntity>.success(trip),
-          isPolling: false,
-        ));
+        emit(
+          state.copyWith(
+            cancelStatus: const BlocStatus<void>.success(null),
+            tripStatus: BlocStatus<TripEntity>.success(trip),
+            isPolling: false,
+          ),
+        );
       },
       failure: (msg) {
         printY('[TripBloc] cancel failed=$msg');
         emit(state.copyWith(cancelStatus: BlocStatus<void>.failure(msg)));
+      },
+    );
+  }
+
+  Future<void> _onCompensationClaimSubmitted(
+    _CompensationClaimSubmitted event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    if (id == null) return;
+    emit(
+      state.copyWith(
+        compensationClaimStatus:
+            const BlocStatus<TripCompensationClaimEntity>.loading(),
+      ),
+    );
+    final Result<TripCompensationClaimEntity> result = await _facade
+        .submitCompensationClaim(
+          tripId: id,
+          note: event.note,
+          evidenceUrls: event.evidenceUrls,
+        );
+    result.when(
+      success: (claim) {
+        printG('[TripBloc] compensation claim submitted id=${claim.id}');
+        emit(
+          state.copyWith(
+            compensationClaimStatus:
+                BlocStatus<TripCompensationClaimEntity>.success(claim),
+          ),
+        );
+        add(const TripEvent.pollingTick());
+      },
+      failure: (msg) {
+        printY('[TripBloc] compensation claim failed=$msg');
+        emit(
+          state.copyWith(
+            compensationClaimStatus:
+                BlocStatus<TripCompensationClaimEntity>.failure(msg),
+          ),
+        );
       },
     );
   }
@@ -158,26 +224,37 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     _HistoryStarted event,
     Emitter<TripState> emit,
   ) async {
-    emit(state.copyWith(
-      historyStatus: const BlocStatus.loading(),
-      trips: [],
-      currentPage: 1,
-      hasMore: true,
-    ));
-    final Result<PagedResult<TripSummaryEntity>> result = await _facade.getTripHistory();
+    emit(
+      state.copyWith(
+        historyStatus: const BlocStatus.loading(),
+        trips: [],
+        currentPage: 1,
+        hasMore: true,
+      ),
+    );
+    final Result<PagedResult<TripSummaryEntity>> result = await _facade
+        .getTripHistory();
     result.when(
       success: (paged) {
         printG('[TripBloc] history loaded count=${paged.items.length}');
-        emit(state.copyWith(
-          historyStatus: BlocStatus<List<TripSummaryEntity>>.success(paged.items),
-          trips: paged.items,
-          currentPage: 1,
-          hasMore: paged.items.length < paged.totalCount,
-        ));
+        emit(
+          state.copyWith(
+            historyStatus: BlocStatus<List<TripSummaryEntity>>.success(
+              paged.items,
+            ),
+            trips: paged.items,
+            currentPage: 1,
+            hasMore: paged.items.length < paged.totalCount,
+          ),
+        );
       },
       failure: (msg) {
         printY('[TripBloc] history failed=$msg');
-        emit(state.copyWith(historyStatus: BlocStatus<List<TripSummaryEntity>>.failure(msg)));
+        emit(
+          state.copyWith(
+            historyStatus: BlocStatus<List<TripSummaryEntity>>.failure(msg),
+          ),
+        );
       },
     );
   }
@@ -188,21 +265,60 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   ) async {
     if (!state.hasMore || state.historyStatus.isLoading) return;
     final nextPage = state.currentPage + 1;
+    printC('[TripBloc] history next page requested page=$nextPage');
     emit(state.copyWith(historyStatus: const BlocStatus.loading()));
-    final Result<PagedResult<TripSummaryEntity>> result = await _facade.getTripHistory(page: nextPage);
+    final Result<PagedResult<TripSummaryEntity>> result = await _facade
+        .getTripHistory(page: nextPage);
     result.when(
       success: (paged) {
+        printG('[TripBloc] history page loaded count=${paged.items.length}');
         final List<TripSummaryEntity> merged = [...state.trips, ...paged.items];
-        emit(state.copyWith(
-          historyStatus: BlocStatus<List<TripSummaryEntity>>.success(merged),
-          trips: merged,
-          currentPage: nextPage,
-          hasMore: merged.length < paged.totalCount,
-        ));
+        emit(
+          state.copyWith(
+            historyStatus: BlocStatus<List<TripSummaryEntity>>.success(merged),
+            trips: merged,
+            currentPage: nextPage,
+            hasMore: merged.length < paged.totalCount,
+          ),
+        );
       },
       failure: (msg) {
-        emit(state.copyWith(historyStatus: BlocStatus<List<TripSummaryEntity>>.failure(msg)));
+        printY('[TripBloc] history page failed=$msg');
+        emit(
+          state.copyWith(
+            historyStatus: BlocStatus<List<TripSummaryEntity>>.failure(msg),
+          ),
+        );
       },
+    );
+  }
+
+  Future<void> _onDriverLocationUpdated(
+    _DriverLocationUpdated event,
+    Emitter<TripState> emit,
+  ) async {
+    printC(
+      '[TripBloc] driver location updated lat=${event.latitude} lng=${event.longitude}',
+    );
+    final oldLocation = state.activeDriverLocation;
+    double? bearing;
+    if (oldLocation != null) {
+      bearing = Geolocator.bearingBetween(
+        oldLocation.latitude,
+        oldLocation.longitude,
+        event.latitude,
+        event.longitude,
+      );
+    }
+
+    emit(
+      state.copyWith(
+        activeDriverLocation: DriverLocationEntity(
+          latitude: event.latitude,
+          longitude: event.longitude,
+          bearing: bearing,
+        ),
+      ),
     );
   }
 }

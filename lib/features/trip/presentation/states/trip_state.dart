@@ -6,8 +6,11 @@ abstract class TripState with _$TripState {
     // Active trip
     @Default(BlocStatus<TripEntity>.initial()) BlocStatus<TripEntity> tripStatus,
     @Default(BlocStatus<void>.initial()) BlocStatus<void> cancelStatus,
+    @Default(BlocStatus<TripCompensationClaimEntity>.initial())
+    BlocStatus<TripCompensationClaimEntity> compensationClaimStatus,
     @Default(false) bool isPolling,
     String? activeTripId,
+    DriverLocationEntity? activeDriverLocation,
 
     // Trip history
     @Default(BlocStatus<List<TripSummaryEntity>>.initial())

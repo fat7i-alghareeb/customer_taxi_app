@@ -13,4 +13,10 @@ abstract class AuthRepository {
     required String verificationId,
     required String smsCode,
   });
+
+  /// Updates the FCM device token on the backend.
+  Future<Result<void>> updateFcmToken(String token);
+
+  /// Updates the user's preferred language on the backend.
+  Future<Result<void>> updatePreferredLanguage(String languageCode);
 }

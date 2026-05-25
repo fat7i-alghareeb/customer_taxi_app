@@ -53,6 +53,25 @@ sealed class RealtimeEvent with _$RealtimeEvent {
     required String passengerId,
     required double amount,
   }) = RealtimeTripRefunded;
+
+  const factory RealtimeEvent.driverEnRoute({
+    required String tripId,
+    required String passengerId,
+    required String driverId,
+  }) = RealtimeDriverEnRoute;
+
+  const factory RealtimeEvent.driverArrived({
+    required String tripId,
+    required String passengerId,
+    required String driverId,
+  }) = RealtimeDriverArrived;
+
+  const factory RealtimeEvent.driverLocationUpdated({
+    required String tripId,
+    required String driverId,
+    required double latitude,
+    required double longitude,
+  }) = RealtimeDriverLocationUpdated;
 }
 
 /// Stable list of every SignalR method name the hub will push to clients.
@@ -66,6 +85,9 @@ abstract final class RealtimeMethodNames {
   static const paymentConfirmed = 'PaymentConfirmed';
   static const paymentFailed = 'PaymentFailed';
   static const tripRefunded = 'TripRefunded';
+  static const driverEnRoute = 'DriverEnRoute';
+  static const driverArrived = 'DriverArrived';
+  static const driverLocationUpdated = 'DriverLocationUpdated';
 
   static const all = <String>[
     tripRequested,
@@ -76,6 +98,9 @@ abstract final class RealtimeMethodNames {
     paymentConfirmed,
     paymentFailed,
     tripRefunded,
+    driverEnRoute,
+    driverArrived,
+    driverLocationUpdated,
   ];
 }
 
@@ -90,5 +115,8 @@ extension RealtimeEventTripId on RealtimeEvent {
     RealtimePaymentConfirmed(:final tripId) => tripId,
     RealtimePaymentFailed(:final tripId) => tripId,
     RealtimeTripRefunded(:final tripId) => tripId,
+    RealtimeDriverEnRoute(:final tripId) => tripId,
+    RealtimeDriverArrived(:final tripId) => tripId,
+    RealtimeDriverLocationUpdated(:final tripId) => tripId,
   };
 }

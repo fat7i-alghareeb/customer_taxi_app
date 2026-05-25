@@ -7,6 +7,8 @@ extension OrderStripePaymentModelMapper on OrderStripePaymentModel {
       paymentIntentId: paymentIntentId,
       clientSecret: clientSecret,
       publishableKey: publishableKey,
+      customerId: customerId,
+      ephemeralKeySecret: ephemeralKeySecret,
     );
   }
 }
