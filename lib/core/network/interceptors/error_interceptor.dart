@@ -115,14 +115,16 @@ class ErrorInterceptor extends Interceptor {
   /// payload. Common backend shapes are supported:
   /// - `{ "message": "..." }`
   /// - `{ "error": "..." }`
+  /// - `{ "title": "..." }` (ASP.NET ProblemDetails)
   /// - `{ "detail": "..." }`
   String? _extractApiMessage(Response<dynamic>? response) {
     if (response == null) return null;
     final data = response.data;
     if (data == null) return null;
     if (data is String && data.trim().isNotEmpty) return data;
-    if (data is Map<String, dynamic>) {
-      final Object? msg = data['message'] ?? data['error'] ?? data['detail'];
+    if (data is Map) {
+      final Object? msg =
+          data['message'] ?? data['error'] ?? data['title'] ?? data['detail'];
       if (msg is String && msg.trim().isNotEmpty) return msg;
     }
     return null;

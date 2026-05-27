@@ -3,6 +3,9 @@ import 'dart:convert';
 
 import 'package:dio_refresh_bot/dio_refresh_bot.dart';
 import 'package:injectable/injectable.dart';
+import 'package:customertaxi/core/injection/injectable.dart';
+import 'package:customertaxi/core/services/localization/locale_service.dart';
+import 'package:customertaxi/features/auth/domain/repositories/auth_repository.dart';
 
 import '../../../utils/constants/auth_constants.dart';
 import '../../../utils/helpers/colored_print.dart';
@@ -114,6 +117,17 @@ class AuthManager {
 
     if (token != null) {
       await tokenStorage.write(token);
+    }
+
+    // Sync preferred language to backend post-login
+    try {
+      final localeService = getIt<LocaleService>();
+      final langCode = await localeService.currentLanguageCode();
+      final authRepo = getIt<AuthRepository>();
+      unawaited(authRepo.updatePreferredLanguage(langCode));
+      printG('${AuthLogTags.authManager} language synced post-login: $langCode');
+    } catch (e) {
+      printY('${AuthLogTags.authManager} language sync post-login failed: $e');
     }
 
     printG('${AuthLogTags.authManager} login complete');

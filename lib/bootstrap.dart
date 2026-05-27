@@ -22,6 +22,8 @@ import 'core/services/realtime/realtime_lifecycle_coordinator.dart';
 import 'core/services/session/auth_manager.dart';
 import 'core/services/session/auth_state_notifier.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
+import 'features/root/presentation/ui/screens/root_screen.dart';
+import 'features/trip/presentation/states/trip_bloc.dart';
 import 'core/theme/theme_controller.dart';
 import 'common/widgets/stage_tools/stage_device_preview_controller.dart';
 import 'flavors.dart' show F, Flavor;
@@ -106,6 +108,19 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         } catch (e) {
           printY('[Bootstrap] Startup backup FCM token update failed: $e');
         }
+
+        // Backup language check on startup if authenticated
+        try {
+          final localeService = getIt<LocaleService>();
+          final code = await localeService.currentLanguageCode();
+          final authRepo = getIt<AuthRepository>();
+          await authRepo.updatePreferredLanguage(code);
+          printG(
+            '[Bootstrap] Startup backup language update SUCCESS: $code',
+          );
+        } catch (e) {
+          printY('[Bootstrap] Startup backup language update failed: $e');
+        }
       }
 
       printG('[Bootstrap] fetching client config...');
@@ -147,6 +162,12 @@ Future<void> _initializeNotifications() async {
       onNotificationTap: (payload) async {
         await _handleNotificationNavigation(payload);
       },
+      onForegroundNotification: (payload) async {
+        // App is in the foreground when the push arrives — pipe any trip id
+        // straight to the bloc so the active-trip sheet updates without
+        // requiring the user to tap the banner.
+        _routeTripPayloadToBloc(payload);
+      },
       onTokenRefresh: (token) async {
         final authState = getIt<AuthStateNotifier>();
         if (authState.isAuthenticated) {
@@ -170,9 +191,22 @@ Future<void> _initializeNotifications() async {
 Future<void> _handleNotificationNavigation(
   AppNotificationPayload payload,
 ) async {
-  final location = payload.toGoRouterLocation;
-  if (location == null || location.isEmpty) {
-    printC('[Notifications] Tap ignored (no route/deepLink)');
+  // If the payload carries a trip id, push it into the bloc so the trip is
+  // loaded and the staged sheet renders in the correct stage.
+  final tripId = _tripIdFromPayload(payload);
+  if (tripId != null) {
+    _routeTripPayloadToBloc(payload);
+  }
+
+  // Prefer an explicit deep-link if the backend supplied one; otherwise
+  // fall back to the root screen when we only have a trip id; otherwise no-op.
+  final explicitLocation = payload.toGoRouterLocation;
+  final location = (explicitLocation != null && explicitLocation.isNotEmpty)
+      ? explicitLocation
+      : (tripId != null ? RootScreen.pagePath : null);
+
+  if (location == null) {
+    printC('[Notifications] Tap ignored (no route/deepLink/tripId)');
     return;
   }
 
@@ -183,6 +217,32 @@ Future<void> _handleNotificationNavigation(
   } catch (e) {
     printY('[Notifications] Navigation failed: $e (location=$location)');
   }
+}
+
+/// If [payload] carries a `tripId`, ask the singleton [TripBloc] to start
+/// streaming it so the active trip surface updates immediately. Called from
+/// both the tap handler and the foreground push handler.
+void _routeTripPayloadToBloc(AppNotificationPayload payload) {
+  final tripId = _tripIdFromPayload(payload);
+  if (tripId == null) return;
+  try {
+    getIt<TripBloc>().add(TripEvent.started(tripId));
+    printG('[Notifications] Trip arrival routed to bloc tripId=$tripId');
+  } catch (e) {
+    printY('[Notifications] Trip routing failed: $e');
+  }
+}
+
+String? _tripIdFromPayload(AppNotificationPayload payload) {
+  final raw = payload.data['tripId'] ??
+      payload.data['TripId'] ??
+      payload.data['trip_id'];
+  if (raw is String && raw.trim().isNotEmpty) return raw;
+  if (raw != null) {
+    final asString = raw.toString();
+    if (asString.trim().isNotEmpty) return asString;
+  }
+  return null;
 }
 
 /// Initializes the authentication layer and HTTP client.
