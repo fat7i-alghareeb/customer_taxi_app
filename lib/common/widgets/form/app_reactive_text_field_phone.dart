@@ -434,15 +434,14 @@ extension PhoneNumberX on PhoneNumber {
   /// Robustly strips the dial code and the '+' prefix from the phone number
   /// to get the raw national digits suitable for the text field.
   String parseNumber() {
-    final dial = dialCode ?? '';
+    final rawDial = dialCode ?? '';
+    final dial = rawDial.startsWith('+') ? rawDial.substring(1) : rawDial;
     var text = phoneNumber ?? '';
 
-    // Strip '+' if present
     if (text.startsWith('+')) {
       text = text.substring(1);
     }
 
-    // Strip dial code if present at the start
     if (dial.isNotEmpty && text.startsWith(dial)) {
       text = text.substring(dial.length);
     }

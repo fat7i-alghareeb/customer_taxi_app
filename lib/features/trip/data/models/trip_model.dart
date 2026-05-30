@@ -21,10 +21,28 @@ abstract class TripModel with _$TripModel {
     TripCancellationModel? cancellation,
     TripCompensationClaimModel? compensationClaim,
     TripWaitingSessionModel? activeWaitingSession,
+    String? encodedOverviewPolyline,
+    @Default([]) List<TripRouteSegmentModel> routeSegments,
   }) = _TripModel;
 
   factory TripModel.fromJson(Map<String, dynamic> json) =>
       _$TripModelFromJson(json);
+}
+
+@freezed
+abstract class TripRouteSegmentModel with _$TripRouteSegmentModel {
+  const factory TripRouteSegmentModel({
+    required int distanceMeters,
+    required int durationSeconds,
+    required String encodedPolyline,
+    required double startLatitude,
+    required double startLongitude,
+    required double endLatitude,
+    required double endLongitude,
+  }) = _TripRouteSegmentModel;
+
+  factory TripRouteSegmentModel.fromJson(Map<String, dynamic> json) =>
+      _$TripRouteSegmentModelFromJson(json);
 }
 
 @freezed

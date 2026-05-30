@@ -10,8 +10,6 @@ import 'package:customertaxi/features/root/presentation/ui/screens/contact_us_sc
 import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_screen.dart';
 import 'package:customertaxi/features/favorites/presentation/ui/screens/favorites_screen.dart';
 
-import 'package:customertaxi/common/widgets/show_overlay.dart';
-
 import 'drawer/drawer_header_section.dart';
 import 'drawer/drawer_logout_footer.dart';
 import 'drawer/drawer_menu_item.dart';
@@ -65,12 +63,6 @@ class RootDrawerContent extends StatelessWidget {
                 ),
                 _buildLanguageSelector(context),
                 _buildThemeSelector(context),
-                DrawerMenuItem(
-                  icon: FontAwesomeIcons.gear,
-                  label: AppStrings.settings,
-                  onTap: () =>
-                      showSuccessOverlay(context, AppStrings.comingSoon),
-                ),
               ],
             ),
           ),

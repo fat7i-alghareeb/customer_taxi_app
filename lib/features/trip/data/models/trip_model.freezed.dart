@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TripModel {
 
- String get id; String get referenceCode; String get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; List<TripStopModel> get stops; String? get vehicleTypeName; double? get driverLat; double? get driverLng; DateTime? get etaToPickup; TripCancellationModel? get cancellation; TripCompensationClaimModel? get compensationClaim; TripWaitingSessionModel? get activeWaitingSession;
+ String get id; String get referenceCode; String get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; List<TripStopModel> get stops; String? get vehicleTypeName; double? get driverLat; double? get driverLng; DateTime? get etaToPickup; TripCancellationModel? get cancellation; TripCompensationClaimModel? get compensationClaim; TripWaitingSessionModel? get activeWaitingSession; String? get encodedOverviewPolyline; List<TripRouteSegmentModel> get routeSegments;
 /// Create a copy of TripModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TripModelCopyWith<TripModel> get copyWith => _$TripModelCopyWithImpl<TripModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripModel&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripModel&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other.routeSegments, routeSegments));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,compensationClaim,activeWaitingSession);
+int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(routeSegments));
 
 @override
 String toString() {
-  return 'TripModel(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession)';
+  return 'TripModel(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TripModelCopyWith<$Res>  {
   factory $TripModelCopyWith(TripModel value, $Res Function(TripModel) _then) = _$TripModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String referenceCode, String status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopModel> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationModel? cancellation, TripCompensationClaimModel? compensationClaim, TripWaitingSessionModel? activeWaitingSession
+ String id, String referenceCode, String status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopModel> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationModel? cancellation, TripCompensationClaimModel? compensationClaim, TripWaitingSessionModel? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentModel> routeSegments
 });
 
 
@@ -65,7 +65,7 @@ class _$TripModelCopyWithImpl<$Res>
 
 /// Create a copy of TripModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -82,7 +82,9 @@ as double?,etaToPickup: freezed == etaToPickup ? _self.etaToPickup : etaToPickup
 as DateTime?,cancellation: freezed == cancellation ? _self.cancellation : cancellation // ignore: cast_nullable_to_non_nullable
 as TripCancellationModel?,compensationClaim: freezed == compensationClaim ? _self.compensationClaim : compensationClaim // ignore: cast_nullable_to_non_nullable
 as TripCompensationClaimModel?,activeWaitingSession: freezed == activeWaitingSession ? _self.activeWaitingSession : activeWaitingSession // ignore: cast_nullable_to_non_nullable
-as TripWaitingSessionModel?,
+as TripWaitingSessionModel?,encodedOverviewPolyline: freezed == encodedOverviewPolyline ? _self.encodedOverviewPolyline : encodedOverviewPolyline // ignore: cast_nullable_to_non_nullable
+as String?,routeSegments: null == routeSegments ? _self.routeSegments : routeSegments // ignore: cast_nullable_to_non_nullable
+as List<TripRouteSegmentModel>,
   ));
 }
 /// Create a copy of TripModel
@@ -203,10 +205,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopModel> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationModel? cancellation,  TripCompensationClaimModel? compensationClaim,  TripWaitingSessionModel? activeWaitingSession)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopModel> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationModel? cancellation,  TripCompensationClaimModel? compensationClaim,  TripWaitingSessionModel? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentModel> routeSegments)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripModel() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments);case _:
   return orElse();
 
 }
@@ -224,10 +226,10 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopModel> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationModel? cancellation,  TripCompensationClaimModel? compensationClaim,  TripWaitingSessionModel? activeWaitingSession)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopModel> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationModel? cancellation,  TripCompensationClaimModel? compensationClaim,  TripWaitingSessionModel? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentModel> routeSegments)  $default,) {final _that = this;
 switch (_that) {
 case _TripModel():
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -244,10 +246,10 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopModel> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationModel? cancellation,  TripCompensationClaimModel? compensationClaim,  TripWaitingSessionModel? activeWaitingSession)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  String status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopModel> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationModel? cancellation,  TripCompensationClaimModel? compensationClaim,  TripWaitingSessionModel? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentModel> routeSegments)?  $default,) {final _that = this;
 switch (_that) {
 case _TripModel() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments);case _:
   return null;
 
 }
@@ -259,7 +261,7 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 @JsonSerializable()
 
 class _TripModel implements TripModel {
-  const _TripModel({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, final  List<TripStopModel> stops = const [], this.vehicleTypeName, this.driverLat, this.driverLng, this.etaToPickup, this.cancellation, this.compensationClaim, this.activeWaitingSession}): _stops = stops;
+  const _TripModel({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, final  List<TripStopModel> stops = const [], this.vehicleTypeName, this.driverLat, this.driverLng, this.etaToPickup, this.cancellation, this.compensationClaim, this.activeWaitingSession, this.encodedOverviewPolyline, final  List<TripRouteSegmentModel> routeSegments = const []}): _stops = stops,_routeSegments = routeSegments;
   factory _TripModel.fromJson(Map<String, dynamic> json) => _$TripModelFromJson(json);
 
 @override final  String id;
@@ -283,6 +285,14 @@ class _TripModel implements TripModel {
 @override final  TripCancellationModel? cancellation;
 @override final  TripCompensationClaimModel? compensationClaim;
 @override final  TripWaitingSessionModel? activeWaitingSession;
+@override final  String? encodedOverviewPolyline;
+ final  List<TripRouteSegmentModel> _routeSegments;
+@override@JsonKey() List<TripRouteSegmentModel> get routeSegments {
+  if (_routeSegments is EqualUnmodifiableListView) return _routeSegments;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_routeSegments);
+}
+
 
 /// Create a copy of TripModel
 /// with the given fields replaced by the non-null parameter values.
@@ -297,16 +307,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripModel&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripModel&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other._routeSegments, _routeSegments));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(_stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,compensationClaim,activeWaitingSession);
+int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(_stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(_routeSegments));
 
 @override
 String toString() {
-  return 'TripModel(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession)';
+  return 'TripModel(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments)';
 }
 
 
@@ -317,7 +327,7 @@ abstract mixin class _$TripModelCopyWith<$Res> implements $TripModelCopyWith<$Re
   factory _$TripModelCopyWith(_TripModel value, $Res Function(_TripModel) _then) = __$TripModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String referenceCode, String status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopModel> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationModel? cancellation, TripCompensationClaimModel? compensationClaim, TripWaitingSessionModel? activeWaitingSession
+ String id, String referenceCode, String status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopModel> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationModel? cancellation, TripCompensationClaimModel? compensationClaim, TripWaitingSessionModel? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentModel> routeSegments
 });
 
 
@@ -334,7 +344,7 @@ class __$TripModelCopyWithImpl<$Res>
 
 /// Create a copy of TripModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,}) {
   return _then(_TripModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -351,7 +361,9 @@ as double?,etaToPickup: freezed == etaToPickup ? _self.etaToPickup : etaToPickup
 as DateTime?,cancellation: freezed == cancellation ? _self.cancellation : cancellation // ignore: cast_nullable_to_non_nullable
 as TripCancellationModel?,compensationClaim: freezed == compensationClaim ? _self.compensationClaim : compensationClaim // ignore: cast_nullable_to_non_nullable
 as TripCompensationClaimModel?,activeWaitingSession: freezed == activeWaitingSession ? _self.activeWaitingSession : activeWaitingSession // ignore: cast_nullable_to_non_nullable
-as TripWaitingSessionModel?,
+as TripWaitingSessionModel?,encodedOverviewPolyline: freezed == encodedOverviewPolyline ? _self.encodedOverviewPolyline : encodedOverviewPolyline // ignore: cast_nullable_to_non_nullable
+as String?,routeSegments: null == routeSegments ? _self._routeSegments : routeSegments // ignore: cast_nullable_to_non_nullable
+as List<TripRouteSegmentModel>,
   ));
 }
 
@@ -392,6 +404,287 @@ $TripWaitingSessionModelCopyWith<$Res>? get activeWaitingSession {
     return _then(_self.copyWith(activeWaitingSession: value));
   });
 }
+}
+
+
+/// @nodoc
+mixin _$TripRouteSegmentModel {
+
+ int get distanceMeters; int get durationSeconds; String get encodedPolyline; double get startLatitude; double get startLongitude; double get endLatitude; double get endLongitude;
+/// Create a copy of TripRouteSegmentModel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TripRouteSegmentModelCopyWith<TripRouteSegmentModel> get copyWith => _$TripRouteSegmentModelCopyWithImpl<TripRouteSegmentModel>(this as TripRouteSegmentModel, _$identity);
+
+  /// Serializes this TripRouteSegmentModel to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripRouteSegmentModel&&(identical(other.distanceMeters, distanceMeters) || other.distanceMeters == distanceMeters)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.encodedPolyline, encodedPolyline) || other.encodedPolyline == encodedPolyline)&&(identical(other.startLatitude, startLatitude) || other.startLatitude == startLatitude)&&(identical(other.startLongitude, startLongitude) || other.startLongitude == startLongitude)&&(identical(other.endLatitude, endLatitude) || other.endLatitude == endLatitude)&&(identical(other.endLongitude, endLongitude) || other.endLongitude == endLongitude));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,distanceMeters,durationSeconds,encodedPolyline,startLatitude,startLongitude,endLatitude,endLongitude);
+
+@override
+String toString() {
+  return 'TripRouteSegmentModel(distanceMeters: $distanceMeters, durationSeconds: $durationSeconds, encodedPolyline: $encodedPolyline, startLatitude: $startLatitude, startLongitude: $startLongitude, endLatitude: $endLatitude, endLongitude: $endLongitude)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TripRouteSegmentModelCopyWith<$Res>  {
+  factory $TripRouteSegmentModelCopyWith(TripRouteSegmentModel value, $Res Function(TripRouteSegmentModel) _then) = _$TripRouteSegmentModelCopyWithImpl;
+@useResult
+$Res call({
+ int distanceMeters, int durationSeconds, String encodedPolyline, double startLatitude, double startLongitude, double endLatitude, double endLongitude
+});
+
+
+
+
+}
+/// @nodoc
+class _$TripRouteSegmentModelCopyWithImpl<$Res>
+    implements $TripRouteSegmentModelCopyWith<$Res> {
+  _$TripRouteSegmentModelCopyWithImpl(this._self, this._then);
+
+  final TripRouteSegmentModel _self;
+  final $Res Function(TripRouteSegmentModel) _then;
+
+/// Create a copy of TripRouteSegmentModel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? distanceMeters = null,Object? durationSeconds = null,Object? encodedPolyline = null,Object? startLatitude = null,Object? startLongitude = null,Object? endLatitude = null,Object? endLongitude = null,}) {
+  return _then(_self.copyWith(
+distanceMeters: null == distanceMeters ? _self.distanceMeters : distanceMeters // ignore: cast_nullable_to_non_nullable
+as int,durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
+as int,encodedPolyline: null == encodedPolyline ? _self.encodedPolyline : encodedPolyline // ignore: cast_nullable_to_non_nullable
+as String,startLatitude: null == startLatitude ? _self.startLatitude : startLatitude // ignore: cast_nullable_to_non_nullable
+as double,startLongitude: null == startLongitude ? _self.startLongitude : startLongitude // ignore: cast_nullable_to_non_nullable
+as double,endLatitude: null == endLatitude ? _self.endLatitude : endLatitude // ignore: cast_nullable_to_non_nullable
+as double,endLongitude: null == endLongitude ? _self.endLongitude : endLongitude // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [TripRouteSegmentModel].
+extension TripRouteSegmentModelPatterns on TripRouteSegmentModel {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TripRouteSegmentModel value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TripRouteSegmentModel() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TripRouteSegmentModel value)  $default,){
+final _that = this;
+switch (_that) {
+case _TripRouteSegmentModel():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TripRouteSegmentModel value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TripRouteSegmentModel() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int distanceMeters,  int durationSeconds,  String encodedPolyline,  double startLatitude,  double startLongitude,  double endLatitude,  double endLongitude)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TripRouteSegmentModel() when $default != null:
+return $default(_that.distanceMeters,_that.durationSeconds,_that.encodedPolyline,_that.startLatitude,_that.startLongitude,_that.endLatitude,_that.endLongitude);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int distanceMeters,  int durationSeconds,  String encodedPolyline,  double startLatitude,  double startLongitude,  double endLatitude,  double endLongitude)  $default,) {final _that = this;
+switch (_that) {
+case _TripRouteSegmentModel():
+return $default(_that.distanceMeters,_that.durationSeconds,_that.encodedPolyline,_that.startLatitude,_that.startLongitude,_that.endLatitude,_that.endLongitude);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int distanceMeters,  int durationSeconds,  String encodedPolyline,  double startLatitude,  double startLongitude,  double endLatitude,  double endLongitude)?  $default,) {final _that = this;
+switch (_that) {
+case _TripRouteSegmentModel() when $default != null:
+return $default(_that.distanceMeters,_that.durationSeconds,_that.encodedPolyline,_that.startLatitude,_that.startLongitude,_that.endLatitude,_that.endLongitude);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _TripRouteSegmentModel implements TripRouteSegmentModel {
+  const _TripRouteSegmentModel({required this.distanceMeters, required this.durationSeconds, required this.encodedPolyline, required this.startLatitude, required this.startLongitude, required this.endLatitude, required this.endLongitude});
+  factory _TripRouteSegmentModel.fromJson(Map<String, dynamic> json) => _$TripRouteSegmentModelFromJson(json);
+
+@override final  int distanceMeters;
+@override final  int durationSeconds;
+@override final  String encodedPolyline;
+@override final  double startLatitude;
+@override final  double startLongitude;
+@override final  double endLatitude;
+@override final  double endLongitude;
+
+/// Create a copy of TripRouteSegmentModel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TripRouteSegmentModelCopyWith<_TripRouteSegmentModel> get copyWith => __$TripRouteSegmentModelCopyWithImpl<_TripRouteSegmentModel>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$TripRouteSegmentModelToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripRouteSegmentModel&&(identical(other.distanceMeters, distanceMeters) || other.distanceMeters == distanceMeters)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.encodedPolyline, encodedPolyline) || other.encodedPolyline == encodedPolyline)&&(identical(other.startLatitude, startLatitude) || other.startLatitude == startLatitude)&&(identical(other.startLongitude, startLongitude) || other.startLongitude == startLongitude)&&(identical(other.endLatitude, endLatitude) || other.endLatitude == endLatitude)&&(identical(other.endLongitude, endLongitude) || other.endLongitude == endLongitude));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,distanceMeters,durationSeconds,encodedPolyline,startLatitude,startLongitude,endLatitude,endLongitude);
+
+@override
+String toString() {
+  return 'TripRouteSegmentModel(distanceMeters: $distanceMeters, durationSeconds: $durationSeconds, encodedPolyline: $encodedPolyline, startLatitude: $startLatitude, startLongitude: $startLongitude, endLatitude: $endLatitude, endLongitude: $endLongitude)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TripRouteSegmentModelCopyWith<$Res> implements $TripRouteSegmentModelCopyWith<$Res> {
+  factory _$TripRouteSegmentModelCopyWith(_TripRouteSegmentModel value, $Res Function(_TripRouteSegmentModel) _then) = __$TripRouteSegmentModelCopyWithImpl;
+@override @useResult
+$Res call({
+ int distanceMeters, int durationSeconds, String encodedPolyline, double startLatitude, double startLongitude, double endLatitude, double endLongitude
+});
+
+
+
+
+}
+/// @nodoc
+class __$TripRouteSegmentModelCopyWithImpl<$Res>
+    implements _$TripRouteSegmentModelCopyWith<$Res> {
+  __$TripRouteSegmentModelCopyWithImpl(this._self, this._then);
+
+  final _TripRouteSegmentModel _self;
+  final $Res Function(_TripRouteSegmentModel) _then;
+
+/// Create a copy of TripRouteSegmentModel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? distanceMeters = null,Object? durationSeconds = null,Object? encodedPolyline = null,Object? startLatitude = null,Object? startLongitude = null,Object? endLatitude = null,Object? endLongitude = null,}) {
+  return _then(_TripRouteSegmentModel(
+distanceMeters: null == distanceMeters ? _self.distanceMeters : distanceMeters // ignore: cast_nullable_to_non_nullable
+as int,durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
+as int,encodedPolyline: null == encodedPolyline ? _self.encodedPolyline : encodedPolyline // ignore: cast_nullable_to_non_nullable
+as String,startLatitude: null == startLatitude ? _self.startLatitude : startLatitude // ignore: cast_nullable_to_non_nullable
+as double,startLongitude: null == startLongitude ? _self.startLongitude : startLongitude // ignore: cast_nullable_to_non_nullable
+as double,endLatitude: null == endLatitude ? _self.endLatitude : endLatitude // ignore: cast_nullable_to_non_nullable
+as double,endLongitude: null == endLongitude ? _self.endLongitude : endLongitude // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+
 }
 
 

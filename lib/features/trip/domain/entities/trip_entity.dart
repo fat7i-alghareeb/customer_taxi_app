@@ -21,6 +21,8 @@ abstract class TripEntity with _$TripEntity {
     TripCancellationEntity? cancellation,
     TripCompensationClaimEntity? compensationClaim,
     TripWaitingSessionEntity? activeWaitingSession,
+    String? encodedOverviewPolyline,
+    @Default([]) List<TripRouteSegmentEntity> routeSegments,
   }) = _TripEntity;
 }
 
@@ -30,6 +32,19 @@ abstract class TripStopEntity with _$TripStopEntity {
     required double latitude,
     required double longitude,
   }) = _TripStopEntity;
+}
+
+@freezed
+abstract class TripRouteSegmentEntity with _$TripRouteSegmentEntity {
+  const factory TripRouteSegmentEntity({
+    required int distanceMeters,
+    required int durationSeconds,
+    required String encodedPolyline,
+    required double startLatitude,
+    required double startLongitude,
+    required double endLatitude,
+    required double endLongitude,
+  }) = _TripRouteSegmentEntity;
 }
 
 @freezed

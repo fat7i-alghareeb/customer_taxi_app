@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart' show SystemSound, SystemSoundType;
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:customertaxi/common/imports/imports.dart';
@@ -38,11 +39,13 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   double _interpolatedBearing = 0.0;
 
   bool _arrivalAlertPlayed = false;
+  TripStatus? _lastSeenTripStatus;
 
   @override
   void initState() {
     super.initState();
     _loadCustomMarkers();
+    _primeArrivalGuardFromCurrentState();
 
     _carMovementController =
         AnimationController(
@@ -189,6 +192,18 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     );
   }
 
+  void _primeArrivalGuardFromCurrentState() {
+    final TripState current = context.read<TripBloc>().state;
+    current.tripStatus.whenOrNull(
+      success: (trip) {
+        _lastSeenTripStatus = trip.status;
+        if (trip.status == TripStatus.driverArrived) {
+          _arrivalAlertPlayed = true;
+        }
+      },
+    );
+  }
+
   void _triggerArrivalAlert() {
     if (_arrivalAlertPlayed) return;
     _arrivalAlertPlayed = true;
@@ -212,7 +227,11 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     state.tripStatus.whenOrNull(
       success: (trip) {
         printC('[ActiveTripBody] trip state changed status=${trip.status}');
-        if (trip.status == TripStatus.driverArrived) {
+        final isRealTransitionToArrived =
+            _lastSeenTripStatus != TripStatus.driverArrived &&
+                trip.status == TripStatus.driverArrived;
+        _lastSeenTripStatus = trip.status;
+        if (isRealTransitionToArrived) {
           _triggerArrivalAlert();
         }
 
@@ -294,11 +313,48 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     return markers;
   }
 
+  final Map<String, List<List<LatLng>>> _decodedRouteCache = {};
+
   List<List<LatLng>> _buildRoutePolylines(TripEntity trip) {
-    final List<LatLng> points = trip.stops
+    if (trip.routeSegments.isNotEmpty) {
+      final cacheKey = '${trip.id}|segments';
+      final cached = _decodedRouteCache[cacheKey];
+      if (cached != null) return cached;
+
+      final decoded = trip.routeSegments
+          .map((segment) => PolylinePoints.decodePolyline(segment.encodedPolyline)
+              .map((p) => LatLng(p.latitude, p.longitude))
+              .toList())
+          .where((leg) => leg.isNotEmpty)
+          .toList();
+
+      if (decoded.isNotEmpty) {
+        _decodedRouteCache[cacheKey] = decoded;
+        return decoded;
+      }
+    }
+
+    final overview = trip.encodedOverviewPolyline;
+    if (overview != null && overview.isNotEmpty) {
+      final cacheKey = '${trip.id}|overview';
+      final cached = _decodedRouteCache[cacheKey];
+      if (cached != null) return cached;
+
+      final decoded = PolylinePoints.decodePolyline(overview)
+          .map((p) => LatLng(p.latitude, p.longitude))
+          .toList();
+
+      if (decoded.isNotEmpty) {
+        final result = [decoded];
+        _decodedRouteCache[cacheKey] = result;
+        return result;
+      }
+    }
+
+    final List<LatLng> stopPoints = trip.stops
         .map((s) => LatLng(s.latitude, s.longitude))
         .toList();
-    return points.isNotEmpty ? [points] : const <List<LatLng>>[];
+    return stopPoints.isNotEmpty ? [stopPoints] : const <List<LatLng>>[];
   }
 
   @override

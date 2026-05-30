@@ -19,6 +19,20 @@ extension TripModelMapper on TripModel {
     cancellation: cancellation?.toEntity,
     compensationClaim: compensationClaim?.toEntity,
     activeWaitingSession: activeWaitingSession?.toEntity,
+    encodedOverviewPolyline: encodedOverviewPolyline,
+    routeSegments: routeSegments.map((s) => s.toEntity).toList(),
+  );
+}
+
+extension TripRouteSegmentModelMapper on TripRouteSegmentModel {
+  TripRouteSegmentEntity get toEntity => TripRouteSegmentEntity(
+    distanceMeters: distanceMeters,
+    durationSeconds: durationSeconds,
+    encodedPolyline: encodedPolyline,
+    startLatitude: startLatitude,
+    startLongitude: startLongitude,
+    endLatitude: endLatitude,
+    endLongitude: endLongitude,
   );
 }
 

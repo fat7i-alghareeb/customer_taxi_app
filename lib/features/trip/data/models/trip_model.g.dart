@@ -42,6 +42,14 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
       : TripWaitingSessionModel.fromJson(
           json['activeWaitingSession'] as Map<String, dynamic>,
         ),
+  encodedOverviewPolyline: json['encodedOverviewPolyline'] as String?,
+  routeSegments:
+      (json['routeSegments'] as List<dynamic>?)
+          ?.map(
+            (e) => TripRouteSegmentModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
@@ -61,7 +69,33 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'cancellation': instance.cancellation,
       'compensationClaim': instance.compensationClaim,
       'activeWaitingSession': instance.activeWaitingSession,
+      'encodedOverviewPolyline': instance.encodedOverviewPolyline,
+      'routeSegments': instance.routeSegments,
     };
+
+_TripRouteSegmentModel _$TripRouteSegmentModelFromJson(
+  Map<String, dynamic> json,
+) => _TripRouteSegmentModel(
+  distanceMeters: (json['distanceMeters'] as num).toInt(),
+  durationSeconds: (json['durationSeconds'] as num).toInt(),
+  encodedPolyline: json['encodedPolyline'] as String,
+  startLatitude: (json['startLatitude'] as num).toDouble(),
+  startLongitude: (json['startLongitude'] as num).toDouble(),
+  endLatitude: (json['endLatitude'] as num).toDouble(),
+  endLongitude: (json['endLongitude'] as num).toDouble(),
+);
+
+Map<String, dynamic> _$TripRouteSegmentModelToJson(
+  _TripRouteSegmentModel instance,
+) => <String, dynamic>{
+  'distanceMeters': instance.distanceMeters,
+  'durationSeconds': instance.durationSeconds,
+  'encodedPolyline': instance.encodedPolyline,
+  'startLatitude': instance.startLatitude,
+  'startLongitude': instance.startLongitude,
+  'endLatitude': instance.endLatitude,
+  'endLongitude': instance.endLongitude,
+};
 
 _TripStopModel _$TripStopModelFromJson(Map<String, dynamic> json) =>
     _TripStopModel(
