@@ -280,5 +280,10 @@
   "cancellationPolicyCancelDialog": "Możesz anulować w ciągu 1 godziny od dokonania rezerwacji. Zwroty środków za płatności online są przetwarzane w ciągu 4 dni roboczych. Po 1 godzinie anulowanie jest zablokowane, chyba że złożysz wniosek o odszkodowanie za opóźnienie kierowcy.",
   "reportDriverDelay": "Zgłoś opóźnienie kierowcy",
   "compensationClaimNoteHint": "Opisz opóźnienie i dodaj linki do dowodów, jeśli są dostępne.",
-  "compensationClaimSubmitted": "Wniosek o odszkodowanie został złożony do weryfikacji przez administratora."
+  "compensationClaimSubmitted": "Wniosek o odszkodowanie został złożony do weryfikacji przez administratora.",
+  "attachEvidence": "Dołącz dowód",
+  "filesAttached": "{count} plik(i) załączony(e)",
+  "uploadFailed": "Nie udało się przesłać dowodu. Spróbuj ponownie.",
+  "tripScheduledConfirmed": "Twoja podróż jest potwierdzona!",
+  "tripScheduledActivated": "Szukamy dla Ciebie kierowcy"
 }

@@ -280,5 +280,10 @@
   "cancellationPolicyCancelDialog": "يمكنك الإلغاء خلال ساعة واحدة من الحجز. تتم معالجة المبالغ المستردة للمدفوعات الإلكترونية خلال 4 أيام عمل. بعد ساعة، يُحظر الإلغاء إلا إذا قدّمت مطالبة تعويض بسبب تأخر السائق.",
   "reportDriverDelay": "الإبلاغ عن تأخر السائق",
   "compensationClaimNoteHint": "صف التأخير وأضف روابط الإثبات إن وُجدت.",
-  "compensationClaimSubmitted": "تم تقديم مطالبة التعويض لمراجعة المشرف."
+  "compensationClaimSubmitted": "تم تقديم مطالبة التعويض لمراجعة المشرف.",
+  "attachEvidence": "إرفاق الأدلة",
+  "filesAttached": "{count} ملف(ات) مرفقة",
+  "uploadFailed": "فشل رفع الأدلة. يرجى المحاولة مرة أخرى.",
+  "tripScheduledConfirmed": "تم تأكيد رحلتك!",
+  "tripScheduledActivated": "نحن نبحث عن سائق لك"
 }

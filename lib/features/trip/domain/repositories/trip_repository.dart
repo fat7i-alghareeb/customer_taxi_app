@@ -10,6 +10,9 @@ abstract class TripRepository {
     required String note,
     List<String> evidenceUrls = const [],
   });
+  Future<Result<List<String>>> uploadCompensationEvidence(
+    List<String> filePaths,
+  );
   Future<Result<PagedResult<TripSummaryEntity>>> getTripHistory({
     int page = 1,
     int pageSize = 20,

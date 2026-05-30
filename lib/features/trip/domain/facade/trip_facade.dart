@@ -35,6 +35,13 @@ class TripFacade {
     );
   }
 
+  Future<Result<List<String>>> uploadCompensationEvidence(
+    List<String> filePaths,
+  ) {
+    printC('[TripFacade] uploadCompensationEvidence count=${filePaths.length}');
+    return _repository.uploadCompensationEvidence(filePaths);
+  }
+
   Future<Result<PagedResult<TripSummaryEntity>>> getTripHistory({
     int page = 1,
     int pageSize = 20,

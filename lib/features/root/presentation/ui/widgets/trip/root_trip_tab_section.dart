@@ -7,10 +7,16 @@ class RootTripTabSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          getIt<TripBloc>()..add(const TripEvent.historyStarted()),
-      child: const TripHistoryBody(),
+    return SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: REdgeInsets.only(top: AppSpacing.md),
+        child: BlocProvider(
+          create: (context) =>
+              getIt<TripBloc>()..add(const TripEvent.historyStarted()),
+          child: const TripHistoryBody(),
+        ),
+      ),
     );
   }
 }

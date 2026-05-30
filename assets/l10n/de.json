@@ -280,5 +280,10 @@
   "cancellationPolicyCancelDialog": "Sie können innerhalb von 1 Stunde nach der Buchung stornieren. Rückerstattungen für Online-Zahlungen werden innerhalb von 4 Werktagen bearbeitet. Nach 1 Stunde ist die Stornierung gesperrt, es sei denn, Sie reichen einen Entschädigungsantrag wegen Fahrerverspätung ein.",
   "reportDriverDelay": "Fahrverzögerung melden",
   "compensationClaimNoteHint": "Beschreiben Sie die Verzögerung und fügen Sie Nachweislinks hinzu, falls verfügbar.",
-  "compensationClaimSubmitted": "Entschädigungsanspruch zur Überprüfung durch den Administrator eingereicht."
+  "compensationClaimSubmitted": "Entschädigungsanspruch zur Überprüfung durch den Administrator eingereicht.",
+  "attachEvidence": "Beweis anhängen",
+  "filesAttached": "{count} Datei(en) angehängt",
+  "uploadFailed": "Hochladen des Beweises fehlgeschlagen. Bitte erneut versuchen.",
+  "tripScheduledConfirmed": "Ihre Fahrt ist bestätigt!",
+  "tripScheduledActivated": "Wir suchen einen Fahrer für Sie"
 }

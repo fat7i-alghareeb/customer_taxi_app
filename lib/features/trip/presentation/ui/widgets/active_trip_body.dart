@@ -11,6 +11,7 @@ import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/compensation_claim_dialog.dart';
 import 'package:vibration/vibration.dart';
 
 class ActiveTripBody extends StatefulWidget {
@@ -208,20 +209,6 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   }
 
   void _handleTripStateChange(BuildContext context, TripState state) {
-    state.cancelStatus.whenOrNull(
-      failure: (msg) {
-        showSuccessOverlay(context, msg);
-        _showCompensationClaimDialog(context);
-      },
-    );
-    state.compensationClaimStatus.whenOrNull(
-      success: (_) => showSuccessOverlay(
-        context,
-        AppStrings.compensationClaimSubmitted,
-      ),
-      failure: (msg) => showSuccessOverlay(context, msg),
-    );
-
     state.tripStatus.whenOrNull(
       success: (trip) {
         printC('[ActiveTripBody] trip state changed status=${trip.status}');
@@ -316,73 +303,102 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TripBloc, TripState>(
-      listenWhen: (prev, curr) =>
-          prev.cancelStatus != curr.cancelStatus ||
-          prev.tripStatus != curr.tripStatus ||
-          prev.activeDriverLocation != curr.activeDriverLocation,
-      listener: _handleTripStateChange,
-      builder: (context, state) {
-        return StatusBuilder<TripEntity>(
-          state: state.tripStatus,
-          success: (trip) {
-            final double lat = trip.stops.isNotEmpty
-                ? trip.stops.first.latitude
-                : 52.2297;
-            final double lng = trip.stops.isNotEmpty
-                ? trip.stops.first.longitude
-                : 21.0122;
-
-            return Stack(
-              fit: StackFit.expand,
-              children: [
-                // Full Screen Background Tracking Map
-                RootMapCanvasWidget(
-                  currentLocation: RootMapLocationEntity(
-                    latitude: lat,
-                    longitude: lng,
-                    zoom: 14.5,
-                  ),
-                  destinationLocation: trip.stops.length > 1
-                      ? LatLng(
-                          trip.stops.last.latitude,
-                          trip.stops.last.longitude,
-                        )
-                      : null,
-                  legPolylines: _buildRoutePolylines(trip),
-                  tripMarkers: _buildTripMarkers(trip),
-                  onMapCreated: (ctrl) => _onMapCreated(ctrl, trip),
-                  driverLocation: _currentCarPosition?.toDriverLocation(
-                    _interpolatedBearing,
-                  ),
-                  driverMarkerIcon: _carMarkerIcon,
-                ),
-
-                // Glassmorphic Premium Dark Sheet Overlay at bottom
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child:
-                      _GlassmorphicTripStatusSheet(
-                            trip: trip,
-                            cancelStatus: state.cancelStatus,
-                            onCancelPressed: () => _showCancelDialog(context),
-                          )
-                          .animate()
-                          .fadeIn(duration: 350.ms)
-                          .slideY(
-                            begin: 0.2,
-                            end: 0.0,
-                            duration: 350.ms,
-                            curve: Curves.easeOutCubic,
-                          ),
-                ),
-              ],
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<TripBloc, TripState>(
+          listenWhen: (prev, curr) => prev.cancelStatus != curr.cancelStatus,
+          listener: (context, state) {
+            state.cancelStatus.whenOrNull(
+              failure: (msg) {
+                showSuccessOverlay(context, msg);
+                _showCompensationClaimDialog(context);
+              },
             );
           },
-        );
-      },
+        ),
+        BlocListener<TripBloc, TripState>(
+          listenWhen: (prev, curr) =>
+              prev.compensationClaimStatus != curr.compensationClaimStatus,
+          listener: (context, state) {
+            state.compensationClaimStatus.whenOrNull(
+              success: (_) => showSuccessOverlay(
+                context,
+                AppStrings.compensationClaimSubmitted,
+              ),
+              failure: (msg) => showSuccessOverlay(context, msg),
+            );
+          },
+        ),
+        BlocListener<TripBloc, TripState>(
+          listenWhen: (prev, curr) =>
+              prev.tripStatus != curr.tripStatus ||
+              prev.activeDriverLocation != curr.activeDriverLocation,
+          listener: _handleTripStateChange,
+        ),
+      ],
+      child: BlocBuilder<TripBloc, TripState>(
+        builder: (context, state) {
+          return StatusBuilder<TripEntity>(
+            state: state.tripStatus,
+            success: (trip) {
+              final double lat = trip.stops.isNotEmpty
+                  ? trip.stops.first.latitude
+                  : 52.2297;
+              final double lng = trip.stops.isNotEmpty
+                  ? trip.stops.first.longitude
+                  : 21.0122;
+
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Full Screen Background Tracking Map
+                  RootMapCanvasWidget(
+                    currentLocation: RootMapLocationEntity(
+                      latitude: lat,
+                      longitude: lng,
+                      zoom: 14.5,
+                    ),
+                    destinationLocation: trip.stops.length > 1
+                        ? LatLng(
+                            trip.stops.last.latitude,
+                            trip.stops.last.longitude,
+                          )
+                        : null,
+                    legPolylines: _buildRoutePolylines(trip),
+                    tripMarkers: _buildTripMarkers(trip),
+                    onMapCreated: (ctrl) => _onMapCreated(ctrl, trip),
+                    driverLocation: _currentCarPosition?.toDriverLocation(
+                      _interpolatedBearing,
+                    ),
+                    driverMarkerIcon: _carMarkerIcon,
+                  ),
+
+                  // Glassmorphic Premium Dark Sheet Overlay at bottom
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child:
+                        _GlassmorphicTripStatusSheet(
+                              trip: trip,
+                              cancelStatus: state.cancelStatus,
+                              onCancelPressed: () => _showCancelDialog(context),
+                            )
+                            .animate()
+                            .fadeIn(duration: 350.ms)
+                            .slideY(
+                              begin: 0.2,
+                              end: 0.0,
+                              duration: 350.ms,
+                              curve: Curves.easeOutCubic,
+                            ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -413,41 +429,18 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   }
 
   void _showCompensationClaimDialog(BuildContext context) {
-    final controller = TextEditingController();
     printM('[ActiveTripBody] compensation claim dialog opened');
     unawaited(
-      showDialog<bool>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: Text(AppStrings.reportDriverDelay),
-          content: TextField(
-            controller: controller,
-            minLines: 3,
-            maxLines: 5,
-            decoration: InputDecoration(
-              hintText: AppStrings.compensationClaimNoteHint,
-            ),
+      CompensationClaimDialog.show(context).then((result) {
+        if (result == null || !context.mounted) return;
+
+        printM('[ActiveTripBody] compensation claim submitted');
+        context.read<TripBloc>().add(
+          TripEvent.compensationClaimSubmitted(
+            note: result.note,
+            evidenceUrls: result.evidenceUrls,
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext, false),
-              child: Text(AppStrings.cancel),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext, true),
-              child: Text(AppStrings.confirm),
-            ),
-          ],
-        ),
-      ).then((confirmed) {
-        final note = controller.text.trim();
-        controller.dispose();
-        if (confirmed == true && context.mounted && note.isNotEmpty) {
-          printM('[ActiveTripBody] compensation claim submitted');
-          context.read<TripBloc>().add(
-            TripEvent.compensationClaimSubmitted(note: note),
-          );
-        }
+        );
       }),
     );
   }

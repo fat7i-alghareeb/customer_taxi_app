@@ -32,7 +32,7 @@ class AppDiscountBanner extends StatelessWidget {
           FaIcon(
             FontAwesomeIcons.tag,
             size: 14.r,
-            color: context.onPrimary,
+            color: context.onSurface,
           ),
           AppSpacing.sm.horizontalSpace,
           Text(
@@ -41,7 +41,7 @@ class AppDiscountBanner extends StatelessWidget {
               discountPercent.toStringAsFixed(0),
             ),
             style: AppTextStyles.s14w700.copyWith(
-              color: context.onPrimary,
+              color: context.onSurface,
             ),
           ),
         ],

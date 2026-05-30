@@ -280,5 +280,10 @@
   "cancellationPolicyCancelDialog": "Vous pouvez annuler dans l'heure suivant la réservation. Les remboursements pour les paiements en ligne sont traités dans les 4 jours ouvrables. Après 1 heure, l'annulation est bloquée sauf si vous soumettez une demande d'indemnisation pour retard du chauffeur.",
   "reportDriverDelay": "Signaler le retard du chauffeur",
   "compensationClaimNoteHint": "Décrivez le retard et ajoutez des liens de preuve si disponibles.",
-  "compensationClaimSubmitted": "Demande d'indemnisation soumise pour examen par l'administrateur."
+  "compensationClaimSubmitted": "Demande d'indemnisation soumise pour examen par l'administrateur.",
+  "attachEvidence": "Joindre une preuve",
+  "filesAttached": "{count} fichier(s) joint(s)",
+  "uploadFailed": "Échec du téléchargement de la preuve. Veuillez réessayer.",
+  "tripScheduledConfirmed": "Votre trajet est confirmé !",
+  "tripScheduledActivated": "Nous cherchons un chauffeur"
 }

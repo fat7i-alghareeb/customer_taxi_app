@@ -1,5 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'notification_topics.dart';
+
 /// Notification configuration used as the single source of truth for how
 /// notifications are presented across:
 /// - Firebase Cloud Messaging (FCM) remote messages
@@ -243,7 +245,7 @@ class AppNotificationConfig {
   /// - You should ensure `defaultAndroidSmallIcon` exists as a drawable.
   factory AppNotificationConfig.defaults() {
     return const AppNotificationConfig(
-      initialTopics: <String>['customers'],
+      initialTopics: <String>[NotificationTopics.customers],
       androidChannels: <AppAndroidNotificationChannelConfig>[
         AppAndroidNotificationChannelConfig(
           id: 'high_importance',

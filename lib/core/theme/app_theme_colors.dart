@@ -146,7 +146,7 @@ class AppColorSeeds {
   /// Seed colors for the light theme.
   static const AppColorSeedSet light = AppColorSeedSet(
     primary: AppColors.primaryLight,
-    onPrimary: Colors.white,
+    onPrimary: AppColors.backGroundDark,
     secondary: AppColors.secondaryLight,
     background: AppColors.backGroundLight,
     surface: AppColors.surfaceLight,

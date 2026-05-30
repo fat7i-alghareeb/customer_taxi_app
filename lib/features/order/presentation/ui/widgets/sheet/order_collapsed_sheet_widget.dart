@@ -58,7 +58,7 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppTextStyles.s12w500.copyWith(
-                                        color: context.onPrimary,
+                                        color: context.onSurface,
                                         letterSpacing: 1.2,
                                         fontWeight: FontWeight.w700,
                                       ),
@@ -75,7 +75,7 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppTextStyles.s28w700.copyWith(
-                                        color: context.onPrimary,
+                                        color: context.onSurface,
                                         height: 1.1,
                                         fontWeight: FontWeight.w800,
                                       ),

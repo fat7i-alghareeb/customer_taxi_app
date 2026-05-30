@@ -120,7 +120,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                 borderRadius: AppRadii.lg,
               ),
               child: _isLoading
-                  ? AppButtonChild.custom(LoadingDots(color: context.onPrimary))
+                  ? AppButtonChild.custom(LoadingDots(color: context.onSurface))
                   : AppButtonChild.label(AppStrings.confirmPoint),
             ),
           ),

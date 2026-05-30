@@ -15,15 +15,20 @@ import 'core/notification/notification_config.dart';
 import 'core/notification/notification_coordinator.dart';
 import 'core/notification/notification_init_options.dart';
 import 'core/notification/notification_payload.dart';
+import 'core/notification/notification_topics.dart';
 import 'core/router/router_config.dart';
 import 'core/services/client_config/client_config_service.dart';
 import 'core/services/localization/locale_service.dart';
 import 'core/services/realtime/realtime_lifecycle_coordinator.dart';
 import 'core/services/session/auth_manager.dart';
 import 'core/services/session/auth_state_notifier.dart';
+import 'package:customertaxi/core/utils/result.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
+import 'common/widgets/show_overlay.dart';
 import 'features/root/presentation/ui/screens/root_screen.dart';
 import 'features/trip/presentation/states/trip_bloc.dart';
+import 'features/trip/presentation/ui/screens/trip_history_screen.dart';
+import 'utils/helpers/app_strings.dart';
 import 'core/theme/theme_controller.dart';
 import 'common/widgets/stage_tools/stage_device_preview_controller.dart';
 import 'flavors.dart' show F, Flavor;
@@ -100,26 +105,37 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
           final token = await coordinator.getDeviceToken();
           if (token != null && token.isNotEmpty) {
             final authRepo = getIt<AuthRepository>();
-            await authRepo.updateFcmToken(token);
-            printG(
-              '[Bootstrap] Startup backup FCM token update SUCCESS: $token',
+            final result = await authRepo.updateFcmToken(token);
+            result.when(
+              success: (_) =>
+                  printG('[Bootstrap] Startup backup FCM token update SUCCESS'),
+              failure: (msg) => printY(
+                '[Bootstrap] Startup backup FCM token update failed: $msg',
+              ),
             );
           }
         } catch (e) {
           printY('[Bootstrap] Startup backup FCM token update failed: $e');
         }
 
-        // Backup language check on startup if authenticated
-        try {
-          final localeService = getIt<LocaleService>();
-          final code = await localeService.currentLanguageCode();
-          final authRepo = getIt<AuthRepository>();
-          await authRepo.updatePreferredLanguage(code);
-          printG(
-            '[Bootstrap] Startup backup language update SUCCESS: $code',
-          );
-        } catch (e) {
-          printY('[Bootstrap] Startup backup language update failed: $e');
+        // Re-verify if still authenticated (FCM sync or token refresh could have triggered logout)
+        if (authState.isAuthenticated) {
+          try {
+            final localeService = getIt<LocaleService>();
+            final code = await localeService.currentLanguageCode();
+            final authRepo = getIt<AuthRepository>();
+            final result = await authRepo.updatePreferredLanguage(code);
+            result.when(
+              success: (_) => printG(
+                '[Bootstrap] Startup backup language update SUCCESS: $code',
+              ),
+              failure: (msg) => printY(
+                '[Bootstrap] Startup backup language update failed: $msg',
+              ),
+            );
+          } catch (e) {
+            printY('[Bootstrap] Startup backup language update failed: $e');
+          }
         }
       }
 
@@ -163,18 +179,30 @@ Future<void> _initializeNotifications() async {
         await _handleNotificationNavigation(payload);
       },
       onForegroundNotification: (payload) async {
-        // App is in the foreground when the push arrives — pipe any trip id
-        // straight to the bloc so the active-trip sheet updates without
-        // requiring the user to tap the banner.
+        final status = _statusFromPayload(payload);
+        if (status == 'scheduled') {
+          _showScheduledNotificationOverlay(AppStrings.tripScheduledConfirmed);
+          return;
+        }
+        if (status == 'pendingdriver') {
+          _showScheduledNotificationOverlay(AppStrings.tripScheduledActivated);
+          _routeTripPayloadToBloc(payload);
+          return;
+        }
+        // Regular trip push — pipe to bloc so the active-trip sheet updates.
         _routeTripPayloadToBloc(payload);
       },
       onTokenRefresh: (token) async {
+        await coordinator.subscribeToTopics(const [
+          NotificationTopics.customers,
+        ]);
+
         final authState = getIt<AuthStateNotifier>();
         if (authState.isAuthenticated) {
           try {
             final authRepo = getIt<AuthRepository>();
             await authRepo.updateFcmToken(token);
-            printG('[Bootstrap] Dynamic FCM token refresh SUCCESS: $token');
+            printG('[Bootstrap] Dynamic FCM token refresh SUCCESS');
           } catch (e) {
             printY('[Bootstrap] Dynamic FCM token refresh failed: $e');
           }
@@ -191,6 +219,22 @@ Future<void> _initializeNotifications() async {
 Future<void> _handleNotificationNavigation(
   AppNotificationPayload payload,
 ) async {
+  final status = _statusFromPayload(payload);
+
+  // Scheduled-trip confirmation — go to trip history so the user sees it.
+  if (status == 'scheduled') {
+    _navigateTo(TripHistoryScreen.pagePath);
+    return;
+  }
+
+  // Scheduled trip activated — start searching for a driver.
+  if (status == 'pendingdriver') {
+    final tripId = _tripIdFromPayload(payload);
+    if (tripId != null) _routeTripPayloadToBloc(payload);
+    _navigateTo(RootScreen.pagePath);
+    return;
+  }
+
   // If the payload carries a trip id, push it into the bloc so the trip is
   // loaded and the staged sheet renders in the correct stage.
   final tripId = _tripIdFromPayload(payload);
@@ -210,13 +254,7 @@ Future<void> _handleNotificationNavigation(
     return;
   }
 
-  try {
-    final router = getIt<AppRouterConfig>().router;
-    router.go(location);
-    printG('[Notifications] Navigated to $location');
-  } catch (e) {
-    printY('[Notifications] Navigation failed: $e (location=$location)');
-  }
+  _navigateTo(location);
 }
 
 /// If [payload] carries a `tripId`, ask the singleton [TripBloc] to start
@@ -233,8 +271,37 @@ void _routeTripPayloadToBloc(AppNotificationPayload payload) {
   }
 }
 
+String? _statusFromPayload(AppNotificationPayload payload) {
+  final raw = payload.data['status'] ?? payload.data['Status'];
+  if (raw is String && raw.trim().isNotEmpty) return raw.trim().toLowerCase();
+  return null;
+}
+
+void _navigateTo(String location) {
+  try {
+    final router = getIt<AppRouterConfig>().router;
+    router.go(location);
+    printG('[Notifications] Navigated to $location');
+  } catch (e) {
+    printY('[Notifications] Navigation failed: $e (location=$location)');
+  }
+}
+
+void _showScheduledNotificationOverlay(String message) {
+  try {
+    final context =
+        getIt<AppRouterConfig>().router.routerDelegate.navigatorKey.currentContext;
+    if (context != null && context.mounted) {
+      showSuccessOverlay(context, message);
+    }
+  } catch (e) {
+    printY('[Notifications] Overlay failed: $e');
+  }
+}
+
 String? _tripIdFromPayload(AppNotificationPayload payload) {
-  final raw = payload.data['tripId'] ??
+  final raw =
+      payload.data['tripId'] ??
       payload.data['TripId'] ??
       payload.data['trip_id'];
   if (raw is String && raw.trim().isNotEmpty) return raw;

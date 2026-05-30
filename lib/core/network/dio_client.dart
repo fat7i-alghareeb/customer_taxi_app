@@ -124,7 +124,10 @@ Dio _initDio({
     errorInterceptor,
   ]);
 
-  printC('[DioClient] Created Dio (refresh=$useRefresh), baseUrl: $baseUrl', tag: false);
+  printC(
+    '[DioClient] Created Dio (refresh=$useRefresh), baseUrl: $baseUrl',
+    tag: false,
+  );
 
   return dio;
 }
@@ -162,11 +165,17 @@ void _configureJwtFlow({
       tokenProtocol: TokenProtocol(
         shouldRefresh: (response, token) {
           if (!authManager.isAuthenticated) {
-            printY('[DioClient] shouldRefresh=false (not authenticated)', tag: false);
+            printY(
+              '[DioClient] shouldRefresh=false (not authenticated)',
+              tag: false,
+            );
             return false;
           }
           if (token == null || token.accessToken.isNotEmpty == false) {
-            printY('[DioClient] shouldRefresh=false (missing token)', tag: false);
+            printY(
+              '[DioClient] shouldRefresh=false (missing token)',
+              tag: false,
+            );
             return false;
           }
           if (ApiEndpoints.refreshToken.isEmpty) {
@@ -197,7 +206,10 @@ void _configureJwtFlow({
       tokenHeaderBuilder: (token) {
         final raw = token.accessToken;
         final preview = raw.length > 10 ? '${raw.substring(0, 10)}...' : raw;
-        printG('[DioClient] Attaching Authorization: Bearer $preview', tag: false);
+        printG(
+          '[DioClient] Attaching Authorization: Bearer $preview',
+          tag: false,
+        );
         return <String, String>{'Authorization': 'Bearer $raw'};
       },
       // Handle revoked/invalid refresh token.
@@ -235,8 +247,8 @@ void _configureJwtFlow({
           final response = await tokenDio.post<dynamic>(
             ApiEndpoints.refreshToken,
             data: <String, Object?>{
-              'RefreshToken': token.refreshToken,
-              'ExpiredAccessToken': token.accessToken,
+              'expiredAccessToken': token.accessToken,
+              'refreshToken': token.refreshToken,
             },
           );
 

@@ -163,13 +163,13 @@ class _ModeChip extends StatelessWidget {
               FaIcon(
                 icon,
                 size: 14.r,
-                color: isSelected ? context.onPrimary : context.onSurface,
+                color: context.onSurface,
               ),
               AppSpacing.xs.horizontalSpace,
               Text(
                 label,
                 style: AppTextStyles.s14w600.copyWith(
-                  color: isSelected ? context.onPrimary : context.onSurface,
+                  color: context.onSurface,
                   fontWeight: FontWeight.w700,
                 ),
               ),

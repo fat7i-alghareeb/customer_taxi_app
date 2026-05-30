@@ -248,7 +248,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                       child: FaIcon(
                         context.chevronStart,
                         size: 16.r,
-                        color: context.onPrimary,
+                        color: context.onSurface,
                       ),
                     ),
                   ),
@@ -262,7 +262,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                         ? AppStrings.selectCarType
                         : AppStrings.planYourTrip,
                     style: AppTextStyles.s16w600.copyWith(
-                      color: context.onPrimary,
+                      color: context.onSurface,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.5,
                     ),
@@ -283,7 +283,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                       child: FaIcon(
                         FontAwesomeIcons.xmark,
                         size: 18.r,
-                        color: context.onPrimary,
+                        color: context.onSurface,
                       ),
                     ),
                   ),

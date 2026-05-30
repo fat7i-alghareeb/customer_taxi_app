@@ -171,7 +171,7 @@ class _SuccessButtonVariant extends AppButtonVariant {
   LinearGradient gradient(BuildContext context) => context.gradients.success;
 
   @override
-  Color foreground(BuildContext context) => context.background;
+  Color foreground(BuildContext context) => context.onSurface;
 }
 
 class _ErrorButtonVariant extends AppButtonVariant {
@@ -184,7 +184,7 @@ class _ErrorButtonVariant extends AppButtonVariant {
   LinearGradient gradient(BuildContext context) => context.gradients.error;
 
   @override
-  Color foreground(BuildContext context) => context.background;
+  Color foreground(BuildContext context) => context.onSurface;
 }
 
 class _WarningButtonVariant extends AppButtonVariant {
@@ -197,7 +197,7 @@ class _WarningButtonVariant extends AppButtonVariant {
   LinearGradient gradient(BuildContext context) => context.gradients.warning;
 
   @override
-  Color foreground(BuildContext context) => context.background;
+  Color foreground(BuildContext context) => context.onSurface;
 }
 
 class _GreyButtonVariant extends AppButtonVariant {
@@ -210,7 +210,7 @@ class _GreyButtonVariant extends AppButtonVariant {
   LinearGradient gradient(BuildContext context) => context.gradients.grey;
 
   @override
-  Color foreground(BuildContext context) => context.background;
+  Color foreground(BuildContext context) => context.onSurface;
 }
 
 class CustomButtonVariant extends AppButtonVariant {
@@ -232,5 +232,5 @@ class CustomButtonVariant extends AppButtonVariant {
 
   @override
   Color foreground(BuildContext context) =>
-      foregroundColor ?? context.background;
+      foregroundColor ?? context.onSurface;
 }

@@ -76,6 +76,28 @@ class TripRemoteDataSource {
     });
   }
 
+  Future<List<String>> uploadCompensationEvidence(List<String> filePaths) {
+    return rethrowAsAppException(() async {
+      printY(
+        '[TripRemoteDataSource] uploadCompensationEvidence count=${filePaths.length}',
+      );
+      final formData = FormData();
+      for (final path in filePaths) {
+        formData.files.add(
+          MapEntry('files', await MultipartFile.fromFile(path)),
+        );
+      }
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.uploadCompensationEvidence,
+        data: formData,
+      );
+      final data = res.data;
+      final urls = data is Map<String, dynamic> ? data['urls'] : null;
+      return (urls as List<dynamic>?)?.whereType<String>().toList() ??
+          const <String>[];
+    });
+  }
+
   Future<PagedResult<TripSummaryModel>> getTripHistory({
     int page = 1,
     int pageSize = 20,

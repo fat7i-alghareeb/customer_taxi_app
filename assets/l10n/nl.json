@@ -280,5 +280,10 @@
   "cancellationPolicyCancelDialog": "U kunt annuleren binnen 1 uur na boeking. Terugbetalingen voor online betalingen worden verwerkt binnen 4 werkdagen. Na 1 uur is annulering geblokkeerd, tenzij u een schadeclaim indient wegens vertraging van de chauffeur.",
   "reportDriverDelay": "Vertraging chauffeur melden",
   "compensationClaimNoteHint": "Beschrijf de vertraging en voeg bewijslinks toe indien beschikbaar.",
-  "compensationClaimSubmitted": "Schadevergoedingsverzoek ingediend voor beoordeling door de beheerder."
+  "compensationClaimSubmitted": "Schadevergoedingsverzoek ingediend voor beoordeling door de beheerder.",
+  "attachEvidence": "Bewijs toevoegen",
+  "filesAttached": "{count} bestand(en) bijgevoegd",
+  "uploadFailed": "Upload van bewijs mislukt. Probeer het opnieuw.",
+  "tripScheduledConfirmed": "Uw rit is bevestigd!",
+  "tripScheduledActivated": "We zoeken een chauffeur voor u"
 }

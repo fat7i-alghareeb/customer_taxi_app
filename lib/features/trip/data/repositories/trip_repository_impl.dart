@@ -53,6 +53,18 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  Future<Result<List<String>>> uploadCompensationEvidence(
+    List<String> filePaths,
+  ) {
+    return runAsResult(() async {
+      printM('[TripRepository] uploadCompensationEvidence count=${filePaths.length}');
+      final urls = await _remote.uploadCompensationEvidence(filePaths);
+      printG('[TripRepository] uploadCompensationEvidence urls=${urls.length}');
+      return urls;
+    });
+  }
+
+  @override
   Future<Result<PagedResult<TripSummaryEntity>>> getTripHistory({
     int page = 1,
     int pageSize = 20,

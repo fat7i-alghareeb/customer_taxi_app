@@ -280,5 +280,10 @@
   "cancellationPolicyCancelDialog": "Puteți anula în termen de 1 oră de la rezervare. Rambursările pentru plățile online sunt procesate în termen de 4 zile lucrătoare. După 1 oră, anularea este blocată dacă nu depuneți o cerere de compensație pentru întârzierea șoferului.",
   "reportDriverDelay": "Raportați întârzierea șoferului",
   "compensationClaimNoteHint": "Descrieți întârzierea și adăugați linkuri cu dovezi dacă sunt disponibile.",
-  "compensationClaimSubmitted": "Cererea de compensație a fost depusă pentru revizuire de către administrator."
+  "compensationClaimSubmitted": "Cererea de compensație a fost depusă pentru revizuire de către administrator.",
+  "attachEvidence": "Atașați dovada",
+  "filesAttached": "{count} fișier(e) atașat(e)",
+  "uploadFailed": "Încărcarea dovezii a eșuat. Vă rugăm să încercați din nou.",
+  "tripScheduledConfirmed": "Călătoria ta este confirmată!",
+  "tripScheduledActivated": "Căutăm un șofer pentru tine"
 }

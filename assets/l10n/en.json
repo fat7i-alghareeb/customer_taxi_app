@@ -280,5 +280,10 @@
   "cancellationPolicyCancelDialog": "You can cancel within 1 hour of booking. Refunds for online payments are processed within 4 business days. After 1 hour, cancellation is blocked unless you submit a driver-delay compensation claim.",
   "reportDriverDelay": "Report driver delay",
   "compensationClaimNoteHint": "Describe the delay and add proof links if available.",
-  "compensationClaimSubmitted": "Compensation claim submitted for admin review."
+  "compensationClaimSubmitted": "Compensation claim submitted for admin review.",
+  "attachEvidence": "Attach evidence",
+  "filesAttached": "{count} file(s) attached",
+  "uploadFailed": "Failed to upload evidence. Please try again.",
+  "tripScheduledConfirmed": "Your trip is confirmed!",
+  "tripScheduledActivated": "We're finding you a driver"
 }

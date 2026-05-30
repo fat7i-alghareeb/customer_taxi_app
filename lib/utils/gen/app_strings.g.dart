@@ -83,6 +83,16 @@ class AppStrings {
   static String get compensationClaimNoteHint => 'compensationClaimNoteHint'.tr();
   /// Compensation claim submitted for admin review. - تم تقديم مطالبة التعويض لمراجعة المشرف. - Schadevergoedingsverzoek ingediend voor beoordeling door de beheerder. - Entschädigungsanspruch zur Überprüfung durch den Administrator eingereicht. - Wniosek o odszkodowanie został złożony do weryfikacji przez administratora. - Претензію на компенсацію подано на розгляд адміністратора. - Demande d'indemnisation soumise pour examen par l'administrateur. - Reclamación de compensación enviada para revisión del administrador. - Cererea de compensație a fost depusă pentru revizuire de către administrator.
   static String get compensationClaimSubmitted => 'compensationClaimSubmitted'.tr();
+  /// Attach evidence - إرفاق الأدلة - Attach evidence - Attach evidence - Attach evidence - Attach evidence - Attach evidence - Attach evidence - Attach evidence
+  static String get attachEvidence => 'attachEvidence'.tr();
+  /// {count} file(s) attached
+  static String filesAttached(int count) => 'filesAttached'.tr(namedArgs: {'count': count.toString()});
+  /// Failed to upload evidence. Please try again.
+  static String get uploadFailed => 'uploadFailed'.tr();
+  /// Your trip is confirmed!
+  static String get tripScheduledConfirmed => 'tripScheduledConfirmed'.tr();
+  /// We're finding you a driver
+  static String get tripScheduledActivated => 'tripScheduledActivated'.tr();
   /// Complete Profile - إكمال الملف الشخصي - Voltooi Profiel - Profil vervollständigen - Uzupełnij profil - Заповнити профіль - Compléter le profil - Completar perfil - Completează profilul
   static String get completeProfile => 'completeProfile'.tr();
   /// Confirm - تأكيد - Bevestigen - Bestätigen - Potwierdź - Підтвердити - Confirmer - Confirmar - Confirmă

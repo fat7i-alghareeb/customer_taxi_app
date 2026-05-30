@@ -72,7 +72,7 @@ class ProfilePhotoPicker extends StatelessWidget {
                 child: FaIcon(
                   FontAwesomeIcons.camera,
                   size: 16.r,
-                  color: context.onPrimary,
+                  color: context.onSurface,
                 ),
               ),
             ),

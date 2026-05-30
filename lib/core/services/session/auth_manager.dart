@@ -58,6 +58,10 @@ class AuthManager {
       'cachedToken=${tokenStorage.cachedToken != null}',
     );
 
+    _tokenStatusSub = tokenStorage.authenticationStatus.listen(
+      _onAuthStatusChanged,
+    );
+
     final shouldLogExpiry = state.user != null && !state.isGuest;
     if (shouldLogExpiry) {
       final expiry = await tokenStorage.loadExpiry();
@@ -78,6 +82,25 @@ class AuthManager {
       }
     }
 
+    final hasStoredUser = state.user != null && !state.isGuest;
+    final hasStoredToken = tokenStorage.cachedToken != null;
+    final hasValidTokens = await tokenStorage.hasValidTokens();
+    printM(
+      '${AuthLogTags.authManager} startup decision '
+      'hasStoredUser=$hasStoredUser hasStoredToken=$hasStoredToken '
+      'hasValidTokens=$hasValidTokens status=${state.authStatus.status}',
+    );
+
+    if (hasStoredUser && hasStoredToken) {
+      printG(
+        '${AuthLogTags.authManager} restoring authenticated session '
+        '(refresh will run on next protected request if token is expired)',
+      );
+      state.setAuthStatus(AuthStatus.authenticated());
+      printG('${AuthLogTags.authManager} initialize complete');
+      return;
+    }
+
     // Make sure we don't stay in [Status.initial] while waiting for stream
     // emissions.
     if (state.authStatus.status == Status.initial) {
@@ -89,9 +112,6 @@ class AuthManager {
       );
     }
 
-    _tokenStatusSub = tokenStorage.authenticationStatus.listen(
-      _onAuthStatusChanged,
-    );
     printG('${AuthLogTags.authManager} initialize complete');
   }
 
@@ -125,7 +145,9 @@ class AuthManager {
       final langCode = await localeService.currentLanguageCode();
       final authRepo = getIt<AuthRepository>();
       unawaited(authRepo.updatePreferredLanguage(langCode));
-      printG('${AuthLogTags.authManager} language synced post-login: $langCode');
+      printG(
+        '${AuthLogTags.authManager} language synced post-login: $langCode',
+      );
     } catch (e) {
       printY('${AuthLogTags.authManager} language sync post-login failed: $e');
     }

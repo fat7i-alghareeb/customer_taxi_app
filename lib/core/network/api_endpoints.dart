@@ -28,6 +28,8 @@ class ApiEndpoints {
   static String cancelTrip(String id) => '/api/v1/trips/$id/cancellations';
   static String submitCompensationClaim(String id) =>
       '/api/v1/trips/$id/compensation-claims';
+  static const String uploadCompensationEvidence =
+      '/api/v1/uploads/compensation-evidence';
   static const String tripHistory = '/api/v1/trips';
   static const String tripCount = '/api/v1/trips/count';
 }
