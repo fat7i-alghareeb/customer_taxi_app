@@ -42,18 +42,9 @@ workflows:
             echo "GOOGLE_MAPS_API_KEY detected. Length: ${#GOOGLE_MAPS_API_KEY}"
           fi
 
-          if [ -z "$PRODUCTION_BASE_URL" ]; then
-            echo "ERROR: PRODUCTION_BASE_URL is empty or not found."
-            exit 1
-          else
-            echo "PRODUCTION_BASE_URL detected. Length: ${#PRODUCTION_BASE_URL}"
-          fi
-
           echo "-------------------------------"
 
           echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" > .env
-          echo "STAGE_BASE_URL=$STAGE_BASE_URL" >> .env
-          echo "PRODUCTION_BASE_URL=$PRODUCTION_BASE_URL" >> .env
 
           dart run build_runner build --delete-conflicting-outputs
 
