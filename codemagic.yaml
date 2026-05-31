@@ -98,6 +98,12 @@ workflows:
       - name: Print Gradle Signing Report Before Build
         script: |
           set -e
+          if [ ! -f "android/gradlew" ]; then
+            echo "ERROR: Gradle wrapper file 'android/gradlew' not found!"
+            echo "Gradle wrapper files must be committed to the Git repository and must not be ignored."
+            exit 1
+          fi
+          chmod +x android/gradlew
           cd android
           ./gradlew :app:signingReport --no-daemon
 
