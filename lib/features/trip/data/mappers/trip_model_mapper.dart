@@ -50,8 +50,14 @@ extension TripSummaryModelMapper on TripSummaryModel {
 }
 
 extension TripStopModelMapper on TripStopModel {
-  TripStopEntity get toStopEntity =>
-      TripStopEntity(latitude: latitude, longitude: longitude);
+  TripStopEntity get toStopEntity => TripStopEntity(
+    latitude: latitude,
+    longitude: longitude,
+    label: label,
+    sequence: sequence,
+    isCompleted: isCompleted,
+    completedAtUtc: completedAtUtc,
+  );
 }
 
 extension TripCancellationModelMapper on TripCancellationModel {

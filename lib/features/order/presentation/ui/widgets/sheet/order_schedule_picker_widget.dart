@@ -1,4 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/common/widgets/show_overlay.dart';
 
 import '../../../states/order_bloc.dart';
 
@@ -85,6 +86,14 @@ class OrderSchedulePickerWidget extends StatelessWidget {
       time.hour,
       time.minute,
     );
+
+    final minTime = DateTime.now().add(const Duration(minutes: 15));
+    if (scheduledAt.isBefore(minTime)) {
+      if (context.mounted) {
+        showErrorOverlay(context, AppStrings.tripLeadTimeError);
+      }
+      return;
+    }
 
     context.read<OrderBloc>().add(OrderEvent.scheduleTimeChanged(scheduledAt));
   }

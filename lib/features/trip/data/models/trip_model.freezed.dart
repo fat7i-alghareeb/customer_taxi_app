@@ -691,7 +691,7 @@ as double,
 /// @nodoc
 mixin _$TripStopModel {
 
- double get latitude; double get longitude;
+ double get latitude; double get longitude; String? get label; int get sequence; bool get isCompleted; DateTime? get completedAtUtc;
 /// Create a copy of TripStopModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -704,16 +704,16 @@ $TripStopModelCopyWith<TripStopModel> get copyWith => _$TripStopModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripStopModel&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripStopModel&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.label, label) || other.label == label)&&(identical(other.sequence, sequence) || other.sequence == sequence)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.completedAtUtc, completedAtUtc) || other.completedAtUtc == completedAtUtc));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,latitude,longitude);
+int get hashCode => Object.hash(runtimeType,latitude,longitude,label,sequence,isCompleted,completedAtUtc);
 
 @override
 String toString() {
-  return 'TripStopModel(latitude: $latitude, longitude: $longitude)';
+  return 'TripStopModel(latitude: $latitude, longitude: $longitude, label: $label, sequence: $sequence, isCompleted: $isCompleted, completedAtUtc: $completedAtUtc)';
 }
 
 
@@ -724,7 +724,7 @@ abstract mixin class $TripStopModelCopyWith<$Res>  {
   factory $TripStopModelCopyWith(TripStopModel value, $Res Function(TripStopModel) _then) = _$TripStopModelCopyWithImpl;
 @useResult
 $Res call({
- double latitude, double longitude
+ double latitude, double longitude, String? label, int sequence, bool isCompleted, DateTime? completedAtUtc
 });
 
 
@@ -741,11 +741,15 @@ class _$TripStopModelCopyWithImpl<$Res>
 
 /// Create a copy of TripStopModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? latitude = null,Object? longitude = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? latitude = null,Object? longitude = null,Object? label = freezed,Object? sequence = null,Object? isCompleted = null,Object? completedAtUtc = freezed,}) {
   return _then(_self.copyWith(
 latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
-as double,
+as double,label: freezed == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String?,sequence: null == sequence ? _self.sequence : sequence // ignore: cast_nullable_to_non_nullable
+as int,isCompleted: null == isCompleted ? _self.isCompleted : isCompleted // ignore: cast_nullable_to_non_nullable
+as bool,completedAtUtc: freezed == completedAtUtc ? _self.completedAtUtc : completedAtUtc // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -830,10 +834,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double latitude,  double longitude)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double latitude,  double longitude,  String? label,  int sequence,  bool isCompleted,  DateTime? completedAtUtc)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripStopModel() when $default != null:
-return $default(_that.latitude,_that.longitude);case _:
+return $default(_that.latitude,_that.longitude,_that.label,_that.sequence,_that.isCompleted,_that.completedAtUtc);case _:
   return orElse();
 
 }
@@ -851,10 +855,10 @@ return $default(_that.latitude,_that.longitude);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double latitude,  double longitude)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double latitude,  double longitude,  String? label,  int sequence,  bool isCompleted,  DateTime? completedAtUtc)  $default,) {final _that = this;
 switch (_that) {
 case _TripStopModel():
-return $default(_that.latitude,_that.longitude);case _:
+return $default(_that.latitude,_that.longitude,_that.label,_that.sequence,_that.isCompleted,_that.completedAtUtc);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -871,10 +875,10 @@ return $default(_that.latitude,_that.longitude);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double latitude,  double longitude)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double latitude,  double longitude,  String? label,  int sequence,  bool isCompleted,  DateTime? completedAtUtc)?  $default,) {final _that = this;
 switch (_that) {
 case _TripStopModel() when $default != null:
-return $default(_that.latitude,_that.longitude);case _:
+return $default(_that.latitude,_that.longitude,_that.label,_that.sequence,_that.isCompleted,_that.completedAtUtc);case _:
   return null;
 
 }
@@ -886,11 +890,15 @@ return $default(_that.latitude,_that.longitude);case _:
 @JsonSerializable()
 
 class _TripStopModel implements TripStopModel {
-  const _TripStopModel({required this.latitude, required this.longitude});
+  const _TripStopModel({required this.latitude, required this.longitude, this.label, this.sequence = 0, this.isCompleted = false, this.completedAtUtc});
   factory _TripStopModel.fromJson(Map<String, dynamic> json) => _$TripStopModelFromJson(json);
 
 @override final  double latitude;
 @override final  double longitude;
+@override final  String? label;
+@override@JsonKey() final  int sequence;
+@override@JsonKey() final  bool isCompleted;
+@override final  DateTime? completedAtUtc;
 
 /// Create a copy of TripStopModel
 /// with the given fields replaced by the non-null parameter values.
@@ -905,16 +913,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripStopModel&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripStopModel&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.label, label) || other.label == label)&&(identical(other.sequence, sequence) || other.sequence == sequence)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.completedAtUtc, completedAtUtc) || other.completedAtUtc == completedAtUtc));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,latitude,longitude);
+int get hashCode => Object.hash(runtimeType,latitude,longitude,label,sequence,isCompleted,completedAtUtc);
 
 @override
 String toString() {
-  return 'TripStopModel(latitude: $latitude, longitude: $longitude)';
+  return 'TripStopModel(latitude: $latitude, longitude: $longitude, label: $label, sequence: $sequence, isCompleted: $isCompleted, completedAtUtc: $completedAtUtc)';
 }
 
 
@@ -925,7 +933,7 @@ abstract mixin class _$TripStopModelCopyWith<$Res> implements $TripStopModelCopy
   factory _$TripStopModelCopyWith(_TripStopModel value, $Res Function(_TripStopModel) _then) = __$TripStopModelCopyWithImpl;
 @override @useResult
 $Res call({
- double latitude, double longitude
+ double latitude, double longitude, String? label, int sequence, bool isCompleted, DateTime? completedAtUtc
 });
 
 
@@ -942,11 +950,15 @@ class __$TripStopModelCopyWithImpl<$Res>
 
 /// Create a copy of TripStopModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? latitude = null,Object? longitude = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? latitude = null,Object? longitude = null,Object? label = freezed,Object? sequence = null,Object? isCompleted = null,Object? completedAtUtc = freezed,}) {
   return _then(_TripStopModel(
 latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
-as double,
+as double,label: freezed == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String?,sequence: null == sequence ? _self.sequence : sequence // ignore: cast_nullable_to_non_nullable
+as int,isCompleted: null == isCompleted ? _self.isCompleted : isCompleted // ignore: cast_nullable_to_non_nullable
+as bool,completedAtUtc: freezed == completedAtUtc ? _self.completedAtUtc : completedAtUtc // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

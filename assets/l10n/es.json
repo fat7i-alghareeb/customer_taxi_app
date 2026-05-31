@@ -285,5 +285,10 @@
   "filesAttached": "{count} archivo(s) adjunto(s)",
   "uploadFailed": "Error al cargar la evidencia. Por favor, inténtelo de nuevo.",
   "tripScheduledConfirmed": "¡Su viaje está confirmado!",
-  "tripScheduledActivated": "Estamos buscando un conductor"
+  "tripScheduledActivated": "Estamos buscando un conductor",
+  "upcomingTrips": "Próximos",
+  "pastTrips": "Viajes pasados",
+  "scheduledForLabel": "Programado para {time}",
+  "tripLeadTimeError": "La hora programada debe ser al menos 15 minutos en el futuro.",
+  "tripStopCompletedAt": "Completado a las {time}"
 }

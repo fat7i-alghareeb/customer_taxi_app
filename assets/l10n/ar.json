@@ -285,5 +285,11 @@
   "filesAttached": "{count} ملف(ات) مرفقة",
   "uploadFailed": "فشل رفع الأدلة. يرجى المحاولة مرة أخرى.",
   "tripScheduledConfirmed": "تم تأكيد رحلتك!",
-  "tripScheduledActivated": "نحن نبحث عن سائق لك"
+  "tripScheduledActivated": "نحن نبحث عن سائق لك",
+  "upcomingTrips": "القادمة",
+  "pastTrips": "الرحلات السابقة",
+  "scheduledForLabel": "مجدولة في {time}",
+  "tripLeadTimeError": "يجب أن يكون الوقت المجدول بعد 15 دقيقة على الأقل من الآن.",
+  "tripStopCompletedAt": "اكتمل في {time}"
 }
+

@@ -19,6 +19,8 @@ class AppStrings {
   static String get apr => 'apr'.tr();
   /// April - أبريل - April - April - Kwiecień - Квітень - Avril - Abril - Aprilie
   static String get april => 'april'.tr();
+  /// Attach evidence - إرفاق الأدلة - Bewijs toevoegen - Beweis anhängen - Dołącz dowód - Додати доказ - Joindre une preuve - Adjuntar evidencia - Atașați dovada
+  static String get attachEvidence => 'attachEvidence'.tr();
   /// Aug - أغس - Aug - Aug - Sie - Серп - Août - Ago - Aug
   static String get aug => 'aug'.tr();
   /// August - أغسطس - Augustus - August - Sierpień - Серпень - Août - Agosto - August
@@ -83,16 +85,6 @@ class AppStrings {
   static String get compensationClaimNoteHint => 'compensationClaimNoteHint'.tr();
   /// Compensation claim submitted for admin review. - تم تقديم مطالبة التعويض لمراجعة المشرف. - Schadevergoedingsverzoek ingediend voor beoordeling door de beheerder. - Entschädigungsanspruch zur Überprüfung durch den Administrator eingereicht. - Wniosek o odszkodowanie został złożony do weryfikacji przez administratora. - Претензію на компенсацію подано на розгляд адміністратора. - Demande d'indemnisation soumise pour examen par l'administrateur. - Reclamación de compensación enviada para revisión del administrador. - Cererea de compensație a fost depusă pentru revizuire de către administrator.
   static String get compensationClaimSubmitted => 'compensationClaimSubmitted'.tr();
-  /// Attach evidence - إرفاق الأدلة - Attach evidence - Attach evidence - Attach evidence - Attach evidence - Attach evidence - Attach evidence - Attach evidence
-  static String get attachEvidence => 'attachEvidence'.tr();
-  /// {count} file(s) attached
-  static String filesAttached(int count) => 'filesAttached'.tr(namedArgs: {'count': count.toString()});
-  /// Failed to upload evidence. Please try again.
-  static String get uploadFailed => 'uploadFailed'.tr();
-  /// Your trip is confirmed!
-  static String get tripScheduledConfirmed => 'tripScheduledConfirmed'.tr();
-  /// We're finding you a driver
-  static String get tripScheduledActivated => 'tripScheduledActivated'.tr();
   /// Complete Profile - إكمال الملف الشخصي - Voltooi Profiel - Profil vervollständigen - Uzupełnij profil - Заповнити профіль - Compléter le profil - Completar perfil - Completează profilul
   static String get completeProfile => 'completeProfile'.tr();
   /// Confirm - تأكيد - Bevestigen - Bestätigen - Potwierdź - Підтвердити - Confirmer - Confirmar - Confirmă
@@ -183,6 +175,8 @@ class AppStrings {
   static String get feb => 'feb'.tr();
   /// February - فبراير - Februari - Februar - Luty - Лютий - Février - Febrero - Februarie
   static String get february => 'february'.tr();
+  /// {count} file(s) attached - {count} ملف(ات) مرفقة - {count} bestand(en) bijgevoegd - {count} Datei(en) angehängt - {count} plik(i) załączony(e) - {count} файл(и) додано - {count} fichier(s) joint(s) - {count} archivo(s) adjunto(s) - {count} fișier(e) atașat(e)
+  static String get filesAttached => 'filesAttached'.tr();
   /// Fri - جمع - Vr - Fr - Pt - Пт - Ven - Vie - Vin
   static String get fri => 'fri'.tr();
   /// Friday - الجمعة - Vrijdag - Freitag - Piątek - П'ятниця - Vendredi - Viernes - Vineri
@@ -327,6 +321,8 @@ class AppStrings {
   static String get orderStopLabel => 'orderStopLabel'.tr();
   /// Verification - التحقق - Verificatie - Verifizierung - Weryfikacja - Верифікація - Vérification - Verificación - Verificare
   static String get otp => 'otp'.tr();
+  /// Past Trips - الرحلات السابقة - Eerdere ritten - Vergangene Fahrten - Minione przejazdy - Минулі поїздки - Trajets passés - Viajes pasados - Curse anterioare
+  static String get pastTrips => 'pastTrips'.tr();
   /// Pay securely with Stripe - ادفع بأمان عبر Stripe - Betaal veilig via Stripe - Sicher bezahlen mit Stripe - Zapłać bezpiecznie przez Stripe - Безпечна оплата через Stripe - Payez en toute sécurité avec Stripe - Paga de forma segura con Stripe - Plătește în siguranță cu Stripe
   static String get payViaStripe => 'payViaStripe'.tr();
   /// Payment canceled. - تم إلغاء الدفع. - Betaling geannuleerd. - Zahlung abgebrochen. - Płatność anulowana. - Платіж скасовано. - Paiement annulé. - Pago cancelado. - Plată anulată.
@@ -409,6 +405,8 @@ class AppStrings {
   static String get scheduleARideInAdvanceSubtitle => 'scheduleARideInAdvanceSubtitle'.tr();
   /// Schedule Time - جدولة الوقت - Tijd inplannen - Zeit planen - Zaplanuj czas - Запланувати час - Planifier l'heure - Programar hora - Programare oră
   static String get scheduleTime => 'scheduleTime'.tr();
+  /// Scheduled for {time} - مجدولة في {time} - Ingepland voor {time} - Geplant für {time} - Zaplanowane na {time} - Заплановано на {time} - Planifié pour {time} - Programado para {time} - Programată pentru {time}
+  static String get scheduledForLabel => 'scheduledForLabel'.tr();
   /// Search - بحث - Zoeken - Suche - Szukaj - Пошук - Rechercher - Buscar - Căutare
   static String get search => 'search'.tr();
   /// Search pickup location - ابحث عن موقع الانطلاق - Zoek ophaallocatie - Abholort suchen - Szukaj miejsca odbioru - Пошук місця посадки - Lieu de prise en charge - Buscar lugar de recogida - Caută locul de preluare
@@ -503,8 +501,14 @@ class AppStrings {
   static String get tripHistoryLoadMore => 'tripHistoryLoadMore'.tr();
   /// My Trips - رحلاتي - Mijn Ritten - Meine Fahrten - Moje przejazdy - Мої поїздки - Mes Trajets - Mis viajes - Cursele mele
   static String get tripHistoryTitle => 'tripHistoryTitle'.tr();
+  /// Scheduled time must be at least 15 minutes from now. - يجب أن يكون الوقت المجدول بعد 15 دقيقة على الأقل من الآن. - De geplande tijd moet minstens 15 minuten in de toekomst liggen. - Die geplante Zeit muss mindestens 15 Minuten in der Zukunft liegen. - Zaplanowany czas musi być o co najmniej 15 minut w przyszłość. - Запланований час має бути щонайменше на 15 хвилин у майбутньому. - L'heure programmée doit être d'au moins 15 minutes dans le futur. - La hora programada debe ser al menos 15 minutos en el futuro. - Ora programată trebuie să fie cu cel puțin 15 minute în viitor.
+  static String get tripLeadTimeError => 'tripLeadTimeError'.tr();
   /// Trip #{code} - رحلة رقم {code} - Rit #{code} - Fahrt #{code} - Przejazd #{code} - Поїздка #{code} - Trajet #{code} - Viaje #{code} - Cursa #{code}
   static String get tripReferenceCode => 'tripReferenceCode'.tr();
+  /// We're finding you a driver - نحن نبحث عن سائق لك - We zoeken een chauffeur voor u - Wir suchen einen Fahrer für Sie - Szukamy dla Ciebie kierowcy - Ми шукаємо для вас водія - Nous cherchons un chauffeur - Estamos buscando un conductor - Căutăm un șofer pentru tine
+  static String get tripScheduledActivated => 'tripScheduledActivated'.tr();
+  /// Your trip is confirmed! - تم تأكيد رحلتك! - Uw rit is bevestigd! - Ihre Fahrt ist bestätigt! - Twoja podróż jest potwierdzona! - Вашу поїздку підтверджено! - Votre trajet est confirmé ! - ¡Su viaje está confirmado! - Călătoria ta este confirmată!
+  static String get tripScheduledConfirmed => 'tripScheduledConfirmed'.tr();
   /// Scheduled for {time} - مجدولة في {time} - Ingepland voor {time} - Geplant für {time} - Zaplanowano na {time} - Заплановано на {time} - Planifié pour {time} - Programado para {time} - Programată pentru {time}
   static String get tripScheduledFor => 'tripScheduledFor'.tr();
   /// Status - الحالة - Status - Status - Status - Статус - Statut - Estado - Status
@@ -525,12 +529,18 @@ class AppStrings {
   static String get tripStatusPendingDriver => 'tripStatusPendingDriver'.tr();
   /// Scheduled - مجدولة - Ingepland - Geplant - Zaplanowany - Заплановано - Planifié - Programado - Programată
   static String get tripStatusScheduled => 'tripStatusScheduled'.tr();
+  /// Completed at {time} - اكتمل في {time} - Voltooid om {time} - Abgeschlossen um {time} - Ukończono o {time} - Завершено о {time} - Terminé à {time} - Completado a las {time} - Finalizată la {time}
+  static String get tripStopCompletedAt => 'tripStopCompletedAt'.tr();
   /// Tue - ثلا - Di - Di - Wt - Вт - Mar - Mar - Mar
   static String get tue => 'tue'.tr();
   /// Tuesday - الثلاثاء - Dinsdag - Dienstag - Wtorek - Вівторок - Mardi - Martes - Marți
   static String get tuesday => 'tuesday'.tr();
   /// An unexpected error occurred. Please try again. - حدث خطأ غير متوقع. حاول مرة أخرى. - Er is een onverwachte fout opgetreden. Probeer het opnieuw. - Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut. - Wystąpił nieoczekiwany błąd. Spróbuj ponownie. - Виникла непередбачена помилка. Спробуйте ще раз. - Une erreur inattendue s'est produite. Veuillez réessayer. - Ocurrió un error inesperado. Por favor, inténtelo de nuevo. - A apărut o eroare neașteptată. Vă rugăm să încercați din nou.
   static String get unknownError => 'unknownError'.tr();
+  /// Upcoming - القادمة - Aankomend - Bevorstehende - Nadchodzące - Найближчі - À venir - Próximos - Viitoare
+  static String get upcomingTrips => 'upcomingTrips'.tr();
+  /// Failed to upload evidence. Please try again. - فشل رفع الأدلة. يرجى المحاولة مرة أخرى. - Upload van bewijs mislukt. Probeer het opnieuw. - Hochladen des Beweises fehlgeschlagen. Bitte erneut versuchen. - Nie udało się przesłać dowodu. Spróbuj ponownie. - Не вдалося завантажити доказ. Спробуйте ще раз. - Échec du téléchargement de la preuve. Veuillez réessayer. - Error al cargar la evidencia. Por favor, inténtelo de nuevo. - Încărcarea dovezii a eșuat. Vă rugăm să încercați din nou.
+  static String get uploadFailed => 'uploadFailed'.tr();
   /// Value is invalid. - قيمة غير صحيحة. - Waarde is ongeldig. - Wert ist ungültig. - Wartość jest nieprawidłowa. - Значення недійсне. - La valeur est invalide. - El valor es inválido. - Valoarea este invalidă.
   static String get validationAny => 'validationAny'.tr();
   /// Invalid value. - قيمة غير صحيحة. - Ongeldige waarde. - Ungültiger Wert. - Nieprawidłowa wartość. - Неправильне значення. - Valeur invalide. - Valor inválido. - Valoare invalidă.

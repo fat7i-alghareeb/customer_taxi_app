@@ -285,5 +285,11 @@
   "filesAttached": "{count} bestand(en) bijgevoegd",
   "uploadFailed": "Upload van bewijs mislukt. Probeer het opnieuw.",
   "tripScheduledConfirmed": "Uw rit is bevestigd!",
-  "tripScheduledActivated": "We zoeken een chauffeur voor u"
+  "tripScheduledActivated": "We zoeken een chauffeur voor u",
+  "upcomingTrips": "Aankomend",
+  "pastTrips": "Eerdere ritten",
+  "scheduledForLabel": "Ingepland voor {time}",
+  "tripLeadTimeError": "De geplande tijd moet minstens 15 minuten in de toekomst liggen.",
+  "tripStopCompletedAt": "Voltooid om {time}"
 }
+

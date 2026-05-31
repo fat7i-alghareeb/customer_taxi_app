@@ -285,5 +285,10 @@
   "filesAttached": "{count} файл(и) додано",
   "uploadFailed": "Не вдалося завантажити доказ. Спробуйте ще раз.",
   "tripScheduledConfirmed": "Вашу поїздку підтверджено!",
-  "tripScheduledActivated": "Ми шукаємо для вас водія"
+  "tripScheduledActivated": "Ми шукаємо для вас водія",
+  "upcomingTrips": "Найближчі",
+  "pastTrips": "Минулі поїздки",
+  "scheduledForLabel": "Заплановано на {time}",
+  "tripLeadTimeError": "Запланований час має бути щонайменше на 15 хвилин у майбутньому.",
+  "tripStopCompletedAt": "Завершено о {time}"
 }

@@ -285,5 +285,10 @@
   "filesAttached": "{count} fișier(e) atașat(e)",
   "uploadFailed": "Încărcarea dovezii a eșuat. Vă rugăm să încercați din nou.",
   "tripScheduledConfirmed": "Călătoria ta este confirmată!",
-  "tripScheduledActivated": "Căutăm un șofer pentru tine"
+  "tripScheduledActivated": "Căutăm un șofer pentru tine",
+  "upcomingTrips": "Viitoare",
+  "pastTrips": "Curse anterioare",
+  "scheduledForLabel": "Programată pentru {time}",
+  "tripLeadTimeError": "Ora programată trebuie să fie cu cel puțin 15 minute în viitor.",
+  "tripStopCompletedAt": "Finalizată la {time}"
 }

@@ -31,6 +31,10 @@ abstract class TripStopEntity with _$TripStopEntity {
   const factory TripStopEntity({
     required double latitude,
     required double longitude,
+    String? label,
+    @Default(0) int sequence,
+    @Default(false) bool isCompleted,
+    DateTime? completedAtUtc,
   }) = _TripStopEntity;
 }
 

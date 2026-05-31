@@ -1,5 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import '../../../domain/entities/trip_entity.dart';
+import '../../../domain/entities/trip_status.dart';
 import '../../states/trip_bloc.dart';
 import 'trip_summary_card.dart';
 
@@ -40,26 +41,83 @@ class _TripHistoryList extends StatelessWidget {
       return EmptyStateWidget(text: AppStrings.tripHistoryEmpty);
     }
 
-    return ListView.builder(
-      padding: REdgeInsets.all(AppSpacing.xl),
+    final upcoming = trips.where((t) => t.status == TripStatus.scheduled).toList();
+    final past = trips.where((t) => t.status != TripStatus.scheduled).toList();
+
+    return CustomScrollView(
       physics: const BouncingScrollPhysics(),
-      itemCount: trips.length + (hasMore ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index == trips.length) {
-          return Padding(
-            padding: REdgeInsets.symmetric(vertical: AppSpacing.md),
-            child: isLoadingMore
-                ? Center(child: LoadingDots(color: context.primary))
-                : AppButton.grey(
-                    onTap: () => context.read<TripBloc>().add(
-                          const TripEvent.nextPageRequested(),
-                        ),
-                    child: AppButtonChild.label(AppStrings.tripHistoryLoadMore),
-                  ),
-          );
-        }
-        return TripSummaryCard(trip: trips[index]);
-      },
+      slivers: [
+        if (upcoming.isNotEmpty) ...[
+          SliverPadding(
+            padding: REdgeInsets.only(
+              left: AppSpacing.xl,
+              right: AppSpacing.xl,
+              top: AppSpacing.xl,
+              bottom: AppSpacing.sm,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                AppStrings.upcomingTrips,
+                style: AppTextStyles.s16w700.copyWith(color: context.primary),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: REdgeInsets.symmetric(horizontal: AppSpacing.xl),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => Padding(
+                  padding: REdgeInsets.only(bottom: AppSpacing.md),
+                  child: TripSummaryCard(trip: upcoming[index]),
+                ),
+                childCount: upcoming.length,
+              ),
+            ),
+          ),
+        ],
+        if (past.isNotEmpty) ...[
+          SliverPadding(
+            padding: REdgeInsets.only(
+              left: AppSpacing.xl,
+              right: AppSpacing.xl,
+              top: AppSpacing.xl,
+              bottom: AppSpacing.sm,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                AppStrings.pastTrips,
+                style: AppTextStyles.s16w700.copyWith(color: context.onSurface),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: REdgeInsets.symmetric(horizontal: AppSpacing.xl),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => Padding(
+                  padding: REdgeInsets.only(bottom: AppSpacing.md),
+                  child: TripSummaryCard(trip: past[index]),
+                ),
+                childCount: past.length,
+              ),
+            ),
+          ),
+        ],
+        if (hasMore)
+          SliverPadding(
+            padding: REdgeInsets.all(AppSpacing.xl),
+            sliver: SliverToBoxAdapter(
+              child: isLoadingMore
+                  ? Center(child: LoadingDots(color: context.primary))
+                  : AppButton.grey(
+                      onTap: () => context.read<TripBloc>().add(
+                            const TripEvent.nextPageRequested(),
+                          ),
+                      child: AppButtonChild.label(AppStrings.tripHistoryLoadMore),
+                    ),
+            ),
+          ),
+      ],
     );
   }
 }

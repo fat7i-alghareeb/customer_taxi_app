@@ -285,5 +285,10 @@
   "filesAttached": "{count} fichier(s) joint(s)",
   "uploadFailed": "Échec du téléchargement de la preuve. Veuillez réessayer.",
   "tripScheduledConfirmed": "Votre trajet est confirmé !",
-  "tripScheduledActivated": "Nous cherchons un chauffeur"
+  "tripScheduledActivated": "Nous cherchons un chauffeur",
+  "upcomingTrips": "À venir",
+  "pastTrips": "Trajets passés",
+  "scheduledForLabel": "Planifié pour {time}",
+  "tripLeadTimeError": "L'heure programmée doit être d'au moins 15 minutes dans le futur.",
+  "tripStopCompletedAt": "Terminé à {time}"
 }

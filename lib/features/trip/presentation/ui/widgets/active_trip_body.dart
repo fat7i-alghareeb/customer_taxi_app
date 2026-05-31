@@ -282,30 +282,55 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   Set<Marker> _buildTripMarkers(TripEntity trip) {
     final markers = <Marker>{};
     if (trip.stops.isNotEmpty) {
-      markers.add(
-        Marker(
-          markerId: const MarkerId('trip-pickup-point'),
-          position: LatLng(
-            trip.stops.first.latitude,
-            trip.stops.first.longitude,
-          ),
-          icon:
-              _pickupMarkerIcon ??
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-        ),
-      );
+      // Find the next uncompleted stop
+      int nextStopIndex = -1;
+      for (int i = 0; i < trip.stops.length; i++) {
+        if (!trip.stops[i].isCompleted) {
+          nextStopIndex = i;
+          break;
+        }
+      }
 
-      if (trip.stops.length > 1) {
+      for (int i = 0; i < trip.stops.length; i++) {
+        final stop = trip.stops[i];
+        final isPickup = i == 0;
+        final isDestination = i == trip.stops.length - 1;
+        final isNext = i == nextStopIndex;
+
+        BitmapDescriptor descriptor;
+        if (isPickup) {
+          descriptor = _pickupMarkerIcon ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+        } else if (isDestination) {
+          descriptor = _destinationMarkerIcon ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+        } else {
+          // Intermediate stop
+          if (isNext) {
+            // Highlight the next uncompleted stop in Red
+            descriptor = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+          } else if (stop.isCompleted) {
+            // Completed stops in Green
+            descriptor = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+          } else {
+            // Uncompleted subsequent stops in Violet
+            descriptor = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet);
+          }
+        }
+
         markers.add(
           Marker(
-            markerId: const MarkerId('trip-destination-point'),
-            position: LatLng(
-              trip.stops.last.latitude,
-              trip.stops.last.longitude,
+            markerId: MarkerId('trip-stop-${stop.sequence}-$i'),
+            position: LatLng(stop.latitude, stop.longitude),
+            icon: descriptor,
+            infoWindow: InfoWindow(
+              title: stop.label ?? (isPickup ? 'Pickup' : isDestination ? 'Destination' : 'Stop ${i + 1}'),
+              snippet: stop.isCompleted
+                  ? 'Completed'
+                  : isNext
+                      ? 'Next Stop'
+                      : 'Upcoming Stop',
             ),
-            icon:
-                _destinationMarkerIcon ??
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
           ),
         );
       }
@@ -794,6 +819,79 @@ class _GlassmorphicTripStatusSheet extends StatelessWidget {
           ),
         ),
         AppSpacing.xl.verticalSpace,
+
+        // Stops Timeline
+        if (trip.stops.isNotEmpty) ...[
+          Container(
+            padding: REdgeInsets.all(AppSpacing.lg),
+            decoration: BoxDecoration(
+              color: colors.onSurface.withValues(alpha: 0.02),
+              borderRadius: BorderRadius.circular(AppRadii.lg.r),
+              border: Border.all(
+                color: colors.onSurface.withValues(alpha: 0.04),
+                width: 1.r,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(trip.stops.length, (index) {
+                final stop = trip.stops[index];
+                final isLast = index == trip.stops.length - 1;
+                
+                final timeStr = stop.completedAtUtc != null
+                    ? stop.completedAtUtc!.toLocal().toTime12Compact()
+                    : '';
+                final completedStr = timeStr.isNotEmpty
+                    ? AppStrings.tripStopCompletedAt.replaceAll('{time}', timeStr)
+                    : AppStrings.tripStatusCompleted;
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          width: 10.r,
+                          height: 10.r,
+                          decoration: const BoxDecoration(
+                            color: AppColors.success,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        if (!isLast)
+                          Container(
+                            width: 2.w,
+                            height: 24.h,
+                            color: AppColors.success.withValues(alpha: 0.25),
+                          ),
+                      ],
+                    ),
+                    AppSpacing.md.horizontalSpace,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            stop.label ?? (index == 0 ? 'Pickup' : isLast ? 'Destination' : 'Stop ${index + 1}'),
+                            style: AppTextStyles.s14w600.copyWith(color: colors.onSurface),
+                          ),
+                          Text(
+                            completedStr,
+                            style: AppTextStyles.s12w400.copyWith(
+                              color: colors.onSurface.withValues(alpha: 0.5),
+                            ),
+                          ),
+                          if (!isLast) AppSpacing.sm.verticalSpace,
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            ),
+          ),
+          AppSpacing.xl.verticalSpace,
+        ],
 
         // Done button to route home
         AppButton.primaryGradient(

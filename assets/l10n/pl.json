@@ -285,5 +285,10 @@
   "filesAttached": "{count} plik(i) załączony(e)",
   "uploadFailed": "Nie udało się przesłać dowodu. Spróbuj ponownie.",
   "tripScheduledConfirmed": "Twoja podróż jest potwierdzona!",
-  "tripScheduledActivated": "Szukamy dla Ciebie kierowcy"
+  "tripScheduledActivated": "Szukamy dla Ciebie kierowcy",
+  "upcomingTrips": "Nadchodzące",
+  "pastTrips": "Minione przejazdy",
+  "scheduledForLabel": "Zaplanowane na {time}",
+  "tripLeadTimeError": "Zaplanowany czas musi być o co najmniej 15 minut w przyszłość.",
+  "tripStopCompletedAt": "Ukończono o {time}"
 }

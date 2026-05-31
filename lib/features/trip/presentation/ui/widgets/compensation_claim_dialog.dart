@@ -129,7 +129,10 @@ class _CompensationClaimDialogState extends State<CompensationClaimDialog> {
                         child: AppButtonChild.labelIcon(
                           label: _pickedPaths.isEmpty
                               ? AppStrings.attachEvidence
-                              : AppStrings.filesAttached(_pickedPaths.length),
+                              : AppStrings.filesAttached.replaceAll(
+                                  '{count}',
+                                  _pickedPaths.length.toString(),
+                                ),
                           icon: IconSource.icon(FontAwesomeIcons.paperclip),
                         ),
                       ),

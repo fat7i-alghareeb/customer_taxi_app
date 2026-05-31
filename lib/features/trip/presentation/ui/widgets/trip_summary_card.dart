@@ -1,5 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import '../../../domain/entities/trip_entity.dart';
+import '../../../domain/entities/trip_status.dart';
 import 'trip_status_chip.dart';
 import '../screens/active_trip_screen.dart';
 
@@ -37,12 +38,24 @@ class TripSummaryCard extends StatelessWidget {
                 ],
               ),
               AppSpacing.sm.verticalSpace,
-              Text(
-                dateStr,
-                style: AppTextStyles.s12w400.copyWith(
-                  color: context.onSurface.withValues(alpha: 0.5),
+              if (trip.status == TripStatus.scheduled && trip.scheduledAtUtc != null) ...[
+                Text(
+                  AppStrings.tripScheduledFor.replaceAll(
+                    '{time}',
+                    trip.scheduledAtUtc!.toLocal().toSmartDateTime(),
+                  ),
+                  style: AppTextStyles.s12w700.copyWith(
+                    color: AppColors.warning,
+                  ),
                 ),
-              ),
+              ] else ...[
+                Text(
+                  dateStr,
+                  style: AppTextStyles.s12w400.copyWith(
+                    color: context.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
               AppSpacing.md.verticalSpace,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

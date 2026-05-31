@@ -109,23 +109,40 @@ class _ProfileBodyState extends State<ProfileBody> {
                   enabled: false,
                 ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.05),
                 AppSpacing.xxl.verticalSpace,
-                AppButton.primary(
-                  onTap: () {
-                    if (_form.valid) {
-                      context.read<ProfileBloc>().add(
-                        const ProfileEvent.saveRequested(),
-                      );
-                    } else {
-                      _form.markAllAsTouched();
+                ReactiveFormConsumer(
+                  builder: (context, form, _) {
+                    final currentName =
+                        (form.control(ProfileForms.nameField).value as String?)
+                                ?.trim() ??
+                            '';
+                    final authName = (authUser?.name ?? '').trim();
+                    final nameChanged = currentName != authName;
+                    final photoChanged = state.pendingPhoto != null;
+                    final hasChanges = nameChanged || photoChanged;
+
+                    if (!widget.isSetupMode && !hasChanges) {
+                      return const SizedBox.shrink();
                     }
+
+                    return AppButton.primary(
+                      onTap: () {
+                        if (_form.valid) {
+                          context.read<ProfileBloc>().add(
+                            const ProfileEvent.saveRequested(),
+                          );
+                        } else {
+                          _form.markAllAsTouched();
+                        }
+                      },
+                      isLoading: state.saveStatus.isLoading,
+                      child: AppButtonChild.label(
+                        widget.isSetupMode
+                            ? AppStrings.profileSaveAndContinue
+                            : AppStrings.profileSave,
+                      ),
+                    ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.05);
                   },
-                  isLoading: state.saveStatus.isLoading,
-                  child: AppButtonChild.label(
-                    widget.isSetupMode
-                        ? AppStrings.profileSaveAndContinue
-                        : AppStrings.profileSave,
-                  ),
-                ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.05),
+                ),
               ],
             ),
           ),

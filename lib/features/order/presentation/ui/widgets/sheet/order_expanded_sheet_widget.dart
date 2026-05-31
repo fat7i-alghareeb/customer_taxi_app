@@ -158,9 +158,12 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
   bool get _isConfirmActive {
     final allStopsResolved = widget.state.stops.list.every((s) => s != null);
     if (!allStopsResolved) return false;
-    if (widget.state.booking.scheduleMode == OrderScheduleMode.later &&
-        widget.state.booking.scheduledAt == null) {
-      return false;
+    if (widget.state.booking.scheduleMode == OrderScheduleMode.later) {
+      if (widget.state.booking.scheduledAt == null) return false;
+      final minTime = DateTime.now().add(const Duration(minutes: 15));
+      if (widget.state.booking.scheduledAt!.isBefore(minTime)) {
+        return false;
+      }
     }
     return true;
   }

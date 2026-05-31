@@ -50,6 +50,10 @@ abstract class TripStopModel with _$TripStopModel {
   const factory TripStopModel({
     required double latitude,
     required double longitude,
+    String? label,
+    @Default(0) int sequence,
+    @Default(false) bool isCompleted,
+    DateTime? completedAtUtc,
   }) = _TripStopModel;
 
   factory TripStopModel.fromJson(Map<String, dynamic> json) =>

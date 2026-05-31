@@ -285,5 +285,11 @@
   "filesAttached": "{count} Datei(en) angehängt",
   "uploadFailed": "Hochladen des Beweises fehlgeschlagen. Bitte erneut versuchen.",
   "tripScheduledConfirmed": "Ihre Fahrt ist bestätigt!",
-  "tripScheduledActivated": "Wir suchen einen Fahrer für Sie"
+  "tripScheduledActivated": "Wir suchen einen Fahrer für Sie",
+  "upcomingTrips": "Bevorstehende",
+  "pastTrips": "Vergangene Fahrten",
+  "scheduledForLabel": "Geplant für {time}",
+  "tripLeadTimeError": "Die geplante Zeit muss mindestens 15 Minuten in der Zukunft liegen.",
+  "tripStopCompletedAt": "Abgeschlossen um {time}"
 }
+

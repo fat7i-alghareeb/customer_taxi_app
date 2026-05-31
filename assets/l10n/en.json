@@ -285,5 +285,11 @@
   "filesAttached": "{count} file(s) attached",
   "uploadFailed": "Failed to upload evidence. Please try again.",
   "tripScheduledConfirmed": "Your trip is confirmed!",
-  "tripScheduledActivated": "We're finding you a driver"
+  "tripScheduledActivated": "We're finding you a driver",
+  "upcomingTrips": "Upcoming",
+  "pastTrips": "Past Trips",
+  "scheduledForLabel": "Scheduled for {time}",
+  "tripLeadTimeError": "Scheduled time must be at least 15 minutes from now.",
+  "tripStopCompletedAt": "Completed at {time}"
 }
+

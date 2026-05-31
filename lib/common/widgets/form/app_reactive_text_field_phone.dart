@@ -24,6 +24,44 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
     return RegExp(r'^\d+$').hasMatch(v);
   }
 
+  void _runSuppressedPhoneCallbacks(VoidCallback action) {
+    _suppressPhoneCallbacks = true;
+    action();
+    Future.microtask(() {
+      if (!mounted) return;
+      _suppressPhoneCallbacks = false;
+    });
+  }
+
+  void _setPhoneControllerText(String text) {
+    if (phoneController.text == text) return;
+    _runSuppressedPhoneCallbacks(() {
+      phoneController.value = TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: text.length),
+      );
+    });
+  }
+
+  void _clearPhoneController() {
+    if (phoneController.text.trim().isEmpty) return;
+    _runSuppressedPhoneCallbacks(phoneController.clear);
+  }
+
+  String _sanitizeNationalText(String rawText, {String? dialCode}) {
+    if (!rawText.startsWith('+')) return rawText;
+
+    var text = rawText.substring(1);
+    final rawDial = dialCode ?? '';
+    final dial = rawDial.startsWith('+') ? rawDial.substring(1) : rawDial;
+
+    if (dial.isNotEmpty && text.startsWith(dial)) {
+      text = text.substring(dial.length);
+    }
+
+    return text;
+  }
+
   /// Picks the initial ISO country code.
   ///
   /// Priority:
@@ -54,6 +92,7 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
   void _syncPhoneControllerFromControl(
     String? value, {
     required String isoCode,
+    required bool canOverrideInvalid,
   }) {
     if (_focusNode.hasFocus) return;
 
@@ -61,7 +100,9 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
     // do NOT overwrite the controller from the control value (which may still
     // contain the last valid E.164). This prevents reverting to the last valid
     // value on blur.
-    if (!_phoneIsValid && phoneController.text.trim().isNotEmpty) {
+    if (!_phoneIsValid &&
+        phoneController.text.trim().isNotEmpty &&
+        !canOverrideInvalid) {
       return;
     }
 
@@ -80,16 +121,18 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
     if (_looksLikeE164(e164)) {
       PhoneNumber.getRegionInfoFromPhoneNumber(e164, isoCode)
           .then((PhoneNumber pn) {
-            final text = pn.parseNumber();
+            final resolvedIso = pn.isoCode;
+            if (resolvedIso != null &&
+                resolvedIso.trim().isNotEmpty &&
+                _phoneIsoCode != resolvedIso) {
+              _phoneIsoCode = resolvedIso;
+            }
+            final text = pn.parseCleanNumber();
             if (phoneController.text == text) return;
 
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (!mounted) return;
-              if (phoneController.text == text) return;
-              phoneController.value = TextEditingValue(
-                text: text,
-                selection: TextSelection.collapsed(offset: text.length),
-              );
+              _setPhoneControllerText(text);
             });
           })
           .catchError((_) {
@@ -104,11 +147,7 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
       if (phoneController.text == e164) return;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        if (phoneController.text == e164) return;
-        phoneController.value = TextEditingValue(
-          text: e164,
-          selection: TextSelection.collapsed(offset: e164.length),
-        );
+        _setPhoneControllerText(e164);
       });
     }
   }
@@ -142,21 +181,33 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
           _phoneLastEmittedE164 = null;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            if (phoneController.text.trim().isEmpty) return;
-            phoneController.clear();
+            _clearPhoneController();
           });
         }
 
-        _syncPhoneControllerFromControl(value, isoCode: isoCode);
+        _syncPhoneControllerFromControl(
+          value,
+          isoCode: isoCode,
+          canOverrideInvalid: !control.dirty && !control.touched,
+        );
+
+        if (!_focusNode.hasFocus && !control.dirty && !control.touched) {
+          final rawText = phoneController.text.trim();
+          final sanitized = _sanitizeNationalText(
+            rawText,
+            dialCode: _phoneLastNumber?.dialCode,
+          );
+          if (sanitized != rawText) {
+            _setPhoneControllerText(sanitized);
+          }
+        }
 
         final e164 = (value ?? '').trim();
-        final signature = '$isoCode:$e164';
+        final signature = isoCode;
 
         if (_phoneInitialValueSignature != signature) {
           _phoneInitialValueSignature = signature;
-          _phoneInitialValueCached = _looksLikeE164(e164)
-              ? PhoneNumber(isoCode: isoCode, phoneNumber: e164)
-              : PhoneNumber(isoCode: isoCode);
+          _phoneInitialValueCached = PhoneNumber(isoCode: isoCode);
         }
 
         final initial = _phoneInitialValueCached!;
@@ -219,22 +270,50 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
                   if (raw is! FormControl<String>) return;
                   final c = raw;
 
-                  final currentText = phoneController.text.trim();
+                  final rawText = phoneController.text.trim();
+
+                  final wasValid = _phoneIsValid;
+                  _phoneIsValid = isValid;
+
+                  if (_suppressPhoneCallbacks) {
+                    _lastPhoneValidationText = rawText;
+                    return;
+                  }
+
+                  final digits = isValid
+                      ? (_phoneLastNumber?.parseCleanNumber() ?? '')
+                      : '';
+                  final fallback = digits.isNotEmpty
+                      ? digits
+                      : _sanitizeNationalText(
+                          rawText,
+                          dialCode: _phoneLastNumber?.dialCode,
+                        );
+                  final effectiveText = fallback;
+
+                  if (fallback.isNotEmpty && fallback != rawText) {
+                    _setPhoneControllerText(fallback);
+                  }
+
                   final shouldStartValidation =
-                      currentText.isNotEmpty ||
+                      effectiveText.isNotEmpty ||
                       (c.value ?? '').isNotEmpty ||
                       c.dirty ||
                       c.touched;
 
-                  if (shouldStartValidation) {
+                  final didChangeText =
+                      effectiveText != _lastPhoneValidationText;
+                  if (didChangeText) {
+                    _lastPhoneValidationText = effectiveText;
+                  }
+
+                  if (shouldStartValidation &&
+                      (didChangeText || wasValid != isValid)) {
                     if (!c.dirty) {
                       c.markAsDirty();
                     }
-                    _armDeferredValidation();
+                    _armDeferredValidation(input: effectiveText);
                   }
-
-                  final wasValid = _phoneIsValid;
-                  _phoneIsValid = isValid;
 
                   if (wasValid != isValid) {
                     if (isValid) {
@@ -270,7 +349,7 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
                     _phoneLastEmittedE164 = null;
                     return;
                   }
-                  if (currentText.isEmpty) {
+                  if (effectiveText.isEmpty) {
                     if (c.hasError(
                       AppReactiveValidationMessages.invalidPhoneKey,
                     )) {
@@ -370,11 +449,18 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
                       c.dirty ||
                       c.touched;
 
+                  if (_suppressPhoneCallbacks) {
+                    _lastPhoneValidationText = currentText;
+                    return;
+                  }
+
+                  _lastPhoneValidationText = currentText;
+
                   if (shouldStartValidation) {
                     if (!c.dirty) {
                       c.markAsDirty();
                     }
-                    _armDeferredValidation();
+                    _armDeferredValidation(input: currentText);
                   }
 
                   if (!_phoneIsValid &&
@@ -433,7 +519,7 @@ extension _AppReactiveTextFieldPhone on _AppReactiveTextFieldState {
 extension PhoneNumberX on PhoneNumber {
   /// Robustly strips the dial code and the '+' prefix from the phone number
   /// to get the raw national digits suitable for the text field.
-  String parseNumber() {
+  String parseCleanNumber() {
     final rawDial = dialCode ?? '';
     final dial = rawDial.startsWith('+') ? rawDial.substring(1) : rawDial;
     var text = phoneNumber ?? '';

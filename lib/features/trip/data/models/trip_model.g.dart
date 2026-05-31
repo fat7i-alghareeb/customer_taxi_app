@@ -101,12 +101,22 @@ _TripStopModel _$TripStopModelFromJson(Map<String, dynamic> json) =>
     _TripStopModel(
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
+      label: json['label'] as String?,
+      sequence: (json['sequence'] as num?)?.toInt() ?? 0,
+      isCompleted: json['isCompleted'] as bool? ?? false,
+      completedAtUtc: json['completedAtUtc'] == null
+          ? null
+          : DateTime.parse(json['completedAtUtc'] as String),
     );
 
 Map<String, dynamic> _$TripStopModelToJson(_TripStopModel instance) =>
     <String, dynamic>{
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'label': instance.label,
+      'sequence': instance.sequence,
+      'isCompleted': instance.isCompleted,
+      'completedAtUtc': instance.completedAtUtc?.toIso8601String(),
     };
 
 _TripCancellationModel _$TripCancellationModelFromJson(
