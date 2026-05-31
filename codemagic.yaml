@@ -4,11 +4,11 @@ workflows:
 
     max_build_duration: 60
 
-    android_signing:
-      - customertaxi_release
-
     environment:
       flutter: 3.41.5
+
+      android_signing:
+        - customertaxi_release
 
       groups:
         - production
@@ -36,17 +36,17 @@ workflows:
           echo "--- Environment Diagnostics ---"
 
           if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
-            echo "❌ ERROR: GOOGLE_MAPS_API_KEY is empty or not found."
+            echo "ERROR: GOOGLE_MAPS_API_KEY is empty or not found."
             exit 1
           else
-            echo "✅ GOOGLE_MAPS_API_KEY detected (Length: ${#GOOGLE_MAPS_API_KEY})"
+            echo "GOOGLE_MAPS_API_KEY detected. Length: ${#GOOGLE_MAPS_API_KEY}"
           fi
 
           if [ -z "$PRODUCTION_BASE_URL" ]; then
-            echo "❌ ERROR: PRODUCTION_BASE_URL is empty or not found."
+            echo "ERROR: PRODUCTION_BASE_URL is empty or not found."
             exit 1
           else
-            echo "✅ PRODUCTION_BASE_URL detected (Length: ${#PRODUCTION_BASE_URL})"
+            echo "PRODUCTION_BASE_URL detected. Length: ${#PRODUCTION_BASE_URL}"
           fi
 
           echo "-------------------------------"
@@ -60,27 +60,49 @@ workflows:
       - name: Set up signing key properties
         script: |
           set -e
+
           echo "--- Code Signing Environment Validation ---"
+
           if [ -z "$CM_KEYSTORE_PATH" ]; then
-            echo "❌ ERROR: CM_KEYSTORE_PATH is empty. Ensure Android keystore is configured in Codemagic UI."
+            echo "ERROR: CM_KEYSTORE_PATH is empty. Make sure Android keystore is configured in Codemagic."
             exit 1
           else
-            echo "✅ CM_KEYSTORE_PATH is configured at $CM_KEYSTORE_PATH"
+            echo "CM_KEYSTORE_PATH is configured."
           fi
-          if [ -z "$CM_KEYSTORE_PASSWORD" ] || [ -z "$CM_KEY_ALIAS" ] || [ -z "$CM_KEY_PASSWORD" ]; then
-            echo "❌ ERROR: One or more key parameters (CM_KEYSTORE_PASSWORD, CM_KEY_ALIAS, CM_KEY_PASSWORD) are missing."
+
+          if [ -z "$CM_KEYSTORE_PASSWORD" ]; then
+            echo "ERROR: CM_KEYSTORE_PASSWORD is empty."
             exit 1
-          else
-            echo "✅ Key parameters are present."
           fi
+
+          if [ -z "$CM_KEY_ALIAS" ]; then
+            echo "ERROR: CM_KEY_ALIAS is empty."
+            exit 1
+          fi
+
+          if [ -z "$CM_KEY_PASSWORD" ]; then
+            echo "ERROR: CM_KEY_PASSWORD is empty."
+            exit 1
+          fi
+
+          echo "Key parameters are present."
           echo "------------------------------------------"
-          
-          # Write credentials to android/key.properties
+
           echo "storePassword=$CM_KEYSTORE_PASSWORD" > android/key.properties
           echo "keyPassword=$CM_KEY_PASSWORD" >> android/key.properties
           echo "keyAlias=$CM_KEY_ALIAS" >> android/key.properties
           echo "storeFile=$CM_KEYSTORE_PATH" >> android/key.properties
-          echo "✅ Generated android/key.properties for CI build."
+
+          echo "Generated android/key.properties for CI build."
+
+      - name: Print Uploaded Keystore SHA Before Build
+        script: |
+          set -e
+
+          keytool -list -v \
+            -keystore "$CM_KEYSTORE_PATH" \
+            -alias "$CM_KEY_ALIAS" \
+            -storepass "$CM_KEYSTORE_PASSWORD"
 
       - name: Print Gradle Signing Report Before Build
         script: |
@@ -106,7 +128,7 @@ workflows:
           APK_PATH=$(find build/app/outputs/flutter-apk -name "*.apk" | head -n 1)
 
           if [ -z "$APK_PATH" ]; then
-            echo "❌ ERROR: APK not found."
+            echo "ERROR: APK not found."
             exit 1
           fi
 
@@ -115,7 +137,7 @@ workflows:
           APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -n 1)
 
           if [ -z "$APKSIGNER" ]; then
-            echo "❌ ERROR: apksigner not found."
+            echo "ERROR: apksigner not found."
             exit 1
           fi
 
