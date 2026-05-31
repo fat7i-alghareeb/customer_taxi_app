@@ -51,3 +51,9 @@ app.*.map.json
 
 # Generated Envied files
 lib/core/config/env/*.g.dart
+
+# Android Signing Secrets
+android/keystores/*.jks
+android/keystores/*.keystore
+android/key.properties
+
