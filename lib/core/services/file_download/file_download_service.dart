@@ -3,7 +3,7 @@ import 'dart:typed_data';
 /// Where the file actually landed. The UI uses this to decide which
 /// success message to show (e.g. "Saved to Downloads" vs "Opened share sheet").
 enum FileDownloadLocation {
-  /// Android: public Downloads folder via MediaStore (or direct write on legacy).
+  /// Android: public Downloads folder when a platform save path can provide it.
   /// iOS: Files app via the Documents container.
   publicDownloads,
 
@@ -35,16 +35,12 @@ sealed class FileDownloadResult {
 }
 
 final class FileDownloadSuccess extends FileDownloadResult {
-  const FileDownloadSuccess({
-    required this.location,
-    this.path,
-    this.uri,
-  });
+  const FileDownloadSuccess({required this.location, this.path, this.uri});
 
   /// Filesystem path when available. Null for [FileDownloadLocation.sharedTemporarily].
   final String? path;
 
-  /// Content URI on Android when MediaStore was used. Null elsewhere.
+  /// Content URI when a platform save API provides one. Null for file paths.
   final Uri? uri;
 
   final FileDownloadLocation location;
@@ -60,8 +56,8 @@ final class FileDownloadFailure extends FileDownloadResult {
 /// Persists arbitrary bytes to user-visible storage with platform-appropriate
 /// fallbacks. Used today for invoice PDFs; reusable for receipts, exports, etc.
 abstract class FileDownloadService {
-  /// Saves [bytes] under [fileName] with [mimeType] (used by MediaStore +
-  /// share sheet metadata). The returned result tells the caller *where* the
+  /// Saves [bytes] under [fileName] with [mimeType] (used by the native saver
+  /// and share sheet metadata). The returned result tells the caller *where* the
   /// file ended up so it can show the right confirmation copy.
   Future<FileDownloadResult> saveBytes({
     required Uint8List bytes,

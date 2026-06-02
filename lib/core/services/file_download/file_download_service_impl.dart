@@ -1,10 +1,9 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:injectable/injectable.dart';
-import 'package:media_store_plus/media_store_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
@@ -15,11 +14,9 @@ import 'file_download_service.dart';
 /// Cascading save strategy:
 ///
 /// **Android**
-///   1. SDK ≥ 29: `MediaStore.Downloads` (no permission, lands in Downloads app).
-///   2. SDK ≤ 28: legacy `WRITE_EXTERNAL_STORAGE` + direct write to
-///      `/storage/emulated/0/Download`.
-///   3. App-private external dir (`Android/data/<pkg>/files/Download/`).
-///   4. Share sheet ("Save to Drive/Files/etc.").
+///   1. FileSaver app-external save.
+///   2. App-private external dir (`Android/data/<pkg>/files/Download/`).
+///   3. Share sheet ("Save to Drive/Files/etc.").
 ///
 /// **iOS**
 ///   1. App Documents dir (visible in Files when `UIFileSharingEnabled` +
@@ -28,10 +25,6 @@ import 'file_download_service.dart';
 @LazySingleton(as: FileDownloadService)
 class FileDownloadServiceImpl implements FileDownloadService {
   FileDownloadServiceImpl();
-
-  static const _appFolder = 'Fat7i';
-
-  final MediaStore _mediaStore = MediaStore();
 
   @override
   Future<FileDownloadResult> saveBytes({
@@ -77,30 +70,23 @@ class FileDownloadServiceImpl implements FileDownloadService {
       }
     }
 
-    // Strategy 1 + 2 (MediaStore handles both 29+ and the legacy direct-write
-    // path internally — much less code to maintain than two branches).
+    // Strategy 1: file_saver uses app-scoped storage on Android, which avoids
+    // public-storage plugin metadata conflicts in release builds.
     try {
-      await MediaStore.ensureInitialized();
-      MediaStore.appFolder = _appFolder;
-
-      final temp = await _writeTemp(bytes, fileName);
-      final info = await _mediaStore.saveFile(
-        tempFilePath: temp.path,
-        dirType: DirType.download,
-        dirName: DirName.download,
+      final path = await FileSaver.instance.saveFile(
+        name: _nameWithoutExtension(fileName),
+        bytes: bytes,
+        fileExtension: _extensionWithoutDot(fileName),
+        includeExtension: _extensionWithoutDot(fileName).isNotEmpty,
+        mimeType: MimeType.custom,
+        customMimeType: mimeType,
       );
 
-      // Always sweep the temp file regardless of MediaStore's outcome.
-      unawaited(temp.delete().catchError((_) => temp));
-
-      if (info != null) {
-        printY(
-          '[FileDownload] mediaStore ok name=${info.name} status=${info.saveStatus.name}',
-        );
+      if (path.isNotEmpty) {
+        printY('[FileDownload] fileSaver ok path=$path');
         return FileDownloadSuccess(
-          location: FileDownloadLocation.publicDownloads,
-          path: info.uri.toString(),
-          uri: info.uri,
+          location: FileDownloadLocation.appExternalDir,
+          path: path,
         );
       }
     } on FileSystemException catch (e) {
@@ -111,9 +97,9 @@ class FileDownloadServiceImpl implements FileDownloadService {
           cause: e,
         );
       }
-      printY('[FileDownload] mediaStore FileSystemException: $e');
+      printY('[FileDownload] fileSaver FileSystemException: $e');
     } catch (e) {
-      printY('[FileDownload] mediaStore failed: $e');
+      printY('[FileDownload] fileSaver failed: $e');
     }
 
     return _appExternalDirFallback(bytes, fileName, mimeType);
@@ -201,9 +187,7 @@ class FileDownloadServiceImpl implements FileDownloadService {
     try {
       final result = await SharePlus.instance.share(
         ShareParams(
-          files: [
-            XFile.fromData(bytes, name: fileName, mimeType: mimeType),
-          ],
+          files: [XFile.fromData(bytes, name: fileName, mimeType: mimeType)],
         ),
       );
       if (result.status == ShareResultStatus.dismissed) {
@@ -220,12 +204,6 @@ class FileDownloadServiceImpl implements FileDownloadService {
         cause: e,
       );
     }
-  }
-
-  Future<File> _writeTemp(Uint8List bytes, String fileName) async {
-    final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/$fileName');
-    return _writeBytesAtomically(file.path, bytes);
   }
 
   /// Write to `<path>.tmp` then rename — guarantees no half-written file is
@@ -252,7 +230,19 @@ class FileDownloadServiceImpl implements FileDownloadService {
     }
   }
 
-  /// Strip the characters that break either filesystem or MediaStore inserts.
+  String _nameWithoutExtension(String fileName) {
+    final dot = fileName.lastIndexOf('.');
+    if (dot <= 0) return fileName;
+    return fileName.substring(0, dot);
+  }
+
+  String _extensionWithoutDot(String fileName) {
+    final dot = fileName.lastIndexOf('.');
+    if (dot < 0 || dot == fileName.length - 1) return '';
+    return fileName.substring(dot + 1);
+  }
+
+  /// Strip the characters that break filesystem writes.
   String _sanitize(String name) =>
       name.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_').trim();
 }

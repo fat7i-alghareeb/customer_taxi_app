@@ -61,6 +61,9 @@ This folder should remain **feature-agnostic**. If code is specific to one produ
     - onboarding coordination
     - persistent storage
     - memory/cache management
+    - file downloads through `FileDownloadService`, which saves generated
+      bytes with `file_saver`, then falls back to app-scoped storage and the
+      share sheet when platform saving fails.
 
 - **`theme/`**
   - Design system foundation: colors, typography, text styles, theme composition, system UI overlay setup.
