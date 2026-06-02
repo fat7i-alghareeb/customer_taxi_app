@@ -29,6 +29,7 @@ _OrderTripResponseModel _$OrderTripResponseModelFromJson(
       : OrderStripePaymentModel.fromJson(
           json['stripePayment'] as Map<String, dynamic>,
         ),
+  passengerNote: json['passengerNote'] as String?,
 );
 
 Map<String, dynamic> _$OrderTripResponseModelToJson(
@@ -46,4 +47,5 @@ Map<String, dynamic> _$OrderTripResponseModelToJson(
   'scheduledAtUtc': instance.scheduledAtUtc?.toIso8601String(),
   'stops': instance.stops,
   'stripePayment': instance.stripePayment,
+  'passengerNote': instance.passengerNote,
 };

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TripEntity {
 
- String get id; String get referenceCode; TripStatus get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; List<TripStopEntity> get stops; String? get vehicleTypeName; double? get driverLat; double? get driverLng; DateTime? get etaToPickup; TripCancellationEntity? get cancellation; TripCompensationClaimEntity? get compensationClaim; TripWaitingSessionEntity? get activeWaitingSession; String? get encodedOverviewPolyline; List<TripRouteSegmentEntity> get routeSegments;
+ String get id; String get referenceCode; TripStatus get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; List<TripStopEntity> get stops; String? get vehicleTypeName; double? get driverLat; double? get driverLng; DateTime? get etaToPickup; TripCancellationEntity? get cancellation; TripCompensationClaimEntity? get compensationClaim; TripWaitingSessionEntity? get activeWaitingSession; String? get encodedOverviewPolyline; List<TripRouteSegmentEntity> get routeSegments; String? get passengerNote;
 /// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TripEntityCopyWith<TripEntity> get copyWith => _$TripEntityCopyWithImpl<TripEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other.routeSegments, routeSegments));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other.routeSegments, routeSegments)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(routeSegments));
+int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(routeSegments),passengerNote);
 
 @override
 String toString() {
-  return 'TripEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments)';
+  return 'TripEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments, passengerNote: $passengerNote)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TripEntityCopyWith<$Res>  {
   factory $TripEntityCopyWith(TripEntity value, $Res Function(TripEntity) _then) = _$TripEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopEntity> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationEntity? cancellation, TripCompensationClaimEntity? compensationClaim, TripWaitingSessionEntity? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentEntity> routeSegments
+ String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopEntity> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationEntity? cancellation, TripCompensationClaimEntity? compensationClaim, TripWaitingSessionEntity? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentEntity> routeSegments, String? passengerNote
 });
 
 
@@ -62,7 +62,7 @@ class _$TripEntityCopyWithImpl<$Res>
 
 /// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,Object? passengerNote = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -81,7 +81,8 @@ as TripCancellationEntity?,compensationClaim: freezed == compensationClaim ? _se
 as TripCompensationClaimEntity?,activeWaitingSession: freezed == activeWaitingSession ? _self.activeWaitingSession : activeWaitingSession // ignore: cast_nullable_to_non_nullable
 as TripWaitingSessionEntity?,encodedOverviewPolyline: freezed == encodedOverviewPolyline ? _self.encodedOverviewPolyline : encodedOverviewPolyline // ignore: cast_nullable_to_non_nullable
 as String?,routeSegments: null == routeSegments ? _self.routeSegments : routeSegments // ignore: cast_nullable_to_non_nullable
-as List<TripRouteSegmentEntity>,
+as List<TripRouteSegmentEntity>,passengerNote: freezed == passengerNote ? _self.passengerNote : passengerNote // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of TripEntity
@@ -202,10 +203,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripEntity() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote);case _:
   return orElse();
 
 }
@@ -223,10 +224,10 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote)  $default,) {final _that = this;
 switch (_that) {
 case _TripEntity():
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -243,10 +244,10 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote)?  $default,) {final _that = this;
 switch (_that) {
 case _TripEntity() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote);case _:
   return null;
 
 }
@@ -258,7 +259,7 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 
 
 class _TripEntity implements TripEntity {
-  const _TripEntity({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, final  List<TripStopEntity> stops = const [], this.vehicleTypeName, this.driverLat, this.driverLng, this.etaToPickup, this.cancellation, this.compensationClaim, this.activeWaitingSession, this.encodedOverviewPolyline, final  List<TripRouteSegmentEntity> routeSegments = const []}): _stops = stops,_routeSegments = routeSegments;
+  const _TripEntity({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, final  List<TripStopEntity> stops = const [], this.vehicleTypeName, this.driverLat, this.driverLng, this.etaToPickup, this.cancellation, this.compensationClaim, this.activeWaitingSession, this.encodedOverviewPolyline, final  List<TripRouteSegmentEntity> routeSegments = const [], this.passengerNote}): _stops = stops,_routeSegments = routeSegments;
   
 
 @override final  String id;
@@ -290,6 +291,7 @@ class _TripEntity implements TripEntity {
   return EqualUnmodifiableListView(_routeSegments);
 }
 
+@override final  String? passengerNote;
 
 /// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -301,16 +303,16 @@ _$TripEntityCopyWith<_TripEntity> get copyWith => __$TripEntityCopyWithImpl<_Tri
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other._routeSegments, _routeSegments));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other._routeSegments, _routeSegments)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(_stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(_routeSegments));
+int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(_stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(_routeSegments),passengerNote);
 
 @override
 String toString() {
-  return 'TripEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments)';
+  return 'TripEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments, passengerNote: $passengerNote)';
 }
 
 
@@ -321,7 +323,7 @@ abstract mixin class _$TripEntityCopyWith<$Res> implements $TripEntityCopyWith<$
   factory _$TripEntityCopyWith(_TripEntity value, $Res Function(_TripEntity) _then) = __$TripEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopEntity> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationEntity? cancellation, TripCompensationClaimEntity? compensationClaim, TripWaitingSessionEntity? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentEntity> routeSegments
+ String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopEntity> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationEntity? cancellation, TripCompensationClaimEntity? compensationClaim, TripWaitingSessionEntity? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentEntity> routeSegments, String? passengerNote
 });
 
 
@@ -338,7 +340,7 @@ class __$TripEntityCopyWithImpl<$Res>
 
 /// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,Object? passengerNote = freezed,}) {
   return _then(_TripEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -357,7 +359,8 @@ as TripCancellationEntity?,compensationClaim: freezed == compensationClaim ? _se
 as TripCompensationClaimEntity?,activeWaitingSession: freezed == activeWaitingSession ? _self.activeWaitingSession : activeWaitingSession // ignore: cast_nullable_to_non_nullable
 as TripWaitingSessionEntity?,encodedOverviewPolyline: freezed == encodedOverviewPolyline ? _self.encodedOverviewPolyline : encodedOverviewPolyline // ignore: cast_nullable_to_non_nullable
 as String?,routeSegments: null == routeSegments ? _self._routeSegments : routeSegments // ignore: cast_nullable_to_non_nullable
-as List<TripRouteSegmentEntity>,
+as List<TripRouteSegmentEntity>,passengerNote: freezed == passengerNote ? _self.passengerNote : passengerNote // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -1796,7 +1799,7 @@ as bool,
 /// @nodoc
 mixin _$TripSummaryEntity {
 
- String get id; String get referenceCode; TripStatus get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; List<TripStopEntity> get stops;
+ String get id; String get referenceCode; TripStatus get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; List<TripStopEntity> get stops; String? get passengerNote;
 /// Create a copy of TripSummaryEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1807,16 +1810,16 @@ $TripSummaryEntityCopyWith<TripSummaryEntity> get copyWith => _$TripSummaryEntit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripSummaryEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripSummaryEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(stops));
+int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(stops),passengerNote);
 
 @override
 String toString() {
-  return 'TripSummaryEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops)';
+  return 'TripSummaryEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, passengerNote: $passengerNote)';
 }
 
 
@@ -1827,7 +1830,7 @@ abstract mixin class $TripSummaryEntityCopyWith<$Res>  {
   factory $TripSummaryEntityCopyWith(TripSummaryEntity value, $Res Function(TripSummaryEntity) _then) = _$TripSummaryEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopEntity> stops
+ String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopEntity> stops, String? passengerNote
 });
 
 
@@ -1844,7 +1847,7 @@ class _$TripSummaryEntityCopyWithImpl<$Res>
 
 /// Create a copy of TripSummaryEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? passengerNote = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -1854,7 +1857,8 @@ as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode
 as String,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime,scheduledAtUtc: freezed == scheduledAtUtc ? _self.scheduledAtUtc : scheduledAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,stops: null == stops ? _self.stops : stops // ignore: cast_nullable_to_non_nullable
-as List<TripStopEntity>,
+as List<TripStopEntity>,passengerNote: freezed == passengerNote ? _self.passengerNote : passengerNote // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -1939,10 +1943,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? passengerNote)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripSummaryEntity() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.passengerNote);case _:
   return orElse();
 
 }
@@ -1960,10 +1964,10 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? passengerNote)  $default,) {final _that = this;
 switch (_that) {
 case _TripSummaryEntity():
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.passengerNote);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1980,10 +1984,10 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  List<TripStopEntity> stops,  String? passengerNote)?  $default,) {final _that = this;
 switch (_that) {
 case _TripSummaryEntity() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.stops,_that.passengerNote);case _:
   return null;
 
 }
@@ -1995,7 +1999,7 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 
 
 class _TripSummaryEntity implements TripSummaryEntity {
-  const _TripSummaryEntity({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, final  List<TripStopEntity> stops = const []}): _stops = stops;
+  const _TripSummaryEntity({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, final  List<TripStopEntity> stops = const [], this.passengerNote}): _stops = stops;
   
 
 @override final  String id;
@@ -2012,6 +2016,7 @@ class _TripSummaryEntity implements TripSummaryEntity {
   return EqualUnmodifiableListView(_stops);
 }
 
+@override final  String? passengerNote;
 
 /// Create a copy of TripSummaryEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -2023,16 +2028,16 @@ _$TripSummaryEntityCopyWith<_TripSummaryEntity> get copyWith => __$TripSummaryEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripSummaryEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripSummaryEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(_stops));
+int get hashCode => Object.hash(runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,const DeepCollectionEquality().hash(_stops),passengerNote);
 
 @override
 String toString() {
-  return 'TripSummaryEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops)';
+  return 'TripSummaryEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, stops: $stops, passengerNote: $passengerNote)';
 }
 
 
@@ -2043,7 +2048,7 @@ abstract mixin class _$TripSummaryEntityCopyWith<$Res> implements $TripSummaryEn
   factory _$TripSummaryEntityCopyWith(_TripSummaryEntity value, $Res Function(_TripSummaryEntity) _then) = __$TripSummaryEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopEntity> stops
+ String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, List<TripStopEntity> stops, String? passengerNote
 });
 
 
@@ -2060,7 +2065,7 @@ class __$TripSummaryEntityCopyWithImpl<$Res>
 
 /// Create a copy of TripSummaryEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? stops = null,Object? passengerNote = freezed,}) {
   return _then(_TripSummaryEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -2070,7 +2075,8 @@ as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode
 as String,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime,scheduledAtUtc: freezed == scheduledAtUtc ? _self.scheduledAtUtc : scheduledAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,stops: null == stops ? _self._stops : stops // ignore: cast_nullable_to_non_nullable
-as List<TripStopEntity>,
+as List<TripStopEntity>,passengerNote: freezed == passengerNote ? _self.passengerNote : passengerNote // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

@@ -45,9 +45,11 @@ class OrderRequestTripEntity {
     required this.quoteId,
     required this.stops,
     this.scheduledAt,
+    this.passengerNote,
   });
 
   final String quoteId;
   final List<OrderStopCoordinateEntity> stops;
   final DateTime? scheduledAt;
+  final String? passengerNote;
 }

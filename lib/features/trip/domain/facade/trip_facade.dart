@@ -1,8 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:injectable/injectable.dart';
 import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/utils/result.dart';
 import '../entities/trip_entity.dart';
+import '../entities/trip_invoice_entity.dart';
+import '../entities/trip_receipt_entity.dart';
 import '../repositories/trip_repository.dart';
 import '../../data/datasources/trip_remote_datasource.dart';
 
@@ -20,6 +24,17 @@ class TripFacade {
   Future<Result<TripEntity>> cancelTrip(String id) {
     printC('[TripFacade] cancelTrip id=$id');
     return _repository.cancelTrip(id);
+  }
+
+  Future<Result<TripEntity>> updatePassengerNote({
+    required String tripId,
+    required String? passengerNote,
+  }) {
+    printC('[TripFacade] updatePassengerNote id=$tripId');
+    return _repository.updatePassengerNote(
+      tripId: tripId,
+      passengerNote: passengerNote,
+    );
   }
 
   Future<Result<TripCompensationClaimEntity>> submitCompensationClaim({
@@ -48,5 +63,23 @@ class TripFacade {
   }) {
     printC('[TripFacade] getTripHistory page=$page');
     return _repository.getTripHistory(page: page, pageSize: pageSize);
+  }
+
+  Future<Result<TripReceiptEntity>> getTripReceipt(String id) {
+    printC('[TripFacade] getTripReceipt id=$id');
+    return _repository.getTripReceipt(id);
+  }
+
+  Future<Result<TripInvoiceEntity>> getTripInvoice(String id) {
+    printC('[TripFacade] getTripInvoice id=$id');
+    return _repository.getTripInvoice(id);
+  }
+
+  Future<Result<Uint8List>> getTripInvoicePdf(
+    String id, {
+    required String languageCode,
+  }) {
+    printC('[TripFacade] getTripInvoicePdf id=$id lang=$languageCode');
+    return _repository.getTripInvoicePdf(id, languageCode: languageCode);
   }
 }

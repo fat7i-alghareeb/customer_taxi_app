@@ -24,6 +24,7 @@ class OrderTripResponseEntity {
     this.scheduledAtUtc,
     required this.stops,
     this.stripePayment,
+    this.passengerNote,
   });
 
   final String id;
@@ -38,4 +39,5 @@ class OrderTripResponseEntity {
   final DateTime? scheduledAtUtc;
   final List<OrderTripStopCoordinate> stops;
   final OrderStripePaymentEntity? stripePayment;
+  final String? passengerNote;
 }

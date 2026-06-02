@@ -1,10 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/error/global_error_handler.dart';
 import '../../../../core/network/api_endpoints.dart';
+import '../models/trip_invoice_model.dart';
 import '../models/trip_model.dart';
+import '../models/trip_receipt_model.dart';
 
 class PagedResult<T> {
   const PagedResult({
@@ -54,6 +58,20 @@ class TripRemoteDataSource {
           'reason': 'PassengerWithinOneHour',
           'note': 'Passenger requested cancellation from customer app',
         },
+      );
+      return TripModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<TripModel> updatePassengerNote({
+    required String tripId,
+    required String? passengerNote,
+  }) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] updatePassengerNote id=$tripId');
+      final res = await _dio.put<dynamic>(
+        ApiEndpoints.updatePassengerNote(tripId),
+        data: {'passengerNote': passengerNote},
       );
       return TripModel.fromJson(res.data as Map<String, dynamic>);
     });
@@ -112,6 +130,39 @@ class TripRemoteDataSource {
         res.data as Map<String, dynamic>,
         TripSummaryModel.fromJson,
       );
+    });
+  }
+
+  Future<TripReceiptModel> getTripReceipt(String id) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] getTripReceipt id=$id');
+      final res = await _dio.get<dynamic>(ApiEndpoints.tripReceipt(id));
+      return TripReceiptModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<TripInvoiceModel> getTripInvoice(String id) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] getTripInvoice id=$id');
+      final res = await _dio.get<dynamic>(ApiEndpoints.tripInvoice(id));
+      return TripInvoiceModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<Uint8List> getTripInvoicePdfBytes(
+    String id, {
+    required String languageCode,
+  }) {
+    return rethrowAsAppException(() async {
+      printY(
+        '[TripRemoteDataSource] getTripInvoicePdfBytes id=$id lang=$languageCode',
+      );
+      final res = await _dio.get<List<int>>(
+        ApiEndpoints.tripInvoicePdf(id),
+        queryParameters: {'language': languageCode},
+        options: Options(responseType: ResponseType.bytes),
+      );
+      return Uint8List.fromList(res.data ?? const <int>[]);
     });
   }
 }

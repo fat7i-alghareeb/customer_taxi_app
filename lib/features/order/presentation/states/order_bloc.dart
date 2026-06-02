@@ -79,6 +79,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<_BookingDetailsBackPressed>(_onBookingDetailsBackPressed);
     on<_ScheduleModeChanged>(_onScheduleModeChanged);
     on<_ScheduleTimeChanged>(_onScheduleTimeChanged);
+    on<_PassengerNoteChanged>(_onPassengerNoteChanged);
     on<_PaymentSheetDismissed>(_onPaymentSheetDismissed);
   }
 

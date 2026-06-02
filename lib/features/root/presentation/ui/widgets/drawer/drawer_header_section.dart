@@ -7,8 +7,8 @@ class DrawerHeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentUser = getIt<AuthManager>().currentUser;
-    final nameText = currentUser?.name ?? 'Adam';
-    final phoneText = currentUser?.phone ?? '+31 6 12345678';
+    final nameText = currentUser?.name ?? '--';
+    final phoneText = currentUser?.phone ?? '--';
 
 
     return Padding(

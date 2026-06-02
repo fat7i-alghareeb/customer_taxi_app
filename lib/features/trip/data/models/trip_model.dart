@@ -23,6 +23,7 @@ abstract class TripModel with _$TripModel {
     TripWaitingSessionModel? activeWaitingSession,
     String? encodedOverviewPolyline,
     @Default([]) List<TripRouteSegmentModel> routeSegments,
+    String? passengerNote,
   }) = _TripModel;
 
   factory TripModel.fromJson(Map<String, dynamic> json) =>
@@ -124,6 +125,7 @@ abstract class TripSummaryModel with _$TripSummaryModel {
     required DateTime createdAtUtc,
     DateTime? scheduledAtUtc,
     @Default([]) List<TripStopModel> stops,
+    String? passengerNote,
   }) = _TripSummaryModel;
 
   factory TripSummaryModel.fromJson(Map<String, dynamic> json) =>

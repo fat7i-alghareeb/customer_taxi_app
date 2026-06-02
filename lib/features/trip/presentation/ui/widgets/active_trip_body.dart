@@ -13,6 +13,10 @@ import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/compensation_claim_dialog.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/completed_action_chips.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_fare_summary_card.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_stops_timeline.dart';
 import 'package:vibration/vibration.dart';
 
 class ActiveTripBody extends StatefulWidget {
@@ -269,12 +273,9 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
           }
         }
 
-        if (trip.status.isTerminal) {
-          printG('[ActiveTripBody] terminal trip, returning to root soon');
-          Future.delayed(AppDurations.slow * 4, () {
-            if (context.mounted) context.goNamed('RootScreen');
-          });
-        }
+        // Terminal trips stay on this screen so the customer can browse the
+        // receipt / invoice chips at their leisure. Dismissal is now explicit
+        // via the Done button in [_buildCompletedSheet].
       },
     );
   }
@@ -412,6 +413,19 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         ),
         BlocListener<TripBloc, TripState>(
           listenWhen: (prev, curr) =>
+              prev.passengerNoteStatus != curr.passengerNoteStatus,
+          listener: (context, state) {
+            state.passengerNoteStatus.whenOrNull(
+              success: (_) => showSuccessOverlay(
+                context,
+                AppStrings.passengerNoteSaved,
+              ),
+              failure: (msg) => showErrorOverlay(context, msg),
+            );
+          },
+        ),
+        BlocListener<TripBloc, TripState>(
+          listenWhen: (prev, curr) =>
               prev.tripStatus != curr.tripStatus ||
               prev.activeDriverLocation != curr.activeDriverLocation,
           listener: _handleTripStateChange,
@@ -428,6 +442,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
               final double lng = trip.stops.isNotEmpty
                   ? trip.stops.first.longitude
                   : 21.0122;
+              final canEditPassengerNote = trip.status.canEditPassengerNote;
 
               return Stack(
                 fit: StackFit.expand,
@@ -474,6 +489,16 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                               curve: Curves.easeOutCubic,
                             ),
                   ),
+                  if (canEditPassengerNote)
+                    PositionedDirectional(
+                      end: AppSpacing.xl.w,
+                      bottom: 245.h + MediaQuery.paddingOf(context).bottom,
+                      child: _PassengerNoteFloatingAction(
+                        hasNote: trip.passengerNote?.trim().isNotEmpty == true,
+                        isLoading: state.passengerNoteStatus.isLoading,
+                        onTap: () => _showPassengerNoteSheet(context, trip),
+                      ),
+                    ),
                 ],
               );
             },
@@ -525,6 +550,21 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
       }),
     );
   }
+
+  void _showPassengerNoteSheet(BuildContext context, TripEntity trip) {
+    printM('[ActiveTripBody] passenger note sheet opened');
+    unawaited(
+      PassengerNoteSheet.show(
+        context,
+        initialNote: trip.passengerNote,
+      ).then((result) {
+        if (result == null || !context.mounted) return;
+        context.read<TripBloc>().add(
+          TripEvent.passengerNoteSubmitted(result.note),
+        );
+      }),
+    );
+  }
 }
 
 extension on LatLng {
@@ -533,6 +573,82 @@ extension on LatLng {
       latitude: latitude,
       longitude: longitude,
       bearing: bearing,
+    );
+  }
+}
+
+extension on TripStatus {
+  bool get canEditPassengerNote =>
+      this != TripStatus.inProgress && !isTerminal && this != TripStatus.unknown;
+}
+
+class _PassengerNoteFloatingAction extends StatelessWidget {
+  const _PassengerNoteFloatingAction({
+    required this.hasNote,
+    required this.isLoading,
+    required this.onTap,
+  });
+
+  final bool hasNote;
+  final bool isLoading;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: isLoading ? null : onTap,
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+        child: Ink(
+          padding: REdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
+          ),
+          decoration: BoxDecoration(
+            color: colors.primary,
+            borderRadius: BorderRadius.circular(AppRadii.lg.r),
+            boxShadow: [
+              BoxShadow(
+                color: colors.primary.withValues(alpha: 0.25),
+                blurRadius: 18.r,
+                offset: Offset(0, 8.h),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isLoading)
+                SizedBox(
+                  width: 16.r,
+                  height: 16.r,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.r,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      colors.onPrimary,
+                    ),
+                  ),
+                )
+              else
+                FaIcon(
+                  hasNote ? FontAwesomeIcons.solidComment : FontAwesomeIcons.message,
+                  size: 16.r,
+                  color: colors.onPrimary,
+                ),
+              AppSpacing.sm.horizontalSpace,
+              Text(
+                AppStrings.passengerNoteEdit,
+                style: AppTextStyles.s12w700.copyWith(
+                  color: colors.onPrimary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -770,8 +886,6 @@ class _GlassmorphicTripStatusSheet extends StatelessWidget {
 
   Widget _buildCompletedSheet(BuildContext context) {
     final colors = context.colorScheme;
-    final fareStr =
-        '${trip.quotedFare.toStringAsFixed(2)} ${trip.currencyCode}';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -792,108 +906,25 @@ class _GlassmorphicTripStatusSheet extends StatelessWidget {
         ),
         AppSpacing.lg.verticalSpace,
 
+        // Uber-style receipt / invoice chips
+        CompletedActionChips(tripId: trip.id),
+        AppSpacing.lg.verticalSpace,
+
         // Fare Summary Card
-        Container(
-          padding: REdgeInsets.all(AppSpacing.lg),
-          decoration: BoxDecoration(
-            color: colors.onSurface.withValues(alpha: 0.04),
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-          ),
-          child: Column(
-            children: [
-              Text(
-                AppStrings.tripFare.replaceAll('{fare} {currency}', fareStr),
-                style: AppTextStyles.s24w700.copyWith(color: colors.primary),
-              ),
-              AppSpacing.xs.verticalSpace,
-              Text(
-                AppStrings.tripReferenceCode.replaceAll(
-                  '#{code}',
-                  trip.referenceCode,
-                ),
-                style: AppTextStyles.s12w400.copyWith(
-                  color: colors.onSurface.withValues(alpha: 0.5),
-                ),
-              ),
-            ],
-          ),
+        TripFareSummaryCard(
+          amount: trip.quotedFare,
+          currencyCode: trip.currencyCode,
+          referenceCode: trip.referenceCode,
         ),
         AppSpacing.xl.verticalSpace,
 
         // Stops Timeline
         if (trip.stops.isNotEmpty) ...[
-          Container(
-            padding: REdgeInsets.all(AppSpacing.lg),
-            decoration: BoxDecoration(
-              color: colors.onSurface.withValues(alpha: 0.02),
-              borderRadius: BorderRadius.circular(AppRadii.lg.r),
-              border: Border.all(
-                color: colors.onSurface.withValues(alpha: 0.04),
-                width: 1.r,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(trip.stops.length, (index) {
-                final stop = trip.stops[index];
-                final isLast = index == trip.stops.length - 1;
-                
-                final timeStr = stop.completedAtUtc != null
-                    ? stop.completedAtUtc!.toLocal().toTime12Compact()
-                    : '';
-                final completedStr = timeStr.isNotEmpty
-                    ? AppStrings.tripStopCompletedAt.replaceAll('{time}', timeStr)
-                    : AppStrings.tripStatusCompleted;
-
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          width: 10.r,
-                          height: 10.r,
-                          decoration: const BoxDecoration(
-                            color: AppColors.success,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        if (!isLast)
-                          Container(
-                            width: 2.w,
-                            height: 24.h,
-                            color: AppColors.success.withValues(alpha: 0.25),
-                          ),
-                      ],
-                    ),
-                    AppSpacing.md.horizontalSpace,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            stop.label ?? (index == 0 ? 'Pickup' : isLast ? 'Destination' : 'Stop ${index + 1}'),
-                            style: AppTextStyles.s14w600.copyWith(color: colors.onSurface),
-                          ),
-                          Text(
-                            completedStr,
-                            style: AppTextStyles.s12w400.copyWith(
-                              color: colors.onSurface.withValues(alpha: 0.5),
-                            ),
-                          ),
-                          if (!isLast) AppSpacing.sm.verticalSpace,
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              }),
-            ),
-          ),
+          TripStopsTimeline(stops: trip.stops),
           AppSpacing.xl.verticalSpace,
         ],
 
-        // Done button to route home
+        // Done button to route home (explicit dismiss — no auto-redirect)
         AppButton.primaryGradient(
           onTap: () => context.goNamed('RootScreen'),
           child: AppButtonChild.label(AppStrings.done),

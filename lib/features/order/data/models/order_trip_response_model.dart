@@ -23,6 +23,7 @@ abstract class OrderTripResponseModel with _$OrderTripResponseModel {
     DateTime? scheduledAtUtc,
     required List<OrderTripStopModel> stops,
     OrderStripePaymentModel? stripePayment,
+    String? passengerNote,
   }) = _OrderTripResponseModel;
 
   factory OrderTripResponseModel.fromJson(Map<String, dynamic> json) =>

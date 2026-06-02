@@ -71,6 +71,17 @@ extension _BookingHandlers on OrderBloc {
     );
   }
 
+  void _onPassengerNoteChanged(
+    _PassengerNoteChanged event,
+    Emitter<OrderState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        booking: state.booking.copyWith(passengerNote: event.note),
+      ),
+    );
+  }
+
   void _onPaymentSheetDismissed(
     _PaymentSheetDismissed event,
     Emitter<OrderState> emit,
@@ -152,6 +163,7 @@ extension _BookingHandlers on OrderBloc {
         state.booking.scheduleMode == OrderScheduleMode.later
         ? state.booking.scheduledAt
         : null;
+    final passengerNote = state.booking.passengerNote.trim();
 
     if (scheduledAtToSend != null) {
       printC('[Payment] scheduled ride at $scheduledAtToSend');
@@ -162,6 +174,7 @@ extension _BookingHandlers on OrderBloc {
         quoteId: quoteId,
         stops: stopCoords,
         scheduledAt: scheduledAtToSend,
+        passengerNote: passengerNote.isEmpty ? null : passengerNote,
       ),
     );
 

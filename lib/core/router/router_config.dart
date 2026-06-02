@@ -15,7 +15,10 @@ import '../../features/root/presentation/ui/screens/cancellation_policy_screen.d
 import '../../features/root/presentation/ui/screens/contact_us_screen.dart';
 import '../../features/profile/presentation/ui/screens/profile_setup_screen.dart';
 import '../../features/trip/presentation/ui/screens/active_trip_screen.dart';
+import '../../features/trip/presentation/ui/screens/trip_details_screen.dart';
 import '../../features/trip/presentation/ui/screens/trip_history_screen.dart';
+import '../../features/trip/presentation/ui/screens/trip_invoice_screen.dart';
+import '../../features/trip/presentation/ui/screens/trip_receipt_screen.dart';
 import '../../features/favorites/presentation/ui/screens/favorites_screen.dart';
 import '../../features/order/presentation/ui/screens/location_picker_screen.dart';
 import '../../features/splash/presentation/ui/screens/splash_screen.dart';

@@ -11,6 +11,7 @@ abstract class OrderBookingSlice with _$OrderBookingSlice {
   const factory OrderBookingSlice({
     @Default(OrderScheduleMode.now) OrderScheduleMode scheduleMode,
     DateTime? scheduledAt,
+    @Default('') String passengerNote,
     @Default(BlocStatus<OrderTripResponseEntity>.initial())
     BlocStatus<OrderTripResponseEntity> tripRequestStatus,
     @Default(BlocStatus<void>.initial())

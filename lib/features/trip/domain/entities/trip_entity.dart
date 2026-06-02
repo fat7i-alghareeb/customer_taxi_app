@@ -23,6 +23,7 @@ abstract class TripEntity with _$TripEntity {
     TripWaitingSessionEntity? activeWaitingSession,
     String? encodedOverviewPolyline,
     @Default([]) List<TripRouteSegmentEntity> routeSegments,
+    String? passengerNote,
   }) = _TripEntity;
 }
 
@@ -106,5 +107,6 @@ abstract class TripSummaryEntity with _$TripSummaryEntity {
     required DateTime createdAtUtc,
     DateTime? scheduledAtUtc,
     @Default([]) List<TripStopEntity> stops,
+    String? passengerNote,
   }) = _TripSummaryEntity;
 }

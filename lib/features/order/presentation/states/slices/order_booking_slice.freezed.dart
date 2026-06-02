@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderBookingSlice {
 
- OrderScheduleMode get scheduleMode; DateTime? get scheduledAt; BlocStatus<OrderTripResponseEntity> get tripRequestStatus; BlocStatus<void> get paymentSheetState;// Stores the trip created by requestTrip so the same PaymentIntent can be
+ OrderScheduleMode get scheduleMode; DateTime? get scheduledAt; String get passengerNote; BlocStatus<OrderTripResponseEntity> get tripRequestStatus; BlocStatus<void> get paymentSheetState;// Stores the trip created by requestTrip so the same PaymentIntent can be
 // re-presented if the user dismisses the sheet without paying. Cleared on
 // success, full payment failure, or when the user abandons the booking.
  OrderTripResponseEntity? get pendingTripResponse;
@@ -28,16 +28,16 @@ $OrderBookingSliceCopyWith<OrderBookingSlice> get copyWith => _$OrderBookingSlic
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderBookingSlice&&(identical(other.scheduleMode, scheduleMode) || other.scheduleMode == scheduleMode)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.tripRequestStatus, tripRequestStatus) || other.tripRequestStatus == tripRequestStatus)&&(identical(other.paymentSheetState, paymentSheetState) || other.paymentSheetState == paymentSheetState)&&(identical(other.pendingTripResponse, pendingTripResponse) || other.pendingTripResponse == pendingTripResponse));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderBookingSlice&&(identical(other.scheduleMode, scheduleMode) || other.scheduleMode == scheduleMode)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote)&&(identical(other.tripRequestStatus, tripRequestStatus) || other.tripRequestStatus == tripRequestStatus)&&(identical(other.paymentSheetState, paymentSheetState) || other.paymentSheetState == paymentSheetState)&&(identical(other.pendingTripResponse, pendingTripResponse) || other.pendingTripResponse == pendingTripResponse));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,scheduleMode,scheduledAt,tripRequestStatus,paymentSheetState,pendingTripResponse);
+int get hashCode => Object.hash(runtimeType,scheduleMode,scheduledAt,passengerNote,tripRequestStatus,paymentSheetState,pendingTripResponse);
 
 @override
 String toString() {
-  return 'OrderBookingSlice(scheduleMode: $scheduleMode, scheduledAt: $scheduledAt, tripRequestStatus: $tripRequestStatus, paymentSheetState: $paymentSheetState, pendingTripResponse: $pendingTripResponse)';
+  return 'OrderBookingSlice(scheduleMode: $scheduleMode, scheduledAt: $scheduledAt, passengerNote: $passengerNote, tripRequestStatus: $tripRequestStatus, paymentSheetState: $paymentSheetState, pendingTripResponse: $pendingTripResponse)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $OrderBookingSliceCopyWith<$Res>  {
   factory $OrderBookingSliceCopyWith(OrderBookingSlice value, $Res Function(OrderBookingSlice) _then) = _$OrderBookingSliceCopyWithImpl;
 @useResult
 $Res call({
- OrderScheduleMode scheduleMode, DateTime? scheduledAt, BlocStatus<OrderTripResponseEntity> tripRequestStatus, BlocStatus<void> paymentSheetState, OrderTripResponseEntity? pendingTripResponse
+ OrderScheduleMode scheduleMode, DateTime? scheduledAt, String passengerNote, BlocStatus<OrderTripResponseEntity> tripRequestStatus, BlocStatus<void> paymentSheetState, OrderTripResponseEntity? pendingTripResponse
 });
 
 
@@ -65,11 +65,12 @@ class _$OrderBookingSliceCopyWithImpl<$Res>
 
 /// Create a copy of OrderBookingSlice
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? scheduleMode = null,Object? scheduledAt = freezed,Object? tripRequestStatus = null,Object? paymentSheetState = null,Object? pendingTripResponse = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? scheduleMode = null,Object? scheduledAt = freezed,Object? passengerNote = null,Object? tripRequestStatus = null,Object? paymentSheetState = null,Object? pendingTripResponse = freezed,}) {
   return _then(_self.copyWith(
 scheduleMode: null == scheduleMode ? _self.scheduleMode : scheduleMode // ignore: cast_nullable_to_non_nullable
 as OrderScheduleMode,scheduledAt: freezed == scheduledAt ? _self.scheduledAt : scheduledAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,tripRequestStatus: null == tripRequestStatus ? _self.tripRequestStatus : tripRequestStatus // ignore: cast_nullable_to_non_nullable
+as DateTime?,passengerNote: null == passengerNote ? _self.passengerNote : passengerNote // ignore: cast_nullable_to_non_nullable
+as String,tripRequestStatus: null == tripRequestStatus ? _self.tripRequestStatus : tripRequestStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<OrderTripResponseEntity>,paymentSheetState: null == paymentSheetState ? _self.paymentSheetState : paymentSheetState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<void>,pendingTripResponse: freezed == pendingTripResponse ? _self.pendingTripResponse : pendingTripResponse // ignore: cast_nullable_to_non_nullable
 as OrderTripResponseEntity?,
@@ -175,10 +176,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OrderScheduleMode scheduleMode,  DateTime? scheduledAt,  BlocStatus<OrderTripResponseEntity> tripRequestStatus,  BlocStatus<void> paymentSheetState,  OrderTripResponseEntity? pendingTripResponse)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OrderScheduleMode scheduleMode,  DateTime? scheduledAt,  String passengerNote,  BlocStatus<OrderTripResponseEntity> tripRequestStatus,  BlocStatus<void> paymentSheetState,  OrderTripResponseEntity? pendingTripResponse)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderBookingSlice() when $default != null:
-return $default(_that.scheduleMode,_that.scheduledAt,_that.tripRequestStatus,_that.paymentSheetState,_that.pendingTripResponse);case _:
+return $default(_that.scheduleMode,_that.scheduledAt,_that.passengerNote,_that.tripRequestStatus,_that.paymentSheetState,_that.pendingTripResponse);case _:
   return orElse();
 
 }
@@ -196,10 +197,10 @@ return $default(_that.scheduleMode,_that.scheduledAt,_that.tripRequestStatus,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OrderScheduleMode scheduleMode,  DateTime? scheduledAt,  BlocStatus<OrderTripResponseEntity> tripRequestStatus,  BlocStatus<void> paymentSheetState,  OrderTripResponseEntity? pendingTripResponse)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OrderScheduleMode scheduleMode,  DateTime? scheduledAt,  String passengerNote,  BlocStatus<OrderTripResponseEntity> tripRequestStatus,  BlocStatus<void> paymentSheetState,  OrderTripResponseEntity? pendingTripResponse)  $default,) {final _that = this;
 switch (_that) {
 case _OrderBookingSlice():
-return $default(_that.scheduleMode,_that.scheduledAt,_that.tripRequestStatus,_that.paymentSheetState,_that.pendingTripResponse);case _:
+return $default(_that.scheduleMode,_that.scheduledAt,_that.passengerNote,_that.tripRequestStatus,_that.paymentSheetState,_that.pendingTripResponse);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -216,10 +217,10 @@ return $default(_that.scheduleMode,_that.scheduledAt,_that.tripRequestStatus,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OrderScheduleMode scheduleMode,  DateTime? scheduledAt,  BlocStatus<OrderTripResponseEntity> tripRequestStatus,  BlocStatus<void> paymentSheetState,  OrderTripResponseEntity? pendingTripResponse)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OrderScheduleMode scheduleMode,  DateTime? scheduledAt,  String passengerNote,  BlocStatus<OrderTripResponseEntity> tripRequestStatus,  BlocStatus<void> paymentSheetState,  OrderTripResponseEntity? pendingTripResponse)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderBookingSlice() when $default != null:
-return $default(_that.scheduleMode,_that.scheduledAt,_that.tripRequestStatus,_that.paymentSheetState,_that.pendingTripResponse);case _:
+return $default(_that.scheduleMode,_that.scheduledAt,_that.passengerNote,_that.tripRequestStatus,_that.paymentSheetState,_that.pendingTripResponse);case _:
   return null;
 
 }
@@ -231,11 +232,12 @@ return $default(_that.scheduleMode,_that.scheduledAt,_that.tripRequestStatus,_th
 
 
 class _OrderBookingSlice implements OrderBookingSlice {
-  const _OrderBookingSlice({this.scheduleMode = OrderScheduleMode.now, this.scheduledAt, this.tripRequestStatus = const BlocStatus<OrderTripResponseEntity>.initial(), this.paymentSheetState = const BlocStatus<void>.initial(), this.pendingTripResponse});
+  const _OrderBookingSlice({this.scheduleMode = OrderScheduleMode.now, this.scheduledAt, this.passengerNote = '', this.tripRequestStatus = const BlocStatus<OrderTripResponseEntity>.initial(), this.paymentSheetState = const BlocStatus<void>.initial(), this.pendingTripResponse});
   
 
 @override@JsonKey() final  OrderScheduleMode scheduleMode;
 @override final  DateTime? scheduledAt;
+@override@JsonKey() final  String passengerNote;
 @override@JsonKey() final  BlocStatus<OrderTripResponseEntity> tripRequestStatus;
 @override@JsonKey() final  BlocStatus<void> paymentSheetState;
 // Stores the trip created by requestTrip so the same PaymentIntent can be
@@ -253,16 +255,16 @@ _$OrderBookingSliceCopyWith<_OrderBookingSlice> get copyWith => __$OrderBookingS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderBookingSlice&&(identical(other.scheduleMode, scheduleMode) || other.scheduleMode == scheduleMode)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.tripRequestStatus, tripRequestStatus) || other.tripRequestStatus == tripRequestStatus)&&(identical(other.paymentSheetState, paymentSheetState) || other.paymentSheetState == paymentSheetState)&&(identical(other.pendingTripResponse, pendingTripResponse) || other.pendingTripResponse == pendingTripResponse));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderBookingSlice&&(identical(other.scheduleMode, scheduleMode) || other.scheduleMode == scheduleMode)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote)&&(identical(other.tripRequestStatus, tripRequestStatus) || other.tripRequestStatus == tripRequestStatus)&&(identical(other.paymentSheetState, paymentSheetState) || other.paymentSheetState == paymentSheetState)&&(identical(other.pendingTripResponse, pendingTripResponse) || other.pendingTripResponse == pendingTripResponse));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,scheduleMode,scheduledAt,tripRequestStatus,paymentSheetState,pendingTripResponse);
+int get hashCode => Object.hash(runtimeType,scheduleMode,scheduledAt,passengerNote,tripRequestStatus,paymentSheetState,pendingTripResponse);
 
 @override
 String toString() {
-  return 'OrderBookingSlice(scheduleMode: $scheduleMode, scheduledAt: $scheduledAt, tripRequestStatus: $tripRequestStatus, paymentSheetState: $paymentSheetState, pendingTripResponse: $pendingTripResponse)';
+  return 'OrderBookingSlice(scheduleMode: $scheduleMode, scheduledAt: $scheduledAt, passengerNote: $passengerNote, tripRequestStatus: $tripRequestStatus, paymentSheetState: $paymentSheetState, pendingTripResponse: $pendingTripResponse)';
 }
 
 
@@ -273,7 +275,7 @@ abstract mixin class _$OrderBookingSliceCopyWith<$Res> implements $OrderBookingS
   factory _$OrderBookingSliceCopyWith(_OrderBookingSlice value, $Res Function(_OrderBookingSlice) _then) = __$OrderBookingSliceCopyWithImpl;
 @override @useResult
 $Res call({
- OrderScheduleMode scheduleMode, DateTime? scheduledAt, BlocStatus<OrderTripResponseEntity> tripRequestStatus, BlocStatus<void> paymentSheetState, OrderTripResponseEntity? pendingTripResponse
+ OrderScheduleMode scheduleMode, DateTime? scheduledAt, String passengerNote, BlocStatus<OrderTripResponseEntity> tripRequestStatus, BlocStatus<void> paymentSheetState, OrderTripResponseEntity? pendingTripResponse
 });
 
 
@@ -290,11 +292,12 @@ class __$OrderBookingSliceCopyWithImpl<$Res>
 
 /// Create a copy of OrderBookingSlice
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? scheduleMode = null,Object? scheduledAt = freezed,Object? tripRequestStatus = null,Object? paymentSheetState = null,Object? pendingTripResponse = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? scheduleMode = null,Object? scheduledAt = freezed,Object? passengerNote = null,Object? tripRequestStatus = null,Object? paymentSheetState = null,Object? pendingTripResponse = freezed,}) {
   return _then(_OrderBookingSlice(
 scheduleMode: null == scheduleMode ? _self.scheduleMode : scheduleMode // ignore: cast_nullable_to_non_nullable
 as OrderScheduleMode,scheduledAt: freezed == scheduledAt ? _self.scheduledAt : scheduledAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,tripRequestStatus: null == tripRequestStatus ? _self.tripRequestStatus : tripRequestStatus // ignore: cast_nullable_to_non_nullable
+as DateTime?,passengerNote: null == passengerNote ? _self.passengerNote : passengerNote // ignore: cast_nullable_to_non_nullable
+as String,tripRequestStatus: null == tripRequestStatus ? _self.tripRequestStatus : tripRequestStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<OrderTripResponseEntity>,paymentSheetState: null == paymentSheetState ? _self.paymentSheetState : paymentSheetState // ignore: cast_nullable_to_non_nullable
 as BlocStatus<void>,pendingTripResponse: freezed == pendingTripResponse ? _self.pendingTripResponse : pendingTripResponse // ignore: cast_nullable_to_non_nullable
 as OrderTripResponseEntity?,

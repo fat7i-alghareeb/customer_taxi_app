@@ -197,6 +197,22 @@ class AppStrings {
   static String get invalidOtp => 'invalidOtp'.tr();
   /// Please enter a valid phone number. - يرجى إدخال رقم هاتف صالح. - Voer een geldig telefoonnummer in. - Bitte geben Sie eine gültige Telefonnummer ein. - Wprowadź prawidłowy numer telefonu. - Введіть правильний номер телефону. - Veuillez entrer un numéro valide. - Por favor, introduzca un número de teléfono válido. - Vă rugăm să introduceți un număr de telefon valid.
   static String get invalidPhoneNumber => 'invalidPhoneNumber'.tr();
+  /// Download - تنزيل - Downloaden - Herunterladen - Pobierz - Завантажити - Télécharger - Descargar - Descarcă
+  static String get invoiceDownload => 'invoiceDownload'.tr();
+  /// Issued - تاريخ الإصدار - Factuurdatum - Rechnungsdatum - Data wystawienia - Дата виставлення - Date d'émission - Fecha de emisión - Data emiterii
+  static String get invoiceIssuedAtLabel => 'invoiceIssuedAtLabel'.tr();
+  /// Invoice language - لغة الفاتورة - Factuurtaal - Rechnungssprache - Język faktury - Мова рахунка - Langue de la facture - Idioma de la factura - Limba facturii
+  static String get invoiceLanguageLabel => 'invoiceLanguageLabel'.tr();
+  /// Couldn't load the invoice PDF. Tap to retry. - تعذّر تحميل ملف الفاتورة. اضغط لإعادة المحاولة. - De factuur kon niet worden geladen. Tik om opnieuw te proberen. - Rechnung konnte nicht geladen werden. Tippe zum Wiederholen. - Nie udało się załadować faktury. Stuknij, aby spróbować ponownie. - Не вдалося завантажити рахунок. Натисніть, щоб повторити. - Impossible de charger la facture. Appuyez pour réessayer. - No se pudo cargar la factura. Toca para reintentar. - Factura nu s-a putut încărca. Atinge pentru a reîncerca.
+  static String get invoiceLoadFailed => 'invoiceLoadFailed'.tr();
+  /// The invoice isn't ready yet. Please try again in a moment. - الفاتورة لم تجهز بعد. حاول مرة أخرى بعد قليل. - De factuur is nog niet gereed. Probeer het over een moment opnieuw. - Die Rechnung ist noch nicht bereit. Bitte versuche es gleich erneut. - Faktura nie jest jeszcze gotowa. Spróbuj ponownie za chwilę. - Рахунок ще не готовий. Спробуйте за мить. - La facture n'est pas encore prête. Réessayez dans un instant. - La factura aún no está lista. Vuelve a intentarlo en un momento. - Factura nu este încă pregătită. Încearcă din nou în câteva momente.
+  static String get invoiceNotIssuedYet => 'invoiceNotIssuedYet'.tr();
+  /// Invoice no. - رقم الفاتورة - Factuurnummer - Rechnungsnummer - Nr faktury - № рахунка - N° de facture - N.º de factura - Nr. factură
+  static String get invoiceNumberLabel => 'invoiceNumberLabel'.tr();
+  /// Share - مشاركة - Delen - Teilen - Udostępnij - Поділитися - Partager - Compartir - Distribuie
+  static String get invoiceShare => 'invoiceShare'.tr();
+  /// Invoice - الفاتورة - Factuur - Rechnung - Faktura - Рахунок-фактура - Facture - Factura - Factură
+  static String get invoiceTitle => 'invoiceTitle'.tr();
   /// Jan - ينا - Jan - Jan - Sty - Січ - Janv - Ene - Ian
   static String get jan => 'jan'.tr();
   /// January - يناير - Januari - Januar - Styczeń - Січень - Janvier - Enero - Ianuarie
@@ -213,22 +229,40 @@ class AppStrings {
   static String get language => 'language'.tr();
   /// Arabic - العربية - Arabisch - العربية - العربية - العربية - العربية - العربية - العربية
   static String get languageAR => 'languageAR'.tr();
+  /// Arabic - العربية - Arabisch - Arabisch - Arabski - Арабська - Arabe - Árabe - Arabă
+  static String get languageArabic => 'languageArabic'.tr();
   /// German - الألمانية - Duits - Deutsch - Deutsch - Deutsch - Deutsch - Deutsch - Deutsch
   static String get languageDE => 'languageDE'.tr();
+  /// Dutch - الهولندية - Nederlands - Niederländisch - Niderlandzki - Нідерландська - Néerlandais - Neerlandés - Olandeză
+  static String get languageDutch => 'languageDutch'.tr();
   /// English - English - Engels - English - English - English - English - English - English
   static String get languageEN => 'languageEN'.tr();
   /// Spanish - الإسبانية - Spaans - Spanisch - Hiszpański - Іспанська - Espagnol - Español - Español
   static String get languageES => 'languageES'.tr();
+  /// English - الإنجليزية - Engels - Englisch - Angielski - Англійська - Anglais - Inglés - Engleză
+  static String get languageEnglish => 'languageEnglish'.tr();
   /// French - الفرنسية - Frans - Français - Français - Français - Français - Français - Français
   static String get languageFR => 'languageFR'.tr();
+  /// French - الفرنسية - Frans - Französisch - Francuski - Французька - Français - Francés - Franceză
+  static String get languageFrench => 'languageFrench'.tr();
+  /// German - الألمانية - Duits - Deutsch - Niemiecki - Німецька - Allemand - Alemán - Germană
+  static String get languageGerman => 'languageGerman'.tr();
   /// Dutch - الهولندية - Nederlands - Nederlands - Nederlands - Nederlands - Nederlands - Nederlands - Nederlands
   static String get languageNL => 'languageNL'.tr();
   /// Polish - البولندية - Pools - Polski - Polski - Polski - Polski - Polski - Polski
   static String get languagePL => 'languagePL'.tr();
+  /// Polish - البولندية - Pools - Polnisch - Polski - Польська - Polonais - Polaco - Poloneză
+  static String get languagePolish => 'languagePolish'.tr();
   /// Romanian - الرومانية - Roemeens - Rumänisch - Rumuński - Румунська - Roumain - Rumano - Română
   static String get languageRO => 'languageRO'.tr();
+  /// Romanian - الرومانية - Roemeens - Rumänisch - Rumuński - Румунська - Roumain - Rumano - Română
+  static String get languageRomanian => 'languageRomanian'.tr();
+  /// Spanish - الإسبانية - Spaans - Spanisch - Hiszpański - Іспанська - Espagnol - Español - Spaniolă
+  static String get languageSpanish => 'languageSpanish'.tr();
   /// Ukrainian - الأوكرانية - Oekraïens - Українська - Українська - Українська - Українська - Українська - Українська
   static String get languageUK => 'languageUK'.tr();
+  /// Ukrainian - الأوكرانية - Oekraïens - Ukrainisch - Ukraiński - Українська - Ukrainien - Ucraniano - Ucraineană
+  static String get languageUkrainian => 'languageUkrainian'.tr();
   /// Later - لاحقًا - Later - Später - Później - Пізніше - Plus tard - Más tarde - Mai târziu
   static String get later => 'later'.tr();
   /// Light - الفاتح - Licht - Hell - Jasny - Світла - Clair - Claro - Luminos
@@ -321,6 +355,24 @@ class AppStrings {
   static String get orderStopLabel => 'orderStopLabel'.tr();
   /// Verification - التحقق - Verificatie - Verifizierung - Weryfikacja - Верифікація - Vérification - Verificación - Verificare
   static String get otp => 'otp'.tr();
+  /// Clear - مسح - Wissen - Löschen - Wyczyść - Очистити - Effacer - Borrar - Șterge
+  static String get passengerNoteClear => 'passengerNoteClear'.tr();
+  /// Note cleared - تم مسح الملاحظة - Notitie gewist - Notiz gelöscht - Notatka wyczyszczona - Примітку очищено - Note effacée - Nota borrada - Notă ștearsă
+  static String get passengerNoteCleared => 'passengerNoteCleared'.tr();
+  /// Note - الملاحظة - Notitie - Notiz - Notatka - Примітка - Note - Nota - Notă
+  static String get passengerNoteEdit => 'passengerNoteEdit'.tr();
+  /// Save - حفظ - Opslaan - Speichern - Zapisz - Зберегти - Enregistrer - Guardar - Salvează
+  static String get passengerNoteSave => 'passengerNoteSave'.tr();
+  /// Note saved - تم حفظ الملاحظة - Notitie opgeslagen - Notiz gespeichert - Notatka zapisana - Примітку збережено - Note enregistrée - Nota guardada - Notă salvată
+  static String get passengerNoteSaved => 'passengerNoteSaved'.tr();
+  /// Note to driver - ملاحظة للسائق - Notitie voor chauffeur - Notiz an den Fahrer - Notatka dla kierowcy - Примітка для водія - Note au chauffeur - Nota para el conductor - Notă pentru șofer
+  static String get passengerNoteSheetTitle => 'passengerNoteSheetTitle'.tr();
+  /// Note to driver - ملاحظة للسائق - Notitie voor chauffeur - Notiz an den Fahrer - Notatka dla kierowcy - Примітка для водія - Note au chauffeur - Nota para el conductor - Notă pentru șofer
+  static String get passengerNoteToDriver => 'passengerNoteToDriver'.tr();
+  /// Add optional details that may help your driver - أضف أي تفاصيل اختيارية تساعد السائق - Voeg optionele details toe die de chauffeur helpen - Fügen Sie optionale Details hinzu, die dem Fahrer helfen - Dodaj opcjonalne szczegóły pomocne dla kierowcy - Додайте необов’язкові деталі, які допоможуть водію - Ajoutez des détails facultatifs utiles au chauffeur - Añade detalles opcionales que ayuden al conductor - Adaugă detalii opționale care îl pot ajuta pe șofer
+  static String get passengerNoteToDriverHint => 'passengerNoteToDriverHint'.tr();
+  /// Note cannot be longer than 500 characters - لا يمكن أن تتجاوز الملاحظة 500 حرف - De notitie mag niet langer zijn dan 500 tekens - Die Notiz darf nicht länger als 500 Zeichen sein - Notatka nie może być dłuższa niż 500 znaków - Примітка не може перевищувати 500 символів - La note ne peut pas dépasser 500 caractères - La nota no puede superar los 500 caracteres - Nota nu poate depăși 500 de caractere
+  static String get passengerNoteTooLong => 'passengerNoteTooLong'.tr();
   /// Past Trips - الرحلات السابقة - Eerdere ritten - Vergangene Fahrten - Minione przejazdy - Минулі поїздки - Trajets passés - Viajes pasados - Curse anterioare
   static String get pastTrips => 'pastTrips'.tr();
   /// Pay securely with Stripe - ادفع بأمان عبر Stripe - Betaal veilig via Stripe - Sicher bezahlen mit Stripe - Zapłać bezpiecznie przez Stripe - Безпечна оплата через Stripe - Payez en toute sécurité avec Stripe - Paga de forma segura con Stripe - Plătește în siguranță cu Stripe
@@ -331,6 +383,12 @@ class AppStrings {
   static String get paymentFailed => 'paymentFailed'.tr();
   /// Payment Method - طريقة الدفع - Betalingsmethode - Zahlungsart - Metoda płatności - Спосіб оплати - Mode de paiement - Método de pago - Metodă de plată
   static String get paymentMethod => 'paymentMethod'.tr();
+  /// Card - بطاقة - Kaart - Karte - Karta - Картка - Carte - Tarjeta - Card
+  static String get paymentMethodCard => 'paymentMethodCard'.tr();
+  /// Cash - نقدًا - Contant - Bar - Gotówka - Готівка - Espèces - Efectivo - Numerar
+  static String get paymentMethodCash => 'paymentMethodCash'.tr();
+  /// Wallet - محفظة - Portemonnee - Wallet - Portfel - Гаманець - Portefeuille - Monedero - Portofel
+  static String get paymentMethodWallet => 'paymentMethodWallet'.tr();
   /// Payments are temporarily unavailable. - المدفوعات غير متاحة مؤقتاً. - Betalingen zijn tijdelijk niet beschikbaar. - Zahlungen sind vorübergehend nicht verfügbar. - Płatności są tymczasowo niedostępne. - Платежі тимчасово недоступні. - Les paiements sont temporairement indisponibles. - Los pagos no están disponibles temporalmente. - Plățile sunt temporar indisponibile.
   static String get paymentNotEnabled => 'paymentNotEnabled'.tr();
   /// You cannot continue using the app until location permission is granted. - لا يمكنك متابعة استخدام التطبيق حتى تمنح صلاحية الموقع. - U kunt de app niet blijven gebruiken totdat de locatiepermissie is verleend. - Sie können die App erst weiter nutzen, wenn die Standortberechtigung erteilt wurde. - Nie możesz korzystać z aplikacji bez zgody na lokalizację. - Ви не можете користуватися додатком без доступу до геопозиції. - Vous ne pouvez pas utiliser l'application sans la permission de localisation. - No puede seguir usando la aplicación hasta que se conceda el permiso de ubicación. - Nu puteți continua să utilizați aplicația până când nu este acordată permisiunea de locație.
@@ -377,6 +435,26 @@ class AppStrings {
   static String get profileSaveSuccess => 'profileSaveSuccess'.tr();
   /// Complete Your Profile - أكمل ملفك الشخصي - Voltooi uw profiel - Profil vervollständigen - Uzupełnij profil - Заповніть профіль - Complétez votre profil - Complete su perfil - Completează profilul
   static String get profileSetupTitle => 'profileSetupTitle'.tr();
+  /// Distance - المسافة - Afstand - Entfernung - Dystans - Відстань - Distance - Distancia - Distanță
+  static String get receiptDistanceLabel => 'receiptDistanceLabel'.tr();
+  /// {km} km - {km} كم - {km} km - {km} km - {km} km - {km} км - {km} km - {km} km - {km} km
+  static String get receiptDistanceValue => 'receiptDistanceValue'.tr();
+  /// Duration - المدة - Duur - Dauer - Czas - Тривалість - Durée - Duración - Durată
+  static String get receiptDurationLabel => 'receiptDurationLabel'.tr();
+  /// {min} min - {min} دقيقة - {min} min - {min} Min. - {min} min - {min} хв - {min} min - {min} min - {min} min
+  static String get receiptDurationValue => 'receiptDurationValue'.tr();
+  /// We hope you enjoyed your trip today. - نأمل أن تكون قد استمتعت بمشوارك اليوم. - We hopen dat je vandaag een prettige rit hebt gehad. - Wir hoffen, deine Fahrt heute hat dir gefallen. - Mamy nadzieję, że dzisiejszy kurs Ci się podobał. - Сподіваємось, вам сподобалась сьогоднішня поїздка. - Nous espérons que votre course aujourd'hui s'est bien passée. - Esperamos que hayas disfrutado tu viaje de hoy. - Sperăm că ți-a plăcut cursa de astăzi.
+  static String get receiptHopeEnjoyed => 'receiptHopeEnjoyed'.tr();
+  /// Payments - المدفوعات - Betalingen - Zahlungen - Płatności - Платежі - Paiements - Pagos - Plăți
+  static String get receiptPayments => 'receiptPayments'.tr();
+  /// Thanks for riding with us, {name} - شكراً لك على إجراء مشاويرك معنا، {name} - Bedankt voor je rit, {name} - Danke, dass du mit uns gefahren bist, {name} - Dziękujemy za przejazd, {name} - Дякуємо, що подорожуєте з нами, {name} - Merci d'avoir voyagé avec nous, {name} - Gracias por viajar con nosotros, {name} - Mulțumim că ai călătorit cu noi, {name}
+  static String get receiptThankYou => 'receiptThankYou'.tr();
+  /// Receipt - الإيصال - Bon - Beleg - Paragon - Чек - Reçu - Recibo - Bon
+  static String get receiptTitle => 'receiptTitle'.tr();
+  /// Total - الإجمالي - Totaal - Gesamt - Razem - Разом - Total - Total - Total
+  static String get receiptTotal => 'receiptTotal'.tr();
+  /// Trip fare - أجرة المشوار - Rittarief - Fahrpreis - Cena kursu - Вартість поїздки - Tarif de la course - Tarifa del viaje - Tarif cursă
+  static String get receiptTripFare => 'receiptTripFare'.tr();
   /// Recent locations - المواقع الأخيرة - Recente locaties - Letzte Standorte - Ostatnie lokalizacje - Останні адреси - Lieux récents - Ubicaciones recientes - Locații recente
   static String get recentLocations => 'recentLocations'.tr();
   /// Report driver delay - الإبلاغ عن تأخر السائق - Vertraging chauffeur melden - Fahrverzögerung melden - Zgłoś opóźnienie kierowcy - Повідомити про затримку водія - Signaler le retard du chauffeur - Reportar retraso del conductor - Raportați întârzierea șoferului
@@ -491,6 +569,8 @@ class AppStrings {
   static String get tripCancelConfirmYes => 'tripCancelConfirmYes'.tr();
   /// Requested at - وقت الطلب - Aangevraagd op - Anfragezeit - Czas zgłoszenia - Час запиту - Demandé à - Solicitado a las - Solicitată la
   static String get tripCreatedAt => 'tripCreatedAt'.tr();
+  /// Trip details - تفاصيل المشوار - Ritdetails - Fahrtdetails - Szczegóły kursu - Деталі поїздки - Détails de la course - Detalles del viaje - Detalii cursă
+  static String get tripDetailsTitle => 'tripDetailsTitle'.tr();
   /// {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency}
   static String get tripFare => 'tripFare'.tr();
   /// Trip History - سجل الرحلات - Ritgeschiedenis - Fahrtenverlauf - Historia przejazdów - Історія поїздок - Historique des trajets - Historial de viajes - Istoric curse
@@ -501,8 +581,12 @@ class AppStrings {
   static String get tripHistoryLoadMore => 'tripHistoryLoadMore'.tr();
   /// My Trips - رحلاتي - Mijn Ritten - Meine Fahrten - Moje przejazdy - Мої поїздки - Mes Trajets - Mis viajes - Cursele mele
   static String get tripHistoryTitle => 'tripHistoryTitle'.tr();
+  /// Invoice - الفاتورة - Factuur - Rechnung - Faktura - Рахунок - Facture - Factura - Factură
+  static String get tripInvoiceChip => 'tripInvoiceChip'.tr();
   /// Scheduled time must be at least 15 minutes from now. - يجب أن يكون الوقت المجدول بعد 15 دقيقة على الأقل من الآن. - De geplande tijd moet minstens 15 minuten in de toekomst liggen. - Die geplante Zeit muss mindestens 15 Minuten in der Zukunft liegen. - Zaplanowany czas musi być o co najmniej 15 minut w przyszłość. - Запланований час має бути щонайменше на 15 хвилин у майбутньому. - L'heure programmée doit être d'au moins 15 minutes dans le futur. - La hora programada debe ser al menos 15 minutos en el futuro. - Ora programată trebuie să fie cu cel puțin 15 minute în viitor.
   static String get tripLeadTimeError => 'tripLeadTimeError'.tr();
+  /// Receipt - الإيصال - Bon - Beleg - Paragon - Чек - Reçu - Recibo - Bon
+  static String get tripReceiptChip => 'tripReceiptChip'.tr();
   /// Trip #{code} - رحلة رقم {code} - Rit #{code} - Fahrt #{code} - Przejazd #{code} - Поїздка #{code} - Trajet #{code} - Viaje #{code} - Cursa #{code}
   static String get tripReferenceCode => 'tripReferenceCode'.tr();
   /// We're finding you a driver - نحن نبحث عن سائق لك - We zoeken een chauffeur voor u - Wir suchen einen Fahrer für Sie - Szukamy dla Ciebie kierowcy - Ми шукаємо для вас водія - Nous cherchons un chauffeur - Estamos buscando un conductor - Căutăm un șofer pentru tine
@@ -513,6 +597,8 @@ class AppStrings {
   static String get tripScheduledFor => 'tripScheduledFor'.tr();
   /// Status - الحالة - Status - Status - Status - Статус - Statut - Estado - Status
   static String get tripStatus => 'tripStatus'.tr();
+  /// Awaiting payment - بانتظار الدفع - In afwachting van betaling - Zahlung ausstehend - Oczekuje na płatność - Очікує оплати - Paiement en attente - Pendiente de pago - În așteptarea plății
+  static String get tripStatusAwaitingPayment => 'tripStatusAwaitingPayment'.tr();
   /// Cancelled - ملغاة - Geannuleerd - Storniert - Anulowany - Скасовано - Annulé - Cancelado - Anulată
   static String get tripStatusCancelled => 'tripStatusCancelled'.tr();
   /// Completed - مكتملة - Voltooid - Abgeschlossen - Zakończony - Завершено - Terminé - Completado - Finalizată
@@ -525,8 +611,14 @@ class AppStrings {
   static String get tripStatusDriverEnRoute => 'tripStatusDriverEnRoute'.tr();
   /// In Progress - في الطريق - Onderweg - Unterwegs - W trasie - У дорозі - En cours - En curso - În desfășurare
   static String get tripStatusInProgress => 'tripStatusInProgress'.tr();
+  /// Payment failed - فشل الدفع - Betaling mislukt - Zahlung fehlgeschlagen - Płatność nieudana - Платіж не вдався - Paiement échoué - Pago fallido - Plată eșuată
+  static String get tripStatusPaymentFailed => 'tripStatusPaymentFailed'.tr();
   /// Finding Driver - جاري البحث عن سائق - Chauffeur zoeken - Fahrer wird gesucht - Szukanie kierowcy - Пошук водія - Recherche de chauffeur - Buscando conductor - Se caută șofer
   static String get tripStatusPendingDriver => 'tripStatusPendingDriver'.tr();
+  /// Pending quote - بانتظار التسعير - Offerte in afwachting - Angebot ausstehend - Oczekuje na wycenę - Очікує на розрахунок - Devis en attente - Cotización pendiente - Ofertă în așteptare
+  static String get tripStatusPendingQuote => 'tripStatusPendingQuote'.tr();
+  /// Refunded - تم رد المبلغ - Terugbetaald - Erstattet - Zwrócono środki - Повернено кошти - Remboursé - Reembolsado - Rambursat
+  static String get tripStatusRefunded => 'tripStatusRefunded'.tr();
   /// Scheduled - مجدولة - Ingepland - Geplant - Zaplanowany - Заплановано - Planifié - Programado - Programată
   static String get tripStatusScheduled => 'tripStatusScheduled'.tr();
   /// Completed at {time} - اكتمل في {time} - Voltooid om {time} - Abgeschlossen um {time} - Ukończono o {time} - Завершено о {time} - Terminé à {time} - Completado a las {time} - Finalizată la {time}

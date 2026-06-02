@@ -3,6 +3,7 @@ import '../../../domain/entities/trip_entity.dart';
 import '../../../domain/entities/trip_status.dart';
 import 'trip_status_chip.dart';
 import '../screens/active_trip_screen.dart';
+import '../screens/trip_details_screen.dart';
 
 class TripSummaryCard extends StatelessWidget {
   const TripSummaryCard({super.key, required this.trip});
@@ -20,10 +21,15 @@ class TripSummaryCard extends StatelessWidget {
         side: BorderSide(color: context.colorScheme.outline.withValues(alpha: 0.1)),
       ),
       child: InkWell(
-        onTap: () => context.pushNamed(
-          ActiveTripScreen.pageName,
-          extra: trip.id, // Or ScreenArgs if exists
-        ),
+        onTap: () {
+          // Live trips → ActiveTripScreen (map + status sheet).
+          // Completed trips → TripDetailsScreen (post-trip view with the
+          // receipt / invoice chips, mirroring the Uber reference image).
+          final pageName = trip.status == TripStatus.completed
+              ? TripDetailsScreen.pageName
+              : ActiveTripScreen.pageName;
+          context.pushNamed(pageName, extra: trip.id);
+        },
         borderRadius: BorderRadius.circular(AppRadii.lg.r),
         child: Padding(
           padding: REdgeInsets.all(AppSpacing.lg),

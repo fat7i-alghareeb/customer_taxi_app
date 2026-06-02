@@ -24,6 +24,7 @@ extension OrderTripResponseModelMapper on OrderTripResponseModel {
           )
           .toList(),
       stripePayment: stripePayment?.toEntity,
+      passengerNote: passengerNote,
     );
   }
 }

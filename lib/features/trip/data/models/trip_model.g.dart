@@ -50,6 +50,7 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
           )
           .toList() ??
       const [],
+  passengerNote: json['passengerNote'] as String?,
 );
 
 Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
@@ -71,6 +72,7 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'activeWaitingSession': instance.activeWaitingSession,
       'encodedOverviewPolyline': instance.encodedOverviewPolyline,
       'routeSegments': instance.routeSegments,
+      'passengerNote': instance.passengerNote,
     };
 
 _TripRouteSegmentModel _$TripRouteSegmentModelFromJson(
@@ -229,6 +231,7 @@ _TripSummaryModel _$TripSummaryModelFromJson(Map<String, dynamic> json) =>
               ?.map((e) => TripStopModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      passengerNote: json['passengerNote'] as String?,
     );
 
 Map<String, dynamic> _$TripSummaryModelToJson(_TripSummaryModel instance) =>
@@ -241,4 +244,5 @@ Map<String, dynamic> _$TripSummaryModelToJson(_TripSummaryModel instance) =>
       'createdAtUtc': instance.createdAtUtc.toIso8601String(),
       'scheduledAtUtc': instance.scheduledAtUtc?.toIso8601String(),
       'stops': instance.stops,
+      'passengerNote': instance.passengerNote,
     };

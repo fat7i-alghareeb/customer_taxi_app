@@ -1,6 +1,10 @@
 import '../../domain/entities/trip_entity.dart';
+import '../../domain/entities/trip_invoice_entity.dart';
+import '../../domain/entities/trip_receipt_entity.dart';
 import '../../domain/entities/trip_status.dart';
+import '../models/trip_invoice_model.dart';
 import '../models/trip_model.dart';
+import '../models/trip_receipt_model.dart';
 
 extension TripModelMapper on TripModel {
   TripEntity get toEntity => TripEntity(
@@ -21,6 +25,7 @@ extension TripModelMapper on TripModel {
     activeWaitingSession: activeWaitingSession?.toEntity,
     encodedOverviewPolyline: encodedOverviewPolyline,
     routeSegments: routeSegments.map((s) => s.toEntity).toList(),
+    passengerNote: passengerNote,
   );
 }
 
@@ -46,6 +51,7 @@ extension TripSummaryModelMapper on TripSummaryModel {
     createdAtUtc: createdAtUtc,
     scheduledAtUtc: scheduledAtUtc,
     stops: stops.map((s) => s.toStopEntity).toList(),
+    passengerNote: passengerNote,
   );
 }
 
@@ -98,5 +104,65 @@ extension TripWaitingSessionModelMapper on TripWaitingSessionModel {
     minutes: minutes,
     estimatedFee: estimatedFee,
     isActive: isActive,
+  );
+}
+
+extension TripReceiptModelMapper on TripReceiptModel {
+  TripReceiptEntity get toEntity => TripReceiptEntity(
+    tripId: tripId,
+    referenceCode: referenceCode,
+    status: status,
+    grossAmount: grossAmount,
+    netAmount: netAmount,
+    taxAmount: taxAmount,
+    currencyCode: currencyCode,
+    paymentMethod: paymentMethod,
+    paymentReference: paymentReference,
+    paidAtUtc: paidAtUtc,
+    completedAtUtc: completedAtUtc,
+    distanceKm: distanceKm,
+    durationMin: durationMin,
+    vehicleTypeName: vehicleTypeName,
+    passengerName: passengerName,
+    issuerName: issuerName,
+    invoiceAvailable: invoiceAvailable,
+    invoiceNumber: invoiceNumber,
+    invoiceIssuedAtUtc: invoiceIssuedAtUtc,
+    stops: stops.map((s) => s.toStopEntity).toList(),
+  );
+}
+
+extension TripInvoiceModelMapper on TripInvoiceModel {
+  TripInvoiceEntity get toEntity => TripInvoiceEntity(
+    invoiceId: invoiceId,
+    tripId: tripId,
+    invoiceNumber: invoiceNumber,
+    issuedAtUtc: issuedAtUtc,
+    currencyCode: currencyCode,
+    grossAmount: grossAmount,
+    netAmount: netAmount,
+    taxRate: taxRate,
+    taxAmount: taxAmount,
+    paymentMethod: paymentMethod,
+    paymentReference: paymentReference,
+    paidAtUtc: paidAtUtc,
+    issuerName: issuerName,
+    issuerAddress: issuerAddress,
+    issuerVatNumber: issuerVatNumber,
+    tripReferenceCode: tripReferenceCode,
+    tripCompletedAtUtc: tripCompletedAtUtc,
+    distanceKm: distanceKm,
+    durationMin: durationMin,
+    vehicleTypeName: vehicleTypeName,
+    passengerName: passengerName,
+    stops: stops.map((s) => s.toEntity).toList(),
+  );
+}
+
+extension TripInvoiceStopModelMapper on TripInvoiceStopModel {
+  TripInvoiceStopEntity get toEntity => TripInvoiceStopEntity(
+    sequence: sequence,
+    label: label,
+    completedAtUtc: completedAtUtc,
   );
 }

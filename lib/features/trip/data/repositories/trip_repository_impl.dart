@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:injectable/injectable.dart';
 import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/error/global_error_handler.dart';
 import '../../../../core/utils/result.dart';
 import '../../domain/entities/trip_entity.dart';
+import '../../domain/entities/trip_invoice_entity.dart';
+import '../../domain/entities/trip_receipt_entity.dart';
 import '../../domain/repositories/trip_repository.dart';
 import '../datasources/trip_remote_datasource.dart';
 import '../mappers/trip_model_mapper.dart';
@@ -30,6 +34,22 @@ class TripRepositoryImpl implements TripRepository {
       printM('[TripRepository] cancelTrip id=$id');
       final model = await _remote.cancelTrip(id);
       printG('[TripRepository] cancelTrip success');
+      return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<TripEntity>> updatePassengerNote({
+    required String tripId,
+    required String? passengerNote,
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] updatePassengerNote id=$tripId');
+      final model = await _remote.updatePassengerNote(
+        tripId: tripId,
+        passengerNote: passengerNote,
+      );
+      printG('[TripRepository] updatePassengerNote success');
       return model.toEntity;
     });
   }
@@ -79,6 +99,42 @@ class TripRepositoryImpl implements TripRepository {
         page: result.page,
         pageSize: result.pageSize,
       );
+    });
+  }
+
+  @override
+  Future<Result<TripReceiptEntity>> getTripReceipt(String id) {
+    return runAsResult(() async {
+      printM('[TripRepository] getTripReceipt id=$id');
+      final model = await _remote.getTripReceipt(id);
+      printG('[TripRepository] getTripReceipt success');
+      return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<TripInvoiceEntity>> getTripInvoice(String id) {
+    return runAsResult(() async {
+      printM('[TripRepository] getTripInvoice id=$id');
+      final model = await _remote.getTripInvoice(id);
+      printG('[TripRepository] getTripInvoice success');
+      return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<Uint8List>> getTripInvoicePdf(
+    String id, {
+    required String languageCode,
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] getTripInvoicePdf id=$id lang=$languageCode');
+      final bytes = await _remote.getTripInvoicePdfBytes(
+        id,
+        languageCode: languageCode,
+      );
+      printG('[TripRepository] getTripInvoicePdf bytes=${bytes.length}');
+      return bytes;
     });
   }
 }

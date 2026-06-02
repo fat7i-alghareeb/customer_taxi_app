@@ -54,6 +54,8 @@ class OrderEvent with _$OrderEvent {
       _ScheduleModeChanged;
   const factory OrderEvent.scheduleTimeChanged(DateTime? time) =
       _ScheduleTimeChanged;
+  const factory OrderEvent.passengerNoteChanged(String note) =
+      _PassengerNoteChanged;
   const factory OrderEvent.confirmBookingDetailsPressed() =
       _ConfirmBookingDetailsPressed;
   const factory OrderEvent.paymentSheetDismissed() = _PaymentSheetDismissed;

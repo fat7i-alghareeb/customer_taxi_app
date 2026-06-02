@@ -6,6 +6,7 @@ abstract class TripState with _$TripState {
     // Active trip
     @Default(BlocStatus<TripEntity>.initial()) BlocStatus<TripEntity> tripStatus,
     @Default(BlocStatus<void>.initial()) BlocStatus<void> cancelStatus,
+    @Default(BlocStatus<void>.initial()) BlocStatus<void> passengerNoteStatus,
     @Default(BlocStatus<TripCompensationClaimEntity>.initial())
     BlocStatus<TripCompensationClaimEntity> compensationClaimStatus,
     @Default(false) bool isPolling,
@@ -18,5 +19,13 @@ abstract class TripState with _$TripState {
     @Default([]) List<TripSummaryEntity> trips,
     @Default(1) int currentPage,
     @Default(true) bool hasMore,
+
+    // Receipt / Invoice (per-section loading)
+    @Default(BlocStatus<TripReceiptEntity>.initial())
+    BlocStatus<TripReceiptEntity> receiptStatus,
+    @Default(BlocStatus<TripInvoiceEntity>.initial())
+    BlocStatus<TripInvoiceEntity> invoiceStatus,
+    @Default(BlocStatus<Uint8List>.initial())
+    BlocStatus<Uint8List> invoicePdfStatus,
   }) = _TripState;
 }

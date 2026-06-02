@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:injectable/injectable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -6,6 +8,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:customertaxi/core/services/realtime/realtime_event.dart';
 import 'package:customertaxi/core/services/realtime/realtime_service.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_invoice_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_receipt_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
 import 'package:customertaxi/features/trip/domain/facade/trip_facade.dart';
@@ -25,11 +29,15 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<_Started>(_onStarted);
     on<_PollingTick>(_onPollingTick);
     on<_CancelRequested>(_onCancelRequested);
+    on<_PassengerNoteSubmitted>(_onPassengerNoteSubmitted);
     on<_CompensationClaimSubmitted>(_onCompensationClaimSubmitted);
     on<_StopPolling>(_onStopPolling);
     on<_HistoryStarted>(_onHistoryStarted);
     on<_NextPageRequested>(_onNextPageRequested);
     on<_DriverLocationUpdated>(_onDriverLocationUpdated);
+    on<_LoadReceipt>(_onLoadReceipt);
+    on<_LoadInvoice>(_onLoadInvoice);
+    on<_LoadInvoicePdf>(_onLoadInvoicePdf);
   }
 
   final TripFacade _facade;
@@ -173,6 +181,35 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     );
   }
 
+  Future<void> _onPassengerNoteSubmitted(
+    _PassengerNoteSubmitted event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    if (id == null) return;
+    final note = event.passengerNote?.trim();
+    emit(state.copyWith(passengerNoteStatus: const BlocStatus.loading()));
+    final Result<TripEntity> result = await _facade.updatePassengerNote(
+      tripId: id,
+      passengerNote: note == null || note.isEmpty ? null : note,
+    );
+    result.when(
+      success: (trip) {
+        printG('[TripBloc] passenger note updated');
+        emit(
+          state.copyWith(
+            passengerNoteStatus: const BlocStatus<void>.success(null),
+            tripStatus: BlocStatus<TripEntity>.success(trip),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] passenger note failed=$msg');
+        emit(state.copyWith(passengerNoteStatus: BlocStatus<void>.failure(msg)));
+      },
+    );
+  }
+
   Future<void> _onCompensationClaimSubmitted(
     _CompensationClaimSubmitted event,
     Emitter<TripState> emit,
@@ -287,6 +324,87 @@ class TripBloc extends Bloc<TripEvent, TripState> {
         emit(
           state.copyWith(
             historyStatus: BlocStatus<List<TripSummaryEntity>>.failure(msg),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _onLoadReceipt(
+    _LoadReceipt event,
+    Emitter<TripState> emit,
+  ) async {
+    emit(state.copyWith(receiptStatus: const BlocStatus.loading()));
+    final Result<TripReceiptEntity> result = await _facade.getTripReceipt(event.tripId);
+    result.when(
+      success: (receipt) {
+        printG('[TripBloc] receipt loaded trip=${event.tripId}');
+        emit(
+          state.copyWith(
+            receiptStatus: BlocStatus<TripReceiptEntity>.success(receipt),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] receipt failed=$msg');
+        emit(
+          state.copyWith(
+            receiptStatus: BlocStatus<TripReceiptEntity>.failure(msg),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _onLoadInvoice(
+    _LoadInvoice event,
+    Emitter<TripState> emit,
+  ) async {
+    emit(state.copyWith(invoiceStatus: const BlocStatus.loading()));
+    final Result<TripInvoiceEntity> result = await _facade.getTripInvoice(event.tripId);
+    result.when(
+      success: (invoice) {
+        printG('[TripBloc] invoice loaded number=${invoice.invoiceNumber}');
+        emit(
+          state.copyWith(
+            invoiceStatus: BlocStatus<TripInvoiceEntity>.success(invoice),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] invoice failed=$msg');
+        emit(
+          state.copyWith(
+            invoiceStatus: BlocStatus<TripInvoiceEntity>.failure(msg),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _onLoadInvoicePdf(
+    _LoadInvoicePdf event,
+    Emitter<TripState> emit,
+  ) async {
+    emit(state.copyWith(invoicePdfStatus: const BlocStatus.loading()));
+    final Result<Uint8List> result = await _facade.getTripInvoicePdf(
+      event.tripId,
+      languageCode: event.languageCode,
+    );
+    result.when(
+      success: (bytes) {
+        printG('[TripBloc] invoice pdf loaded bytes=${bytes.length}');
+        emit(
+          state.copyWith(
+            invoicePdfStatus: BlocStatus<Uint8List>.success(bytes),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] invoice pdf failed=$msg');
+        emit(
+          state.copyWith(
+            invoicePdfStatus: BlocStatus<Uint8List>.failure(msg),
           ),
         );
       },

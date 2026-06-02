@@ -33,22 +33,17 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://admtaxitours.com/'));
+      ..loadRequest(Uri.parse('https://fat7i.dev/'));
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold.appBar(
-      appBarConfig: AppScaffoldAppBarConfig(
-        title: AppStrings.profileAboutUs,
-      ),
+      appBarConfig: AppScaffoldAppBarConfig(title: AppStrings.profileAboutUs),
       child: Stack(
         children: [
           WebViewWidget(controller: _controller),
-          if (_isLoading)
-            const Center(
-              child: MainLoadingProgress(),
-            ),
+          if (_isLoading) const Center(child: MainLoadingProgress()),
         ],
       ),
     );
