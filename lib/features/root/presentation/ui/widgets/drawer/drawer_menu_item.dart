@@ -68,7 +68,7 @@ class DrawerMenuItem extends StatelessWidget {
                 AppSpacing.sm.horizontalSpace,
               ],
               FaIcon(
-                FontAwesomeIcons.chevronRight,
+                context.chevronEnd,
                 size: 12.r,
                 color: context.primary,
               ),

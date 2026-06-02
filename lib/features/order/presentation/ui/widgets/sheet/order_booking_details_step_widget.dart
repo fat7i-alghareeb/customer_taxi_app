@@ -10,7 +10,8 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     printM('[OrderBookingDetailsStepWidget] build');
 
-    final isLoading = state.booking.tripRequestStatus.isLoading ||
+    final isLoading =
+        state.booking.tripRequestStatus.isLoading ||
         state.booking.paymentSheetState.isLoading;
 
     return Column(
@@ -20,13 +21,11 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
         AppSpacing.md.verticalSpace,
         const _StripePaymentRow(),
         AppSpacing.xl.verticalSpace,
-        _PassengerNoteField(note: state.booking.passengerNote),
-        AppSpacing.xl.verticalSpace,
         AppButton.primary(
           onTap: () {
             context.read<OrderBloc>().add(
-                  const OrderEvent.confirmBookingDetailsPressed(),
-                );
+              const OrderEvent.confirmBookingDetailsPressed(),
+            );
           },
           isActive: !isLoading,
           isLoading: isLoading,
@@ -38,61 +37,6 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
           child: AppButtonChild.label(AppStrings.confirmAndPay),
         ),
       ],
-    );
-  }
-}
-
-class _PassengerNoteField extends StatefulWidget {
-  const _PassengerNoteField({required this.note});
-
-  final String note;
-
-  @override
-  State<_PassengerNoteField> createState() => _PassengerNoteFieldState();
-}
-
-class _PassengerNoteFieldState extends State<_PassengerNoteField> {
-  late final FormGroup _form;
-
-  @override
-  void initState() {
-    super.initState();
-    _form = FormGroup({
-      'passengerNote': FormControl<String>(
-        value: widget.note,
-        validators: [Validators.maxLength(500)],
-      ),
-    });
-  }
-
-  @override
-  void didUpdateWidget(covariant _PassengerNoteField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.note != widget.note &&
-        _form.control('passengerNote').value != widget.note) {
-      _form.control('passengerNote').value = widget.note;
-    }
-  }
-
-  @override
-  void dispose() {
-    _form.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppReactiveTextField.text(
-      formGroup: _form,
-      formControlName: 'passengerNote',
-      title: AppStrings.passengerNoteToDriver,
-      hintText: AppStrings.passengerNoteToDriverHint,
-      minLines: 2,
-      maxLines: 4,
-      textInputAction: TextInputAction.newline,
-      onChangedDebounced: (value, _) {
-        context.read<OrderBloc>().add(OrderEvent.passengerNoteChanged(value));
-      },
     );
   }
 }
@@ -127,28 +71,20 @@ class _StripePaymentRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.surface,
         borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        border: Border.all(
-          color: context.onSurface.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: context.onSurface.withValues(alpha: 0.1)),
       ),
       child: Row(
         children: [
-          FaIcon(
-            FontAwesomeIcons.stripe,
-            size: 28.r,
-            color: const Color(0xFF635BFF),
-          ),
+          FaIcon(FontAwesomeIcons.stripe, size: 28.r, color: context.primary),
           AppSpacing.md.horizontalSpace,
           Expanded(
             child: Text(
               AppStrings.payViaStripe,
-              style: AppTextStyles.s14w500.copyWith(
-                color: context.onSurface,
-              ),
+              style: AppTextStyles.s14w500.copyWith(color: context.onSurface),
             ),
           ),
-          Icon(
-            Icons.lock_outline_rounded,
+          FaIcon(
+            FontAwesomeIcons.lock,
             size: 18.r,
             color: context.onSurface.withValues(alpha: 0.4),
           ),

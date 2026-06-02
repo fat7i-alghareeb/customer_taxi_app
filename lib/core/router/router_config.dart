@@ -10,6 +10,7 @@ import '../../features/auth/presentation/ui/screens/login_screen.dart';
 import '../../features/onboarding/presentation/ui/screens/onboarding_screen.dart';
 import '../../features/permissions/presentation/ui/screens/permission_gate_screen.dart';
 import '../../features/root/presentation/ui/screens/root_screen.dart';
+import '../../features/root/presentation/ui/widgets/root_body.dart';
 import '../../features/root/presentation/ui/screens/about_us_screen.dart';
 import '../../features/root/presentation/ui/screens/cancellation_policy_screen.dart';
 import '../../features/root/presentation/ui/screens/contact_us_screen.dart';

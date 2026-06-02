@@ -43,8 +43,14 @@ class AppRouteRegistry {
       GoRoute(
         path: RootScreen.pagePath,
         name: RootScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const RootScreen()),
+        pageBuilder: (context, state) {
+          final initialTab =
+              state.extra is RootTab ? state.extra as RootTab : null;
+          return AppPageTransitions.build(
+            state: state,
+            child: RootScreen(initialTab: initialTab),
+          );
+        },
       ),
       GoRoute(
         path: AboutUsScreen.pagePath,

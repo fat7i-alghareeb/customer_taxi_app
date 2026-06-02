@@ -38,28 +38,42 @@ class RootDrawerContent extends StatelessWidget {
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.clockRotateLeft,
                   label: AppStrings.drawerTrips,
-                  onTap: () => context.pushNamed(TripHistoryScreen.pageName),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(TripHistoryScreen.pageName);
+                  },
                 ),
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.locationDot,
                   label: AppStrings.drawerFavorites,
-                  onTap: () => context.pushNamed(FavoritesScreen.pageName),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(FavoritesScreen.pageName);
+                  },
                 ),
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.circleInfo,
                   label: AppStrings.profileAboutUs,
-                  onTap: () => context.pushNamed(AboutUsScreen.pageName),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(AboutUsScreen.pageName);
+                  },
                 ),
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.fileContract,
                   label: AppStrings.cancellationPolicyTitle,
-                  onTap: () =>
-                      context.pushNamed(CancellationPolicyScreen.pageName),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(CancellationPolicyScreen.pageName);
+                  },
                 ),
                 DrawerMenuItem(
                   icon: FontAwesomeIcons.headset,
                   label: AppStrings.profileContactUs,
-                  onTap: () => context.pushNamed(ContactUsScreen.pageName),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(ContactUsScreen.pageName);
+                  },
                 ),
                 _buildLanguageSelector(context),
                 _buildThemeSelector(context),
@@ -215,6 +229,9 @@ class RootDrawerContent extends StatelessWidget {
     );
 
     if (confirm == true) {
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
       await getIt<AuthManager>().logout();
     }
   }

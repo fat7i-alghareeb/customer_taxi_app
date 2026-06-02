@@ -310,6 +310,15 @@
   "invoiceLanguageLabel": "Invoice language",
   "invoiceDownload": "Download",
   "invoiceShare": "Share",
+  "invoiceSavedToDownloads": "Saved to Downloads",
+  "invoiceSavedToFiles": "Saved to Files app",
+  "invoiceSavedToAppFolder": "Saved inside the app folder. Use your file manager to find it.",
+  "invoiceSavedSharedFallback": "Couldn't save automatically — choose where to keep it.",
+  "invoiceDownloadFailed": "Couldn't save the invoice.",
+  "invoiceStorageFull": "Not enough free space on your device.",
+  "invoicePermissionDenied": "Storage permission denied.",
+  "invoicePermissionPermanentlyDenied": "Storage access is blocked. Open settings to allow it.",
+  "invoiceOpenSettings": "Open settings",
   "invoiceLoadFailed": "Couldn't load the invoice PDF. Tap to retry.",
   "invoiceNotIssuedYet": "The invoice isn't ready yet. Please try again in a moment.",
   "paymentMethodCard": "Card",
@@ -336,5 +345,7 @@
   "tripStatusPendingQuote": "Pending quote",
   "tripStatusAwaitingPayment": "Awaiting payment",
   "tripStatusPaymentFailed": "Payment failed",
-  "tripStatusRefunded": "Refunded"
+  "tripStatusRefunded": "Refunded",
+  "cancellationPolicyHowToCancel": "To cancel any trip, please go to the Trips tab and select the trip you want to cancel.",
+  "cancellationPolicyGoToTrips": "Go to Trips"
 }

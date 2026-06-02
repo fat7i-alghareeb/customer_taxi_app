@@ -118,7 +118,7 @@ class OrderCollapsedSheetWidget extends StatelessWidget {
                                           ),
                                           AppSpacing.xs.horizontalSpace,
                                           FaIcon(
-                                            FontAwesomeIcons.chevronRight,
+                                            context.chevronEnd,
                                             size: 10.r,
                                             color: context.primary,
                                           ),

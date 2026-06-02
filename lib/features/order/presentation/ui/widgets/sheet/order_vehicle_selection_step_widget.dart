@@ -4,6 +4,7 @@ import '../../../../constants/order_constants.dart';
 import '../../../../domain/entities/order_trip_car_option_entity.dart';
 import '../../../states/order_bloc.dart';
 import 'order_car_option_card_widget.dart';
+import 'order_passenger_note_field_widget.dart';
 import 'order_route_summary_timeline_widget.dart';
 import '../../../../domain/entities/order_location_entity.dart';
 
@@ -77,7 +78,6 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
     OrderConstants.carTypeBus8,
   ];
 
-
   @override
   Widget build(BuildContext context) {
     printM('[OrderVehicleSelectionStepWidget] build');
@@ -112,7 +112,9 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
           durationText: durationText,
           distanceKm: totalDistanceKm,
           onEditStop: (index) {
-            context.read<OrderBloc>().add(OrderEvent.setOnMapPressed(index: index));
+            context.read<OrderBloc>().add(
+              OrderEvent.setOnMapPressed(index: index),
+            );
           },
         ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
         AppSpacing.lg.verticalSpace,
@@ -139,9 +141,9 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
         ).animate().fadeIn(delay: 300.ms),
         if (discountPercent > 0) ...[
           AppSpacing.md.verticalSpace,
-          AppDiscountBanner(discountPercent: discountPercent)
-              .animate()
-              .fadeIn(delay: 300.ms),
+          AppDiscountBanner(
+            discountPercent: discountPercent,
+          ).animate().fadeIn(delay: 300.ms),
         ],
         AppSpacing.md.verticalSpace,
         ...state.trip.carOptionsState.maybeWhen(
@@ -178,9 +180,11 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
             ],
           ],
         ),
+        AppSpacing.xl.verticalSpace,
+        OrderPassengerNoteFieldWidget(
+          note: state.booking.passengerNote,
+        ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.08),
       ],
     );
   }
 }
-
-

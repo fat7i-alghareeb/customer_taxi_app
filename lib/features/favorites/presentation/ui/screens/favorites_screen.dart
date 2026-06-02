@@ -443,7 +443,7 @@ class _SetOnMapCard extends StatelessWidget {
                   ),
                 ),
                 FaIcon(
-                  FontAwesomeIcons.chevronRight,
+                  context.chevronEnd,
                   size: 14.r,
                   color: context.primary.withValues(alpha: 0.5),
                 ),

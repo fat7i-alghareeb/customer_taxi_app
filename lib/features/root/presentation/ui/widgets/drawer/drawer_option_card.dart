@@ -75,7 +75,7 @@ class DrawerOptionCard extends StatelessWidget {
                 ),
               ),
               FaIcon(
-                FontAwesomeIcons.chevronRight,
+                context.chevronEnd,
                 size: 14.r,
                 color: context.onSurface.withValues(alpha: 0.3),
               ),

@@ -133,7 +133,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                                         );
                                       },
                                       icon: FaIcon(
-                                        FontAwesomeIcons.chevronLeft,
+                                        context.chevronStart,
                                         size: 20.r,
                                         color: context.onSurface,
                                       ),

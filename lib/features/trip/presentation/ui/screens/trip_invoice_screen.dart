@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
+import '../../../../../core/services/file_download/file_download_service.dart';
 import '../../states/trip_bloc.dart';
 
 /// Customer-facing invoice PDF screen — mirrors the Uber "الفاتورة" reference.
@@ -25,36 +27,39 @@ class TripInvoiceScreen extends StatelessWidget {
     return BlocProvider<TripBloc>(
       create: (_) => getIt<TripBloc>()
         ..add(
-          TripEvent.loadInvoicePdf(
-            tripId: tripId,
-            languageCode: languageCode,
-          ),
+          TripEvent.loadInvoicePdf(tripId: tripId, languageCode: languageCode),
         ),
       child: AppScaffold.appBar(
         appBarConfig: AppScaffoldAppBarConfig(title: AppStrings.invoiceTitle),
-        child: _TripInvoiceBody(
-          tripId: tripId,
-          languageCode: languageCode,
-        ),
+        child: _TripInvoiceBody(tripId: tripId, languageCode: languageCode),
       ),
     );
   }
 }
 
-class _TripInvoiceBody extends StatelessWidget {
+class _TripInvoiceBody extends StatefulWidget {
   const _TripInvoiceBody({required this.tripId, required this.languageCode});
 
   final String tripId;
   final String languageCode;
 
-  Future<void> _onSharePressed(BuildContext context, Uint8List bytes) async {
+  @override
+  State<_TripInvoiceBody> createState() => _TripInvoiceBodyState();
+}
+
+class _TripInvoiceBodyState extends State<_TripInvoiceBody> {
+  bool _downloading = false;
+
+  String _fileName() => 'fat7i-invoice-${widget.tripId}.pdf';
+
+  Future<void> _onSharePressed(Uint8List bytes) async {
     try {
       await SharePlus.instance.share(
         ShareParams(
           files: [
             XFile.fromData(
               bytes,
-              name: 'invoice-$tripId-$languageCode.pdf',
+              name: _fileName(),
               mimeType: 'application/pdf',
             ),
           ],
@@ -63,12 +68,73 @@ class _TripInvoiceBody extends StatelessWidget {
       );
     } catch (e) {
       printY('[TripInvoice] share failed=$e');
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppStrings.invoiceLoadFailed)),
-        );
+      if (mounted) {
+        _showSnack(AppStrings.invoiceDownloadFailed);
       }
     }
+  }
+
+  Future<void> _onDownloadPressed(Uint8List bytes) async {
+    if (_downloading) return;
+    setState(() => _downloading = true);
+    try {
+      final result = await getIt<FileDownloadService>().saveBytes(
+        bytes: bytes,
+        fileName: _fileName(),
+        mimeType: 'application/pdf',
+      );
+      if (!mounted) return;
+      switch (result) {
+        case FileDownloadSuccess(:final location):
+          _showSnack(_successMessage(location));
+        case FileDownloadFailure(:final reason):
+          _handleFailure(reason);
+      }
+    } finally {
+      if (mounted) setState(() => _downloading = false);
+    }
+  }
+
+  String _successMessage(FileDownloadLocation location) {
+    switch (location) {
+      case FileDownloadLocation.publicDownloads:
+        return AppStrings.invoiceSavedToDownloads;
+      case FileDownloadLocation.appDocuments:
+        return AppStrings.invoiceSavedToFiles;
+      case FileDownloadLocation.appExternalDir:
+        return AppStrings.invoiceSavedToAppFolder;
+      case FileDownloadLocation.sharedTemporarily:
+        return AppStrings.invoiceSavedSharedFallback;
+    }
+  }
+
+  void _handleFailure(FileDownloadFailureReason reason) {
+    switch (reason) {
+      case FileDownloadFailureReason.permissionPermanentlyDenied:
+        _showSnack(
+          AppStrings.invoicePermissionPermanentlyDenied,
+          action: SnackBarAction(
+            label: AppStrings.invoiceOpenSettings,
+            onPressed: openAppSettings,
+          ),
+        );
+      case FileDownloadFailureReason.permissionDenied:
+        _showSnack(AppStrings.invoicePermissionDenied);
+      case FileDownloadFailureReason.storageFull:
+        _showSnack(AppStrings.invoiceStorageFull);
+      case FileDownloadFailureReason.cancelled:
+        // user dismissed the share sheet — stay silent
+        break;
+      case FileDownloadFailureReason.ioError:
+      case FileDownloadFailureReason.unsupportedPlatform:
+        _showSnack(AppStrings.invoiceDownloadFailed);
+    }
+  }
+
+  void _showSnack(String message, {SnackBarAction? action}) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), action: action));
   }
 
   @override
@@ -83,8 +149,8 @@ class _TripInvoiceBody extends StatelessWidget {
                 state: state.invoicePdfStatus,
                 onError: () => context.read<TripBloc>().add(
                   TripEvent.loadInvoicePdf(
-                    tripId: tripId,
-                    languageCode: languageCode,
+                    tripId: widget.tripId,
+                    languageCode: widget.languageCode,
                   ),
                 ),
                 errorMessage: AppStrings.invoiceLoadFailed,
@@ -103,9 +169,9 @@ class _TripInvoiceBody extends StatelessWidget {
               ),
             ),
             _BottomBar(
-              tripId: tripId,
-              languageCode: languageCode,
-              onShare: (bytes) => _onSharePressed(context, bytes),
+              onShare: _onSharePressed,
+              onDownload: _onDownloadPressed,
+              isDownloading: _downloading,
             ),
           ],
         );
@@ -116,14 +182,14 @@ class _TripInvoiceBody extends StatelessWidget {
 
 class _BottomBar extends StatelessWidget {
   const _BottomBar({
-    required this.tripId,
-    required this.languageCode,
     required this.onShare,
+    required this.onDownload,
+    required this.isDownloading,
   });
 
-  final String tripId;
-  final String languageCode;
   final ValueChanged<Uint8List> onShare;
+  final ValueChanged<Uint8List> onDownload;
+  final bool isDownloading;
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +198,8 @@ class _BottomBar extends StatelessWidget {
       buildWhen: (a, b) => a.invoicePdfStatus != b.invoicePdfStatus,
       builder: (context, state) {
         final bytes = state.invoicePdfStatus.getDataWhenSuccess;
-        final canShare = bytes != null && bytes.isNotEmpty;
+        final isReady = bytes != null && bytes.isNotEmpty;
+        final isLoading = state.invoicePdfStatus.isLoading;
         return Container(
           width: double.infinity,
           padding: REdgeInsets.fromLTRB(
@@ -150,10 +217,26 @@ class _BottomBar extends StatelessWidget {
               ),
             ),
           ),
-          child: AppButton.primary(
-            onTap: canShare ? () => onShare(bytes) : null,
-            isLoading: state.invoicePdfStatus.isLoading,
-            child: AppButtonChild.label(AppStrings.invoiceDownload),
+          child: Row(
+            children: [
+              Expanded(
+                child: AppButton.outline(
+                  onTap: isReady ? () => onShare(bytes) : null,
+                  isLoading: isLoading,
+                  child: AppButtonChild.label(AppStrings.invoiceShare),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: AppButton.primary(
+                  onTap: isReady && !isDownloading
+                      ? () => onDownload(bytes)
+                      : null,
+                  isLoading: isLoading || isDownloading,
+                  child: AppButtonChild.label(AppStrings.invoiceDownload),
+                ),
+              ),
+            ],
           ),
         );
       },

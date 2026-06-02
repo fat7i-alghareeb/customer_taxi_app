@@ -60,7 +60,7 @@ class OrderMapContextTriggerWidget extends StatelessWidget {
                       ),
                     ),
                     FaIcon(
-                      FontAwesomeIcons.chevronRight,
+                      context.chevronEnd,
                       size: 12.r,
                       color: context.onSurface.withValues(alpha: 0.4),
                     ),

@@ -310,6 +310,15 @@
   "invoiceLanguageLabel": "Rechnungssprache",
   "invoiceDownload": "Herunterladen",
   "invoiceShare": "Teilen",
+  "invoiceSavedToDownloads": "In Downloads gespeichert",
+  "invoiceSavedToFiles": "In der Dateien-App gespeichert",
+  "invoiceSavedToAppFolder": "Im App-Ordner gespeichert. Öffne den Dateimanager, um sie zu finden.",
+  "invoiceSavedSharedFallback": "Automatisches Speichern fehlgeschlagen — wähle einen Speicherort.",
+  "invoiceDownloadFailed": "Rechnung konnte nicht gespeichert werden.",
+  "invoiceStorageFull": "Nicht genügend freier Speicher auf dem Gerät.",
+  "invoicePermissionDenied": "Speicherberechtigung verweigert.",
+  "invoicePermissionPermanentlyDenied": "Speicherzugriff ist blockiert. Öffne die Einstellungen, um ihn zuzulassen.",
+  "invoiceOpenSettings": "Einstellungen öffnen",
   "invoiceLoadFailed": "Rechnung konnte nicht geladen werden. Tippe zum Wiederholen.",
   "invoiceNotIssuedYet": "Die Rechnung ist noch nicht bereit. Bitte versuche es gleich erneut.",
   "paymentMethodCard": "Karte",
@@ -336,5 +345,7 @@
   "tripStatusPendingQuote": "Angebot ausstehend",
   "tripStatusAwaitingPayment": "Zahlung ausstehend",
   "tripStatusPaymentFailed": "Zahlung fehlgeschlagen",
-  "tripStatusRefunded": "Erstattet"
+  "tripStatusRefunded": "Erstattet",
+  "cancellationPolicyHowToCancel": "Um eine Fahrt zu stornieren, gehen Sie bitte zum Reiter Fahrten und wählen Sie die Fahrt aus, die Sie stornieren möchten.",
+  "cancellationPolicyGoToTrips": "Zu den Fahrten"
 }

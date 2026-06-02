@@ -36,7 +36,11 @@ mixin _AppReactiveTextFieldHelpersMixin on State<AppReactiveTextField> {
       _AppReactiveTextFieldType.integer =>
         const TextInputType.numberWithOptions(signed: true),
       _AppReactiveTextFieldType.phone => TextInputType.phone,
-      _ => TextInputType.text,
+      _ => (widget.maxLines != 1 ||
+              widget.minLines != 1 ||
+              widget.textInputAction == TextInputAction.newline)
+          ? TextInputType.multiline
+          : TextInputType.text,
     };
   }
 

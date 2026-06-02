@@ -310,6 +310,15 @@
   "invoiceLanguageLabel": "Idioma de la factura",
   "invoiceDownload": "Descargar",
   "invoiceShare": "Compartir",
+  "invoiceSavedToDownloads": "Guardado en Descargas",
+  "invoiceSavedToFiles": "Guardado en la app Archivos",
+  "invoiceSavedToAppFolder": "Guardado en la carpeta de la app. Abre el gestor de archivos para encontrarlo.",
+  "invoiceSavedSharedFallback": "No se pudo guardar automáticamente — elige dónde guardarlo.",
+  "invoiceDownloadFailed": "No se pudo guardar la factura.",
+  "invoiceStorageFull": "No hay suficiente espacio libre en el dispositivo.",
+  "invoicePermissionDenied": "Permiso de almacenamiento denegado.",
+  "invoicePermissionPermanentlyDenied": "El acceso al almacenamiento está bloqueado. Abre los ajustes para permitirlo.",
+  "invoiceOpenSettings": "Abrir ajustes",
   "invoiceLoadFailed": "No se pudo cargar la factura. Toca para reintentar.",
   "invoiceNotIssuedYet": "La factura aún no está lista. Vuelve a intentarlo en un momento.",
   "paymentMethodCard": "Tarjeta",
@@ -336,5 +345,7 @@
   "tripStatusPendingQuote": "Cotización pendiente",
   "tripStatusAwaitingPayment": "Pendiente de pago",
   "tripStatusPaymentFailed": "Pago fallido",
-  "tripStatusRefunded": "Reembolsado"
+  "tripStatusRefunded": "Reembolsado",
+  "cancellationPolicyHowToCancel": "Para cancelar cualquier viaje, vaya a la pestaña Viajes y seleccione el viaje que desea cancelar.",
+  "cancellationPolicyGoToTrips": "Ir a Viajes"
 }

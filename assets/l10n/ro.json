@@ -310,6 +310,15 @@
   "invoiceLanguageLabel": "Limba facturii",
   "invoiceDownload": "Descarcă",
   "invoiceShare": "Distribuie",
+  "invoiceSavedToDownloads": "Salvat în Descărcări",
+  "invoiceSavedToFiles": "Salvat în aplicația Fișiere",
+  "invoiceSavedToAppFolder": "Salvat în folderul aplicației. Deschide managerul de fișiere pentru a-l găsi.",
+  "invoiceSavedSharedFallback": "Salvarea automată a eșuat — alege unde să-l păstrezi.",
+  "invoiceDownloadFailed": "Factura nu a putut fi salvată.",
+  "invoiceStorageFull": "Spațiu liber insuficient pe dispozitiv.",
+  "invoicePermissionDenied": "Permisiune de stocare refuzată.",
+  "invoicePermissionPermanentlyDenied": "Accesul la stocare este blocat. Deschide setările pentru a-l permite.",
+  "invoiceOpenSettings": "Deschide setările",
   "invoiceLoadFailed": "Factura nu s-a putut încărca. Atinge pentru a reîncerca.",
   "invoiceNotIssuedYet": "Factura nu este încă pregătită. Încearcă din nou în câteva momente.",
   "paymentMethodCard": "Card",
@@ -336,5 +345,7 @@
   "tripStatusPendingQuote": "Ofertă în așteptare",
   "tripStatusAwaitingPayment": "În așteptarea plății",
   "tripStatusPaymentFailed": "Plată eșuată",
-  "tripStatusRefunded": "Rambursat"
+  "tripStatusRefunded": "Rambursat",
+  "cancellationPolicyHowToCancel": "Pentru a anula orice cursă, te rugăm să mergi la fila Curse și să selectezi cursa pe care dorești să o anulezi.",
+  "cancellationPolicyGoToTrips": "Mergi la Curse"
 }

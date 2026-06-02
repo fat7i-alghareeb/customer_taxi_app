@@ -11,7 +11,9 @@ import 'package:customertaxi/features/root/presentation/ui/widgets/root_drawer_c
 enum RootTab { account, home, trips }
 
 class RootBody extends StatefulWidget {
-  const RootBody({super.key});
+  const RootBody({super.key, this.initialTab});
+
+  final RootTab? initialTab;
 
   @override
   State<RootBody> createState() => _RootBodyState();
@@ -19,12 +21,25 @@ class RootBody extends StatefulWidget {
 
 class _RootBodyState extends State<RootBody> {
   late final PageController _pageController;
-  int _currentIndex = RootTab.home.index;
+  late int _currentIndex;
 
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.initialTab?.index ?? RootTab.home.index;
     _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void didUpdateWidget(covariant RootBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialTab != null &&
+        widget.initialTab != oldWidget.initialTab) {
+      setState(() {
+        _currentIndex = widget.initialTab!.index;
+      });
+      _pageController.jumpToPage(_currentIndex);
+    }
   }
 
   @override

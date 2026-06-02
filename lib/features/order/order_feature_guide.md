@@ -32,7 +32,7 @@ abstract class OrderState with _$OrderState {
 | `OrderMapSlice`     | [slices/order_map_slice.dart](presentation/states/slices/order_map_slice.dart)         | `latitude`, `longitude`, `zoom`                                                                                                                 |
 | `OrderStopsSlice`   | [slices/order_stops_slice.dart](presentation/states/slices/order_stops_slice.dart)     | `list`, `queries`, `suggestionsState`, `savedState`                                                                                             |
 | `OrderTripSlice`    | [slices/order_trip_slice.dart](presentation/states/slices/order_trip_slice.dart)       | `routeState`, `carOptionsState`, `prefetchedRouteState`, `prefetchedCarOptionsState`, `prefetchedStops`, `selectedCarTypeId`, `selectedQuoteId` |
-| `OrderBookingSlice` | [slices/order_booking_slice.dart](presentation/states/slices/order_booking_slice.dart) | `scheduleMode`, `scheduledAt`, `tripRequestStatus`, `paymentSheetState`                                                                         |
+| `OrderBookingSlice` | [slices/order_booking_slice.dart](presentation/states/slices/order_booking_slice.dart) | `scheduleMode`, `scheduledAt`, `passengerNote`, `tripRequestStatus`, `paymentSheetState`                                                        |
 
 ### Enums
 
@@ -89,6 +89,7 @@ Pure sorting/normalization helpers live in [helpers/saved_locations_helper.dart]
 | `bookingDetailsBackPressed()`                                     | —                                   | booking details back button, system back    |
 | `scheduleModeChanged(mode)`                                       | `OrderScheduleMode`                 | schedule toggle                             |
 | `scheduleTimeChanged(time)`                                       | `DateTime?`                         | date/time picker                            |
+| `passengerNoteChanged(note)`                                      | `String note`                       | passenger note field in car selection       |
 | `confirmBookingDetailsPressed()`                                  | —                                   | "Confirm & Pay" button                      |
 | `paymentSheetDismissed()`                                         | —                                   | dismissal of Stripe sheet                   |
 
@@ -130,6 +131,7 @@ Pure sorting/normalization helpers live in [helpers/saved_locations_helper.dart]
 - `trip.selectedCarTypeId = typeId`
 - Looks up matching `quoteId` from `trip.carOptionsState.success.options`
 - `trip.selectedQuoteId = quoteId`
+- The same step also lets the passenger enter `booking.passengerNote`
 
 **7. Confirm car** (`confirmCarSelectionPressed`)
 
@@ -142,7 +144,8 @@ Pure sorting/normalization helpers live in [helpers/saved_locations_helper.dart]
 **9. Confirm & Pay** (`confirmBookingDetailsPressed`)
 
 - `booking.tripRequestStatus = loading`
-- Calls `_facade.requestTrip(OrderRequestTripEntity(quoteId, stops, scheduledAt?))`
+- Reads `booking.passengerNote`, trims it, and omits it when empty
+- Calls `_facade.requestTrip(OrderRequestTripEntity(quoteId, stops, scheduledAt?, passengerNote?))`
 - **If** `ClientConfigService.current.stripeEnabled` **and** `trip.stripePayment != null`:
   - `Stripe.instance.initPaymentSheet(clientSecret, merchantDisplayName:'customertaxi', country:'NL', email:always)`
   - `Stripe.instance.presentPaymentSheet()`
@@ -239,7 +242,7 @@ Remote calls use Dio via [order_remote_datasource.dart](data/datasources/order_r
 | `OrderTripCarOptionEntity`   | [entities/order_trip_car_option_entity.dart](domain/entities/order_trip_car_option_entity.dart)   | Vehicle type card: `typeId`, `quoteId`, `name`, `price`                                                                                                                                                              |
 | `OrderTripResponseEntity`    | [entities/order_trip_response_entity.dart](domain/entities/order_trip_response_entity.dart)       | Trip creation result: `id`, `status`, optional `stripePayment`                                                                                                                                                       |
 | `OrderStripePaymentEntity`   | [entities/order_stripe_payment_entity.dart](domain/entities/order_stripe_payment_entity.dart)     | `clientSecret`, `publishableKey`, `paymentIntentId`                                                                                                                                                                  |
-| `OrderLocationRequestEntity` | [entities/order_location_request_entity.dart](domain/entities/order_location_request_entity.dart) | Request param types: `OrderLocationSearchRequestEntity`, `OrderReverseGeocodeRequestEntity`, `OrderTripRouteRequestEntity`, `OrderPricingQuotesRequestEntity`, `OrderRequestTripEntity`, `OrderStopCoordinateEntity` |
+| `OrderLocationRequestEntity` | [entities/order_location_request_entity.dart](domain/entities/order_location_request_entity.dart) | Request param types: `OrderLocationSearchRequestEntity`, `OrderReverseGeocodeRequestEntity`, `OrderTripRouteRequestEntity`, `OrderPricingQuotesRequestEntity`, `OrderRequestTripEntity` with optional `passengerNote`, `OrderStopCoordinateEntity` |
 
 ---
 
@@ -254,6 +257,7 @@ RootScreen
             ├── OrderExpandedSheetWidget       (expanded)
             │   ├── OrderLocationEntryStepWidget   (expandedStep == locationEntry)
             │   ├── OrderVehicleSelectionStepWidget (expandedStep == carSelection)
+            │   │   └── OrderPassengerNoteFieldWidget
             │   └── OrderBookingDetailsStepWidget  (expandedStep == bookingDetails)
             │       └── OrderSchedulePickerWidget
             └── OrderMapPickSheetWidget        (mapPicking)

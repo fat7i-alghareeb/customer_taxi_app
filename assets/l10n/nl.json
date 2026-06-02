@@ -310,6 +310,15 @@
   "invoiceLanguageLabel": "Factuurtaal",
   "invoiceDownload": "Downloaden",
   "invoiceShare": "Delen",
+  "invoiceSavedToDownloads": "Opgeslagen in Downloads",
+  "invoiceSavedToFiles": "Opgeslagen in Bestanden",
+  "invoiceSavedToAppFolder": "Opgeslagen in de app-map. Open je bestandsbeheer om hem te vinden.",
+  "invoiceSavedSharedFallback": "Automatisch opslaan lukte niet — kies waar je hem wilt bewaren.",
+  "invoiceDownloadFailed": "De factuur kon niet worden opgeslagen.",
+  "invoiceStorageFull": "Niet genoeg vrije ruimte op je toestel.",
+  "invoicePermissionDenied": "Toestemming voor opslag geweigerd.",
+  "invoicePermissionPermanentlyDenied": "Opslagtoegang is geblokkeerd. Open instellingen om dit toe te staan.",
+  "invoiceOpenSettings": "Instellingen openen",
   "invoiceLoadFailed": "De factuur kon niet worden geladen. Tik om opnieuw te proberen.",
   "invoiceNotIssuedYet": "De factuur is nog niet gereed. Probeer het over een moment opnieuw.",
   "paymentMethodCard": "Kaart",
@@ -336,5 +345,7 @@
   "tripStatusPendingQuote": "Offerte in afwachting",
   "tripStatusAwaitingPayment": "In afwachting van betaling",
   "tripStatusPaymentFailed": "Betaling mislukt",
-  "tripStatusRefunded": "Terugbetaald"
+  "tripStatusRefunded": "Terugbetaald",
+  "cancellationPolicyHowToCancel": "Als u een rit wilt annuleren, gaat u naar het tabblad Ritten en selecteert u de rit die u wilt annuleren.",
+  "cancellationPolicyGoToTrips": "Ga naar Ritten"
 }

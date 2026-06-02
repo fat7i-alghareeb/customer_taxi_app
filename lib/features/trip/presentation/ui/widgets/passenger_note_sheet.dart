@@ -81,11 +81,14 @@ class _PassengerNoteSheetState extends State<PassengerNoteSheet> {
         Row(
           children: [
             Expanded(
-              child: AppButton.outline(
-                variant: AppButtonVariant.grey,
+              child: AppButton.error(
+                // variant: AppButtonVariant.grey,
                 isActive: hasNote,
                 onTap: _clear,
-                child: AppButtonChild.label(AppStrings.passengerNoteClear),
+                child: AppButtonChild.label(
+                  AppStrings.passengerNoteClear,
+                  textStyle: TextStyle(color: context.onSurface),
+                ),
               ),
             ),
             AppSpacing.md.horizontalSpace,

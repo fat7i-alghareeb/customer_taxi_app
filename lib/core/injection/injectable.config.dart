@@ -35,6 +35,10 @@ import 'package:customertaxi/core/notification/notification_timezone_service.dar
 import 'package:customertaxi/core/router/router_config.dart' as _i434;
 import 'package:customertaxi/core/services/client_config/client_config_service.dart'
     as _i768;
+import 'package:customertaxi/core/services/file_download/file_download_service.dart'
+    as _i130;
+import 'package:customertaxi/core/services/file_download/file_download_service_impl.dart'
+    as _i958;
 import 'package:customertaxi/core/services/localization/locale_service.dart'
     as _i504;
 import 'package:customertaxi/core/services/location/location_service.dart'
@@ -179,6 +183,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i181.NotificationLocalService>(),
         gh<_i226.NotificationFcmService>(),
       ),
+    );
+    gh.lazySingleton<_i130.FileDownloadService>(
+      () => _i958.FileDownloadServiceImpl(),
     );
     gh.lazySingleton<_i102.PermissionsCoordinator>(
       () => _i102.PermissionsCoordinator(

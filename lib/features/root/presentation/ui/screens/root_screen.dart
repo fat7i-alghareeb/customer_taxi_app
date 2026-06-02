@@ -10,9 +10,11 @@ import '../widgets/root_body.dart';
 
 
 class RootScreen extends StatefulWidget {
-  const RootScreen({super.key});
+  const RootScreen({super.key, this.initialTab});
   static const String pagePath = '/root_screen';
   static const String pageName = 'RootScreen';
+
+  final RootTab? initialTab;
 
   @override
   State<RootScreen> createState() => _RootScreenState();
@@ -33,7 +35,7 @@ class _RootScreenState extends State<RootScreen> {
               getIt<OrderBloc>()..add(const OrderEvent.started()),
         ),
       ],
-      child: const RootBody(),
+      child: RootBody(initialTab: widget.initialTab),
     );
   }
 }

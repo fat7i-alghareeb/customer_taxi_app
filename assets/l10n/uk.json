@@ -310,6 +310,15 @@
   "invoiceLanguageLabel": "Мова рахунка",
   "invoiceDownload": "Завантажити",
   "invoiceShare": "Поділитися",
+  "invoiceSavedToDownloads": "Збережено в Завантаженнях",
+  "invoiceSavedToFiles": "Збережено в застосунку Файли",
+  "invoiceSavedToAppFolder": "Збережено у папці застосунку. Відкрийте файловий менеджер, щоб знайти його.",
+  "invoiceSavedSharedFallback": "Автоматичне збереження не вдалося — виберіть, куди зберегти.",
+  "invoiceDownloadFailed": "Не вдалося зберегти рахунок.",
+  "invoiceStorageFull": "Недостатньо вільного місця на пристрої.",
+  "invoicePermissionDenied": "Доступ до сховища відхилено.",
+  "invoicePermissionPermanentlyDenied": "Доступ до сховища заблоковано. Відкрийте налаштування, щоб дозволити.",
+  "invoiceOpenSettings": "Відкрити налаштування",
   "invoiceLoadFailed": "Не вдалося завантажити рахунок. Натисніть, щоб повторити.",
   "invoiceNotIssuedYet": "Рахунок ще не готовий. Спробуйте за мить.",
   "paymentMethodCard": "Картка",
@@ -336,5 +345,7 @@
   "tripStatusPendingQuote": "Очікує на розрахунок",
   "tripStatusAwaitingPayment": "Очікує оплати",
   "tripStatusPaymentFailed": "Платіж не вдався",
-  "tripStatusRefunded": "Повернено кошти"
+  "tripStatusRefunded": "Повернено кошти",
+  "cancellationPolicyHowToCancel": "Щоб скасувати будь-яку поїздку, будь ласка, перейдіть на вкладку Поїздки та виберіть поїздку, яку хочете скасувати.",
+  "cancellationPolicyGoToTrips": "Перейти до поїздок"
 }

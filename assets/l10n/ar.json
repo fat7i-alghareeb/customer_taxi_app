@@ -310,6 +310,15 @@
   "invoiceLanguageLabel": "لغة الفاتورة",
   "invoiceDownload": "تنزيل",
   "invoiceShare": "مشاركة",
+  "invoiceSavedToDownloads": "تم الحفظ في مجلد التنزيلات",
+  "invoiceSavedToFiles": "تم الحفظ في تطبيق الملفات",
+  "invoiceSavedToAppFolder": "تم الحفظ داخل مجلد التطبيق. استخدم مدير الملفات للوصول إليه.",
+  "invoiceSavedSharedFallback": "تعذّر الحفظ تلقائيًا — اختر مكان الحفظ.",
+  "invoiceDownloadFailed": "تعذّر حفظ الفاتورة.",
+  "invoiceStorageFull": "لا توجد مساحة كافية على جهازك.",
+  "invoicePermissionDenied": "تم رفض إذن التخزين.",
+  "invoicePermissionPermanentlyDenied": "الوصول إلى التخزين محظور. افتح الإعدادات للسماح به.",
+  "invoiceOpenSettings": "فتح الإعدادات",
   "invoiceLoadFailed": "تعذّر تحميل ملف الفاتورة. اضغط لإعادة المحاولة.",
   "invoiceNotIssuedYet": "الفاتورة لم تجهز بعد. حاول مرة أخرى بعد قليل.",
   "paymentMethodCard": "بطاقة",
@@ -336,5 +345,7 @@
   "tripStatusPendingQuote": "بانتظار التسعير",
   "tripStatusAwaitingPayment": "بانتظار الدفع",
   "tripStatusPaymentFailed": "فشل الدفع",
-  "tripStatusRefunded": "تم رد المبلغ"
+  "tripStatusRefunded": "تم رد المبلغ",
+  "cancellationPolicyHowToCancel": "لإلغاء أي رحلة، يرجى الانتقال إلى علامة تبويب الرحلات واختيار الرحلة التي تريد إلغاءها.",
+  "cancellationPolicyGoToTrips": "الذهاب إلى الرحلات"
 }

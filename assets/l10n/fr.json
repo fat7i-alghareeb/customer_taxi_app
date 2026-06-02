@@ -310,6 +310,15 @@
   "invoiceLanguageLabel": "Langue de la facture",
   "invoiceDownload": "Télécharger",
   "invoiceShare": "Partager",
+  "invoiceSavedToDownloads": "Enregistré dans Téléchargements",
+  "invoiceSavedToFiles": "Enregistré dans l'app Fichiers",
+  "invoiceSavedToAppFolder": "Enregistré dans le dossier de l'app. Ouvrez votre gestionnaire de fichiers pour le retrouver.",
+  "invoiceSavedSharedFallback": "Enregistrement automatique impossible — choisissez où le garder.",
+  "invoiceDownloadFailed": "Impossible d'enregistrer la facture.",
+  "invoiceStorageFull": "Espace libre insuffisant sur l'appareil.",
+  "invoicePermissionDenied": "Autorisation de stockage refusée.",
+  "invoicePermissionPermanentlyDenied": "Accès au stockage bloqué. Ouvrez les réglages pour l'autoriser.",
+  "invoiceOpenSettings": "Ouvrir les réglages",
   "invoiceLoadFailed": "Impossible de charger la facture. Appuyez pour réessayer.",
   "invoiceNotIssuedYet": "La facture n'est pas encore prête. Réessayez dans un instant.",
   "paymentMethodCard": "Carte",
@@ -336,5 +345,7 @@
   "tripStatusPendingQuote": "Devis en attente",
   "tripStatusAwaitingPayment": "Paiement en attente",
   "tripStatusPaymentFailed": "Paiement échoué",
-  "tripStatusRefunded": "Remboursé"
+  "tripStatusRefunded": "Remboursé",
+  "cancellationPolicyHowToCancel": "Pour annuler un trajet, veuillez vous rendre sur l'onglet Trajets et sélectionner le trajet que vous souhaitez annuler.",
+  "cancellationPolicyGoToTrips": "Aller aux trajets"
 }
