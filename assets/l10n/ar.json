@@ -61,6 +61,7 @@
   "cancel": "إلغاء",
   "done": "تم",
   "selectDateTime": "اختر التاريخ والوقت",
+  "selectTimeBeforeContinue": "يرجى اختيار الوقت قبل المتابعة.",
   "selectDate": "اختر التاريخ",
   "selectTime": "اختر الوقت",
   "selectYear": "اختر السنة",

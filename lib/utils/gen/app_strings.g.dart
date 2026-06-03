@@ -585,6 +585,8 @@ class AppStrings {
   static String get selectTheme => 'selectTheme'.tr();
   /// Select time - اختر الوقت - Tijd selecteren - Uhrzeit wählen - Wybierz godzinę - Вибрати час - Choisir l'heure - Seleccionar hora - Selectează ora
   static String get selectTime => 'selectTime'.tr();
+  /// Please select a time before continuing. - يرجى اختيار الوقت قبل المتابعة. - Selecteer een tijd voordat je doorgaat. - Bitte wähle eine Uhrzeit aus, bevor du fortfährst. - Wybierz godzinę przed kontynuowaniem. - Виберіть час, перш ніж продовжити. - Veuillez choisir une heure avant de continuer. - Selecciona una hora antes de continuar. - Selectează o oră înainte de a continua.
+  static String get selectTimeBeforeContinue => 'selectTimeBeforeContinue'.tr();
   /// Select year - اختر السنة - Jaar selecteren - Jahr wählen - Wybierz rok - Вибрати рік - Choisir l'année - Seleccionar año - Selectează anul
   static String get selectYear => 'selectYear'.tr();
   /// Send Code - إرسال الرمز - Code verzenden - Code senden - Wyślij kod - Надіслати код - Envoyer le code - Enviar código - Trimite codul

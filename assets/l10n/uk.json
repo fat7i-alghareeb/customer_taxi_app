@@ -61,6 +61,7 @@
   "cancel": "Скасувати",
   "done": "Готово",
   "selectDateTime": "Вибрати дату і час",
+  "selectTimeBeforeContinue": "Виберіть час, перш ніж продовжити.",
   "selectDate": "Вибрати дату",
   "selectTime": "Вибрати час",
   "selectYear": "Вибрати рік",

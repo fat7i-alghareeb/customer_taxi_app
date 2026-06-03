@@ -61,6 +61,7 @@
   "cancel": "Annuler",
   "done": "Terminé",
   "selectDateTime": "Choisir date et heure",
+  "selectTimeBeforeContinue": "Veuillez choisir une heure avant de continuer.",
   "selectDate": "Choisir la date",
   "selectTime": "Choisir l'heure",
   "selectYear": "Choisir l'année",

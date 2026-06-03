@@ -61,6 +61,7 @@
   "cancel": "Cancel",
   "done": "Done",
   "selectDateTime": "Select date & time",
+  "selectTimeBeforeContinue": "Please select a time before continuing.",
   "selectDate": "Select date",
   "selectTime": "Select time",
   "selectYear": "Select year",

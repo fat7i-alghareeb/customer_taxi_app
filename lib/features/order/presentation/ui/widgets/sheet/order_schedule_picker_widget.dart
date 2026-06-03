@@ -3,14 +3,64 @@ import 'package:customertaxi/common/widgets/show_overlay.dart';
 
 import '../../../states/order_bloc.dart';
 
-class OrderSchedulePickerWidget extends StatelessWidget {
+class OrderSchedulePickerWidget extends StatefulWidget {
   const OrderSchedulePickerWidget({super.key, required this.state});
 
   final OrderState state;
 
   @override
-  Widget build(BuildContext context) {
+  State<OrderSchedulePickerWidget> createState() =>
+      _OrderSchedulePickerWidgetState();
+}
+
+class _OrderSchedulePickerWidgetState extends State<OrderSchedulePickerWidget> {
+  bool _hasShownMissingTimeOverlay = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_shouldShowMissingTimeError(widget.state)) {
+      _scheduleMissingTimeOverlay();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant OrderSchedulePickerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final shouldShowError = _shouldShowMissingTimeError(widget.state);
+    if (!shouldShowError) {
+      _hasShownMissingTimeOverlay = false;
+      return;
+    }
+
+    if (!_hasShownMissingTimeOverlay) {
+      _scheduleMissingTimeOverlay();
+    }
+  }
+
+  bool _shouldShowMissingTimeError(OrderState state) {
     final isLater = state.booking.scheduleMode == OrderScheduleMode.later;
+    final allLocationsResolved =
+        state.stops.list.isNotEmpty &&
+        state.stops.list.every((stop) => stop != null);
+
+    return isLater && allLocationsResolved && state.booking.scheduledAt == null;
+  }
+
+  void _scheduleMissingTimeOverlay() {
+    _hasShownMissingTimeOverlay = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_shouldShowMissingTimeError(widget.state)) return;
+      showErrorOverlay(context, AppStrings.selectTimeBeforeContinue);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isLater =
+        widget.state.booking.scheduleMode == OrderScheduleMode.later;
+    final showMissingTimeError = _shouldShowMissingTimeError(widget.state);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -24,9 +74,25 @@ class OrderSchedulePickerWidget extends StatelessWidget {
           child: isLater
               ? Padding(
                   padding: REdgeInsets.only(top: AppSpacing.sm),
-                  child: _DateTimeField(
-                    scheduledAt: state.booking.scheduledAt,
-                    onTap: () => _selectDateTime(context),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _DateTimeField(
+                        scheduledAt: widget.state.booking.scheduledAt,
+                        hasError: showMissingTimeError,
+                        onTap: () => _selectDateTime(context),
+                      ),
+                      if (showMissingTimeError) ...[
+                        AppSpacing.xs.verticalSpace,
+                        Text(
+                          AppStrings.selectTimeBeforeContinue,
+                          style: AppTextStyles.s12w400.copyWith(
+                            color: context.error,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ).animate().fadeIn(duration: AppDurations.fast),
+                      ],
+                    ],
                   ),
                 )
               : const SizedBox.shrink(),
@@ -36,7 +102,7 @@ class OrderSchedulePickerWidget extends StatelessWidget {
   }
 
   Future<void> _selectDateTime(BuildContext context) async {
-    final initial = state.booking.scheduledAt ?? DateTime.now();
+    final initial = widget.state.booking.scheduledAt ?? DateTime.now();
     final date = await showDatePicker(
       context: context,
       initialDate: initial,
@@ -120,8 +186,8 @@ class _ModeToggle extends StatelessWidget {
               icon: FontAwesomeIcons.bolt,
               isSelected: !isLater,
               onTap: () => context.read<OrderBloc>().add(
-                    const OrderEvent.scheduleModeChanged(OrderScheduleMode.now),
-                  ),
+                const OrderEvent.scheduleModeChanged(OrderScheduleMode.now),
+              ),
             ),
           ),
           AppSpacing.xs.horizontalSpace,
@@ -131,10 +197,8 @@ class _ModeToggle extends StatelessWidget {
               icon: FontAwesomeIcons.clock,
               isSelected: isLater,
               onTap: () => context.read<OrderBloc>().add(
-                    const OrderEvent.scheduleModeChanged(
-                      OrderScheduleMode.later,
-                    ),
-                  ),
+                const OrderEvent.scheduleModeChanged(OrderScheduleMode.later),
+              ),
             ),
           ),
         ],
@@ -169,11 +233,7 @@ class _ModeChip extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FaIcon(
-                icon,
-                size: 14.r,
-                color: context.onSurface,
-              ),
+              FaIcon(icon, size: 14.r, color: context.onSurface),
               AppSpacing.xs.horizontalSpace,
               Text(
                 label,
@@ -191,16 +251,21 @@ class _ModeChip extends StatelessWidget {
 }
 
 class _DateTimeField extends StatelessWidget {
-  const _DateTimeField({required this.scheduledAt, required this.onTap});
+  const _DateTimeField({
+    required this.scheduledAt,
+    required this.hasError,
+    required this.onTap,
+  });
 
   final DateTime? scheduledAt;
+  final bool hasError;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final hasTime = scheduledAt != null;
     final label = hasTime
-        ? DateFormat('EEE, MMM d, HH:mm').format(scheduledAt!)
+        ? scheduledAt!.toSmartDateTime()
         : AppStrings.selectDateTime;
 
     return Material(
@@ -214,10 +279,12 @@ class _DateTimeField extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppRadii.lg.r),
             border: Border.all(
-              color: hasTime
+              color: hasError
+                  ? context.error
+                  : hasTime
                   ? context.primary
                   : context.onSurface.withValues(alpha: 0.15),
-              width: hasTime ? 2.r : 1.r,
+              width: hasError || hasTime ? 2.r : 1.r,
             ),
           ),
           child: Row(
