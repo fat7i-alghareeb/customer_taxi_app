@@ -64,6 +64,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     if (oldWidget.state != widget.state) {
       printM('[OrderExpandedSheetWidget] didUpdateWidget state changed');
       _syncFormWithState(widget.state);
+      _maybeAutoConfirm(oldWidget.state, widget.state);
     }
 
     if (widget.state.stops.list.isEmpty) {
@@ -80,6 +81,28 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
         _focusedFieldIndex! >= widget.state.stops.list.length) {
       _focusedFieldIndex = null;
     }
+  }
+
+  void _maybeAutoConfirm(OrderState oldState, OrderState newState) {
+    if (newState.sheet.expandedStep != OrderExpandedStep.locationEntry) return;
+    if (_isConfirmActiveFor(oldState)) return;
+    if (!_isConfirmActiveFor(newState)) return;
+
+    printM('[OrderExpandedSheetWidget] auto-confirm: all stops resolved');
+    FocusScope.of(context).unfocus();
+    context.read<OrderBloc>().add(const OrderEvent.confirmOrderPressed());
+  }
+
+  bool _isConfirmActiveFor(OrderState state) {
+    final allStopsResolved = state.stops.list.isNotEmpty &&
+        state.stops.list.every((s) => s != null);
+    if (!allStopsResolved) return false;
+    if (state.booking.scheduleMode == OrderScheduleMode.later) {
+      if (state.booking.scheduledAt == null) return false;
+      final minTime = DateTime.now().add(const Duration(minutes: 15));
+      if (state.booking.scheduledAt!.isBefore(minTime)) return false;
+    }
+    return true;
   }
 
   void _handleFocusChanged(int index) {
@@ -155,18 +178,7 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
     printM('[OrderExpandedSheetWidget] _syncFormWithState completed');
   }
 
-  bool get _isConfirmActive {
-    final allStopsResolved = widget.state.stops.list.every((s) => s != null);
-    if (!allStopsResolved) return false;
-    if (widget.state.booking.scheduleMode == OrderScheduleMode.later) {
-      if (widget.state.booking.scheduledAt == null) return false;
-      final minTime = DateTime.now().add(const Duration(minutes: 15));
-      if (widget.state.booking.scheduledAt!.isBefore(minTime)) {
-        return false;
-      }
-    }
-    return true;
-  }
+  bool get _isConfirmActive => _isConfirmActiveFor(widget.state);
 
   bool get _isVehicleSelectionStep =>
       widget.state.sheet.expandedStep == OrderExpandedStep.carSelection;

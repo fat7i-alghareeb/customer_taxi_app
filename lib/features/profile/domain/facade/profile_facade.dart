@@ -21,4 +21,9 @@ class ProfileFacade {
     printC('[ProfileFacade] updateProfile name="${param.name}" hasPhoto=${param.photo != null}');
     return _repository.updateProfile(param);
   }
+
+  Future<Result<void>> deleteAccount() {
+    printC('[ProfileFacade] deleteAccount');
+    return _repository.deleteAccount();
+  }
 }

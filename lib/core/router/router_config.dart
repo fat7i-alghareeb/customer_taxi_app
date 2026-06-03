@@ -14,6 +14,8 @@ import '../../features/root/presentation/ui/widgets/root_body.dart';
 import '../../features/root/presentation/ui/screens/about_us_screen.dart';
 import '../../features/root/presentation/ui/screens/cancellation_policy_screen.dart';
 import '../../features/root/presentation/ui/screens/contact_us_screen.dart';
+import '../../features/root/presentation/ui/screens/privacy_policy_screen.dart';
+import '../../features/root/presentation/ui/screens/terms_and_conditions_screen.dart';
 import '../../features/profile/presentation/ui/screens/profile_setup_screen.dart';
 import '../../features/trip/presentation/ui/screens/active_trip_screen.dart';
 import '../../features/trip/presentation/ui/screens/trip_details_screen.dart';
@@ -442,6 +444,13 @@ class AppRouteGuard {
     }
 
     if (!canEnterApp) {
+      // Legal screens must be reachable from the OTP consent checkboxes
+      // before the user has authenticated, otherwise the guard kicks them
+      // back to login mid-registration.
+      if (currentPath == PrivacyPolicyScreen.pagePath ||
+          currentPath == TermsAndConditionsScreen.pagePath) {
+        return null;
+      }
       if (currentPath != loginPath) {
         printY('${RouterLogTags.redirect} #$cycleId unauthenticated -> login');
         return loginPath;

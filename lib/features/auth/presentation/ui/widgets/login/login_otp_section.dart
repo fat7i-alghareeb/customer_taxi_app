@@ -3,6 +3,8 @@ import 'package:pinput/pinput.dart';
 
 import 'package:customertaxi/features/auth/constants/forms/auth_forms.dart';
 import 'package:customertaxi/features/auth/presentation/states/auth_bloc.dart';
+import 'package:customertaxi/features/root/presentation/ui/screens/privacy_policy_screen.dart';
+import 'package:customertaxi/features/root/presentation/ui/screens/terms_and_conditions_screen.dart';
 
 class LoginOtpSection extends StatelessWidget {
   const LoginOtpSection({
@@ -48,9 +50,19 @@ class LoginOtpSection extends StatelessWidget {
                     forceErrorState: state.otpStatus.isFailed,
                     onCompleted: (pin) {
                       form.control(AuthForms.otpField).value = pin;
-                      context
-                          .read<AuthBloc>()
-                          .add(AuthEvent.verifyOtpRequested(pin));
+                      final privacyOk =
+                          (form.control(AuthForms.privacyConsentField).value
+                                  as bool?) ??
+                              false;
+                      final termsOk =
+                          (form.control(AuthForms.termsConsentField).value
+                                  as bool?) ??
+                              false;
+                      if (privacyOk && termsOk) {
+                        context
+                            .read<AuthBloc>()
+                            .add(AuthEvent.verifyOtpRequested(pin));
+                      }
                     },
                     onChanged: (pin) {
                       form.control(AuthForms.otpField).value = pin;
@@ -70,13 +82,36 @@ class LoginOtpSection extends StatelessWidget {
           ),
         ),
         AppSpacing.xl.verticalSpace,
+        ConsentCheckbox(
+          formControlName: AuthForms.privacyConsentField,
+          prefixLabel: AppStrings.consentPrivacyPrefix,
+          linkLabel: AppStrings.consentPrivacyLinkLabel,
+          onLinkTap: () =>
+              context.pushNamed(PrivacyPolicyScreen.pageName),
+        ),
+        AppSpacing.sm.verticalSpace,
+        ConsentCheckbox(
+          formControlName: AuthForms.termsConsentField,
+          prefixLabel: AppStrings.consentTermsPrefix,
+          linkLabel: AppStrings.consentTermsLinkLabel,
+          onLinkTap: () =>
+              context.pushNamed(TermsAndConditionsScreen.pageName),
+        ),
+        AppSpacing.xl.verticalSpace,
         ReactiveFormConsumer(
           builder: (context, form, child) {
             return BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
+                final otpValid = form.control(AuthForms.otpField).valid;
+                final privacyAccepted =
+                    (form.control(AuthForms.privacyConsentField).value as bool?) ??
+                        false;
+                final termsAccepted =
+                    (form.control(AuthForms.termsConsentField).value as bool?) ??
+                        false;
                 return AppButton.primaryGradient(
                   child: AppButtonChild.label(AppStrings.verifyOtp),
-                  isActive: form.control(AuthForms.otpField).valid,
+                  isActive: otpValid && privacyAccepted && termsAccepted,
                   isLoading: state.otpStatus.isLoading,
                   onTap: () {
                     final otp =

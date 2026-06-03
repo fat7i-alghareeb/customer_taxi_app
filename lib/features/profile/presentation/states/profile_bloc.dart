@@ -3,6 +3,7 @@ import 'package:customertaxi/common/imports/imports.dart';
 import 'package:injectable/injectable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:customertaxi/core/services/session/auth_manager.dart';
 import 'package:customertaxi/features/profile/data/params/profile_params.dart';
 import 'package:customertaxi/features/profile/domain/entities/profile_entity.dart';
 import 'package:customertaxi/features/profile/domain/facade/profile_facade.dart';
@@ -18,6 +19,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<_NameSaved>(_onNameSaved);
     on<_PhotoSelected>(_onPhotoSelected);
     on<_SaveRequested>(_onSaveRequested);
+    on<_DeleteAccountRequested>(_onDeleteAccountRequested);
   }
 
   final ProfileFacade _facade;
@@ -78,6 +80,32 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       failure: (message) {
         printY('[ProfileBloc] save failed=$message');
         emit(state.copyWith(saveStatus: BlocStatus<ProfileEntity>.failure(message)));
+      },
+    );
+  }
+
+  Future<void> _onDeleteAccountRequested(
+    _DeleteAccountRequested event,
+    Emitter<ProfileState> emit,
+  ) async {
+    emit(state.copyWith(deleteAccountStatus: const BlocStatus.loading()));
+
+    final Result<void> result = await _facade.deleteAccount();
+
+    await result.when(
+      success: (_) async {
+        printG('[ProfileBloc] deleteAccount success');
+        emit(state.copyWith(
+          deleteAccountStatus: const BlocStatus<void>.success(null),
+        ));
+        // Drop session so the router guard routes back to login.
+        await getIt<AuthManager>().logout();
+      },
+      failure: (message) async {
+        printY('[ProfileBloc] deleteAccount failed=$message');
+        emit(state.copyWith(
+          deleteAccountStatus: BlocStatus<void>.failure(message),
+        ));
       },
     );
   }

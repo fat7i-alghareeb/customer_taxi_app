@@ -7,6 +7,7 @@ class ApiEndpoints {
 
   // Users
   static const String currentUser = '/api/v1/users/me';
+  static const String deleteAccount = '/api/v1/users/me';
   static const String updateFcmToken = '/api/v1/users/me/fcm-token';
   static const String updatePreferredLanguage = '/api/v1/users/me/language';
 

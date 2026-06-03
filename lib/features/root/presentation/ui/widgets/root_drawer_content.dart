@@ -7,6 +7,8 @@ import 'package:customertaxi/core/theme/theme_controller.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/about_us_screen.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/cancellation_policy_screen.dart';
 import 'package:customertaxi/features/root/presentation/ui/screens/contact_us_screen.dart';
+import 'package:customertaxi/features/root/presentation/ui/screens/privacy_policy_screen.dart';
+import 'package:customertaxi/features/root/presentation/ui/screens/terms_and_conditions_screen.dart';
 import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_screen.dart';
 import 'package:customertaxi/features/favorites/presentation/ui/screens/favorites_screen.dart';
 
@@ -65,6 +67,22 @@ class RootDrawerContent extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                     context.pushNamed(CancellationPolicyScreen.pageName);
+                  },
+                ),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.shieldHalved,
+                  label: AppStrings.drawerPrivacyPolicy,
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(PrivacyPolicyScreen.pageName);
+                  },
+                ),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.scroll,
+                  label: AppStrings.drawerTermsAndConditions,
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(TermsAndConditionsScreen.pageName);
                   },
                 ),
                 DrawerMenuItem(

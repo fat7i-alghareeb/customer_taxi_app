@@ -55,14 +55,15 @@ extension ProfileEventPatterns on ProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _NameSaved value)?  nameSaved,TResult Function( _PhotoSelected value)?  photoSelected,TResult Function( _SaveRequested value)?  saveRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _NameSaved value)?  nameSaved,TResult Function( _PhotoSelected value)?  photoSelected,TResult Function( _SaveRequested value)?  saveRequested,TResult Function( _DeleteAccountRequested value)?  deleteAccountRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _NameSaved() when nameSaved != null:
 return nameSaved(_that);case _PhotoSelected() when photoSelected != null:
 return photoSelected(_that);case _SaveRequested() when saveRequested != null:
-return saveRequested(_that);case _:
+return saveRequested(_that);case _DeleteAccountRequested() when deleteAccountRequested != null:
+return deleteAccountRequested(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return saveRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _NameSaved value)  nameSaved,required TResult Function( _PhotoSelected value)  photoSelected,required TResult Function( _SaveRequested value)  saveRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _NameSaved value)  nameSaved,required TResult Function( _PhotoSelected value)  photoSelected,required TResult Function( _SaveRequested value)  saveRequested,required TResult Function( _DeleteAccountRequested value)  deleteAccountRequested,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _NameSaved():
 return nameSaved(_that);case _PhotoSelected():
 return photoSelected(_that);case _SaveRequested():
-return saveRequested(_that);case _:
+return saveRequested(_that);case _DeleteAccountRequested():
+return deleteAccountRequested(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +106,15 @@ return saveRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _NameSaved value)?  nameSaved,TResult? Function( _PhotoSelected value)?  photoSelected,TResult? Function( _SaveRequested value)?  saveRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _NameSaved value)?  nameSaved,TResult? Function( _PhotoSelected value)?  photoSelected,TResult? Function( _SaveRequested value)?  saveRequested,TResult? Function( _DeleteAccountRequested value)?  deleteAccountRequested,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _NameSaved() when nameSaved != null:
 return nameSaved(_that);case _PhotoSelected() when photoSelected != null:
 return photoSelected(_that);case _SaveRequested() when saveRequested != null:
-return saveRequested(_that);case _:
+return saveRequested(_that);case _DeleteAccountRequested() when deleteAccountRequested != null:
+return deleteAccountRequested(_that);case _:
   return null;
 
 }
@@ -128,13 +131,14 @@ return saveRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String name)?  nameSaved,TResult Function( File photo)?  photoSelected,TResult Function()?  saveRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String name)?  nameSaved,TResult Function( File photo)?  photoSelected,TResult Function()?  saveRequested,TResult Function()?  deleteAccountRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NameSaved() when nameSaved != null:
 return nameSaved(_that.name);case _PhotoSelected() when photoSelected != null:
 return photoSelected(_that.photo);case _SaveRequested() when saveRequested != null:
-return saveRequested();case _:
+return saveRequested();case _DeleteAccountRequested() when deleteAccountRequested != null:
+return deleteAccountRequested();case _:
   return orElse();
 
 }
@@ -152,13 +156,14 @@ return saveRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String name)  nameSaved,required TResult Function( File photo)  photoSelected,required TResult Function()  saveRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String name)  nameSaved,required TResult Function( File photo)  photoSelected,required TResult Function()  saveRequested,required TResult Function()  deleteAccountRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _NameSaved():
 return nameSaved(_that.name);case _PhotoSelected():
 return photoSelected(_that.photo);case _SaveRequested():
-return saveRequested();case _:
+return saveRequested();case _DeleteAccountRequested():
+return deleteAccountRequested();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +180,14 @@ return saveRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String name)?  nameSaved,TResult? Function( File photo)?  photoSelected,TResult? Function()?  saveRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String name)?  nameSaved,TResult? Function( File photo)?  photoSelected,TResult? Function()?  saveRequested,TResult? Function()?  deleteAccountRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NameSaved() when nameSaved != null:
 return nameSaved(_that.name);case _PhotoSelected() when photoSelected != null:
 return photoSelected(_that.photo);case _SaveRequested() when saveRequested != null:
-return saveRequested();case _:
+return saveRequested();case _DeleteAccountRequested() when deleteAccountRequested != null:
+return deleteAccountRequested();case _:
   return null;
 
 }
@@ -386,9 +392,41 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _DeleteAccountRequested implements ProfileEvent {
+  const _DeleteAccountRequested();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeleteAccountRequested);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ProfileEvent.deleteAccountRequested()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$ProfileState {
 
- BlocStatus<ProfileEntity> get loadStatus; BlocStatus<ProfileEntity> get saveStatus; ProfileEntity? get currentUser; String get pendingName; File? get pendingPhoto;
+ BlocStatus<ProfileEntity> get loadStatus; BlocStatus<ProfileEntity> get saveStatus; BlocStatus<void> get deleteAccountStatus; ProfileEntity? get currentUser; String get pendingName; File? get pendingPhoto;
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -399,16 +437,16 @@ $ProfileStateCopyWith<ProfileState> get copyWith => _$ProfileStateCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.deleteAccountStatus, deleteAccountStatus) || other.deleteAccountStatus == deleteAccountStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,currentUser,pendingName,pendingPhoto);
+int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,deleteAccountStatus,currentUser,pendingName,pendingPhoto);
 
 @override
 String toString() {
-  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto)';
+  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, deleteAccountStatus: $deleteAccountStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto)';
 }
 
 
@@ -419,11 +457,11 @@ abstract mixin class $ProfileStateCopyWith<$Res>  {
   factory $ProfileStateCopyWith(ProfileState value, $Res Function(ProfileState) _then) = _$ProfileStateCopyWithImpl;
 @useResult
 $Res call({
- BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto
+ BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, BlocStatus<void> deleteAccountStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto
 });
 
 
-$BlocStatusCopyWith<ProfileEntity, $Res> get loadStatus;$BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus;$ProfileEntityCopyWith<$Res>? get currentUser;
+$BlocStatusCopyWith<ProfileEntity, $Res> get loadStatus;$BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus;$BlocStatusCopyWith<void, $Res> get deleteAccountStatus;$ProfileEntityCopyWith<$Res>? get currentUser;
 
 }
 /// @nodoc
@@ -436,11 +474,12 @@ class _$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? deleteAccountStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,}) {
   return _then(_self.copyWith(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<ProfileEntity>,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<ProfileEntity>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
+as BlocStatus<ProfileEntity>,deleteAccountStatus: null == deleteAccountStatus ? _self.deleteAccountStatus : deleteAccountStatus // ignore: cast_nullable_to_non_nullable
+as BlocStatus<void>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
 as ProfileEntity?,pendingName: null == pendingName ? _self.pendingName : pendingName // ignore: cast_nullable_to_non_nullable
 as String,pendingPhoto: freezed == pendingPhoto ? _self.pendingPhoto : pendingPhoto // ignore: cast_nullable_to_non_nullable
 as File?,
@@ -463,6 +502,15 @@ $BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus {
   
   return $BlocStatusCopyWith<ProfileEntity, $Res>(_self.saveStatus, (value) {
     return _then(_self.copyWith(saveStatus: value));
+  });
+}/// Create a copy of ProfileState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BlocStatusCopyWith<void, $Res> get deleteAccountStatus {
+  
+  return $BlocStatusCopyWith<void, $Res>(_self.deleteAccountStatus, (value) {
+    return _then(_self.copyWith(deleteAccountStatus: value));
   });
 }/// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
@@ -558,10 +606,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
   return orElse();
 
 }
@@ -579,10 +627,10 @@ return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendin
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState():
-return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -599,10 +647,10 @@ return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendin
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto);case _:
   return null;
 
 }
@@ -614,11 +662,12 @@ return $default(_that.loadStatus,_that.saveStatus,_that.currentUser,_that.pendin
 
 
 class _ProfileState implements ProfileState {
-  const _ProfileState({this.loadStatus = const BlocStatus<ProfileEntity>.initial(), this.saveStatus = const BlocStatus<ProfileEntity>.initial(), this.currentUser, this.pendingName = '', this.pendingPhoto});
+  const _ProfileState({this.loadStatus = const BlocStatus<ProfileEntity>.initial(), this.saveStatus = const BlocStatus<ProfileEntity>.initial(), this.deleteAccountStatus = const BlocStatus<void>.initial(), this.currentUser, this.pendingName = '', this.pendingPhoto});
   
 
 @override@JsonKey() final  BlocStatus<ProfileEntity> loadStatus;
 @override@JsonKey() final  BlocStatus<ProfileEntity> saveStatus;
+@override@JsonKey() final  BlocStatus<void> deleteAccountStatus;
 @override final  ProfileEntity? currentUser;
 @override@JsonKey() final  String pendingName;
 @override final  File? pendingPhoto;
@@ -633,16 +682,16 @@ _$ProfileStateCopyWith<_ProfileState> get copyWith => __$ProfileStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.deleteAccountStatus, deleteAccountStatus) || other.deleteAccountStatus == deleteAccountStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,currentUser,pendingName,pendingPhoto);
+int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,deleteAccountStatus,currentUser,pendingName,pendingPhoto);
 
 @override
 String toString() {
-  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto)';
+  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, deleteAccountStatus: $deleteAccountStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto)';
 }
 
 
@@ -653,11 +702,11 @@ abstract mixin class _$ProfileStateCopyWith<$Res> implements $ProfileStateCopyWi
   factory _$ProfileStateCopyWith(_ProfileState value, $Res Function(_ProfileState) _then) = __$ProfileStateCopyWithImpl;
 @override @useResult
 $Res call({
- BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto
+ BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, BlocStatus<void> deleteAccountStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto
 });
 
 
-@override $BlocStatusCopyWith<ProfileEntity, $Res> get loadStatus;@override $BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus;@override $ProfileEntityCopyWith<$Res>? get currentUser;
+@override $BlocStatusCopyWith<ProfileEntity, $Res> get loadStatus;@override $BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus;@override $BlocStatusCopyWith<void, $Res> get deleteAccountStatus;@override $ProfileEntityCopyWith<$Res>? get currentUser;
 
 }
 /// @nodoc
@@ -670,11 +719,12 @@ class __$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? deleteAccountStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,}) {
   return _then(_ProfileState(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<ProfileEntity>,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<ProfileEntity>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
+as BlocStatus<ProfileEntity>,deleteAccountStatus: null == deleteAccountStatus ? _self.deleteAccountStatus : deleteAccountStatus // ignore: cast_nullable_to_non_nullable
+as BlocStatus<void>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
 as ProfileEntity?,pendingName: null == pendingName ? _self.pendingName : pendingName // ignore: cast_nullable_to_non_nullable
 as String,pendingPhoto: freezed == pendingPhoto ? _self.pendingPhoto : pendingPhoto // ignore: cast_nullable_to_non_nullable
 as File?,
@@ -698,6 +748,15 @@ $BlocStatusCopyWith<ProfileEntity, $Res> get saveStatus {
   
   return $BlocStatusCopyWith<ProfileEntity, $Res>(_self.saveStatus, (value) {
     return _then(_self.copyWith(saveStatus: value));
+  });
+}/// Create a copy of ProfileState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BlocStatusCopyWith<void, $Res> get deleteAccountStatus {
+  
+  return $BlocStatusCopyWith<void, $Res>(_self.deleteAccountStatus, (value) {
+    return _then(_self.copyWith(deleteAccountStatus: value));
   });
 }/// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.

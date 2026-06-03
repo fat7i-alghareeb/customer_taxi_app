@@ -67,6 +67,22 @@ class AppRouteRegistry {
         ),
       ),
       GoRoute(
+        path: PrivacyPolicyScreen.pagePath,
+        name: PrivacyPolicyScreen.pageName,
+        pageBuilder: (context, state) => AppPageTransitions.build(
+          state: state,
+          child: const PrivacyPolicyScreen(),
+        ),
+      ),
+      GoRoute(
+        path: TermsAndConditionsScreen.pagePath,
+        name: TermsAndConditionsScreen.pageName,
+        pageBuilder: (context, state) => AppPageTransitions.build(
+          state: state,
+          child: const TermsAndConditionsScreen(),
+        ),
+      ),
+      GoRoute(
         path: ContactUsScreen.pagePath,
         name: ContactUsScreen.pageName,
         pageBuilder: (context, state) =>

@@ -21,6 +21,13 @@ class ProfileRemoteDataSource {
     });
   }
 
+  Future<void> deleteAccount() {
+    return rethrowAsAppException(() async {
+      printY('[ProfileRemoteDataSource] deleteAccount');
+      await _dio.delete<dynamic>(ApiEndpoints.deleteAccount);
+    });
+  }
+
   Future<ProfileModel> updateProfile(UpdateUserProfileRequest param) {
     return rethrowAsAppException(() async {
       printY('[ProfileRemoteDataSource] updateProfile name="${param.name}" hasPhoto=${param.photo != null}');

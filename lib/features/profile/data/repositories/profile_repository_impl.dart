@@ -57,4 +57,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return entity;
     });
   }
+
+  @override
+  Future<Result<void>> deleteAccount() {
+    return runAsResult(() async {
+      printM('[ProfileRepository] deleteAccount');
+      await _remote.deleteAccount();
+      printG('[ProfileRepository] deleteAccount success');
+    });
+  }
 }

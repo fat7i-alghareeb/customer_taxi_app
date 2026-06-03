@@ -6,4 +6,5 @@ class ProfileEvent with _$ProfileEvent {
   const factory ProfileEvent.nameSaved(String name) = _NameSaved;
   const factory ProfileEvent.photoSelected(File photo) = _PhotoSelected;
   const factory ProfileEvent.saveRequested() = _SaveRequested;
+  const factory ProfileEvent.deleteAccountRequested() = _DeleteAccountRequested;
 }

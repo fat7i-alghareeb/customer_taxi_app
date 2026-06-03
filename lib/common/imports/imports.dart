@@ -62,3 +62,5 @@ export "../widgets/form/app_reactive_validation_messages.dart";
 export "../widgets/full_screen_image_screen.dart";
 export "../widgets/loading_dots.dart";
 export "../widgets/main_loading_progress.dart";
+export "../widgets/policy_section.dart";
+export "../widgets/consent_checkbox.dart";

@@ -5,6 +5,7 @@ import '../../../../root/presentation/ui/screens/root_screen.dart';
 import '../../states/profile_bloc.dart';
 import '../../../constants/forms/profile_forms.dart';
 import 'profile_photo_picker.dart';
+import 'profile_delete_account_button.dart';
 
 class ProfileBody extends StatefulWidget {
   const ProfileBody({super.key, required this.isSetupMode});
@@ -143,6 +144,10 @@ class _ProfileBodyState extends State<ProfileBody> {
                     ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.05);
                   },
                 ),
+                if (!widget.isSetupMode) ...[
+                  AppSpacing.xl.verticalSpace,
+                  const ProfileDeleteAccountButton(),
+                ],
               ],
             ),
           ),
