@@ -5,14 +5,18 @@ allprojects {
     }
 }
 
-// flutter_stripe pulls in `stripe-android-issuing-push-provisioning`, which depends on
-// the gated `com.google.android.gms:play-services-tapandpay` artifact that is not
-// available in public Maven repos and breaks release builds (`:stripe_android:lintVitalAnalyzeRelease`).
-// This app does not use Stripe Issuing / push provisioning, so exclude it from every
-// subproject. The Stripe plugin loads push provisioning via reflection, so this is safe.
+// flutter_stripe's stripe_android plugin declares `com.stripe:stripe-android-issuing-push-provisioning`
+// as a `compileOnly` dependency because its Kotlin sources (EphemeralKeyProvider, PushProvisioningProxy)
+// reference those classes directly. The module therefore MUST stay on the compile classpath, otherwise
+// `:stripe_android:compileReleaseKotlin` fails with "Unresolved reference 'pushProvisioning'".
+//
+// That module transitively pulls the gated `com.google.android.gms:play-services-tapandpay` artifact,
+// which is not published to public Maven repos and breaks release resolution. This app does not use
+// Stripe Issuing / push provisioning, and the TapAndPay integration is reached purely via reflection
+// (TapAndPayProxy uses Class.forName), so excluding only the tapandpay artifact is safe.
 subprojects {
     configurations.all {
-        exclude(group = "com.stripe", module = "stripe-android-issuing-push-provisioning")
+        exclude(group = "com.google.android.gms", module = "play-services-tapandpay")
     }
 }
 
