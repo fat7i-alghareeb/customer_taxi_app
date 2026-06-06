@@ -56,7 +56,7 @@ enum TripStatus {
     };
   }
 
-  IconData get icon {
+  FaIconData get icon {
     return switch (this) {
       TripStatus.pendingQuote => FontAwesomeIcons.fileInvoiceDollar,
       TripStatus.scheduled => FontAwesomeIcons.calendarDays,

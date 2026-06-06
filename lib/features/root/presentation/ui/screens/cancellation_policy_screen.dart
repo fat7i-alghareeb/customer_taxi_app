@@ -10,12 +10,24 @@ class CancellationPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paragraphs = <String>[
-      AppStrings.cancellationPolicyPassengerWindow,
-      AppStrings.cancellationPolicyDriverLate,
-      AppStrings.cancellationPolicyPassengerLate,
-      AppStrings.cancellationPolicyWaitingFee,
-      AppStrings.cancellationPolicyRefundTiming,
+    final sections = <(String, List<String>)>[
+      (
+        AppStrings.cancellationPolicyCancellationHeading,
+        <String>[
+          AppStrings.cancellationPolicyCancel1,
+          AppStrings.cancellationPolicyCancel2,
+          AppStrings.cancellationPolicyCancel3,
+          AppStrings.cancellationPolicyCancel4,
+        ],
+      ),
+      (
+        AppStrings.cancellationPolicyAirportHeading,
+        <String>[
+          AppStrings.cancellationPolicyAirport1,
+          AppStrings.cancellationPolicyAirport2,
+          AppStrings.cancellationPolicyAirport3,
+        ],
+      ),
     ];
 
     return AppScaffold.appBar(
@@ -25,38 +37,27 @@ class CancellationPolicyScreen extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: ListView.separated(
+            child: ListView(
               padding: REdgeInsets.symmetric(
                 horizontal: AppSpacing.lg.w,
                 vertical: AppSpacing.lg.h,
               ),
-              itemBuilder: (context, index) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: REdgeInsets.only(top: 2),
-                      child: FaIcon(
-                        FontAwesomeIcons.circleCheck,
-                        size: 16.sp,
-                        color: context.primary,
-                      ),
+              children: [
+                for (final (heading, bullets) in sections) ...[
+                  Text(
+                    heading,
+                    style: AppTextStyles.s18w600.copyWith(
+                      color: context.primary,
                     ),
-                    AppSpacing.md.horizontalSpace,
-                    Expanded(
-                      child: Text(
-                        paragraphs[index],
-                        style: AppTextStyles.s14w400.copyWith(
-                          color: context.onSurface,
-                          height: 1.45,
-                        ),
-                      ),
-                    ),
+                  ).animate().fadeIn(duration: 220.ms),
+                  AppSpacing.md.verticalSpace,
+                  for (final bullet in bullets) ...[
+                    _PolicyBullet(text: bullet),
+                    AppSpacing.lg.verticalSpace,
                   ],
-                ).animate().fadeIn(duration: 220.ms).slideY(begin: 0.06, end: 0);
-              },
-              separatorBuilder: (_, _) => AppSpacing.lg.verticalSpace,
-              itemCount: paragraphs.length,
+                  AppSpacing.md.verticalSpace,
+                ],
+              ],
             ),
           ),
           Container(
@@ -120,5 +121,38 @@ class CancellationPolicyScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _PolicyBullet extends StatelessWidget {
+  const _PolicyBullet({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: REdgeInsets.only(top: 2),
+          child: FaIcon(
+            FontAwesomeIcons.circleCheck,
+            size: 16.sp,
+            color: context.primary,
+          ),
+        ),
+        AppSpacing.md.horizontalSpace,
+        Expanded(
+          child: Text(
+            text,
+            style: AppTextStyles.s14w400.copyWith(
+              color: context.onSurface,
+              height: 1.45,
+            ),
+          ),
+        ),
+      ],
+    ).animate().fadeIn(duration: 220.ms).slideY(begin: 0.06, end: 0);
   }
 }

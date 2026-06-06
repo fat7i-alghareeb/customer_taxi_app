@@ -119,7 +119,7 @@ class _FavoritesListSection extends StatelessWidget {
               children: [
                 EmptyStateWidget(
                   text: AppStrings.favoritesEmpty,
-                  icon: IconSource.icon(FontAwesomeIcons.locationDot),
+                  icon: IconSource.faIcon(FontAwesomeIcons.locationDot),
                 ),
                 AppSpacing.lg.verticalSpace,
                 Padding(
@@ -194,7 +194,7 @@ class _SearchResultsSection extends StatelessWidget {
         if (state.searchResults.isEmpty) {
           return EmptyStateWidget(
             text: AppStrings.noResultsFound,
-            icon: IconSource.icon(FontAwesomeIcons.magnifyingGlass),
+            icon: IconSource.faIcon(FontAwesomeIcons.magnifyingGlass),
           );
         }
 

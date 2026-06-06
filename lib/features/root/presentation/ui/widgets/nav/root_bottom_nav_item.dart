@@ -11,7 +11,7 @@ class RootBottomNavItem extends StatelessWidget {
   });
 
   final String label;
-  final IconData icon;
+  final FaIconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 

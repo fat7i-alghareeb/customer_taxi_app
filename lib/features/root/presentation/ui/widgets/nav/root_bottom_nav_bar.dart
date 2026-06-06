@@ -7,7 +7,7 @@ class RootBottomNavItemConfig {
   const RootBottomNavItemConfig({required this.label, required this.icon});
 
   final String label;
-  final IconData icon;
+  final FaIconData icon;
 }
 
 class RootBottomNavBar extends StatelessWidget {

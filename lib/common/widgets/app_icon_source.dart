@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../utils/helpers/build_svg_icon.dart';
 import 'app_image_viewer.dart';
 
@@ -102,6 +103,11 @@ abstract class IconSource {
   /// ```
   factory IconSource.icon(IconData icon, {double? size, Color? color}) {
     return _IconButtonIconSource(icon, size: size, color: color);
+  }
+
+  /// Creates an [IconSource] from a [FaIconData] (font_awesome_flutter).
+  factory IconSource.faIcon(FaIconData icon, {double? size, Color? color}) {
+    return _FaIconSource(icon, size: size, color: color);
   }
 
   /// Creates an [IconSource] from an image asset (png/jpg/etc).
@@ -270,6 +276,26 @@ class _IconButtonIconSource extends IconSource {
   @override
   IconSource copyWith({double? size, Color? color}) {
     return _IconButtonIconSource(
+      icon,
+      size: size ?? this.size,
+      color: color ?? this.color,
+    );
+  }
+}
+
+class _FaIconSource extends IconSource {
+  const _FaIconSource(this.icon, {super.size, super.color});
+
+  final FaIconData icon;
+
+  @override
+  Widget buildWidget(BuildContext context) {
+    return FaIcon(icon, size: size?.sp, color: color);
+  }
+
+  @override
+  IconSource copyWith({double? size, Color? color}) {
+    return _FaIconSource(
       icon,
       size: size ?? this.size,
       color: color ?? this.color,

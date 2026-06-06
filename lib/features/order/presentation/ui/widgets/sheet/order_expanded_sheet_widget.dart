@@ -314,9 +314,8 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: widget.state.stops.list.length,
-                onReorder: (oldIndex, newIndex) {
+                onReorderItem: (oldIndex, newIndex) {
                   printM('[OrderExpandedSheetWidget] onReorder old=$oldIndex new=$newIndex');
-                  if (newIndex > oldIndex) newIndex -= 1;
                   context.read<OrderBloc>().add(OrderEvent.stopReordered(oldIndex, newIndex));
                 },
                 itemBuilder: (context, index) {

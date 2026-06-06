@@ -133,7 +133,7 @@ class _CompensationClaimDialogState extends State<CompensationClaimDialog> {
                                   '{count}',
                                   _pickedPaths.length.toString(),
                                 ),
-                          icon: IconSource.icon(FontAwesomeIcons.paperclip),
+                          icon: IconSource.faIcon(FontAwesomeIcons.paperclip),
                         ),
                       ),
                       if (_isUploading) ...[

@@ -41,7 +41,7 @@ class _ZoomButton extends StatelessWidget {
   const _ZoomButton({required this.onTap, required this.icon});
 
   final VoidCallback onTap;
-  final IconData icon;
+  final FaIconData icon;
 
   @override
   Widget build(BuildContext context) {

@@ -19,7 +19,7 @@ class OrderLocationFieldWidget extends StatefulWidget {
   final String formControlName;
   final String title;
   final String hintText;
-  final IconData iconData;
+  final FaIconData iconData;
   final ValueChanged<String> onQueryChanged;
   final VoidCallback? onClearPressed;
   final VoidCallback? onAddPressed;
@@ -165,10 +165,10 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                     onTap: widget.onRemovePressed!,
                   );
                 } else if (showClear) {
-                  suffixIcon = IconSource.icon(FontAwesomeIcons.xmark, size: 14.r);
+                  suffixIcon = IconSource.faIcon(FontAwesomeIcons.xmark, size: 14.r);
                   onSuffixTap = widget.onClearPressed;
                 } else if (showAdd) {
-                  suffixIcon = IconSource.icon(FontAwesomeIcons.plus, size: 14.r, color: context.primary);
+                  suffixIcon = IconSource.faIcon(FontAwesomeIcons.plus, size: 14.r, color: context.primary);
                   onSuffixTap = widget.onAddPressed;
                 }
 
@@ -204,7 +204,7 @@ class _SuffixIconButton extends StatelessWidget {
     this.color,
   });
 
-  final IconData icon;
+  final FaIconData icon;
   final VoidCallback onTap;
   final Color? color;
 

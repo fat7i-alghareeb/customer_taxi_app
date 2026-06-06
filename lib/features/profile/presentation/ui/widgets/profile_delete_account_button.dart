@@ -29,7 +29,7 @@ class ProfileDeleteAccountButton extends StatelessWidget {
           onTap: () => _confirmAndDelete(context),
           child: AppButtonChild.labelIcon(
             label: AppStrings.profileDeleteAccount,
-            icon: IconSource.icon(FontAwesomeIcons.trashCan),
+            icon: IconSource.faIcon(FontAwesomeIcons.trashCan),
           ),
         ).animate().fadeIn(delay: 450.ms).slideY(begin: 0.05);
       },
@@ -41,7 +41,7 @@ class ProfileDeleteAccountButton extends StatelessWidget {
     final confirmed = await AppDialog.show<bool>(
       context,
       dialog: AppDialog.basic(
-        icon: IconSource.icon(FontAwesomeIcons.triangleExclamation),
+        icon: IconSource.faIcon(FontAwesomeIcons.triangleExclamation),
         title: AppStrings.profileDeleteAccountDialogTitle,
         message: AppStrings.profileDeleteAccountDialogMessage,
         primaryAction: AppDialogAction.danger(

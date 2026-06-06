@@ -201,7 +201,7 @@ class _AppScaffoldAppBar extends StatelessWidget {
     if (leadingDrawerEnabled && config.leading == null) {
       icon = config.drawerIcon ?? IconSource.icon(Icons.menu);
     } else {
-      icon = config.leading ?? IconSource.icon(context.chevronStart);
+      icon = config.leading ?? IconSource.faIcon(context.chevronStart);
     }
 
     final resolvedIcon = icon.build(context, color: context.onSurface, size: 22);

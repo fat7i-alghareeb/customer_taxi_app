@@ -23,7 +23,7 @@ class DrawerLogoutFooter extends StatelessWidget {
         layout: AppButtonLayout(height: 52.sp, borderRadius: AppRadii.lg),
         child: AppButtonChild.labelIcon(
           label: AppStrings.logout,
-          icon: IconSource.icon(FontAwesomeIcons.rightFromBracket),
+          icon: IconSource.faIcon(FontAwesomeIcons.rightFromBracket),
           iconSize: 18.r,
           textStyle: AppTextStyles.s16w700,
         ),

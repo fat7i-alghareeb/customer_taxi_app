@@ -126,7 +126,7 @@ class _DetailsContent extends StatelessWidget {
 class _DetailsMetaRow extends StatelessWidget {
   const _DetailsMetaRow({required this.icon, required this.label});
 
-  final IconData icon;
+  final FaIconData icon;
   final String label;
 
   @override

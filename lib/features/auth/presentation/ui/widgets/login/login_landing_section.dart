@@ -125,7 +125,7 @@ class LoginLandingSection extends StatelessWidget {
                 layout: const AppButtonLayout(percentageWidth: 1.0),
                 child: AppButtonChild.labelIcon(
                   label: AppStrings.loginLandingRegister,
-                  icon: IconSource.icon(context.chevronEnd),
+                  icon: IconSource.faIcon(context.chevronEnd),
                   position: AppButtonIconPosition.trailing,
                 ),
                 onTap: () {
@@ -138,7 +138,7 @@ class LoginLandingSection extends StatelessWidget {
               AppButton.outline(
                 child: AppButtonChild.labelIcon(
                   label: AppStrings.loginLandingLogin,
-                  icon: IconSource.icon(context.chevronEnd),
+                  icon: IconSource.faIcon(context.chevronEnd),
                   position: AppButtonIconPosition.trailing,
                 ),
                 onTap: () {

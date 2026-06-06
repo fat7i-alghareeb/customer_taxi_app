@@ -13,7 +13,6 @@ class TermsAndConditionsScreen extends StatelessWidget {
       (AppStrings.termsReservationsTitle, AppStrings.termsReservationsBody),
       (AppStrings.termsPricingTitle, AppStrings.termsPricingBody),
       (AppStrings.termsPaymentTitle, AppStrings.termsPaymentBody),
-      (AppStrings.termsCancellationTitle, AppStrings.termsCancellationBody),
       (AppStrings.termsClientResponsibilityTitle,
           AppStrings.termsClientResponsibilityBody),
       (AppStrings.termsCompanyResponsibilityTitle,

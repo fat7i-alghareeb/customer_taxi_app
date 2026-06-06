@@ -2,8 +2,8 @@ class ApiEndpoints {
   ApiEndpoints._();
 
   // Auth
-  static const String login = '/api/v1.0/auth/login';
-  static const String refreshToken = '/api/v1/identity/tokens/refresh';
+  static const String login = '/api/v1/auth/sessions';
+  static const String refreshToken = '/api/v1/auth/tokens/refreshes';
 
   // Users
   static const String currentUser = '/api/v1/users/me';
@@ -12,7 +12,7 @@ class ApiEndpoints {
   static const String updatePreferredLanguage = '/api/v1/users/me/language';
 
   // Maps
-  static const String mapsSearch = '/api/v1/maps/search';
+  static const String mapsSearch = '/api/v1/maps/searches';
   static const String mapsReverseGeocode = '/api/v1/maps/reverse-geocodings';
   static const String mapsDirections = '/api/v1/maps/directions';
 
@@ -39,4 +39,3 @@ class ApiEndpoints {
   static String tripInvoice(String id) => '/api/v1/trips/$id/invoice';
   static String tripInvoicePdf(String id) => '/api/v1/trips/$id/invoice/pdf';
 }
-

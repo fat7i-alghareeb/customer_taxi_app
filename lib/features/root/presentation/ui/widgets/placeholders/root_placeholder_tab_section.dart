@@ -8,7 +8,7 @@ class RootPlaceholderTabSection extends StatelessWidget {
   });
 
   final String title;
-  final IconData icon;
+  final FaIconData icon;
 
   @override
   Widget build(BuildContext context) {

@@ -12,6 +12,7 @@ import 'package:customertaxi/features/root/presentation/ui/screens/terms_and_con
 import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_screen.dart';
 import 'package:customertaxi/features/favorites/presentation/ui/screens/favorites_screen.dart';
 
+import 'drawer/drawer_expandable_menu_item.dart';
 import 'drawer/drawer_header_section.dart';
 import 'drawer/drawer_logout_footer.dart';
 import 'drawer/drawer_menu_item.dart';
@@ -53,45 +54,51 @@ class RootDrawerContent extends StatelessWidget {
                     context.pushNamed(FavoritesScreen.pageName);
                   },
                 ),
-                DrawerMenuItem(
-                  icon: FontAwesomeIcons.circleInfo,
-                  label: AppStrings.profileAboutUs,
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.pushNamed(AboutUsScreen.pageName);
-                  },
-                ),
-                DrawerMenuItem(
-                  icon: FontAwesomeIcons.fileContract,
-                  label: AppStrings.cancellationPolicyTitle,
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.pushNamed(CancellationPolicyScreen.pageName);
-                  },
-                ),
-                DrawerMenuItem(
+                DrawerExpandableMenuItem(
                   icon: FontAwesomeIcons.shieldHalved,
                   label: AppStrings.drawerPrivacyPolicy,
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.pushNamed(PrivacyPolicyScreen.pageName);
-                  },
-                ),
-                DrawerMenuItem(
-                  icon: FontAwesomeIcons.scroll,
-                  label: AppStrings.drawerTermsAndConditions,
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.pushNamed(TermsAndConditionsScreen.pageName);
-                  },
-                ),
-                DrawerMenuItem(
-                  icon: FontAwesomeIcons.headset,
-                  label: AppStrings.profileContactUs,
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.pushNamed(ContactUsScreen.pageName);
-                  },
+                  children: [
+                    DrawerMenuItem(
+                      icon: FontAwesomeIcons.shieldHalved,
+                      label: AppStrings.drawerPrivacyPolicy,
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.pushNamed(PrivacyPolicyScreen.pageName);
+                      },
+                    ),
+                    DrawerMenuItem(
+                      icon: FontAwesomeIcons.circleInfo,
+                      label: AppStrings.profileAboutUs,
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.pushNamed(AboutUsScreen.pageName);
+                      },
+                    ),
+                    DrawerMenuItem(
+                      icon: FontAwesomeIcons.fileContract,
+                      label: AppStrings.cancellationPolicyTitle,
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.pushNamed(CancellationPolicyScreen.pageName);
+                      },
+                    ),
+                    DrawerMenuItem(
+                      icon: FontAwesomeIcons.scroll,
+                      label: AppStrings.drawerTermsAndConditions,
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.pushNamed(TermsAndConditionsScreen.pageName);
+                      },
+                    ),
+                    DrawerMenuItem(
+                      icon: FontAwesomeIcons.headset,
+                      label: AppStrings.profileContactUs,
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.pushNamed(ContactUsScreen.pageName);
+                      },
+                    ),
+                  ],
                 ),
                 _buildLanguageSelector(context),
                 _buildThemeSelector(context),

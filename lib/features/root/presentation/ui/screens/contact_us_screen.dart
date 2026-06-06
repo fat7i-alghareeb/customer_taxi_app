@@ -68,15 +68,6 @@ class ContactUsScreen extends StatelessWidget {
                 .animate()
                 .fadeIn(delay: 150.ms, duration: AppDurations.normal)
                 .slideX(begin: -0.1, end: 0),
-            AppSpacing.lg.verticalSpace,
-            _ContactSection(
-                  title: AppStrings.contactUsAddress,
-                  icon: FontAwesomeIcons.locationDot,
-                  children: [_ContactItem(value: AppStrings.contactUsTak1)],
-                )
-                .animate()
-                .fadeIn(delay: 300.ms, duration: AppDurations.normal)
-                .slideX(begin: -0.1, end: 0),
             AppSpacing.xxl.verticalSpace,
           ],
         ).standardHorizontalPadding,
@@ -94,7 +85,7 @@ class _ContactSection extends StatelessWidget {
   });
 
   final String title;
-  final IconData icon;
+  final FaIconData icon;
   final List<Widget> children;
   final VoidCallback? onTap;
 

@@ -10,7 +10,7 @@ class DrawerOptionCard extends StatelessWidget {
     this.iconColor,
   });
 
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final String? value;
   final VoidCallback onTap;

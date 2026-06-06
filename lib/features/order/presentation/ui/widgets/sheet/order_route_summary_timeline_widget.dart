@@ -144,7 +144,7 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
     return context.onSurface.withValues(alpha: 0.4);
   }
 
-  IconData _getPinIcon(int index, int total) {
+  FaIconData _getPinIcon(int index, int total) {
     if (index == 0) return FontAwesomeIcons.circleArrowUp;
     if (index == total - 1) return FontAwesomeIcons.locationDot;
     return FontAwesomeIcons.circleDot;
@@ -156,7 +156,7 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
     return AppStrings.orderStopLabel.replaceAll('{n}', index.toString());
   }
 
-  Widget _buildPin(BuildContext context, Color color, IconData icon) {
+  Widget _buildPin(BuildContext context, Color color, FaIconData icon) {
     return Container(
       width: 28.r,
       height: 28.r,
