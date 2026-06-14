@@ -6,6 +6,7 @@ import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/error/global_error_handler.dart';
 import '../../../../core/network/api_endpoints.dart';
+import '../../domain/entities/waiting_fee_settlement_entity.dart';
 import '../models/trip_invoice_model.dart';
 import '../models/trip_model.dart';
 import '../models/trip_receipt_model.dart';
@@ -49,14 +50,30 @@ class TripRemoteDataSource {
     });
   }
 
-  Future<TripModel> cancelTrip(String id) {
+  /// Returns the caller's current active trip, or null when the server
+  /// responds 204 (no active trip).
+  Future<TripModel?> getActiveTrip() {
     return rethrowAsAppException(() async {
-      printY('[TripRemoteDataSource] cancelTrip id=$id');
+      printY('[TripRemoteDataSource] getActiveTrip');
+      final res = await _dio.get<dynamic>(ApiEndpoints.tripActive);
+      final data = res.data;
+      if (res.statusCode == 204 || data == null || data is! Map) {
+        return null;
+      }
+      return TripModel.fromJson(Map<String, dynamic>.from(data));
+    });
+  }
+
+  Future<TripModel> cancelTrip(String id, {String? note}) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] cancelTrip id=$id note=$note');
       final res = await _dio.post<dynamic>(
         ApiEndpoints.cancelTrip(id),
         data: {
           'reason': 'PassengerWithinOneHour',
-          'note': 'Passenger requested cancellation from customer app',
+          'note': (note == null || note.trim().isEmpty)
+              ? 'Passenger requested cancellation from customer app'
+              : note.trim(),
         },
       );
       return TripModel.fromJson(res.data as Map<String, dynamic>);
@@ -74,6 +91,44 @@ class TripRemoteDataSource {
         data: {'passengerNote': passengerNote},
       );
       return TripModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<void> rateTrip({
+    required String tripId,
+    required int stars,
+    String? comment,
+  }) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] rateTrip id=$tripId stars=$stars');
+      await _dio.post<dynamic>(
+        ApiEndpoints.rateTrip(tripId),
+        data: {'stars': stars, 'comment': comment},
+      );
+    });
+  }
+
+  Future<WaitingFeeSettlementEntity> settleWaitingFee(String tripId) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] settleWaitingFee id=$tripId');
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.settleWaitingFee(tripId),
+      );
+      final data = res.data as Map<String, dynamic>;
+      final sp = data['stripePayment'] as Map<String, dynamic>?;
+      return WaitingFeeSettlementEntity(
+        amount: (data['amount'] as num?)?.toDouble() ?? 0,
+        currencyCode: data['currencyCode'] as String? ?? 'EUR',
+        stripePayment: sp == null
+            ? null
+            : WaitingFeeStripePaymentEntity(
+                paymentIntentId: sp['paymentIntentId'] as String? ?? '',
+                clientSecret: sp['clientSecret'] as String? ?? '',
+                publishableKey: sp['publishableKey'] as String? ?? '',
+                customerId: sp['customerId'] as String? ?? '',
+                ephemeralKeySecret: sp['ephemeralKeySecret'] as String? ?? '',
+              ),
+      );
     });
   }
 

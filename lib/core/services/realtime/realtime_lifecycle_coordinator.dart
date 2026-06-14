@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import '../../../utils/helpers/colored_print.dart';
 import '../client_config/client_config_service.dart';
 import '../session/auth_manager.dart';
+import 'realtime_connection_state.dart';
 import 'realtime_service.dart';
 
 /// Owns the realtime connection lifecycle.
@@ -44,6 +45,7 @@ class RealtimeLifecycleCoordinator with WidgetsBindingObserver {
   final ClientConfigService _configService;
 
   StreamSubscription<AuthStatus>? _authSub;
+  StreamSubscription<RealtimeConnectionState>? _stateSub;
   bool _started = false;
 
   /// Subscribes to auth + app lifecycle. Idempotent.
@@ -58,6 +60,11 @@ class RealtimeLifecycleCoordinator with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addObserver(this);
     _authSub = _authManager.authStatusStream.listen(_onAuthStatus);
+    // Mirror every socket transition to the console so the realtime layer can
+    // be monitored live (disconnected → connecting → connected → reconnecting).
+    _stateSub = _service.connectionState.listen(
+      (state) => printC('$_logTag connectionState -> $state'),
+    );
 
     // Best-effort initial connect: the auth stream only emits on changes,
     // so if we are already authenticated at startup we need to kick a
@@ -74,6 +81,8 @@ class RealtimeLifecycleCoordinator with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     await _authSub?.cancel();
     _authSub = null;
+    await _stateSub?.cancel();
+    _stateSub = null;
     await _service.disconnect();
   }
 

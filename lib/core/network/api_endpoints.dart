@@ -25,6 +25,7 @@ class ApiEndpoints {
   // Trips
   static const String tripQuotes = '/api/v1/trips/quotes';
   static const String requestTrip = '/api/v1/trips';
+  static const String tripActive = '/api/v1/trips/active';
   static String tripById(String id) => '/api/v1/trips/$id';
   static String updatePassengerNote(String id) =>
       '/api/v1/trips/$id/passenger-note';
@@ -35,6 +36,9 @@ class ApiEndpoints {
       '/api/v1/uploads/compensation-evidence';
   static const String tripHistory = '/api/v1/trips';
   static const String tripCount = '/api/v1/trips/count';
+  static String rateTrip(String id) => '/api/v1/trips/$id/rating';
+  static String settleWaitingFee(String id) =>
+      '/api/v1/trips/$id/waiting-fee/settlements';
   static String tripReceipt(String id) => '/api/v1/trips/$id/receipt';
   static String tripInvoice(String id) => '/api/v1/trips/$id/invoice';
   static String tripInvoicePdf(String id) => '/api/v1/trips/$id/invoice/pdf';

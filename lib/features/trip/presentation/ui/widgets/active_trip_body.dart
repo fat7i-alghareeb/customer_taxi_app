@@ -11,11 +11,15 @@ import 'package:customertaxi/common/widgets/show_overlay.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
+import 'package:customertaxi/features/trip/presentation/coordinators/trip_completion_coordinator.dart';
+import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/cancel_trip_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/compensation_claim_dialog.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/completed_action_chips.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_fare_summary_card.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_rating_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_stops_timeline.dart';
 import 'package:vibration/vibration.dart';
 
@@ -233,7 +237,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         printC('[ActiveTripBody] trip state changed status=${trip.status}');
         final isRealTransitionToArrived =
             _lastSeenTripStatus != TripStatus.driverArrived &&
-                trip.status == TripStatus.driverArrived;
+            trip.status == TripStatus.driverArrived;
         _lastSeenTripStatus = trip.status;
         if (isRealTransitionToArrived) {
           _triggerArrivalAlert();
@@ -300,22 +304,30 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
         BitmapDescriptor descriptor;
         if (isPickup) {
-          descriptor = _pickupMarkerIcon ??
+          descriptor =
+              _pickupMarkerIcon ??
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
         } else if (isDestination) {
-          descriptor = _destinationMarkerIcon ??
+          descriptor =
+              _destinationMarkerIcon ??
               BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
         } else {
           // Intermediate stop
           if (isNext) {
             // Highlight the next uncompleted stop in Red
-            descriptor = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+            descriptor = BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueRed,
+            );
           } else if (stop.isCompleted) {
             // Completed stops in Green
-            descriptor = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+            descriptor = BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueGreen,
+            );
           } else {
             // Uncompleted subsequent stops in Violet
-            descriptor = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet);
+            descriptor = BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueViolet,
+            );
           }
         }
 
@@ -325,12 +337,18 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
             position: LatLng(stop.latitude, stop.longitude),
             icon: descriptor,
             infoWindow: InfoWindow(
-              title: stop.label ?? (isPickup ? 'Pickup' : isDestination ? 'Destination' : 'Stop ${i + 1}'),
+              title:
+                  stop.label ??
+                  (isPickup
+                      ? 'Pickup'
+                      : isDestination
+                      ? 'Destination'
+                      : 'Stop ${i + 1}'),
               snippet: stop.isCompleted
                   ? 'Completed'
                   : isNext
-                      ? 'Next Stop'
-                      : 'Upcoming Stop',
+                  ? 'Next Stop'
+                  : 'Upcoming Stop',
             ),
           ),
         );
@@ -348,9 +366,11 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
       if (cached != null) return cached;
 
       final decoded = trip.routeSegments
-          .map((segment) => PolylinePoints.decodePolyline(segment.encodedPolyline)
-              .map((p) => LatLng(p.latitude, p.longitude))
-              .toList())
+          .map(
+            (segment) => PolylinePoints.decodePolyline(
+              segment.encodedPolyline,
+            ).map((p) => LatLng(p.latitude, p.longitude)).toList(),
+          )
           .where((leg) => leg.isNotEmpty)
           .toList();
 
@@ -366,9 +386,9 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
       final cached = _decodedRouteCache[cacheKey];
       if (cached != null) return cached;
 
-      final decoded = PolylinePoints.decodePolyline(overview)
-          .map((p) => LatLng(p.latitude, p.longitude))
-          .toList();
+      final decoded = PolylinePoints.decodePolyline(
+        overview,
+      ).map((p) => LatLng(p.latitude, p.longitude)).toList();
 
       if (decoded.isNotEmpty) {
         final result = [decoded];
@@ -416,10 +436,8 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
               prev.passengerNoteStatus != curr.passengerNoteStatus,
           listener: (context, state) {
             state.passengerNoteStatus.whenOrNull(
-              success: (_) => showSuccessOverlay(
-                context,
-                AppStrings.passengerNoteSaved,
-              ),
+              success: (_) =>
+                  showSuccessOverlay(context, AppStrings.passengerNoteSaved),
               failure: (msg) => showErrorOverlay(context, msg),
             );
           },
@@ -509,27 +527,14 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   }
 
   void _showCancelDialog(BuildContext context) {
-    printM('[ActiveTripBody] cancel dialog opened');
+    printM('[ActiveTripBody] cancel sheet opened');
     unawaited(
-      AppDialog.show<bool>(
-        context,
-        dialog: AppDialog.basic(
-          title: AppStrings.tripCancelButton,
-          message: AppStrings.cancellationPolicyCancelDialog,
-          secondaryAction: AppDialogAction.secondary(
-            label: AppStrings.cancel,
-            onPressed: () => Navigator.pop(context, false),
-          ),
-          primaryAction: AppDialogAction.danger(
-            label: AppStrings.confirm,
-            onPressed: () => Navigator.pop(context, true),
-          ),
-        ),
-      ).then((confirmed) {
-        if (confirmed == true && context.mounted) {
-          printM('[ActiveTripBody] cancel confirmed');
-          context.read<TripBloc>().add(const TripEvent.cancelRequested());
-        }
+      CancelTripSheet.show(context).then((result) {
+        if (result == null || !context.mounted) return;
+        printM('[ActiveTripBody] cancel confirmed note=${result.note}');
+        context.read<TripBloc>().add(
+          TripEvent.cancelRequested(note: result.note),
+        );
       }),
     );
   }
@@ -554,10 +559,9 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   void _showPassengerNoteSheet(BuildContext context, TripEntity trip) {
     printM('[ActiveTripBody] passenger note sheet opened');
     unawaited(
-      PassengerNoteSheet.show(
-        context,
-        initialNote: trip.passengerNote,
-      ).then((result) {
+      PassengerNoteSheet.show(context, initialNote: trip.passengerNote).then((
+        result,
+      ) {
         if (result == null || !context.mounted) return;
         context.read<TripBloc>().add(
           TripEvent.passengerNoteSubmitted(result.note),
@@ -579,7 +583,9 @@ extension on LatLng {
 
 extension on TripStatus {
   bool get canEditPassengerNote =>
-      this != TripStatus.inProgress && !isTerminal && this != TripStatus.unknown;
+      this != TripStatus.inProgress &&
+      !isTerminal &&
+      this != TripStatus.unknown;
 }
 
 class _PassengerNoteFloatingAction extends StatelessWidget {
@@ -627,23 +633,21 @@ class _PassengerNoteFloatingAction extends StatelessWidget {
                   height: 16.r,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.r,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      colors.onPrimary,
-                    ),
+                    valueColor: AlwaysStoppedAnimation<Color>(colors.onPrimary),
                   ),
                 )
               else
                 FaIcon(
-                  hasNote ? FontAwesomeIcons.solidComment : FontAwesomeIcons.message,
+                  hasNote
+                      ? FontAwesomeIcons.solidComment
+                      : FontAwesomeIcons.message,
                   size: 16.r,
                   color: colors.onPrimary,
                 ),
               AppSpacing.sm.horizontalSpace,
               Text(
                 AppStrings.passengerNoteEdit,
-                style: AppTextStyles.s12w700.copyWith(
-                  color: colors.onPrimary,
-                ),
+                style: AppTextStyles.s12w700.copyWith(color: colors.onPrimary),
               ),
             ],
           ),
@@ -653,7 +657,7 @@ class _PassengerNoteFloatingAction extends StatelessWidget {
   }
 }
 
-class _GlassmorphicTripStatusSheet extends StatelessWidget {
+class _GlassmorphicTripStatusSheet extends StatefulWidget {
   const _GlassmorphicTripStatusSheet({
     required this.trip,
     required this.cancelStatus,
@@ -663,6 +667,78 @@ class _GlassmorphicTripStatusSheet extends StatelessWidget {
   final TripEntity trip;
   final BlocStatus<void> cancelStatus;
   final VoidCallback onCancelPressed;
+
+  @override
+  State<_GlassmorphicTripStatusSheet> createState() =>
+      _GlassmorphicTripStatusSheetState();
+}
+
+class _GlassmorphicTripStatusSheetState
+    extends State<_GlassmorphicTripStatusSheet> {
+  // Drives the 1-second rebuilds for the live waiting countdown while the
+  // driver is waiting at pickup.
+  Timer? _waitingTicker;
+  // Ensures the post-trip rating sheet is only auto-shown once.
+  bool _ratingPrompted = false;
+
+  TripEntity get trip => widget.trip;
+  BlocStatus<void> get cancelStatus => widget.cancelStatus;
+  VoidCallback get onCancelPressed => widget.onCancelPressed;
+
+  @override
+  void initState() {
+    super.initState();
+    _syncWaitingTicker();
+    _maybePromptRating();
+  }
+
+  @override
+  void didUpdateWidget(covariant _GlassmorphicTripStatusSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncWaitingTicker();
+    _maybePromptRating();
+  }
+
+  @override
+  void dispose() {
+    _waitingTicker?.cancel();
+    super.dispose();
+  }
+
+  void _syncWaitingTicker() {
+    final needsTicker = trip.status == TripStatus.driverArrived;
+    if (needsTicker && _waitingTicker == null) {
+      _waitingTicker = Timer.periodic(const Duration(seconds: 1), (_) {
+        if (mounted) setState(() {});
+      });
+    } else if (!needsTicker && _waitingTicker != null) {
+      _waitingTicker?.cancel();
+      _waitingTicker = null;
+    }
+  }
+
+  void _maybePromptRating() {
+    if (_ratingPrompted || trip.status != TripStatus.completed) return;
+    _ratingPrompted = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(
+        getIt<TripCompletionCoordinator>().promptRatingForCompletedTrip(
+          trip.id,
+        ),
+      );
+    });
+  }
+
+  Future<void> _refreshActiveTripGate() async {
+    await getIt<ActiveTripCubit>().refresh();
+  }
+
+  Future<void> _clearActiveTripGate() async {
+    final cubit = getIt<ActiveTripCubit>();
+    cubit.clear();
+    await cubit.refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -832,6 +908,9 @@ class _GlassmorphicTripStatusSheet extends StatelessWidget {
         ),
         AppSpacing.lg.verticalSpace,
 
+        // Live "board within 10 minutes" countdown + accruing waiting fee.
+        _buildWaitingCountdown(context),
+
         // Vehicle info
         _buildVehicleCard(context),
         AppSpacing.xl.verticalSpace,
@@ -844,6 +923,94 @@ class _GlassmorphicTripStatusSheet extends StatelessWidget {
           child: AppButtonChild.label(AppStrings.activeTripCancelRide),
         ),
       ],
+    );
+  }
+
+  /// Shows the 10-minute boarding countdown after the driver arrives. Once the
+  /// free grace window elapses, it switches to the accruing per-minute fee.
+  Widget _buildWaitingCountdown(BuildContext context) {
+    final colors = context.colorScheme;
+    final session = trip.activeWaitingSession;
+    final startUtc = session?.startedAtUtc ?? trip.arrivedAtUtc;
+    if (startUtc == null) return const SizedBox.shrink();
+
+    final graceMinutes = session?.graceMinutes ?? 10;
+    final ratePerMinute = session?.ratePerMinute ?? 0;
+    final elapsed = DateTime.now().difference(startUtc);
+    final graceRemaining = Duration(minutes: graceMinutes) - elapsed;
+
+    final Widget content;
+    final Color tint;
+    if (graceRemaining > Duration.zero) {
+      final mm = graceRemaining.inMinutes
+          .remainder(60)
+          .toString()
+          .padLeft(2, '0');
+      final ss = graceRemaining.inSeconds
+          .remainder(60)
+          .toString()
+          .padLeft(2, '0');
+      tint = colors.primary;
+      content = Row(
+        children: [
+          FaIcon(FontAwesomeIcons.solidClock, color: tint, size: 18.r),
+          AppSpacing.md.horizontalSpace,
+          Expanded(
+            child: Text(
+              AppStrings.tripArrivedBoardWithin.replaceAll('{time}', '$mm:$ss'),
+              style: AppTextStyles.s14w700.copyWith(color: colors.onSurface),
+            ),
+          ),
+        ],
+      );
+    } else {
+      final overdueSeconds = elapsed.inSeconds - graceMinutes * 60;
+      final billableMinutes = (overdueSeconds / 60).ceil();
+      final fee = billableMinutes * ratePerMinute;
+      final amount = '${fee.toStringAsFixed(2)} ${trip.currencyCode}';
+      tint = AppColors.warning;
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              FaIcon(
+                FontAwesomeIcons.triangleExclamation,
+                color: tint,
+                size: 18.r,
+              ),
+              AppSpacing.md.horizontalSpace,
+              Expanded(
+                child: Text(
+                  AppStrings.tripWaitingGraceOver,
+                  style: AppTextStyles.s12w500.copyWith(
+                    color: colors.onSurface,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          AppSpacing.xs.verticalSpace,
+          Text(
+            AppStrings.tripWaitingFeeAccruing.replaceAll('{amount}', amount),
+            style: AppTextStyles.s16w700.copyWith(color: tint),
+          ),
+        ],
+      );
+    }
+
+    return Padding(
+      padding: REdgeInsets.only(bottom: AppSpacing.lg),
+      child: Container(
+        width: double.infinity,
+        padding: REdgeInsets.all(AppSpacing.md),
+        decoration: BoxDecoration(
+          color: tint.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(AppRadii.lg.r),
+          border: Border.all(color: tint.withValues(alpha: 0.30), width: 1.r),
+        ),
+        child: content,
+      ),
     );
   }
 
@@ -924,9 +1091,23 @@ class _GlassmorphicTripStatusSheet extends StatelessWidget {
           AppSpacing.xl.verticalSpace,
         ],
 
+        // Rate the trip (also auto-shown once on completion).
+        AppButton.outline(
+          onTap: () => showTripRatingSheet(
+            context,
+            tripId: trip.id,
+            onClosed: _refreshActiveTripGate,
+          ),
+          child: AppButtonChild.label(AppStrings.ratingTitle),
+        ),
+        AppSpacing.md.verticalSpace,
+
         // Done button to route home (explicit dismiss — no auto-redirect)
         AppButton.primaryGradient(
-          onTap: () => context.goNamed('RootScreen'),
+          onTap: () async {
+            await _clearActiveTripGate();
+            if (context.mounted) context.goNamed('RootScreen');
+          },
           child: AppButtonChild.label(AppStrings.done),
         ),
       ],

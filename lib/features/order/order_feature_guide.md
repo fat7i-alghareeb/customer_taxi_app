@@ -147,7 +147,7 @@ Pure sorting/normalization helpers live in [helpers/saved_locations_helper.dart]
 - Reads `booking.passengerNote`, trims it, and omits it when empty
 - Calls `_facade.requestTrip(OrderRequestTripEntity(quoteId, stops, scheduledAt?, passengerNote?))`
 - **If** `ClientConfigService.current.stripeEnabled` **and** `trip.stripePayment != null`:
-  - `Stripe.instance.initPaymentSheet(clientSecret, merchantDisplayName:'customertaxi', country:'NL', email:always)`
+  - `Stripe.instance.initPaymentSheet(clientSecret, merchantDisplayName:'customertaxi', billingDetailsCollectionConfiguration: automatic)`
   - `Stripe.instance.presentPaymentSheet()`
   - Success → `booking.paymentSheetState = success(null)`
   - `StripeException.Canceled` → `booking.tripRequestStatus = failure(paymentCanceled)`
@@ -200,8 +200,11 @@ await Stripe.instance.initPaymentSheet(
     style: ThemeMode.system,
     returnURL: 'customertaxi://stripe-redirect',
     billingDetailsCollectionConfiguration:
-        BillingDetailsCollectionConfiguration(email: CollectionMode.always),
-    billingDetails: BillingDetails(address: Address(country: 'NL', ...)),
+        BillingDetailsCollectionConfiguration(
+          email: CollectionMode.automatic,
+          name: CollectionMode.automatic,
+          address: AddressCollectionMode.automatic,
+        ),
   ),
 );
 await Stripe.instance.presentPaymentSheet();

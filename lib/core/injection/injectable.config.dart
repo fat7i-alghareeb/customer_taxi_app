@@ -120,6 +120,10 @@ import 'package:customertaxi/features/trip/domain/facade/trip_facade.dart'
     as _i224;
 import 'package:customertaxi/features/trip/domain/repositories/trip_repository.dart'
     as _i133;
+import 'package:customertaxi/features/trip/presentation/coordinators/trip_completion_coordinator.dart'
+    as _i888;
+import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart'
+    as _i5;
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart'
     as _i753;
 import 'package:injectable/injectable.dart' as _i526;
@@ -279,6 +283,19 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i753.TripBloc>(
       () => _i753.TripBloc(gh<_i224.TripFacade>(), gh<_i404.RealtimeService>()),
+    );
+    gh.lazySingleton<_i5.ActiveTripCubit>(
+      () => _i5.ActiveTripCubit(
+        gh<_i224.TripFacade>(),
+        gh<_i404.RealtimeService>(),
+      ),
+    );
+    gh.lazySingleton<_i888.TripCompletionCoordinator>(
+      () => _i888.TripCompletionCoordinator(
+        gh<_i404.RealtimeService>(),
+        gh<_i434.AppRouterConfig>(),
+        gh<_i224.TripFacade>(),
+      ),
     );
     gh.lazySingleton<_i1032.RealtimeLifecycleCoordinator>(
       () => _i1032.RealtimeLifecycleCoordinator(

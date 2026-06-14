@@ -9,6 +9,9 @@ import 'package:flutter/services.dart'
     show SystemChrome, SystemUiMode, appFlavor;
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'core/config/localization_config.dart';
+import 'features/trip/presentation/coordinators/trip_completion_coordinator.dart';
+import 'features/trip/presentation/states/active_trip_cubit.dart';
+import 'features/trip/presentation/ui/widgets/waiting_fee_settlement_flow.dart';
 import 'firebase_options.dart';
 import 'core/injection/injectable.dart';
 import 'core/notification/notification_config.dart';
@@ -221,6 +224,37 @@ Future<void> _handleNotificationNavigation(
 ) async {
   final status = _statusFromPayload(payload);
 
+  // Trip completed push tapped while the app was backgrounded/closed (SignalR
+  // was disconnected). Route through the same coordinator so its de-dupe set is
+  // shared with the realtime path and the rating sheet shows at most once.
+  if (_typeFromPayload(payload) == 'trip_completed') {
+    final completedTripId = _tripIdFromPayload(payload);
+    if (completedTripId != null) {
+      await getIt<TripCompletionCoordinator>()
+          .promptRatingForTrip(completedTripId);
+    } else {
+      _navigateTo(RootScreen.pagePath);
+    }
+    return;
+  }
+
+  // Outstanding waiting fee — open the on-session settlement sheet for the trip.
+  if (_typeFromPayload(payload) == 'waiting_fee_due') {
+    final feeTripId = _tripIdFromPayload(payload);
+    _navigateTo(RootScreen.pagePath);
+    if (feeTripId != null) {
+      final context = getIt<AppRouterConfig>()
+          .router
+          .routerDelegate
+          .navigatorKey
+          .currentContext;
+      if (context != null && context.mounted) {
+        await showWaitingFeeSettlement(context, tripId: feeTripId);
+      }
+    }
+    return;
+  }
+
   // Scheduled-trip confirmation — go to trip history so the user sees it.
   if (status == 'scheduled') {
     _navigateTo(TripHistoryScreen.pagePath);
@@ -277,6 +311,12 @@ String? _statusFromPayload(AppNotificationPayload payload) {
   return null;
 }
 
+String? _typeFromPayload(AppNotificationPayload payload) {
+  final raw = payload.data['type'] ?? payload.data['Type'];
+  if (raw is String && raw.trim().isNotEmpty) return raw.trim().toLowerCase();
+  return null;
+}
+
 void _navigateTo(String location) {
   try {
     final router = getIt<AppRouterConfig>().router;
@@ -289,8 +329,11 @@ void _navigateTo(String location) {
 
 void _showScheduledNotificationOverlay(String message) {
   try {
-    final context =
-        getIt<AppRouterConfig>().router.routerDelegate.navigatorKey.currentContext;
+    final context = getIt<AppRouterConfig>()
+        .router
+        .routerDelegate
+        .navigatorKey
+        .currentContext;
     if (context != null && context.mounted) {
       showSuccessOverlay(context, message);
     }
@@ -352,6 +395,11 @@ Future<void> _initializeClientConfig() async {
 /// app). Gated by `ClientConfig.signalREnabled`.
 void _initializeRealtime() {
   getIt<RealtimeLifecycleCoordinator>().start();
+  // Listens for TripCompleted to open the rating sheet globally.
+  getIt<TripCompletionCoordinator>().start();
+  // Resolves the passenger's active trip so the Home tab can resume it and join
+  // its realtime channel.
+  getIt<ActiveTripCubit>().start();
 }
 
 /// Runs the application inside a guarded zone and wraps it with

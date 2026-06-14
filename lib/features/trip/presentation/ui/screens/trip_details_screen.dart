@@ -1,9 +1,11 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
 import '../../../domain/entities/trip_entity.dart';
+import '../../../domain/entities/trip_status.dart';
 import '../../states/trip_bloc.dart';
 import '../widgets/completed_action_chips.dart';
 import '../widgets/trip_fare_summary_card.dart';
+import '../widgets/trip_rating_sheet.dart';
 import '../widgets/trip_stops_timeline.dart';
 
 /// Post-trip details screen — replicates the Uber "تفاصيل المشوار" reference
@@ -78,6 +80,12 @@ class _DetailsContent extends StatelessWidget {
         children: [
           // Chips row — exactly matches the Uber reference image
           CompletedActionChips(tripId: trip.id),
+
+          // Rating section — CTA when unrated, given stars + edit when rated.
+          if (trip.status == TripStatus.completed) ...[
+            AppSpacing.lg.verticalSpace,
+            _RatingSection(trip: trip),
+          ],
           AppSpacing.xl.verticalSpace,
 
           // Stops timeline (pickup, intermediate, destination)
@@ -119,6 +127,125 @@ class _DetailsContent extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Rating block on a completed trip: a prominent CTA when the rider hasn't
+/// rated yet, otherwise the stars they gave plus an option to change them.
+class _RatingSection extends StatelessWidget {
+  const _RatingSection({required this.trip});
+
+  final TripEntity trip;
+
+  Future<void> _openSheet(BuildContext context, {int initialStars = 0}) async {
+    await showTripRatingSheet(
+      context,
+      tripId: trip.id,
+      initialStars: initialStars,
+    );
+    if (context.mounted) {
+      context.read<TripBloc>().add(TripEvent.started(trip.id));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+    final rating = trip.passengerRating;
+
+    if (rating == null) {
+      // Not rated yet — prominent brand CTA.
+      return Material(
+        color: colors.primary,
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadii.lg.r),
+          onTap: () => _openSheet(context),
+          child: Padding(
+            padding: REdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.md,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FaIcon(
+                  FontAwesomeIcons.solidStar,
+                  size: 18.r,
+                  color: colors.onPrimary,
+                ),
+                AppSpacing.md.horizontalSpace,
+                Text(
+                  AppStrings.rateTripCta,
+                  style: AppTextStyles.s14w600.copyWith(color: colors.onPrimary),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Already rated — show the given stars + an edit affordance.
+    return Container(
+      padding: REdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+        border: Border.all(color: colors.onSurface.withValues(alpha: 0.08)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  AppStrings.ratingYourRating,
+                  style: AppTextStyles.s12w400.copyWith(
+                    color: colors.onSurface.withValues(alpha: 0.6),
+                  ),
+                ),
+                AppSpacing.sm.verticalSpace,
+                _ReadOnlyStars(value: rating),
+              ],
+            ),
+          ),
+          TextButton(
+            onPressed: () => _openSheet(context, initialStars: rating),
+            child: Text(AppStrings.ratingModify),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReadOnlyStars extends StatelessWidget {
+  const _ReadOnlyStars({required this.value});
+
+  final int value;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (i) {
+        final filled = i < value;
+        return Padding(
+          padding: REdgeInsets.only(right: AppSpacing.xs),
+          child: FaIcon(
+            filled ? FontAwesomeIcons.solidStar : FontAwesomeIcons.star,
+            size: 18.r,
+            color: filled
+                ? AppColors.warning
+                : colors.onSurface.withValues(alpha: 0.25),
+          ),
+        );
+      }),
     );
   }
 }

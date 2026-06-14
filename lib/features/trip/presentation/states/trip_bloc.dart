@@ -160,7 +160,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     final id = state.activeTripId;
     if (id == null) return;
     emit(state.copyWith(cancelStatus: const BlocStatus.loading()));
-    final Result<TripEntity> result = await _facade.cancelTrip(id);
+    final Result<TripEntity> result = await _facade.cancelTrip(id, note: event.note);
     result.when(
       success: (trip) {
         printG('[TripBloc] cancel success');

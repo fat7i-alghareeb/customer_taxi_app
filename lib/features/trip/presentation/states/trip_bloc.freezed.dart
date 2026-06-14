@@ -152,12 +152,12 @@ return loadInvoicePdf(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId)?  started,TResult Function()?  pollingTick,TResult Function()?  cancelRequested,TResult Function( String? passengerNote)?  passengerNoteSubmitted,TResult Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult Function()?  stopPolling,TResult Function()?  historyStarted,TResult Function()?  nextPageRequested,TResult Function( double latitude,  double longitude)?  driverLocationUpdated,TResult Function( String tripId)?  loadReceipt,TResult Function( String tripId)?  loadInvoice,TResult Function( String tripId,  String languageCode)?  loadInvoicePdf,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId)?  started,TResult Function()?  pollingTick,TResult Function( String? note)?  cancelRequested,TResult Function( String? passengerNote)?  passengerNoteSubmitted,TResult Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult Function()?  stopPolling,TResult Function()?  historyStarted,TResult Function()?  nextPageRequested,TResult Function( double latitude,  double longitude)?  driverLocationUpdated,TResult Function( String tripId)?  loadReceipt,TResult Function( String tripId)?  loadInvoice,TResult Function( String tripId,  String languageCode)?  loadInvoicePdf,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that.tripId);case _PollingTick() when pollingTick != null:
 return pollingTick();case _CancelRequested() when cancelRequested != null:
-return cancelRequested();case _PassengerNoteSubmitted() when passengerNoteSubmitted != null:
+return cancelRequested(_that.note);case _PassengerNoteSubmitted() when passengerNoteSubmitted != null:
 return passengerNoteSubmitted(_that.passengerNote);case _CompensationClaimSubmitted() when compensationClaimSubmitted != null:
 return compensationClaimSubmitted(_that.note,_that.evidenceUrls);case _StopPolling() when stopPolling != null:
 return stopPolling();case _HistoryStarted() when historyStarted != null:
@@ -184,12 +184,12 @@ return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId)  started,required TResult Function()  pollingTick,required TResult Function()  cancelRequested,required TResult Function( String? passengerNote)  passengerNoteSubmitted,required TResult Function( String note,  List<String> evidenceUrls)  compensationClaimSubmitted,required TResult Function()  stopPolling,required TResult Function()  historyStarted,required TResult Function()  nextPageRequested,required TResult Function( double latitude,  double longitude)  driverLocationUpdated,required TResult Function( String tripId)  loadReceipt,required TResult Function( String tripId)  loadInvoice,required TResult Function( String tripId,  String languageCode)  loadInvoicePdf,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId)  started,required TResult Function()  pollingTick,required TResult Function( String? note)  cancelRequested,required TResult Function( String? passengerNote)  passengerNoteSubmitted,required TResult Function( String note,  List<String> evidenceUrls)  compensationClaimSubmitted,required TResult Function()  stopPolling,required TResult Function()  historyStarted,required TResult Function()  nextPageRequested,required TResult Function( double latitude,  double longitude)  driverLocationUpdated,required TResult Function( String tripId)  loadReceipt,required TResult Function( String tripId)  loadInvoice,required TResult Function( String tripId,  String languageCode)  loadInvoicePdf,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started(_that.tripId);case _PollingTick():
 return pollingTick();case _CancelRequested():
-return cancelRequested();case _PassengerNoteSubmitted():
+return cancelRequested(_that.note);case _PassengerNoteSubmitted():
 return passengerNoteSubmitted(_that.passengerNote);case _CompensationClaimSubmitted():
 return compensationClaimSubmitted(_that.note,_that.evidenceUrls);case _StopPolling():
 return stopPolling();case _HistoryStarted():
@@ -215,12 +215,12 @@ return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId)?  started,TResult? Function()?  pollingTick,TResult? Function()?  cancelRequested,TResult? Function( String? passengerNote)?  passengerNoteSubmitted,TResult? Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult? Function()?  stopPolling,TResult? Function()?  historyStarted,TResult? Function()?  nextPageRequested,TResult? Function( double latitude,  double longitude)?  driverLocationUpdated,TResult? Function( String tripId)?  loadReceipt,TResult? Function( String tripId)?  loadInvoice,TResult? Function( String tripId,  String languageCode)?  loadInvoicePdf,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId)?  started,TResult? Function()?  pollingTick,TResult? Function( String? note)?  cancelRequested,TResult? Function( String? passengerNote)?  passengerNoteSubmitted,TResult? Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult? Function()?  stopPolling,TResult? Function()?  historyStarted,TResult? Function()?  nextPageRequested,TResult? Function( double latitude,  double longitude)?  driverLocationUpdated,TResult? Function( String tripId)?  loadReceipt,TResult? Function( String tripId)?  loadInvoice,TResult? Function( String tripId,  String languageCode)?  loadInvoicePdf,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that.tripId);case _PollingTick() when pollingTick != null:
 return pollingTick();case _CancelRequested() when cancelRequested != null:
-return cancelRequested();case _PassengerNoteSubmitted() when passengerNoteSubmitted != null:
+return cancelRequested(_that.note);case _PassengerNoteSubmitted() when passengerNoteSubmitted != null:
 return passengerNoteSubmitted(_that.passengerNote);case _CompensationClaimSubmitted() when compensationClaimSubmitted != null:
 return compensationClaimSubmitted(_that.note,_that.evidenceUrls);case _StopPolling() when stopPolling != null:
 return stopPolling();case _HistoryStarted() when historyStarted != null:
@@ -339,33 +339,67 @@ String toString() {
 
 
 class _CancelRequested implements TripEvent {
-  const _CancelRequested();
+  const _CancelRequested({this.note});
   
 
+ final  String? note;
 
-
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CancelRequestedCopyWith<_CancelRequested> get copyWith => __$CancelRequestedCopyWithImpl<_CancelRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CancelRequested);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CancelRequested&&(identical(other.note, note) || other.note == note));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,note);
 
 @override
 String toString() {
-  return 'TripEvent.cancelRequested()';
+  return 'TripEvent.cancelRequested(note: $note)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$CancelRequestedCopyWith<$Res> implements $TripEventCopyWith<$Res> {
+  factory _$CancelRequestedCopyWith(_CancelRequested value, $Res Function(_CancelRequested) _then) = __$CancelRequestedCopyWithImpl;
+@useResult
+$Res call({
+ String? note
+});
 
 
+
+
+}
+/// @nodoc
+class __$CancelRequestedCopyWithImpl<$Res>
+    implements _$CancelRequestedCopyWith<$Res> {
+  __$CancelRequestedCopyWithImpl(this._self, this._then);
+
+  final _CancelRequested _self;
+  final $Res Function(_CancelRequested) _then;
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? note = freezed,}) {
+  return _then(_CancelRequested(
+note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

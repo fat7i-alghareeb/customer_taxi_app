@@ -7,6 +7,7 @@ import '../../../../core/utils/result.dart';
 import '../entities/trip_entity.dart';
 import '../entities/trip_invoice_entity.dart';
 import '../entities/trip_receipt_entity.dart';
+import '../entities/waiting_fee_settlement_entity.dart';
 import '../repositories/trip_repository.dart';
 import '../../data/datasources/trip_remote_datasource.dart';
 
@@ -21,9 +22,14 @@ class TripFacade {
     return _repository.getTripById(id);
   }
 
-  Future<Result<TripEntity>> cancelTrip(String id) {
+  Future<Result<TripEntity?>> getActiveTrip() {
+    printC('[TripFacade] getActiveTrip');
+    return _repository.getActiveTrip();
+  }
+
+  Future<Result<TripEntity>> cancelTrip(String id, {String? note}) {
     printC('[TripFacade] cancelTrip id=$id');
-    return _repository.cancelTrip(id);
+    return _repository.cancelTrip(id, note: note);
   }
 
   Future<Result<TripEntity>> updatePassengerNote({
@@ -35,6 +41,20 @@ class TripFacade {
       tripId: tripId,
       passengerNote: passengerNote,
     );
+  }
+
+  Future<Result<void>> rateTrip({
+    required String tripId,
+    required int stars,
+    String? comment,
+  }) {
+    printC('[TripFacade] rateTrip id=$tripId stars=$stars');
+    return _repository.rateTrip(tripId: tripId, stars: stars, comment: comment);
+  }
+
+  Future<Result<WaitingFeeSettlementEntity>> settleWaitingFee(String tripId) {
+    printC('[TripFacade] settleWaitingFee id=$tripId');
+    return _repository.settleWaitingFee(tripId);
   }
 
   Future<Result<TripCompensationClaimEntity>> submitCompensationClaim({

@@ -1,10 +1,12 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
 
-import 'home/root_home_tab_section.dart';
+import 'home/active_trip_gate.dart';
 import 'nav/root_bottom_nav_bar.dart';
 import 'profile/root_profile_tab_section.dart';
 import 'trip/root_trip_tab_section.dart';
+
+import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart';
 
 import 'package:customertaxi/features/root/presentation/ui/widgets/root_drawer_content.dart';
 
@@ -51,6 +53,11 @@ class _RootBodyState extends State<RootBody> {
   void _onTabSelected(int index) {
     printM('[RootBody] _onTabSelected index=$index');
     FocusManager.instance.primaryFocus?.unfocus();
+    // Re-resolve the active trip whenever the Home tab is opened so its realtime
+    // channel is (re)joined and the live trip view appears if one exists.
+    if (index == RootTab.home.index) {
+      getIt<ActiveTripCubit>().refresh();
+    }
     if (index == _currentIndex) {
       return;
     }
@@ -90,7 +97,7 @@ class _RootBodyState extends State<RootBody> {
   List<Widget> _buildPages() {
     return <Widget>[
       const RootProfileTabSection(),
-      const RootHomeTabSection(),
+      const ActiveTripGate(),
       const RootTripTabSection(),
     ];
   }

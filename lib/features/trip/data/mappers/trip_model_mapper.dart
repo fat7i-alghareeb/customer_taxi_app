@@ -15,6 +15,7 @@ extension TripModelMapper on TripModel {
     currencyCode: currencyCode,
     createdAtUtc: createdAtUtc,
     scheduledAtUtc: scheduledAtUtc,
+    arrivedAtUtc: arrivedAtUtc,
     stops: stops.map((s) => s.toStopEntity).toList(),
     vehicleTypeName: vehicleTypeName,
     driverLat: driverLat,
@@ -26,6 +27,8 @@ extension TripModelMapper on TripModel {
     encodedOverviewPolyline: encodedOverviewPolyline,
     routeSegments: routeSegments.map((s) => s.toEntity).toList(),
     passengerNote: passengerNote,
+    passengerRating: passengerRating,
+    ratingComment: ratingComment,
   );
 }
 
@@ -104,6 +107,9 @@ extension TripWaitingSessionModelMapper on TripWaitingSessionModel {
     minutes: minutes,
     estimatedFee: estimatedFee,
     isActive: isActive,
+    ratePerMinute: ratePerMinute,
+    graceMinutes: graceMinutes,
+    billableMinutes: billableMinutes,
   );
 }
 

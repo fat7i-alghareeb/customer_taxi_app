@@ -13,6 +13,7 @@ abstract class TripEntity with _$TripEntity {
     required String currencyCode,
     required DateTime createdAtUtc,
     DateTime? scheduledAtUtc,
+    DateTime? arrivedAtUtc,
     @Default([]) List<TripStopEntity> stops,
     String? vehicleTypeName,
     double? driverLat,
@@ -24,6 +25,8 @@ abstract class TripEntity with _$TripEntity {
     String? encodedOverviewPolyline,
     @Default([]) List<TripRouteSegmentEntity> routeSegments,
     String? passengerNote,
+    int? passengerRating,
+    String? ratingComment,
   }) = _TripEntity;
 }
 
@@ -93,6 +96,9 @@ abstract class TripWaitingSessionEntity with _$TripWaitingSessionEntity {
     int? minutes,
     double? estimatedFee,
     @Default(false) bool isActive,
+    @Default(0) double ratePerMinute,
+    @Default(10) int graceMinutes,
+    int? billableMinutes,
   }) = _TripWaitingSessionEntity;
 }
 

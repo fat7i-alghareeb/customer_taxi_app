@@ -4,15 +4,23 @@ import '../../../../core/utils/result.dart';
 import '../entities/trip_entity.dart';
 import '../entities/trip_invoice_entity.dart';
 import '../entities/trip_receipt_entity.dart';
+import '../entities/waiting_fee_settlement_entity.dart';
 import '../../data/datasources/trip_remote_datasource.dart';
 
 abstract class TripRepository {
   Future<Result<TripEntity>> getTripById(String id);
-  Future<Result<TripEntity>> cancelTrip(String id);
+  Future<Result<TripEntity?>> getActiveTrip();
+  Future<Result<TripEntity>> cancelTrip(String id, {String? note});
   Future<Result<TripEntity>> updatePassengerNote({
     required String tripId,
     required String? passengerNote,
   });
+  Future<Result<void>> rateTrip({
+    required String tripId,
+    required int stars,
+    String? comment,
+  });
+  Future<Result<WaitingFeeSettlementEntity>> settleWaitingFee(String tripId);
   Future<Result<TripCompensationClaimEntity>> submitCompensationClaim({
     required String tripId,
     required String note,

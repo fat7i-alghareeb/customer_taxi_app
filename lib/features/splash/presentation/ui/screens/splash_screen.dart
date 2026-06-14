@@ -1,7 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
-import '../widgets/premium_splash_logo.dart';
-import '../widgets/splash_map_warmup_progress_widget.dart';
 import '../widgets/splash_map_warmup_widget.dart';
 
 /// Unified cinematic splash screen.
@@ -18,18 +16,24 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold.body(
-      scaffoldConfig: AppScaffoldConfig(
-        backgroundColor: context.primary,
+      scaffoldConfig: const AppScaffoldConfig(
         safeArea: [],
       ),
-      child: const Stack(
+      child: Stack(
         fit: StackFit.expand,
         children: [
-          SplashMapWarmupWidget(),
-          Center(child: PremiumSplashLogo()),
-          SplashMapWarmupProgressWidget(),
+          const SplashMapWarmupWidget(),
+          Image.asset(
+            Assets.images.splashScreen.path,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
         ],
       ),
     );
   }
 }
+
+
+

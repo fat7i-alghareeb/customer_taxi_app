@@ -45,6 +45,28 @@ class AppStrings {
   static String get bookingDetails => 'bookingDetails'.tr();
   /// Cancel - إلغاء - Annuleren - Abbrechen - Anuluj - Скасувати - Annuler - Cancelar - Anulează
   static String get cancel => 'cancel'.tr();
+  /// Yes, cancel - نعم، إلغاء - Ja, annuleren - Ja, stornieren - Tak, anuluj - Так, скасувати - Oui, annuler - Sí, cancelar - Da, anulează
+  static String get cancelConfirm => 'cancelConfirm'.tr();
+  /// Keep ride - الإبقاء على الرحلة - Behoud rit - Fahrt behalten - Zachowaj przejazd - Залишити поїздку - Garder le trajet - Mantener viaje - Păstrează cursa
+  static String get cancelKeep => 'cancelKeep'.tr();
+  /// Booked by mistake - تم الحجز بالخطأ - Per ongeluk geboekt - Versehentlich gebucht - Zarezerwowano przez pomyłkę - Замовлено помилково - Réservé par erreur - Reservado por error - Rezervat din greșeală
+  static String get cancelReasonBookedByMistake => 'cancelReasonBookedByMistake'.tr();
+  /// Driver is too far or taking too long - السائق بعيد جداً أو يتأخر - Chauffeur is te ver of duurt te lang - Fahrer ist zu weit weg oder dauert zu lange - Kierowca jest za daleko lub jedzie zbyt długo - Водій задалеко або надто довго їде - Le chauffeur est trop loin ou trop lent - El conductor está muy lejos o tarda demasiado - Șoferul e prea departe sau întârzie
+  static String get cancelReasonDriverTooLong => 'cancelReasonDriverTooLong'.tr();
+  /// Found another ride - وجدت رحلة أخرى - Andere rit gevonden - Andere Fahrt gefunden - Znalazłem inny przejazd - Знайшов іншу поїздку - J'ai trouvé un autre trajet - Encontré otro viaje - Am găsit altă cursă
+  static String get cancelReasonFoundAnother => 'cancelReasonFoundAnother'.tr();
+  /// Other - أخرى - Anders - Sonstiges - Inne - Інше - Autre - Otro - Altul
+  static String get cancelReasonOther => 'cancelReasonOther'.tr();
+  /// Tell us why (optional) - أخبرنا بالسبب (اختياري) - Vertel ons waarom (optioneel) - Sagen Sie uns warum (optional) - Napisz dlaczego (opcjonalnie) - Напишіть, чому (необов'язково) - Dites-nous pourquoi (facultatif) - Dinos por qué (opcional) - Spune-ne de ce (opțional)
+  static String get cancelReasonOtherHint => 'cancelReasonOtherHint'.tr();
+  /// My plans changed - تغيّرت خططي - Mijn plannen zijn gewijzigd - Meine Pläne haben sich geändert - Zmieniły się moje plany - Мої плани змінилися - Mes plans ont changé - Cambiaron mis planes - Mi s-au schimbat planurile
+  static String get cancelReasonPlansChanged => 'cancelReasonPlansChanged'.tr();
+  /// Why are you cancelling? - لماذا تريد الإلغاء؟ - Waarom annuleer je? - Warum stornieren Sie? - Dlaczego anulujesz? - Чому скасовуєте? - Pourquoi annulez-vous ? - ¿Por qué cancelas? - De ce anulezi?
+  static String get cancelSheetReasonLabel => 'cancelSheetReasonLabel'.tr();
+  /// Free cancellation — you'll be fully refunded. - إلغاء مجاني — سيتم رد المبلغ بالكامل. - Gratis annuleren — je wordt volledig terugbetaald. - Kostenlose Stornierung — Sie werden vollständig erstattet. - Bezpłatna anulacja — otrzymasz pełny zwrot. - Безкоштовне скасування — кошти повернуться повністю. - Annulation gratuite — vous serez intégralement remboursé. - Cancelación gratuita — se te reembolsará por completo. - Anulare gratuită — vei fi rambursat integral.
+  static String get cancelSheetRefundNote => 'cancelSheetRefundNote'.tr();
+  /// Cancel ride - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulează cursa
+  static String get cancelSheetTitle => 'cancelSheetTitle'.tr();
   /// For airport rides, a free waiting time of 30 minutes applies after the agreed arrival time. - بالنسبة لرحلات المطار، يُطبَّق وقت انتظار مجاني مدته 30 دقيقة بعد وقت الوصول المتفق عليه. - Voor luchthavenritten geldt een gratis wachttijd van 30 minuten na de afgesproken aankomsttijd. - Für Flughafenfahrten gilt eine kostenlose Wartezeit von 30 Minuten nach der vereinbarten Ankunftszeit. - W przypadku przejazdów na lotnisko obowiązuje bezpłatny czas oczekiwania wynoszący 30 minut po uzgodnionym czasie przyjazdu. - Для поїздок в аеропорт діє безкоштовний час очікування 30 хвилин після узгодженого часу прибуття. - Pour les trajets vers l'aéroport, un temps d'attente gratuit de 30 minutes s'applique après l'heure d'arrivée convenue. - Para los viajes al aeropuerto se aplica un tiempo de espera gratuito de 30 minutos después de la hora de llegada acordada. - Pentru cursele spre aeroport se aplică un timp de așteptare gratuit de 30 de minute după ora de sosire convenită.
   static String get cancellationPolicyAirport1 => 'cancellationPolicyAirport1'.tr();
   /// If the customer is not present within these 30 minutes, a waiting fee of €0.15 per minute is charged, provided the driver agrees to continue waiting. - إذا لم يحضر العميل خلال هذه الدقائق الثلاثين، تُفرض رسوم انتظار قدرها €0.15 لكل دقيقة، شريطة موافقة السائق على متابعة الانتظار. - Indien de klant niet binnen deze 30 minuten aanwezig is, wordt een wachttarief van €0,15 per minuut in rekening gebracht, mits de chauffeur akkoord gaat met verder wachten. - Wenn der Kunde innerhalb dieser 30 Minuten nicht anwesend ist, wird eine Wartegebühr von €0,15 pro Minute berechnet, sofern der Fahrer dem weiteren Warten zustimmt. - Jeśli klient nie pojawi się w ciągu tych 30 minut, naliczana jest opłata za oczekiwanie w wysokości €0,15 za minutę, pod warunkiem że kierowca zgodzi się na dalsze oczekiwanie. - Якщо клієнт не з'явиться протягом цих 30 хвилин, стягується плата за очікування в розмірі €0,15 за хвилину, за умови що водій погоджується продовжувати чекати. - Si le client n'est pas présent dans ces 30 minutes, des frais d'attente de €0,15 par minute sont facturés, à condition que le chauffeur accepte de continuer à attendre. - Si el cliente no está presente dentro de estos 30 minutos, se cobra una tarifa de espera de €0,15 por minuto, siempre que el conductor acepte seguir esperando. - Dacă clientul nu este prezent în aceste 30 de minute, se percepe o taxă de așteptare de €0,15 pe minut, cu condiția ca șoferul să fie de acord să aștepte în continuare.
@@ -525,6 +547,32 @@ class AppStrings {
   static String get profileSaveSuccess => 'profileSaveSuccess'.tr();
   /// Complete Your Profile - أكمل ملفك الشخصي - Voltooi uw profiel - Profil vervollständigen - Uzupełnij profil - Заповніть профіль - Complétez votre profil - Complete su perfil - Completează profilul
   static String get profileSetupTitle => 'profileSetupTitle'.tr();
+  /// Rate your trip - قيّم رحلتك - Beoordeel uw rit - Bewerten Sie Ihre Fahrt - Oceń przejazd - Оцініть поїздку - Évaluez votre trajet - Califica tu viaje - Evaluează cursa
+  static String get rateTripCta => 'rateTripCta'.tr();
+  /// Thanks for your trip! - شكراً على رحلتك! - Bedankt voor je rit! - Danke für Ihre Fahrt! - Dziękujemy za przejazd! - Дякуємо за поїздку! - Merci pour votre trajet ! - ¡Gracias por tu viaje! - Mulțumim pentru cursă!
+  static String get ratingHeaderTitle => 'ratingHeaderTitle'.tr();
+  /// Thanks for your great review! Would you like to share your experience on Google? - شكراً على تقييمك الرائع! هل ترغب بمشاركة تجربتك على غوغل؟ - Bedankt voor je geweldige beoordeling. Zou je jouw ervaring willen delen op Google? - Danke für Ihre tolle Bewertung! Möchten Sie Ihre Erfahrung auf Google teilen? - Dziękujemy za świetną opinię! Czy chcesz podzielić się swoim doświadczeniem w Google? - Дякуємо за чудовий відгук! Бажаєте поділитися своїм досвідом у Google? - Merci pour votre excellente évaluation ! Souhaitez-vous partager votre expérience sur Google ? - ¡Gracias por tu gran valoración! ¿Te gustaría compartir tu experiencia en Google? - Mulțumim pentru recenzia ta grozavă! Vrei să-ți împărtășești experiența pe Google?
+  static String get ratingHighPrompt => 'ratingHighPrompt'.tr();
+  /// Great! - رائع! - Geweldig! - Großartig! - Świetnie! - Чудово! - Génial ! - ¡Genial! - Grozav!
+  static String get ratingHighTitle => 'ratingHighTitle'.tr();
+  /// We appreciate your feedback. Have a nice day! - نحن نقدّر ملاحظاتك. نتمنى لك يوماً سعيداً! - We waarderen je feedback. Fijne dag! - Wir schätzen Ihr Feedback. Schönen Tag noch! - Doceniamy Twoją opinię. Miłego dnia! - Ми цінуємо ваш відгук. Гарного дня! - Nous apprécions votre retour. Bonne journée ! - Valoramos tus comentarios. ¡Que tengas un buen día! - Apreciem feedbackul tău. O zi bună!
+  static String get ratingLowThanks => 'ratingLowThanks'.tr();
+  /// Edit rating - تعديل التقييم - Wijzig beoordeling - Bewertung ändern - Zmień ocenę - Змінити оцінку - Modifier l'évaluation - Editar valoración - Modifică evaluarea
+  static String get ratingModify => 'ratingModify'.tr();
+  /// Maybe later - ربما لاحقاً - Misschien later - Vielleicht später - Może później - Можливо, пізніше - Peut-être plus tard - Quizás más tarde - Poate mai târziu
+  static String get ratingShareNo => 'ratingShareNo'.tr();
+  /// Yes, review us on Google - نعم، قيّمنا على غوغل - Ja, beoordeel ons op Google - Ja, bewerten Sie uns auf Google - Tak, oceń nas w Google - Так, оцініть нас у Google - Oui, évaluez-nous sur Google - Sí, califícanos en Google - Da, evaluează-ne pe Google
+  static String get ratingShareYes => 'ratingShareYes'.tr();
+  /// Submit - إرسال - Verzenden - Senden - Wyślij - Надіслати - Envoyer - Enviar - Trimite
+  static String get ratingSubmit => 'ratingSubmit'.tr();
+  /// How was your experience? - كيف كانت تجربتك؟ - Hoe was je ervaring? - Wie war Ihre Erfahrung? - Jak oceniasz swoje doświadczenie? - Яким був ваш досвід? - Comment s'est passée votre expérience ? - ¿Cómo fue tu experiencia? - Cum a fost experiența ta?
+  static String get ratingSubtitle => 'ratingSubtitle'.tr();
+  /// Thank you! - شكراً! - Bedankt! - Danke! - Dziękujemy! - Дякуємо! - Merci ! - ¡Gracias! - Mulțumim!
+  static String get ratingThanksHeading => 'ratingThanksHeading'.tr();
+  /// How was your trip? - كيف كانت رحلتك؟ - Hoe was uw rit? - Wie war Ihre Fahrt? - Jak oceniasz przejazd? - Якою була ваша поїздка? - Comment s'est passé votre trajet ? - ¿Cómo fue tu viaje? - Cum a fost cursa ta?
+  static String get ratingTitle => 'ratingTitle'.tr();
+  /// Your rating - تقييمك - Jouw beoordeling - Ihre Bewertung - Twoja ocena - Ваша оцінка - Votre évaluation - Tu valoración - Evaluarea ta
+  static String get ratingYourRating => 'ratingYourRating'.tr();
   /// Distance - المسافة - Afstand - Entfernung - Dystans - Відстань - Distance - Distancia - Distanță
   static String get receiptDistanceLabel => 'receiptDistanceLabel'.tr();
   /// {km} km - {km} كم - {km} km - {km} km - {km} km - {km} км - {km} km - {km} km - {km} km
@@ -689,6 +737,8 @@ class AppStrings {
   static String get tooManyRequests => 'tooManyRequests'.tr();
   /// Your Trip - رحلتك - Uw Rit - Ihre Fahrt - Twój przejazd - Ваша поїздка - Votre Trajet - Su Viaje - Călătoria ta
   static String get tripActiveTitle => 'tripActiveTitle'.tr();
+  /// Please get in within {time} - الرجاء الركوب خلال {time} - Stap binnen {time} in - Bitte steigen Sie innerhalb von {time} ein - Wsiądź w ciągu {time} - Сідайте протягом {time} - Veuillez monter dans {time} - Sube en un plazo de {time} - Te rugăm să urci în {time}
+  static String get tripArrivedBoardWithin => 'tripArrivedBoardWithin'.tr();
   /// Cancel Trip - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulează cursa
   static String get tripCancelButton => 'tripCancelButton'.tr();
   /// Are you sure you want to cancel this trip? - هل أنت متأكد أنك تريد إلغاء هذه الرحلة؟ - Weet u zeker dat u deze rit wilt annuleren? - Möchten Sie diese Fahrt wirklich stornieren? - Czy na pewno chcesz anulować ten przejazd? - Ви впевнені, що хочете скасувати поїздку? - Voulez-vous vraiment annuler ce trajet ? - ¿Está seguro de que desea cancelar este viaje? - Sigur doriți să anulați această cursă?
@@ -753,6 +803,10 @@ class AppStrings {
   static String get tripStatusScheduled => 'tripStatusScheduled'.tr();
   /// Completed at {time} - اكتمل في {time} - Voltooid om {time} - Abgeschlossen um {time} - Ukończono o {time} - Завершено о {time} - Terminé à {time} - Completado a las {time} - Finalizată la {time}
   static String get tripStopCompletedAt => 'tripStopCompletedAt'.tr();
+  /// Waiting fee: {amount} - رسوم الانتظار: {amount} - Wachttarief: {amount} - Wartegebühr: {amount} - Opłata za oczekiwanie: {amount} - Плата за очікування: {amount} - Frais d'attente : {amount} - Tarifa de espera: {amount} - Taxă de așteptare: {amount}
+  static String get tripWaitingFeeAccruing => 'tripWaitingFeeAccruing'.tr();
+  /// Free waiting time is over. A per-minute fee now applies. - انتهى وقت الانتظار المجاني. تُطبّق الآن رسوم لكل دقيقة. - De gratis wachttijd is voorbij. Er geldt nu een tarief per minuut. - Die kostenlose Wartezeit ist vorbei. Es gilt nun eine Gebühr pro Minute. - Bezpłatny czas oczekiwania się skończył. Obowiązuje opłata za minutę. - Безкоштовний час очікування завершився. Тепер діє плата за хвилину. - Le temps d'attente gratuit est terminé. Des frais à la minute s'appliquent désormais. - El tiempo de espera gratuito ha terminado. Ahora se aplica una tarifa por minuto. - Timpul de așteptare gratuit s-a încheiat. Acum se aplică o taxă pe minut.
+  static String get tripWaitingGraceOver => 'tripWaitingGraceOver'.tr();
   /// Tue - ثلا - Di - Di - Wt - Вт - Mar - Mar - Mar
   static String get tue => 'tue'.tr();
   /// Tuesday - الثلاثاء - Dinsdag - Dienstag - Wtorek - Вівторок - Mardi - Martes - Marți
@@ -801,6 +855,14 @@ class AppStrings {
   static String get validationUnknown => 'validationUnknown'.tr();
   /// Verify Code - تحقق من الرمز - Code verifiëren - Code verifizieren - Weryfikuj kod - Підтвердити код - Vérifier le code - Verificar código - Verifică codul
   static String get verifyOtp => 'verifyOtp'.tr();
+  /// No outstanding waiting fee. - لا توجد رسوم انتظار مستحقة. - Geen openstaand wachttarief. - Keine offene Wartegebühr. - Brak zaległej opłaty za oczekiwanie. - Немає несплаченої плати за очікування. - Aucun frais d'attente impayé. - No hay tarifa de espera pendiente. - Nicio taxă de așteptare restantă.
+  static String get waitingFeeNothingDue => 'waitingFeeNothingDue'.tr();
+  /// Waiting fee paid. Thank you! - تم دفع رسوم الانتظار. شكراً! - Wachttarief betaald. Bedankt! - Wartegebühr bezahlt. Danke! - Opłata za oczekiwanie opłacona. Dziękujemy! - Плату за очікування сплачено. Дякуємо! - Frais d'attente payés. Merci ! - Tarifa de espera pagada. ¡Gracias! - Taxa de așteptare a fost plătită. Mulțumim!
+  static String get waitingFeePaidSuccess => 'waitingFeePaidSuccess'.tr();
+  /// Pay outstanding fee - دفع الرسوم المستحقة - Openstaand tarief betalen - Offene Gebühr bezahlen - Zapłać zaległą opłatę - Сплатити заборгованість - Payer les frais dus - Pagar tarifa pendiente - Plătește taxa restantă
+  static String get waitingFeePayCta => 'waitingFeePayCta'.tr();
+  /// Payment failed. Please try again. - فشل الدفع. الرجاء المحاولة مرة أخرى. - Betaling mislukt. Probeer het opnieuw. - Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut. - Płatność nie powiodła się. Spróbuj ponownie. - Не вдалося здійснити оплату. Спробуйте ще раз. - Le paiement a échoué. Veuillez réessayer. - El pago falló. Inténtalo de nuevo. - Plata a eșuat. Te rugăm să încerci din nou.
+  static String get waitingFeePayFailed => 'waitingFeePayFailed'.tr();
   /// Wed - أرب - Wo - Mi - Śr - Ср - Mer - Mié - Mie
   static String get wed => 'wed'.tr();
   /// Wednesday - الأربعاء - Woensdag - Mittwoch - Środa - Середа - Mercredi - Miércoles - Miercuri

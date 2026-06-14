@@ -16,6 +16,9 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
   scheduledAtUtc: json['scheduledAtUtc'] == null
       ? null
       : DateTime.parse(json['scheduledAtUtc'] as String),
+  arrivedAtUtc: json['arrivedAtUtc'] == null
+      ? null
+      : DateTime.parse(json['arrivedAtUtc'] as String),
   stops:
       (json['stops'] as List<dynamic>?)
           ?.map((e) => TripStopModel.fromJson(e as Map<String, dynamic>))
@@ -51,6 +54,8 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
           .toList() ??
       const [],
   passengerNote: json['passengerNote'] as String?,
+  passengerRating: (json['passengerRating'] as num?)?.toInt(),
+  ratingComment: json['ratingComment'] as String?,
 );
 
 Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
@@ -62,6 +67,7 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'currencyCode': instance.currencyCode,
       'createdAtUtc': instance.createdAtUtc.toIso8601String(),
       'scheduledAtUtc': instance.scheduledAtUtc?.toIso8601String(),
+      'arrivedAtUtc': instance.arrivedAtUtc?.toIso8601String(),
       'stops': instance.stops,
       'vehicleTypeName': instance.vehicleTypeName,
       'driverLat': instance.driverLat,
@@ -73,6 +79,8 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'encodedOverviewPolyline': instance.encodedOverviewPolyline,
       'routeSegments': instance.routeSegments,
       'passengerNote': instance.passengerNote,
+      'passengerRating': instance.passengerRating,
+      'ratingComment': instance.ratingComment,
     };
 
 _TripRouteSegmentModel _$TripRouteSegmentModelFromJson(
@@ -200,6 +208,9 @@ _TripWaitingSessionModel _$TripWaitingSessionModelFromJson(
   minutes: (json['minutes'] as num?)?.toInt(),
   estimatedFee: (json['estimatedFee'] as num?)?.toDouble(),
   isActive: json['isActive'] as bool? ?? false,
+  ratePerMinute: (json['ratePerMinute'] as num?)?.toDouble() ?? 0,
+  graceMinutes: (json['graceMinutes'] as num?)?.toInt() ?? 10,
+  billableMinutes: (json['billableMinutes'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$TripWaitingSessionModelToJson(
@@ -213,6 +224,9 @@ Map<String, dynamic> _$TripWaitingSessionModelToJson(
   'minutes': instance.minutes,
   'estimatedFee': instance.estimatedFee,
   'isActive': instance.isActive,
+  'ratePerMinute': instance.ratePerMinute,
+  'graceMinutes': instance.graceMinutes,
+  'billableMinutes': instance.billableMinutes,
 };
 
 _TripSummaryModel _$TripSummaryModelFromJson(Map<String, dynamic> json) =>

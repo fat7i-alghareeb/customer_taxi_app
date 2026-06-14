@@ -4,7 +4,7 @@ part of 'trip_bloc.dart';
 class TripEvent with _$TripEvent {
   const factory TripEvent.started(String tripId) = _Started;
   const factory TripEvent.pollingTick() = _PollingTick;
-  const factory TripEvent.cancelRequested() = _CancelRequested;
+  const factory TripEvent.cancelRequested({String? note}) = _CancelRequested;
   const factory TripEvent.passengerNoteSubmitted(String? passengerNote) =
       _PassengerNoteSubmitted;
   const factory TripEvent.compensationClaimSubmitted({

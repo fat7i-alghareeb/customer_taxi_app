@@ -8,6 +8,7 @@ import '../../../../core/utils/result.dart';
 import '../../domain/entities/trip_entity.dart';
 import '../../domain/entities/trip_invoice_entity.dart';
 import '../../domain/entities/trip_receipt_entity.dart';
+import '../../domain/entities/waiting_fee_settlement_entity.dart';
 import '../../domain/repositories/trip_repository.dart';
 import '../datasources/trip_remote_datasource.dart';
 import '../mappers/trip_model_mapper.dart';
@@ -29,10 +30,24 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<Result<TripEntity>> cancelTrip(String id) {
+  Future<Result<TripEntity?>> getActiveTrip() {
+    return runAsResult(() async {
+      printM('[TripRepository] getActiveTrip');
+      final model = await _remote.getActiveTrip();
+      if (model == null) {
+        printG('[TripRepository] getActiveTrip none');
+        return null;
+      }
+      printG('[TripRepository] getActiveTrip status=${model.status}');
+      return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<TripEntity>> cancelTrip(String id, {String? note}) {
     return runAsResult(() async {
       printM('[TripRepository] cancelTrip id=$id');
-      final model = await _remote.cancelTrip(id);
+      final model = await _remote.cancelTrip(id, note: note);
       printG('[TripRepository] cancelTrip success');
       return model.toEntity;
     });
@@ -51,6 +66,29 @@ class TripRepositoryImpl implements TripRepository {
       );
       printG('[TripRepository] updatePassengerNote success');
       return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<void>> rateTrip({
+    required String tripId,
+    required int stars,
+    String? comment,
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] rateTrip id=$tripId stars=$stars');
+      await _remote.rateTrip(tripId: tripId, stars: stars, comment: comment);
+      printG('[TripRepository] rateTrip success');
+    });
+  }
+
+  @override
+  Future<Result<WaitingFeeSettlementEntity>> settleWaitingFee(String tripId) {
+    return runAsResult(() async {
+      printM('[TripRepository] settleWaitingFee id=$tripId');
+      final settlement = await _remote.settleWaitingFee(tripId);
+      printG('[TripRepository] settleWaitingFee amount=${settlement.amount}');
+      return settlement;
     });
   }
 

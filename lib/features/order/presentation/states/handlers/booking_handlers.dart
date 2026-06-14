@@ -265,9 +265,9 @@ extension _BookingHandlers on OrderBloc {
           returnURL: 'customertaxi://stripe-redirect',
           billingDetailsCollectionConfiguration:
               const BillingDetailsCollectionConfiguration(
-                email: CollectionMode.always,
-                name: CollectionMode.always,
-                address: AddressCollectionMode.full,
+                email: CollectionMode.automatic,
+                name: CollectionMode.automatic,
+                address: AddressCollectionMode.automatic,
               ),
         ),
       );

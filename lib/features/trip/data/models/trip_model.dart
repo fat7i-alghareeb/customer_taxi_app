@@ -13,6 +13,7 @@ abstract class TripModel with _$TripModel {
     required String currencyCode,
     required DateTime createdAtUtc,
     DateTime? scheduledAtUtc,
+    DateTime? arrivedAtUtc,
     @Default([]) List<TripStopModel> stops,
     String? vehicleTypeName,
     double? driverLat,
@@ -24,6 +25,8 @@ abstract class TripModel with _$TripModel {
     String? encodedOverviewPolyline,
     @Default([]) List<TripRouteSegmentModel> routeSegments,
     String? passengerNote,
+    int? passengerRating,
+    String? ratingComment,
   }) = _TripModel;
 
   factory TripModel.fromJson(Map<String, dynamic> json) =>
@@ -108,6 +111,9 @@ abstract class TripWaitingSessionModel with _$TripWaitingSessionModel {
     int? minutes,
     double? estimatedFee,
     @Default(false) bool isActive,
+    @Default(0) double ratePerMinute,
+    @Default(10) int graceMinutes,
+    int? billableMinutes,
   }) = _TripWaitingSessionModel;
 
   factory TripWaitingSessionModel.fromJson(Map<String, dynamic> json) =>
