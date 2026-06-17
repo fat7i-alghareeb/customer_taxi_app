@@ -49,6 +49,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   double _interpolatedBearing = 0.0;
 
   bool _arrivalAlertPlayed = false;
+  bool _cancelledSheetShown = false;
   TripStatus? _lastSeenTripStatus;
 
   @override
@@ -234,9 +235,6 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   }
 
   Future<void> _handleTripCancelled(BuildContext context) async {
-    final hasActiveTrip = getIt<ActiveTripCubit>().state.hasActiveTrip;
-    if (!hasActiveTrip) return;
-
     await TripCancelledSuccessSheet.show(context);
     if (context.mounted) {
       context.read<OrderBloc>().add(
@@ -251,7 +249,10 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
       success: (trip) {
         printC('[ActiveTripBody] trip state changed status=${trip.status}');
         if (trip.status == TripStatus.cancelled) {
-          unawaited(_handleTripCancelled(context));
+          if (!_cancelledSheetShown) {
+            _cancelledSheetShown = true;
+            unawaited(_handleTripCancelled(context));
+          }
           return;
         }
 
