@@ -1,6 +1,8 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/core/services/session/auth_state_notifier.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
+import 'package:customertaxi/features/order/domain/entities/order_location_entity.dart';
+import 'package:customertaxi/features/order/presentation/ui/screens/location_picker_screen.dart';
 import '../../../../root/presentation/ui/screens/root_screen.dart';
 import '../../states/profile_bloc.dart';
 import '../../../constants/forms/profile_forms.dart';
@@ -109,6 +111,30 @@ class _ProfileBodyState extends State<ProfileBody> {
                   title: AppStrings.phoneNumber,
                   enabled: false,
                 ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.05),
+                AppSpacing.lg.verticalSpace,
+                _HomeAddressField(
+                  label: state.homeAddressTouched
+                      ? state.pendingHomeAddressLabel
+                      : state.currentUser?.homeAddressLabel,
+                  onPick: () async {
+                    final location =
+                        await context.pushNamed<OrderLocationEntity>(
+                      LocationPickerScreen.pageName,
+                    );
+                    if (location != null && context.mounted) {
+                      context.read<ProfileBloc>().add(
+                            ProfileEvent.homeAddressSelected(
+                              label: location.label,
+                              latitude: location.latitude,
+                              longitude: location.longitude,
+                            ),
+                          );
+                    }
+                  },
+                  onClear: () => context.read<ProfileBloc>().add(
+                        const ProfileEvent.homeAddressSelected(),
+                      ),
+                ).animate().fadeIn(delay: 375.ms).slideY(begin: 0.05),
                 AppSpacing.xxl.verticalSpace,
                 ReactiveFormConsumer(
                   builder: (context, form, _) {
@@ -119,7 +145,9 @@ class _ProfileBodyState extends State<ProfileBody> {
                     final authName = (authUser?.name ?? '').trim();
                     final nameChanged = currentName != authName;
                     final photoChanged = state.pendingPhoto != null;
-                    final hasChanges = nameChanged || photoChanged;
+                    final addressChanged = state.homeAddressTouched;
+                    final hasChanges =
+                        nameChanged || photoChanged || addressChanged;
 
                     if (!widget.isSetupMode && !hasChanges) {
                       return const SizedBox.shrink();
@@ -153,6 +181,94 @@ class _ProfileBodyState extends State<ProfileBody> {
           ),
         );
       },
+    );
+  }
+}
+
+/// Optional home-address row. Tapping opens the map picker; when a value is set
+/// it shows the label with a clear button (keeps the field optional).
+class _HomeAddressField extends StatelessWidget {
+  const _HomeAddressField({
+    required this.label,
+    required this.onPick,
+    required this.onClear,
+  });
+
+  final String? label;
+  final VoidCallback onPick;
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasValue = label != null && label!.trim().isNotEmpty;
+    final onSurface = context.colorScheme.onSurface;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.profileHomeAddress,
+          style: AppTextStyles.s14w400.copyWith(
+            color: onSurface.withValues(alpha: 0.7),
+          ),
+        ),
+        AppSpacing.sm.verticalSpace,
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onPick,
+            borderRadius: BorderRadius.circular(AppRadii.lg.r),
+            child: Container(
+              padding: REdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.md,
+              ),
+              decoration: BoxDecoration(
+                color: context.colorScheme.surface,
+                borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                border: Border.all(
+                  color: onSurface.withValues(alpha: 0.12),
+                  width: 1.r,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.home_outlined,
+                    size: 20.r,
+                    color: hasValue ? context.primary : onSurface.withValues(alpha: 0.5),
+                  ),
+                  AppSpacing.md.horizontalSpace,
+                  Expanded(
+                    child: Text(
+                      hasValue ? label! : AppStrings.profileHomeAddressHint,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.s14w400.copyWith(
+                        color: hasValue
+                            ? onSurface
+                            : onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                  if (hasValue)
+                    IconButton(
+                      onPressed: onClear,
+                      visualDensity: VisualDensity.compact,
+                      icon: Icon(Icons.close, size: 18.r, color: onSurface),
+                    )
+                  else
+                    Icon(
+                      Icons.map_outlined,
+                      size: 20.r,
+                      color: onSurface.withValues(alpha: 0.5),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

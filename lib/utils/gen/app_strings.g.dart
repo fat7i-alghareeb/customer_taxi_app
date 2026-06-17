@@ -13,6 +13,8 @@ class AppStrings {
   static String get activeTripLiveEta => 'activeTripLiveEta'.tr();
   /// Vehicle type: {type} - نوع المركبة: {type} - Voertuigtype: {type} - Fahrzeugtyp: {type} - Typ pojazdu: {type} - Тип авто: {type} - Type de véhicule : {type} - Tipo de vehículo: {type} - Tip vehicul: {type}
   static String get activeTripLookForCar => 'activeTripLookForCar'.tr();
+  /// Driver running late? - السائق متأخر؟ - Chauffeur te laat? - Fahrer verspätet? - Kierowca się spóźnia? - Водій запізнюється? - Chauffeur en retard ? - ¿El conductor se retrasa? - Șoferul întârzie?
+  static String get activeTripReportDriverLate => 'activeTripReportDriverLate'.tr();
   /// Add stop - إضافة توقف - Stop toevoegen - Halt hinzufügen - Dodaj przystanek - Додати зупинку - Ajouter un arrêt - Añadir parada - Adaugă oprire
   static String get addStop => 'addStop'.tr();
   /// Apr - أبر - Apr - Apr - Kwi - Квіт - Avril - Abr - Apr
@@ -63,7 +65,7 @@ class AppStrings {
   static String get cancelReasonPlansChanged => 'cancelReasonPlansChanged'.tr();
   /// Why are you cancelling? - لماذا تريد الإلغاء؟ - Waarom annuleer je? - Warum stornieren Sie? - Dlaczego anulujesz? - Чому скасовуєте? - Pourquoi annulez-vous ? - ¿Por qué cancelas? - De ce anulezi?
   static String get cancelSheetReasonLabel => 'cancelSheetReasonLabel'.tr();
-  /// Free cancellation — you'll be fully refunded. - إلغاء مجاني — سيتم رد المبلغ بالكامل. - Gratis annuleren — je wordt volledig terugbetaald. - Kostenlose Stornierung — Sie werden vollständig erstattet. - Bezpłatna anulacja — otrzymasz pełny zwrot. - Безкоштовне скасування — кошти повернуться повністю. - Annulation gratuite — vous serez intégralement remboursé. - Cancelación gratuita — se te reembolsará por completo. - Anulare gratuită — vei fi rambursat integral.
+  /// Free if cancelled within 1 hour of booking; after that, 20% of the fare is refunded. - مجاني إذا أُلغيت خلال ساعة من الحجز؛ بعد ذلك يُسترد 20٪ من قيمة الرحلة. - Gratis bij annulering binnen 1 uur na boeking; daarna wordt 20% van het ritbedrag terugbetaald. - Kostenlos bei Stornierung innerhalb von 1 Stunde nach Buchung; danach werden 20 % des Fahrpreises erstattet. - Bezpłatnie, jeśli anulujesz w ciągu 1 godziny od rezerwacji; później zwracane jest 20% kwoty przejazdu. - Безкоштовно, якщо скасувати протягом 1 години після бронювання; після цього повертається 20% вартості поїздки. - Gratuit si annulé dans l'heure suivant la réservation ; ensuite, 20 % du montant est remboursé. - Gratis si cancelas dentro de 1 hora desde la reserva; después, se reembolsa el 20% del importe. - Gratuit dacă anulezi în maximum 1 oră de la rezervare; după aceea, se rambursează 20% din sumă.
   static String get cancelSheetRefundNote => 'cancelSheetRefundNote'.tr();
   /// Cancel ride - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulează cursa
   static String get cancelSheetTitle => 'cancelSheetTitle'.tr();
@@ -259,6 +261,8 @@ class AppStrings {
   static String get invalidOtp => 'invalidOtp'.tr();
   /// Please enter a valid phone number. - يرجى إدخال رقم هاتف صالح. - Voer een geldig telefoonnummer in. - Bitte geben Sie eine gültige Telefonnummer ein. - Wprowadź prawidłowy numer telefonu. - Введіть правильний номер телефону. - Veuillez entrer un numéro valide. - Por favor, introduzca un número de teléfono válido. - Vă rugăm să introduceți un număr de telefon valid.
   static String get invalidPhoneNumber => 'invalidPhoneNumber'.tr();
+  /// Close - إغلاق - Sluiten - Schließen - Zamknij - Закрити - Fermer - Cerrar - Închide
+  static String get invoiceClose => 'invoiceClose'.tr();
   /// Download - تنزيل - Downloaden - Herunterladen - Pobierz - Завантажити - Télécharger - Descargar - Descarcă
   static String get invoiceDownload => 'invoiceDownload'.tr();
   /// Couldn't save the invoice. - تعذّر حفظ الفاتورة. - De factuur kon niet worden opgeslagen. - Rechnung konnte nicht gespeichert werden. - Nie udało się zapisać faktury. - Не вдалося зберегти рахунок. - Impossible d'enregistrer la facture. - No se pudo guardar la factura. - Factura nu a putut fi salvată.
@@ -273,12 +277,18 @@ class AppStrings {
   static String get invoiceNotIssuedYet => 'invoiceNotIssuedYet'.tr();
   /// Invoice no. - رقم الفاتورة - Factuurnummer - Rechnungsnummer - Nr faktury - № рахунка - N° de facture - N.º de factura - Nr. factură
   static String get invoiceNumberLabel => 'invoiceNumberLabel'.tr();
+  /// Open - فتح - Openen - Öffnen - Otwórz - Відкрити - Ouvrir - Abrir - Deschide
+  static String get invoiceOpen => 'invoiceOpen'.tr();
+  /// Couldn't open the file. No app available to open PDFs. - تعذّر فتح الملف. لا يوجد تطبيق لفتح ملفات PDF. - Kan het bestand niet openen. Geen app beschikbaar om pdf's te openen. - Datei konnte nicht geöffnet werden. Keine App zum Öffnen von PDFs verfügbar. - Nie można otworzyć pliku. Brak aplikacji do otwierania plików PDF. - Не вдалося відкрити файл. Немає програми для відкриття PDF. - Impossible d'ouvrir le fichier. Aucune application disponible pour ouvrir les PDF. - No se pudo abrir el archivo. No hay ninguna app para abrir PDF. - Fișierul nu a putut fi deschis. Nicio aplicație pentru deschiderea PDF-urilor.
+  static String get invoiceOpenFailed => 'invoiceOpenFailed'.tr();
   /// Open settings - فتح الإعدادات - Instellingen openen - Einstellungen öffnen - Otwórz ustawienia - Відкрити налаштування - Ouvrir les réglages - Abrir ajustes - Deschide setările
   static String get invoiceOpenSettings => 'invoiceOpenSettings'.tr();
   /// Storage permission denied. - تم رفض إذن التخزين. - Toestemming voor opslag geweigerd. - Speicherberechtigung verweigert. - Odmówiono uprawnień do pamięci. - Доступ до сховища відхилено. - Autorisation de stockage refusée. - Permiso de almacenamiento denegado. - Permisiune de stocare refuzată.
   static String get invoicePermissionDenied => 'invoicePermissionDenied'.tr();
   /// Storage access is blocked. Open settings to allow it. - الوصول إلى التخزين محظور. افتح الإعدادات للسماح به. - Opslagtoegang is geblokkeerd. Open instellingen om dit toe te staan. - Speicherzugriff ist blockiert. Öffne die Einstellungen, um ihn zuzulassen. - Dostęp do pamięci jest zablokowany. Otwórz ustawienia, aby zezwolić. - Доступ до сховища заблоковано. Відкрийте налаштування, щоб дозволити. - Accès au stockage bloqué. Ouvrez les réglages pour l'autoriser. - El acceso al almacenamiento está bloqueado. Abre los ajustes para permitirlo. - Accesul la stocare este blocat. Deschide setările pentru a-l permite.
   static String get invoicePermissionPermanentlyDenied => 'invoicePermissionPermanentlyDenied'.tr();
+  /// Invoice saved - تم حفظ الفاتورة - Factuur opgeslagen - Rechnung gespeichert - Faktura zapisana - Рахунок збережено - Facture enregistrée - Factura guardada - Factură salvată
+  static String get invoiceSavedDialogTitle => 'invoiceSavedDialogTitle'.tr();
   /// Couldn't save automatically — choose where to keep it. - تعذّر الحفظ تلقائيًا — اختر مكان الحفظ. - Automatisch opslaan lukte niet — kies waar je hem wilt bewaren. - Automatisches Speichern fehlgeschlagen — wähle einen Speicherort. - Automatyczny zapis nie powiódł się — wybierz, gdzie zachować plik. - Автоматичне збереження не вдалося — виберіть, куди зберегти. - Enregistrement automatique impossible — choisissez où le garder. - No se pudo guardar automáticamente — elige dónde guardarlo. - Salvarea automată a eșuat — alege unde să-l păstrezi.
   static String get invoiceSavedSharedFallback => 'invoiceSavedSharedFallback'.tr();
   /// Saved inside the app folder. Use your file manager to find it. - تم الحفظ داخل مجلد التطبيق. استخدم مدير الملفات للوصول إليه. - Opgeslagen in de app-map. Open je bestandsbeheer om hem te vinden. - Im App-Ordner gespeichert. Öffne den Dateimanager, um sie zu finden. - Zapisano w folderze aplikacji. Otwórz menedżera plików, aby go znaleźć. - Збережено у папці застосунку. Відкрийте файловий менеджер, щоб знайти його. - Enregistré dans le dossier de l'app. Ouvrez votre gestionnaire de fichiers pour le retrouver. - Guardado en la carpeta de la app. Abre el gestor de archivos para encontrarlo. - Salvat în folderul aplicației. Deschide managerul de fișiere pentru a-l găsi.
@@ -419,6 +429,10 @@ class AppStrings {
   static String get onboardingTitle3 => 'onboardingTitle3'.tr();
   /// Add Stop - إضافة توقف - Stop toevoegen - Halt hinzufügen - Dodaj przystanek - Додати зупинку - Ajouter un arrêt - Añadir parada - Adaugă oprire
   static String get orderAddStop => 'orderAddStop'.tr();
+  /// Includes 30 minutes of free waiting time. - يشمل 30 دقيقة انتظار مجاني. - Inclusief 30 minuten gratis wachttijd. - Inklusive 30 Minuten kostenloser Wartezeit. - Obejmuje 30 minut darmowego czasu oczekiwania. - Включає 30 хвилин безкоштовного очікування. - Comprend 30 minutes d'attente gratuite. - Incluye 30 minutos de espera gratuita. - Include 30 de minute de așteptare gratuită.
+  static String get orderAirportSubtitle => 'orderAirportSubtitle'.tr();
+  /// Airport pickup - استقبال من المطار - Luchthavenophaling - Flughafenabholung - Odbiór z lotniska - Зустріч в аеропорту - Prise en charge à l'aéroport - Recogida en aeropuerto - Preluare de la aeroport
+  static String get orderAirportTitle => 'orderAirportTitle'.tr();
   /// Order confirmed successfully. - تم تأكيد الطلب بنجاح. - Bestelling succesvol bevestigd. - Bestellung erfolgreich bestätigt. - Zamówienie potwierdzone pomyślnie. - Замовлення успішно підтверджено. - Commande confirmée avec succès. - Pedido confirmado con éxito. - Comandă confirmată cu succes.
   static String get orderConfirmedSuccess => 'orderConfirmedSuccess'.tr();
   /// Selected location - الموقع المحدد - Geselecteerde locatie - Ausgewählter Standort - Wybrana lokalizacja - Вибрана точка - Lieu sélectionné - Ubicación seleccionada - Locație selectată
@@ -531,6 +545,10 @@ class AppStrings {
   static String get profileDeleteAccountSuccess => 'profileDeleteAccountSuccess'.tr();
   /// Edit Profile - تعديل الملف الشخصي - Profiel bewerken - Profil bearbeiten - Edytuj profil - Редагувати профіль - Modifier le profil - Editar perfil - Editează profilul
   static String get profileEditTitle => 'profileEditTitle'.tr();
+  /// Home address - عنوان المنزل - Thuisadres - Heimatadresse - Adres domowy - Домашня адреса - Adresse du domicile - Dirección particular - Adresă de domiciliu
+  static String get profileHomeAddress => 'profileHomeAddress'.tr();
+  /// Add your home address (optional) - أضف عنوان منزلك (اختياري) - Voeg je thuisadres toe (optioneel) - Heimatadresse hinzufügen (optional) - Dodaj swój adres domowy (opcjonalnie) - Додайте домашню адресу (необов'язково) - Ajoutez votre adresse de domicile (facultatif) - Añade tu dirección particular (opcional) - Adaugă adresa de domiciliu (opțional)
+  static String get profileHomeAddressHint => 'profileHomeAddressHint'.tr();
   /// Full Name - الاسم الكامل - Volledige naam - Vollständiger Name - Imię i nazwisko - Повне ім'я - Nom complet - Nombre completo - Nume complet
   static String get profileName => 'profileName'.tr();
   /// Enter your name - أدخل اسمك - Voer uw naam in - Name eingeben - Wpisz imię - Введіть ім'я - Entrez votre nom - Introduzca su nombre - Introduceți numele
@@ -747,6 +765,10 @@ class AppStrings {
   static String get tripCancelConfirmNo => 'tripCancelConfirmNo'.tr();
   /// Yes, Cancel - نعم، إلغاء - Ja, annuleren - Ja, stornieren - Tak, anuluj - Так, скасувати - Oui, annuler - Sí, cancelar - Da, anulează
   static String get tripCancelConfirmYes => 'tripCancelConfirmYes'.tr();
+  /// Trip cancelled successfully - تم إلغاء الرحلة بنجاح - Rit succesvol geannuleerd - Fahrt erfolgreich storniert - Przejazd został pomyślnie anulowany - Поїздку успішно скасовано - Course annulée avec succès - Viaje cancelado con éxito - Cursă anulată cu succes
+  static String get tripCancelledSuccess => 'tripCancelledSuccess'.tr();
+  /// Your trip has been cancelled successfully. You can request a new ride anytime. - تم إلغاء رحلتك بنجاح. يمكنك طلب رحلة جديدة في أي وقت. - Je rit is succesvol geannuleerd. Je kunt op elk moment een nieuwe rit aanvragen. - Ihre Fahrt wurde erfolgreich storniert. Sie können jederzeit eine neue Fahrt anfordern. - Twój przejazd został pomyślnie anulowany. Możesz zamówić nowy przejazd w dowolnym momencie. - Вашу поїздку успішно скасовано. Ви можете замовити нову поїздку в будь-який час. - Votre course a été annulée avec succès. Vous pouvez demander une nouvelle course à tout moment. - Su viaje ha sido cancelado con éxito. Puede solicitar un nuevo viaje en cualquier momento. - Cursa ta a fost anulată cu succes. Poți solicita o cursă nouă oricând.
+  static String get tripCancelledSuccessDesc => 'tripCancelledSuccessDesc'.tr();
   /// Requested at - وقت الطلب - Aangevraagd op - Anfragezeit - Czas zgłoszenia - Час запиту - Demandé à - Solicitado a las - Solicitată la
   static String get tripCreatedAt => 'tripCreatedAt'.tr();
   /// Trip details - تفاصيل المشوار - Ritdetails - Fahrtdetails - Szczegóły kursu - Деталі поїздки - Détails de la course - Detalles del viaje - Detalii cursă

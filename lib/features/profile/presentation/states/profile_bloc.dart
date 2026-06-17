@@ -18,6 +18,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<_Started>(_onStarted);
     on<_NameSaved>(_onNameSaved);
     on<_PhotoSelected>(_onPhotoSelected);
+    on<_HomeAddressSelected>(_onHomeAddressSelected);
     on<_SaveRequested>(_onSaveRequested);
     on<_DeleteAccountRequested>(_onDeleteAccountRequested);
   }
@@ -52,19 +53,48 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(pendingPhoto: event.photo));
   }
 
+  void _onHomeAddressSelected(
+    _HomeAddressSelected event,
+    Emitter<ProfileState> emit,
+  ) {
+    emit(state.copyWith(
+      homeAddressTouched: true,
+      pendingHomeAddressLabel: event.label,
+      pendingHomeAddressLatitude: event.latitude,
+      pendingHomeAddressLongitude: event.longitude,
+    ));
+  }
+
   Future<void> _onSaveRequested(
     _SaveRequested event,
     Emitter<ProfileState> emit,
   ) async {
     final name = state.pendingName.trim();
-    if (name.isEmpty && state.pendingPhoto == null) return;
+    if (name.isEmpty && state.pendingPhoto == null && !state.homeAddressTouched) {
+      return;
+    }
 
     emit(state.copyWith(saveStatus: const BlocStatus.loading()));
+
+    // When the address was touched, send the pending selection (all-null clears
+    // it). Otherwise resend the current address so it is preserved unchanged.
+    final label = state.homeAddressTouched
+        ? state.pendingHomeAddressLabel
+        : state.currentUser?.homeAddressLabel;
+    final latitude = state.homeAddressTouched
+        ? state.pendingHomeAddressLatitude
+        : state.currentUser?.homeAddressLatitude;
+    final longitude = state.homeAddressTouched
+        ? state.pendingHomeAddressLongitude
+        : state.currentUser?.homeAddressLongitude;
 
     final Result<ProfileEntity> result = await _facade.updateProfile(
       UpdateUserProfileRequest(
         name: name.isEmpty ? null : name,
         photo: state.pendingPhoto,
+        homeAddressLabel: label,
+        homeAddressLatitude: latitude,
+        homeAddressLongitude: longitude,
       ),
     );
 
@@ -75,6 +105,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           saveStatus: BlocStatus<ProfileEntity>.success(user),
           currentUser: user,
           pendingPhoto: null,
+          homeAddressTouched: false,
+          pendingHomeAddressLabel: null,
+          pendingHomeAddressLatitude: null,
+          pendingHomeAddressLongitude: null,
         ));
       },
       failure: (message) {

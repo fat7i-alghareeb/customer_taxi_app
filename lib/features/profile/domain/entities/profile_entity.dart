@@ -9,5 +9,8 @@ abstract class ProfileEntity with _$ProfileEntity {
     String? name,
     required String phone,
     String? profilePhotoUrl,
+    String? homeAddressLabel,
+    double? homeAddressLatitude,
+    double? homeAddressLongitude,
   }) = _ProfileEntity;
 }

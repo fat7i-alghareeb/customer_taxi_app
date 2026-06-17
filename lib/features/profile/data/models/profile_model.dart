@@ -10,6 +10,9 @@ abstract class ProfileModel with _$ProfileModel {
     String? name,
     required String phone,
     String? profilePhotoUrl,
+    String? homeAddressLabel,
+    double? homeAddressLatitude,
+    double? homeAddressLongitude,
   }) = _ProfileModel;
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>

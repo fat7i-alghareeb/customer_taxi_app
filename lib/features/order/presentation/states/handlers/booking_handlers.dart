@@ -82,6 +82,17 @@ extension _BookingHandlers on OrderBloc {
     );
   }
 
+  void _onAirportToggled(
+    _AirportToggled event,
+    Emitter<OrderState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        booking: state.booking.copyWith(isAirport: event.isAirport),
+      ),
+    );
+  }
+
   void _onPaymentSheetDismissed(
     _PaymentSheetDismissed event,
     Emitter<OrderState> emit,
@@ -175,6 +186,7 @@ extension _BookingHandlers on OrderBloc {
         stops: stopCoords,
         scheduledAt: scheduledAtToSend,
         passengerNote: passengerNote.isEmpty ? null : passengerNote,
+        isAirport: state.booking.isAirport,
       ),
     );
 

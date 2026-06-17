@@ -3,6 +3,7 @@ import 'package:customertaxi/common/imports/imports.dart';
 import '../../../../constants/order_constants.dart';
 import '../../../../domain/entities/order_trip_car_option_entity.dart';
 import '../../../states/order_bloc.dart';
+import 'order_airport_toggle_widget.dart';
 import 'order_car_option_card_widget.dart';
 import 'order_passenger_note_field_widget.dart';
 import 'order_route_summary_timeline_widget.dart';
@@ -181,6 +182,10 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
           ],
         ),
         AppSpacing.xl.verticalSpace,
+        OrderAirportToggleWidget(
+          isAirport: state.booking.isAirport,
+        ).animate().fadeIn(delay: 320.ms).slideY(begin: 0.08),
+        AppSpacing.md.verticalSpace,
         OrderPassengerNoteFieldWidget(
           note: state.booking.passengerNote,
         ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.08),

@@ -69,10 +69,13 @@ class _TripRatingSheetState extends State<_TripRatingSheet> {
 
   Future<void> _openGoogleReview() async {
     try {
-      await launchUrl(
+      final launched = await launchUrl(
         Uri.parse(_googleReviewUrl),
-        mode: LaunchMode.externalApplication,
+        mode: LaunchMode.inAppBrowserView,
       );
+      if (!launched) {
+        printR('[TripRatingSheet] Google review launch returned false');
+      }
     } catch (e) {
       printR('[TripRatingSheet] could not open Google review: $e');
     }

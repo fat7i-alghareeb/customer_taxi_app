@@ -79,12 +79,14 @@ class OrderRequestTripParams {
     required this.stops,
     this.scheduledAt,
     this.passengerNote,
+    this.isAirport = false,
   });
 
   final String quoteId;
   final List<OrderCoordinateParam> stops;
   final DateTime? scheduledAt;
   final String? passengerNote;
+  final bool isAirport;
 
   Map<String, dynamic> toJson() => {
         'quoteId': quoteId,
@@ -93,5 +95,6 @@ class OrderRequestTripParams {
           'scheduledAt': scheduledAt!.toUtc().toIso8601String(),
         if (passengerNote?.trim().isNotEmpty == true)
           'passengerNote': passengerNote!.trim(),
+        'isAirport': isAirport,
       };
 }

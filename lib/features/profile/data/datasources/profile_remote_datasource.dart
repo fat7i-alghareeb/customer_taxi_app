@@ -36,6 +36,21 @@ class ProfileRemoteDataSource {
       if (param.name != null) {
         formData.fields.add(MapEntry('Name', param.name!));
       }
+      // Home address fields are only sent when present; omitting all three lets
+      // the backend clear a previously-saved address.
+      if (param.homeAddressLabel != null) {
+        formData.fields.add(MapEntry('HomeAddressLabel', param.homeAddressLabel!));
+      }
+      if (param.homeAddressLatitude != null) {
+        formData.fields.add(
+          MapEntry('HomeAddressLatitude', param.homeAddressLatitude!.toString()),
+        );
+      }
+      if (param.homeAddressLongitude != null) {
+        formData.fields.add(
+          MapEntry('HomeAddressLongitude', param.homeAddressLongitude!.toString()),
+        );
+      }
       if (param.photo != null) {
         formData.files.add(
           MapEntry(

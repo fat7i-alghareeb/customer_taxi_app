@@ -46,10 +46,12 @@ class OrderRequestTripEntity {
     required this.stops,
     this.scheduledAt,
     this.passengerNote,
+    this.isAirport = false,
   });
 
   final String quoteId;
   final List<OrderStopCoordinateEntity> stops;
   final DateTime? scheduledAt;
   final String? passengerNote;
+  final bool isAirport;
 }

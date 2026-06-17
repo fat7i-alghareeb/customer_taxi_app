@@ -12,6 +12,7 @@ abstract class OrderBookingSlice with _$OrderBookingSlice {
     @Default(OrderScheduleMode.now) OrderScheduleMode scheduleMode,
     DateTime? scheduledAt,
     @Default('') String passengerNote,
+    @Default(false) bool isAirport,
     @Default(BlocStatus<OrderTripResponseEntity>.initial())
     BlocStatus<OrderTripResponseEntity> tripRequestStatus,
     @Default(BlocStatus<void>.initial())

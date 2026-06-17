@@ -14,7 +14,9 @@ import 'package:customertaxi/features/trip/domain/entities/driver_location_entit
 import 'package:customertaxi/features/trip/presentation/coordinators/trip_completion_coordinator.dart';
 import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
+import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/cancel_trip_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancelled_success_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/compensation_claim_dialog.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/completed_action_chips.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_sheet.dart';
@@ -231,10 +233,28 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     }());
   }
 
+  Future<void> _handleTripCancelled(BuildContext context) async {
+    final hasActiveTrip = getIt<ActiveTripCubit>().state.hasActiveTrip;
+    if (!hasActiveTrip) return;
+
+    await TripCancelledSuccessSheet.show(context);
+    if (context.mounted) {
+      context.read<OrderBloc>().add(
+            const OrderEvent.collapseRequested(),
+          );
+      getIt<ActiveTripCubit>().clear();
+    }
+  }
+
   void _handleTripStateChange(BuildContext context, TripState state) {
     state.tripStatus.whenOrNull(
       success: (trip) {
         printC('[ActiveTripBody] trip state changed status=${trip.status}');
+        if (trip.status == TripStatus.cancelled) {
+          unawaited(_handleTripCancelled(context));
+          return;
+        }
+
         final isRealTransitionToArrived =
             _lastSeenTripStatus != TripStatus.driverArrived &&
             trip.status == TripStatus.driverArrived;
@@ -412,8 +432,10 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
           listener: (context, state) {
             state.cancelStatus.whenOrNull(
               failure: (msg) {
-                showSuccessOverlay(context, msg);
-                _showCompensationClaimDialog(context);
+                // A failed cancellation just surfaces the error. (Compensation
+                // claims are a separate flow reached from the late-driver action,
+                // not a consequence of a cancel failure.)
+                showErrorOverlay(context, msg);
               },
             );
           },
@@ -497,6 +519,8 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                               trip: trip,
                               cancelStatus: state.cancelStatus,
                               onCancelPressed: () => _showCancelDialog(context),
+                              onCompensationPressed: () =>
+                                  _showCompensationClaimDialog(context),
                             )
                             .animate()
                             .fadeIn(duration: 350.ms)
@@ -662,11 +686,13 @@ class _GlassmorphicTripStatusSheet extends StatefulWidget {
     required this.trip,
     required this.cancelStatus,
     required this.onCancelPressed,
+    required this.onCompensationPressed,
   });
 
   final TripEntity trip;
   final BlocStatus<void> cancelStatus;
   final VoidCallback onCancelPressed;
+  final VoidCallback onCompensationPressed;
 
   @override
   State<_GlassmorphicTripStatusSheet> createState() =>
@@ -684,6 +710,7 @@ class _GlassmorphicTripStatusSheetState
   TripEntity get trip => widget.trip;
   BlocStatus<void> get cancelStatus => widget.cancelStatus;
   VoidCallback get onCancelPressed => widget.onCancelPressed;
+  VoidCallback get onCompensationPressed => widget.onCompensationPressed;
 
   @override
   void initState() {
@@ -921,6 +948,15 @@ class _GlassmorphicTripStatusSheetState
           isLoading: cancelStatus.isLoading,
           onTap: onCancelPressed,
           child: AppButtonChild.label(AppStrings.activeTripCancelRide),
+        ),
+
+        // Late-driver compensation claim (policy: >20 min late => 5% back).
+        AppSpacing.sm.verticalSpace,
+        Center(
+          child: TextButton(
+            onPressed: onCompensationPressed,
+            child: Text(AppStrings.activeTripReportDriverLate),
+          ),
         ),
       ],
     );

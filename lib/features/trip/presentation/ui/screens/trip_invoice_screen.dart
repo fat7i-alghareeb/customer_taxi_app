@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -28,7 +29,9 @@ class TripInvoiceScreen extends StatelessWidget {
       create: (_) => getIt<TripBloc>()
         ..add(
           TripEvent.loadInvoicePdf(tripId: tripId, languageCode: languageCode),
-        ),
+        )
+        // Also load invoice details so we can name the file by its invoice number.
+        ..add(TripEvent.loadInvoice(tripId)),
       child: AppScaffold.appBar(
         appBarConfig: AppScaffoldAppBarConfig(title: AppStrings.invoiceTitle),
         child: _TripInvoiceBody(tripId: tripId, languageCode: languageCode),
@@ -50,7 +53,20 @@ class _TripInvoiceBody extends StatefulWidget {
 class _TripInvoiceBodyState extends State<_TripInvoiceBody> {
   bool _downloading = false;
 
-  String _fileName() => 'fat7i-invoice-${widget.tripId}.pdf';
+  /// Names the file by its invoice number when loaded, e.g. `OT-2026-000123.pdf`.
+  /// Falls back to the trip-based name if invoice details aren't available yet.
+  String _fileName() {
+    final number = context
+        .read<TripBloc>()
+        .state
+        .invoiceStatus
+        .getDataWhenSuccess
+        ?.invoiceNumber;
+    if (number != null && number.trim().isNotEmpty) {
+      return '${number.trim()}.pdf';
+    }
+    return 'fat7i-invoice-${widget.tripId}.pdf';
+  }
 
   Future<void> _onSharePressed(Uint8List bytes) async {
     try {
@@ -85,8 +101,12 @@ class _TripInvoiceBodyState extends State<_TripInvoiceBody> {
       );
       if (!mounted) return;
       switch (result) {
-        case FileDownloadSuccess(:final location):
-          _showSnack(_successMessage(location));
+        case FileDownloadSuccess(:final location, :final path):
+          if (path != null && path.isNotEmpty) {
+            await _showSavedDialog(path, bytes);
+          } else {
+            _showSnack(_successMessage(location));
+          }
         case FileDownloadFailure(:final reason):
           _handleFailure(reason);
       }
@@ -105,6 +125,47 @@ class _TripInvoiceBodyState extends State<_TripInvoiceBody> {
         return AppStrings.invoiceSavedToAppFolder;
       case FileDownloadLocation.sharedTemporarily:
         return AppStrings.invoiceSavedSharedFallback;
+    }
+  }
+
+  /// Shows where the PDF was saved with actions to open it externally or share it.
+  Future<void> _showSavedDialog(String path, Uint8List bytes) async {
+    if (!mounted) return;
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(AppStrings.invoiceSavedDialogTitle),
+        content: SelectableText(path, style: AppTextStyles.s14w400),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(AppStrings.invoiceClose),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              _onSharePressed(bytes);
+            },
+            child: Text(AppStrings.invoiceShare),
+          ),
+          FilledButton(
+            onPressed: () async {
+              Navigator.of(dialogContext).pop();
+              await _openFile(path);
+            },
+            child: Text(AppStrings.invoiceOpen),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _openFile(String path) async {
+    final result = await OpenFilex.open(path);
+    if (!mounted) return;
+    if (result.type != ResultType.done) {
+      printY('[TripInvoice] open failed=${result.type} ${result.message}');
+      _showSnack(AppStrings.invoiceOpenFailed);
     }
   }
 

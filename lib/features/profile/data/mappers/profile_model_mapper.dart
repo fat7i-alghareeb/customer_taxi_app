@@ -7,5 +7,8 @@ extension ProfileModelMapper on ProfileModel {
     name: name,
     phone: phone,
     profilePhotoUrl: profilePhotoUrl,
+    homeAddressLabel: homeAddressLabel,
+    homeAddressLatitude: homeAddressLatitude,
+    homeAddressLongitude: homeAddressLongitude,
   );
 }

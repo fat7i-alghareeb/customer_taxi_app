@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_saver/file_saver.dart';
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,9 +14,10 @@ import 'file_download_service.dart';
 /// Cascading save strategy:
 ///
 /// **Android**
-///   1. FileSaver app-external save.
-///   2. App-private external dir (`Android/data/<pkg>/files/Download/`).
-///   3. Share sheet ("Save to Drive/Files/etc.").
+///   1. Public Downloads via native MediaStore (`/storage/emulated/0/Download/`).
+///   2. FileSaver app-external save.
+///   3. App-private external dir (`Android/data/<pkg>/files/Download/`).
+///   4. Share sheet ("Save to Drive/Files/etc.").
 ///
 /// **iOS**
 ///   1. App Documents dir (visible in Files when `UIFileSharingEnabled` +
@@ -25,6 +26,11 @@ import 'file_download_service.dart';
 @LazySingleton(as: FileDownloadService)
 class FileDownloadServiceImpl implements FileDownloadService {
   FileDownloadServiceImpl();
+
+  /// Native channel that saves into the public Downloads folder via MediaStore.
+  /// Mirrors the handler registered in `MainActivity` (`dev.fat7i.customertaxi`).
+  static const MethodChannel _downloadsChannel =
+      MethodChannel('dev.fat7i.customertaxi/downloads');
 
   @override
   Future<FileDownloadResult> saveBytes({
@@ -70,7 +76,14 @@ class FileDownloadServiceImpl implements FileDownloadService {
       }
     }
 
-    // Strategy 1: file_saver uses app-scoped storage on Android, which avoids
+    // Strategy 1: public Downloads folder via native MediaStore. Permission-less
+    // on SDK 29+; on ≤ 28 it relies on the storage permission granted above.
+    final publicResult = await _publicDownloadsSave(bytes, fileName, mimeType);
+    if (publicResult != null) {
+      return publicResult;
+    }
+
+    // Strategy 2: file_saver uses app-scoped storage on Android, which avoids
     // public-storage plugin metadata conflicts in release builds.
     try {
       final path = await FileSaver.instance.saveFile(
@@ -103,6 +116,40 @@ class FileDownloadServiceImpl implements FileDownloadService {
     }
 
     return _appExternalDirFallback(bytes, fileName, mimeType);
+  }
+
+  /// Strategy 1 — public Downloads via native MediaStore. Returns a success with
+  /// the absolute file path, or `null` to let the caller fall through to the
+  /// app-scoped strategies (e.g. plugin missing, denied, or any platform error).
+  Future<FileDownloadResult?> _publicDownloadsSave(
+    Uint8List bytes,
+    String fileName,
+    String mimeType,
+  ) async {
+    try {
+      final path = await _downloadsChannel.invokeMethod<String>(
+        'saveToDownloads',
+        <String, dynamic>{
+          'bytes': bytes,
+          'fileName': fileName,
+          'mimeType': mimeType,
+        },
+      );
+      if (path != null && path.isNotEmpty) {
+        printY('[FileDownload] mediaStore ok path=$path');
+        return FileDownloadSuccess(
+          location: FileDownloadLocation.publicDownloads,
+          path: path,
+        );
+      }
+    } on MissingPluginException catch (e) {
+      printY('[FileDownload] mediaStore channel missing: $e');
+    } on PlatformException catch (e) {
+      printY('[FileDownload] mediaStore failed: ${e.code} ${e.message}');
+    } catch (e) {
+      printY('[FileDownload] mediaStore unexpected: $e');
+    }
+    return null;
   }
 
   /// Strategy 3 — Android app-private external dir. Always succeeds on devices

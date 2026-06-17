@@ -15,5 +15,11 @@ abstract class ProfileState with _$ProfileState {
     ProfileEntity? currentUser,
     @Default('') String pendingName,
     File? pendingPhoto,
+    // Pending home address selection. `homeAddressTouched` distinguishes "not
+    // changed" (keep current) from "cleared" (all values null → remove).
+    @Default(false) bool homeAddressTouched,
+    String? pendingHomeAddressLabel,
+    double? pendingHomeAddressLatitude,
+    double? pendingHomeAddressLongitude,
   }) = _ProfileState;
 }

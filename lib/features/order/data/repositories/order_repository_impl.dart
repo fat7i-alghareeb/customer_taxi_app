@@ -174,6 +174,7 @@ class OrderRepositoryImpl implements OrderRepository {
               .toList(),
           scheduledAt: request.scheduledAt,
           passengerNote: request.passengerNote,
+          isAirport: request.isAirport,
         ),
       );
 
