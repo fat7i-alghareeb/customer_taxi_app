@@ -12,6 +12,7 @@ extension OrderSavedLocationCacheModelMapper on OrderSavedLocationCacheModel {
         label: label,
         primaryName: primaryName,
         secondaryAddress: secondaryAddress,
+        isAirport: isAirport,
       ),
       isPinned: isPinned,
       touchedAtMillis: touchedAtMillis,
@@ -28,9 +29,9 @@ extension OrderSavedLocationEntityMapper on OrderSavedLocationEntity {
       label: location.label,
       primaryName: location.primaryName,
       secondaryAddress: location.secondaryAddress,
+      isAirport: location.isAirport,
       isPinned: isPinned,
       touchedAtMillis: touchedAtMillis,
     );
   }
 }
-

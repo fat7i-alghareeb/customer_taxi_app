@@ -182,10 +182,12 @@ class OrderVehicleSelectionStepWidget extends StatelessWidget {
           ],
         ),
         AppSpacing.xl.verticalSpace,
-        OrderAirportToggleWidget(
-          isAirport: state.booking.isAirport,
-        ).animate().fadeIn(delay: 320.ms).slideY(begin: 0.08),
-        AppSpacing.md.verticalSpace,
+        if (stops.first.isAirport) ...[
+          OrderAirportToggleWidget(
+            flightNumber: state.booking.flightNumber,
+          ).animate().fadeIn(delay: 320.ms).slideY(begin: 0.08),
+          AppSpacing.md.verticalSpace,
+        ],
         OrderPassengerNoteFieldWidget(
           note: state.booking.passengerNote,
         ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.08),

@@ -41,7 +41,9 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
                   AppSpacing.xs.horizontalSpace,
                   Text(
                     durationText!,
-                    style: AppTextStyles.s12w500.copyWith(color: context.primary),
+                    style: AppTextStyles.s12w500.copyWith(
+                      color: context.primary,
+                    ),
                   ),
                 ],
                 if ((durationText ?? '').isNotEmpty && distanceKm > 0) ...[
@@ -63,7 +65,9 @@ class OrderRouteSummaryTimelineWidget extends StatelessWidget {
                   AppSpacing.xs.horizontalSpace,
                   Text(
                     '${distanceKm.toStringAsFixed(1)} km',
-                    style: AppTextStyles.s12w500.copyWith(color: context.primary),
+                    style: AppTextStyles.s12w500.copyWith(
+                      color: context.primary,
+                    ),
                   ),
                 ],
               ],

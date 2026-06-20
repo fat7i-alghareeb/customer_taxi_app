@@ -44,7 +44,8 @@ class TripSummaryCard extends StatelessWidget {
                 ],
               ),
               AppSpacing.sm.verticalSpace,
-              if (trip.status == TripStatus.scheduled && trip.scheduledAtUtc != null) ...[
+              if (trip.scheduledAtUtc != null &&
+                  !trip.status.isTerminal) ...[
                 Text(
                   AppStrings.tripScheduledFor.replaceAll(
                     '{time}',

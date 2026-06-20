@@ -78,9 +78,7 @@ class OrderBody extends StatelessWidget {
             }
 
             printM('[OrderBody] system back -> collapseRequested');
-            context.read<OrderBloc>().add(
-              const OrderEvent.collapseRequested(),
-            );
+            context.read<OrderBloc>().add(const OrderEvent.collapseRequested());
           },
           child: Stack(
             fit: StackFit.expand,

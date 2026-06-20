@@ -13,11 +13,15 @@ class ProfileDeleteAccountButton extends StatelessWidget {
           prev.deleteAccountStatus != curr.deleteAccountStatus,
       listener: (context, state) {
         state.deleteAccountStatus.whenOrNull(
-          success: (_) =>
-              showSuccessOverlay(context, AppStrings.profileDeleteAccountSuccess),
+          success: (_) => showSuccessOverlay(
+            context,
+            AppStrings.profileDeleteAccountSuccess,
+          ),
           failure: (message) => showErrorOverlay(
             context,
-            message.isNotEmpty ? message : AppStrings.profileDeleteAccountFailure,
+            message.isNotEmpty
+                ? message
+                : AppStrings.profileDeleteAccountFailure,
           ),
         );
       },

@@ -9,7 +9,8 @@ class OrderEvent with _$OrderEvent {
   const factory OrderEvent.mapPickCancelled() = _MapPickCancelled;
   const factory OrderEvent.vehicleStepBackPressed() = _VehicleStepBackPressed;
 
-  const factory OrderEvent.setOnMapPressed({required int index}) = _SetOnMapPressed;
+  const factory OrderEvent.setOnMapPressed({required int index}) =
+      _SetOnMapPressed;
 
   const factory OrderEvent.mapCameraTargetUpdated({
     required double latitude,
@@ -20,7 +21,8 @@ class OrderEvent with _$OrderEvent {
   const factory OrderEvent.confirmMapPointPressed() = _ConfirmMapPointPressed;
 
   const factory OrderEvent.activeStopChanged(int index) = _ActiveStopChanged;
-  const factory OrderEvent.stopQueryChanged(int index, String query) = _StopQueryChanged;
+  const factory OrderEvent.stopQueryChanged(int index, String query) =
+      _StopQueryChanged;
   const factory OrderEvent.stopCleared(int index) = _StopCleared;
   const factory OrderEvent.stopSuggestionSelected(
     int index,
@@ -29,7 +31,8 @@ class OrderEvent with _$OrderEvent {
 
   const factory OrderEvent.stopAdded() = _StopAdded;
   const factory OrderEvent.stopRemoved(int index) = _StopRemoved;
-  const factory OrderEvent.stopReordered(int oldIndex, int newIndex) = _StopReordered;
+  const factory OrderEvent.stopReordered(int oldIndex, int newIndex) =
+      _StopReordered;
 
   const factory OrderEvent.savedLocationPinToggled({
     required int stopIndex,
@@ -56,7 +59,8 @@ class OrderEvent with _$OrderEvent {
       _ScheduleTimeChanged;
   const factory OrderEvent.passengerNoteChanged(String note) =
       _PassengerNoteChanged;
-  const factory OrderEvent.airportToggled(bool isAirport) = _AirportToggled;
+  const factory OrderEvent.flightNumberChanged(String flightNumber) =
+      _FlightNumberChanged;
   const factory OrderEvent.confirmBookingDetailsPressed() =
       _ConfirmBookingDetailsPressed;
   const factory OrderEvent.paymentSheetDismissed() = _PaymentSheetDismissed;

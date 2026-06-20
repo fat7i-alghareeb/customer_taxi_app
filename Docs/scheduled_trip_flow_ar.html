@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الرحلة المجدولة – كيف تعمل؟</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:    #f97316;
+      --orange-dk: #ea580c;
+      --orange-lt: #fff7ed;
+      --blue:      #1d4ed8;
+      --blue-lt:   #eff6ff;
+      --green:     #16a34a;
+      --green-lt:  #f0fdf4;
+      --red:       #dc2626;
+      --red-lt:    #fef2f2;
+      --yellow:    #ca8a04;
+      --yellow-lt: #fefce8;
+      --gray:      #6b7280;
+      --gray-lt:   #f9fafb;
+      --border:    #e5e7eb;
+      --text:      #111827;
+    }
+
+    body {
+      font-family: 'Cairo', 'Arial', sans-serif;
+      background: #f1f5f9;
+      color: var(--text);
+      direction: rtl;
+      line-height: 1.9;
+      font-size: 15px;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 40px rgba(0,0,0,.10);
+    }
+
+    /* ── Cover ─────────────────────────────────────────────────────── */
+    .cover {
+      background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
+      color: #fff;
+      padding: 56px 48px 48px;
+      text-align: center;
+      position: relative;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 36px;
+      background: #fff;
+      clip-path: ellipse(60% 100% at 50% 100%);
+    }
+    .cover .logo { font-size: 3.5em; margin-bottom: 12px; }
+    .cover h1 { font-size: 2.2em; font-weight: 900; letter-spacing: -.5px; }
+    .cover .sub {
+      font-size: 1.05em;
+      opacity: .88;
+      margin-top: 10px;
+      max-width: 520px;
+      margin-inline: auto;
+    }
+    .cover .badge {
+      display: inline-block;
+      background: rgba(255,255,255,.2);
+      border: 1.5px solid rgba(255,255,255,.5);
+      border-radius: 999px;
+      padding: 4px 18px;
+      font-size: .88em;
+      margin-top: 18px;
+    }
+
+    /* ── Body ───────────────────────────────────────────────────────── */
+    .body { padding: 48px 48px 60px; }
+
+    .intro {
+      background: var(--gray-lt);
+      border-right: 5px solid var(--orange);
+      border-radius: 10px;
+      padding: 18px 22px;
+      font-size: 1.05em;
+      line-height: 2;
+      margin-bottom: 48px;
+      color: #374151;
+    }
+
+    /* ── Section title ──────────────────────────────────────────────── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.25em;
+      font-weight: 800;
+      color: var(--orange-dk);
+      margin: 44px 0 24px;
+      padding-bottom: 10px;
+      border-bottom: 2.5px solid var(--orange);
+    }
+    .section-title span { font-size: 1.3em; }
+
+    /* ── Overview flowchart ─────────────────────────────────────────── */
+    .flow-grid {
+      display: grid;
+      grid-template-columns: 1fr 28px 1fr 28px 1fr;
+      gap: 8px 0;
+      align-items: center;
+      margin: 20px 0 36px;
+    }
+    .flow-box {
+      background: var(--orange-lt);
+      border: 2px solid var(--orange);
+      border-radius: 10px;
+      text-align: center;
+      padding: 12px 8px;
+      font-weight: 700;
+      font-size: .92em;
+      line-height: 1.4;
+    }
+    .flow-box.final {
+      background: var(--orange);
+      color: #fff;
+      border-color: var(--orange-dk);
+    }
+    .flow-arrow {
+      text-align: center;
+      font-size: 1.4em;
+      color: var(--orange);
+      font-weight: 700;
+    }
+    /* vertical arrows between rows */
+    .flow-col-arrow {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 1.5em;
+      color: var(--orange);
+      line-height: 1;
+      margin: 2px 0;
+    }
+
+    /* ── Phase cards ────────────────────────────────────────────────── */
+    .phases { display: flex; flex-direction: column; gap: 22px; }
+    .phase-card {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px;
+      transition: box-shadow .2s;
+    }
+    .phase-card:hover { box-shadow: 0 4px 18px rgba(249,115,22,.12); }
+    .phase-num {
+      min-width: 46px;
+      height: 46px;
+      background: var(--orange);
+      color: #fff;
+      font-size: 1.3em;
+      font-weight: 900;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .phase-body { flex: 1; }
+    .phase-body h3 {
+      font-size: 1.08em;
+      font-weight: 800;
+      color: var(--orange-dk);
+      margin-bottom: 10px;
+    }
+    .phase-body ul { padding-right: 20px; }
+    .phase-body li { margin-bottom: 5px; }
+
+    /* ── Notification pills ─────────────────────────────────────────── */
+    .notif {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 9px;
+      font-size: .93em;
+      line-height: 1.6;
+    }
+    .notif.customer { background: var(--green-lt); border-right: 4px solid var(--green); }
+    .notif.admin    { background: var(--blue-lt);  border-right: 4px solid var(--blue);  }
+    .notif.danger   { background: var(--red-lt);   border-right: 4px solid var(--red);   }
+    .notif-icon { font-size: 1.15em; margin-top: 1px; flex-shrink: 0; }
+    .notif strong { font-weight: 700; }
+
+    /* ── Timeline ───────────────────────────────────────────────────── */
+    .timeline-wrap {
+      background: var(--gray-lt);
+      border-radius: 14px;
+      padding: 28px 24px 28px 32px;
+      position: relative;
+    }
+    .tl-line {
+      position: absolute;
+      right: 43px;
+      top: 36px;
+      bottom: 36px;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--orange), #fdba74);
+      border-radius: 99px;
+    }
+    .tl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+    .tl-item:last-child { margin-bottom: 0; }
+    .tl-dot {
+      min-width: 22px;
+      height: 22px;
+      background: var(--orange);
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2.5px var(--orange);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .tl-dot.gray { background: var(--gray); box-shadow: 0 0 0 2.5px var(--gray); }
+    .tl-dot.green { background: var(--green); box-shadow: 0 0 0 2.5px var(--green); }
+    .tl-content {}
+    .tl-time {
+      font-weight: 700;
+      font-size: .97em;
+      color: var(--text);
+    }
+    .tl-desc {
+      font-size: .88em;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    /* ── Reminder diagram ───────────────────────────────────────────── */
+    .reminder-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0;
+      position: relative;
+      overflow-x: auto;
+    }
+    .reminder-segment {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .reminder-segment::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      right: 50%; left: -50%;
+      height: 3px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .reminder-segment:first-child::before { display: none; }
+    .r-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2.5px currentColor;
+      background: currentColor;
+      z-index: 1;
+      flex-shrink: 0;
+      color: var(--orange);
+    }
+    .r-dot.green { color: var(--green); }
+    .r-dot.red   { color: var(--red);   }
+    .r-label {
+      font-size: .78em;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 8px;
+      color: var(--text);
+      max-width: 80px;
+    }
+    .r-sub {
+      font-size: .72em;
+      color: var(--gray);
+      text-align: center;
+      margin-top: 3px;
+      max-width: 80px;
+    }
+
+    /* ── Notes ──────────────────────────────────────────────────────── */
+    .notes { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+    .note-card {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--yellow-lt);
+      border-right: 4px solid var(--yellow);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: .95em;
+      line-height: 1.7;
+    }
+    .note-icon { font-size: 1.3em; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Status badges ──────────────────────────────────────────────── */
+    .badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: .84em;
+      font-weight: 700;
+    }
+    .status-badge.orange  { background: var(--orange-lt); color: var(--orange-dk); border: 1.5px solid var(--orange); }
+    .status-badge.blue    { background: var(--blue-lt);   color: var(--blue);      border: 1.5px solid var(--blue);  }
+    .status-badge.green   { background: var(--green-lt);  color: var(--green);     border: 1.5px solid var(--green); }
+    .status-badge.gray    { background: var(--gray-lt);   color: var(--gray);      border: 1.5px solid var(--border);}
+
+    /* ── State attention diagram ────────────────────────────────────── */
+    .attention-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .attention-box {
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+      font-size: .86em;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .attention-box .a-icon { font-size: 1.6em; display: block; margin-bottom: 5px; }
+    .attention-box.a1 { background: #f0fdf4; color: #15803d; border: 2px solid #86efac; }
+    .attention-box.a2 { background: #fefce8; color: #a16207; border: 2px solid #fde047; }
+    .attention-box.a3 { background: #fff7ed; color: #c2410c; border: 2px solid #fdba74; }
+    .attention-box.a4 { background: #fef2f2; color: #b91c1c; border: 2px solid #fca5a5; }
+
+    /* ── Footer ─────────────────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      margin-top: 56px;
+      padding-top: 20px;
+      border-top: 1.5px solid var(--border);
+      font-size: .85em;
+      color: var(--gray);
+      line-height: 1.9;
+    }
+
+    /* ── Print ──────────────────────────────────────────────────────── */
+    @media print {
+      body { background: #fff; font-size: 13px; }
+      .page { box-shadow: none; margin: 0; border-radius: 0; max-width: 100%; }
+      .cover::after { display: none; }
+      .body { padding: 32px 40px 40px; }
+      .phase-card:hover { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════════════ COVER ══════════════════════ -->
+  <div class="cover">
+    <div class="logo">🚕</div>
+    <h1>الرحلة المجدولة</h1>
+    <p class="sub">
+      ماذا يحدث عندما يحجز العميل رحلة مسبقة؟<br>
+      شرح كامل لكل مرحلة من لحظة الحجز حتى الوصول
+    </p>
+    <div class="badge">وثيقة غير تقنية · مخصصة للعميل</div>
+  </div>
+
+  <!-- ══════════════════════ BODY ═══════════════════════ -->
+  <div class="body">
+
+    <!-- Intro -->
+    <div class="intro">
+      الرحلة المجدولة هي خدمة تتيح للعميل حجز تاكسي لموعد محدد في المستقبل.
+      بعد إتمام الحجز والدفع، يتولى النظام تلقائياً تذكير الإدارة وتنظيم انطلاق السائق
+      في الوقت المناسب تماماً — دون الحاجة لأي تدخل يدوي من العميل.
+    </div>
+
+    <!-- ══ 1. Overview flowchart ══ -->
+    <div class="section-title"><span>🗺️</span> نظرة عامة على مراحل الرحلة</div>
+
+    <div class="flow-grid">
+      <div class="flow-box">📱<br>الحجز والدفع</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-box">✅<br>تأكيد الحجز</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-box">⏳<br>انتظار قبول الإدارة</div>
+
+      <div class="flow-col-arrow" style="grid-column:5">↓</div>
+
+      <div class="flow-box">👨‍💼<br>قبول الإدارة</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">⏰<br>تذكيرات تلقائية</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">🚗<br>انطلاق السائق</div>
+
+      <div class="flow-col-arrow" style="grid-column:5">↓</div>
+
+      <div class="flow-box">📍<br>وصول السائق</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-box">🛣️<br>بدء الرحلة</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-box final">🏁<br>اكتمال الرحلة ✓</div>
+    </div>
+
+    <!-- حالات الرحلة -->
+    <p style="font-weight:700; margin-bottom:10px; color:#374151;">حالات الرحلة بالترتيب:</p>
+    <div class="badge-row">
+      <span class="status-badge orange">⏳ في انتظار قبول الإدارة</span>
+      <span class="status-badge blue">👨‍💼 مقبولة</span>
+      <span class="status-badge orange">🚗 السائق في الطريق</span>
+      <span class="status-badge orange">📍 السائق وصل</span>
+      <span class="status-badge blue">🛣️ الرحلة جارية</span>
+      <span class="status-badge green">🏁 مكتملة</span>
+    </div>
+
+    <!-- ══ 2. Phase-by-phase ══ -->
+    <div class="section-title"><span>📋</span> تفاصيل كل مرحلة</div>
+    <div class="phases">
+
+      <!-- Phase 1 -->
+      <div class="phase-card">
+        <div class="phase-num">١</div>
+        <div class="phase-body">
+          <h3>📱 الحجز من تطبيق العميل</h3>
+          <ul>
+            <li>يفتح العميل التطبيق ويختار خيار <strong>"لاحقاً"</strong> بدلاً من "الآن"</li>
+            <li>يحدد التاريخ والوقت الذي يريد فيه الرحلة</li>
+            <li>يختار نقطة الانطلاق والوجهة ونوع السيارة</li>
+            <li>يمكنه إضافة ملاحظة للسائق أو رقم رحلته الجوية (اختياري)</li>
+            <li>يُكمل الدفع عبر التطبيق</li>
+          </ul>
+          <div class="notif admin">
+            <span class="notif-icon">ℹ️</span>
+            <div><strong>شرط مهم:</strong> يجب أن يكون موعد الرحلة بعد <strong>15 دقيقة على الأقل</strong> من وقت إتمام الحجز. لا يمكن حجز رحلة فورية عبر هذه الطريقة.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-card">
+        <div class="phase-num">٢</div>
+        <div class="phase-body">
+          <h3>✅ تأكيد الدفع وإنشاء الرحلة</h3>
+          <ul>
+            <li>بعد نجاح الدفع يُنشئ النظام الرحلة فوراً</li>
+            <li>تحصل الرحلة على <strong>كود مرجعي فريد</strong> (مثال: TRP-483921)</li>
+            <li>تنتقل الرحلة إلى حالة <strong>"في انتظار قبول الإدارة"</strong></li>
+          </ul>
+          <div class="notif customer">
+            <span class="notif-icon">🔔</span>
+            <div><strong>إشعار للعميل:</strong> "تم تأكيد حجزك بنجاح — رحلتك في [التاريخ والوقت]"</div>
+          </div>
+          <div class="notif admin">
+            <span class="notif-icon">🔔</span>
+            <div><strong>إشعار للإدارة:</strong> "رحلة مجدولة جديدة [TRP-XXXXXX] — موعدها [التاريخ والوقت]"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase-card">
+        <div class="phase-num">٣</div>
+        <div class="phase-body">
+          <h3>⏳ مرحلة الانتظار — النظام يراقب ويُذكّر</h3>
+          <p>يُراقب النظام تلقائياً كل رحلة مجدولة كل دقيقة ويُرسل تذكيرات للإدارة حسب الجدول التالي:</p>
+          <br>
+          <div class="notif admin">
+            <span class="notif-icon">🔔</span>
+            <div><strong>قبل 60 دقيقة:</strong> "تذكير — الرحلة [الكود] بعد ساعة واحدة"</div>
+          </div>
+          <div class="notif admin">
+            <span class="notif-icon">🔔</span>
+            <div><strong>قبل 30 دقيقة:</strong> "تذكير — الرحلة [الكود] بعد نصف ساعة"</div>
+          </div>
+          <div class="notif admin">
+            <span class="notif-icon">🔔</span>
+            <div><strong>قبل 15 دقيقة:</strong> "تنبيه عاجل — الرحلة [الكود] بعد ربع ساعة"</div>
+          </div>
+          <div class="notif danger">
+            <span class="notif-icon">🚨</span>
+            <div><strong>عند تجاوز الموعد دون قبول:</strong> "تحذير — الرحلة [الكود] تجاوزت موعدها ولم تُقبل بعد"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase-card">
+        <div class="phase-num">٤</div>
+        <div class="phase-body">
+          <h3>👨‍💼 قبول الإدارة للرحلة</h3>
+          <ul>
+            <li>يرى فريق الإدارة الرحلة على لوحة التحكم مع جميع التفاصيل</li>
+            <li>يقبل أحد أعضاء الإدارة الرحلة</li>
+            <li>تنتقل الرحلة إلى حالة <strong>"مقبولة"</strong></li>
+          </ul>
+          <div class="notif customer">
+            <span class="notif-icon">🔔</span>
+            <div><strong>إشعار للعميل:</strong> "تم قبول رحلتك — جاري التجهيز لها"</div>
+          </div>
+          <br>
+          <p>بعد القبول تستمر التذكيرات التلقائية للإدارة:</p>
+          <div class="notif admin">
+            <span class="notif-icon">🔔</span>
+            <div><strong>قبل 30 دقيقة:</strong> "تذكير — الرحلة المقبولة [الكود] بعد نصف ساعة"</div>
+          </div>
+          <div class="notif admin">
+            <span class="notif-icon">🔔</span>
+            <div><strong>قبل 15 دقيقة:</strong> "تذكير عاجل — الرحلة المقبولة [الكود] بعد ربع ساعة"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="phase-card">
+        <div class="phase-num">٥</div>
+        <div class="phase-body">
+          <h3>🚗 انطلاق السائق (عند اقتراب الموعد)</h3>
+          <ul>
+            <li>عندما يتبقى <strong>15 دقيقة أو أقل</strong> على موعد الرحلة يفتح النظام "نافذة الإرسال"</li>
+            <li>في هذه اللحظة فقط يمكن للإدارة تحديد السائق كـ<strong>"في الطريق"</strong></li>
+            <li>النظام يمنع إرسال السائق قبل ذلك تلقائياً — لضمان الدقة في المواعيد</li>
+          </ul>
+          <div class="notif customer">
+            <span class="notif-icon">🔔</span>
+            <div><strong>إشعار للعميل:</strong> "السائق في طريقه إليك"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 6 -->
+      <div class="phase-card">
+        <div class="phase-num">٦</div>
+        <div class="phase-body">
+          <h3>📍 وصول السائق لموقع العميل</h3>
+          <ul>
+            <li>يصل السائق إلى نقطة الانطلاق المحددة</li>
+            <li>تتغير حالة الرحلة إلى <strong>"السائق وصل"</strong></li>
+          </ul>
+          <div class="notif customer">
+            <span class="notif-icon">🔔</span>
+            <div><strong>إشعار للعميل:</strong> "السائق وصل إلى موقعك"</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 7 -->
+      <div class="phase-card">
+        <div class="phase-num">٧</div>
+        <div class="phase-body">
+          <h3>🛣️ بدء الرحلة</h3>
+          <ul>
+            <li>يستقل العميل السيارة وتبدأ الرحلة رسمياً</li>
+            <li>تتغير الحالة إلى <strong>"الرحلة جارية"</strong></li>
+            <li>في حالة وجود محطات متوسطة يتم إكمالها بالترتيب تلقائياً</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 8 -->
+      <div class="phase-card">
+        <div class="phase-num">٨</div>
+        <div class="phase-body">
+          <h3>🏁 اكتمال الرحلة</h3>
+          <ul>
+            <li>يصل العميل إلى وجهته وتُسجَّل الرحلة كـ<strong>"مكتملة"</strong></li>
+            <li>يتلقى العميل الفاتورة تلقائياً</li>
+            <li>يمكن للعميل تقييم الرحلة من 1 إلى 5 نجوم</li>
+          </ul>
+          <div class="notif customer">
+            <span class="notif-icon">🔔</span>
+            <div><strong>إشعار للعميل:</strong> "اكتملت رحلتك بنجاح — شكراً لاستخدامك التطبيق"</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /phases -->
+
+    <!-- ══ 3. Notification timeline ══ -->
+    <div class="section-title"><span>⏱️</span> المخطط الزمني للإشعارات</div>
+
+    <div class="timeline-wrap">
+      <div class="tl-line"></div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">🕐 لحظة إتمام الحجز والدفع</div>
+          <div class="tl-desc">← إشعار تأكيد للعميل &nbsp;|&nbsp; إشعار رحلة جديدة للإدارة</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">🕐 قبل 60 دقيقة من الموعد</div>
+          <div class="tl-desc">← تذكير تلقائي للإدارة بالرحلة القادمة</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">👨‍💼 قبول الإدارة (في أي وقت قبل الموعد)</div>
+          <div class="tl-desc">← إشعار للعميل بأن رحلته مقبولة</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">🕐 قبل 30 دقيقة من الموعد</div>
+          <div class="tl-desc">← تذكير للإدارة (سواء قبلوا الرحلة أم لا)</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">🕐 قبل 15 دقيقة من الموعد</div>
+          <div class="tl-desc">← تذكير عاجل للإدارة &nbsp;+&nbsp; تُفتح نافذة إرسال السائق</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">🚗 السائق في الطريق</div>
+          <div class="tl-desc">← إشعار للعميل بانطلاق السائق نحوه</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">📍 وصول السائق</div>
+          <div class="tl-desc">← إشعار للعميل بوصول السائق</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-content">
+          <div class="tl-time">✅ اكتمال الرحلة</div>
+          <div class="tl-desc">← إشعار اكتمال الرحلة &nbsp;+&nbsp; إرسال الفاتورة للعميل</div>
+        </div>
+      </div>
+
+    </div><!-- /timeline-wrap -->
+
+    <!-- ══ 4. Admin attention states ══ -->
+    <div class="section-title"><span>🚦</span> مؤشر تنبيه الإدارة (حالات الانتباه)</div>
+
+    <p style="margin-bottom:16px; color:#374151; line-height:1.8;">
+      تعرض لوحة تحكم الإدارة مؤشراً ملوناً لكل رحلة مجدولة يوضح مدى إلحاحيتها:
+    </p>
+
+    <div class="attention-row">
+      <div class="attention-box a1">
+        <span class="a-icon">🟢</span>
+        عادي<br><small style="font-weight:400">الموعد بعد فترة كافية</small>
+      </div>
+      <div class="attention-box a2">
+        <span class="a-icon">🟡</span>
+        قريب<br><small style="font-weight:400">الموعد يقترب</small>
+      </div>
+      <div class="attention-box a3">
+        <span class="a-icon">🟠</span>
+        عاجل<br><small style="font-weight:400">الموعد خلال دقائق</small>
+      </div>
+      <div class="attention-box a4">
+        <span class="a-icon">🔴</span>
+        متأخر<br><small style="font-weight:400">تجاوز الموعد المحدد</small>
+      </div>
+    </div>
+
+    <!-- ══ 5. Important notes ══ -->
+    <div class="section-title"><span>📌</span> ملاحظات مهمة</div>
+
+    <div class="notes">
+
+      <div class="note-card">
+        <span class="note-icon">⏰</span>
+        <div>
+          <strong>الحد الأدنى للحجز المسبق:</strong>
+          يجب أن يكون موعد الرحلة بعد 15 دقيقة على الأقل من وقت الحجز.
+          هذا الشرط تلقائي ولا يمكن تجاوزه.
+        </div>
+      </div>
+
+      <div class="note-card">
+        <span class="note-icon">🔒</span>
+        <div>
+          <strong>قفل وقت الإرسال:</strong>
+          النظام لا يسمح للإدارة بإرسال السائق إلا عندما يتبقى 15 دقيقة أو أقل على الموعد.
+          هذا يضمن أن السائق يصل للعميل في الوقت المحدد — لا مبكراً ولا متأخراً.
+        </div>
+      </div>
+
+      <div class="note-card">
+        <span class="note-icon">🤖</span>
+        <div>
+          <strong>التذكيرات تلقائية بالكامل:</strong>
+          النظام يراقب جميع الرحلات المجدولة كل دقيقة ويرسل التذكيرات للإدارة دون أي تدخل بشري —
+          مما يضمن عدم نسيان أي رحلة.
+        </div>
+      </div>
+
+      <div class="note-card">
+        <span class="note-icon">📱</span>
+        <div>
+          <strong>متابعة مستمرة للعميل:</strong>
+          يمكن للعميل متابعة حالة رحلته في أي وقت من خلال تطبيق التاكسي — من لحظة الحجز حتى الاكتمال.
+        </div>
+      </div>
+
+    </div><!-- /notes -->
+
+    <!-- ══ Footer ══ -->
+    <div class="footer">
+      <p>هذا المستند يصف آلية عمل نظام الرحلات المجدولة كما هو مطبق حالياً</p>
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /page -->
+</body>
+</html>

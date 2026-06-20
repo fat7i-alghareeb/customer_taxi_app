@@ -12,11 +12,10 @@ abstract class OrderBookingSlice with _$OrderBookingSlice {
     @Default(OrderScheduleMode.now) OrderScheduleMode scheduleMode,
     DateTime? scheduledAt,
     @Default('') String passengerNote,
-    @Default(false) bool isAirport,
+    @Default('') String flightNumber,
     @Default(BlocStatus<OrderTripResponseEntity>.initial())
     BlocStatus<OrderTripResponseEntity> tripRequestStatus,
-    @Default(BlocStatus<void>.initial())
-    BlocStatus<void> paymentSheetState,
+    @Default(BlocStatus<void>.initial()) BlocStatus<void> paymentSheetState,
     // Stores the trip created by requestTrip so the same PaymentIntent can be
     // re-presented if the user dismisses the sheet without paying. Cleared on
     // success, full payment failure, or when the user abandons the booking.

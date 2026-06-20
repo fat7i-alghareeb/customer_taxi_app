@@ -9,11 +9,11 @@ abstract class ProfileState with _$ProfileState {
     @Default(BlocStatus<ProfileEntity>.initial())
     BlocStatus<ProfileEntity> saveStatus,
 
-    @Default(BlocStatus<void>.initial())
-    BlocStatus<void> deleteAccountStatus,
+    @Default(BlocStatus<void>.initial()) BlocStatus<void> deleteAccountStatus,
 
     ProfileEntity? currentUser,
     @Default('') String pendingName,
+    @Default('') String pendingEmail,
     File? pendingPhoto,
     // Pending home address selection. `homeAddressTouched` distinguishes "not
     // changed" (keep current) from "cleared" (all values null → remove).

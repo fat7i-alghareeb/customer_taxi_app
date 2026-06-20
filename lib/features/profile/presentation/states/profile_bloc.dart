@@ -17,6 +17,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(this._facade) : super(const ProfileState()) {
     on<_Started>(_onStarted);
     on<_NameSaved>(_onNameSaved);
+    on<_EmailSaved>(_onEmailSaved);
     on<_PhotoSelected>(_onPhotoSelected);
     on<_HomeAddressSelected>(_onHomeAddressSelected);
     on<_SaveRequested>(_onSaveRequested);
@@ -32,10 +33,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     result.when(
       success: (user) {
         printG('[ProfileBloc] started loaded id=${user.id}');
-        emit(state.copyWith(
-          currentUser: user,
-          pendingName: user.name ?? '',
-        ));
+        emit(
+          state.copyWith(
+            currentUser: user,
+            pendingName: user.name ?? '',
+            pendingEmail: user.email ?? '',
+          ),
+        );
       },
       failure: (message) {
         printY('[ProfileBloc] started failed=$message');
@@ -49,6 +53,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(pendingName: event.name));
   }
 
+  void _onEmailSaved(_EmailSaved event, Emitter<ProfileState> emit) {
+    emit(state.copyWith(pendingEmail: event.email));
+  }
+
   void _onPhotoSelected(_PhotoSelected event, Emitter<ProfileState> emit) {
     emit(state.copyWith(pendingPhoto: event.photo));
   }
@@ -57,12 +65,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     _HomeAddressSelected event,
     Emitter<ProfileState> emit,
   ) {
-    emit(state.copyWith(
-      homeAddressTouched: true,
-      pendingHomeAddressLabel: event.label,
-      pendingHomeAddressLatitude: event.latitude,
-      pendingHomeAddressLongitude: event.longitude,
-    ));
+    emit(
+      state.copyWith(
+        homeAddressTouched: true,
+        pendingHomeAddressLabel: event.label,
+        pendingHomeAddressLatitude: event.latitude,
+        pendingHomeAddressLongitude: event.longitude,
+      ),
+    );
   }
 
   Future<void> _onSaveRequested(
@@ -70,7 +80,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     final name = state.pendingName.trim();
-    if (name.isEmpty && state.pendingPhoto == null && !state.homeAddressTouched) {
+    final email = state.pendingEmail.trim();
+    final currentEmail = state.currentUser?.email?.trim() ?? '';
+    if (name.isEmpty &&
+        email == currentEmail &&
+        state.pendingPhoto == null &&
+        !state.homeAddressTouched) {
       return;
     }
 
@@ -91,6 +106,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final Result<ProfileEntity> result = await _facade.updateProfile(
       UpdateUserProfileRequest(
         name: name.isEmpty ? null : name,
+        email: email,
         photo: state.pendingPhoto,
         homeAddressLabel: label,
         homeAddressLatitude: latitude,
@@ -101,19 +117,25 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     result.when(
       success: (user) {
         printG('[ProfileBloc] save success id=${user.id}');
-        emit(state.copyWith(
-          saveStatus: BlocStatus<ProfileEntity>.success(user),
-          currentUser: user,
-          pendingPhoto: null,
-          homeAddressTouched: false,
-          pendingHomeAddressLabel: null,
-          pendingHomeAddressLatitude: null,
-          pendingHomeAddressLongitude: null,
-        ));
+        emit(
+          state.copyWith(
+            saveStatus: BlocStatus<ProfileEntity>.success(user),
+            currentUser: user,
+            pendingPhoto: null,
+            homeAddressTouched: false,
+            pendingHomeAddressLabel: null,
+            pendingHomeAddressLatitude: null,
+            pendingHomeAddressLongitude: null,
+          ),
+        );
       },
       failure: (message) {
         printY('[ProfileBloc] save failed=$message');
-        emit(state.copyWith(saveStatus: BlocStatus<ProfileEntity>.failure(message)));
+        emit(
+          state.copyWith(
+            saveStatus: BlocStatus<ProfileEntity>.failure(message),
+          ),
+        );
       },
     );
   }
@@ -129,17 +151,21 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await result.when(
       success: (_) async {
         printG('[ProfileBloc] deleteAccount success');
-        emit(state.copyWith(
-          deleteAccountStatus: const BlocStatus<void>.success(null),
-        ));
+        emit(
+          state.copyWith(
+            deleteAccountStatus: const BlocStatus<void>.success(null),
+          ),
+        );
         // Drop session so the router guard routes back to login.
         await getIt<AuthManager>().logout();
       },
       failure: (message) async {
         printY('[ProfileBloc] deleteAccount failed=$message');
-        emit(state.copyWith(
-          deleteAccountStatus: BlocStatus<void>.failure(message),
-        ));
+        emit(
+          state.copyWith(
+            deleteAccountStatus: BlocStatus<void>.failure(message),
+          ),
+        );
       },
     );
   }

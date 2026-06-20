@@ -27,11 +27,8 @@ import 'core/services/session/auth_manager.dart';
 import 'core/services/session/auth_state_notifier.dart';
 import 'package:customertaxi/core/utils/result.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
-import 'common/widgets/show_overlay.dart';
 import 'features/root/presentation/ui/screens/root_screen.dart';
 import 'features/trip/presentation/states/trip_bloc.dart';
-import 'features/trip/presentation/ui/screens/trip_history_screen.dart';
-import 'utils/helpers/app_strings.dart';
 import 'core/theme/theme_controller.dart';
 import 'common/widgets/stage_tools/stage_device_preview_controller.dart';
 import 'flavors.dart' show F, Flavor;
@@ -182,17 +179,13 @@ Future<void> _initializeNotifications() async {
         await _handleNotificationNavigation(payload);
       },
       onForegroundNotification: (payload) async {
-        final status = _statusFromPayload(payload);
-        if (status == 'scheduled') {
-          _showScheduledNotificationOverlay(AppStrings.tripScheduledConfirmed);
+        // Chat messages: the coordinator already showed the local banner and the
+        // open chat updates live over SignalR — nothing else to route.
+        if (_typeFromPayload(payload) == 'chat_message') {
           return;
         }
-        if (status == 'pendingdriver') {
-          _showScheduledNotificationOverlay(AppStrings.tripScheduledActivated);
-          _routeTripPayloadToBloc(payload);
-          return;
-        }
-        // Regular trip push — pipe to bloc so the active-trip sheet updates.
+        // FCM already displays the foreground banner. SignalR/this callback
+        // only refreshes authoritative trip state; it must not show a second overlay.
         _routeTripPayloadToBloc(payload);
       },
       onTokenRefresh: (token) async {
@@ -222,8 +215,6 @@ Future<void> _initializeNotifications() async {
 Future<void> _handleNotificationNavigation(
   AppNotificationPayload payload,
 ) async {
-  final status = _statusFromPayload(payload);
-
   // Trip completed push tapped while the app was backgrounded/closed (SignalR
   // was disconnected). Route through the same coordinator so its de-dupe set is
   // shared with the realtime path and the rating sheet shows at most once.
@@ -255,16 +246,10 @@ Future<void> _handleNotificationNavigation(
     return;
   }
 
-  // Scheduled-trip confirmation — go to trip history so the user sees it.
-  if (status == 'scheduled') {
-    _navigateTo(TripHistoryScreen.pagePath);
-    return;
-  }
-
-  // Scheduled trip activated — start searching for a driver.
-  if (status == 'pendingdriver') {
-    final tripId = _tripIdFromPayload(payload);
-    if (tripId != null) _routeTripPayloadToBloc(payload);
+  // Chat message tapped — open the active trip so the user can read/reply.
+  if (_typeFromPayload(payload) == 'chat_message') {
+    final chatTripId = _tripIdFromPayload(payload);
+    if (chatTripId != null) _routeTripPayloadToBloc(payload);
     _navigateTo(RootScreen.pagePath);
     return;
   }
@@ -305,12 +290,6 @@ void _routeTripPayloadToBloc(AppNotificationPayload payload) {
   }
 }
 
-String? _statusFromPayload(AppNotificationPayload payload) {
-  final raw = payload.data['status'] ?? payload.data['Status'];
-  if (raw is String && raw.trim().isNotEmpty) return raw.trim().toLowerCase();
-  return null;
-}
-
 String? _typeFromPayload(AppNotificationPayload payload) {
   final raw = payload.data['type'] ?? payload.data['Type'];
   if (raw is String && raw.trim().isNotEmpty) return raw.trim().toLowerCase();
@@ -324,21 +303,6 @@ void _navigateTo(String location) {
     printG('[Notifications] Navigated to $location');
   } catch (e) {
     printY('[Notifications] Navigation failed: $e (location=$location)');
-  }
-}
-
-void _showScheduledNotificationOverlay(String message) {
-  try {
-    final context = getIt<AppRouterConfig>()
-        .router
-        .routerDelegate
-        .navigatorKey
-        .currentContext;
-    if (context != null && context.mounted) {
-      showSuccessOverlay(context, message);
-    }
-  } catch (e) {
-    printY('[Notifications] Overlay failed: $e');
   }
 }
 

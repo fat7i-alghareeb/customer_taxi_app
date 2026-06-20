@@ -30,33 +30,43 @@ class ProfileRemoteDataSource {
 
   Future<ProfileModel> updateProfile(UpdateUserProfileRequest param) {
     return rethrowAsAppException(() async {
-      printY('[ProfileRemoteDataSource] updateProfile name="${param.name}" hasPhoto=${param.photo != null}');
-      
+      printY(
+        '[ProfileRemoteDataSource] updateProfile name="${param.name}" hasPhoto=${param.photo != null}',
+      );
+
       final formData = FormData();
       if (param.name != null) {
         formData.fields.add(MapEntry('Name', param.name!));
       }
+      if (param.email != null) {
+        formData.fields.add(MapEntry('Email', param.email!));
+      }
       // Home address fields are only sent when present; omitting all three lets
       // the backend clear a previously-saved address.
       if (param.homeAddressLabel != null) {
-        formData.fields.add(MapEntry('HomeAddressLabel', param.homeAddressLabel!));
+        formData.fields.add(
+          MapEntry('HomeAddressLabel', param.homeAddressLabel!),
+        );
       }
       if (param.homeAddressLatitude != null) {
         formData.fields.add(
-          MapEntry('HomeAddressLatitude', param.homeAddressLatitude!.toString()),
+          MapEntry(
+            'HomeAddressLatitude',
+            param.homeAddressLatitude!.toString(),
+          ),
         );
       }
       if (param.homeAddressLongitude != null) {
         formData.fields.add(
-          MapEntry('HomeAddressLongitude', param.homeAddressLongitude!.toString()),
+          MapEntry(
+            'HomeAddressLongitude',
+            param.homeAddressLongitude!.toString(),
+          ),
         );
       }
       if (param.photo != null) {
         formData.files.add(
-          MapEntry(
-            'Photo',
-            await MultipartFile.fromFile(param.photo!.path),
-          ),
+          MapEntry('Photo', await MultipartFile.fromFile(param.photo!.path)),
         );
       }
 

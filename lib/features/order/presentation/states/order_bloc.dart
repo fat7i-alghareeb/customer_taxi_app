@@ -80,7 +80,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<_ScheduleModeChanged>(_onScheduleModeChanged);
     on<_ScheduleTimeChanged>(_onScheduleTimeChanged);
     on<_PassengerNoteChanged>(_onPassengerNoteChanged);
-    on<_AirportToggled>(_onAirportToggled);
+    on<_FlightNumberChanged>(_onFlightNumberChanged);
     on<_PaymentSheetDismissed>(_onPaymentSheetDismissed);
   }
 

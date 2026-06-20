@@ -77,13 +77,15 @@ class OrderFacade {
     );
     return _repository.togglePinnedLocation(location);
   }
- 
+
   Future<Result<int>> getTripCount() {
     printC('[OrderFacade] getTripCount');
     return _repository.getTripCount();
   }
- 
-  Future<Result<List<OrderSavedLocationEntity>>> removeSavedLocation(String identityKey) {
+
+  Future<Result<List<OrderSavedLocationEntity>>> removeSavedLocation(
+    String identityKey,
+  ) {
     printC('[OrderFacade] removeSavedLocation identity=$identityKey');
     return _repository.removeSavedLocation(identityKey);
   }

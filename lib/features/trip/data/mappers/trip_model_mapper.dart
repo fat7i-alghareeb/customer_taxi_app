@@ -29,6 +29,13 @@ extension TripModelMapper on TripModel {
     passengerNote: passengerNote,
     passengerRating: passengerRating,
     ratingComment: ratingComment,
+    acceptedByAdminId: acceptedByAdminId,
+    acceptedAdminName: acceptedAdminName,
+    acceptedAtUtc: acceptedAtUtc,
+    isScheduled: isScheduled,
+    dispatchWindowOpensAtUtc: dispatchWindowOpensAtUtc,
+    canMarkEnRoute: canMarkEnRoute,
+    attentionState: attentionState,
   );
 }
 

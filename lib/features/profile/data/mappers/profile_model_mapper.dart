@@ -6,6 +6,7 @@ extension ProfileModelMapper on ProfileModel {
     id: id,
     name: name,
     phone: phone,
+    email: email,
     profilePhotoUrl: profilePhotoUrl,
     homeAddressLabel: homeAddressLabel,
     homeAddressLatitude: homeAddressLatitude,

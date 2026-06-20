@@ -1,5 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
+import 'package:customertaxi/features/order/domain/entities/order_location_entity.dart';
 import 'package:customertaxi/features/order/domain/entities/order_location_request_entity.dart';
 import 'package:customertaxi/features/order/domain/repositories/order_repository.dart';
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
@@ -19,10 +20,24 @@ class LocationPickerScreen extends StatefulWidget {
 }
 
 class _LocationPickerScreenState extends State<LocationPickerScreen> {
+  static const String _searchField = 'locationSearch';
+
   LatLng? _currentCameraTarget;
   bool _isLoading = false;
+  bool _isSearching = false;
+  int _searchToken = 0;
+  List<OrderLocationEntity> _searchResults = const [];
 
   RootMapLocationEntity? _initialLocation;
+  final FormGroup _searchForm = FormGroup({
+    _searchField: FormControl<String>(),
+  });
+
+  @override
+  void dispose() {
+    _searchForm.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -61,6 +76,47 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     _currentCameraTarget = position.target;
   }
 
+  Future<void> _searchLocations(String value) async {
+    final query = value.trim();
+    final token = ++_searchToken;
+
+    if (query.length < 2) {
+      setState(() {
+        _isSearching = false;
+        _searchResults = const [];
+      });
+      return;
+    }
+
+    setState(() => _isSearching = true);
+    final target = _currentCameraTarget;
+    final result = await getIt<OrderRepository>().searchLocations(
+      OrderLocationSearchRequestEntity(
+        query: query,
+        biasLat: target?.latitude,
+        biasLng: target?.longitude,
+      ),
+    );
+
+    if (!mounted || token != _searchToken) return;
+
+    result.when(
+      success: (locations) {
+        setState(() {
+          _isSearching = false;
+          _searchResults = locations;
+        });
+      },
+      failure: (message) {
+        setState(() {
+          _isSearching = false;
+          _searchResults = const [];
+        });
+        showErrorOverlay(context, message);
+      },
+    );
+  }
+
   Future<void> _confirmLocation() async {
     if (_currentCameraTarget == null || _isLoading) return;
 
@@ -73,6 +129,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
       ),
     );
 
+    if (!mounted) return;
     setState(() => _isLoading = false);
 
     result.when(
@@ -93,38 +150,125 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   Widget build(BuildContext context) {
     return AppScaffold.appBar(
       appBarConfig: AppScaffoldAppBarConfig(title: AppStrings.setOnMap),
-      child: Stack(
-        children: [
-          if (_initialLocation != null)
-            RootMapCanvasWidget(
-              currentLocation: _initialLocation!,
-              onMapCreated: (_) {},
-              onCameraMove: _onCameraMove,
-              showMyLocationButton: true,
-            )
-          else
-            Center(child: LoadingDots(color: context.primary)),
+      child: ReactiveForm(
+        formGroup: _searchForm,
+        child: Stack(
+          children: [
+            if (_initialLocation != null)
+              RootMapCanvasWidget(
+                currentLocation: _initialLocation!,
+                onMapCreated: (_) {},
+                onCameraMove: _onCameraMove,
+                showMyLocationButton: true,
+              )
+            else
+              Center(child: LoadingDots(color: context.primary)),
 
-          const OrderCenterPinWidget(),
+            const OrderCenterPinWidget(),
 
-          Positioned(
-            left: AppSpacing.lg.w,
-            right: AppSpacing.lg.w,
-            bottom: context.bottomPadding + AppSpacing.lg.h,
-            child: AppButton.primary(
-              isActive: !_isLoading && _initialLocation != null,
-              onTap: _confirmLocation,
-              layout: AppButtonLayout(
-                width: double.infinity,
-                height: 54.h,
-                borderRadius: AppRadii.lg,
+            Positioned(
+              top: AppSpacing.lg.h,
+              left: AppSpacing.lg.w,
+              right: AppSpacing.lg.w,
+              child: Column(
+                children: [
+                  Material(
+                    elevation: 5,
+                    shadowColor: Colors.black26,
+                    borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                    child: AppReactiveTextField.text(
+                      formControlName: _searchField,
+                      hintText: AppStrings.searchToLocation,
+                      onChangedDebounced: (value, _) => _searchLocations(value),
+                      prefix: Icon(
+                        Icons.search,
+                        size: 20.r,
+                        color: context.primary,
+                      ),
+                    ),
+                  ),
+                  if (_isSearching || _searchResults.isNotEmpty)
+                    Container(
+                      margin: REdgeInsets.only(top: AppSpacing.sm),
+                      constraints: BoxConstraints(maxHeight: 300.h),
+                      decoration: BoxDecoration(
+                        color: context.surface,
+                        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 12,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: _isSearching
+                          ? Padding(
+                              padding: REdgeInsets.all(AppSpacing.lg),
+                              child: LoadingDots(color: context.primary),
+                            )
+                          : ListView.separated(
+                              shrinkWrap: true,
+                              padding: REdgeInsets.symmetric(
+                                vertical: AppSpacing.sm,
+                              ),
+                              itemCount: _searchResults.length,
+                              separatorBuilder: (_, _) => Divider(
+                                height: 1,
+                                color: context.onSurface.withValues(
+                                  alpha: 0.08,
+                                ),
+                              ),
+                              itemBuilder: (context, index) {
+                                final location = _searchResults[index];
+                                return ListTile(
+                                  leading: Icon(
+                                    Icons.location_on_outlined,
+                                    color: context.primary,
+                                  ),
+                                  title: Text(
+                                    location.primaryName ?? location.label,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  subtitle:
+                                      location.secondaryAddress?.isNotEmpty ==
+                                          true
+                                      ? Text(
+                                          location.secondaryAddress!,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        )
+                                      : null,
+                                  onTap: () => context.pop(location),
+                                );
+                              },
+                            ),
+                    ),
+                ],
               ),
-              child: _isLoading
-                  ? AppButtonChild.custom(LoadingDots(color: context.onSurface))
-                  : AppButtonChild.label(AppStrings.confirmPoint),
             ),
-          ),
-        ],
+            Positioned(
+              left: AppSpacing.lg.w,
+              right: AppSpacing.lg.w,
+              bottom: context.bottomPadding + AppSpacing.lg.h,
+              child: AppButton.primary(
+                isActive: !_isLoading && _initialLocation != null,
+                onTap: _confirmLocation,
+                layout: AppButtonLayout(
+                  width: double.infinity,
+                  height: 54.h,
+                  borderRadius: AppRadii.lg,
+                ),
+                child: _isLoading
+                    ? AppButtonChild.custom(
+                        LoadingDots(color: context.onSurface),
+                      )
+                    : AppButtonChild.label(AppStrings.confirmPoint),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

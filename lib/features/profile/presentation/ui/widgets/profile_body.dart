@@ -34,6 +34,7 @@ class _ProfileBodyState extends State<ProfileBody> {
       );
       _form.control(ProfileForms.nameField).updateValue(user.name);
       _form.control(ProfileForms.phoneField).updateValue(user.phone);
+      _form.control(ProfileForms.emailField).updateValue(user.email);
     }
   }
 
@@ -62,6 +63,15 @@ class _ProfileBodyState extends State<ProfileBody> {
         final currentPhone = currentAuthUser?.phone;
         if (currentPhone != null && currentPhone != phoneControl.value) {
           phoneControl.updateValue(currentPhone);
+        }
+
+        final emailControl = _form.control(ProfileForms.emailField);
+        final currentEmail = currentAuthUser?.email;
+        if (currentEmail != null &&
+            currentEmail != emailControl.value &&
+            emailControl.pristine &&
+            !state.saveStatus.isLoading) {
+          emailControl.updateValue(currentEmail);
         }
 
         state.saveStatus.whenOrNull(
@@ -112,42 +122,61 @@ class _ProfileBodyState extends State<ProfileBody> {
                   enabled: false,
                 ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.05),
                 AppSpacing.lg.verticalSpace,
+                AppReactiveTextField.email(
+                  formControlName: ProfileForms.emailField,
+                  title: AppStrings.contactUsEmail,
+                  onChangedDebounced: (value, _) {
+                    context.read<ProfileBloc>().add(
+                      ProfileEvent.emailSaved(value),
+                    );
+                  },
+                ).animate().fadeIn(delay: 365.ms).slideY(begin: 0.05),
+                AppSpacing.lg.verticalSpace,
                 _HomeAddressField(
                   label: state.homeAddressTouched
                       ? state.pendingHomeAddressLabel
                       : state.currentUser?.homeAddressLabel,
                   onPick: () async {
-                    final location =
-                        await context.pushNamed<OrderLocationEntity>(
-                      LocationPickerScreen.pageName,
-                    );
+                    final location = await context
+                        .pushNamed<OrderLocationEntity>(
+                          LocationPickerScreen.pageName,
+                        );
                     if (location != null && context.mounted) {
                       context.read<ProfileBloc>().add(
-                            ProfileEvent.homeAddressSelected(
-                              label: location.label,
-                              latitude: location.latitude,
-                              longitude: location.longitude,
-                            ),
-                          );
+                        ProfileEvent.homeAddressSelected(
+                          label: location.label,
+                          latitude: location.latitude,
+                          longitude: location.longitude,
+                        ),
+                      );
                     }
                   },
                   onClear: () => context.read<ProfileBloc>().add(
-                        const ProfileEvent.homeAddressSelected(),
-                      ),
+                    const ProfileEvent.homeAddressSelected(),
+                  ),
                 ).animate().fadeIn(delay: 375.ms).slideY(begin: 0.05),
                 AppSpacing.xxl.verticalSpace,
                 ReactiveFormConsumer(
                   builder: (context, form, _) {
                     final currentName =
                         (form.control(ProfileForms.nameField).value as String?)
-                                ?.trim() ??
-                            '';
+                            ?.trim() ??
+                        '';
                     final authName = (authUser?.name ?? '').trim();
                     final nameChanged = currentName != authName;
                     final photoChanged = state.pendingPhoto != null;
                     final addressChanged = state.homeAddressTouched;
+                    final currentEmail =
+                        (form.control(ProfileForms.emailField).value as String?)
+                            ?.trim() ??
+                        '';
+                    final emailChanged =
+                        currentEmail != (authUser?.email ?? '').trim();
                     final hasChanges =
-                        nameChanged || photoChanged || addressChanged;
+                        nameChanged ||
+                        emailChanged ||
+                        photoChanged ||
+                        addressChanged;
 
                     if (!widget.isSetupMode && !hasChanges) {
                       return const SizedBox.shrink();
@@ -236,7 +265,9 @@ class _HomeAddressField extends StatelessWidget {
                   Icon(
                     Icons.home_outlined,
                     size: 20.r,
-                    color: hasValue ? context.primary : onSurface.withValues(alpha: 0.5),
+                    color: hasValue
+                        ? context.primary
+                        : onSurface.withValues(alpha: 0.5),
                   ),
                   AppSpacing.md.horizontalSpace,
                   Expanded(

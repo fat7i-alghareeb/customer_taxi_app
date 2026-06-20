@@ -12,9 +12,7 @@ class ProfileSetupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<ProfileBloc>()..add(const ProfileEvent.started()),
-      child: AppScaffold.body(
-        child: const ProfileBody(isSetupMode: true),
-      ),
+      child: AppScaffold.body(child: const ProfileBody(isSetupMode: true)),
     );
   }
 }

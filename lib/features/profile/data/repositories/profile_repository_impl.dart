@@ -21,13 +21,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<void> _syncAuthUser(ProfileEntity profile) async {
     final authManager = getIt<AuthManager>();
 
-    // We pass a partial UserEntity with the new data; AuthManager.updateUser 
-    // will merge this with existing cached data (preserving any fields not 
+    // We pass a partial UserEntity with the new data; AuthManager.updateUser
+    // will merge this with existing cached data (preserving any fields not
     // present in ProfileEntity).
     final update = UserEntity(
       id: profile.id,
       name: profile.name,
       phone: profile.phone,
+      email: profile.email,
       profilePhotoUrl: profile.profilePhotoUrl,
     );
 
@@ -49,7 +50,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Result<ProfileEntity>> updateProfile(UpdateUserProfileRequest param) {
     return runAsResult(() async {
-      printM('[ProfileRepository] updateProfile name="${param.name}" hasPhoto=${param.photo != null}');
+      printM(
+        '[ProfileRepository] updateProfile name="${param.name}" hasPhoto=${param.photo != null}',
+      );
       final model = await _remote.updateProfile(param);
       printG('[ProfileRepository] updateProfile success id=${model.id}');
       final entity = model.toEntity;

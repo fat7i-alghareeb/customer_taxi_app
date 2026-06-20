@@ -14,10 +14,10 @@ class OrderSearchLocationParams {
   final double? biasLng;
 
   Map<String, dynamic> toJson() => {
-        'query': query,
-        if (biasLat != null) 'latitude': biasLat,
-        if (biasLng != null) 'longitude': biasLng,
-      };
+    'query': query,
+    if (biasLat != null) 'latitude': biasLat,
+    if (biasLng != null) 'longitude': biasLng,
+  };
 }
 
 class OrderReverseGeocodeParams {
@@ -30,9 +30,9 @@ class OrderReverseGeocodeParams {
   final double longitude;
 
   Map<String, dynamic> toJson() => {
-        'latitude': latitude,
-        'longitude': longitude,
-      };
+    'latitude': latitude,
+    'longitude': longitude,
+  };
 }
 
 class OrderCoordinateParam {
@@ -40,17 +40,20 @@ class OrderCoordinateParam {
     required this.latitude,
     required this.longitude,
     this.label,
+    this.isAirport = false,
   });
 
   final double latitude;
   final double longitude;
   final String? label;
+  final bool isAirport;
 
   Map<String, dynamic> toJson() => {
-        'latitude': latitude,
-        'longitude': longitude,
-        if (label != null) 'label': label,
-      };
+    'latitude': latitude,
+    'longitude': longitude,
+    if (label != null) 'label': label,
+    'isAirport': isAirport,
+  };
 }
 
 class OrderTripRouteParams {
@@ -59,8 +62,8 @@ class OrderTripRouteParams {
   final List<OrderCoordinateParam> stops;
 
   Map<String, dynamic> toJson() => {
-        'stops': stops.map((s) => s.toJson()).toList(),
-      };
+    'stops': stops.map((s) => s.toJson()).toList(),
+  };
 }
 
 class OrderPricingQuotesParams {
@@ -69,8 +72,8 @@ class OrderPricingQuotesParams {
   final List<OrderCoordinateParam> stops;
 
   Map<String, dynamic> toJson() => {
-        'stops': stops.map((s) => s.toJson()).toList(),
-      };
+    'stops': stops.map((s) => s.toJson()).toList(),
+  };
 }
 
 class OrderRequestTripParams {
@@ -79,22 +82,23 @@ class OrderRequestTripParams {
     required this.stops,
     this.scheduledAt,
     this.passengerNote,
-    this.isAirport = false,
+    this.flightNumber,
   });
 
   final String quoteId;
   final List<OrderCoordinateParam> stops;
   final DateTime? scheduledAt;
   final String? passengerNote;
-  final bool isAirport;
+  final String? flightNumber;
 
   Map<String, dynamic> toJson() => {
-        'quoteId': quoteId,
-        'stops': stops.map((s) => s.toJson()).toList(),
-        if (scheduledAt != null)
-          'scheduledAt': scheduledAt!.toUtc().toIso8601String(),
-        if (passengerNote?.trim().isNotEmpty == true)
-          'passengerNote': passengerNote!.trim(),
-        'isAirport': isAirport,
-      };
+    'quoteId': quoteId,
+    'stops': stops.map((s) => s.toJson()).toList(),
+    if (scheduledAt != null)
+      'scheduledAt': scheduledAt!.toUtc().toIso8601String(),
+    if (passengerNote?.trim().isNotEmpty == true)
+      'passengerNote': passengerNote!.trim(),
+    if (flightNumber?.trim().isNotEmpty == true)
+      'flightNumber': flightNumber!.trim(),
+  };
 }

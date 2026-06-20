@@ -1,5 +1,9 @@
 class OrderLocationSearchRequestEntity {
-  const OrderLocationSearchRequestEntity({required this.query, this.biasLat, this.biasLng});
+  const OrderLocationSearchRequestEntity({
+    required this.query,
+    this.biasLat,
+    this.biasLng,
+  });
 
   final String query;
   final double? biasLat;
@@ -21,11 +25,13 @@ class OrderStopCoordinateEntity {
     required this.latitude,
     required this.longitude,
     this.label,
+    this.isAirport = false,
   });
 
   final double latitude;
   final double longitude;
   final String? label;
+  final bool isAirport;
 }
 
 class OrderTripRouteRequestEntity {
@@ -46,12 +52,12 @@ class OrderRequestTripEntity {
     required this.stops,
     this.scheduledAt,
     this.passengerNote,
-    this.isAirport = false,
+    this.flightNumber,
   });
 
   final String quoteId;
   final List<OrderStopCoordinateEntity> stops;
   final DateTime? scheduledAt;
   final String? passengerNote;
-  final bool isAirport;
+  final String? flightNumber;
 }

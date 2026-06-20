@@ -53,6 +53,7 @@ extension _TripResolutionHandlers on OrderBloc {
           (s) => OrderStopCoordinateEntity(
             latitude: s.latitude,
             longitude: s.longitude,
+            isAirport: s.isAirport,
           ),
         )
         .toList();
@@ -187,6 +188,24 @@ extension _TripResolutionHandlers on OrderBloc {
 
     final startLocation = state.stops.list.first;
     if (startLocation == null) return;
+    if (startLocation.isAirport) {
+      final flightNumber = state.booking.flightNumber
+          .trim()
+          .replaceAll(RegExp(r'\s+'), ' ')
+          .toUpperCase();
+      final isValid =
+          flightNumber.length >= 2 &&
+          flightNumber.length <= 15 &&
+          RegExp(
+            r'^[A-Z0-9](?:[A-Z0-9 -]{0,13}[A-Z0-9])?$',
+          ).hasMatch(flightNumber);
+      if (!isValid) {
+        printY(
+          '[OrderBloc] confirmCarSelectionPressed blocked (invalid flight number)',
+        );
+        return;
+      }
+    }
 
     printC(
       '[OrderBloc] confirmCarSelectionPressed -> bookingDetails selectedType=$selectedCarTypeId',
@@ -250,6 +269,7 @@ extension _TripResolutionHandlers on OrderBloc {
           (s) => OrderStopCoordinateEntity(
             latitude: s.latitude,
             longitude: s.longitude,
+            isAirport: s.isAirport,
           ),
         )
         .toList();

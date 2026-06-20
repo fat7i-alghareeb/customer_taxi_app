@@ -87,6 +87,9 @@ class $AssetsImagesGen {
   AssetGenImage get schdedulTrip =>
       const AssetGenImage('assets/images/schdedulTrip.png');
 
+  /// File path: assets/images/splash.png
+  AssetGenImage get splash => const AssetGenImage('assets/images/splash.png');
+
   /// File path: assets/images/splashScreen.jpg
   AssetGenImage get splashScreen =>
       const AssetGenImage('assets/images/splashScreen.jpg');
@@ -124,6 +127,7 @@ class $AssetsImagesGen {
     roadAndBuildings,
     roadLightTrails,
     schdedulTrip,
+    splash,
     splashScreen,
     splashDark,
     splashLight,

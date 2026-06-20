@@ -55,12 +55,13 @@ extension ProfileEventPatterns on ProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _NameSaved value)?  nameSaved,TResult Function( _PhotoSelected value)?  photoSelected,TResult Function( _HomeAddressSelected value)?  homeAddressSelected,TResult Function( _SaveRequested value)?  saveRequested,TResult Function( _DeleteAccountRequested value)?  deleteAccountRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _NameSaved value)?  nameSaved,TResult Function( _EmailSaved value)?  emailSaved,TResult Function( _PhotoSelected value)?  photoSelected,TResult Function( _HomeAddressSelected value)?  homeAddressSelected,TResult Function( _SaveRequested value)?  saveRequested,TResult Function( _DeleteAccountRequested value)?  deleteAccountRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _NameSaved() when nameSaved != null:
-return nameSaved(_that);case _PhotoSelected() when photoSelected != null:
+return nameSaved(_that);case _EmailSaved() when emailSaved != null:
+return emailSaved(_that);case _PhotoSelected() when photoSelected != null:
 return photoSelected(_that);case _HomeAddressSelected() when homeAddressSelected != null:
 return homeAddressSelected(_that);case _SaveRequested() when saveRequested != null:
 return saveRequested(_that);case _DeleteAccountRequested() when deleteAccountRequested != null:
@@ -82,12 +83,13 @@ return deleteAccountRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _NameSaved value)  nameSaved,required TResult Function( _PhotoSelected value)  photoSelected,required TResult Function( _HomeAddressSelected value)  homeAddressSelected,required TResult Function( _SaveRequested value)  saveRequested,required TResult Function( _DeleteAccountRequested value)  deleteAccountRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _NameSaved value)  nameSaved,required TResult Function( _EmailSaved value)  emailSaved,required TResult Function( _PhotoSelected value)  photoSelected,required TResult Function( _HomeAddressSelected value)  homeAddressSelected,required TResult Function( _SaveRequested value)  saveRequested,required TResult Function( _DeleteAccountRequested value)  deleteAccountRequested,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _NameSaved():
-return nameSaved(_that);case _PhotoSelected():
+return nameSaved(_that);case _EmailSaved():
+return emailSaved(_that);case _PhotoSelected():
 return photoSelected(_that);case _HomeAddressSelected():
 return homeAddressSelected(_that);case _SaveRequested():
 return saveRequested(_that);case _DeleteAccountRequested():
@@ -108,12 +110,13 @@ return deleteAccountRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _NameSaved value)?  nameSaved,TResult? Function( _PhotoSelected value)?  photoSelected,TResult? Function( _HomeAddressSelected value)?  homeAddressSelected,TResult? Function( _SaveRequested value)?  saveRequested,TResult? Function( _DeleteAccountRequested value)?  deleteAccountRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _NameSaved value)?  nameSaved,TResult? Function( _EmailSaved value)?  emailSaved,TResult? Function( _PhotoSelected value)?  photoSelected,TResult? Function( _HomeAddressSelected value)?  homeAddressSelected,TResult? Function( _SaveRequested value)?  saveRequested,TResult? Function( _DeleteAccountRequested value)?  deleteAccountRequested,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _NameSaved() when nameSaved != null:
-return nameSaved(_that);case _PhotoSelected() when photoSelected != null:
+return nameSaved(_that);case _EmailSaved() when emailSaved != null:
+return emailSaved(_that);case _PhotoSelected() when photoSelected != null:
 return photoSelected(_that);case _HomeAddressSelected() when homeAddressSelected != null:
 return homeAddressSelected(_that);case _SaveRequested() when saveRequested != null:
 return saveRequested(_that);case _DeleteAccountRequested() when deleteAccountRequested != null:
@@ -134,11 +137,12 @@ return deleteAccountRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String name)?  nameSaved,TResult Function( File photo)?  photoSelected,TResult Function( String? label,  double? latitude,  double? longitude)?  homeAddressSelected,TResult Function()?  saveRequested,TResult Function()?  deleteAccountRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String name)?  nameSaved,TResult Function( String email)?  emailSaved,TResult Function( File photo)?  photoSelected,TResult Function( String? label,  double? latitude,  double? longitude)?  homeAddressSelected,TResult Function()?  saveRequested,TResult Function()?  deleteAccountRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NameSaved() when nameSaved != null:
-return nameSaved(_that.name);case _PhotoSelected() when photoSelected != null:
+return nameSaved(_that.name);case _EmailSaved() when emailSaved != null:
+return emailSaved(_that.email);case _PhotoSelected() when photoSelected != null:
 return photoSelected(_that.photo);case _HomeAddressSelected() when homeAddressSelected != null:
 return homeAddressSelected(_that.label,_that.latitude,_that.longitude);case _SaveRequested() when saveRequested != null:
 return saveRequested();case _DeleteAccountRequested() when deleteAccountRequested != null:
@@ -160,11 +164,12 @@ return deleteAccountRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String name)  nameSaved,required TResult Function( File photo)  photoSelected,required TResult Function( String? label,  double? latitude,  double? longitude)  homeAddressSelected,required TResult Function()  saveRequested,required TResult Function()  deleteAccountRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String name)  nameSaved,required TResult Function( String email)  emailSaved,required TResult Function( File photo)  photoSelected,required TResult Function( String? label,  double? latitude,  double? longitude)  homeAddressSelected,required TResult Function()  saveRequested,required TResult Function()  deleteAccountRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _NameSaved():
-return nameSaved(_that.name);case _PhotoSelected():
+return nameSaved(_that.name);case _EmailSaved():
+return emailSaved(_that.email);case _PhotoSelected():
 return photoSelected(_that.photo);case _HomeAddressSelected():
 return homeAddressSelected(_that.label,_that.latitude,_that.longitude);case _SaveRequested():
 return saveRequested();case _DeleteAccountRequested():
@@ -185,11 +190,12 @@ return deleteAccountRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String name)?  nameSaved,TResult? Function( File photo)?  photoSelected,TResult? Function( String? label,  double? latitude,  double? longitude)?  homeAddressSelected,TResult? Function()?  saveRequested,TResult? Function()?  deleteAccountRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String name)?  nameSaved,TResult? Function( String email)?  emailSaved,TResult? Function( File photo)?  photoSelected,TResult? Function( String? label,  double? latitude,  double? longitude)?  homeAddressSelected,TResult? Function()?  saveRequested,TResult? Function()?  deleteAccountRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NameSaved() when nameSaved != null:
-return nameSaved(_that.name);case _PhotoSelected() when photoSelected != null:
+return nameSaved(_that.name);case _EmailSaved() when emailSaved != null:
+return emailSaved(_that.email);case _PhotoSelected() when photoSelected != null:
 return photoSelected(_that.photo);case _HomeAddressSelected() when homeAddressSelected != null:
 return homeAddressSelected(_that.label,_that.latitude,_that.longitude);case _SaveRequested() when saveRequested != null:
 return saveRequested();case _DeleteAccountRequested() when deleteAccountRequested != null:
@@ -292,6 +298,72 @@ class __$NameSavedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? name = null,}) {
   return _then(_NameSaved(
 null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _EmailSaved implements ProfileEvent {
+  const _EmailSaved(this.email);
+  
+
+ final  String email;
+
+/// Create a copy of ProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EmailSavedCopyWith<_EmailSaved> get copyWith => __$EmailSavedCopyWithImpl<_EmailSaved>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EmailSaved&&(identical(other.email, email) || other.email == email));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,email);
+
+@override
+String toString() {
+  return 'ProfileEvent.emailSaved(email: $email)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EmailSavedCopyWith<$Res> implements $ProfileEventCopyWith<$Res> {
+  factory _$EmailSavedCopyWith(_EmailSaved value, $Res Function(_EmailSaved) _then) = __$EmailSavedCopyWithImpl;
+@useResult
+$Res call({
+ String email
+});
+
+
+
+
+}
+/// @nodoc
+class __$EmailSavedCopyWithImpl<$Res>
+    implements _$EmailSavedCopyWith<$Res> {
+  __$EmailSavedCopyWithImpl(this._self, this._then);
+
+  final _EmailSaved _self;
+  final $Res Function(_EmailSaved) _then;
+
+/// Create a copy of ProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? email = null,}) {
+  return _then(_EmailSaved(
+null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -502,7 +574,7 @@ String toString() {
 /// @nodoc
 mixin _$ProfileState {
 
- BlocStatus<ProfileEntity> get loadStatus; BlocStatus<ProfileEntity> get saveStatus; BlocStatus<void> get deleteAccountStatus; ProfileEntity? get currentUser; String get pendingName; File? get pendingPhoto;// Pending home address selection. `homeAddressTouched` distinguishes "not
+ BlocStatus<ProfileEntity> get loadStatus; BlocStatus<ProfileEntity> get saveStatus; BlocStatus<void> get deleteAccountStatus; ProfileEntity? get currentUser; String get pendingName; String get pendingEmail; File? get pendingPhoto;// Pending home address selection. `homeAddressTouched` distinguishes "not
 // changed" (keep current) from "cleared" (all values null → remove).
  bool get homeAddressTouched; String? get pendingHomeAddressLabel; double? get pendingHomeAddressLatitude; double? get pendingHomeAddressLongitude;
 /// Create a copy of ProfileState
@@ -515,16 +587,16 @@ $ProfileStateCopyWith<ProfileState> get copyWith => _$ProfileStateCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.deleteAccountStatus, deleteAccountStatus) || other.deleteAccountStatus == deleteAccountStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto)&&(identical(other.homeAddressTouched, homeAddressTouched) || other.homeAddressTouched == homeAddressTouched)&&(identical(other.pendingHomeAddressLabel, pendingHomeAddressLabel) || other.pendingHomeAddressLabel == pendingHomeAddressLabel)&&(identical(other.pendingHomeAddressLatitude, pendingHomeAddressLatitude) || other.pendingHomeAddressLatitude == pendingHomeAddressLatitude)&&(identical(other.pendingHomeAddressLongitude, pendingHomeAddressLongitude) || other.pendingHomeAddressLongitude == pendingHomeAddressLongitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.deleteAccountStatus, deleteAccountStatus) || other.deleteAccountStatus == deleteAccountStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingEmail, pendingEmail) || other.pendingEmail == pendingEmail)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto)&&(identical(other.homeAddressTouched, homeAddressTouched) || other.homeAddressTouched == homeAddressTouched)&&(identical(other.pendingHomeAddressLabel, pendingHomeAddressLabel) || other.pendingHomeAddressLabel == pendingHomeAddressLabel)&&(identical(other.pendingHomeAddressLatitude, pendingHomeAddressLatitude) || other.pendingHomeAddressLatitude == pendingHomeAddressLatitude)&&(identical(other.pendingHomeAddressLongitude, pendingHomeAddressLongitude) || other.pendingHomeAddressLongitude == pendingHomeAddressLongitude));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,deleteAccountStatus,currentUser,pendingName,pendingPhoto,homeAddressTouched,pendingHomeAddressLabel,pendingHomeAddressLatitude,pendingHomeAddressLongitude);
+int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,deleteAccountStatus,currentUser,pendingName,pendingEmail,pendingPhoto,homeAddressTouched,pendingHomeAddressLabel,pendingHomeAddressLatitude,pendingHomeAddressLongitude);
 
 @override
 String toString() {
-  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, deleteAccountStatus: $deleteAccountStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto, homeAddressTouched: $homeAddressTouched, pendingHomeAddressLabel: $pendingHomeAddressLabel, pendingHomeAddressLatitude: $pendingHomeAddressLatitude, pendingHomeAddressLongitude: $pendingHomeAddressLongitude)';
+  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, deleteAccountStatus: $deleteAccountStatus, currentUser: $currentUser, pendingName: $pendingName, pendingEmail: $pendingEmail, pendingPhoto: $pendingPhoto, homeAddressTouched: $homeAddressTouched, pendingHomeAddressLabel: $pendingHomeAddressLabel, pendingHomeAddressLatitude: $pendingHomeAddressLatitude, pendingHomeAddressLongitude: $pendingHomeAddressLongitude)';
 }
 
 
@@ -535,7 +607,7 @@ abstract mixin class $ProfileStateCopyWith<$Res>  {
   factory $ProfileStateCopyWith(ProfileState value, $Res Function(ProfileState) _then) = _$ProfileStateCopyWithImpl;
 @useResult
 $Res call({
- BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, BlocStatus<void> deleteAccountStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto, bool homeAddressTouched, String? pendingHomeAddressLabel, double? pendingHomeAddressLatitude, double? pendingHomeAddressLongitude
+ BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, BlocStatus<void> deleteAccountStatus, ProfileEntity? currentUser, String pendingName, String pendingEmail, File? pendingPhoto, bool homeAddressTouched, String? pendingHomeAddressLabel, double? pendingHomeAddressLatitude, double? pendingHomeAddressLongitude
 });
 
 
@@ -552,13 +624,14 @@ class _$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? deleteAccountStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,Object? homeAddressTouched = null,Object? pendingHomeAddressLabel = freezed,Object? pendingHomeAddressLatitude = freezed,Object? pendingHomeAddressLongitude = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? deleteAccountStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingEmail = null,Object? pendingPhoto = freezed,Object? homeAddressTouched = null,Object? pendingHomeAddressLabel = freezed,Object? pendingHomeAddressLatitude = freezed,Object? pendingHomeAddressLongitude = freezed,}) {
   return _then(_self.copyWith(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<ProfileEntity>,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<ProfileEntity>,deleteAccountStatus: null == deleteAccountStatus ? _self.deleteAccountStatus : deleteAccountStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<void>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
 as ProfileEntity?,pendingName: null == pendingName ? _self.pendingName : pendingName // ignore: cast_nullable_to_non_nullable
+as String,pendingEmail: null == pendingEmail ? _self.pendingEmail : pendingEmail // ignore: cast_nullable_to_non_nullable
 as String,pendingPhoto: freezed == pendingPhoto ? _self.pendingPhoto : pendingPhoto // ignore: cast_nullable_to_non_nullable
 as File?,homeAddressTouched: null == homeAddressTouched ? _self.homeAddressTouched : homeAddressTouched // ignore: cast_nullable_to_non_nullable
 as bool,pendingHomeAddressLabel: freezed == pendingHomeAddressLabel ? _self.pendingHomeAddressLabel : pendingHomeAddressLabel // ignore: cast_nullable_to_non_nullable
@@ -688,10 +761,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto,  bool homeAddressTouched,  String? pendingHomeAddressLabel,  double? pendingHomeAddressLatitude,  double? pendingHomeAddressLongitude)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  String pendingEmail,  File? pendingPhoto,  bool homeAddressTouched,  String? pendingHomeAddressLabel,  double? pendingHomeAddressLatitude,  double? pendingHomeAddressLongitude)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto,_that.homeAddressTouched,_that.pendingHomeAddressLabel,_that.pendingHomeAddressLatitude,_that.pendingHomeAddressLongitude);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingEmail,_that.pendingPhoto,_that.homeAddressTouched,_that.pendingHomeAddressLabel,_that.pendingHomeAddressLatitude,_that.pendingHomeAddressLongitude);case _:
   return orElse();
 
 }
@@ -709,10 +782,10 @@ return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto,  bool homeAddressTouched,  String? pendingHomeAddressLabel,  double? pendingHomeAddressLatitude,  double? pendingHomeAddressLongitude)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  String pendingEmail,  File? pendingPhoto,  bool homeAddressTouched,  String? pendingHomeAddressLabel,  double? pendingHomeAddressLatitude,  double? pendingHomeAddressLongitude)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState():
-return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto,_that.homeAddressTouched,_that.pendingHomeAddressLabel,_that.pendingHomeAddressLatitude,_that.pendingHomeAddressLongitude);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingEmail,_that.pendingPhoto,_that.homeAddressTouched,_that.pendingHomeAddressLabel,_that.pendingHomeAddressLatitude,_that.pendingHomeAddressLongitude);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -729,10 +802,10 @@ return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  File? pendingPhoto,  bool homeAddressTouched,  String? pendingHomeAddressLabel,  double? pendingHomeAddressLatitude,  double? pendingHomeAddressLongitude)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<ProfileEntity> loadStatus,  BlocStatus<ProfileEntity> saveStatus,  BlocStatus<void> deleteAccountStatus,  ProfileEntity? currentUser,  String pendingName,  String pendingEmail,  File? pendingPhoto,  bool homeAddressTouched,  String? pendingHomeAddressLabel,  double? pendingHomeAddressLatitude,  double? pendingHomeAddressLongitude)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingPhoto,_that.homeAddressTouched,_that.pendingHomeAddressLabel,_that.pendingHomeAddressLatitude,_that.pendingHomeAddressLongitude);case _:
+return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_that.currentUser,_that.pendingName,_that.pendingEmail,_that.pendingPhoto,_that.homeAddressTouched,_that.pendingHomeAddressLabel,_that.pendingHomeAddressLatitude,_that.pendingHomeAddressLongitude);case _:
   return null;
 
 }
@@ -744,7 +817,7 @@ return $default(_that.loadStatus,_that.saveStatus,_that.deleteAccountStatus,_tha
 
 
 class _ProfileState implements ProfileState {
-  const _ProfileState({this.loadStatus = const BlocStatus<ProfileEntity>.initial(), this.saveStatus = const BlocStatus<ProfileEntity>.initial(), this.deleteAccountStatus = const BlocStatus<void>.initial(), this.currentUser, this.pendingName = '', this.pendingPhoto, this.homeAddressTouched = false, this.pendingHomeAddressLabel, this.pendingHomeAddressLatitude, this.pendingHomeAddressLongitude});
+  const _ProfileState({this.loadStatus = const BlocStatus<ProfileEntity>.initial(), this.saveStatus = const BlocStatus<ProfileEntity>.initial(), this.deleteAccountStatus = const BlocStatus<void>.initial(), this.currentUser, this.pendingName = '', this.pendingEmail = '', this.pendingPhoto, this.homeAddressTouched = false, this.pendingHomeAddressLabel, this.pendingHomeAddressLatitude, this.pendingHomeAddressLongitude});
   
 
 @override@JsonKey() final  BlocStatus<ProfileEntity> loadStatus;
@@ -752,6 +825,7 @@ class _ProfileState implements ProfileState {
 @override@JsonKey() final  BlocStatus<void> deleteAccountStatus;
 @override final  ProfileEntity? currentUser;
 @override@JsonKey() final  String pendingName;
+@override@JsonKey() final  String pendingEmail;
 @override final  File? pendingPhoto;
 // Pending home address selection. `homeAddressTouched` distinguishes "not
 // changed" (keep current) from "cleared" (all values null → remove).
@@ -770,16 +844,16 @@ _$ProfileStateCopyWith<_ProfileState> get copyWith => __$ProfileStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.deleteAccountStatus, deleteAccountStatus) || other.deleteAccountStatus == deleteAccountStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto)&&(identical(other.homeAddressTouched, homeAddressTouched) || other.homeAddressTouched == homeAddressTouched)&&(identical(other.pendingHomeAddressLabel, pendingHomeAddressLabel) || other.pendingHomeAddressLabel == pendingHomeAddressLabel)&&(identical(other.pendingHomeAddressLatitude, pendingHomeAddressLatitude) || other.pendingHomeAddressLatitude == pendingHomeAddressLatitude)&&(identical(other.pendingHomeAddressLongitude, pendingHomeAddressLongitude) || other.pendingHomeAddressLongitude == pendingHomeAddressLongitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.saveStatus, saveStatus) || other.saveStatus == saveStatus)&&(identical(other.deleteAccountStatus, deleteAccountStatus) || other.deleteAccountStatus == deleteAccountStatus)&&(identical(other.currentUser, currentUser) || other.currentUser == currentUser)&&(identical(other.pendingName, pendingName) || other.pendingName == pendingName)&&(identical(other.pendingEmail, pendingEmail) || other.pendingEmail == pendingEmail)&&(identical(other.pendingPhoto, pendingPhoto) || other.pendingPhoto == pendingPhoto)&&(identical(other.homeAddressTouched, homeAddressTouched) || other.homeAddressTouched == homeAddressTouched)&&(identical(other.pendingHomeAddressLabel, pendingHomeAddressLabel) || other.pendingHomeAddressLabel == pendingHomeAddressLabel)&&(identical(other.pendingHomeAddressLatitude, pendingHomeAddressLatitude) || other.pendingHomeAddressLatitude == pendingHomeAddressLatitude)&&(identical(other.pendingHomeAddressLongitude, pendingHomeAddressLongitude) || other.pendingHomeAddressLongitude == pendingHomeAddressLongitude));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,deleteAccountStatus,currentUser,pendingName,pendingPhoto,homeAddressTouched,pendingHomeAddressLabel,pendingHomeAddressLatitude,pendingHomeAddressLongitude);
+int get hashCode => Object.hash(runtimeType,loadStatus,saveStatus,deleteAccountStatus,currentUser,pendingName,pendingEmail,pendingPhoto,homeAddressTouched,pendingHomeAddressLabel,pendingHomeAddressLatitude,pendingHomeAddressLongitude);
 
 @override
 String toString() {
-  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, deleteAccountStatus: $deleteAccountStatus, currentUser: $currentUser, pendingName: $pendingName, pendingPhoto: $pendingPhoto, homeAddressTouched: $homeAddressTouched, pendingHomeAddressLabel: $pendingHomeAddressLabel, pendingHomeAddressLatitude: $pendingHomeAddressLatitude, pendingHomeAddressLongitude: $pendingHomeAddressLongitude)';
+  return 'ProfileState(loadStatus: $loadStatus, saveStatus: $saveStatus, deleteAccountStatus: $deleteAccountStatus, currentUser: $currentUser, pendingName: $pendingName, pendingEmail: $pendingEmail, pendingPhoto: $pendingPhoto, homeAddressTouched: $homeAddressTouched, pendingHomeAddressLabel: $pendingHomeAddressLabel, pendingHomeAddressLatitude: $pendingHomeAddressLatitude, pendingHomeAddressLongitude: $pendingHomeAddressLongitude)';
 }
 
 
@@ -790,7 +864,7 @@ abstract mixin class _$ProfileStateCopyWith<$Res> implements $ProfileStateCopyWi
   factory _$ProfileStateCopyWith(_ProfileState value, $Res Function(_ProfileState) _then) = __$ProfileStateCopyWithImpl;
 @override @useResult
 $Res call({
- BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, BlocStatus<void> deleteAccountStatus, ProfileEntity? currentUser, String pendingName, File? pendingPhoto, bool homeAddressTouched, String? pendingHomeAddressLabel, double? pendingHomeAddressLatitude, double? pendingHomeAddressLongitude
+ BlocStatus<ProfileEntity> loadStatus, BlocStatus<ProfileEntity> saveStatus, BlocStatus<void> deleteAccountStatus, ProfileEntity? currentUser, String pendingName, String pendingEmail, File? pendingPhoto, bool homeAddressTouched, String? pendingHomeAddressLabel, double? pendingHomeAddressLatitude, double? pendingHomeAddressLongitude
 });
 
 
@@ -807,13 +881,14 @@ class __$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? deleteAccountStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingPhoto = freezed,Object? homeAddressTouched = null,Object? pendingHomeAddressLabel = freezed,Object? pendingHomeAddressLatitude = freezed,Object? pendingHomeAddressLongitude = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? saveStatus = null,Object? deleteAccountStatus = null,Object? currentUser = freezed,Object? pendingName = null,Object? pendingEmail = null,Object? pendingPhoto = freezed,Object? homeAddressTouched = null,Object? pendingHomeAddressLabel = freezed,Object? pendingHomeAddressLatitude = freezed,Object? pendingHomeAddressLongitude = freezed,}) {
   return _then(_ProfileState(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<ProfileEntity>,saveStatus: null == saveStatus ? _self.saveStatus : saveStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<ProfileEntity>,deleteAccountStatus: null == deleteAccountStatus ? _self.deleteAccountStatus : deleteAccountStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<void>,currentUser: freezed == currentUser ? _self.currentUser : currentUser // ignore: cast_nullable_to_non_nullable
 as ProfileEntity?,pendingName: null == pendingName ? _self.pendingName : pendingName // ignore: cast_nullable_to_non_nullable
+as String,pendingEmail: null == pendingEmail ? _self.pendingEmail : pendingEmail // ignore: cast_nullable_to_non_nullable
 as String,pendingPhoto: freezed == pendingPhoto ? _self.pendingPhoto : pendingPhoto // ignore: cast_nullable_to_non_nullable
 as File?,homeAddressTouched: null == homeAddressTouched ? _self.homeAddressTouched : homeAddressTouched // ignore: cast_nullable_to_non_nullable
 as bool,pendingHomeAddressLabel: freezed == pendingHomeAddressLabel ? _self.pendingHomeAddressLabel : pendingHomeAddressLabel // ignore: cast_nullable_to_non_nullable

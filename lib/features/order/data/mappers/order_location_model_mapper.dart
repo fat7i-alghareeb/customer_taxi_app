@@ -9,7 +9,7 @@ extension OrderLocationModelMapper on OrderLocationModel {
       label: label,
       primaryName: primaryName,
       secondaryAddress: secondaryAddress,
+      isAirport: isAirport,
     );
-
   }
 }

@@ -46,9 +46,7 @@ extension _LifecycleHandlers on OrderBloc {
       },
       failure: (_) => emit(
         state.copyWith(
-          stops: state.stops.copyWith(
-            savedState: const BlocStatus.initial(),
-          ),
+          stops: state.stops.copyWith(savedState: const BlocStatus.initial()),
         ),
       ),
     );
@@ -95,10 +93,7 @@ extension _LifecycleHandlers on OrderBloc {
 
         emit(
           state.copyWith(
-            stops: state.stops.copyWith(
-              list: nextStops,
-              queries: nextQueries,
-            ),
+            stops: state.stops.copyWith(list: nextStops, queries: nextQueries),
             sheet: state.sheet.copyWith(mode: OrderSheetMode.collapsed),
           ),
         );
@@ -120,10 +115,7 @@ extension _LifecycleHandlers on OrderBloc {
 
         emit(
           state.copyWith(
-            stops: state.stops.copyWith(
-              list: nextStops,
-              queries: nextQueries,
-            ),
+            stops: state.stops.copyWith(list: nextStops, queries: nextQueries),
             sheet: state.sheet.copyWith(mode: OrderSheetMode.collapsed),
           ),
         );
@@ -141,7 +133,9 @@ extension _LifecycleHandlers on OrderBloc {
 
     final reset = _resetTripFlowState(state);
     emit(
-      reset.copyWith(sheet: reset.sheet.copyWith(mode: OrderSheetMode.expanded)),
+      reset.copyWith(
+        sheet: reset.sheet.copyWith(mode: OrderSheetMode.expanded),
+      ),
     );
 
     final savedLocationsResult = await _facade.getSavedLocations();

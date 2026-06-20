@@ -98,6 +98,9 @@ extension _MapHandlers on OrderBloc {
               routeState: const BlocStatus.initial(),
               carOptionsState: const BlocStatus.initial(),
             ),
+            booking: index == 0
+                ? state.booking.copyWith(flightNumber: '')
+                : state.booking,
           );
         } else {
           final reset = _resetTripFlowState(state);
@@ -108,6 +111,9 @@ extension _MapHandlers on OrderBloc {
               suggestionsState: nextSuggestions,
             ),
             sheet: reset.sheet.copyWith(mode: OrderSheetMode.expanded),
+            booking: index == 0
+                ? reset.booking.copyWith(flightNumber: '')
+                : reset.booking,
           );
         }
 
@@ -149,14 +155,18 @@ extension _MapHandlers on OrderBloc {
   ) {
     _invalidateTripResolution();
     _invalidatePrefetch();
-    printM('[OrderBloc] vehicleStepBackPressed -> locationEntry (stops preserved)');
-    emit(state.copyWith(
-      sheet: state.sheet.copyWith(
-        expandedStep: OrderExpandedStep.locationEntry,
-        mapPickingTarget: OrderLocationTarget.stop,
+    printM(
+      '[OrderBloc] vehicleStepBackPressed -> locationEntry (stops preserved)',
+    );
+    emit(
+      state.copyWith(
+        sheet: state.sheet.copyWith(
+          expandedStep: OrderExpandedStep.locationEntry,
+          mapPickingTarget: OrderLocationTarget.stop,
+        ),
+        trip: const OrderTripSlice(),
+        booking: OrderBookingSlice(scheduleMode: state.booking.scheduleMode),
       ),
-      trip: const OrderTripSlice(),
-      booking: OrderBookingSlice(scheduleMode: state.booking.scheduleMode),
-    ));
+    );
   }
 }

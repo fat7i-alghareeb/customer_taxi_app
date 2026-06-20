@@ -7,11 +7,10 @@ import '../../../../utils/helpers/app_strings.dart';
 
 enum TripStatus {
   pendingQuote,
-  scheduled,
-  pendingDriver,
-  driverAssigned,
-  driverEnRoute,
-  driverArrived,
+  awaitingAdminAcceptance,
+  accepted,
+  enRoute,
+  arrived,
   inProgress,
   completed,
   cancelled,
@@ -23,29 +22,27 @@ enum TripStatus {
   String get title {
     return switch (this) {
       TripStatus.pendingQuote => AppStrings.tripStatusPendingQuote,
-      TripStatus.scheduled => AppStrings.tripStatusScheduled,
-      TripStatus.pendingDriver => AppStrings.tripStatusPendingDriver,
-      TripStatus.driverAssigned => AppStrings.tripStatusDriverAssigned,
-      TripStatus.driverEnRoute => AppStrings.tripStatusDriverEnRoute,
-      TripStatus.driverArrived => AppStrings.tripStatusDriverArrived,
+      TripStatus.awaitingAdminAcceptance => AppStrings.tripStatusPendingDriver,
+      TripStatus.accepted => AppStrings.tripStatusDriverAssigned,
+      TripStatus.enRoute => AppStrings.tripStatusDriverEnRoute,
+      TripStatus.arrived => AppStrings.tripStatusDriverArrived,
       TripStatus.inProgress => AppStrings.tripStatusInProgress,
       TripStatus.completed => AppStrings.tripStatusCompleted,
       TripStatus.cancelled => AppStrings.tripStatusCancelled,
       TripStatus.awaitingPayment => AppStrings.tripStatusAwaitingPayment,
       TripStatus.paymentFailed => AppStrings.tripStatusPaymentFailed,
       TripStatus.refunded => AppStrings.tripStatusRefunded,
-      TripStatus.unknown => 'Unknown',
+      TripStatus.unknown => AppStrings.tripStatus,
     };
   }
 
   Color color(BuildContext context) {
     return switch (this) {
       TripStatus.pendingQuote => AppColors.info,
-      TripStatus.scheduled => Colors.orange,
-      TripStatus.pendingDriver => Colors.blue,
-      TripStatus.driverAssigned => Colors.teal,
-      TripStatus.driverEnRoute => Colors.teal,
-      TripStatus.driverArrived => Colors.green,
+      TripStatus.awaitingAdminAcceptance => Colors.orange,
+      TripStatus.accepted => Colors.teal,
+      TripStatus.enRoute => Colors.teal,
+      TripStatus.arrived => Colors.green,
       TripStatus.inProgress => context.primary,
       TripStatus.completed => Colors.green,
       TripStatus.cancelled => context.error,
@@ -59,11 +56,10 @@ enum TripStatus {
   FaIconData get icon {
     return switch (this) {
       TripStatus.pendingQuote => FontAwesomeIcons.fileInvoiceDollar,
-      TripStatus.scheduled => FontAwesomeIcons.calendarDays,
-      TripStatus.pendingDriver => FontAwesomeIcons.magnifyingGlassLocation,
-      TripStatus.driverAssigned => FontAwesomeIcons.carSide,
-      TripStatus.driverEnRoute => FontAwesomeIcons.carSide,
-      TripStatus.driverArrived => FontAwesomeIcons.circleCheck,
+      TripStatus.awaitingAdminAcceptance => FontAwesomeIcons.calendarDays,
+      TripStatus.accepted => FontAwesomeIcons.circleCheck,
+      TripStatus.enRoute => FontAwesomeIcons.carSide,
+      TripStatus.arrived => FontAwesomeIcons.circleCheck,
       TripStatus.inProgress => FontAwesomeIcons.route,
       TripStatus.completed => FontAwesomeIcons.checkDouble,
       TripStatus.cancelled => FontAwesomeIcons.circleXmark,
@@ -81,12 +77,11 @@ enum TripStatus {
       this == TripStatus.refunded;
 
   bool get canCancel =>
-      this == TripStatus.scheduled ||
       this == TripStatus.awaitingPayment ||
-      this == TripStatus.pendingDriver ||
-      this == TripStatus.driverAssigned ||
-      this == TripStatus.driverEnRoute ||
-      this == TripStatus.driverArrived;
+      this == TripStatus.awaitingAdminAcceptance ||
+      this == TripStatus.accepted ||
+      this == TripStatus.enRoute ||
+      this == TripStatus.arrived;
 
   static TripStatus fromString(String? value) {
     final normalized = value
@@ -98,11 +93,15 @@ enum TripStatus {
 
     return switch (normalized) {
       'pendingquote' => TripStatus.pendingQuote,
-      'scheduled' => TripStatus.scheduled,
-      'pendingdriver' || 'findingdriver' => TripStatus.pendingDriver,
-      'driverassigned' => TripStatus.driverAssigned,
-      'driverenroute' => TripStatus.driverEnRoute,
-      'driverarrived' || 'driverassignedarrived' => TripStatus.driverArrived,
+      'awaitingadminacceptance' ||
+      'scheduled' ||
+      'pendingdriver' ||
+      'findingdriver' => TripStatus.awaitingAdminAcceptance,
+      'accepted' || 'driverassigned' => TripStatus.accepted,
+      'enroute' || 'driverenroute' => TripStatus.enRoute,
+      'arrived' ||
+      'driverarrived' ||
+      'driverassignedarrived' => TripStatus.arrived,
       'inprogress' => TripStatus.inProgress,
       'completed' => TripStatus.completed,
       'cancelled' || 'canceled' => TripStatus.cancelled,

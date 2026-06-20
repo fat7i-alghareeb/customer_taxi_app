@@ -39,6 +39,7 @@ class ApiEndpoints {
   static String rateTrip(String id) => '/api/v1/trips/$id/rating';
   static String settleWaitingFee(String id) =>
       '/api/v1/trips/$id/waiting-fee/settlements';
+  static String tripMessages(String id) => '/api/v1/trips/$id/messages';
   static String tripReceipt(String id) => '/api/v1/trips/$id/receipt';
   static String tripInvoice(String id) => '/api/v1/trips/$id/invoice';
   static String tripInvoicePdf(String id) => '/api/v1/trips/$id/invoice/pdf';

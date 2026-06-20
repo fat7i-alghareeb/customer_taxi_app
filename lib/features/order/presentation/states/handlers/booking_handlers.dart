@@ -53,11 +53,7 @@ extension _BookingHandlers on OrderBloc {
     Emitter<OrderState> emit,
   ) {
     if (event.time == null) {
-      emit(
-        state.copyWith(
-          booking: state.booking.copyWith(scheduledAt: null),
-        ),
-      );
+      emit(state.copyWith(booking: state.booking.copyWith(scheduledAt: null)));
       return;
     }
 
@@ -82,13 +78,13 @@ extension _BookingHandlers on OrderBloc {
     );
   }
 
-  void _onAirportToggled(
-    _AirportToggled event,
+  void _onFlightNumberChanged(
+    _FlightNumberChanged event,
     Emitter<OrderState> emit,
   ) {
     emit(
       state.copyWith(
-        booking: state.booking.copyWith(isAirport: event.isAirport),
+        booking: state.booking.copyWith(flightNumber: event.flightNumber),
       ),
     );
   }
@@ -129,6 +125,15 @@ extension _BookingHandlers on OrderBloc {
       return;
     }
 
+    final isAirport = resolvedStops.first.isAirport;
+    final normalizedFlightNumber = _normalizeFlightNumber(
+      state.booking.flightNumber,
+    );
+    if (isAirport && !_isValidFlightNumber(normalizedFlightNumber)) {
+      printY('[Payment] blocked — invalid airport flight number');
+      return;
+    }
+
     // ── Retry path: reuse existing PaymentIntent if user previously dismissed ──
     // When the user opens the Stripe sheet and closes it without paying, the
     // PaymentIntent remains in `requires_payment_method` on Stripe's side —
@@ -151,7 +156,9 @@ extension _BookingHandlers on OrderBloc {
     }
 
     // ── First attempt: create the trip on the backend ────────────────────────
-    printC('[Payment] requesting trip quoteId=$quoteId stops=${resolvedStops.length}');
+    printC(
+      '[Payment] requesting trip quoteId=$quoteId stops=${resolvedStops.length}',
+    );
     emit(
       state.copyWith(
         booking: state.booking.copyWith(
@@ -166,6 +173,7 @@ extension _BookingHandlers on OrderBloc {
             latitude: s.latitude,
             longitude: s.longitude,
             label: s.label,
+            isAirport: s.isAirport,
           ),
         )
         .toList();
@@ -186,7 +194,7 @@ extension _BookingHandlers on OrderBloc {
         stops: stopCoords,
         scheduledAt: scheduledAtToSend,
         passengerNote: passengerNote.isEmpty ? null : passengerNote,
-        isAirport: state.booking.isAirport,
+        flightNumber: isAirport ? normalizedFlightNumber : null,
       ),
     );
 
@@ -204,7 +212,9 @@ extension _BookingHandlers on OrderBloc {
         final stripeEnabled = _clientConfig.current.stripeEnabled;
 
         if (!stripeEnabled) {
-          printY('[Payment] Stripe disabled — skipping payment sheet (trip booked)');
+          printY(
+            '[Payment] Stripe disabled — skipping payment sheet (trip booked)',
+          );
           emit(
             state.copyWith(
               booking: state.booking.copyWith(
@@ -217,7 +227,9 @@ extension _BookingHandlers on OrderBloc {
         }
 
         if (stripePayment == null) {
-          printY('[Payment] stripeEnabled=true but no stripePayment on trip — skipping sheet (trip booked)');
+          printY(
+            '[Payment] stripeEnabled=true but no stripePayment on trip — skipping sheet (trip booked)',
+          );
           emit(
             state.copyWith(
               booking: state.booking.copyWith(
@@ -263,10 +275,14 @@ extension _BookingHandlers on OrderBloc {
     OrderTripResponseEntity trip,
     OrderStripePaymentEntity stripePayment,
   ) async {
-    printC('[Payment] Stripe path — paymentIntentId=${stripePayment.paymentIntentId}');
+    printC(
+      '[Payment] Stripe path — paymentIntentId=${stripePayment.paymentIntentId}',
+    );
 
     try {
-      printC('[Payment] initPaymentSheet — clientSecret=${stripePayment.clientSecret.substring(0, 12)}…');
+      printC(
+        '[Payment] initPaymentSheet — clientSecret=${stripePayment.clientSecret.substring(0, 12)}…',
+      );
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: stripePayment.clientSecret,
@@ -293,7 +309,9 @@ extension _BookingHandlers on OrderBloc {
       // `AwaitingPayment` on the server until the Stripe webhook fires.
       // Wait briefly for the real-time confirmation push before
       // declaring success in the UI.
-      printC('[Payment] awaiting backend PaymentConfirmed/PaymentFailed (timeout=${_kPaymentConfirmationTimeout.inSeconds}s)');
+      printC(
+        '[Payment] awaiting backend PaymentConfirmed/PaymentFailed (timeout=${_kPaymentConfirmationTimeout.inSeconds}s)',
+      );
       final outcome = await _awaitPaymentOutcome(trip.id);
       switch (outcome) {
         case _PaymentOutcome.confirmed:
@@ -308,7 +326,9 @@ extension _BookingHandlers on OrderBloc {
           );
           break;
         case _PaymentOutcome.timeout:
-          printY('[Payment] timeout waiting for backend — emitting optimistic success');
+          printY(
+            '[Payment] timeout waiting for backend — emitting optimistic success',
+          );
           emit(
             state.copyWith(
               booking: state.booking.copyWith(
@@ -319,7 +339,9 @@ extension _BookingHandlers on OrderBloc {
           );
           break;
         case _PaymentOutcome.failed:
-          printR('[Payment] backend reported payment failed — emitting failure');
+          printR(
+            '[Payment] backend reported payment failed — emitting failure',
+          );
           // Payment definitively failed on the backend side; clear the pending
           // trip so the next tap creates a fresh one.
           emit(
@@ -336,7 +358,9 @@ extension _BookingHandlers on OrderBloc {
     } on StripeException catch (e) {
       final isCanceled = e.error.code == FailureCode.Canceled;
       if (isCanceled) {
-        printY('[Payment] sheet canceled by user — keeping PI for retry code=${e.error.code}');
+        printY(
+          '[Payment] sheet canceled by user — keeping PI for retry code=${e.error.code}',
+        );
         // Keep pendingTripResponse: the PaymentIntent is still in
         // `requires_payment_method` on Stripe's side and can be re-presented.
         emit(
@@ -348,7 +372,9 @@ extension _BookingHandlers on OrderBloc {
           ),
         );
       } else {
-        printR('[Payment] sheet hard failure — clearing PI code=${e.error.code} msg=${e.error.localizedMessage}');
+        printR(
+          '[Payment] sheet hard failure — clearing PI code=${e.error.code} msg=${e.error.localizedMessage}',
+        );
         // A hard Stripe failure likely means the PI is in a terminal state;
         // clear pendingTripResponse so the next tap starts fresh.
         emit(
@@ -373,20 +399,23 @@ extension _BookingHandlers on OrderBloc {
   /// - [_PaymentOutcome.timeout] if neither arrives in time (caller treats
   ///   this as an optimistic success to keep the UI responsive)
   Future<_PaymentOutcome> _awaitPaymentOutcome(String tripId) async {
-    printC('[Payment/_awaitOutcome] listening for tripId=$tripId timeout=${_kPaymentConfirmationTimeout.inSeconds}s');
+    printC(
+      '[Payment/_awaitOutcome] listening for tripId=$tripId timeout=${_kPaymentConfirmationTimeout.inSeconds}s',
+    );
     try {
       final event = await _realtime.events
           .where(
             (e) =>
                 e.tripId == tripId &&
-                (e is RealtimePaymentConfirmed ||
-                    e is RealtimePaymentFailed),
+                (e is RealtimePaymentConfirmed || e is RealtimePaymentFailed),
           )
           .first
           .timeout(_kPaymentConfirmationTimeout);
 
       if (event is RealtimePaymentFailed) {
-        printR('[Payment/_awaitOutcome] PaymentFailed received reason=${event.reason}');
+        printR(
+          '[Payment/_awaitOutcome] PaymentFailed received reason=${event.reason}',
+        );
         return _PaymentOutcome.failed;
       }
       printG('[Payment/_awaitOutcome] PaymentConfirmed received');
@@ -398,6 +427,16 @@ extension _BookingHandlers on OrderBloc {
       return _PaymentOutcome.timeout;
     }
   }
+}
+
+String _normalizeFlightNumber(String value) {
+  return value.trim().replaceAll(RegExp(r'\s+'), ' ').toUpperCase();
+}
+
+bool _isValidFlightNumber(String value) {
+  return value.length >= 2 &&
+      value.length <= 15 &&
+      RegExp(r'^[A-Z0-9](?:[A-Z0-9 -]{0,13}[A-Z0-9])?$').hasMatch(value);
 }
 
 enum _PaymentOutcome { confirmed, failed, timeout }

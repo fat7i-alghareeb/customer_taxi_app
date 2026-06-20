@@ -9,6 +9,7 @@ abstract class ProfileModel with _$ProfileModel {
     required String id,
     String? name,
     required String phone,
+    String? email,
     String? profilePhotoUrl,
     String? homeAddressLabel,
     double? homeAddressLatitude,

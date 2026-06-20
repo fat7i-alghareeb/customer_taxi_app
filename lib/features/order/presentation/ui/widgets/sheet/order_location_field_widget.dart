@@ -38,7 +38,9 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
   @override
   void initState() {
     super.initState();
-    printM('[OrderLocationFieldWidget] initState controlName=${widget.formControlName}');
+    printM(
+      '[OrderLocationFieldWidget] initState controlName=${widget.formControlName}',
+    );
     _internalFocusNode = widget.focusNode ?? FocusNode();
     _internalFocusNode.addListener(_onFocusChanged);
   }
@@ -54,7 +56,9 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
   }
 
   void _onFocusChanged() {
-    printM('[OrderLocationFieldWidget] _onFocusChanged controlName=${widget.formControlName} hasFocus=${_internalFocusNode.hasFocus}');
+    printM(
+      '[OrderLocationFieldWidget] _onFocusChanged controlName=${widget.formControlName} hasFocus=${_internalFocusNode.hasFocus}',
+    );
     if (mounted) {
       setState(() {
         _hasFocus = _internalFocusNode.hasFocus;
@@ -116,11 +120,14 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
               formControlName: widget.formControlName,
               builder: (context, control, _) {
                 final hasValue = (control.value ?? '').trim().isNotEmpty;
-                final showClear = _hasFocus && hasValue && widget.onClearPressed != null;
+                final showClear =
+                    _hasFocus && hasValue && widget.onClearPressed != null;
                 final showAdd = widget.onAddPressed != null;
                 final showRemove = widget.onRemovePressed != null;
 
-                printM('[OrderLocationFieldWidget] build controlName=${widget.formControlName} value="${control.value}" hasFocus=$_hasFocus');
+                printM(
+                  '[OrderLocationFieldWidget] build controlName=${widget.formControlName} value="${control.value}" hasFocus=$_hasFocus',
+                );
 
                 Widget? suffixWidget;
                 IconSource? suffixIcon;
@@ -165,10 +172,17 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                     onTap: widget.onRemovePressed!,
                   );
                 } else if (showClear) {
-                  suffixIcon = IconSource.faIcon(FontAwesomeIcons.xmark, size: 14.r);
+                  suffixIcon = IconSource.faIcon(
+                    FontAwesomeIcons.xmark,
+                    size: 14.r,
+                  );
                   onSuffixTap = widget.onClearPressed;
                 } else if (showAdd) {
-                  suffixIcon = IconSource.faIcon(FontAwesomeIcons.plus, size: 14.r, color: context.primary);
+                  suffixIcon = IconSource.faIcon(
+                    FontAwesomeIcons.plus,
+                    size: 14.r,
+                    color: context.primary,
+                  );
                   onSuffixTap = widget.onAddPressed;
                 }
 
@@ -184,7 +198,9 @@ class _OrderLocationFieldWidgetState extends State<OrderLocationFieldWidget> {
                         )
                       : const AppAffixes(),
                   onChangedDebounced: (value, _) {
-                    printM('[OrderLocationFieldWidget] onChangedDebounced controlName=${widget.formControlName} value="$value"');
+                    printM(
+                      '[OrderLocationFieldWidget] onChangedDebounced controlName=${widget.formControlName} value="$value"',
+                    );
                     widget.onQueryChanged(value);
                   },
                 );

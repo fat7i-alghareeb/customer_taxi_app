@@ -78,6 +78,14 @@ import 'package:customertaxi/features/auth/domain/repositories/auth_repository.d
     as _i618;
 import 'package:customertaxi/features/auth/presentation/states/auth_bloc.dart'
     as _i781;
+import 'package:customertaxi/features/chat/data/datasources/chat_remote_datasource.dart'
+    as _i754;
+import 'package:customertaxi/features/chat/data/repositories/chat_repository_impl.dart'
+    as _i187;
+import 'package:customertaxi/features/chat/domain/repositories/chat_repository.dart'
+    as _i698;
+import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart'
+    as _i174;
 import 'package:customertaxi/features/favorites/presentation/states/favorites_bloc.dart'
     as _i499;
 import 'package:customertaxi/features/order/data/datasources/order_local_datasource.dart'
@@ -248,6 +256,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i54.AuthRemoteDataSource>(
       () => _i54.AuthRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i754.ChatRemoteDataSource>(
+      () => _i754.ChatRemoteDataSource(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i93.OrderRemoteDataSource>(
       () => _i93.OrderRemoteDataSource(gh<_i361.Dio>()),
     );
@@ -262,6 +273,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i482.ProfileRepository>(
       () => _i411.ProfileRepositoryImpl(gh<_i1044.ProfileRemoteDataSource>()),
+    );
+    gh.lazySingleton<_i698.ChatRepository>(
+      () => _i187.ChatRepositoryImpl(gh<_i754.ChatRemoteDataSource>()),
     );
     gh.lazySingleton<_i133.TripRepository>(
       () => _i384.TripRepositoryImpl(gh<_i379.TripRemoteDataSource>()),
@@ -328,6 +342,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i925.OrderFacade>(
       () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
+    );
+    gh.factory<_i174.ChatBloc>(
+      () => _i174.ChatBloc(
+        gh<_i698.ChatRepository>(),
+        gh<_i404.RealtimeService>(),
+        gh<_i814.AuthManager>(),
+      ),
     );
     gh.lazySingleton<_i239.AuthFacade>(
       () => _i239.AuthFacade(gh<_i618.AuthRepository>()),

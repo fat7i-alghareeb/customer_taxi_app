@@ -13,30 +13,34 @@ class OrderCenterPinWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             FaIcon(
-              FontAwesomeIcons.locationDot,
-              size: 42.r,
-              color: context.primary,
-            ).animate(onPlay: (c) => c.repeat(reverse: true)).moveY(
+                  FontAwesomeIcons.locationDot,
+                  size: 42.r,
+                  color: context.primary,
+                )
+                .animate(onPlay: (c) => c.repeat(reverse: true))
+                .moveY(
                   begin: 0,
                   end: -6.h,
                   duration: 1200.ms,
                   curve: Curves.easeInOut,
                 ),
             Container(
-              width: 12.w,
-              height: 4.h,
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.all(Radius.elliptical(6.w, 2.h)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    spreadRadius: 1,
+                  width: 12.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.all(Radius.elliptical(6.w, 2.h)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 4,
+                        spreadRadius: 1,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ).animate(onPlay: (c) => c.repeat(reverse: true)).scale(
+                )
+                .animate(onPlay: (c) => c.repeat(reverse: true))
+                .scale(
                   begin: const Offset(1, 1),
                   end: const Offset(0.7, 0.7),
                   duration: 1200.ms,
@@ -48,4 +52,3 @@ class OrderCenterPinWidget extends StatelessWidget {
     );
   }
 }
-

@@ -7,9 +7,7 @@ extension _StopsHandlers on OrderBloc {
   ) {
     printM('[OrderBloc] activeStopChanged index=${event.index}');
     emit(
-      state.copyWith(
-        sheet: state.sheet.copyWith(activeStopIndex: event.index),
-      ),
+      state.copyWith(sheet: state.sheet.copyWith(activeStopIndex: event.index)),
     );
   }
 
@@ -136,6 +134,9 @@ extension _StopsHandlers on OrderBloc {
           routeState: const BlocStatus.initial(),
           carOptionsState: const BlocStatus.initial(),
         ),
+        booking: event.index == 0
+            ? state.booking.copyWith(flightNumber: '')
+            : state.booking,
       ),
     );
 
@@ -162,6 +163,9 @@ extension _StopsHandlers on OrderBloc {
     emit(
       state.copyWith(
         stops: state.stops.copyWith(list: nextStops, queries: nextQueries),
+        booking: event.index == 0
+            ? state.booking.copyWith(flightNumber: '')
+            : state.booking,
       ),
     );
 

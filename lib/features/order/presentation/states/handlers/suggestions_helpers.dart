@@ -148,10 +148,7 @@ extension _SuggestionsHelpers on OrderBloc {
           final currentSuggestions = nextSuggestions[i];
           if (state.stops.queries[i].trim().isEmpty) {
             nextSuggestions[i] = BlocStatus.success(
-              SavedLocationsHelper.filterByQuery(
-                query: '',
-                saved: sortedSaved,
-              ),
+              SavedLocationsHelper.filterByQuery(query: '', saved: sortedSaved),
             );
           } else {
             nextSuggestions[i] = currentSuggestions.maybeWhen(

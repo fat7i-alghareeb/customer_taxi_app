@@ -94,8 +94,8 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
   }
 
   bool _isConfirmActiveFor(OrderState state) {
-    final allStopsResolved = state.stops.list.isNotEmpty &&
-        state.stops.list.every((s) => s != null);
+    final allStopsResolved =
+        state.stops.list.isNotEmpty && state.stops.list.every((s) => s != null);
     if (!allStopsResolved) return false;
     if (state.booking.scheduleMode == OrderScheduleMode.later) {
       if (state.booking.scheduledAt == null) return false;
@@ -113,15 +113,19 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
         _activeSearchIndex = index;
       });
       context.read<OrderBloc>().add(OrderEvent.activeStopChanged(index));
-      
+
       final array = _form.control(OrderForms.stopsArray) as FormArray<String>;
       final control = array.controls[index] as FormControl<String>;
       final value = control.value ?? '';
-      
-      printM('[OrderExpandedSheetWidget] field $index focus check: value="$value"');
-      
+
+      printM(
+        '[OrderExpandedSheetWidget] field $index focus check: value="$value"',
+      );
+
       if (value.trim().isEmpty) {
-        printM('[OrderExpandedSheetWidget] field $index empty, sending stopQueryChanged("")');
+        printM(
+          '[OrderExpandedSheetWidget] field $index empty, sending stopQueryChanged("")',
+        );
         context.read<OrderBloc>().add(OrderEvent.stopQueryChanged(index, ''));
       }
     } else {
@@ -134,7 +138,9 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
   void _syncFormWithState(OrderState state) {
     if (_isSyncing) {
-      printY('[OrderExpandedSheetWidget] _syncFormWithState blocked (already syncing)');
+      printY(
+        '[OrderExpandedSheetWidget] _syncFormWithState blocked (already syncing)',
+      );
       return;
     }
     printM('[OrderExpandedSheetWidget] _syncFormWithState start');
@@ -146,7 +152,9 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
 
     // Adjust FormArray length
     if (array.controls.length != stopsList.length) {
-      printM('[OrderExpandedSheetWidget] adjusting array length from ${array.controls.length} to ${stopsList.length}');
+      printM(
+        '[OrderExpandedSheetWidget] adjusting array length from ${array.controls.length} to ${stopsList.length}',
+      );
       while (array.controls.length < stopsList.length) {
         array.add(FormControl<String>(validators: [Validators.required]));
       }
@@ -163,14 +171,18 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
           ? queries[i]
           : (stopsList[i]?.label ?? '');
       final control = array.controls[i] as FormControl<String>;
-      
+
       if ((control.value ?? '') != query) {
-        printG('[OrderExpandedSheetWidget] index=$i query sync: control="${control.value}" -> new="$query"');
+        printG(
+          '[OrderExpandedSheetWidget] index=$i query sync: control="${control.value}" -> new="$query"',
+        );
         // We use emitEvent: true to ensure the UI (ReactiveTextField) picks up the programmatic change.
         // The _isSyncing guard in onQueryChanged prevents infinite loops.
         control.updateValue(query, emitEvent: true);
       } else {
-        printGray('[OrderExpandedSheetWidget] index=$i query already in sync: "$query"');
+        printGray(
+          '[OrderExpandedSheetWidget] index=$i query already in sync: "$query"',
+        );
       }
     }
 
@@ -185,8 +197,22 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
   bool get _isBookingDetailsStep =>
       widget.state.sheet.expandedStep == OrderExpandedStep.bookingDetails;
 
-  bool get _isVehicleConfirmActive =>
-      widget.state.trip.selectedCarTypeId?.trim().isNotEmpty ?? false;
+  bool get _isVehicleConfirmActive {
+    final hasVehicle =
+        widget.state.trip.selectedCarTypeId?.trim().isNotEmpty ?? false;
+    if (!hasVehicle) return false;
+    if (widget.state.stops.list.firstOrNull?.isAirport != true) return true;
+
+    final flightNumber = widget.state.booking.flightNumber
+        .trim()
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .toUpperCase();
+    return flightNumber.length >= 2 &&
+        flightNumber.length <= 15 &&
+        RegExp(
+          r'^[A-Z0-9](?:[A-Z0-9 -]{0,13}[A-Z0-9])?$',
+        ).hasMatch(flightNumber);
+  }
 
   BlocStatus<List<OrderSavedLocationEntity>> get _activeSuggestionsState {
     final suggestions = widget.state.stops.suggestionsState;
@@ -223,7 +249,9 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isKeyboardOpen = context.bottomInset > 0;
-          printM('[OrderExpandedSheetWidget] LayoutBuilder isKeyboardOpen=$isKeyboardOpen');
+          printM(
+            '[OrderExpandedSheetWidget] LayoutBuilder isKeyboardOpen=$isKeyboardOpen',
+          );
 
           final headerSection = Container(
             height: OrderConstants.expandedHeaderHeight.sp,
@@ -315,35 +343,51 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: widget.state.stops.list.length,
                 onReorderItem: (oldIndex, newIndex) {
-                  printM('[OrderExpandedSheetWidget] onReorder old=$oldIndex new=$newIndex');
-                  context.read<OrderBloc>().add(OrderEvent.stopReordered(oldIndex, newIndex));
+                  printM(
+                    '[OrderExpandedSheetWidget] onReorder old=$oldIndex new=$newIndex',
+                  );
+                  context.read<OrderBloc>().add(
+                    OrderEvent.stopReordered(oldIndex, newIndex),
+                  );
                 },
                 itemBuilder: (context, index) {
                   printM('[OrderExpandedSheetWidget] itemBuilder index=$index');
                   final isFirst = index == 0;
                   final stopsLen = widget.state.stops.list.length;
                   final isLast = index == stopsLen - 1;
-                  final title = isFirst ? AppStrings.from : (isLast ? AppStrings.to : AppStrings.stop);
-                  
+                  final title = isFirst
+                      ? AppStrings.from
+                      : (isLast ? AppStrings.to : AppStrings.stop);
+
                   return Padding(
                     key: ValueKey('stop_$index'),
                     padding: REdgeInsets.only(bottom: AppSpacing.md),
                     child: OrderLocationFieldWidget(
                       formControlName: '${OrderForms.stopsArray}.$index',
                       title: title,
-                      hintText: isFirst ? AppStrings.searchFromLocation : AppStrings.searchToLocation,
-                      iconData: isFirst ? FontAwesomeIcons.circleDot : FontAwesomeIcons.locationDot,
+                      hintText: isFirst
+                          ? AppStrings.searchFromLocation
+                          : AppStrings.searchToLocation,
+                      iconData: isFirst
+                          ? FontAwesomeIcons.circleDot
+                          : FontAwesomeIcons.locationDot,
                       focusNode: _focusNodes[index],
                       onClearPressed: () => _clearField(index),
                       onAddPressed: isLast && stopsLen < 5
-                          ? () => context.read<OrderBloc>().add(const OrderEvent.stopAdded())
+                          ? () => context.read<OrderBloc>().add(
+                              const OrderEvent.stopAdded(),
+                            )
                           : null,
                       onRemovePressed: !isFirst && !isLast
-                          ? () => context.read<OrderBloc>().add(OrderEvent.stopRemoved(index))
+                          ? () => context.read<OrderBloc>().add(
+                              OrderEvent.stopRemoved(index),
+                            )
                           : null,
                       onQueryChanged: (value) {
                         if (_isSyncing) return;
-                        context.read<OrderBloc>().add(OrderEvent.stopQueryChanged(index, value));
+                        context.read<OrderBloc>().add(
+                          OrderEvent.stopQueryChanged(index, value),
+                        );
                       },
                     ),
                   );
@@ -353,12 +397,16 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
           );
 
           final mapTrigger = OrderMapContextTriggerWidget(
-            target: _focusedFieldIndex == null ? OrderLocationTarget.stop : OrderLocationTarget.stop, // Generic stop target
+            target: _focusedFieldIndex == null
+                ? OrderLocationTarget.stop
+                : OrderLocationTarget.stop, // Generic stop target
             onTap: () {
               printM('[OrderExpandedSheetWidget] mapTrigger onTap');
               FocusScope.of(context).unfocus();
               context.read<OrderBloc>().add(
-                OrderEvent.setOnMapPressed(index: _focusedFieldIndex ?? _activeSearchIndex),
+                OrderEvent.setOnMapPressed(
+                  index: _focusedFieldIndex ?? _activeSearchIndex,
+                ),
               );
             },
           );

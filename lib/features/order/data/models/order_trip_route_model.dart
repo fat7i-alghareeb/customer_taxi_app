@@ -152,8 +152,12 @@ class OrderTripRouteModel {
 
     final List<OrderTripLegModel> legs = [];
     for (int i = 0; i < legsJson.length; i++) {
-      final legModel = OrderTripLegModel.fromJson(legsJson[i] as Map<String, dynamic>);
-      final pointsForLeg = i < legPoints.length ? legPoints[i] : const <OrderTripRoutePointModel>[];
+      final legModel = OrderTripLegModel.fromJson(
+        legsJson[i] as Map<String, dynamic>,
+      );
+      final pointsForLeg = i < legPoints.length
+          ? legPoints[i]
+          : const <OrderTripRoutePointModel>[];
       legs.add(legModel.copyWith(points: pointsForLeg));
     }
 

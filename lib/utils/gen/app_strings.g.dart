@@ -115,6 +115,20 @@ class AppStrings {
   static String get carTypeStandard => 'carTypeStandard'.tr();
   /// Change - تغيير - Wijzigen - Ändern - Zmień - Змінити - Modifier - Cambiar - Schimbă
   static String get change => 'change'.tr();
+  /// Camera - الكاميرا - Camera - Kamera - Aparat - Камера - Appareil photo - Cámara - Cameră
+  static String get chatChooseCamera => 'chatChooseCamera'.tr();
+  /// Gallery - المعرض - Galerij - Galerie - Galeria - Галерея - Galerie - Galería - Galerie
+  static String get chatChooseGallery => 'chatChooseGallery'.tr();
+  /// This chat has ended. - انتهت هذه الدردشة. - Deze chat is beëindigd. - Dieser Chat ist beendet. - Ten czat został zakończony. - Цей чат завершено. - Cette conversation est terminée. - Este chat ha finalizado. - Acest chat s-a încheiat.
+  static String get chatClosedNotice => 'chatClosedNotice'.tr();
+  /// No messages yet. Say hello! - لا توجد رسائل بعد. ابدأ بالتحية! - Nog geen berichten. Zeg hallo! - Noch keine Nachrichten. Sag Hallo! - Brak wiadomości. Przywitaj się! - Повідомлень ще немає. Привітайтеся! - Aucun message pour l'instant. Dites bonjour ! - Aún no hay mensajes. ¡Saluda! - Niciun mesaj încă. Salută!
+  static String get chatEmptyState => 'chatEmptyState'.tr();
+  /// Type a message… - اكتب رسالة… - Typ een bericht… - Nachricht schreiben… - Napisz wiadomość… - Введіть повідомлення… - Écrivez un message… - Escribe un mensaje… - Scrie un mesaj…
+  static String get chatInputHint => 'chatInputHint'.tr();
+  /// Couldn't send message. Please try again. - تعذّر إرسال الرسالة. حاول مرة أخرى. - Bericht kon niet worden verzonden. Probeer het opnieuw. - Nachricht konnte nicht gesendet werden. Bitte erneut versuchen. - Nie udało się wysłać wiadomości. Spróbuj ponownie. - Не вдалося надіслати повідомлення. Спробуйте ще раз. - Échec de l'envoi du message. Veuillez réessayer. - No se pudo enviar el mensaje. Inténtalo de nuevo. - Mesajul nu a putut fi trimis. Încearcă din nou.
+  static String get chatSendFailed => 'chatSendFailed'.tr();
+  /// Chat - الدردشة - Chat - Chat - Czat - Чат - Chat - Chat - Chat
+  static String get chatTitle => 'chatTitle'.tr();
   /// Clear - مسح - Wissen - Löschen - Wyczyść - Очистити - Effacer - Limpiar - Șterge
   static String get clear => 'clear'.tr();
   /// The request was invalid. - الطلب غير صالح. - De aanvraag was ongeldig. - Die Anfrage war ungültig. - Nieprawidłowe żądanie. - Неправильний запит. - La demande était invalide. - La solicitud no era válida. - Solicitarea a fost invalidă.
@@ -241,6 +255,14 @@ class AppStrings {
   static String get february => 'february'.tr();
   /// {count} file(s) attached - {count} ملف(ات) مرفقة - {count} bestand(en) bijgevoegd - {count} Datei(en) angehängt - {count} plik(i) załączony(e) - {count} файл(и) додано - {count} fichier(s) joint(s) - {count} archivo(s) adjunto(s) - {count} fișier(e) atașat(e)
   static String get filesAttached => 'filesAttached'.tr();
+  /// Flight number - رقم الرحلة - Vluchtnummer - Flugnummer - Numer lotu - Номер рейсу - Numéro de vol - Número de vuelo - Numărul zborului
+  static String get flightNumber => 'flightNumber'.tr();
+  /// Example: TK 1864 - مثال: TK 1864 - Voorbeeld: TK 1864 - Beispiel: TK 1864 - Przykład: TK 1864 - Приклад: TK 1864 - Exemple : TK 1864 - Ejemplo: TK 1864 - Exemplu: TK 1864
+  static String get flightNumberHint => 'flightNumberHint'.tr();
+  /// Enter 2–15 letters, numbers, spaces, or hyphens. - أدخل من 2 إلى 15 حرفاً أو رقماً أو مسافة أو شرطة. - Voer 2–15 letters, cijfers, spaties of koppeltekens in. - Geben Sie 2–15 Buchstaben, Zahlen, Leerzeichen oder Bindestriche ein. - Wpisz 2–15 liter, cyfr, spacji lub łączników. - Введіть 2–15 літер, цифр, пробілів або дефісів. - Saisissez 2 à 15 lettres, chiffres, espaces ou tirets. - Introduce entre 2 y 15 letras, números, espacios o guiones. - Introduceți 2–15 litere, cifre, spații sau cratime.
+  static String get flightNumberInvalid => 'flightNumberInvalid'.tr();
+  /// Flight number is required for airport pickups. - رقم الرحلة مطلوب عند الاستلام من المطار. - Een vluchtnummer is verplicht bij ophalen op de luchthaven. - Für Flughafenabholungen ist eine Flugnummer erforderlich. - Numer lotu jest wymagany przy odbiorze z lotniska. - Для зустрічі в аеропорту потрібен номер рейсу. - Le numéro de vol est requis pour une prise en charge à l'aéroport. - El número de vuelo es obligatorio para recogidas en aeropuerto. - Numărul zborului este obligatoriu pentru preluarea de la aeroport.
+  static String get flightNumberRequired => 'flightNumberRequired'.tr();
   /// Fri - جمع - Vr - Fr - Pt - Пт - Ven - Vie - Vin
   static String get fri => 'fri'.tr();
   /// Friday - الجمعة - Vrijdag - Freitag - Piątek - П'ятниця - Vendredi - Viernes - Vineri
@@ -429,6 +451,10 @@ class AppStrings {
   static String get onboardingTitle3 => 'onboardingTitle3'.tr();
   /// Add Stop - إضافة توقف - Stop toevoegen - Halt hinzufügen - Dodaj przystanek - Додати зупинку - Ajouter un arrêt - Añadir parada - Adaugă oprire
   static String get orderAddStop => 'orderAddStop'.tr();
+  /// Your driver will use the flight number to plan the pickup. - سيستخدم السائق رقم الرحلة للتخطيط لموعد الاستلام. - De chauffeur gebruikt het vluchtnummer om de rit te plannen. - Der Fahrer nutzt die Flugnummer zur Planung der Abholung. - Kierowca użyje numeru lotu do zaplanowania odbioru. - Водій використає номер рейсу для планування зустрічі. - Le chauffeur utilisera le numéro de vol pour planifier la prise en charge. - El conductor usará el número de vuelo para planificar la recogida. - Șoferul va folosi numărul zborului pentru a planifica preluarea.
+  static String get orderAirportDetectedSubtitle => 'orderAirportDetectedSubtitle'.tr();
+  /// Airport pickup detected - تم اكتشاف نقطة استلام من المطار - Ophalen op luchthaven gedetecteerd - Flughafenabholung erkannt - Wykryto odbiór z lotniska - Виявлено зустріч в аеропорту - Prise en charge à l'aéroport détectée - Recogida en aeropuerto detectada - Preluare de la aeroport detectată
+  static String get orderAirportDetectedTitle => 'orderAirportDetectedTitle'.tr();
   /// Includes 30 minutes of free waiting time. - يشمل 30 دقيقة انتظار مجاني. - Inclusief 30 minuten gratis wachttijd. - Inklusive 30 Minuten kostenloser Wartezeit. - Obejmuje 30 minut darmowego czasu oczekiwania. - Включає 30 хвилин безкоштовного очікування. - Comprend 30 minutes d'attente gratuite. - Incluye 30 minutos de espera gratuita. - Include 30 de minute de așteptare gratuită.
   static String get orderAirportSubtitle => 'orderAirportSubtitle'.tr();
   /// Airport pickup - استقبال من المطار - Luchthavenophaling - Flughafenabholung - Odbiór z lotniska - Зустріч в аеропорту - Prise en charge à l'aéroport - Recogida en aeropuerto - Preluare de la aeroport
@@ -545,7 +571,7 @@ class AppStrings {
   static String get profileDeleteAccountSuccess => 'profileDeleteAccountSuccess'.tr();
   /// Edit Profile - تعديل الملف الشخصي - Profiel bewerken - Profil bearbeiten - Edytuj profil - Редагувати профіль - Modifier le profil - Editar perfil - Editează profilul
   static String get profileEditTitle => 'profileEditTitle'.tr();
-  /// Home address - عنوان المنزل - Thuisadres - Heimatadresse - Adres domowy - Домашня адреса - Adresse du domicile - Dirección particular - Adresă de domiciliu
+  /// address - عنوان - adres - Heimatadresse - Adres domowy - Домашня адреса - Adresse du domicile - Dirección particular - Adresă de domiciliu
   static String get profileHomeAddress => 'profileHomeAddress'.tr();
   /// Add your home address (optional) - أضف عنوان منزلك (اختياري) - Voeg je thuisadres toe (optioneel) - Heimatadresse hinzufügen (optional) - Dodaj swój adres domowy (opcjonalnie) - Додайте домашню адресу (необов'язково) - Ajoutez votre adresse de domicile (facultatif) - Añade tu dirección particular (opcional) - Adaugă adresa de domiciliu (opțional)
   static String get profileHomeAddressHint => 'profileHomeAddressHint'.tr();

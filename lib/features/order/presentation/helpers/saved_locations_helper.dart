@@ -51,8 +51,7 @@ class SavedLocationsHelper {
     if (normalizedQuery.isEmpty) return sorted(saved);
     final filtered = saved
         .where(
-          (item) =>
-              item.location.label.toLowerCase().contains(normalizedQuery),
+          (item) => item.location.label.toLowerCase().contains(normalizedQuery),
         )
         .toList();
     return sorted(filtered);

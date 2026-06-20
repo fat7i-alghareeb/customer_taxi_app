@@ -158,8 +158,9 @@ class OrderCarOptionCardWidget extends StatelessWidget {
                           style: AppTextStyles.s12w400.copyWith(
                             color: context.onSurface.withValues(alpha: 0.45),
                             decoration: TextDecoration.lineThrough,
-                            decorationColor:
-                                context.onSurface.withValues(alpha: 0.45),
+                            decorationColor: context.onSurface.withValues(
+                              alpha: 0.45,
+                            ),
                           ),
                         ),
                       Text(

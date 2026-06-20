@@ -22,6 +22,12 @@ sealed class RealtimeEvent with _$RealtimeEvent {
     required String driverId,
   }) = RealtimeDriverAssigned;
 
+  const factory RealtimeEvent.tripAccepted({
+    required String tripId,
+    required String passengerId,
+    required String adminId,
+  }) = RealtimeTripAccepted;
+
   const factory RealtimeEvent.tripStarted({
     required String tripId,
     required String passengerId,
@@ -72,6 +78,22 @@ sealed class RealtimeEvent with _$RealtimeEvent {
     required double latitude,
     required double longitude,
   }) = RealtimeDriverLocationUpdated;
+
+  /// A new in-trip chat message arrived. [sentAtUtc] is an ISO-8601 string.
+  const factory RealtimeEvent.tripMessageReceived({
+    required String tripId,
+    required String messageId,
+    required String senderId,
+    required String senderRole,
+    String? content,
+    String? photoUrl,
+    required String sentAtUtc,
+  }) = RealtimeTripMessageReceived;
+
+  /// The trip's chat was closed (trip completed or cancelled).
+  const factory RealtimeEvent.chatClosed({
+    required String tripId,
+  }) = RealtimeChatClosed;
 }
 
 /// Stable list of every SignalR method name the hub will push to clients.
@@ -79,6 +101,7 @@ sealed class RealtimeEvent with _$RealtimeEvent {
 abstract final class RealtimeMethodNames {
   static const tripRequested = 'TripRequested';
   static const driverAssigned = 'DriverAssigned';
+  static const tripAccepted = 'TripAccepted';
   static const tripStarted = 'TripStarted';
   static const tripCompleted = 'TripCompleted';
   static const tripCancelled = 'TripCancelled';
@@ -88,10 +111,13 @@ abstract final class RealtimeMethodNames {
   static const driverEnRoute = 'DriverEnRoute';
   static const driverArrived = 'DriverArrived';
   static const driverLocationUpdated = 'DriverLocationUpdated';
+  static const tripMessageReceived = 'TripMessageReceived';
+  static const chatClosed = 'ChatClosed';
 
   static const all = <String>[
     tripRequested,
     driverAssigned,
+    tripAccepted,
     tripStarted,
     tripCompleted,
     tripCancelled,
@@ -101,6 +127,8 @@ abstract final class RealtimeMethodNames {
     driverEnRoute,
     driverArrived,
     driverLocationUpdated,
+    tripMessageReceived,
+    chatClosed,
   ];
 }
 
@@ -109,6 +137,7 @@ extension RealtimeEventTripId on RealtimeEvent {
   String get tripId => switch (this) {
     RealtimeTripRequested(:final tripId) => tripId,
     RealtimeDriverAssigned(:final tripId) => tripId,
+    RealtimeTripAccepted(:final tripId) => tripId,
     RealtimeTripStarted(:final tripId) => tripId,
     RealtimeTripCompleted(:final tripId) => tripId,
     RealtimeTripCancelled(:final tripId) => tripId,
@@ -118,5 +147,7 @@ extension RealtimeEventTripId on RealtimeEvent {
     RealtimeDriverEnRoute(:final tripId) => tripId,
     RealtimeDriverArrived(:final tripId) => tripId,
     RealtimeDriverLocationUpdated(:final tripId) => tripId,
+    RealtimeTripMessageReceived(:final tripId) => tripId,
+    RealtimeChatClosed(:final tripId) => tripId,
   };
 }

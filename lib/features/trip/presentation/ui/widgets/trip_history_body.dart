@@ -1,6 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import '../../../domain/entities/trip_entity.dart';
-import '../../../domain/entities/trip_status.dart';
 import '../../states/trip_bloc.dart';
 import 'trip_summary_card.dart';
 
@@ -41,8 +40,12 @@ class _TripHistoryList extends StatelessWidget {
       return EmptyStateWidget(text: AppStrings.tripHistoryEmpty);
     }
 
-    final upcoming = trips.where((t) => t.status == TripStatus.scheduled).toList();
-    final past = trips.where((t) => t.status != TripStatus.scheduled).toList();
+    final upcoming = trips
+        .where((t) => t.scheduledAtUtc != null && !t.status.isTerminal)
+        .toList();
+    final past = trips
+        .where((t) => t.scheduledAtUtc == null || t.status.isTerminal)
+        .toList();
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),

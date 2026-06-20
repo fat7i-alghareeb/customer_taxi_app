@@ -69,13 +69,13 @@ class OrderTripLegEntity {
 
   @override
   int get hashCode => Object.hash(
-        distanceMeters,
-        durationSeconds,
-        encodedPolyline,
-        startLabel,
-        endLabel,
-        Object.hashAll(points),
-      );
+    distanceMeters,
+    durationSeconds,
+    encodedPolyline,
+    startLabel,
+    endLabel,
+    Object.hashAll(points),
+  );
 
   bool _listEquals(
     List<OrderTripRoutePointEntity> first,
@@ -133,12 +133,12 @@ class OrderTripRouteEntity {
 
   @override
   int get hashCode => Object.hash(
-        Object.hashAll(points),
-        durationText,
-        distanceText,
-        distanceMeters,
-        Object.hashAll(legs),
-      );
+    Object.hashAll(points),
+    durationText,
+    distanceText,
+    distanceMeters,
+    Object.hashAll(legs),
+  );
 
   bool _listEquals<T>(List<T> first, List<T> second) {
     if (first.length != second.length) return false;
@@ -148,7 +148,10 @@ class OrderTripRouteEntity {
     return true;
   }
 
-  bool _listEqualsLegs(List<OrderTripLegEntity> first, List<OrderTripLegEntity> second) {
+  bool _listEqualsLegs(
+    List<OrderTripLegEntity> first,
+    List<OrderTripLegEntity> second,
+  ) {
     return _listEquals(first, second);
   }
 }

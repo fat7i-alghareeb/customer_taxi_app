@@ -81,9 +81,7 @@ class OrderRepositoryImpl implements OrderRepository {
         ),
       );
 
-      printG(
-        '[OrderRepository] reverseGeocode success label="${model.label}"',
-      );
+      printG('[OrderRepository] reverseGeocode success label="${model.label}"');
 
       return model.toEntity;
     });
@@ -94,9 +92,7 @@ class OrderRepositoryImpl implements OrderRepository {
     OrderTripRouteRequestEntity request,
   ) {
     return runAsResult(() async {
-      printM(
-        '[OrderRepository] getTripRoute stops=${request.stops.length}',
-      );
+      printM('[OrderRepository] getTripRoute stops=${request.stops.length}');
 
       final model = await _remote.getTripRoute(
         OrderTripRouteParams(
@@ -106,6 +102,7 @@ class OrderRepositoryImpl implements OrderRepository {
                   latitude: s.latitude,
                   longitude: s.longitude,
                   label: s.label,
+                  isAirport: s.isAirport,
                 ),
               )
               .toList(),
@@ -137,6 +134,7 @@ class OrderRepositoryImpl implements OrderRepository {
                   latitude: s.latitude,
                   longitude: s.longitude,
                   label: s.label,
+                  isAirport: s.isAirport,
                 ),
               )
               .toList(),
@@ -169,12 +167,13 @@ class OrderRepositoryImpl implements OrderRepository {
                   latitude: s.latitude,
                   longitude: s.longitude,
                   label: s.label,
+                  isAirport: s.isAirport,
                 ),
               )
               .toList(),
           scheduledAt: request.scheduledAt,
           passengerNote: request.passengerNote,
-          isAirport: request.isAirport,
+          flightNumber: request.flightNumber,
         ),
       );
 
@@ -253,7 +252,9 @@ class OrderRepositoryImpl implements OrderRepository {
   }
 
   @override
-  Future<Result<List<OrderSavedLocationEntity>>> removeSavedLocation(String identityKey) {
+  Future<Result<List<OrderSavedLocationEntity>>> removeSavedLocation(
+    String identityKey,
+  ) {
     return runAsResult(() async {
       printM('[OrderRepository] removeSavedLocation identity=$identityKey');
       final models = await _local.removeSavedLocation(identityKey);

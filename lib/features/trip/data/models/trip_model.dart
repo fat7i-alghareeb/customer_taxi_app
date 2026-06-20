@@ -27,6 +27,13 @@ abstract class TripModel with _$TripModel {
     String? passengerNote,
     int? passengerRating,
     String? ratingComment,
+    String? acceptedByAdminId,
+    String? acceptedAdminName,
+    DateTime? acceptedAtUtc,
+    @Default(false) bool isScheduled,
+    DateTime? dispatchWindowOpensAtUtc,
+    @Default(false) bool canMarkEnRoute,
+    @Default('Normal') String attentionState,
   }) = _TripModel;
 
   factory TripModel.fromJson(Map<String, dynamic> json) =>

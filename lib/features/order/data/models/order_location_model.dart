@@ -1,7 +1,6 @@
 import '../../../../utils/helpers/app_strings.dart';
 import '../../../../utils/helpers/colored_print.dart';
 
-
 class OrderLocationModel {
   const OrderLocationModel({
     required this.latitude,
@@ -12,6 +11,7 @@ class OrderLocationModel {
     this.isEstablishment = false,
     this.street,
     this.neighborhood,
+    this.isAirport = false,
   });
 
   final double latitude;
@@ -22,6 +22,7 @@ class OrderLocationModel {
   final bool isEstablishment;
   final String? street;
   final String? neighborhood;
+  final bool isAirport;
 
   OrderLocationModel copyWith({
     double? latitude,
@@ -32,6 +33,7 @@ class OrderLocationModel {
     bool? isEstablishment,
     String? street,
     String? neighborhood,
+    bool? isAirport,
   }) {
     return OrderLocationModel(
       latitude: latitude ?? this.latitude,
@@ -42,6 +44,7 @@ class OrderLocationModel {
       isEstablishment: isEstablishment ?? this.isEstablishment,
       street: street ?? this.street,
       neighborhood: neighborhood ?? this.neighborhood,
+      isAirport: isAirport ?? this.isAirport,
     );
   }
 
@@ -56,6 +59,7 @@ class OrderLocationModel {
       label: label,
       primaryName: primary,
       secondaryAddress: secondary,
+      isAirport: json['isAirport'] == true || json['IsAirport'] == true,
     );
   }
 
@@ -71,6 +75,7 @@ class OrderLocationModel {
       label: label,
       primaryName: primary,
       secondaryAddress: secondary,
+      isAirport: json['isAirport'] == true || json['IsAirport'] == true,
     );
   }
 
@@ -149,8 +154,10 @@ class OrderLocationModel {
     final primaryName = streetPart.isNotEmpty
         ? streetPart
         : (placePart.isNotEmpty
-            ? placePart
-            : (localPart.isNotEmpty ? localPart : formattedSegments.firstOrNull));
+              ? placePart
+              : (localPart.isNotEmpty
+                    ? localPart
+                    : formattedSegments.firstOrNull));
 
     final secondaryAddress = _buildStructuredSecondary(
       components: components,
@@ -165,10 +172,10 @@ class OrderLocationModel {
     // Ensure we don't return an empty label if possible
     final finalLabel = preferredLabel.isNotEmpty
         ? preferredLabel
-        : (_sanitizeDisplayText(json['formatted_address']?.toString() ?? '')
-            .split(',')
-            .firstOrNull ??
-        AppStrings.orderLocationUnknownLabel);
+        : (_sanitizeDisplayText(
+                json['formatted_address']?.toString() ?? '',
+              ).split(',').firstOrNull ??
+              AppStrings.orderLocationUnknownLabel);
 
     return OrderLocationModel(
       latitude: lat,
@@ -176,14 +183,14 @@ class OrderLocationModel {
       label: finalLabel,
       primaryName: primaryName?.isNotEmpty == true ? primaryName : finalLabel,
       secondaryAddress: secondaryAddress,
-      isEstablishment: placePart.isNotEmpty || (streetPart.isNotEmpty && streetPart.contains(RegExp(r'\d'))),
+      isEstablishment:
+          placePart.isNotEmpty ||
+          (streetPart.isNotEmpty && streetPart.contains(RegExp(r'\d'))),
       street: streetPart.isNotEmpty ? streetPart : null,
       neighborhood: localPart.isNotEmpty ? localPart : null,
+      isAirport: _hasAirportType(json),
     );
   }
-
-
-
 
   factory OrderLocationModel.fromPlacesTextResult(Map<String, dynamic> json) {
     final geometry = json['geometry'] as Map<String, dynamic>?;
@@ -211,13 +218,16 @@ class OrderLocationModel {
 
     final secondaryAddress = localAddressSegments.isNotEmpty
         ? (name.isNotEmpty
-            ? _joinUniqueSegments(source: localAddressSegments, maxSegments: 2)
-            : (localAddressSegments.length > 1
-                ? _joinUniqueSegments(
-                    source: localAddressSegments.sublist(1),
-                    maxSegments: 2,
-                  )
-                : null))
+              ? _joinUniqueSegments(
+                  source: localAddressSegments,
+                  maxSegments: 2,
+                )
+              : (localAddressSegments.length > 1
+                    ? _joinUniqueSegments(
+                        source: localAddressSegments.sublist(1),
+                        maxSegments: 2,
+                      )
+                    : null))
         : null;
 
     printC(
@@ -228,14 +238,14 @@ class OrderLocationModel {
       latitude: lat,
       longitude: lng,
       label: label.isNotEmpty ? label : AppStrings.orderLocationUnknownLabel,
-      primaryName:
-          primaryName?.isNotEmpty == true ? primaryName : (label.isNotEmpty ? label : AppStrings.orderLocationUnknownLabel),
+      primaryName: primaryName?.isNotEmpty == true
+          ? primaryName
+          : (label.isNotEmpty ? label : AppStrings.orderLocationUnknownLabel),
       secondaryAddress: secondaryAddress,
       isEstablishment: true,
+      isAirport: _hasAirportType(json),
     );
   }
-
-
 
   factory OrderLocationModel.fromNearbyResult(Map<String, dynamic> json) {
     final geometry = json['geometry'] as Map<String, dynamic>?;
@@ -253,19 +263,22 @@ class OrderLocationModel {
       label: name,
       primaryName: name,
       secondaryAddress: vicinity,
-      isEstablishment: _isEstablishingType(json['types'] as List<dynamic>? ?? const []),
+      isEstablishment: _isEstablishingType(
+        json['types'] as List<dynamic>? ?? const [],
+      ),
+      isAirport: _hasAirportType(json),
     );
+  }
+
+  static bool _hasAirportType(Map<String, dynamic> json) {
+    final types = json['types'] as List<dynamic>? ?? const [];
+    return types.any((type) => type.toString().toLowerCase() == 'airport');
   }
 
   static bool _isEstablishingType(List<dynamic> types) {
     final typeSet = types.map((t) => t.toString()).toSet();
     return typeSet.intersection(_placeDetailTypes.toSet()).isNotEmpty;
   }
-
-
-
-
-
 
   static String _sanitizeDisplayText(String value) {
     if (value.isEmpty) {
@@ -275,7 +288,9 @@ class OrderLocationModel {
     // Normalize Arabic commas to standard commas for unified processing
     final normalized = value.replaceAll('\u060C', ',').trim();
 
-    final withoutPrefix = normalized.replaceFirst(_plusCodePrefixRegex, '').trim();
+    final withoutPrefix = normalized
+        .replaceFirst(_plusCodePrefixRegex, '')
+        .trim();
     final segments = withoutPrefix
         .split(',')
         .map((segment) => segment.trim())
@@ -306,9 +321,14 @@ class OrderLocationModel {
   }) {
     // 1. Core components that provide good context
     final route = _firstComponentValueByTypes(components, ['route']);
-    final neighborhood = _firstComponentValueByTypes(components, _localDetailTypes);
-    final city =
-        _firstComponentValueByTypes(components, ['locality', 'postal_town']);
+    final neighborhood = _firstComponentValueByTypes(
+      components,
+      _localDetailTypes,
+    );
+    final city = _firstComponentValueByTypes(components, [
+      'locality',
+      'postal_town',
+    ]);
 
     final secondaryParts = <String>[];
     final seen = <String>{primaryName.toLowerCase()};
@@ -316,7 +336,7 @@ class OrderLocationModel {
     void addPart(String part) {
       if (part.isEmpty) return;
       final key = part.toLowerCase();
-      
+
       // Semantic check: don't add "حلب" if "Aleppo" is seen, and vice versa
       if (_hasSemanticDuplicate(seen, key)) {
         return;
@@ -368,9 +388,6 @@ class OrderLocationModel {
     }
     return false;
   }
-
-
-
 
   static List<Map<String, dynamic>> _extractAddressComponents(
     Map<String, dynamic> json,
@@ -572,10 +589,9 @@ class OrderLocationModel {
       return const <String>[];
     }
 
-    final segments = _splitAddress(formattedAddress)
-        .map(_sanitizeDisplayText)
-        .where((segment) => segment.isNotEmpty)
-        .toList();
+    final segments = _splitAddress(
+      formattedAddress,
+    ).map(_sanitizeDisplayText).where((segment) => segment.isNotEmpty).toList();
 
     if (segments.length < 2) {
       return segments;
@@ -585,7 +601,6 @@ class OrderLocationModel {
     final withoutCityCountry = segments.take(segments.length - 1).toList();
     return withoutCityCountry.take(2).toList();
   }
-
 
   static String _joinUniqueSegments({
     required List<String> source,

@@ -23,6 +23,8 @@ import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_not
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_fare_summary_card.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_rating_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_stops_timeline.dart';
+import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart';
+import 'package:customertaxi/features/chat/presentation/ui/widgets/chat_sheet.dart';
 import 'package:vibration/vibration.dart';
 
 class ActiveTripBody extends StatefulWidget {
@@ -208,7 +210,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     current.tripStatus.whenOrNull(
       success: (trip) {
         _lastSeenTripStatus = trip.status;
-        if (trip.status == TripStatus.driverArrived) {
+        if (trip.status == TripStatus.arrived) {
           _arrivalAlertPlayed = true;
         }
       },
@@ -257,8 +259,8 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         }
 
         final isRealTransitionToArrived =
-            _lastSeenTripStatus != TripStatus.driverArrived &&
-            trip.status == TripStatus.driverArrived;
+            _lastSeenTripStatus != TripStatus.arrived &&
+            trip.status == TripStatus.arrived;
         _lastSeenTripStatus = trip.status;
         if (isRealTransitionToArrived) {
           _triggerArrivalAlert();
@@ -484,8 +486,12 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                   ? trip.stops.first.longitude
                   : 21.0122;
               final canEditPassengerNote = trip.status.canEditPassengerNote;
+              final showChat = !trip.status.isTerminal;
 
-              return Stack(
+              return BlocProvider<ChatBloc>(
+                create: (_) =>
+                    getIt<ChatBloc>()..add(ChatEvent.opened(trip.id)),
+                child: Stack(
                 fit: StackFit.expand,
                 children: [
                   // Full Screen Background Tracking Map
@@ -510,12 +516,44 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                     driverMarkerIcon: _carMarkerIcon,
                   ),
 
-                  // Glassmorphic Premium Dark Sheet Overlay at bottom
+                  // Bottom overlay: the Chat / Note action buttons are stacked
+                  // directly ABOVE the glass status sheet (not at a fixed
+                  // offset) so they always clear it, no matter how tall the
+                  // sheet grows for a given trip state (e.g. the arrived sheet
+                  // with the waiting-fee banner).
                   Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    child:
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (showChat || canEditPassengerNote)
+                          Padding(
+                            padding: REdgeInsets.fromLTRB(
+                              AppSpacing.xl,
+                              0,
+                              AppSpacing.xl,
+                              AppSpacing.sm,
+                            ),
+                            child: Row(
+                              children: [
+                                if (showChat) const _ChatFloatingAction(),
+                                const Spacer(),
+                                if (canEditPassengerNote)
+                                  _PassengerNoteFloatingAction(
+                                    hasNote: trip.passengerNote
+                                            ?.trim()
+                                            .isNotEmpty ==
+                                        true,
+                                    isLoading:
+                                        state.passengerNoteStatus.isLoading,
+                                    onTap: () =>
+                                        _showPassengerNoteSheet(context, trip),
+                                  ),
+                              ],
+                            ),
+                          ),
                         _GlassmorphicTripStatusSheet(
                               trip: trip,
                               cancelStatus: state.cancelStatus,
@@ -531,18 +569,11 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                               duration: 350.ms,
                               curve: Curves.easeOutCubic,
                             ),
-                  ),
-                  if (canEditPassengerNote)
-                    PositionedDirectional(
-                      end: AppSpacing.xl.w,
-                      bottom: 245.h + MediaQuery.paddingOf(context).bottom,
-                      child: _PassengerNoteFloatingAction(
-                        hasNote: trip.passengerNote?.trim().isNotEmpty == true,
-                        isLoading: state.passengerNoteStatus.isLoading,
-                        onTap: () => _showPassengerNoteSheet(context, trip),
-                      ),
+                      ],
                     ),
+                  ),
                 ],
+                ),
               );
             },
           );
@@ -682,6 +713,96 @@ class _PassengerNoteFloatingAction extends StatelessWidget {
   }
 }
 
+/// Floating trigger that opens the in-trip chat. Shows an unread badge fed by
+/// the [ChatBloc] provided around the active-trip stack.
+class _ChatFloatingAction extends StatelessWidget {
+  const _ChatFloatingAction();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+
+    return BlocBuilder<ChatBloc, ChatState>(
+      builder: (context, state) {
+        final unread = state.unreadCount;
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => ChatSheet.show(context, bloc: context.read<ChatBloc>()),
+            borderRadius: BorderRadius.circular(AppRadii.lg.r),
+            child: Ink(
+              padding: REdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              decoration: BoxDecoration(
+                color: colors.surface.withValues(alpha: 0.95),
+                borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                border: Border.all(
+                  color: colors.primary.withValues(alpha: 0.3),
+                  width: 1.r,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.12),
+                    blurRadius: 18.r,
+                    offset: Offset(0, 8.h),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.solidComments,
+                        size: 18.r,
+                        color: colors.primary,
+                      ),
+                      if (unread > 0)
+                        PositionedDirectional(
+                          top: -6.h,
+                          end: -8.w,
+                          child: Container(
+                            padding: REdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 1,
+                            ),
+                            constraints: BoxConstraints(minWidth: 16.w),
+                            decoration: BoxDecoration(
+                              color: AppColors.error,
+                              borderRadius: BorderRadius.circular(AppRadii.lg.r),
+                            ),
+                            child: Text(
+                              unread > 99 ? '99+' : '$unread',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.s11w500.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  AppSpacing.sm.horizontalSpace,
+                  Text(
+                    'chatTitle'.tr(),
+                    style: AppTextStyles.s12w700.copyWith(
+                      color: colors.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class _GlassmorphicTripStatusSheet extends StatefulWidget {
   const _GlassmorphicTripStatusSheet({
     required this.trip,
@@ -734,7 +855,7 @@ class _GlassmorphicTripStatusSheetState
   }
 
   void _syncWaitingTicker() {
-    final needsTicker = trip.status == TripStatus.driverArrived;
+    final needsTicker = trip.status == TripStatus.arrived;
     if (needsTicker && _waitingTicker == null) {
       _waitingTicker = Timer.periodic(const Duration(seconds: 1), (_) {
         if (mounted) setState(() {});
@@ -811,9 +932,9 @@ class _GlassmorphicTripStatusSheetState
               AppSpacing.md.verticalSpace,
 
               // Glassmorphic status specific cards builder
-              if (trip.status == TripStatus.driverEnRoute) ...[
+              if (trip.status == TripStatus.enRoute) ...[
                 _buildEnRouteSheet(context),
-              ] else if (trip.status == TripStatus.driverArrived) ...[
+              ] else if (trip.status == TripStatus.arrived) ...[
                 _buildArrivedSheet(context),
               ] else if (trip.status == TripStatus.inProgress) ...[
                 _buildInProgressSheet(context),
@@ -1167,7 +1288,7 @@ class _GlassmorphicTripStatusSheetState
             AppSpacing.md.horizontalSpace,
             Expanded(
               child: Text(
-                trip.status.name.toUpperCase(),
+                trip.status.title,
                 style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
               ),
             ),

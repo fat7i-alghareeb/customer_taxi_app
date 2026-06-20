@@ -56,6 +56,17 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
   passengerNote: json['passengerNote'] as String?,
   passengerRating: (json['passengerRating'] as num?)?.toInt(),
   ratingComment: json['ratingComment'] as String?,
+  acceptedByAdminId: json['acceptedByAdminId'] as String?,
+  acceptedAdminName: json['acceptedAdminName'] as String?,
+  acceptedAtUtc: json['acceptedAtUtc'] == null
+      ? null
+      : DateTime.parse(json['acceptedAtUtc'] as String),
+  isScheduled: json['isScheduled'] as bool? ?? false,
+  dispatchWindowOpensAtUtc: json['dispatchWindowOpensAtUtc'] == null
+      ? null
+      : DateTime.parse(json['dispatchWindowOpensAtUtc'] as String),
+  canMarkEnRoute: json['canMarkEnRoute'] as bool? ?? false,
+  attentionState: json['attentionState'] as String? ?? 'Normal',
 );
 
 Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
@@ -81,6 +92,14 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'passengerNote': instance.passengerNote,
       'passengerRating': instance.passengerRating,
       'ratingComment': instance.ratingComment,
+      'acceptedByAdminId': instance.acceptedByAdminId,
+      'acceptedAdminName': instance.acceptedAdminName,
+      'acceptedAtUtc': instance.acceptedAtUtc?.toIso8601String(),
+      'isScheduled': instance.isScheduled,
+      'dispatchWindowOpensAtUtc': instance.dispatchWindowOpensAtUtc
+          ?.toIso8601String(),
+      'canMarkEnRoute': instance.canMarkEnRoute,
+      'attentionState': instance.attentionState,
     };
 
 _TripRouteSegmentModel _$TripRouteSegmentModelFromJson(

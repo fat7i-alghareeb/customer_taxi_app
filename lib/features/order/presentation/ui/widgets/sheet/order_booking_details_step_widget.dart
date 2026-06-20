@@ -13,6 +13,18 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
     final isLoading =
         state.booking.tripRequestStatus.isLoading ||
         state.booking.paymentSheetState.isLoading;
+    final isAirport = state.stops.list.firstOrNull?.isAirport == true;
+    final normalizedFlightNumber = state.booking.flightNumber
+        .trim()
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .toUpperCase();
+    final hasValidFlightNumber =
+        !isAirport ||
+        (normalizedFlightNumber.length >= 2 &&
+            normalizedFlightNumber.length <= 15 &&
+            RegExp(
+              r'^[A-Z0-9](?:[A-Z0-9 -]{0,13}[A-Z0-9])?$',
+            ).hasMatch(normalizedFlightNumber));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -27,7 +39,7 @@ class OrderBookingDetailsStepWidget extends StatelessWidget {
               const OrderEvent.confirmBookingDetailsPressed(),
             );
           },
-          isActive: !isLoading,
+          isActive: !isLoading && hasValidFlightNumber,
           isLoading: isLoading,
           layout: AppButtonLayout(
             width: double.infinity,

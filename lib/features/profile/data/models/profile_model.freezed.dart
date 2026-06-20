@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProfileModel {
 
- String get id; String? get name; String get phone; String? get profilePhotoUrl; String? get homeAddressLabel; double? get homeAddressLatitude; double? get homeAddressLongitude;
+ String get id; String? get name; String get phone; String? get email; String? get profilePhotoUrl; String? get homeAddressLabel; double? get homeAddressLatitude; double? get homeAddressLongitude;
 /// Create a copy of ProfileModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ProfileModelCopyWith<ProfileModel> get copyWith => _$ProfileModelCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.homeAddressLabel, homeAddressLabel) || other.homeAddressLabel == homeAddressLabel)&&(identical(other.homeAddressLatitude, homeAddressLatitude) || other.homeAddressLatitude == homeAddressLatitude)&&(identical(other.homeAddressLongitude, homeAddressLongitude) || other.homeAddressLongitude == homeAddressLongitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.homeAddressLabel, homeAddressLabel) || other.homeAddressLabel == homeAddressLabel)&&(identical(other.homeAddressLatitude, homeAddressLatitude) || other.homeAddressLatitude == homeAddressLatitude)&&(identical(other.homeAddressLongitude, homeAddressLongitude) || other.homeAddressLongitude == homeAddressLongitude));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,phone,profilePhotoUrl,homeAddressLabel,homeAddressLatitude,homeAddressLongitude);
+int get hashCode => Object.hash(runtimeType,id,name,phone,email,profilePhotoUrl,homeAddressLabel,homeAddressLatitude,homeAddressLongitude);
 
 @override
 String toString() {
-  return 'ProfileModel(id: $id, name: $name, phone: $phone, profilePhotoUrl: $profilePhotoUrl, homeAddressLabel: $homeAddressLabel, homeAddressLatitude: $homeAddressLatitude, homeAddressLongitude: $homeAddressLongitude)';
+  return 'ProfileModel(id: $id, name: $name, phone: $phone, email: $email, profilePhotoUrl: $profilePhotoUrl, homeAddressLabel: $homeAddressLabel, homeAddressLatitude: $homeAddressLatitude, homeAddressLongitude: $homeAddressLongitude)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ProfileModelCopyWith<$Res>  {
   factory $ProfileModelCopyWith(ProfileModel value, $Res Function(ProfileModel) _then) = _$ProfileModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String? name, String phone, String? profilePhotoUrl, String? homeAddressLabel, double? homeAddressLatitude, double? homeAddressLongitude
+ String id, String? name, String phone, String? email, String? profilePhotoUrl, String? homeAddressLabel, double? homeAddressLatitude, double? homeAddressLongitude
 });
 
 
@@ -65,12 +65,13 @@ class _$ProfileModelCopyWithImpl<$Res>
 
 /// Create a copy of ProfileModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? phone = null,Object? profilePhotoUrl = freezed,Object? homeAddressLabel = freezed,Object? homeAddressLatitude = freezed,Object? homeAddressLongitude = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? phone = null,Object? email = freezed,Object? profilePhotoUrl = freezed,Object? homeAddressLabel = freezed,Object? homeAddressLatitude = freezed,Object? homeAddressLongitude = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
+as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
 as String?,homeAddressLabel: freezed == homeAddressLabel ? _self.homeAddressLabel : homeAddressLabel // ignore: cast_nullable_to_non_nullable
 as String?,homeAddressLatitude: freezed == homeAddressLatitude ? _self.homeAddressLatitude : homeAddressLatitude // ignore: cast_nullable_to_non_nullable
 as double?,homeAddressLongitude: freezed == homeAddressLongitude ? _self.homeAddressLongitude : homeAddressLongitude // ignore: cast_nullable_to_non_nullable
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? name,  String phone,  String? profilePhotoUrl,  String? homeAddressLabel,  double? homeAddressLatitude,  double? homeAddressLongitude)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? name,  String phone,  String? email,  String? profilePhotoUrl,  String? homeAddressLabel,  double? homeAddressLatitude,  double? homeAddressLongitude)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileModel() when $default != null:
-return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl,_that.homeAddressLabel,_that.homeAddressLatitude,_that.homeAddressLongitude);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.profilePhotoUrl,_that.homeAddressLabel,_that.homeAddressLatitude,_that.homeAddressLongitude);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl,_that.home
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? name,  String phone,  String? profilePhotoUrl,  String? homeAddressLabel,  double? homeAddressLatitude,  double? homeAddressLongitude)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? name,  String phone,  String? email,  String? profilePhotoUrl,  String? homeAddressLabel,  double? homeAddressLatitude,  double? homeAddressLongitude)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileModel():
-return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl,_that.homeAddressLabel,_that.homeAddressLatitude,_that.homeAddressLongitude);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.profilePhotoUrl,_that.homeAddressLabel,_that.homeAddressLatitude,_that.homeAddressLongitude);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl,_that.home
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? name,  String phone,  String? profilePhotoUrl,  String? homeAddressLabel,  double? homeAddressLatitude,  double? homeAddressLongitude)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? name,  String phone,  String? email,  String? profilePhotoUrl,  String? homeAddressLabel,  double? homeAddressLatitude,  double? homeAddressLongitude)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileModel() when $default != null:
-return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl,_that.homeAddressLabel,_that.homeAddressLatitude,_that.homeAddressLongitude);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.profilePhotoUrl,_that.homeAddressLabel,_that.homeAddressLatitude,_that.homeAddressLongitude);case _:
   return null;
 
 }
@@ -215,12 +216,13 @@ return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl,_that.home
 @JsonSerializable()
 
 class _ProfileModel implements ProfileModel {
-  const _ProfileModel({required this.id, this.name, required this.phone, this.profilePhotoUrl, this.homeAddressLabel, this.homeAddressLatitude, this.homeAddressLongitude});
+  const _ProfileModel({required this.id, this.name, required this.phone, this.email, this.profilePhotoUrl, this.homeAddressLabel, this.homeAddressLatitude, this.homeAddressLongitude});
   factory _ProfileModel.fromJson(Map<String, dynamic> json) => _$ProfileModelFromJson(json);
 
 @override final  String id;
 @override final  String? name;
 @override final  String phone;
+@override final  String? email;
 @override final  String? profilePhotoUrl;
 @override final  String? homeAddressLabel;
 @override final  double? homeAddressLatitude;
@@ -239,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.homeAddressLabel, homeAddressLabel) || other.homeAddressLabel == homeAddressLabel)&&(identical(other.homeAddressLatitude, homeAddressLatitude) || other.homeAddressLatitude == homeAddressLatitude)&&(identical(other.homeAddressLongitude, homeAddressLongitude) || other.homeAddressLongitude == homeAddressLongitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.homeAddressLabel, homeAddressLabel) || other.homeAddressLabel == homeAddressLabel)&&(identical(other.homeAddressLatitude, homeAddressLatitude) || other.homeAddressLatitude == homeAddressLatitude)&&(identical(other.homeAddressLongitude, homeAddressLongitude) || other.homeAddressLongitude == homeAddressLongitude));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,phone,profilePhotoUrl,homeAddressLabel,homeAddressLatitude,homeAddressLongitude);
+int get hashCode => Object.hash(runtimeType,id,name,phone,email,profilePhotoUrl,homeAddressLabel,homeAddressLatitude,homeAddressLongitude);
 
 @override
 String toString() {
-  return 'ProfileModel(id: $id, name: $name, phone: $phone, profilePhotoUrl: $profilePhotoUrl, homeAddressLabel: $homeAddressLabel, homeAddressLatitude: $homeAddressLatitude, homeAddressLongitude: $homeAddressLongitude)';
+  return 'ProfileModel(id: $id, name: $name, phone: $phone, email: $email, profilePhotoUrl: $profilePhotoUrl, homeAddressLabel: $homeAddressLabel, homeAddressLatitude: $homeAddressLatitude, homeAddressLongitude: $homeAddressLongitude)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$ProfileModelCopyWith<$Res> implements $ProfileModelCopyWi
   factory _$ProfileModelCopyWith(_ProfileModel value, $Res Function(_ProfileModel) _then) = __$ProfileModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? name, String phone, String? profilePhotoUrl, String? homeAddressLabel, double? homeAddressLatitude, double? homeAddressLongitude
+ String id, String? name, String phone, String? email, String? profilePhotoUrl, String? homeAddressLabel, double? homeAddressLatitude, double? homeAddressLongitude
 });
 
 
@@ -276,12 +278,13 @@ class __$ProfileModelCopyWithImpl<$Res>
 
 /// Create a copy of ProfileModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? phone = null,Object? profilePhotoUrl = freezed,Object? homeAddressLabel = freezed,Object? homeAddressLatitude = freezed,Object? homeAddressLongitude = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? phone = null,Object? email = freezed,Object? profilePhotoUrl = freezed,Object? homeAddressLabel = freezed,Object? homeAddressLatitude = freezed,Object? homeAddressLongitude = freezed,}) {
   return _then(_ProfileModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
+as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
 as String?,homeAddressLabel: freezed == homeAddressLabel ? _self.homeAddressLabel : homeAddressLabel // ignore: cast_nullable_to_non_nullable
 as String?,homeAddressLatitude: freezed == homeAddressLatitude ? _self.homeAddressLatitude : homeAddressLatitude // ignore: cast_nullable_to_non_nullable
 as double?,homeAddressLongitude: freezed == homeAddressLongitude ? _self.homeAddressLongitude : homeAddressLongitude // ignore: cast_nullable_to_non_nullable

@@ -20,12 +20,16 @@ class OrderLocalDataSource {
 
   final ObjectBoxDao<ObjectBoxLocalCacheEntryEntity> _cacheDao;
 
-  Future<List<OrderSavedLocationCacheModel>> removeSavedLocation(String identityKey) {
+  Future<List<OrderSavedLocationCacheModel>> removeSavedLocation(
+    String identityKey,
+  ) {
     return rethrowAsAppException(() {
-      printC('[OrderLocalDataSource] removeSavedLocation identity=$identityKey');
+      printC(
+        '[OrderLocalDataSource] removeSavedLocation identity=$identityKey',
+      );
       final existing = _toMutableSavedLocations(_readSavedLocationsInternal());
       existing.removeWhere((item) => item.identityKey == identityKey);
-      
+
       final normalized = _normalizeSavedLocations(existing);
       _writeSavedLocationsInternal(normalized);
       return normalized;

@@ -8,6 +8,7 @@ class OrderSavedLocationCacheModel {
     required this.label,
     this.primaryName,
     this.secondaryAddress,
+    this.isAirport = false,
     required this.isPinned,
     required this.touchedAtMillis,
   });
@@ -18,9 +19,9 @@ class OrderSavedLocationCacheModel {
   final String label;
   final String? primaryName;
   final String? secondaryAddress;
+  final bool isAirport;
   final bool isPinned;
   final int touchedAtMillis;
-
 
   OrderSavedLocationCacheModel copyWith({
     String? identityKey,
@@ -29,6 +30,7 @@ class OrderSavedLocationCacheModel {
     String? label,
     String? primaryName,
     String? secondaryAddress,
+    bool? isAirport,
     bool? isPinned,
     int? touchedAtMillis,
   }) {
@@ -39,6 +41,7 @@ class OrderSavedLocationCacheModel {
       label: label ?? this.label,
       primaryName: primaryName ?? this.primaryName,
       secondaryAddress: secondaryAddress ?? this.secondaryAddress,
+      isAirport: isAirport ?? this.isAirport,
       isPinned: isPinned ?? this.isPinned,
       touchedAtMillis: touchedAtMillis ?? this.touchedAtMillis,
     );
@@ -52,6 +55,7 @@ class OrderSavedLocationCacheModel {
       'label': label,
       'primaryName': primaryName,
       'secondaryAddress': secondaryAddress,
+      'isAirport': isAirport,
       'isPinned': isPinned,
       'touchedAtMillis': touchedAtMillis,
     };
@@ -65,11 +69,11 @@ class OrderSavedLocationCacheModel {
       label: json['label']?.toString() ?? '',
       primaryName: json['primaryName']?.toString(),
       secondaryAddress: json['secondaryAddress']?.toString(),
+      isAirport: json['isAirport'] == true,
       isPinned: json['isPinned'] == true,
       touchedAtMillis: (json['touchedAtMillis'] as num?)?.toInt() ?? 0,
     );
   }
-
 }
 
 class OrderSavedLocationsCacheEnvelopeModel {

@@ -37,10 +37,16 @@ class OrderRemoteDataSource {
 
     List<PointLatLng> points;
     if (encoded.length >= _polylineDecodeIsolateThreshold) {
-      printY('[OrderRemoteDataSource] _decodeOptimized: using compute (isolate)', tag: false);
+      printY(
+        '[OrderRemoteDataSource] _decodeOptimized: using compute (isolate)',
+        tag: false,
+      );
       points = await compute(_decodePolyline, encoded);
     } else {
-      printY('[OrderRemoteDataSource] _decodeOptimized: using main thread', tag: false);
+      printY(
+        '[OrderRemoteDataSource] _decodeOptimized: using main thread',
+        tag: false,
+      );
       points = _decodePolyline(encoded);
     }
 
@@ -80,9 +86,7 @@ class OrderRemoteDataSource {
     });
   }
 
-  Future<OrderLocationModel> reverseGeocode(
-    OrderReverseGeocodeParams params,
-  ) {
+  Future<OrderLocationModel> reverseGeocode(OrderReverseGeocodeParams params) {
     return rethrowAsAppException(() async {
       printY(
         '[OrderRemoteDataSource] reverseGeocode lat=${params.latitude} lng=${params.longitude}',
@@ -117,7 +121,10 @@ class OrderRemoteDataSource {
       );
       final json = res.data as Map<String, dynamic>;
 
-      printY('[OrderRemoteDataSource] getTripRoute: decoding main polyline...', tag: false);
+      printY(
+        '[OrderRemoteDataSource] getTripRoute: decoding main polyline...',
+        tag: false,
+      );
       final encoded = json['encodedPolyline'] as String? ?? '';
       final decoded = await _decodeOptimized(encoded);
       final points = decoded
@@ -139,18 +146,20 @@ class OrderRemoteDataSource {
 
       for (int i = 0; i < legsJson.length; i++) {
         final leg = legsJson[i] as Map<String, dynamic>;
-        printY('[OrderRemoteDataSource] getTripRoute: decoding leg $i...', tag: false);
+        printY(
+          '[OrderRemoteDataSource] getTripRoute: decoding leg $i...',
+          tag: false,
+        );
         final legEncoded = leg['encodedPolyline'] as String? ?? '';
         final legDecoded = await _decodeOptimized(legEncoded);
-        final pointsForLeg =
-            legDecoded
-                .map(
-                  (p) => OrderTripRoutePointModel(
-                    latitude: p.latitude,
-                    longitude: p.longitude,
-                  ),
-                )
-                .toList();
+        final pointsForLeg = legDecoded
+            .map(
+              (p) => OrderTripRoutePointModel(
+                latitude: p.latitude,
+                longitude: p.longitude,
+              ),
+            )
+            .toList();
 
         legPoints.add(pointsForLeg);
       }
@@ -195,7 +204,10 @@ class OrderRemoteDataSource {
 
   Future<OrderTripResponseModel> requestTrip(OrderRequestTripParams params) {
     return rethrowAsAppException(() async {
-      printY('[OrderRemoteDataSource] requestTrip quoteId=${params.quoteId}', tag: false);
+      printY(
+        '[OrderRemoteDataSource] requestTrip quoteId=${params.quoteId}',
+        tag: false,
+      );
       final res = await _dio.post(
         ApiEndpoints.requestTrip,
         data: params.toJson(),
@@ -203,7 +215,7 @@ class OrderRemoteDataSource {
       return OrderTripResponseModel.fromJson(res.data as Map<String, dynamic>);
     });
   }
- 
+
   Future<int> getPassengerTripCount() {
     return rethrowAsAppException(() async {
       printY('[OrderRemoteDataSource] getPassengerTripCount', tag: false);

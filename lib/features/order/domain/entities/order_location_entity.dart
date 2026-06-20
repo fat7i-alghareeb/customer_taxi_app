@@ -5,6 +5,7 @@ class OrderLocationEntity {
     required this.label,
     this.primaryName,
     this.secondaryAddress,
+    this.isAirport = false,
   });
 
   final double latitude;
@@ -12,7 +13,7 @@ class OrderLocationEntity {
   final String label;
   final String? primaryName;
   final String? secondaryAddress;
-
+  final bool isAirport;
 
   OrderLocationEntity copyWith({
     double? latitude,
@@ -20,6 +21,7 @@ class OrderLocationEntity {
     String? label,
     String? primaryName,
     String? secondaryAddress,
+    bool? isAirport,
   }) {
     return OrderLocationEntity(
       latitude: latitude ?? this.latitude,
@@ -27,6 +29,7 @@ class OrderLocationEntity {
       label: label ?? this.label,
       primaryName: primaryName ?? this.primaryName,
       secondaryAddress: secondaryAddress ?? this.secondaryAddress,
+      isAirport: isAirport ?? this.isAirport,
     );
   }
 
@@ -38,11 +41,17 @@ class OrderLocationEntity {
         other.longitude == longitude &&
         other.label == label &&
         other.primaryName == primaryName &&
-        other.secondaryAddress == secondaryAddress;
+        other.secondaryAddress == secondaryAddress &&
+        other.isAirport == isAirport;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(latitude, longitude, label, primaryName, secondaryAddress);
-
+  int get hashCode => Object.hash(
+    latitude,
+    longitude,
+    label,
+    primaryName,
+    secondaryAddress,
+    isAirport,
+  );
 }
