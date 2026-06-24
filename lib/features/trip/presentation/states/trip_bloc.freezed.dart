@@ -152,7 +152,7 @@ return loadInvoicePdf(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId)?  started,TResult Function()?  pollingTick,TResult Function( String? note)?  cancelRequested,TResult Function( String? passengerNote)?  passengerNoteSubmitted,TResult Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult Function()?  stopPolling,TResult Function()?  historyStarted,TResult Function()?  nextPageRequested,TResult Function( double latitude,  double longitude)?  driverLocationUpdated,TResult Function( String tripId)?  loadReceipt,TResult Function( String tripId)?  loadInvoice,TResult Function( String tripId,  String languageCode)?  loadInvoicePdf,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId)?  started,TResult Function()?  pollingTick,TResult Function( String? note)?  cancelRequested,TResult Function( String? passengerNote)?  passengerNoteSubmitted,TResult Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult Function()?  stopPolling,TResult Function()?  historyStarted,TResult Function()?  nextPageRequested,TResult Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult Function( String tripId)?  loadReceipt,TResult Function( String tripId)?  loadInvoice,TResult Function( String tripId,  String languageCode)?  loadInvoicePdf,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that.tripId);case _PollingTick() when pollingTick != null:
@@ -163,7 +163,7 @@ return compensationClaimSubmitted(_that.note,_that.evidenceUrls);case _StopPolli
 return stopPolling();case _HistoryStarted() when historyStarted != null:
 return historyStarted();case _NextPageRequested() when nextPageRequested != null:
 return nextPageRequested();case _DriverLocationUpdated() when driverLocationUpdated != null:
-return driverLocationUpdated(_that.latitude,_that.longitude);case _LoadReceipt() when loadReceipt != null:
+return driverLocationUpdated(_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _LoadReceipt() when loadReceipt != null:
 return loadReceipt(_that.tripId);case _LoadInvoice() when loadInvoice != null:
 return loadInvoice(_that.tripId);case _LoadInvoicePdf() when loadInvoicePdf != null:
 return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
@@ -184,7 +184,7 @@ return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId)  started,required TResult Function()  pollingTick,required TResult Function( String? note)  cancelRequested,required TResult Function( String? passengerNote)  passengerNoteSubmitted,required TResult Function( String note,  List<String> evidenceUrls)  compensationClaimSubmitted,required TResult Function()  stopPolling,required TResult Function()  historyStarted,required TResult Function()  nextPageRequested,required TResult Function( double latitude,  double longitude)  driverLocationUpdated,required TResult Function( String tripId)  loadReceipt,required TResult Function( String tripId)  loadInvoice,required TResult Function( String tripId,  String languageCode)  loadInvoicePdf,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId)  started,required TResult Function()  pollingTick,required TResult Function( String? note)  cancelRequested,required TResult Function( String? passengerNote)  passengerNoteSubmitted,required TResult Function( String note,  List<String> evidenceUrls)  compensationClaimSubmitted,required TResult Function()  stopPolling,required TResult Function()  historyStarted,required TResult Function()  nextPageRequested,required TResult Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)  driverLocationUpdated,required TResult Function( String tripId)  loadReceipt,required TResult Function( String tripId)  loadInvoice,required TResult Function( String tripId,  String languageCode)  loadInvoicePdf,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started(_that.tripId);case _PollingTick():
@@ -195,7 +195,7 @@ return compensationClaimSubmitted(_that.note,_that.evidenceUrls);case _StopPolli
 return stopPolling();case _HistoryStarted():
 return historyStarted();case _NextPageRequested():
 return nextPageRequested();case _DriverLocationUpdated():
-return driverLocationUpdated(_that.latitude,_that.longitude);case _LoadReceipt():
+return driverLocationUpdated(_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _LoadReceipt():
 return loadReceipt(_that.tripId);case _LoadInvoice():
 return loadInvoice(_that.tripId);case _LoadInvoicePdf():
 return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
@@ -215,7 +215,7 @@ return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId)?  started,TResult? Function()?  pollingTick,TResult? Function( String? note)?  cancelRequested,TResult? Function( String? passengerNote)?  passengerNoteSubmitted,TResult? Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult? Function()?  stopPolling,TResult? Function()?  historyStarted,TResult? Function()?  nextPageRequested,TResult? Function( double latitude,  double longitude)?  driverLocationUpdated,TResult? Function( String tripId)?  loadReceipt,TResult? Function( String tripId)?  loadInvoice,TResult? Function( String tripId,  String languageCode)?  loadInvoicePdf,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId)?  started,TResult? Function()?  pollingTick,TResult? Function( String? note)?  cancelRequested,TResult? Function( String? passengerNote)?  passengerNoteSubmitted,TResult? Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult? Function()?  stopPolling,TResult? Function()?  historyStarted,TResult? Function()?  nextPageRequested,TResult? Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult? Function( String tripId)?  loadReceipt,TResult? Function( String tripId)?  loadInvoice,TResult? Function( String tripId,  String languageCode)?  loadInvoicePdf,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that.tripId);case _PollingTick() when pollingTick != null:
@@ -226,7 +226,7 @@ return compensationClaimSubmitted(_that.note,_that.evidenceUrls);case _StopPolli
 return stopPolling();case _HistoryStarted() when historyStarted != null:
 return historyStarted();case _NextPageRequested() when nextPageRequested != null:
 return nextPageRequested();case _DriverLocationUpdated() when driverLocationUpdated != null:
-return driverLocationUpdated(_that.latitude,_that.longitude);case _LoadReceipt() when loadReceipt != null:
+return driverLocationUpdated(_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _LoadReceipt() when loadReceipt != null:
 return loadReceipt(_that.tripId);case _LoadInvoice() when loadInvoice != null:
 return loadInvoice(_that.tripId);case _LoadInvoicePdf() when loadInvoicePdf != null:
 return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
@@ -641,11 +641,14 @@ String toString() {
 
 
 class _DriverLocationUpdated implements TripEvent {
-  const _DriverLocationUpdated(this.latitude, this.longitude);
+  const _DriverLocationUpdated(this.latitude, this.longitude, {this.etaToPickupSeconds, this.distanceToPickupMeters, this.routeToPickupPolyline});
   
 
  final  double latitude;
  final  double longitude;
+ final  int? etaToPickupSeconds;
+ final  int? distanceToPickupMeters;
+ final  String? routeToPickupPolyline;
 
 /// Create a copy of TripEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -657,16 +660,16 @@ _$DriverLocationUpdatedCopyWith<_DriverLocationUpdated> get copyWith => __$Drive
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DriverLocationUpdated&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DriverLocationUpdated&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.etaToPickupSeconds, etaToPickupSeconds) || other.etaToPickupSeconds == etaToPickupSeconds)&&(identical(other.distanceToPickupMeters, distanceToPickupMeters) || other.distanceToPickupMeters == distanceToPickupMeters)&&(identical(other.routeToPickupPolyline, routeToPickupPolyline) || other.routeToPickupPolyline == routeToPickupPolyline));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,latitude,longitude);
+int get hashCode => Object.hash(runtimeType,latitude,longitude,etaToPickupSeconds,distanceToPickupMeters,routeToPickupPolyline);
 
 @override
 String toString() {
-  return 'TripEvent.driverLocationUpdated(latitude: $latitude, longitude: $longitude)';
+  return 'TripEvent.driverLocationUpdated(latitude: $latitude, longitude: $longitude, etaToPickupSeconds: $etaToPickupSeconds, distanceToPickupMeters: $distanceToPickupMeters, routeToPickupPolyline: $routeToPickupPolyline)';
 }
 
 
@@ -677,7 +680,7 @@ abstract mixin class _$DriverLocationUpdatedCopyWith<$Res> implements $TripEvent
   factory _$DriverLocationUpdatedCopyWith(_DriverLocationUpdated value, $Res Function(_DriverLocationUpdated) _then) = __$DriverLocationUpdatedCopyWithImpl;
 @useResult
 $Res call({
- double latitude, double longitude
+ double latitude, double longitude, int? etaToPickupSeconds, int? distanceToPickupMeters, String? routeToPickupPolyline
 });
 
 
@@ -694,11 +697,14 @@ class __$DriverLocationUpdatedCopyWithImpl<$Res>
 
 /// Create a copy of TripEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? latitude = null,Object? longitude = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? latitude = null,Object? longitude = null,Object? etaToPickupSeconds = freezed,Object? distanceToPickupMeters = freezed,Object? routeToPickupPolyline = freezed,}) {
   return _then(_DriverLocationUpdated(
 null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
-as double,
+as double,etaToPickupSeconds: freezed == etaToPickupSeconds ? _self.etaToPickupSeconds : etaToPickupSeconds // ignore: cast_nullable_to_non_nullable
+as int?,distanceToPickupMeters: freezed == distanceToPickupMeters ? _self.distanceToPickupMeters : distanceToPickupMeters // ignore: cast_nullable_to_non_nullable
+as int?,routeToPickupPolyline: freezed == routeToPickupPolyline ? _self.routeToPickupPolyline : routeToPickupPolyline // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

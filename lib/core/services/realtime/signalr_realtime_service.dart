@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:injectable/injectable.dart';
 import 'package:signalr_netcore/http_connection_options.dart';
@@ -26,6 +27,7 @@ class SignalRRealtimeService implements RealtimeService {
   static const String _logTag = '[Realtime]';
   static const int _requestTimeoutMs = 15000;
   static const Duration _retryDelay = Duration(seconds: 3);
+  static const Duration _maxRetryDelay = Duration(seconds: 30);
 
   final JwtTokenStorage _tokenStorage;
 
@@ -34,7 +36,10 @@ class SignalRRealtimeService implements RealtimeService {
   Timer? _retryTimer;
   bool _connectRequested = false;
   bool _explicitlyDisconnected = false;
+  int _connectionGeneration = 0;
+  int _retryAttempt = 0;
   final Set<String> _joinedTripGroups = <String>{};
+  final Set<String> _seenEventIds = <String>{};
 
   final StreamController<RealtimeEvent> _eventsController =
       StreamController<RealtimeEvent>.broadcast();
@@ -84,6 +89,7 @@ class SignalRRealtimeService implements RealtimeService {
         return;
       }
       _setState(RealtimeConnectionState.connected);
+      _retryAttempt = 0;
       printG('$_logTag connected');
       await _rejoinTripGroups();
       completer.complete();
@@ -112,6 +118,7 @@ class SignalRRealtimeService implements RealtimeService {
 
     final hub = _connection;
     _connection = null;
+    _connectionGeneration++;
     if (hub == null) {
       _setState(RealtimeConnectionState.disconnected);
       return;
@@ -177,8 +184,17 @@ class SignalRRealtimeService implements RealtimeService {
 
   void _scheduleRetry() {
     if (_retryTimer != null) return;
-    printY('$_logTag scheduling reconnect retry in ${_retryDelay.inSeconds}s');
-    _retryTimer = Timer(_retryDelay, () {
+    final exponent = min(_retryAttempt, 4);
+    final baseSeconds = min(
+      _retryDelay.inSeconds * (1 << exponent),
+      _maxRetryDelay.inSeconds,
+    );
+    final delay = Duration(
+      milliseconds: baseSeconds * 1000 + Random().nextInt(750),
+    );
+    _retryAttempt++;
+    printY('$_logTag scheduling reconnect retry in ${delay.inMilliseconds}ms');
+    _retryTimer = Timer(delay, () {
       _retryTimer = null;
       if (_connectRequested && !_explicitlyDisconnected) {
         unawaited(connect());
@@ -187,6 +203,7 @@ class SignalRRealtimeService implements RealtimeService {
   }
 
   void _wireHandlers(HubConnection hub) {
+    final generation = ++_connectionGeneration;
     hub.on(RealtimeMethodNames.tripRequested, _onTripRequested);
     hub.on(RealtimeMethodNames.driverAssigned, _onDriverAssigned);
     hub.on(RealtimeMethodNames.tripAccepted, _onTripAccepted);
@@ -199,26 +216,31 @@ class SignalRRealtimeService implements RealtimeService {
     hub.on(RealtimeMethodNames.driverEnRoute, _onDriverEnRoute);
     hub.on(RealtimeMethodNames.driverArrived, _onDriverArrived);
     hub.on(RealtimeMethodNames.driverLocationUpdated, _onDriverLocationUpdated);
+    hub.on(RealtimeMethodNames.tripStopCompleted, _onTripStopCompleted);
     hub.on(RealtimeMethodNames.tripMessageReceived, _onTripMessageReceived);
     hub.on(RealtimeMethodNames.chatClosed, _onChatClosed);
 
     hub.onclose(({Exception? error}) {
+      if (_connection != hub || generation != _connectionGeneration) return;
       printY('$_logTag connection closed (error=$error)');
       if (_explicitlyDisconnected) {
         _setState(RealtimeConnectionState.disconnected);
       } else {
-        // Automatic-reconnect policy will retry; expose reconnecting state
-        // until onreconnected resolves.
-        _setState(RealtimeConnectionState.reconnecting);
+        _connection = null;
+        _setState(RealtimeConnectionState.disconnected);
+        _scheduleRetry();
       }
     });
     hub.onreconnecting(({Exception? error}) {
+      if (_connection != hub || generation != _connectionGeneration) return;
       printY('$_logTag reconnecting (error=$error)');
       _setState(RealtimeConnectionState.reconnecting);
     });
     hub.onreconnected(({String? connectionId}) {
+      if (_connection != hub || generation != _connectionGeneration) return;
       printG('$_logTag reconnected connectionId=$connectionId');
       _setState(RealtimeConnectionState.connected);
+      _retryAttempt = 0;
       // After a reconnect SignalR drops group membership — rejoin.
       unawaited(_rejoinTripGroups());
     });
@@ -243,12 +265,41 @@ class SignalRRealtimeService implements RealtimeService {
     _stateController.add(next);
   }
 
-  Map<String, dynamic>? _payload(List<Object?>? args) {
+  Map<String, dynamic>? _payload(
+    List<Object?>? args, {
+    bool requireTripId = true,
+  }) {
     if (args == null || args.isEmpty) return null;
     final first = args.first;
-    if (first is Map<String, dynamic>) return first;
-    if (first is Map) return Map<String, dynamic>.from(first);
-    return null;
+    final payload = first is Map<String, dynamic>
+        ? first
+        : first is Map
+        ? Map<String, dynamic>.from(first)
+        : null;
+    if (payload == null) return null;
+    if (requireTripId && !_hasRequiredStrings(payload, const ['tripId'])) {
+      return null;
+    }
+
+    final eventId = _readNullableString(payload, 'eventId');
+    if (eventId != null) {
+      if (_seenEventIds.length > 512) _seenEventIds.clear();
+      if (!_seenEventIds.add(eventId)) return null;
+    }
+    return payload;
+  }
+
+  bool _hasRequiredStrings(
+    Map<String, dynamic> payload,
+    List<String> fields,
+  ) {
+    for (final field in fields) {
+      if (_readNullableString(payload, field) == null) {
+        printY('$_logTag malformed payload missing $field: $payload');
+        return false;
+      }
+    }
+    return true;
   }
 
   String _readString(Map<String, dynamic> map, String camel) {
@@ -267,6 +318,13 @@ class SignalRRealtimeService implements RealtimeService {
     if (value is num) return value.toDouble();
     if (value is String) return double.tryParse(value) ?? 0;
     return 0;
+  }
+
+  int? _readNullableInt(Map<String, dynamic> map, String camel) {
+    final value = map[camel] ?? map[_pascal(camel)];
+    if (value is num) return value.round();
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 
   String _pascal(String camel) =>
@@ -461,7 +519,7 @@ class SignalRRealtimeService implements RealtimeService {
   }
 
   void _onDriverLocationUpdated(List<Object?>? args) {
-    final p = _payload(args);
+    final p = _payload(args, requireTripId: false);
     if (p == null) return;
     // High-frequency event — keep logging terse to avoid flooding the console.
     _eventsController.add(
@@ -470,6 +528,30 @@ class SignalRRealtimeService implements RealtimeService {
         driverId: _readString(p, 'driverId'),
         latitude: _readDouble(p, 'latitude'),
         longitude: _readDouble(p, 'longitude'),
+        etaToPickupSeconds: _readNullableInt(p, 'etaToPickupSeconds'),
+        distanceToPickupMeters: _readNullableInt(p, 'distanceToPickupMeters'),
+        routeToPickupPolyline: _readNullableString(p, 'routeToPickupPolyline'),
+      ),
+    );
+  }
+
+  void _onTripStopCompleted(List<Object?>? args) {
+    final p = _payload(args);
+    if (p == null) return;
+    final rawSequence = p['sequence'] ?? p['Sequence'];
+    final sequence = rawSequence is int
+        ? rawSequence
+        : int.tryParse(rawSequence?.toString() ?? '');
+    if (sequence == null) {
+      printY('$_logTag malformed TripStopCompleted sequence: $p');
+      return;
+    }
+    _eventsController.add(
+      RealtimeEvent.tripStopCompleted(
+        tripId: _readString(p, 'tripId'),
+        passengerId: _readString(p, 'passengerId'),
+        driverId: _readNullableString(p, 'driverId'),
+        sequence: sequence,
       ),
     );
   }

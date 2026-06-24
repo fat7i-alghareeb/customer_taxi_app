@@ -12,6 +12,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   geolocator_windows
   objectbox_flutter_libs
   permission_handler_windows
+  record_windows
   share_plus
   syncfusion_pdfviewer_windows
   url_launcher_windows

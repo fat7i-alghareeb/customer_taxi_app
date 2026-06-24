@@ -8,5 +8,10 @@ abstract class DriverLocationEntity with _$DriverLocationEntity {
     required double latitude,
     required double longitude,
     double? bearing,
+    // Live driver-arrival estimate to the pickup (only while heading there).
+    int? etaToPickupSeconds,
+    int? distanceToPickupMeters,
+    // Encoded road-following route from the driver to the pickup.
+    String? routeToPickupPolyline,
   }) = _DriverLocationEntity;
 }

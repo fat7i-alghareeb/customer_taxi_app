@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../core/router/app_page_transitions.dart';
 import '../../features/auth/presentation/ui/screens/login_screen.dart';
+import '../../features/chat/presentation/ui/screens/trip_chat_screen.dart';
 import '../../features/onboarding/presentation/ui/screens/onboarding_screen.dart';
 import '../../features/permissions/presentation/ui/screens/permission_gate_screen.dart';
 import '../../features/root/presentation/ui/screens/root_screen.dart';
@@ -338,7 +339,9 @@ class AppRouteGuard {
       isAuthenticated: latestAuthenticated,
     );
     if (profileRedirect != null) {
-      printG('${RouterLogTags.redirect} #$cycleId decision -> "$profileRedirect" (profile-gate)');
+      printG(
+        '${RouterLogTags.redirect} #$cycleId decision -> "$profileRedirect" (profile-gate)',
+      );
       return profileRedirect;
     }
 
@@ -468,7 +471,9 @@ class AppRouteGuard {
         isAuthenticated: true,
       );
       if (profileRedirect != null) {
-        printG('${RouterLogTags.redirect} #$cycleId authenticated -> $profileRedirect (profile gate)');
+        printG(
+          '${RouterLogTags.redirect} #$cycleId authenticated -> $profileRedirect (profile gate)',
+        );
         return profileRedirect;
       }
 

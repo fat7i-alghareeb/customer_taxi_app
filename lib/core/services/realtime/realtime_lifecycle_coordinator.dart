@@ -24,9 +24,14 @@ import 'realtime_service.dart';
 ///    * `Status.unauthenticated` → disconnect.
 ///
 /// 2. **App lifecycle** (via [WidgetsBindingObserver]):
-///    * `paused` / `detached` / `hidden` → disconnect (no zombie sockets
-///      while the OS suspends us).
-///    * `resumed` → reconnect, but only if auth is currently authenticated.
+///    * `paused` / `hidden` → defer disconnect by [_backgroundGrace]. If the
+///      user returns within the window the live socket is kept (a short app
+///      switch must not tear realtime down); only after the window elapses do
+///      we disconnect to avoid zombie sockets while the OS suspends us.
+///    * `detached` → disconnect immediately (the app is terminating).
+///    * `resumed` → cancel any pending background disconnect and reconnect
+///      (idempotent — a no-op when the socket is still alive), but only if
+///      auth is currently authenticated.
 ///
 /// Also gated by [ClientConfigService.current.signalREnabled]: when false,
 /// [start] is a no-op (polling fallback continues to drive trip updates).
@@ -40,12 +45,19 @@ class RealtimeLifecycleCoordinator with WidgetsBindingObserver {
 
   static const String _logTag = '[Realtime/Lifecycle]';
 
+  /// How long the socket is kept alive after the app is backgrounded before we
+  /// proactively disconnect. Covers quick app switches, checking a
+  /// notification, taking a call, copying an address, etc. Long backgrounds are
+  /// still covered by FCM push.
+  static const Duration _backgroundGrace = Duration(minutes: 10);
+
   final RealtimeService _service;
   final AuthManager _authManager;
   final ClientConfigService _configService;
 
   StreamSubscription<AuthStatus>? _authSub;
   StreamSubscription<RealtimeConnectionState>? _stateSub;
+  Timer? _backgroundDisconnectTimer;
   bool _started = false;
 
   /// Subscribes to auth + app lifecycle. Idempotent.
@@ -79,6 +91,7 @@ class RealtimeLifecycleCoordinator with WidgetsBindingObserver {
     if (!_started) return;
     _started = false;
     WidgetsBinding.instance.removeObserver(this);
+    _cancelBackgroundDisconnect();
     await _authSub?.cancel();
     _authSub = null;
     await _stateSub?.cancel();
@@ -92,10 +105,12 @@ class RealtimeLifecycleCoordinator with WidgetsBindingObserver {
     switch (status.status) {
       case Status.authenticated:
         printC('$_logTag auth -> authenticated, connecting');
+        _cancelBackgroundDisconnect();
         unawaited(_service.connect());
         break;
       case Status.unauthenticated:
         printY('$_logTag auth -> unauthenticated, disconnecting');
+        _cancelBackgroundDisconnect();
         unawaited(_service.disconnect());
         break;
       case Status.initial:
@@ -110,20 +125,47 @@ class RealtimeLifecycleCoordinator with WidgetsBindingObserver {
 
     switch (state) {
       case AppLifecycleState.resumed:
+        _cancelBackgroundDisconnect();
         if (_authManager.isAuthenticated) {
-          printC('$_logTag app resumed, reconnecting');
+          // Idempotent: no-op when the socket survived the background, real
+          // reconnect only if the OS dropped it.
+          printC('$_logTag app resumed, ensuring connection');
           unawaited(_service.connect());
         }
         break;
       case AppLifecycleState.paused:
-      case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-        printY('$_logTag app $state, disconnecting');
+        _scheduleBackgroundDisconnect(state);
+        break;
+      case AppLifecycleState.detached:
+        // App is terminating — drop the socket now, no grace period.
+        printY('$_logTag app detached, disconnecting');
+        _cancelBackgroundDisconnect();
         unawaited(_service.disconnect());
         break;
       case AppLifecycleState.inactive:
         // Transient — do nothing.
         break;
     }
+  }
+
+  /// Defers the disconnect by [_backgroundGrace] so a short background does not
+  /// tear the socket down. Idempotent: a timer already in flight is kept.
+  void _scheduleBackgroundDisconnect(AppLifecycleState state) {
+    if (_backgroundDisconnectTimer != null) return;
+    printY(
+      '$_logTag app $state, disconnecting in '
+      '${_backgroundGrace.inMinutes}m if still backgrounded',
+    );
+    _backgroundDisconnectTimer = Timer(_backgroundGrace, () {
+      _backgroundDisconnectTimer = null;
+      printY('$_logTag background grace elapsed, disconnecting');
+      unawaited(_service.disconnect());
+    });
+  }
+
+  void _cancelBackgroundDisconnect() {
+    _backgroundDisconnectTimer?.cancel();
+    _backgroundDisconnectTimer = null;
   }
 }

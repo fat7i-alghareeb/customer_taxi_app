@@ -171,6 +171,35 @@ class TripRemoteDataSource {
     });
   }
 
+  /// Uploads an in-trip safety audio recording and returns its server URL.
+  Future<String> uploadTripRecording({
+    required String tripId,
+    required String filePath,
+    int? durationSeconds,
+  }) {
+    return rethrowAsAppException(() async {
+      printY(
+        '[TripRemoteDataSource] uploadTripRecording trip=$tripId duration=$durationSeconds',
+      );
+      final formData = FormData();
+      formData.files.add(
+        MapEntry('file', await MultipartFile.fromFile(filePath)),
+      );
+      if (durationSeconds != null) {
+        formData.fields.add(
+          MapEntry('durationSeconds', durationSeconds.toString()),
+        );
+      }
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.uploadTripRecording(tripId),
+        data: formData,
+      );
+      final data = res.data;
+      return (data is Map<String, dynamic> ? data['url'] as String? : null) ??
+          '';
+    });
+  }
+
   Future<PagedResult<TripSummaryModel>> getTripHistory({
     int page = 1,
     int pageSize = 20,

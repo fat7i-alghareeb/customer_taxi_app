@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/common/widgets/show_overlay.dart';
+import 'package:customertaxi/core/services/media/media_picker_service.dart';
 import '../../states/profile_bloc.dart';
 
 class ProfilePhotoPicker extends StatelessWidget {
@@ -14,14 +16,15 @@ class ProfilePhotoPicker extends StatelessWidget {
   final File? pendingPhoto;
 
   Future<void> _pickImage(BuildContext context) async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
-    if (image != null && context.mounted) {
+    final result = await appMediaPickerService.pickSingle(ImageSource.gallery);
+    if (!context.mounted) return;
+    if (result.failure != null) {
+      showErrorOverlay(context, AppStrings.profilePhotoUploadError);
+      return;
+    }
+    if (result.isSuccess) {
       context.read<ProfileBloc>().add(
-        ProfileEvent.photoSelected(File(image.path)),
+        ProfileEvent.photoSelected(File(result.files.single.path)),
       );
     }
   }

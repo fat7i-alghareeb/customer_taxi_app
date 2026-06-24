@@ -17,6 +17,8 @@ class RootMapCanvasWidget extends StatelessWidget {
     this.showMyLocationButton = false,
     this.driverLocation,
     this.driverMarkerIcon,
+    this.pickupLocation,
+    this.pickupRoute = const <LatLng>[],
   });
 
   final RootMapLocationEntity currentLocation;
@@ -29,6 +31,15 @@ class RootMapCanvasWidget extends StatelessWidget {
   final bool showMyLocationButton;
   final DriverLocationEntity? driverLocation;
   final BitmapDescriptor? driverMarkerIcon;
+
+  /// Pickup point the driver is heading to. When set together with
+  /// [driverLocation], a line is drawn from the car to the pickup — used as a
+  /// straight-line fallback until [pickupRoute] resolves.
+  final LatLng? pickupLocation;
+
+  /// Road-following route from the driver to the pickup (decoded directions).
+  /// When non-empty it is drawn as the dashed orange path instead of a straight line.
+  final List<LatLng> pickupRoute;
 
   LatLng get _latLng =>
       LatLng(currentLocation.latitude, currentLocation.longitude);
@@ -51,11 +62,32 @@ class RootMapCanvasWidget extends StatelessWidget {
   }
 
   Set<Polyline> _buildPolylines(BuildContext context) {
-    if (legPolylines.isEmpty) {
-      return const <Polyline>{};
+    final polylines = <Polyline>{};
+
+    // Live dashed orange path from the driver's car to the pickup point.
+    // Prefer the road-following route; fall back to a straight line until it loads.
+    if (driverLocation != null && (pickupRoute.isNotEmpty || pickupLocation != null)) {
+      final driverPos = LatLng(
+        driverLocation!.latitude,
+        driverLocation!.longitude,
+      );
+      final points = pickupRoute.isNotEmpty
+          ? <LatLng>[driverPos, ...pickupRoute]
+          : <LatLng>[driverPos, pickupLocation!];
+      polylines.add(
+        Polyline(
+          polylineId: const PolylineId('driver-to-pickup'),
+          points: points,
+          width: 5.r.toInt(),
+          color: Colors.orange,
+          patterns: [PatternItem.dash(20), PatternItem.gap(12)],
+        ),
+      );
     }
 
-    final polylines = <Polyline>{};
+    if (legPolylines.isEmpty) {
+      return polylines;
+    }
 
     // 1. Walking path from Current Location to Trip Start (Dashed)
     if (legPolylines.first.isNotEmpty) {

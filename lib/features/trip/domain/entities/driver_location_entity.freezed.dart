@@ -14,7 +14,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DriverLocationEntity {
 
- double get latitude; double get longitude; double? get bearing;
+ double get latitude; double get longitude; double? get bearing;// Live driver-arrival estimate to the pickup (only while heading there).
+ int? get etaToPickupSeconds; int? get distanceToPickupMeters;// Encoded road-following route from the driver to the pickup.
+ String? get routeToPickupPolyline;
 /// Create a copy of DriverLocationEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +27,16 @@ $DriverLocationEntityCopyWith<DriverLocationEntity> get copyWith => _$DriverLoca
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DriverLocationEntity&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.bearing, bearing) || other.bearing == bearing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DriverLocationEntity&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.bearing, bearing) || other.bearing == bearing)&&(identical(other.etaToPickupSeconds, etaToPickupSeconds) || other.etaToPickupSeconds == etaToPickupSeconds)&&(identical(other.distanceToPickupMeters, distanceToPickupMeters) || other.distanceToPickupMeters == distanceToPickupMeters)&&(identical(other.routeToPickupPolyline, routeToPickupPolyline) || other.routeToPickupPolyline == routeToPickupPolyline));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,latitude,longitude,bearing);
+int get hashCode => Object.hash(runtimeType,latitude,longitude,bearing,etaToPickupSeconds,distanceToPickupMeters,routeToPickupPolyline);
 
 @override
 String toString() {
-  return 'DriverLocationEntity(latitude: $latitude, longitude: $longitude, bearing: $bearing)';
+  return 'DriverLocationEntity(latitude: $latitude, longitude: $longitude, bearing: $bearing, etaToPickupSeconds: $etaToPickupSeconds, distanceToPickupMeters: $distanceToPickupMeters, routeToPickupPolyline: $routeToPickupPolyline)';
 }
 
 
@@ -45,7 +47,7 @@ abstract mixin class $DriverLocationEntityCopyWith<$Res>  {
   factory $DriverLocationEntityCopyWith(DriverLocationEntity value, $Res Function(DriverLocationEntity) _then) = _$DriverLocationEntityCopyWithImpl;
 @useResult
 $Res call({
- double latitude, double longitude, double? bearing
+ double latitude, double longitude, double? bearing, int? etaToPickupSeconds, int? distanceToPickupMeters, String? routeToPickupPolyline
 });
 
 
@@ -62,12 +64,15 @@ class _$DriverLocationEntityCopyWithImpl<$Res>
 
 /// Create a copy of DriverLocationEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? latitude = null,Object? longitude = null,Object? bearing = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? latitude = null,Object? longitude = null,Object? bearing = freezed,Object? etaToPickupSeconds = freezed,Object? distanceToPickupMeters = freezed,Object? routeToPickupPolyline = freezed,}) {
   return _then(_self.copyWith(
 latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,bearing: freezed == bearing ? _self.bearing : bearing // ignore: cast_nullable_to_non_nullable
-as double?,
+as double?,etaToPickupSeconds: freezed == etaToPickupSeconds ? _self.etaToPickupSeconds : etaToPickupSeconds // ignore: cast_nullable_to_non_nullable
+as int?,distanceToPickupMeters: freezed == distanceToPickupMeters ? _self.distanceToPickupMeters : distanceToPickupMeters // ignore: cast_nullable_to_non_nullable
+as int?,routeToPickupPolyline: freezed == routeToPickupPolyline ? _self.routeToPickupPolyline : routeToPickupPolyline // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -152,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double latitude,  double longitude,  double? bearing)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double latitude,  double longitude,  double? bearing,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DriverLocationEntity() when $default != null:
-return $default(_that.latitude,_that.longitude,_that.bearing);case _:
+return $default(_that.latitude,_that.longitude,_that.bearing,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _:
   return orElse();
 
 }
@@ -173,10 +178,10 @@ return $default(_that.latitude,_that.longitude,_that.bearing);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double latitude,  double longitude,  double? bearing)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double latitude,  double longitude,  double? bearing,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)  $default,) {final _that = this;
 switch (_that) {
 case _DriverLocationEntity():
-return $default(_that.latitude,_that.longitude,_that.bearing);case _:
+return $default(_that.latitude,_that.longitude,_that.bearing,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +198,10 @@ return $default(_that.latitude,_that.longitude,_that.bearing);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double latitude,  double longitude,  double? bearing)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double latitude,  double longitude,  double? bearing,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  $default,) {final _that = this;
 switch (_that) {
 case _DriverLocationEntity() when $default != null:
-return $default(_that.latitude,_that.longitude,_that.bearing);case _:
+return $default(_that.latitude,_that.longitude,_that.bearing,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _:
   return null;
 
 }
@@ -208,12 +213,17 @@ return $default(_that.latitude,_that.longitude,_that.bearing);case _:
 
 
 class _DriverLocationEntity implements DriverLocationEntity {
-  const _DriverLocationEntity({required this.latitude, required this.longitude, this.bearing});
+  const _DriverLocationEntity({required this.latitude, required this.longitude, this.bearing, this.etaToPickupSeconds, this.distanceToPickupMeters, this.routeToPickupPolyline});
   
 
 @override final  double latitude;
 @override final  double longitude;
 @override final  double? bearing;
+// Live driver-arrival estimate to the pickup (only while heading there).
+@override final  int? etaToPickupSeconds;
+@override final  int? distanceToPickupMeters;
+// Encoded road-following route from the driver to the pickup.
+@override final  String? routeToPickupPolyline;
 
 /// Create a copy of DriverLocationEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -225,16 +235,16 @@ _$DriverLocationEntityCopyWith<_DriverLocationEntity> get copyWith => __$DriverL
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DriverLocationEntity&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.bearing, bearing) || other.bearing == bearing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DriverLocationEntity&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.bearing, bearing) || other.bearing == bearing)&&(identical(other.etaToPickupSeconds, etaToPickupSeconds) || other.etaToPickupSeconds == etaToPickupSeconds)&&(identical(other.distanceToPickupMeters, distanceToPickupMeters) || other.distanceToPickupMeters == distanceToPickupMeters)&&(identical(other.routeToPickupPolyline, routeToPickupPolyline) || other.routeToPickupPolyline == routeToPickupPolyline));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,latitude,longitude,bearing);
+int get hashCode => Object.hash(runtimeType,latitude,longitude,bearing,etaToPickupSeconds,distanceToPickupMeters,routeToPickupPolyline);
 
 @override
 String toString() {
-  return 'DriverLocationEntity(latitude: $latitude, longitude: $longitude, bearing: $bearing)';
+  return 'DriverLocationEntity(latitude: $latitude, longitude: $longitude, bearing: $bearing, etaToPickupSeconds: $etaToPickupSeconds, distanceToPickupMeters: $distanceToPickupMeters, routeToPickupPolyline: $routeToPickupPolyline)';
 }
 
 
@@ -245,7 +255,7 @@ abstract mixin class _$DriverLocationEntityCopyWith<$Res> implements $DriverLoca
   factory _$DriverLocationEntityCopyWith(_DriverLocationEntity value, $Res Function(_DriverLocationEntity) _then) = __$DriverLocationEntityCopyWithImpl;
 @override @useResult
 $Res call({
- double latitude, double longitude, double? bearing
+ double latitude, double longitude, double? bearing, int? etaToPickupSeconds, int? distanceToPickupMeters, String? routeToPickupPolyline
 });
 
 
@@ -262,12 +272,15 @@ class __$DriverLocationEntityCopyWithImpl<$Res>
 
 /// Create a copy of DriverLocationEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? latitude = null,Object? longitude = null,Object? bearing = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? latitude = null,Object? longitude = null,Object? bearing = freezed,Object? etaToPickupSeconds = freezed,Object? distanceToPickupMeters = freezed,Object? routeToPickupPolyline = freezed,}) {
   return _then(_DriverLocationEntity(
 latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,bearing: freezed == bearing ? _self.bearing : bearing // ignore: cast_nullable_to_non_nullable
-as double?,
+as double?,etaToPickupSeconds: freezed == etaToPickupSeconds ? _self.etaToPickupSeconds : etaToPickupSeconds // ignore: cast_nullable_to_non_nullable
+as int?,distanceToPickupMeters: freezed == distanceToPickupMeters ? _self.distanceToPickupMeters : distanceToPickupMeters // ignore: cast_nullable_to_non_nullable
+as int?,routeToPickupPolyline: freezed == routeToPickupPolyline ? _self.routeToPickupPolyline : routeToPickupPolyline // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

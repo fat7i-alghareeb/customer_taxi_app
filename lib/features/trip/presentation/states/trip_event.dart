@@ -14,7 +14,13 @@ class TripEvent with _$TripEvent {
   const factory TripEvent.stopPolling() = _StopPolling;
   const factory TripEvent.historyStarted() = _HistoryStarted;
   const factory TripEvent.nextPageRequested() = _NextPageRequested;
-  const factory TripEvent.driverLocationUpdated(double latitude, double longitude) = _DriverLocationUpdated;
+  const factory TripEvent.driverLocationUpdated(
+    double latitude,
+    double longitude, {
+    int? etaToPickupSeconds,
+    int? distanceToPickupMeters,
+    String? routeToPickupPolyline,
+  }) = _DriverLocationUpdated;
   const factory TripEvent.loadReceipt(String tripId) = _LoadReceipt;
   const factory TripEvent.loadInvoice(String tripId) = _LoadInvoice;
   const factory TripEvent.loadInvoicePdf({

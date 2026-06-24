@@ -35,9 +35,8 @@ abstract interface class RealtimeService {
   /// the typed [RealtimeEvent] union. Multiple subscribers are allowed.
   Stream<RealtimeEvent> get events;
 
-  /// Broadcast stream of connection-state transitions. Always emits the
-  /// current value to new subscribers (use `valueOf` on the
-  /// implementation if a synchronous read is needed).
+  /// Broadcast stream of future connection-state transitions. Consumers that
+  /// need an initial value must read [currentConnectionState] first.
   Stream<RealtimeConnectionState> get connectionState;
 
   /// Synchronous read of the current connection state.

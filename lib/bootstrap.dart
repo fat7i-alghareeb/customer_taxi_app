@@ -22,11 +22,14 @@ import 'core/notification/notification_topics.dart';
 import 'core/router/router_config.dart';
 import 'core/services/client_config/client_config_service.dart';
 import 'core/services/localization/locale_service.dart';
+import 'core/services/media/media_picker_service.dart';
 import 'core/services/realtime/realtime_lifecycle_coordinator.dart';
 import 'core/services/session/auth_manager.dart';
 import 'core/services/session/auth_state_notifier.dart';
+import 'core/services/support_contact/support_contact_service.dart';
 import 'package:customertaxi/core/utils/result.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
+import 'features/chat/presentation/ui/screens/trip_chat_screen.dart';
 import 'features/root/presentation/ui/screens/root_screen.dart';
 import 'features/trip/presentation/states/trip_bloc.dart';
 import 'core/theme/theme_controller.dart';
@@ -54,6 +57,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       //    plugins or framework APIs are used.
       WidgetsFlutterBinding.ensureInitialized();
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      await appMediaPickerService.initialize();
 
       // Select the active flavor (stage / production) based on the
       // compile-time value provided by the native layer.
@@ -221,8 +225,9 @@ Future<void> _handleNotificationNavigation(
   if (_typeFromPayload(payload) == 'trip_completed') {
     final completedTripId = _tripIdFromPayload(payload);
     if (completedTripId != null) {
-      await getIt<TripCompletionCoordinator>()
-          .promptRatingForTrip(completedTripId);
+      await getIt<TripCompletionCoordinator>().promptRatingForTrip(
+        completedTripId,
+      );
     } else {
       _navigateTo(RootScreen.pagePath);
     }
@@ -250,7 +255,9 @@ Future<void> _handleNotificationNavigation(
   if (_typeFromPayload(payload) == 'chat_message') {
     final chatTripId = _tripIdFromPayload(payload);
     if (chatTripId != null) _routeTripPayloadToBloc(payload);
-    _navigateTo(RootScreen.pagePath);
+    if (chatTripId != null) {
+      await _navigateToChatWhenReady(chatTripId);
+    }
     return;
   }
 
@@ -274,6 +281,23 @@ Future<void> _handleNotificationNavigation(
   }
 
   _navigateTo(location);
+}
+
+Future<void> _navigateToChatWhenReady(String tripId) async {
+  for (var attempt = 0; attempt < 30; attempt++) {
+    final authState = getIt<AuthStateNotifier>();
+    final router = getIt<AppRouterConfig>().router;
+    if (authState.isAuthenticated &&
+        router.routerDelegate.navigatorKey.currentContext != null) {
+      router.goNamed(
+        TripChatScreen.pageName,
+        extra: TripChatScreenArgs(tripId: tripId),
+      );
+      return;
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+  }
+  _navigateTo(RootScreen.pagePath);
 }
 
 /// If [payload] carries a `tripId`, ask the singleton [TripBloc] to start
@@ -349,6 +373,10 @@ Future<void> _initializeClientConfig() async {
   } else {
     printY('[Bootstrap] Stripe disabled or no publishable key — skipping init');
   }
+
+  // Prefetch the support contact so the in-trip "Report problem" action opens
+  // instantly. Failures are tolerated — the service falls back to a default.
+  await getIt<SupportContactService>().fetch();
 }
 
 /// Starts the realtime coordinator.

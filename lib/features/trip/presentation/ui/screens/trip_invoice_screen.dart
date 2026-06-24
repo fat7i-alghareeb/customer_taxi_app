@@ -1,12 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:customertaxi/common/imports/imports.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../../../core/services/file_download/file_download_service.dart';
+import '../../../../../core/services/file_download/file_saved_result_presenter.dart';
 import '../../states/trip_bloc.dart';
 
 /// Customer-facing invoice PDF screen — mirrors the Uber "الفاتورة" reference.
@@ -100,95 +99,14 @@ class _TripInvoiceBodyState extends State<_TripInvoiceBody> {
         mimeType: 'application/pdf',
       );
       if (!mounted) return;
-      switch (result) {
-        case FileDownloadSuccess(:final location, :final path):
-          if (path != null && path.isNotEmpty) {
-            await _showSavedDialog(path, bytes);
-          } else {
-            _showSnack(_successMessage(location));
-          }
-        case FileDownloadFailure(:final reason):
-          _handleFailure(reason);
-      }
+      await presentFileSaveResult(
+        context,
+        result,
+        onShare: () => _onSharePressed(bytes),
+        dialogTitle: AppStrings.invoiceSavedDialogTitle,
+      );
     } finally {
       if (mounted) setState(() => _downloading = false);
-    }
-  }
-
-  String _successMessage(FileDownloadLocation location) {
-    switch (location) {
-      case FileDownloadLocation.publicDownloads:
-        return AppStrings.invoiceSavedToDownloads;
-      case FileDownloadLocation.appDocuments:
-        return AppStrings.invoiceSavedToFiles;
-      case FileDownloadLocation.appExternalDir:
-        return AppStrings.invoiceSavedToAppFolder;
-      case FileDownloadLocation.sharedTemporarily:
-        return AppStrings.invoiceSavedSharedFallback;
-    }
-  }
-
-  /// Shows where the PDF was saved with actions to open it externally or share it.
-  Future<void> _showSavedDialog(String path, Uint8List bytes) async {
-    if (!mounted) return;
-    await showDialog<void>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(AppStrings.invoiceSavedDialogTitle),
-        content: SelectableText(path, style: AppTextStyles.s14w400),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(AppStrings.invoiceClose),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              _onSharePressed(bytes);
-            },
-            child: Text(AppStrings.invoiceShare),
-          ),
-          FilledButton(
-            onPressed: () async {
-              Navigator.of(dialogContext).pop();
-              await _openFile(path);
-            },
-            child: Text(AppStrings.invoiceOpen),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _openFile(String path) async {
-    final result = await OpenFilex.open(path);
-    if (!mounted) return;
-    if (result.type != ResultType.done) {
-      printY('[TripInvoice] open failed=${result.type} ${result.message}');
-      _showSnack(AppStrings.invoiceOpenFailed);
-    }
-  }
-
-  void _handleFailure(FileDownloadFailureReason reason) {
-    switch (reason) {
-      case FileDownloadFailureReason.permissionPermanentlyDenied:
-        _showSnack(
-          AppStrings.invoicePermissionPermanentlyDenied,
-          action: SnackBarAction(
-            label: AppStrings.invoiceOpenSettings,
-            onPressed: openAppSettings,
-          ),
-        );
-      case FileDownloadFailureReason.permissionDenied:
-        _showSnack(AppStrings.invoicePermissionDenied);
-      case FileDownloadFailureReason.storageFull:
-        _showSnack(AppStrings.invoiceStorageFull);
-      case FileDownloadFailureReason.cancelled:
-        // user dismissed the share sheet — stay silent
-        break;
-      case FileDownloadFailureReason.ioError:
-      case FileDownloadFailureReason.unsupportedPlatform:
-        _showSnack(AppStrings.invoiceDownloadFailed);
     }
   }
 

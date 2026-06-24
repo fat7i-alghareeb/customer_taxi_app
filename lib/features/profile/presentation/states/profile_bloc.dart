@@ -91,8 +91,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     emit(state.copyWith(saveStatus: const BlocStatus.loading()));
 
-    // When the address was touched, send the pending selection (all-null clears
-    // it). Otherwise resend the current address so it is preserved unchanged.
+    // Explicit operations prevent an unrelated name/photo update from clearing
+    // a previously stored address.
     final label = state.homeAddressTouched
         ? state.pendingHomeAddressLabel
         : state.currentUser?.homeAddressLabel;
@@ -102,12 +102,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final longitude = state.homeAddressTouched
         ? state.pendingHomeAddressLongitude
         : state.currentUser?.homeAddressLongitude;
+    final addressOperation = !state.homeAddressTouched
+        ? HomeAddressOperation.keep
+        : label?.trim().isNotEmpty == true
+        ? HomeAddressOperation.set
+        : HomeAddressOperation.clear;
 
     final Result<ProfileEntity> result = await _facade.updateProfile(
       UpdateUserProfileRequest(
         name: name.isEmpty ? null : name,
         email: email,
         photo: state.pendingPhoto,
+        homeAddressOperation: addressOperation,
         homeAddressLabel: label,
         homeAddressLatitude: latitude,
         homeAddressLongitude: longitude,

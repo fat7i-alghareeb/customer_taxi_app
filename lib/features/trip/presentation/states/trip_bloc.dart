@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:customertaxi/core/services/realtime/realtime_event.dart';
+import 'package:customertaxi/core/services/realtime/realtime_connection_state.dart';
 import 'package:customertaxi/core/services/realtime/realtime_service.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_invoice_entity.dart';
@@ -44,6 +45,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   final RealtimeService _realtime;
   Timer? _pollingTimer;
   StreamSubscription<RealtimeEvent>? _realtimeSub;
+  StreamSubscription<RealtimeConnectionState>? _connectionSub;
   String? _joinedTripId;
 
   bool _isTerminal(TripStatus status) => status.isTerminal;
@@ -68,10 +70,10 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     printC('[TripBloc] subscribing realtime trip=$tripId');
     await _unsubscribeFromRealtime();
     _joinedTripId = tripId;
-    await _realtime.joinTripGroup(tripId);
     _realtimeSub = _realtime.events
         .where((event) => event.tripId == tripId)
         .listen(_onRealtimeEvent);
+    await _realtime.joinTripGroup(tripId);
   }
 
   Future<void> _unsubscribeFromRealtime() async {
@@ -88,7 +90,15 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   void _onRealtimeEvent(RealtimeEvent event) {
     if (isClosed) return;
     if (event is RealtimeDriverLocationUpdated) {
-      add(TripEvent.driverLocationUpdated(event.latitude, event.longitude));
+      add(
+        TripEvent.driverLocationUpdated(
+          event.latitude,
+          event.longitude,
+          etaToPickupSeconds: event.etaToPickupSeconds,
+          distanceToPickupMeters: event.distanceToPickupMeters,
+          routeToPickupPolyline: event.routeToPickupPolyline,
+        ),
+      );
       return;
     }
     // Events carry IDs only — re-fetch the trip to get authoritative state.
@@ -99,11 +109,19 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   @override
   Future<void> close() async {
     _stopPolling();
+    await _connectionSub?.cancel();
     await _unsubscribeFromRealtime();
     return super.close();
   }
 
   Future<void> _onStarted(_Started event, Emitter<TripState> emit) async {
+    _connectionSub ??= _realtime.connectionState.listen((connectionState) {
+      if (connectionState == RealtimeConnectionState.connected &&
+          state.activeTripId != null &&
+          !isClosed) {
+        add(const TripEvent.pollingTick());
+      }
+    });
     emit(
       state.copyWith(
         tripStatus: const BlocStatus.loading(),
@@ -160,7 +178,10 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     final id = state.activeTripId;
     if (id == null) return;
     emit(state.copyWith(cancelStatus: const BlocStatus.loading()));
-    final Result<TripEntity> result = await _facade.cancelTrip(id, note: event.note);
+    final Result<TripEntity> result = await _facade.cancelTrip(
+      id,
+      note: event.note,
+    );
     result.when(
       success: (trip) {
         printG('[TripBloc] cancel success');
@@ -205,7 +226,9 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       },
       failure: (msg) {
         printY('[TripBloc] passenger note failed=$msg');
-        emit(state.copyWith(passengerNoteStatus: BlocStatus<void>.failure(msg)));
+        emit(
+          state.copyWith(passengerNoteStatus: BlocStatus<void>.failure(msg)),
+        );
       },
     );
   }
@@ -335,7 +358,9 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     Emitter<TripState> emit,
   ) async {
     emit(state.copyWith(receiptStatus: const BlocStatus.loading()));
-    final Result<TripReceiptEntity> result = await _facade.getTripReceipt(event.tripId);
+    final Result<TripReceiptEntity> result = await _facade.getTripReceipt(
+      event.tripId,
+    );
     result.when(
       success: (receipt) {
         printG('[TripBloc] receipt loaded trip=${event.tripId}');
@@ -361,7 +386,9 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     Emitter<TripState> emit,
   ) async {
     emit(state.copyWith(invoiceStatus: const BlocStatus.loading()));
-    final Result<TripInvoiceEntity> result = await _facade.getTripInvoice(event.tripId);
+    final Result<TripInvoiceEntity> result = await _facade.getTripInvoice(
+      event.tripId,
+    );
     result.when(
       success: (invoice) {
         printG('[TripBloc] invoice loaded number=${invoice.invoiceNumber}');
@@ -403,9 +430,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       failure: (msg) {
         printY('[TripBloc] invoice pdf failed=$msg');
         emit(
-          state.copyWith(
-            invoicePdfStatus: BlocStatus<Uint8List>.failure(msg),
-          ),
+          state.copyWith(invoicePdfStatus: BlocStatus<Uint8List>.failure(msg)),
         );
       },
     );
@@ -435,6 +460,9 @@ class TripBloc extends Bloc<TripEvent, TripState> {
           latitude: event.latitude,
           longitude: event.longitude,
           bearing: bearing,
+          etaToPickupSeconds: event.etaToPickupSeconds,
+          distanceToPickupMeters: event.distanceToPickupMeters,
+          routeToPickupPolyline: event.routeToPickupPolyline,
         ),
       ),
     );

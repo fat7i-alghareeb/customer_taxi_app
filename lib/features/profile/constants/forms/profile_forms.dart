@@ -4,11 +4,13 @@ abstract class ProfileForms {
   static const String nameField = 'name';
   static const String phoneField = 'phone';
   static const String emailField = 'email';
+  static const String homeAddressField = 'homeAddress';
 
   static FormGroup formGroup({
     String? initialName,
     String? initialPhone,
     String? initialEmail,
+    String? initialHomeAddress,
   }) {
     return FormGroup({
       nameField: FormControl<String>(
@@ -20,6 +22,7 @@ abstract class ProfileForms {
         value: initialEmail,
         validators: [Validators.email],
       ),
+      homeAddressField: FormControl<String>(value: initialHomeAddress),
     });
   }
 }

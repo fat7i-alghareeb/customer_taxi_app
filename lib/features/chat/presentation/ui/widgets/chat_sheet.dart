@@ -2,6 +2,7 @@ import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:customertaxi/core/services/media/media_picker_service.dart';
 import 'package:customertaxi/core/services/session/auth_manager.dart';
 import 'package:customertaxi/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart';
@@ -10,7 +11,9 @@ import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart';
 /// instance so the unread badge on the trigger and the live messages stay in
 /// sync. Locks the input once the trip ends ([ChatState.isClosed]).
 class ChatSheet extends StatefulWidget {
-  const ChatSheet._();
+  const ChatSheet({super.key, this.fullScreen = false});
+
+  final bool fullScreen;
 
   static Future<void> show(BuildContext context, {required ChatBloc bloc}) {
     bloc.add(const ChatEvent.viewOpened());
@@ -18,10 +21,8 @@ class ChatSheet extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => BlocProvider<ChatBloc>.value(
-        value: bloc,
-        child: const ChatSheet._(),
-      ),
+      builder: (_) =>
+          BlocProvider<ChatBloc>.value(value: bloc, child: const ChatSheet()),
     ).whenComplete(() {
       if (!bloc.isClosed) bloc.add(const ChatEvent.viewClosed());
     });
@@ -34,8 +35,6 @@ class ChatSheet extends StatefulWidget {
 class _ChatSheetState extends State<ChatSheet> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final ImagePicker _picker = ImagePicker();
-
   String? get _myUserId => getIt<AuthManager>().currentUser?.id;
 
   @override
@@ -86,9 +85,14 @@ class _ChatSheetState extends State<ChatSheet> {
     );
     if (source == null || !mounted) return;
 
-    final image = await _picker.pickImage(source: source, imageQuality: 70);
-    if (image == null || !mounted) return;
-    context.read<ChatBloc>().add(ChatEvent.sendPhoto(image.path));
+    final result = await appMediaPickerService.pickSingle(source);
+    if (!mounted) return;
+    if (result.failure != null) {
+      showErrorOverlay(context, AppStrings.chatSendFailed);
+      return;
+    }
+    if (!result.isSuccess) return;
+    context.read<ChatBloc>().add(ChatEvent.sendPhoto(result.files.single.path));
   }
 
   @override
@@ -99,10 +103,14 @@ class _ChatSheetState extends State<ChatSheet> {
     return Padding(
       padding: EdgeInsets.only(bottom: viewInsets),
       child: Container(
-        height: MediaQuery.sizeOf(context).height * 0.8,
+        height: widget.fullScreen
+            ? double.infinity
+            : MediaQuery.sizeOf(context).height * 0.8,
         decoration: BoxDecoration(
           color: colors.surface,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.xl.r)),
+          borderRadius: widget.fullScreen
+              ? BorderRadius.zero
+              : BorderRadius.vertical(top: Radius.circular(AppRadii.xl.r)),
         ),
         child: BlocConsumer<ChatBloc, ChatState>(
           listenWhen: (prev, curr) =>
@@ -246,7 +254,9 @@ class _ChatSheetState extends State<ChatSheet> {
                 decoration: InputDecoration(
                   hintText: 'chatInputHint'.tr(),
                   filled: true,
-                  fillColor: colors.surfaceContainerHighest.withValues(alpha: 0.4),
+                  fillColor: colors.surfaceContainerHighest.withValues(
+                    alpha: 0.4,
+                  ),
                   contentPadding: REdgeInsets.symmetric(
                     horizontal: AppSpacing.md,
                     vertical: AppSpacing.sm,
@@ -307,8 +317,9 @@ class _ChatBubble extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadii.lg.r),
         ),
         child: Column(
-          crossAxisAlignment:
-              isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: isMine
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           children: [
             if (message.photoUrl != null && message.photoUrl!.isNotEmpty)
               Padding(

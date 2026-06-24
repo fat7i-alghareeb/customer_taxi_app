@@ -74,6 +74,15 @@ class _ProfileBodyState extends State<ProfileBody> {
           emailControl.updateValue(currentEmail);
         }
 
+        final addressControl = _form.control(ProfileForms.homeAddressField);
+        final loadedAddress = state.currentUser?.homeAddressLabel;
+        if (loadedAddress != null &&
+            addressControl.pristine &&
+            !state.homeAddressTouched &&
+            addressControl.value != loadedAddress) {
+          addressControl.updateValue(loadedAddress);
+        }
+
         state.saveStatus.whenOrNull(
           loading: () => showLoadingOverlay(context, AppStrings.loading),
           success: (_) {
@@ -132,28 +141,53 @@ class _ProfileBodyState extends State<ProfileBody> {
                   },
                 ).animate().fadeIn(delay: 365.ms).slideY(begin: 0.05),
                 AppSpacing.lg.verticalSpace,
-                _HomeAddressField(
-                  label: state.homeAddressTouched
-                      ? state.pendingHomeAddressLabel
-                      : state.currentUser?.homeAddressLabel,
-                  onPick: () async {
-                    final location = await context
-                        .pushNamed<OrderLocationEntity>(
-                          LocationPickerScreen.pageName,
-                        );
-                    if (location != null && context.mounted) {
-                      context.read<ProfileBloc>().add(
-                        ProfileEvent.homeAddressSelected(
-                          label: location.label,
-                          latitude: location.latitude,
-                          longitude: location.longitude,
-                        ),
-                      );
-                    }
-                  },
-                  onClear: () => context.read<ProfileBloc>().add(
-                    const ProfileEvent.homeAddressSelected(),
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: AppReactiveTextField.text(
+                        formControlName: ProfileForms.homeAddressField,
+                        title: AppStrings.profileHomeAddress,
+                        hintText: AppStrings.profileHomeAddressHint,
+                        onChangedDebounced: (value, _) {
+                          context.read<ProfileBloc>().add(
+                            ProfileEvent.homeAddressSelected(
+                              label: value.trim().isEmpty ? null : value.trim(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    AppSpacing.sm.horizontalSpace,
+                    AppButton.outline(
+                      layout: AppButtonLayout(
+                        width: 52.w,
+                        height: 52.h,
+                        borderRadius: AppRadii.lg,
+                      ),
+                      onTap: () async {
+                        final location = await context
+                            .pushNamed<OrderLocationEntity>(
+                              LocationPickerScreen.pageName,
+                            );
+                        if (location != null && context.mounted) {
+                          _form
+                              .control(ProfileForms.homeAddressField)
+                              .updateValue(location.label);
+                          context.read<ProfileBloc>().add(
+                            ProfileEvent.homeAddressSelected(
+                              label: location.label,
+                              latitude: location.latitude,
+                              longitude: location.longitude,
+                            ),
+                          );
+                        }
+                      },
+                      child: AppButtonChild.icon(
+                        IconSource.faIcon(FontAwesomeIcons.mapLocationDot),
+                      ),
+                    ),
+                  ],
                 ).animate().fadeIn(delay: 375.ms).slideY(begin: 0.05),
                 AppSpacing.xxl.verticalSpace,
                 ReactiveFormConsumer(
@@ -210,96 +244,6 @@ class _ProfileBodyState extends State<ProfileBody> {
           ),
         );
       },
-    );
-  }
-}
-
-/// Optional home-address row. Tapping opens the map picker; when a value is set
-/// it shows the label with a clear button (keeps the field optional).
-class _HomeAddressField extends StatelessWidget {
-  const _HomeAddressField({
-    required this.label,
-    required this.onPick,
-    required this.onClear,
-  });
-
-  final String? label;
-  final VoidCallback onPick;
-  final VoidCallback onClear;
-
-  @override
-  Widget build(BuildContext context) {
-    final hasValue = label != null && label!.trim().isNotEmpty;
-    final onSurface = context.colorScheme.onSurface;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppStrings.profileHomeAddress,
-          style: AppTextStyles.s14w400.copyWith(
-            color: onSurface.withValues(alpha: 0.7),
-          ),
-        ),
-        AppSpacing.sm.verticalSpace,
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onPick,
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            child: Container(
-              padding: REdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.md,
-              ),
-              decoration: BoxDecoration(
-                color: context.colorScheme.surface,
-                borderRadius: BorderRadius.circular(AppRadii.lg.r),
-                border: Border.all(
-                  color: onSurface.withValues(alpha: 0.12),
-                  width: 1.r,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.home_outlined,
-                    size: 20.r,
-                    color: hasValue
-                        ? context.primary
-                        : onSurface.withValues(alpha: 0.5),
-                  ),
-                  AppSpacing.md.horizontalSpace,
-                  Expanded(
-                    child: Text(
-                      hasValue ? label! : AppStrings.profileHomeAddressHint,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.s14w400.copyWith(
-                        color: hasValue
-                            ? onSurface
-                            : onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
-                  ),
-                  if (hasValue)
-                    IconButton(
-                      onPressed: onClear,
-                      visualDensity: VisualDensity.compact,
-                      icon: Icon(Icons.close, size: 18.r, color: onSurface),
-                    )
-                  else
-                    Icon(
-                      Icons.map_outlined,
-                      size: 20.r,
-                      color: onSurface.withValues(alpha: 0.5),
-                    ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

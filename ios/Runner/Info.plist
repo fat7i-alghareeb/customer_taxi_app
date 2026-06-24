@@ -91,6 +91,14 @@
 		<string>This app needs permission to save photos to your library.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>This app needs access to your camera to take a profile photo.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>This app needs access to your microphone so you can record audio during a trip as a safety measure.</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>tel</string>
+			<string>https</string>
+			<string>whatsapp</string>
+		</array>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>location</string>

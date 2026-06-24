@@ -1,7 +1,7 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
 import 'package:customertaxi/features/trip/domain/facade/trip_facade.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:customertaxi/core/services/media/media_picker_service.dart';
 
 class CompensationClaimResult {
   const CompensationClaimResult({
@@ -25,7 +25,8 @@ class CompensationClaimDialog extends StatefulWidget {
   }
 
   @override
-  State<CompensationClaimDialog> createState() => _CompensationClaimDialogState();
+  State<CompensationClaimDialog> createState() =>
+      _CompensationClaimDialogState();
 }
 
 class _CompensationClaimDialogState extends State<CompensationClaimDialog> {
@@ -81,13 +82,22 @@ class _CompensationClaimDialogState extends State<CompensationClaimDialog> {
                           color: colors.onSurface,
                         ),
                       ),
+                      AppSpacing.md.verticalSpace,
+                      Text(
+                        AppStrings.driverLateProofInstructions,
+                        style: AppTextStyles.s12w400.copyWith(
+                          color: colors.onSurface.withValues(alpha: 0.72),
+                        ),
+                      ),
                       AppSpacing.lg.verticalSpace,
                       TextField(
                         controller: _controller,
                         enabled: !_isUploading,
                         minLines: 3,
                         maxLines: 5,
-                        style: AppTextStyles.s14w400.copyWith(color: colors.onSurface),
+                        style: AppTextStyles.s14w400.copyWith(
+                          color: colors.onSurface,
+                        ),
                         decoration: InputDecoration(
                           hintText: AppStrings.compensationClaimNoteHint,
                           hintStyle: AppTextStyles.s14w400.copyWith(
@@ -107,9 +117,7 @@ class _CompensationClaimDialogState extends State<CompensationClaimDialog> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(AppRadii.sm.r),
-                            borderSide: BorderSide(
-                              color: colors.primary,
-                            ),
+                            borderSide: BorderSide(color: colors.primary),
                           ),
                         ),
                       ),
@@ -117,12 +125,18 @@ class _CompensationClaimDialogState extends State<CompensationClaimDialog> {
                       AppButton.outline(
                         isActive: !_isUploading,
                         onTap: () async {
-                          final images = await ImagePicker().pickMultiImage();
-                          if (images.isNotEmpty) {
+                          final result = await appMediaPickerService
+                              .pickMultiple();
+                          if (!context.mounted) return;
+                          if (result.failure != null) {
+                            showErrorOverlay(context, AppStrings.uploadFailed);
+                            return;
+                          }
+                          if (result.isSuccess) {
                             setState(() {
                               _pickedPaths
                                 ..clear()
-                                ..addAll(images.map((e) => e.path));
+                                ..addAll(result.files.map((e) => e.path));
                             });
                           }
                         },
@@ -157,7 +171,20 @@ class _CompensationClaimDialogState extends State<CompensationClaimDialog> {
                               isActive: !_isUploading,
                               onTap: () async {
                                 final note = _controller.text.trim();
-                                if (note.isEmpty) return;
+                                if (note.isEmpty) {
+                                  showErrorOverlay(
+                                    context,
+                                    AppStrings.compensationNoteRequired,
+                                  );
+                                  return;
+                                }
+                                if (_pickedPaths.isEmpty) {
+                                  showErrorOverlay(
+                                    context,
+                                    AppStrings.compensationEvidenceRequired,
+                                  );
+                                  return;
+                                }
 
                                 var evidenceUrls = const <String>[];
                                 if (_pickedPaths.isNotEmpty) {

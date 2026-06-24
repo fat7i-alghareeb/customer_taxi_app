@@ -40,101 +40,128 @@ class AppRouteRegistry {
       pageBuilder: (context, state) =>
           AppPageTransitions.build(state: state, child: const LoginScreen()),
     ),
-      GoRoute(
-        path: RootScreen.pagePath,
-        name: RootScreen.pageName,
-        pageBuilder: (context, state) {
-          final initialTab =
-              state.extra is RootTab ? state.extra as RootTab : null;
-          return AppPageTransitions.build(
-            state: state,
-            child: RootScreen(initialTab: initialTab),
-          );
-        },
-      ),
-      GoRoute(
-        path: AboutUsScreen.pagePath,
-        name: AboutUsScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const AboutUsScreen()),
-      ),
-      GoRoute(
-        path: CancellationPolicyScreen.pagePath,
-        name: CancellationPolicyScreen.pageName,
-        pageBuilder: (context, state) => AppPageTransitions.build(
+    GoRoute(
+      path: RootScreen.pagePath,
+      name: RootScreen.pageName,
+      pageBuilder: (context, state) {
+        final initialTab = state.extra is RootTab
+            ? state.extra as RootTab
+            : null;
+        return AppPageTransitions.build(
           state: state,
-          child: const CancellationPolicyScreen(),
-        ),
+          child: RootScreen(initialTab: initialTab),
+        );
+      },
+    ),
+    GoRoute(
+      path: AboutUsScreen.pagePath,
+      name: AboutUsScreen.pageName,
+      pageBuilder: (context, state) =>
+          AppPageTransitions.build(state: state, child: const AboutUsScreen()),
+    ),
+    GoRoute(
+      path: CancellationPolicyScreen.pagePath,
+      name: CancellationPolicyScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const CancellationPolicyScreen(),
       ),
-      GoRoute(
-        path: PrivacyPolicyScreen.pagePath,
-        name: PrivacyPolicyScreen.pageName,
-        pageBuilder: (context, state) => AppPageTransitions.build(
-          state: state,
-          child: const PrivacyPolicyScreen(),
-        ),
+    ),
+    GoRoute(
+      path: PrivacyPolicyScreen.pagePath,
+      name: PrivacyPolicyScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const PrivacyPolicyScreen(),
       ),
-      GoRoute(
-        path: TermsAndConditionsScreen.pagePath,
-        name: TermsAndConditionsScreen.pageName,
-        pageBuilder: (context, state) => AppPageTransitions.build(
-          state: state,
-          child: const TermsAndConditionsScreen(),
-        ),
+    ),
+    GoRoute(
+      path: TermsAndConditionsScreen.pagePath,
+      name: TermsAndConditionsScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const TermsAndConditionsScreen(),
       ),
-      GoRoute(
-        path: ContactUsScreen.pagePath,
-        name: ContactUsScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const ContactUsScreen()),
+    ),
+    GoRoute(
+      path: ContactUsScreen.pagePath,
+      name: ContactUsScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const ContactUsScreen(),
       ),
-      GoRoute(
-        path: ProfileSetupScreen.pagePath,
-        name: ProfileSetupScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const ProfileSetupScreen()),
+    ),
+    GoRoute(
+      path: ProfileSetupScreen.pagePath,
+      name: ProfileSetupScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const ProfileSetupScreen(),
       ),
-      GoRoute(
-        path: ActiveTripScreen.pagePath,
-        name: ActiveTripScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const ActiveTripScreen()),
+    ),
+    GoRoute(
+      path: ActiveTripScreen.pagePath,
+      name: ActiveTripScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const ActiveTripScreen(),
       ),
-      GoRoute(
-        path: TripHistoryScreen.pagePath,
-        name: TripHistoryScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const TripHistoryScreen()),
+    ),
+    GoRoute(
+      path: TripHistoryScreen.pagePath,
+      name: TripHistoryScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const TripHistoryScreen(),
       ),
-      GoRoute(
-        path: TripDetailsScreen.pagePath,
-        name: TripDetailsScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const TripDetailsScreen()),
+    ),
+    GoRoute(
+      path: TripDetailsScreen.pagePath,
+      name: TripDetailsScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const TripDetailsScreen(),
       ),
-      GoRoute(
-        path: TripReceiptScreen.pagePath,
-        name: TripReceiptScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const TripReceiptScreen()),
+    ),
+    GoRoute(
+      path: TripReceiptScreen.pagePath,
+      name: TripReceiptScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const TripReceiptScreen(),
       ),
-      GoRoute(
-        path: TripInvoiceScreen.pagePath,
-        name: TripInvoiceScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const TripInvoiceScreen()),
+    ),
+    GoRoute(
+      path: TripInvoiceScreen.pagePath,
+      name: TripInvoiceScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const TripInvoiceScreen(),
       ),
-      GoRoute(
-        path: FavoritesScreen.pagePath,
-        name: FavoritesScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const FavoritesScreen()),
+    ),
+    GoRoute(
+      path: TripChatScreen.pagePath,
+      name: TripChatScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: TripChatScreen(args: state.extra as TripChatScreenArgs),
       ),
-      GoRoute(
-        path: LocationPickerScreen.pagePath,
-        name: LocationPickerScreen.pageName,
-        pageBuilder: (context, state) =>
-            AppPageTransitions.build(state: state, child: const LocationPickerScreen()),
+    ),
+    GoRoute(
+      path: FavoritesScreen.pagePath,
+      name: FavoritesScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const FavoritesScreen(),
       ),
-    ];
+    ),
+    GoRoute(
+      path: LocationPickerScreen.pagePath,
+      name: LocationPickerScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const LocationPickerScreen(),
+      ),
+    ),
+  ];
 }

@@ -24,7 +24,11 @@ class ActiveTripGate extends StatelessWidget {
           if (state.hasActiveTrip) {
             final trip = state.trip!;
             return BlocProvider<TripBloc>(
-              key: ValueKey('active-trip-${trip.id}-${trip.status.name}'),
+              // Key by trip id only: the TripBloc already tracks status changes
+              // internally (polling + realtime), so keying by status would tear
+              // down and recreate the bloc on every transition — losing the live
+              // marker animation and re-subscribing needlessly.
+              key: ValueKey('active-trip-${trip.id}'),
               create: (_) => getIt<TripBloc>()..add(TripEvent.started(trip.id)),
               child: const ActiveTripBody(),
             );

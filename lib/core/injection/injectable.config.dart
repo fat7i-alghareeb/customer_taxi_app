@@ -65,6 +65,8 @@ import 'package:customertaxi/core/services/session/auth_state_notifier.dart'
 import 'package:customertaxi/core/services/session/jwt_token_storage.dart'
     as _i247;
 import 'package:customertaxi/core/services/storage/storage_service.dart' as _i742;
+import 'package:customertaxi/core/services/support_contact/support_contact_service.dart'
+    as _i384;
 import 'package:customertaxi/core/theme/theme_controller.dart' as _i998;
 import 'package:customertaxi/features/auth/data/datasources/auth_firebase_datasource.dart'
     as _i243;
@@ -252,6 +254,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i768.ClientConfigService>(
       () => _i768.ClientConfigService(gh<_i361.Dio>()),
+    );
+    gh.singleton<_i384.SupportContactService>(
+      () => _i384.SupportContactService(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i54.AuthRemoteDataSource>(
       () => _i54.AuthRemoteDataSource(gh<_i361.Dio>()),

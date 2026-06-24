@@ -280,9 +280,7 @@ extension _BookingHandlers on OrderBloc {
     );
 
     try {
-      printC(
-        '[Payment] initPaymentSheet — clientSecret=${stripePayment.clientSecret.substring(0, 12)}…',
-      );
+      printC('[Payment] initPaymentSheet — client secret received');
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: stripePayment.clientSecret,

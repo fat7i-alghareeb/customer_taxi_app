@@ -41,8 +41,13 @@ class ProfileRemoteDataSource {
       if (param.email != null) {
         formData.fields.add(MapEntry('Email', param.email!));
       }
-      // Home address fields are only sent when present; omitting all three lets
-      // the backend clear a previously-saved address.
+      formData.fields.add(
+        MapEntry('HomeAddressOperation', switch (param.homeAddressOperation) {
+          HomeAddressOperation.keep => 'Keep',
+          HomeAddressOperation.set => 'Set',
+          HomeAddressOperation.clear => 'Clear',
+        }),
+      );
       if (param.homeAddressLabel != null) {
         formData.fields.add(
           MapEntry('HomeAddressLabel', param.homeAddressLabel!),

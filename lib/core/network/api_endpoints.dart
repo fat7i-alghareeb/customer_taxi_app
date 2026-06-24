@@ -21,6 +21,7 @@ class ApiEndpoints {
 
   // App config
   static const String clientConfig = '/api/v1/app-config/client';
+  static const String supportContact = '/api/v1/app-config/support-contact';
 
   // Trips
   static const String tripQuotes = '/api/v1/trips/quotes';
@@ -40,6 +41,7 @@ class ApiEndpoints {
   static String settleWaitingFee(String id) =>
       '/api/v1/trips/$id/waiting-fee/settlements';
   static String tripMessages(String id) => '/api/v1/trips/$id/messages';
+  static String uploadTripRecording(String id) => '/api/v1/trips/$id/recordings';
   static String tripReceipt(String id) => '/api/v1/trips/$id/receipt';
   static String tripInvoice(String id) => '/api/v1/trips/$id/invoice';
   static String tripInvoicePdf(String id) => '/api/v1/trips/$id/invoice/pdf';

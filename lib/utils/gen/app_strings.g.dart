@@ -5,6 +5,8 @@ part of app_strings;
 class AppStrings {
   /// Active Trip - الرحلة الحالية - Actieve Rit - Aktive Fahrt - Aktywny przejazd - Активна поїздка - Trajet Actif - Viaje activo - Cursă activă
   static String get activeTrip => 'activeTrip'.tr();
+  /// Arrival - الوصول - Aankomst - Ankunft - Przyjazd - Прибуття - Arrivée - Llegada - Sosire
+  static String get activeTripArrivalLabel => 'activeTripArrivalLabel'.tr();
   /// Cancel Ride - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulați cursa
   static String get activeTripCancelRide => 'activeTripCancelRide'.tr();
   /// Your driver is outside - سائقك بالخارج الآن - Je chauffeur staat buiten - Ihr Fahrer ist draußen - Twój kierowca czeka na zewnątrz - Ваш водій очікує на вулиці - Votre chauffeur est à l'extérieur - Su conductor está afuera - Șoferul dvs. este afară
@@ -65,7 +67,7 @@ class AppStrings {
   static String get cancelReasonPlansChanged => 'cancelReasonPlansChanged'.tr();
   /// Why are you cancelling? - لماذا تريد الإلغاء؟ - Waarom annuleer je? - Warum stornieren Sie? - Dlaczego anulujesz? - Чому скасовуєте? - Pourquoi annulez-vous ? - ¿Por qué cancelas? - De ce anulezi?
   static String get cancelSheetReasonLabel => 'cancelSheetReasonLabel'.tr();
-  /// Free if cancelled within 1 hour of booking; after that, 20% of the fare is refunded. - مجاني إذا أُلغيت خلال ساعة من الحجز؛ بعد ذلك يُسترد 20٪ من قيمة الرحلة. - Gratis bij annulering binnen 1 uur na boeking; daarna wordt 20% van het ritbedrag terugbetaald. - Kostenlos bei Stornierung innerhalb von 1 Stunde nach Buchung; danach werden 20 % des Fahrpreises erstattet. - Bezpłatnie, jeśli anulujesz w ciągu 1 godziny od rezerwacji; później zwracane jest 20% kwoty przejazdu. - Безкоштовно, якщо скасувати протягом 1 години після бронювання; після цього повертається 20% вартості поїздки. - Gratuit si annulé dans l'heure suivant la réservation ; ensuite, 20 % du montant est remboursé. - Gratis si cancelas dentro de 1 hora desde la reserva; después, se reembolsa el 20% del importe. - Gratuit dacă anulezi în maximum 1 oră de la rezervare; după aceea, se rambursează 20% din sumă.
+  /// Free cancellation within 1 hour after booking the ride.\nPlease note: if the driver has already arrived at the agreed pick-up point and you cancel the ride afterwards, a €6.50 cancellation fee will be charged.\nAfter the first hour, you will still receive 20% of the fare back in case of cancellation. - إلغاء مجاني خلال ساعة واحدة من حجز الرحلة.\nيرجى الملاحظة: إذا وصل السائق بالفعل إلى نقطة الالتقاء المتفق عليها وقمت بإلغاء الرحلة بعد ذلك، فسيتم خصم رسوم إلغاء بقيمة 6.50 يورو.\nبعد الساعة الأولى، ستسترد 20% من قيمة الرحلة في حال الإلغاء. - Gratis annuleren binnen 1 uur na het boeken van de rit.\nLet op: als de chauffeur al is aangekomen op het afgesproken ophaalpunt en je annuleert daarna de rit, wordt er €6,50 annuleringskosten aangerekend.\nNa de eerste uur krijg je bij annulering nog 20% van het ritbedrag terug. - Kostenlose Stornierung innerhalb von 1 Stunde nach Buchung der Fahrt.\nBitte beachten Sie: Wenn der Fahrer bereits am vereinbarten Abholort eingetroffen ist und Sie die Fahrt danach stornieren, wird eine Stornogebühr von 6,50 € erhoben.\nNach der ersten Stunde erhalten Sie im Falle einer Stornierung noch 20 % des Fahrpreises zurück. - Bezpłatne anulowanie w ciągu 1 godziny od zarezerwowania przejazdu.\nUwaga: jeśli kierowca przybył już do ustalonego punktu odbioru, a Ty po tym anulujesz przejazd, pobrana zostanie opłata za anulowanie w wysokości 6,50 €.\nPo pierwszej godzinie w przypadku anulowania otrzymasz z powrotem 20% opłaty za przejazd. - Безкоштовне скасування протягом 1 години після бронювання поїздки.\nЗверніть увагу: якщо водій вже прибув до погодженого місця посадки, і ви після цього скасовуєте поїздку, буде стягнуто плату за скасування у розмірі 6,50 євро.\nПісля першої години ви все одно отримаєте назад 20% вартості проїзду у разі скасування. - Annulation gratuite dans l'heure qui suit la réservation du trajet.\nVeuillez noter : si le chauffeur est déjà arrivé au point de prise en charge convenu et que vous annulez le trajet par la suite, des frais d'annulation de 6,50 € seront facturés.\nAprès la première heure, vous recevrez toujours 20 % du prix de la course en cas d'annulation. - Cancelación gratuita dentro de 1 hora después de reservar el viaje.\nTenga en cuenta: si el conductor ya ha llegado al punto de recogida acordado y cancela el viaje después, se cobrará una tarifa de cancelación de 6,50 €.\nDespués de la primera hora, aún recibirá el 20 % del importe del viaje en caso de cancelación. - Anulare gratuită în termen de 1 oră de la rezervarea cursei.\nVă rugăm să rețineți: dacă șoferul a ajuns deja la punctul de preluare stabilit și anulați cursa ulterior, se va percepe o taxă de anulare de 6,50 €.\nDupă prima oră, veți primi în continuare 20% din tarif înapoi în caz de anulare.
   static String get cancelSheetRefundNote => 'cancelSheetRefundNote'.tr();
   /// Cancel ride - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulează cursa
   static String get cancelSheetTitle => 'cancelSheetTitle'.tr();
@@ -145,6 +147,10 @@ class AppStrings {
   static String get compensationClaimNoteHint => 'compensationClaimNoteHint'.tr();
   /// Compensation claim submitted for admin review. - تم تقديم مطالبة التعويض لمراجعة المشرف. - Schadevergoedingsverzoek ingediend voor beoordeling door de beheerder. - Entschädigungsanspruch zur Überprüfung durch den Administrator eingereicht. - Wniosek o odszkodowanie został złożony do weryfikacji przez administratora. - Претензію на компенсацію подано на розгляд адміністратора. - Demande d'indemnisation soumise pour examen par l'administrateur. - Reclamación de compensación enviada para revisión del administrador. - Cererea de compensație a fost depusă pentru revizuire de către administrator.
   static String get compensationClaimSubmitted => 'compensationClaimSubmitted'.tr();
+  /// Please attach at least one screenshot as proof. - يرجى إرفاق لقطة شاشة واحدة على الأقل كدليل. - Voeg ten minste één screenshot toe als bewijs. - Bitte fügen Sie mindestens einen Screenshot als Nachweis bei. - Prosimy dołączyć co najmniej jeden zrzut ekranu jako dowód. - Будь ласка, додайте щонайменше один знімок екрана як доказ. - Veuillez joindre au moins une capture d’écran comme preuve. - Adjunte al menos una captura de pantalla como prueba. - Vă rugăm să atașați cel puțin o captură de ecran ca dovadă.
+  static String get compensationEvidenceRequired => 'compensationEvidenceRequired'.tr();
+  /// Please describe the delay before submitting. - يرجى وصف التأخير قبل الإرسال. - Beschrijf de vertraging voor het indienen. - Bitte beschreiben Sie die Verzögerung vor dem Absenden. - Proszę opisać opóźnienie przed wysłaniem. - Будь ласка, опишіть затримку перед відправкою. - Veuillez décrire le retard avant d'envoyer. - Por favor, describa el retraso antes de enviar. - Vă rugăm să descrieți întârzierea înainte de a trimite.
+  static String get compensationNoteRequired => 'compensationNoteRequired'.tr();
   /// Complete Profile - إكمال الملف الشخصي - Voltooi Profiel - Profil vervollständigen - Uzupełnij profil - Заповнити профіль - Compléter le profil - Completar perfil - Completează profilul
   static String get completeProfile => 'completeProfile'.tr();
   /// Confirm - تأكيد - Bevestigen - Bestätigen - Potwierdź - Підтвердити - Confirmer - Confirmar - Confirmă
@@ -223,6 +229,8 @@ class AppStrings {
   static String get drawerTotalTrips => 'drawerTotalTrips'.tr();
   /// Trips - الرحلات - Ritten - Fahrten - Przejazdy - Поїздки - Trajets - Viajes - Curse
   static String get drawerTrips => 'drawerTrips'.tr();
+  /// Please send a screenshot as proof of your contact with the driver, such as call history or WhatsApp, showing the exact time down to the minute. We will contact you as soon as possible. - يرجى إرسال لقطة شاشة كدليل على تواصلك مع السائق، مثل سجل المكالمات أو واتساب، مع إظهار الوقت الدقيق بالدقيقة. سنتواصل معك في أقرب وقت ممكن. - Stuur een screenshot als bewijs van uw contact met de chauffeur, bijvoorbeeld van de oproepgeschiedenis of WhatsApp, waarop de exacte tijd tot op de minuut zichtbaar is. Wij nemen zo snel mogelijk contact met u op. - Bitte senden Sie als Nachweis Ihrer Kontaktaufnahme mit dem Fahrer einen Screenshot, zum Beispiel aus der Anrufliste oder von WhatsApp, auf dem die genaue Uhrzeit bis auf die Minute zu sehen ist. Wir werden Sie so schnell wie möglich kontaktieren. - Prosimy przesłać zrzut ekranu jako dowód kontaktu z kierowcą, na przykład historię połączeń lub rozmowę w WhatsApp, z dokładną godziną co do minuty. Skontaktujemy się z Tobą tak szybko, jak to możliwe. - Будь ласка, надішліть знімок екрана як доказ вашого зв’язку з водієм, наприклад історію дзвінків або WhatsApp, де видно точний час до хвилини. Ми зв’яжемося з вами якомога швидше. - Veuillez envoyer une capture d’écran prouvant votre contact avec le chauffeur, par exemple l’historique des appels ou WhatsApp, avec l’heure exacte à la minute près. Nous vous contacterons dès que possible. - Envíe una captura de pantalla como prueba de su contacto con el conductor, por ejemplo, del historial de llamadas o de WhatsApp, donde se muestre la hora exacta hasta el minuto. Nos pondremos en contacto con usted lo antes posible. - Vă rugăm să trimiteți o captură de ecran ca dovadă a contactului cu șoferul, de exemplu istoricul apelurilor sau WhatsApp, în care să fie afișată ora exactă până la minut. Vă vom contacta cât mai curând posibil.
+  static String get driverLateProofInstructions => 'driverLateProofInstructions'.tr();
   /// Dropped Pin - نقطة محددة - Gemarkeerde speld - Gesetzte Markierung - Przypięta lokalizacja - Вибрана точка - Repère placé - Marcador - Punct fixat
   static String get droppedPin => 'droppedPin'.tr();
   /// No data available. - لا توجد بيانات متاحة. - Geen gegevens beschikbaar. - Keine Daten verfügbar. - Brak dostępnych danych. - Дані відсутні. - Aucune donnée disponible. - No hay datos disponibles. - Nu există date disponibile.
@@ -279,6 +287,14 @@ class AppStrings {
   static String get homeCtaSchedule => 'homeCtaSchedule'.tr();
   /// Trips - الرحلات - Ritten - Fahrten - Przejazdy - Поїздки - Trajets - Viajes - Curse
   static String get homeCtaTrips => 'homeCtaTrips'.tr();
+  /// Emergency help - مساعدة طارئة - Noodhulp - Notfallhilfe - Pomoc awaryjna - Екстрена допомога - Aide d'urgence - Ayuda de emergencia - Ajutor de urgență
+  static String get inTripEmergencyHelp => 'inTripEmergencyHelp'.tr();
+  /// Record ride - تسجيل الرحلة - Rit opnemen - Fahrt aufnehmen - Nagraj przejazd - Записати поїздку - Enregistrer le trajet - Grabar viaje - Înregistrează cursa
+  static String get inTripRecordRide => 'inTripRecordRide'.tr();
+  /// Report problem - الإبلاغ عن مشكلة - Probleem melden - Problem melden - Zgłoś problem - Повідомити про проблему - Signaler un problème - Informar de un problema - Raportează o problemă
+  static String get inTripReportProblem => 'inTripReportProblem'.tr();
+  /// Safety first. We wish you a pleasant ride! - سلامتك أولاً. نتمنى لك رحلة سعيدة! - Veiligheid staat voorop. We wensen je een fijne rit! - Sicherheit zuerst. Wir wünschen Ihnen eine angenehme Fahrt! - Bezpieczeństwo przede wszystkim. Życzymy udanej podróży! - Безпека понад усе. Бажаємо приємної поїздки! - La sécurité avant tout. Nous vous souhaitons un bon trajet ! - La seguridad es lo primero. ¡Le deseamos un buen viaje! - Siguranța pe primul loc. Vă dorim o călătorie plăcută!
+  static String get inTripSafetyTagline => 'inTripSafetyTagline'.tr();
   /// Invalid code. Please try again. - الرمز غير صحيح. يرجى المحاولة مرة أخرى. - Ongeldige code. Probeer het opnieuw. - Ungültiger Code. Bitte versuchen Sie es erneut. - Nieprawidłowy kod. Spróbuj ponownie. - Неправильний код. Спробуйте ще раз. - Code invalide. Veuillez réessayer. - Código inválido. Por favor, inténtelo de nuevo. - Cod invalid. Vă rugăm să încercați din nou.
   static String get invalidOtp => 'invalidOtp'.tr();
   /// Please enter a valid phone number. - يرجى إدخال رقم هاتف صالح. - Voer een geldig telefoonnummer in. - Bitte geben Sie eine gültige Telefonnummer ein. - Wprowadź prawidłowy numer telefonu. - Введіть правильний номер телефону. - Veuillez entrer un numéro valide. - Por favor, introduzca un número de teléfono válido. - Vă rugăm să introduceți un număr de telefon valid.
@@ -639,6 +655,38 @@ class AppStrings {
   static String get receiptTripFare => 'receiptTripFare'.tr();
   /// Recent locations - المواقع الأخيرة - Recente locaties - Letzte Standorte - Ostatnie lokalizacje - Останні адреси - Lieux récents - Ubicaciones recientes - Locații recente
   static String get recentLocations => 'recentLocations'.tr();
+  /// Cancel - إلغاء - Annuleren - Abbrechen - Anuluj - Скасувати - Annuler - Cancelar - Anulează
+  static String get recordRideCancel => 'recordRideCancel'.tr();
+  /// Done - تم - Klaar - Fertig - Gotowe - Готово - Terminé - Listo - Gata
+  static String get recordRideDone => 'recordRideDone'.tr();
+  /// Couldn't save the recording. Please try again. - تعذّر حفظ التسجيل. يرجى المحاولة مرة أخرى. - Opname kon niet worden opgeslagen. Probeer het opnieuw. - Aufnahme konnte nicht gespeichert werden. Bitte erneut versuchen. - Nie udało się zapisać nagrania. Spróbuj ponownie. - Не вдалося зберегти запис. Спробуйте ще раз. - Impossible d'enregistrer. Veuillez réessayer. - No se pudo guardar la grabación. Inténtalo de nuevo. - Înregistrarea nu a putut fi salvată. Încearcă din nou.
+  static String get recordRideFailed => 'recordRideFailed'.tr();
+  /// Open settings - فتح الإعدادات - Instellingen openen - Einstellungen öffnen - Otwórz ustawienia - Відкрити налаштування - Ouvrir les paramètres - Abrir ajustes - Deschide setările
+  static String get recordRideOpenSettings => 'recordRideOpenSettings'.tr();
+  /// Microphone permission is required to record. - إذن الميكروفون مطلوب للتسجيل. - Microfoontoestemming is vereist om op te nemen. - Für die Aufnahme ist die Mikrofonberechtigung erforderlich. - Do nagrywania wymagane jest pozwolenie na mikrofon. - Для запису потрібен дозвіл на мікрофон. - L'autorisation du microphone est requise pour enregistrer. - Se requiere permiso de micrófono para grabar. - Este necesară permisiunea pentru microfon pentru a înregistra.
+  static String get recordRidePermissionDenied => 'recordRidePermissionDenied'.tr();
+  /// Recording… - جارٍ التسجيل… - Bezig met opnemen… - Aufnahme läuft… - Nagrywanie… - Запис… - Enregistrement… - Grabando… - Se înregistrează…
+  static String get recordRideRecording => 'recordRideRecording'.tr();
+  /// Try again - حاول مرة أخرى - Opnieuw proberen - Erneut versuchen - Spróbuj ponownie - Спробувати ще раз - Réessayer - Intentar de nuevo - Încearcă din nou
+  static String get recordRideRetry => 'recordRideRetry'.tr();
+  /// Save to device - حفظ على الجهاز - Op apparaat opslaan - Auf Gerät speichern - Zapisz na urządzeniu - Зберегти на пристрої - Enregistrer sur l'appareil - Guardar en el dispositivo - Salvează pe dispozitiv
+  static String get recordRideSaveToDevice => 'recordRideSaveToDevice'.tr();
+  /// Recording saved - تم حفظ التسجيل - Opname opgeslagen - Aufnahme gespeichert - Nagranie zapisane - Запис збережено - Enregistrement sauvegardé - Grabación guardada - Înregistrare salvată
+  static String get recordRideSavedDialogTitle => 'recordRideSavedDialogTitle'.tr();
+  /// Share - مشاركة - Delen - Teilen - Udostępnij - Поділитися - Partager - Compartir - Distribuie
+  static String get recordRideShare => 'recordRideShare'.tr();
+  /// Stop - إيقاف - Stoppen - Stopp - Zatrzymaj - Зупинити - Arrêter - Detener - Oprește
+  static String get recordRideStop => 'recordRideStop'.tr();
+  /// Record audio during your trip for your safety. - سجّل الصوت أثناء رحلتك من أجل سلامتك. - Neem audio op tijdens je rit voor je veiligheid. - Nehmen Sie zu Ihrer Sicherheit während der Fahrt Audio auf. - Nagrywaj dźwięk podczas przejazdu dla swojego bezpieczeństwa. - Записуйте аудіо під час поїздки задля вашої безпеки. - Enregistrez l'audio pendant votre trajet pour votre sécurité. - Graba audio durante tu viaje por tu seguridad. - Înregistrează audio în timpul cursei pentru siguranța ta.
+  static String get recordRideSubtitle => 'recordRideSubtitle'.tr();
+  /// Record ride - تسجيل الرحلة - Rit opnemen - Fahrt aufnehmen - Nagraj przejazd - Записати поїздку - Enregistrer le trajet - Grabar viaje - Înregistrează cursa
+  static String get recordRideTitle => 'recordRideTitle'.tr();
+  /// Recording saved - تم حفظ التسجيل - Opname opgeslagen - Aufnahme gespeichert - Nagranie zapisane - Запис збережено - Enregistrement sauvegardé - Grabación guardada - Înregistrare salvată
+  static String get recordRideUploaded => 'recordRideUploaded'.tr();
+  /// Saved to the server and to your device. - تم الحفظ على الخادم وعلى جهازك. - Opgeslagen op de server en op je apparaat. - Auf dem Server und auf Ihrem Gerät gespeichert. - Zapisano na serwerze i na Twoim urządzeniu. - Збережено на сервері та на вашому пристрої. - Sauvegardé sur le serveur et sur votre appareil. - Guardado en el servidor y en tu dispositivo. - Salvată pe server și pe dispozitivul tău.
+  static String get recordRideUploadedNote => 'recordRideUploadedNote'.tr();
+  /// Saving recording… - جارٍ حفظ التسجيل… - Opname opslaan… - Aufnahme wird gespeichert… - Zapisywanie nagrania… - Збереження запису… - Enregistrement en cours… - Guardando grabación… - Se salvează înregistrarea…
+  static String get recordRideUploading => 'recordRideUploading'.tr();
   /// Report driver delay - الإبلاغ عن تأخر السائق - Vertraging chauffeur melden - Fahrverzögerung melden - Zgłoś opóźnienie kierowcy - Повідомити про затримку водія - Signaler le retard du chauffeur - Reportar retraso del conductor - Raportați întârzierea șoferului
   static String get reportDriverDelay => 'reportDriverDelay'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd. - Anfrage wurde abgebrochen. - Żądanie zostało anulowane. - Запит скасовано. - La demande a été annulée. - La solicitud fue cancelada. - Solicitarea a fost anulată.
@@ -831,17 +879,17 @@ class AppStrings {
   static String get tripStatusCancelled => 'tripStatusCancelled'.tr();
   /// Completed - مكتملة - Voltooid - Abgeschlossen - Zakończony - Завершено - Terminé - Completado - Finalizată
   static String get tripStatusCompleted => 'tripStatusCompleted'.tr();
-  /// Driver Arrived - وصل السائق - Chauffeur gearriveerd - Fahrer angekommen - Kierowca dojechał - Водій прибув - Chauffeur arrivé - Conductor ha llegado - Șofer sosit
+  /// Arrived - وصلت الرحلة - Aangekomen - Angekommen - Na miejscu - Прибув - Arrivé - Ha llegado - Ajunsă
   static String get tripStatusDriverArrived => 'tripStatusDriverArrived'.tr();
-  /// Driver Assigned - تم تعيين سائق - Chauffeur toegewezen - Fahrer zugewiesen - Kierowca przypisany - Водія призначено - Chauffeur assigné - Conductor asignado - Șofer alocat
+  /// Accepted - تم القبول - Geaccepteerd - Angenommen - Przyjęto - Прийнято - Accepté - Aceptado - Acceptată
   static String get tripStatusDriverAssigned => 'tripStatusDriverAssigned'.tr();
-  /// Driver En Route - سائق في الطريق - Chauffeur onderweg - Fahrer auf dem Weg - Kierowca w drodze - Водій в дорозі - Chauffeur en route - Conductor en camino - Șofer pe drum
+  /// On the Way - الرحلة في الطريق - Onderweg - Unterwegs - W drodze - У дорозі - En route - En camino - În drum
   static String get tripStatusDriverEnRoute => 'tripStatusDriverEnRoute'.tr();
   /// In Progress - في الطريق - Onderweg - Unterwegs - W trasie - У дорозі - En cours - En curso - În desfășurare
   static String get tripStatusInProgress => 'tripStatusInProgress'.tr();
   /// Payment failed - فشل الدفع - Betaling mislukt - Zahlung fehlgeschlagen - Płatność nieudana - Платіж не вдався - Paiement échoué - Pago fallido - Plată eșuată
   static String get tripStatusPaymentFailed => 'tripStatusPaymentFailed'.tr();
-  /// Finding Driver - جاري البحث عن سائق - Chauffeur zoeken - Fahrer wird gesucht - Szukanie kierowcy - Пошук водія - Recherche de chauffeur - Buscando conductor - Se caută șofer
+  /// Awaiting Acceptance - بانتظار القبول - Wacht op acceptatie - Wartet auf Annahme - Oczekuje na przyjęcie - Очікує прийняття - En attente d’acceptation - Pendiente de aceptación - În așteptarea acceptării
   static String get tripStatusPendingDriver => 'tripStatusPendingDriver'.tr();
   /// Pending quote - بانتظار التسعير - Offerte in afwachting - Angebot ausstehend - Oczekuje na wycenę - Очікує на розрахунок - Devis en attente - Cotización pendiente - Ofertă în așteptare
   static String get tripStatusPendingQuote => 'tripStatusPendingQuote'.tr();
@@ -911,6 +959,10 @@ class AppStrings {
   static String get waitingFeePayCta => 'waitingFeePayCta'.tr();
   /// Payment failed. Please try again. - فشل الدفع. الرجاء المحاولة مرة أخرى. - Betaling mislukt. Probeer het opnieuw. - Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut. - Płatność nie powiodła się. Spróbuj ponownie. - Не вдалося здійснити оплату. Спробуйте ще раз. - Le paiement a échoué. Veuillez réessayer. - El pago falló. Inténtalo de nuevo. - Plata a eșuat. Te rugăm să încerci din nou.
   static String get waitingFeePayFailed => 'waitingFeePayFailed'.tr();
+  /// Late time: {minutes} min - مدة التأخير: {minutes} دقيقة - Vertraging: {minutes} min - Verspätung: {minutes} Min. - Opóźnienie: {minutes} min - Запізнення: {minutes} хв - Retard : {minutes} min - Retraso: {minutes} min - Întârziere: {minutes} min
+  static String get waitingLateMinutes => 'waitingLateMinutes'.tr();
+  /// Please pay the waiting time costs to the driver. - يرجى دفع تكاليف وقت الانتظار للسائق. - Betaal de kosten voor de wachttijd aan de chauffeur. - Bitte zahlen Sie die Wartezeitkosten an den Fahrer. - Prosimy zapłacić kierowcy koszty czasu oczekiwania. - Будь ласка, сплатіть водієві вартість часу очікування. - Veuillez payer au chauffeur les frais liés au temps d’attente. - Por favor, pague al conductor los costes del tiempo de espera. - Vă rugăm să plătiți șoferului costurile pentru timpul de așteptare.
+  static String get waitingPayDriverNotice => 'waitingPayDriverNotice'.tr();
   /// Wed - أرب - Wo - Mi - Śr - Ср - Mer - Mié - Mie
   static String get wed => 'wed'.tr();
   /// Wednesday - الأربعاء - Woensdag - Mittwoch - Środa - Середа - Mercredi - Miércoles - Miercuri

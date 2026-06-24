@@ -77,7 +77,19 @@ sealed class RealtimeEvent with _$RealtimeEvent {
     required String driverId,
     required double latitude,
     required double longitude,
+    // Live driver-arrival estimate to the pickup, when the driver is heading there.
+    int? etaToPickupSeconds,
+    int? distanceToPickupMeters,
+    // Encoded road-following route from the driver to the pickup (ready to draw).
+    String? routeToPickupPolyline,
   }) = RealtimeDriverLocationUpdated;
+
+  const factory RealtimeEvent.tripStopCompleted({
+    required String tripId,
+    required String passengerId,
+    String? driverId,
+    required int sequence,
+  }) = RealtimeTripStopCompleted;
 
   /// A new in-trip chat message arrived. [sentAtUtc] is an ISO-8601 string.
   const factory RealtimeEvent.tripMessageReceived({
@@ -111,6 +123,7 @@ abstract final class RealtimeMethodNames {
   static const driverEnRoute = 'DriverEnRoute';
   static const driverArrived = 'DriverArrived';
   static const driverLocationUpdated = 'DriverLocationUpdated';
+  static const tripStopCompleted = 'TripStopCompleted';
   static const tripMessageReceived = 'TripMessageReceived';
   static const chatClosed = 'ChatClosed';
 
@@ -127,6 +140,7 @@ abstract final class RealtimeMethodNames {
     driverEnRoute,
     driverArrived,
     driverLocationUpdated,
+    tripStopCompleted,
     tripMessageReceived,
     chatClosed,
   ];
@@ -147,6 +161,7 @@ extension RealtimeEventTripId on RealtimeEvent {
     RealtimeDriverEnRoute(:final tripId) => tripId,
     RealtimeDriverArrived(:final tripId) => tripId,
     RealtimeDriverLocationUpdated(:final tripId) => tripId,
+    RealtimeTripStopCompleted(:final tripId) => tripId,
     RealtimeTripMessageReceived(:final tripId) => tripId,
     RealtimeChatClosed(:final tripId) => tripId,
   };
