@@ -19,6 +19,8 @@ abstract class TripState with _$TripState {
     @Default([]) List<TripSummaryEntity> trips,
     @Default(1) int currentPage,
     @Default(true) bool hasMore,
+    @Default(false) bool isLoadingMore,
+    @Default('') String searchQuery,
 
     // Receipt / Invoice (per-section loading)
     @Default(BlocStatus<TripReceiptEntity>.initial())

@@ -38,7 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _next() async {
-    if (_index >= 2) {
+    if (_index >= 1) {
       await _finish();
       return;
     }
@@ -71,16 +71,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 subtitle: AppStrings.onboardingSubtitle2,
                 imagePath: Assets.images.onboarding2.path,
               ),
-              OnboardingPageSection(
-                title: AppStrings.onboardingTitle3,
-                subtitle: AppStrings.onboardingSubtitle3,
-                imagePath: Assets.images.onboarding3.path,
-              ),
             ],
           ),
 
           // Skip Button
-          if (_index < 2)
+          if (_index < 1)
             Positioned(
               top: MediaQuery.paddingOf(context).top + AppSpacing.sm.h,
               right: AppSpacing.xl.w,
@@ -104,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
-                    3,
+                    2,
                     (index) => AnimatedContainer(
                       duration: AppDurations.normal,
                       margin: EdgeInsets.symmetric(horizontal: 4.w),
@@ -128,7 +123,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     // noShadow: true,
                     shadowVariant: AppButtonShadowVariant.primary,
                     child: AppButtonChild.label(
-                      _index < 2
+                      _index < 1
                           ? AppStrings.onboardingContinue
                           : AppStrings.onboardingGetStarted,
                     ),

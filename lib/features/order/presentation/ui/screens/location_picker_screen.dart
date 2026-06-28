@@ -13,7 +13,12 @@ class LocationPickerScreen extends StatefulWidget {
   static const String pagePath = '/location_picker';
   static const String pageName = 'LocationPickerScreen';
 
-  const LocationPickerScreen({super.key});
+  const LocationPickerScreen({super.key, this.initialLocation});
+
+  /// Optional starting point for the map camera. When provided, the picker opens
+  /// centered on this location instead of the device's current GPS position —
+  /// used to reposition an already-selected point.
+  final RootMapLocationEntity? initialLocation;
 
   @override
   State<LocationPickerScreen> createState() => _LocationPickerScreenState();
@@ -46,6 +51,16 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   }
 
   Future<void> _initLocation() async {
+    // Reposition mode: start centered on the provided point.
+    final initial = widget.initialLocation;
+    if (initial != null) {
+      setState(() {
+        _initialLocation = initial;
+        _currentCameraTarget = LatLng(initial.latitude, initial.longitude);
+      });
+      return;
+    }
+
     try {
       final pos = await getIt<LocationService>().getCurrentPosition();
       if (mounted) {

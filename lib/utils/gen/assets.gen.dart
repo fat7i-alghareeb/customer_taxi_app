@@ -36,6 +36,10 @@ class $AssetsImagesGen {
   AssetGenImage get buildings =>
       const AssetGenImage('assets/images/buildings.png');
 
+  /// File path: assets/images/carForRealTime.png
+  AssetGenImage get carForRealTime =>
+      const AssetGenImage('assets/images/carForRealTime.png');
+
   /// File path: assets/images/comfort.png
   AssetGenImage get comfort => const AssetGenImage('assets/images/comfort.png');
 
@@ -114,6 +118,7 @@ class $AssetsImagesGen {
     a8Passengeres,
     adamLogo,
     buildings,
+    carForRealTime,
     comfort,
     loginLandingBg,
     logoLauncher,

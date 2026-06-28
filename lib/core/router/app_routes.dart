@@ -160,7 +160,9 @@ class AppRouteRegistry {
       name: LocationPickerScreen.pageName,
       pageBuilder: (context, state) => AppPageTransitions.build(
         state: state,
-        child: const LocationPickerScreen(),
+        child: LocationPickerScreen(
+          initialLocation: state.extra as RootMapLocationEntity?,
+        ),
       ),
     ),
   ];

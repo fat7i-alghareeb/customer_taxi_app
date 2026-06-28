@@ -34,6 +34,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<_CompensationClaimSubmitted>(_onCompensationClaimSubmitted);
     on<_StopPolling>(_onStopPolling);
     on<_HistoryStarted>(_onHistoryStarted);
+    on<_SearchChanged>(_onSearchChanged);
     on<_NextPageRequested>(_onNextPageRequested);
     on<_DriverLocationUpdated>(_onDriverLocationUpdated);
     on<_LoadReceipt>(_onLoadReceipt);
@@ -44,6 +45,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   final TripFacade _facade;
   final RealtimeService _realtime;
   Timer? _pollingTimer;
+  Timer? _searchDebounce;
   StreamSubscription<RealtimeEvent>? _realtimeSub;
   StreamSubscription<RealtimeConnectionState>? _connectionSub;
   String? _joinedTripId;
@@ -109,6 +111,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   @override
   Future<void> close() async {
     _stopPolling();
+    _searchDebounce?.cancel();
     await _connectionSub?.cancel();
     await _unsubscribeFromRealtime();
     return super.close();
@@ -290,10 +293,12 @@ class TripBloc extends Bloc<TripEvent, TripState> {
         trips: [],
         currentPage: 1,
         hasMore: true,
+        isLoadingMore: false,
       ),
     );
+    final search = state.searchQuery.trim();
     final Result<PagedResult<TripSummaryEntity>> result = await _facade
-        .getTripHistory();
+        .getTripHistory(search: search.isEmpty ? null : search);
     result.when(
       success: (paged) {
         printG('[TripBloc] history loaded count=${paged.items.length}');
@@ -319,16 +324,30 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     );
   }
 
+  void _onSearchChanged(_SearchChanged event, Emitter<TripState> emit) {
+    final query = event.query;
+    // Store immediately so the debounced reload picks up the latest term.
+    emit(state.copyWith(searchQuery: query));
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 350), () {
+      if (!isClosed) add(const TripEvent.historyStarted());
+    });
+  }
+
   Future<void> _onNextPageRequested(
     _NextPageRequested event,
     Emitter<TripState> emit,
   ) async {
-    if (!state.hasMore || state.historyStatus.isLoading) return;
+    if (!state.hasMore || state.historyStatus.isLoading || state.isLoadingMore) {
+      return;
+    }
     final nextPage = state.currentPage + 1;
     printC('[TripBloc] history next page requested page=$nextPage');
-    emit(state.copyWith(historyStatus: const BlocStatus.loading()));
+    // Keep the existing list visible; only flag the footer loader.
+    emit(state.copyWith(isLoadingMore: true));
+    final search = state.searchQuery.trim();
     final Result<PagedResult<TripSummaryEntity>> result = await _facade
-        .getTripHistory(page: nextPage);
+        .getTripHistory(page: nextPage, search: search.isEmpty ? null : search);
     result.when(
       success: (paged) {
         printG('[TripBloc] history page loaded count=${paged.items.length}');
@@ -339,16 +358,13 @@ class TripBloc extends Bloc<TripEvent, TripState> {
             trips: merged,
             currentPage: nextPage,
             hasMore: merged.length < paged.totalCount,
+            isLoadingMore: false,
           ),
         );
       },
       failure: (msg) {
         printY('[TripBloc] history page failed=$msg');
-        emit(
-          state.copyWith(
-            historyStatus: BlocStatus<List<TripSummaryEntity>>.failure(msg),
-          ),
-        );
+        emit(state.copyWith(isLoadingMore: false));
       },
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:ui' as ui;
 import 'package:flutter/services.dart' show SystemSound, SystemSoundType;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,7 +10,6 @@ import 'package:customertaxi/common/widgets/show_overlay.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
-import 'package:customertaxi/features/trip/presentation/coordinators/trip_completion_coordinator.dart';
 import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
@@ -19,17 +17,12 @@ import 'package:customertaxi/features/trip/presentation/ui/widgets/cancel_trip_s
 import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_overlay.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancelled_success_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/compensation_claim_dialog.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/completed_action_chips.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_sheet.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_fare_summary_card.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_rating_sheet.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_stops_timeline.dart';
 import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart';
-import 'package:customertaxi/features/chat/presentation/ui/widgets/chat_sheet.dart';
 import 'package:vibration/vibration.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:customertaxi/core/services/support_contact/support_contact_service.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/record_ride_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_floating_action.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/chat_floating_action.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/glassmorphic_trip_status_sheet.dart';
 
 class ActiveTripBody extends StatefulWidget {
   const ActiveTripBody({super.key});
@@ -42,6 +35,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     with SingleTickerProviderStateMixin {
   GoogleMapController? _mapController;
   BitmapDescriptor? _carMarkerIcon;
+  BitmapDescriptor? _carMarkerIconFlipped;
   BitmapDescriptor? _pickupMarkerIcon;
   BitmapDescriptor? _destinationMarkerIcon;
 
@@ -94,6 +88,10 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   Future<void> _loadCustomMarkers() async {
     try {
       final carIcon = await MapMarkerGenerator.createVehicleMarker(width: 56.r);
+      final carIconFlipped = await MapMarkerGenerator.createVehicleMarker(
+        width: 56.r,
+        mirror: true,
+      );
       final aIcon = await MapMarkerGenerator.createCustomMarker(
         text: 'A',
         color: Colors.orange,
@@ -108,6 +106,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
       if (mounted) {
         setState(() {
           _carMarkerIcon = carIcon;
+          _carMarkerIconFlipped = carIconFlipped;
           _pickupMarkerIcon = aIcon;
           _destinationMarkerIcon = bIcon;
         });
@@ -144,6 +143,14 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
   double _lerpDouble(double a, double b, double t) {
     return a + (b - a) * t;
+  }
+
+  /// Whether the heading has a westward (leftward) component, i.e. the car
+  /// should be mirrored to face left. Bearing is degrees clockwise from north.
+  bool _headingWest(double bearing) {
+    double normalized = bearing % 360;
+    if (normalized < 0) normalized += 360;
+    return normalized > 180;
   }
 
   double _calculateBearing(LatLng from, LatLng to) {
@@ -564,6 +571,12 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
               final double renderBearing = _currentCarPosition != null
                   ? _interpolatedBearing
                   : (liveLoc?.bearing ?? 0.0);
+              // The car asset is a side-view image kept upright; pick the
+              // left-facing (mirrored) variant when the driver heads west so it
+              // still faces its direction of travel.
+              final BitmapDescriptor? carMarkerIcon = _headingWest(renderBearing)
+                  ? (_carMarkerIconFlipped ?? _carMarkerIcon)
+                  : _carMarkerIcon;
 
               return BlocProvider<ChatBloc>(
                 create: (_) =>
@@ -588,7 +601,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                       tripMarkers: _buildTripMarkers(trip),
                       onMapCreated: (ctrl) => _onMapCreated(ctrl, trip),
                       driverLocation: renderPos?.toDriverLocation(renderBearing),
-                      driverMarkerIcon: _carMarkerIcon,
+                      driverMarkerIcon: carMarkerIcon,
                       // Draw the live car→pickup line only while the driver is
                       // heading to the customer (en-route / arrived).
                       pickupLocation:
@@ -643,10 +656,10 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                               ),
                               child: Row(
                                 children: [
-                                  if (showChat) const _ChatFloatingAction(),
+                                  if (showChat) const ChatFloatingAction(),
                                   const Spacer(),
                                   if (canEditPassengerNote)
-                                    _PassengerNoteFloatingAction(
+                                    PassengerNoteFloatingAction(
                                       hasNote:
                                           trip.passengerNote
                                               ?.trim()
@@ -662,7 +675,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                                 ],
                               ),
                             ),
-                          _GlassmorphicTripStatusSheet(
+                          GlassmorphicTripStatusSheet(
                                 trip: trip,
                                 cancelStatus: state.cancelStatus,
                                 driverLocation: state.activeDriverLocation,
@@ -752,912 +765,4 @@ extension on TripStatus {
       this != TripStatus.inProgress &&
       !isTerminal &&
       this != TripStatus.unknown;
-}
-
-class _PassengerNoteFloatingAction extends StatelessWidget {
-  const _PassengerNoteFloatingAction({
-    required this.hasNote,
-    required this.isLoading,
-    required this.onTap,
-  });
-
-  final bool hasNote;
-  final bool isLoading;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: isLoading ? null : onTap,
-        borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        child: Ink(
-          padding: REdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
-          decoration: BoxDecoration(
-            color: colors.primary,
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            boxShadow: [
-              BoxShadow(
-                color: colors.primary.withValues(alpha: 0.25),
-                blurRadius: 18.r,
-                offset: Offset(0, 8.h),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (isLoading)
-                SizedBox(
-                  width: 16.r,
-                  height: 16.r,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.r,
-                    valueColor: AlwaysStoppedAnimation<Color>(colors.onPrimary),
-                  ),
-                )
-              else
-                FaIcon(
-                  hasNote
-                      ? FontAwesomeIcons.solidComment
-                      : FontAwesomeIcons.message,
-                  size: 16.r,
-                  color: colors.onPrimary,
-                ),
-              AppSpacing.sm.horizontalSpace,
-              Text(
-                AppStrings.passengerNoteEdit,
-                style: AppTextStyles.s12w700.copyWith(color: colors.onPrimary),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Floating trigger that opens the in-trip chat. Shows an unread badge fed by
-/// the [ChatBloc] provided around the active-trip stack.
-/// Safety panel shown while the trip is in progress (passenger in the car):
-/// emergency call (112), in-trip audio recording, and a WhatsApp "report
-/// problem" shortcut whose number is admin-configurable on the server.
-class _InTripSafetyPanel extends StatelessWidget {
-  const _InTripSafetyPanel({required this.tripId});
-
-  final String tripId;
-
-  Future<void> _launch(Uri uri) async {
-    try {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (e) {
-      printY('[ActiveTripBody] safety launch failed uri=$uri error=$e');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-            children: [
-              Expanded(
-                child: _SafetyAction(
-                  icon: Icons.shield_rounded,
-                  color: AppColors.error,
-                  label: AppStrings.inTripEmergencyHelp,
-                  onTap: () => _launch(Uri.parse('tel:112')),
-                ),
-              ),
-              Expanded(
-                child: _SafetyAction(
-                  icon: Icons.mic_rounded,
-                  color: AppColors.success,
-                  label: AppStrings.inTripRecordRide,
-                  onTap: () => RecordRideSheet.show(context, tripId: tripId),
-                ),
-              ),
-              Expanded(
-                child: _SafetyAction(
-                  icon: Icons.flag_rounded,
-                  color: AppColors.warning,
-                  label: AppStrings.inTripReportProblem,
-                  onTap: () {
-                    final number = getIt<SupportContactService>().whatsApp;
-                    _launch(Uri.parse('https://wa.me/$number'));
-                  },
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.xs.verticalSpace,
-          Text(
-            AppStrings.inTripSafetyTagline,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.s11w500.copyWith(
-              color: colors.onSurface.withValues(alpha: 0.6),
-            ),
-          ),
-        ],
-      );
-  }
-}
-
-class _SafetyAction extends StatelessWidget {
-  const _SafetyAction({
-    required this.icon,
-    required this.color,
-    required this.label,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final Color color;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadii.md.r),
-        child: Padding(
-          padding: REdgeInsets.symmetric(vertical: AppSpacing.sm),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40.r,
-                height: 40.r,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: color.withValues(alpha: 0.14),
-                ),
-                child: Center(
-                  child: Icon(icon, size: 19.r, color: color),
-                ),
-              ),
-              AppSpacing.xs.verticalSpace,
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.s11w500.copyWith(
-                  color: colors.onSurface,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ChatFloatingAction extends StatelessWidget {
-  const _ChatFloatingAction();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return BlocBuilder<ChatBloc, ChatState>(
-      builder: (context, state) {
-        final unread = state.unreadCount;
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () =>
-                ChatSheet.show(context, bloc: context.read<ChatBloc>()),
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            child: Ink(
-              padding: REdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
-              ),
-              decoration: BoxDecoration(
-                color: colors.surface.withValues(alpha: 0.95),
-                borderRadius: BorderRadius.circular(AppRadii.lg.r),
-                border: Border.all(
-                  color: colors.primary.withValues(alpha: 0.3),
-                  width: 1.r,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.12),
-                    blurRadius: 18.r,
-                    offset: Offset(0, 8.h),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.solidComments,
-                        size: 18.r,
-                        color: colors.primary,
-                      ),
-                      if (unread > 0)
-                        PositionedDirectional(
-                          top: -6.h,
-                          end: -8.w,
-                          child: Container(
-                            padding: REdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: 1,
-                            ),
-                            constraints: BoxConstraints(minWidth: 16.w),
-                            decoration: BoxDecoration(
-                              color: AppColors.error,
-                              borderRadius: BorderRadius.circular(
-                                AppRadii.lg.r,
-                              ),
-                            ),
-                            child: Text(
-                              unread > 99 ? '99+' : '$unread',
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.s11w500.copyWith(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                  AppSpacing.sm.horizontalSpace,
-                  Text(
-                    'chatTitle'.tr(),
-                    style: AppTextStyles.s12w700.copyWith(
-                      color: colors.onSurface,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _GlassmorphicTripStatusSheet extends StatefulWidget {
-  const _GlassmorphicTripStatusSheet({
-    required this.trip,
-    required this.cancelStatus,
-    required this.onCancelPressed,
-    required this.onCompensationPressed,
-    this.driverLocation,
-  });
-
-  final TripEntity trip;
-  final BlocStatus<void> cancelStatus;
-  final VoidCallback onCancelPressed;
-  final VoidCallback onCompensationPressed;
-  final DriverLocationEntity? driverLocation;
-
-  @override
-  State<_GlassmorphicTripStatusSheet> createState() =>
-      _GlassmorphicTripStatusSheetState();
-}
-
-class _GlassmorphicTripStatusSheetState
-    extends State<_GlassmorphicTripStatusSheet> {
-  // Drives the 1-second rebuilds for the live waiting countdown while the
-  // driver is waiting at pickup.
-  Timer? _waitingTicker;
-  // Ensures the post-trip rating sheet is only auto-shown once.
-  bool _ratingPrompted = false;
-
-  TripEntity get trip => widget.trip;
-  BlocStatus<void> get cancelStatus => widget.cancelStatus;
-  VoidCallback get onCancelPressed => widget.onCancelPressed;
-  VoidCallback get onCompensationPressed => widget.onCompensationPressed;
-  DriverLocationEntity? get driverLocation => widget.driverLocation;
-
-  @override
-  void initState() {
-    super.initState();
-    _syncWaitingTicker();
-    _maybePromptRating();
-  }
-
-  @override
-  void didUpdateWidget(covariant _GlassmorphicTripStatusSheet oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _syncWaitingTicker();
-    _maybePromptRating();
-  }
-
-  @override
-  void dispose() {
-    _waitingTicker?.cancel();
-    super.dispose();
-  }
-
-  void _syncWaitingTicker() {
-    final needsTicker = trip.status == TripStatus.arrived;
-    if (needsTicker && _waitingTicker == null) {
-      _waitingTicker = Timer.periodic(const Duration(seconds: 1), (_) {
-        if (mounted) setState(() {});
-      });
-    } else if (!needsTicker && _waitingTicker != null) {
-      _waitingTicker?.cancel();
-      _waitingTicker = null;
-    }
-  }
-
-  void _maybePromptRating() {
-    if (_ratingPrompted || trip.status != TripStatus.completed) return;
-    _ratingPrompted = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      unawaited(
-        getIt<TripCompletionCoordinator>().promptRatingForCompletedTrip(
-          trip.id,
-        ),
-      );
-    });
-  }
-
-  Future<void> _refreshActiveTripGate() async {
-    await getIt<ActiveTripCubit>().refresh();
-  }
-
-  Future<void> _clearActiveTripGate() async {
-    final cubit = getIt<ActiveTripCubit>();
-    cubit.clear();
-    await cubit.refresh();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colorScheme;
-    final bottomPadding = MediaQuery.paddingOf(context).bottom;
-
-    return ClipRRect(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.xl.r)),
-      child: BackdropFilter(
-        filter: ui.ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-        child: Container(
-          decoration: BoxDecoration(
-            color: colors.surface.withValues(alpha: 0.85),
-            border: Border(
-              top: BorderSide(
-                color: colors.onSurface.withValues(alpha: 0.08),
-                width: 1.5.r,
-              ),
-            ),
-          ),
-          padding: REdgeInsets.fromLTRB(
-            AppSpacing.xl,
-            AppSpacing.xl,
-            AppSpacing.xl,
-            AppSpacing.xl + bottomPadding,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Tiny top drag handle visual styling
-              Center(
-                child: Container(
-                  width: 40.w,
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    color: colors.onSurface.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(AppRadii.sm.r),
-                  ),
-                ),
-              ),
-              AppSpacing.md.verticalSpace,
-
-              // Glassmorphic status specific cards builder
-              if (trip.status == TripStatus.enRoute) ...[
-                _buildEnRouteSheet(context),
-              ] else if (trip.status == TripStatus.arrived) ...[
-                _buildArrivedSheet(context),
-              ] else if (trip.status == TripStatus.inProgress) ...[
-                _buildInProgressSheet(context),
-              ] else if (trip.status == TripStatus.completed) ...[
-                _buildCompletedSheet(context),
-              ] else ...[
-                // Default fallback
-                _buildGeneralSheet(context),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEnRouteSheet(BuildContext context) {
-    final colors = context.colorScheme;
-    // Prefer the live driver-arrival ETA streamed from the driver's moving
-    // position; fall back to the trip's static pickup ETA when unavailable.
-    final int? liveEtaSeconds = driverLocation?.etaToPickupSeconds;
-    final int displayEta = liveEtaSeconds != null
-        ? LiveArrival.minutes(liveEtaSeconds)
-        : (trip.etaToPickup != null
-              ? (trip.etaToPickup!.difference(DateTime.now()).inMinutes > 0
-                    ? trip.etaToPickup!.difference(DateTime.now()).inMinutes
-                    : 1)
-              : 5);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            FaIcon(FontAwesomeIcons.carSide, color: colors.primary, size: 24.r),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Text(
-                AppStrings.tripStatusDriverEnRoute,
-                style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
-              ),
-            ),
-            Container(
-              padding: REdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: AppSpacing.xs,
-              ),
-              decoration: BoxDecoration(
-                color: colors.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(AppRadii.sm.r),
-              ),
-              child: Text(
-                AppStrings.activeTripLiveEta.replaceAll(
-                  '{time}',
-                  '$displayEta min',
-                ),
-                style: AppTextStyles.s12w700.copyWith(color: colors.primary),
-              ),
-            ),
-          ],
-        ),
-
-        // Live distance • expected arrival clock, matching the tracking card.
-        if (liveEtaSeconds != null &&
-            driverLocation?.distanceToPickupMeters != null) ...[
-          AppSpacing.sm.verticalSpace,
-          Row(
-            children: [
-              FaIcon(
-                FontAwesomeIcons.locationArrow,
-                color: colors.onSurface.withValues(alpha: 0.45),
-                size: 13.r,
-              ),
-              AppSpacing.sm.horizontalSpace,
-              Text(
-                '${LiveArrival.distance(driverLocation!.distanceToPickupMeters!)}  •  ${LiveArrival.arrivalClock(liveEtaSeconds)}',
-                style: AppTextStyles.s14w500.copyWith(
-                  color: colors.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-            ],
-          ),
-        ],
-        AppSpacing.lg.verticalSpace,
-
-        // Beautiful Orange/White Vehicle details banner
-        _buildVehicleCard(context),
-        AppSpacing.xl.verticalSpace,
-
-        // Cancel button
-        AppButton.outline(
-          variant: AppButtonVariant.error,
-          isLoading: cancelStatus.isLoading,
-          onTap: onCancelPressed,
-          child: AppButtonChild.label(AppStrings.activeTripCancelRide),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildArrivedSheet(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Prominent glowing green highlight banner
-        Container(
-          padding: REdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: AppColors.success.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            border: Border.all(
-              color: AppColors.success.withValues(alpha: 0.3),
-              width: 1.r,
-            ),
-          ),
-          child: Row(
-            children: [
-              FaIcon(
-                FontAwesomeIcons.solidCircleCheck,
-                color: AppColors.success,
-                size: 28.r,
-              ).animate().scale(duration: 400.ms),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppStrings.tripStatusDriverArrived,
-                      style: AppTextStyles.s14w700.copyWith(
-                        color: AppColors.success,
-                      ),
-                    ),
-                    AppSpacing.xs.verticalSpace,
-                    Text(
-                      AppStrings.activeTripDriverOutside,
-                      style: AppTextStyles.s16w700.copyWith(
-                        color: colors.onSurface,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        AppSpacing.lg.verticalSpace,
-
-        // Live "board within 10 minutes" countdown + accruing waiting fee.
-        _buildWaitingCountdown(context),
-
-        // Vehicle info
-        _buildVehicleCard(context),
-        AppSpacing.xl.verticalSpace,
-
-        // Cancel button
-        AppButton.outline(
-          variant: AppButtonVariant.error,
-          isLoading: cancelStatus.isLoading,
-          onTap: onCancelPressed,
-          child: AppButtonChild.label(AppStrings.activeTripCancelRide),
-        ),
-
-        // Late-driver compensation claim (policy: >20 min late => 5% back).
-        AppSpacing.sm.verticalSpace,
-        Center(
-          child: TextButton(
-            onPressed: onCompensationPressed,
-            child: Text(AppStrings.activeTripReportDriverLate),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// Shows the 10-minute boarding countdown after the driver arrives. Once the
-  /// free grace window elapses, it switches to the accruing per-minute fee.
-  Widget _buildWaitingCountdown(BuildContext context) {
-    final colors = context.colorScheme;
-    final session = trip.activeWaitingSession;
-    final startUtc = session?.startedAtUtc ?? trip.arrivedAtUtc;
-    if (startUtc == null) return const SizedBox.shrink();
-
-    final graceMinutes = session?.graceMinutes ?? 10;
-    final ratePerMinute = session?.ratePerMinute ?? 0;
-    final elapsed = DateTime.now().difference(startUtc);
-    final graceRemaining = Duration(minutes: graceMinutes) - elapsed;
-
-    final Widget content;
-    final Color tint;
-    if (graceRemaining > Duration.zero) {
-      final mm = graceRemaining.inMinutes
-          .remainder(60)
-          .toString()
-          .padLeft(2, '0');
-      final ss = graceRemaining.inSeconds
-          .remainder(60)
-          .toString()
-          .padLeft(2, '0');
-      tint = colors.primary;
-      content = Row(
-        children: [
-          FaIcon(FontAwesomeIcons.solidClock, color: tint, size: 18.r),
-          AppSpacing.md.horizontalSpace,
-          Expanded(
-            child: Text(
-              AppStrings.tripArrivedBoardWithin.replaceAll('{time}', '$mm:$ss'),
-              style: AppTextStyles.s14w700.copyWith(color: colors.onSurface),
-            ),
-          ),
-        ],
-      );
-    } else {
-      final overdueSeconds = elapsed.inSeconds - graceMinutes * 60;
-      final billableMinutes = (overdueSeconds / 60).ceil();
-      final fee = billableMinutes * ratePerMinute;
-      final amount = '${fee.toStringAsFixed(2)} ${trip.currencyCode}';
-      tint = AppColors.warning;
-      content = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              FaIcon(
-                FontAwesomeIcons.triangleExclamation,
-                color: tint,
-                size: 18.r,
-              ),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: Text(
-                  AppStrings.tripWaitingGraceOver,
-                  style: AppTextStyles.s12w500.copyWith(
-                    color: colors.onSurface,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.xs.verticalSpace,
-          Text(
-            AppStrings.waitingLateMinutes.replaceAll(
-              '{minutes}',
-              billableMinutes.toString(),
-            ),
-            style: AppTextStyles.s14w700.copyWith(color: tint),
-          ),
-          AppSpacing.xs.verticalSpace,
-          Text(
-            AppStrings.tripWaitingFeeAccruing.replaceAll('{amount}', amount),
-            style: AppTextStyles.s16w700.copyWith(color: tint),
-          ),
-          AppSpacing.xs.verticalSpace,
-          Text(
-            AppStrings.waitingPayDriverNotice,
-            style: AppTextStyles.s12w500.copyWith(
-              color: colors.onSurface.withValues(alpha: 0.72),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return Padding(
-      padding: REdgeInsets.only(bottom: AppSpacing.lg),
-      child: Container(
-        width: double.infinity,
-        padding: REdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: tint.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(AppRadii.lg.r),
-          border: Border.all(color: tint.withValues(alpha: 0.30), width: 1.r),
-        ),
-        child: content,
-      ),
-    );
-  }
-
-  Widget _buildInProgressSheet(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            FaIcon(FontAwesomeIcons.route, color: colors.primary, size: 24.r),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Text(
-                AppStrings.tripStatusInProgress,
-                style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.lg.verticalSpace,
-
-        // Ride details in-progress (vehicle type only, NO profile leaks)
-        _buildVehicleCard(context),
-        AppSpacing.lg.verticalSpace,
-
-        // Informational row (no cancel button since ride is active!)
-        Center(
-          child: Text(
-            AppStrings.yourJourneyBeginsHere,
-            style: AppTextStyles.s14w400.copyWith(
-              color: colors.onSurface.withValues(alpha: 0.5),
-            ),
-          ),
-        ),
-        AppSpacing.lg.verticalSpace,
-
-        // Safety panel — only while the passenger is in the car with the
-        // driver. Lives inside the sheet so it reads as a section, not a
-        // floating card.
-        Divider(
-          height: 1.h,
-          thickness: 1.r,
-          color: colors.onSurface.withValues(alpha: 0.08),
-        ),
-        AppSpacing.md.verticalSpace,
-        _InTripSafetyPanel(tripId: trip.id),
-      ],
-    );
-  }
-
-  Widget _buildCompletedSheet(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Center(
-          child: FaIcon(
-            FontAwesomeIcons.circleCheck,
-            color: AppColors.success,
-            size: 48.r,
-          ),
-        ),
-        AppSpacing.md.verticalSpace,
-        Center(
-          child: Text(
-            AppStrings.tripStatusCompleted,
-            style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
-          ),
-        ),
-        AppSpacing.lg.verticalSpace,
-
-        // Uber-style receipt / invoice chips
-        CompletedActionChips(tripId: trip.id),
-        AppSpacing.lg.verticalSpace,
-
-        // Fare Summary Card
-        TripFareSummaryCard(
-          amount: trip.quotedFare,
-          currencyCode: trip.currencyCode,
-          referenceCode: trip.referenceCode,
-        ),
-        AppSpacing.xl.verticalSpace,
-
-        // Stops Timeline
-        if (trip.stops.isNotEmpty) ...[
-          TripStopsTimeline(stops: trip.stops),
-          AppSpacing.xl.verticalSpace,
-        ],
-
-        // Rate the trip (also auto-shown once on completion).
-        AppButton.outline(
-          onTap: () => showTripRatingSheet(
-            context,
-            tripId: trip.id,
-            onClosed: _refreshActiveTripGate,
-          ),
-          child: AppButtonChild.label(AppStrings.ratingTitle),
-        ),
-        AppSpacing.md.verticalSpace,
-
-        // Done button to route home (explicit dismiss — no auto-redirect)
-        AppButton.primaryGradient(
-          onTap: () async {
-            await _clearActiveTripGate();
-            if (context.mounted) context.goNamed('RootScreen');
-          },
-          child: AppButtonChild.label(AppStrings.done),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildGeneralSheet(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            FaIcon(
-              FontAwesomeIcons.circleInfo,
-              color: colors.primary,
-              size: 24.r,
-            ),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Text(
-                trip.status.title,
-                style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.xl.verticalSpace,
-
-        if (trip.status.canCancel)
-          AppButton.outline(
-            variant: AppButtonVariant.error,
-            isLoading: cancelStatus.isLoading,
-            onTap: onCancelPressed,
-            child: AppButtonChild.label(AppStrings.activeTripCancelRide),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildVehicleCard(BuildContext context) {
-    final colors = context.colorScheme;
-    final vehicleType = trip.vehicleTypeName?.trim().isNotEmpty == true
-        ? trip.vehicleTypeName!.trim()
-        : AppStrings.carType;
-    final vehicleString = AppStrings.activeTripLookForCar.replaceAll(
-      '{type}',
-      vehicleType,
-    );
-
-    return Container(
-      padding: REdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: colors.onSurface.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        border: Border.all(
-          color: colors.onSurface.withValues(alpha: 0.06),
-          width: 1.r,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: REdgeInsets.all(AppSpacing.sm),
-            decoration: BoxDecoration(
-              color: colors.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: FaIcon(
-              FontAwesomeIcons.car,
-              color: colors.primary,
-              size: 24.r,
-            ),
-          ),
-          AppSpacing.md.horizontalSpace,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  vehicleType,
-                  style: AppTextStyles.s16w700.copyWith(
-                    color: colors.onSurface,
-                  ),
-                ),
-                AppSpacing.xs.verticalSpace,
-                Text(
-                  vehicleString,
-                  style: AppTextStyles.s12w400.copyWith(
-                    color: colors.onSurface.withValues(alpha: 0.65),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

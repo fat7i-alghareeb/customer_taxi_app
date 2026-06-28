@@ -80,9 +80,14 @@ class TripFacade {
   Future<Result<PagedResult<TripSummaryEntity>>> getTripHistory({
     int page = 1,
     int pageSize = 20,
+    String? search,
   }) {
-    printC('[TripFacade] getTripHistory page=$page');
-    return _repository.getTripHistory(page: page, pageSize: pageSize);
+    printC('[TripFacade] getTripHistory page=$page search=$search');
+    return _repository.getTripHistory(
+      page: page,
+      pageSize: pageSize,
+      search: search,
+    );
   }
 
   Future<Result<TripReceiptEntity>> getTripReceipt(String id) {

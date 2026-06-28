@@ -126,10 +126,15 @@ class TripRepositoryImpl implements TripRepository {
   Future<Result<PagedResult<TripSummaryEntity>>> getTripHistory({
     int page = 1,
     int pageSize = 20,
+    String? search,
   }) {
     return runAsResult(() async {
-      printM('[TripRepository] getTripHistory page=$page');
-      final result = await _remote.getTripHistory(page: page, pageSize: pageSize);
+      printM('[TripRepository] getTripHistory page=$page search=$search');
+      final result = await _remote.getTripHistory(
+        page: page,
+        pageSize: pageSize,
+        search: search,
+      );
       printG('[TripRepository] getTripHistory count=${result.items.length}');
       return PagedResult<TripSummaryEntity>(
         items: result.items.map((m) => m.toSummaryEntity).toList(),

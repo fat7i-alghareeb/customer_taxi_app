@@ -5,6 +5,8 @@ part of app_strings;
 class AppStrings {
   /// Active Trip - الرحلة الحالية - Actieve Rit - Aktive Fahrt - Aktywny przejazd - Активна поїздка - Trajet Actif - Viaje activo - Cursă activă
   static String get activeTrip => 'activeTrip'.tr();
+  /// Arrival in - يصل خلال - Aankomst over - Ankunft in - Przyjazd za - Прибуття за - Arrivée dans - Llegada en - Sosire în
+  static String get activeTripArrivalInLabel => 'activeTripArrivalInLabel'.tr();
   /// Arrival - الوصول - Aankomst - Ankunft - Przyjazd - Прибуття - Arrivée - Llegada - Sosire
   static String get activeTripArrivalLabel => 'activeTripArrivalLabel'.tr();
   /// Cancel Ride - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulați cursa
@@ -831,6 +833,8 @@ class AppStrings {
   static String get tripActiveTitle => 'tripActiveTitle'.tr();
   /// Please get in within {time} - الرجاء الركوب خلال {time} - Stap binnen {time} in - Bitte steigen Sie innerhalb von {time} ein - Wsiądź w ciągu {time} - Сідайте протягом {time} - Veuillez monter dans {time} - Sube en un plazo de {time} - Te rugăm să urci în {time}
   static String get tripArrivedBoardWithin => 'tripArrivedBoardWithin'.tr();
+  /// Trip starts in {time} - تبدأ الرحلة خلال {time} - Rit begint over {time} - Fahrt beginnt in {time} - Przejazd zacznie się za {time} - Поїздка почнеться через {time} - Le trajet commence dans {time} - El viaje comienza en {time} - Cursa începe în {time}
+  static String get tripScheduledStartsIn => 'tripScheduledStartsIn'.tr();
   /// Cancel Trip - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulează cursa
   static String get tripCancelButton => 'tripCancelButton'.tr();
   /// Are you sure you want to cancel this trip? - هل أنت متأكد أنك تريد إلغاء هذه الرحلة؟ - Weet u zeker dat u deze rit wilt annuleren? - Möchten Sie diese Fahrt wirklich stornieren? - Czy na pewno chcesz anulować ten przejazd? - Ви впевнені, що хочете скасувати поїздку? - Voulez-vous vraiment annuler ce trajet ? - ¿Está seguro de que desea cancelar este viaje? - Sigur doriți să anulați această cursă?
@@ -855,6 +859,8 @@ class AppStrings {
   static String get tripHistoryEmpty => 'tripHistoryEmpty'.tr();
   /// Load more - تحميل المزيد - Meer laden - Mehr laden - Załaduj więcej - Завантажити ще - Charger plus - Cargar más - Încarcă mai multe
   static String get tripHistoryLoadMore => 'tripHistoryLoadMore'.tr();
+  /// Search by trip number
+  static String get tripHistorySearchHint => 'tripHistorySearchHint'.tr();
   /// My Trips - رحلاتي - Mijn Ritten - Meine Fahrten - Moje przejazdy - Мої поїздки - Mes Trajets - Mis viajes - Cursele mele
   static String get tripHistoryTitle => 'tripHistoryTitle'.tr();
   /// Invoice - الفاتورة - Factuur - Rechnung - Faktura - Рахунок - Facture - Factura - Factură

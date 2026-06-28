@@ -203,12 +203,17 @@ class TripRemoteDataSource {
   Future<PagedResult<TripSummaryModel>> getTripHistory({
     int page = 1,
     int pageSize = 20,
+    String? search,
   }) {
     return rethrowAsAppException(() async {
-      printY('[TripRemoteDataSource] getTripHistory page=$page');
+      printY('[TripRemoteDataSource] getTripHistory page=$page search=$search');
       final res = await _dio.get<dynamic>(
         ApiEndpoints.tripHistory,
-        queryParameters: {'page': page, 'pageSize': pageSize},
+        queryParameters: {
+          'page': page,
+          'pageSize': pageSize,
+          if (search != null && search.isNotEmpty) 'search': search,
+        },
       );
       return PagedResult.fromJson(
         res.data as Map<String, dynamic>,

@@ -55,15 +55,16 @@ extension ProfileEventPatterns on ProfileEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _NameSaved value)?  nameSaved,TResult Function( _EmailSaved value)?  emailSaved,TResult Function( _PhotoSelected value)?  photoSelected,TResult Function( _HomeAddressSelected value)?  homeAddressSelected,TResult Function( _SaveRequested value)?  saveRequested,TResult Function( _DeleteAccountRequested value)?  deleteAccountRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _NameSaved value)?  nameSaved,TResult Function( _EmailSaved value)?  emailSaved,TResult Function( _PhotoSelected value)?  photoSelected,TResult Function( _HomeAddressMapPicked value)?  homeAddressMapPicked,TResult Function( _HomeAddressLabelChanged value)?  homeAddressLabelChanged,TResult Function( _SaveRequested value)?  saveRequested,TResult Function( _DeleteAccountRequested value)?  deleteAccountRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _NameSaved() when nameSaved != null:
 return nameSaved(_that);case _EmailSaved() when emailSaved != null:
 return emailSaved(_that);case _PhotoSelected() when photoSelected != null:
-return photoSelected(_that);case _HomeAddressSelected() when homeAddressSelected != null:
-return homeAddressSelected(_that);case _SaveRequested() when saveRequested != null:
+return photoSelected(_that);case _HomeAddressMapPicked() when homeAddressMapPicked != null:
+return homeAddressMapPicked(_that);case _HomeAddressLabelChanged() when homeAddressLabelChanged != null:
+return homeAddressLabelChanged(_that);case _SaveRequested() when saveRequested != null:
 return saveRequested(_that);case _DeleteAccountRequested() when deleteAccountRequested != null:
 return deleteAccountRequested(_that);case _:
   return orElse();
@@ -83,15 +84,16 @@ return deleteAccountRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _NameSaved value)  nameSaved,required TResult Function( _EmailSaved value)  emailSaved,required TResult Function( _PhotoSelected value)  photoSelected,required TResult Function( _HomeAddressSelected value)  homeAddressSelected,required TResult Function( _SaveRequested value)  saveRequested,required TResult Function( _DeleteAccountRequested value)  deleteAccountRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _NameSaved value)  nameSaved,required TResult Function( _EmailSaved value)  emailSaved,required TResult Function( _PhotoSelected value)  photoSelected,required TResult Function( _HomeAddressMapPicked value)  homeAddressMapPicked,required TResult Function( _HomeAddressLabelChanged value)  homeAddressLabelChanged,required TResult Function( _SaveRequested value)  saveRequested,required TResult Function( _DeleteAccountRequested value)  deleteAccountRequested,}){
 final _that = this;
 switch (_that) {
 case _Started():
 return started(_that);case _NameSaved():
 return nameSaved(_that);case _EmailSaved():
 return emailSaved(_that);case _PhotoSelected():
-return photoSelected(_that);case _HomeAddressSelected():
-return homeAddressSelected(_that);case _SaveRequested():
+return photoSelected(_that);case _HomeAddressMapPicked():
+return homeAddressMapPicked(_that);case _HomeAddressLabelChanged():
+return homeAddressLabelChanged(_that);case _SaveRequested():
 return saveRequested(_that);case _DeleteAccountRequested():
 return deleteAccountRequested(_that);case _:
   throw StateError('Unexpected subclass');
@@ -110,15 +112,16 @@ return deleteAccountRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _NameSaved value)?  nameSaved,TResult? Function( _EmailSaved value)?  emailSaved,TResult? Function( _PhotoSelected value)?  photoSelected,TResult? Function( _HomeAddressSelected value)?  homeAddressSelected,TResult? Function( _SaveRequested value)?  saveRequested,TResult? Function( _DeleteAccountRequested value)?  deleteAccountRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _NameSaved value)?  nameSaved,TResult? Function( _EmailSaved value)?  emailSaved,TResult? Function( _PhotoSelected value)?  photoSelected,TResult? Function( _HomeAddressMapPicked value)?  homeAddressMapPicked,TResult? Function( _HomeAddressLabelChanged value)?  homeAddressLabelChanged,TResult? Function( _SaveRequested value)?  saveRequested,TResult? Function( _DeleteAccountRequested value)?  deleteAccountRequested,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that);case _NameSaved() when nameSaved != null:
 return nameSaved(_that);case _EmailSaved() when emailSaved != null:
 return emailSaved(_that);case _PhotoSelected() when photoSelected != null:
-return photoSelected(_that);case _HomeAddressSelected() when homeAddressSelected != null:
-return homeAddressSelected(_that);case _SaveRequested() when saveRequested != null:
+return photoSelected(_that);case _HomeAddressMapPicked() when homeAddressMapPicked != null:
+return homeAddressMapPicked(_that);case _HomeAddressLabelChanged() when homeAddressLabelChanged != null:
+return homeAddressLabelChanged(_that);case _SaveRequested() when saveRequested != null:
 return saveRequested(_that);case _DeleteAccountRequested() when deleteAccountRequested != null:
 return deleteAccountRequested(_that);case _:
   return null;
@@ -137,14 +140,15 @@ return deleteAccountRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String name)?  nameSaved,TResult Function( String email)?  emailSaved,TResult Function( File photo)?  photoSelected,TResult Function( String? label,  double? latitude,  double? longitude)?  homeAddressSelected,TResult Function()?  saveRequested,TResult Function()?  deleteAccountRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String name)?  nameSaved,TResult Function( String email)?  emailSaved,TResult Function( File photo)?  photoSelected,TResult Function( String label,  double latitude,  double longitude)?  homeAddressMapPicked,TResult Function( String? label)?  homeAddressLabelChanged,TResult Function()?  saveRequested,TResult Function()?  deleteAccountRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NameSaved() when nameSaved != null:
 return nameSaved(_that.name);case _EmailSaved() when emailSaved != null:
 return emailSaved(_that.email);case _PhotoSelected() when photoSelected != null:
-return photoSelected(_that.photo);case _HomeAddressSelected() when homeAddressSelected != null:
-return homeAddressSelected(_that.label,_that.latitude,_that.longitude);case _SaveRequested() when saveRequested != null:
+return photoSelected(_that.photo);case _HomeAddressMapPicked() when homeAddressMapPicked != null:
+return homeAddressMapPicked(_that.label,_that.latitude,_that.longitude);case _HomeAddressLabelChanged() when homeAddressLabelChanged != null:
+return homeAddressLabelChanged(_that.label);case _SaveRequested() when saveRequested != null:
 return saveRequested();case _DeleteAccountRequested() when deleteAccountRequested != null:
 return deleteAccountRequested();case _:
   return orElse();
@@ -164,14 +168,15 @@ return deleteAccountRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String name)  nameSaved,required TResult Function( String email)  emailSaved,required TResult Function( File photo)  photoSelected,required TResult Function( String? label,  double? latitude,  double? longitude)  homeAddressSelected,required TResult Function()  saveRequested,required TResult Function()  deleteAccountRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String name)  nameSaved,required TResult Function( String email)  emailSaved,required TResult Function( File photo)  photoSelected,required TResult Function( String label,  double latitude,  double longitude)  homeAddressMapPicked,required TResult Function( String? label)  homeAddressLabelChanged,required TResult Function()  saveRequested,required TResult Function()  deleteAccountRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _NameSaved():
 return nameSaved(_that.name);case _EmailSaved():
 return emailSaved(_that.email);case _PhotoSelected():
-return photoSelected(_that.photo);case _HomeAddressSelected():
-return homeAddressSelected(_that.label,_that.latitude,_that.longitude);case _SaveRequested():
+return photoSelected(_that.photo);case _HomeAddressMapPicked():
+return homeAddressMapPicked(_that.label,_that.latitude,_that.longitude);case _HomeAddressLabelChanged():
+return homeAddressLabelChanged(_that.label);case _SaveRequested():
 return saveRequested();case _DeleteAccountRequested():
 return deleteAccountRequested();case _:
   throw StateError('Unexpected subclass');
@@ -190,14 +195,15 @@ return deleteAccountRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String name)?  nameSaved,TResult? Function( String email)?  emailSaved,TResult? Function( File photo)?  photoSelected,TResult? Function( String? label,  double? latitude,  double? longitude)?  homeAddressSelected,TResult? Function()?  saveRequested,TResult? Function()?  deleteAccountRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String name)?  nameSaved,TResult? Function( String email)?  emailSaved,TResult? Function( File photo)?  photoSelected,TResult? Function( String label,  double latitude,  double longitude)?  homeAddressMapPicked,TResult? Function( String? label)?  homeAddressLabelChanged,TResult? Function()?  saveRequested,TResult? Function()?  deleteAccountRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _NameSaved() when nameSaved != null:
 return nameSaved(_that.name);case _EmailSaved() when emailSaved != null:
 return emailSaved(_that.email);case _PhotoSelected() when photoSelected != null:
-return photoSelected(_that.photo);case _HomeAddressSelected() when homeAddressSelected != null:
-return homeAddressSelected(_that.label,_that.latitude,_that.longitude);case _SaveRequested() when saveRequested != null:
+return photoSelected(_that.photo);case _HomeAddressMapPicked() when homeAddressMapPicked != null:
+return homeAddressMapPicked(_that.label,_that.latitude,_that.longitude);case _HomeAddressLabelChanged() when homeAddressLabelChanged != null:
+return homeAddressLabelChanged(_that.label);case _SaveRequested() when saveRequested != null:
 return saveRequested();case _DeleteAccountRequested() when deleteAccountRequested != null:
 return deleteAccountRequested();case _:
   return null;
@@ -440,25 +446,25 @@ as File,
 /// @nodoc
 
 
-class _HomeAddressSelected implements ProfileEvent {
-  const _HomeAddressSelected({this.label, this.latitude, this.longitude});
+class _HomeAddressMapPicked implements ProfileEvent {
+  const _HomeAddressMapPicked({required this.label, required this.latitude, required this.longitude});
   
 
- final  String? label;
- final  double? latitude;
- final  double? longitude;
+ final  String label;
+ final  double latitude;
+ final  double longitude;
 
 /// Create a copy of ProfileEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$HomeAddressSelectedCopyWith<_HomeAddressSelected> get copyWith => __$HomeAddressSelectedCopyWithImpl<_HomeAddressSelected>(this, _$identity);
+_$HomeAddressMapPickedCopyWith<_HomeAddressMapPicked> get copyWith => __$HomeAddressMapPickedCopyWithImpl<_HomeAddressMapPicked>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeAddressSelected&&(identical(other.label, label) || other.label == label)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeAddressMapPicked&&(identical(other.label, label) || other.label == label)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
 }
 
 
@@ -467,18 +473,18 @@ int get hashCode => Object.hash(runtimeType,label,latitude,longitude);
 
 @override
 String toString() {
-  return 'ProfileEvent.homeAddressSelected(label: $label, latitude: $latitude, longitude: $longitude)';
+  return 'ProfileEvent.homeAddressMapPicked(label: $label, latitude: $latitude, longitude: $longitude)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$HomeAddressSelectedCopyWith<$Res> implements $ProfileEventCopyWith<$Res> {
-  factory _$HomeAddressSelectedCopyWith(_HomeAddressSelected value, $Res Function(_HomeAddressSelected) _then) = __$HomeAddressSelectedCopyWithImpl;
+abstract mixin class _$HomeAddressMapPickedCopyWith<$Res> implements $ProfileEventCopyWith<$Res> {
+  factory _$HomeAddressMapPickedCopyWith(_HomeAddressMapPicked value, $Res Function(_HomeAddressMapPicked) _then) = __$HomeAddressMapPickedCopyWithImpl;
 @useResult
 $Res call({
- String? label, double? latitude, double? longitude
+ String label, double latitude, double longitude
 });
 
 
@@ -486,21 +492,87 @@ $Res call({
 
 }
 /// @nodoc
-class __$HomeAddressSelectedCopyWithImpl<$Res>
-    implements _$HomeAddressSelectedCopyWith<$Res> {
-  __$HomeAddressSelectedCopyWithImpl(this._self, this._then);
+class __$HomeAddressMapPickedCopyWithImpl<$Res>
+    implements _$HomeAddressMapPickedCopyWith<$Res> {
+  __$HomeAddressMapPickedCopyWithImpl(this._self, this._then);
 
-  final _HomeAddressSelected _self;
-  final $Res Function(_HomeAddressSelected) _then;
+  final _HomeAddressMapPicked _self;
+  final $Res Function(_HomeAddressMapPicked) _then;
 
 /// Create a copy of ProfileEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? label = freezed,Object? latitude = freezed,Object? longitude = freezed,}) {
-  return _then(_HomeAddressSelected(
-label: freezed == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
-as String?,latitude: freezed == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
-as double?,longitude: freezed == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
-as double?,
+@pragma('vm:prefer-inline') $Res call({Object? label = null,Object? latitude = null,Object? longitude = null,}) {
+  return _then(_HomeAddressMapPicked(
+label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
+as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _HomeAddressLabelChanged implements ProfileEvent {
+  const _HomeAddressLabelChanged(this.label);
+  
+
+ final  String? label;
+
+/// Create a copy of ProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$HomeAddressLabelChangedCopyWith<_HomeAddressLabelChanged> get copyWith => __$HomeAddressLabelChangedCopyWithImpl<_HomeAddressLabelChanged>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeAddressLabelChanged&&(identical(other.label, label) || other.label == label));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,label);
+
+@override
+String toString() {
+  return 'ProfileEvent.homeAddressLabelChanged(label: $label)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$HomeAddressLabelChangedCopyWith<$Res> implements $ProfileEventCopyWith<$Res> {
+  factory _$HomeAddressLabelChangedCopyWith(_HomeAddressLabelChanged value, $Res Function(_HomeAddressLabelChanged) _then) = __$HomeAddressLabelChangedCopyWithImpl;
+@useResult
+$Res call({
+ String? label
+});
+
+
+
+
+}
+/// @nodoc
+class __$HomeAddressLabelChangedCopyWithImpl<$Res>
+    implements _$HomeAddressLabelChangedCopyWith<$Res> {
+  __$HomeAddressLabelChangedCopyWithImpl(this._self, this._then);
+
+  final _HomeAddressLabelChanged _self;
+  final $Res Function(_HomeAddressLabelChanged) _then;
+
+/// Create a copy of ProfileEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? label = freezed,}) {
+  return _then(_HomeAddressLabelChanged(
+freezed == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

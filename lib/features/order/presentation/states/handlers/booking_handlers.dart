@@ -371,16 +371,17 @@ extension _BookingHandlers on OrderBloc {
         );
       } else {
         printR(
-          '[Payment] sheet hard failure — clearing PI code=${e.error.code} msg=${e.error.localizedMessage}',
+          '[Payment] sheet hard failure — keeping PI for retry code=${e.error.code} msg=${e.error.localizedMessage}',
         );
-        // A hard Stripe failure likely means the PI is in a terminal state;
-        // clear pendingTripResponse so the next tap starts fresh.
+        // Keep pendingTripResponse so the user can reopen the sheet. The backend
+        // makes POST /trips idempotent (it returns the same AwaitingPayment trip
+        // with a freshly issued PaymentIntent when the quote is already used), so
+        // retrying is safe whether we re-present the cached intent or re-request.
         emit(
           state.copyWith(
             booking: state.booking.copyWith(
               tripRequestStatus: BlocStatus.failure(AppStrings.paymentFailed),
               paymentSheetState: const BlocStatus.initial(),
-              pendingTripResponse: null,
             ),
           ),
         );

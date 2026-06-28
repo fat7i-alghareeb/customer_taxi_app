@@ -19,7 +19,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<_NameSaved>(_onNameSaved);
     on<_EmailSaved>(_onEmailSaved);
     on<_PhotoSelected>(_onPhotoSelected);
-    on<_HomeAddressSelected>(_onHomeAddressSelected);
+    on<_HomeAddressMapPicked>(_onHomeAddressMapPicked);
+    on<_HomeAddressLabelChanged>(_onHomeAddressLabelChanged);
     on<_SaveRequested>(_onSaveRequested);
     on<_DeleteAccountRequested>(_onDeleteAccountRequested);
   }
@@ -61,8 +62,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(pendingPhoto: event.photo));
   }
 
-  void _onHomeAddressSelected(
-    _HomeAddressSelected event,
+  void _onHomeAddressMapPicked(
+    _HomeAddressMapPicked event,
     Emitter<ProfileState> emit,
   ) {
     emit(
@@ -71,6 +72,37 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         pendingHomeAddressLabel: event.label,
         pendingHomeAddressLatitude: event.latitude,
         pendingHomeAddressLongitude: event.longitude,
+      ),
+    );
+  }
+
+  void _onHomeAddressLabelChanged(
+    _HomeAddressLabelChanged event,
+    Emitter<ProfileState> emit,
+  ) {
+    final label = event.label?.trim();
+    final isEmpty = label == null || label.isEmpty;
+
+    // Empty label means the user cleared the field → drop the address entirely.
+    // Otherwise keep the coordinates already associated with this address (the
+    // pending map-picked point, falling back to the persisted user coords). This
+    // prevents a label-only edit — including the debounced re-fire that follows a
+    // programmatic map-pick update — from wiping the coordinates.
+    final latitude = isEmpty
+        ? null
+        : (state.pendingHomeAddressLatitude ??
+              state.currentUser?.homeAddressLatitude);
+    final longitude = isEmpty
+        ? null
+        : (state.pendingHomeAddressLongitude ??
+              state.currentUser?.homeAddressLongitude);
+
+    emit(
+      state.copyWith(
+        homeAddressTouched: true,
+        pendingHomeAddressLabel: isEmpty ? null : label,
+        pendingHomeAddressLatitude: latitude,
+        pendingHomeAddressLongitude: longitude,
       ),
     );
   }

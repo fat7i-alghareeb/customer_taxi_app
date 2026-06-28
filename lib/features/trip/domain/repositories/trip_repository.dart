@@ -32,6 +32,7 @@ abstract class TripRepository {
   Future<Result<PagedResult<TripSummaryEntity>>> getTripHistory({
     int page = 1,
     int pageSize = 20,
+    String? search,
   });
   Future<Result<TripReceiptEntity>> getTripReceipt(String id);
   Future<Result<TripInvoiceEntity>> getTripInvoice(String id);

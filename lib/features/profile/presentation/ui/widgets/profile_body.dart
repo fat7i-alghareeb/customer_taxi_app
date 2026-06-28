@@ -3,6 +3,7 @@ import 'package:customertaxi/core/services/session/auth_state_notifier.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
 import 'package:customertaxi/features/order/domain/entities/order_location_entity.dart';
 import 'package:customertaxi/features/order/presentation/ui/screens/location_picker_screen.dart';
+import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
 import '../../../../root/presentation/ui/screens/root_screen.dart';
 import '../../states/profile_bloc.dart';
 import '../../../constants/forms/profile_forms.dart';
@@ -151,8 +152,8 @@ class _ProfileBodyState extends State<ProfileBody> {
                         hintText: AppStrings.profileHomeAddressHint,
                         onChangedDebounced: (value, _) {
                           context.read<ProfileBloc>().add(
-                            ProfileEvent.homeAddressSelected(
-                              label: value.trim().isEmpty ? null : value.trim(),
+                            ProfileEvent.homeAddressLabelChanged(
+                              value.trim().isEmpty ? null : value.trim(),
                             ),
                           );
                         },
@@ -166,16 +167,34 @@ class _ProfileBodyState extends State<ProfileBody> {
                         borderRadius: AppRadii.lg,
                       ),
                       onTap: () async {
+                        // Re-open the map centered on the currently selected
+                        // point (if any) so the user can reposition it.
+                        final existingLat =
+                            state.pendingHomeAddressLatitude ??
+                            state.currentUser?.homeAddressLatitude;
+                        final existingLng =
+                            state.pendingHomeAddressLongitude ??
+                            state.currentUser?.homeAddressLongitude;
+                        final initialLocation =
+                            existingLat != null && existingLng != null
+                            ? RootMapLocationEntity(
+                                latitude: existingLat,
+                                longitude: existingLng,
+                                zoom: 16,
+                              )
+                            : null;
+
                         final location = await context
                             .pushNamed<OrderLocationEntity>(
                               LocationPickerScreen.pageName,
+                              extra: initialLocation,
                             );
                         if (location != null && context.mounted) {
                           _form
                               .control(ProfileForms.homeAddressField)
                               .updateValue(location.label);
                           context.read<ProfileBloc>().add(
-                            ProfileEvent.homeAddressSelected(
+                            ProfileEvent.homeAddressMapPicked(
                               label: location.label,
                               latitude: location.latitude,
                               longitude: location.longitude,
@@ -184,7 +203,13 @@ class _ProfileBodyState extends State<ProfileBody> {
                         }
                       },
                       child: AppButtonChild.icon(
-                        IconSource.faIcon(FontAwesomeIcons.mapLocationDot),
+                        IconSource.faIcon(
+                          (state.pendingHomeAddressLatitude ??
+                                      state.currentUser?.homeAddressLatitude) !=
+                                  null
+                              ? FontAwesomeIcons.locationCrosshairs
+                              : FontAwesomeIcons.mapLocationDot,
+                        ),
                       ),
                     ),
                   ],

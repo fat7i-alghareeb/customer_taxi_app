@@ -13,6 +13,7 @@ class TripEvent with _$TripEvent {
   }) = _CompensationClaimSubmitted;
   const factory TripEvent.stopPolling() = _StopPolling;
   const factory TripEvent.historyStarted() = _HistoryStarted;
+  const factory TripEvent.searchChanged(String query) = _SearchChanged;
   const factory TripEvent.nextPageRequested() = _NextPageRequested;
   const factory TripEvent.driverLocationUpdated(
     double latitude,

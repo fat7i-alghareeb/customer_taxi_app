@@ -47,7 +47,7 @@ enum TripStatus {
       TripStatus.completed => Colors.green,
       TripStatus.cancelled => context.error,
       TripStatus.awaitingPayment => AppColors.warning,
-      TripStatus.paymentFailed => AppColors.error,
+      TripStatus.paymentFailed => context.error,
       TripStatus.refunded => AppColors.success,
       TripStatus.unknown => Colors.grey,
     };

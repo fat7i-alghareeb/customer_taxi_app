@@ -52,8 +52,9 @@ class RootMapCanvasWidget extends StatelessWidget {
           markerId: const MarkerId('active-driver-vehicle'),
           position: LatLng(driverLocation!.latitude, driverLocation!.longitude),
           icon: driverMarkerIcon!,
-          rotation: driverLocation!.bearing ?? 0.0,
-          flat: true,
+          // The car is a side-view image kept upright on screen (default
+          // rotation 0 / flat false); heading is conveyed by horizontally
+          // flipping the icon (see ActiveTripBody), not by rotating the marker.
           anchor: const Offset(0.5, 0.5),
         ),
       );
