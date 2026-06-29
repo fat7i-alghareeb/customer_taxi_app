@@ -92,14 +92,14 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         width: 56.r,
         mirror: true,
       );
-      final aIcon = await MapMarkerGenerator.createCustomMarker(
-        text: 'A',
-        color: Colors.orange,
+      // Dot-in-ring markers (solid dot, transparent gap, colored ring) replace the
+      // old lettered A/B circles. Distinct colors keep pickup vs destination clear.
+      final pickupIcon = await MapMarkerGenerator.createDotRingMarker(
+        color: Colors.green,
         size: 45.r,
       );
-      final bIcon = await MapMarkerGenerator.createCustomMarker(
-        text: 'B',
-        color: Colors.blue,
+      final destinationIcon = await MapMarkerGenerator.createDotRingMarker(
+        color: Colors.orange,
         size: 45.r,
       );
 
@@ -107,8 +107,8 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         setState(() {
           _carMarkerIcon = carIcon;
           _carMarkerIconFlipped = carIconFlipped;
-          _pickupMarkerIcon = aIcon;
-          _destinationMarkerIcon = bIcon;
+          _pickupMarkerIcon = pickupIcon;
+          _destinationMarkerIcon = destinationIcon;
         });
         printG('[ActiveTripBody] custom markers loaded');
       }
@@ -282,13 +282,16 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     }
   }
 
-  /// Applies the road-following driver→pickup route delivered (already road-snapped)
-  /// in the backend location payload. Decodes only when the encoded string changes,
-  /// and clears the route once the driver is no longer heading to pickup.
+  /// Applies the road-following driver→target route delivered (already road-snapped)
+  /// in the backend location payload. The target is the pickup while heading there
+  /// (en-route / arrived) and the destination once on board (in-progress). Decodes
+  /// only when the encoded string changes, and clears the route for any other status.
   void _applyPickupRoute(TripStatus status, String? encoded) {
-    final headingToPickup =
-        status == TripStatus.enRoute || status == TripStatus.arrived;
-    if (!headingToPickup || encoded == null || encoded.isEmpty) {
+    final hasLiveTarget =
+        status == TripStatus.enRoute ||
+        status == TripStatus.arrived ||
+        status == TripStatus.inProgress;
+    if (!hasLiveTarget || encoded == null || encoded.isEmpty) {
       if (_pickupRoute.isNotEmpty || _lastPickupPolyline != null) {
         setState(() {
           _pickupRoute = const <LatLng>[];
@@ -578,6 +581,31 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                   ? (_carMarkerIconFlipped ?? _carMarkerIcon)
                   : _carMarkerIcon;
 
+              // The live dashed "car → target" line tracks the pickup while the
+              // driver is heading there (en-route / arrived) and the destination
+              // once the passenger is on board (in-progress).
+              final bool headingToPickup =
+                  trip.status == TripStatus.enRoute ||
+                  trip.status == TripStatus.arrived;
+              final bool tripInProgress =
+                  trip.status == TripStatus.inProgress;
+              final LatLng? liveTargetLocation =
+                  headingToPickup && trip.stops.isNotEmpty
+                  ? LatLng(
+                      trip.stops.first.latitude,
+                      trip.stops.first.longitude,
+                    )
+                  : (tripInProgress && trip.stops.length > 1
+                        ? LatLng(
+                            trip.stops.last.latitude,
+                            trip.stops.last.longitude,
+                          )
+                        : null);
+              final List<LatLng> liveTargetRoute =
+                  (headingToPickup || tripInProgress)
+                  ? _pickupRoute
+                  : const <LatLng>[];
+
               return BlocProvider<ChatBloc>(
                 create: (_) =>
                     getIt<ChatBloc>()..add(ChatEvent.opened(trip.id)),
@@ -602,29 +630,19 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                       onMapCreated: (ctrl) => _onMapCreated(ctrl, trip),
                       driverLocation: renderPos?.toDriverLocation(renderBearing),
                       driverMarkerIcon: carMarkerIcon,
-                      // Draw the live car→pickup line only while the driver is
-                      // heading to the customer (en-route / arrived).
-                      pickupLocation:
-                          (trip.status == TripStatus.enRoute ||
-                                  trip.status == TripStatus.arrived) &&
-                              trip.stops.isNotEmpty
-                          ? LatLng(
-                              trip.stops.first.latitude,
-                              trip.stops.first.longitude,
-                            )
-                          : null,
-                      pickupRoute:
-                          (trip.status == TripStatus.enRoute ||
-                              trip.status == TripStatus.arrived)
-                          ? _pickupRoute
-                          : const <LatLng>[],
+                      // Live car→target dashed line: pickup while heading there
+                      // (en-route / arrived), destination once on board (in-progress).
+                      pickupLocation: liveTargetLocation,
+                      pickupRoute: liveTargetRoute,
                     ),
 
-                    // Top-left live driver-arrival badge — shown while the driver
-                    // is heading to pickup and a live ETA is available.
+                    // Top-left live arrival badge — shown whenever a live ETA is
+                    // available: arrival at pickup (en-route / arrived) or at the
+                    // destination (in-progress).
                     if (LiveArrival.hasEstimate(state.activeDriverLocation) &&
                         (trip.status == TripStatus.enRoute ||
-                            trip.status == TripStatus.arrived))
+                            trip.status == TripStatus.arrived ||
+                            trip.status == TripStatus.inProgress))
                       Positioned(
                         top: MediaQuery.of(context).padding.top + AppSpacing.sm.h,
                         left: AppSpacing.lg.w,
@@ -680,7 +698,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                                 cancelStatus: state.cancelStatus,
                                 driverLocation: state.activeDriverLocation,
                                 onCancelPressed: () =>
-                                    _showCancelDialog(context),
+                                    _showCancelDialog(context, trip),
                                 onCompensationPressed: () =>
                                     _showCompensationClaimDialog(context),
                               )
@@ -705,10 +723,10 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     );
   }
 
-  void _showCancelDialog(BuildContext context) {
+  void _showCancelDialog(BuildContext context, TripEntity trip) {
     printM('[ActiveTripBody] cancel sheet opened');
     unawaited(
-      CancelTripSheet.show(context).then((result) {
+      CancelTripSheet.show(context, trip).then((result) {
         if (result == null || !context.mounted) return;
         printM('[ActiveTripBody] cancel confirmed note=${result.note}');
         context.read<TripBloc>().add(

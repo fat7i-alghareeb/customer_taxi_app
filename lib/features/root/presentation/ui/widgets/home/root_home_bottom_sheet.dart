@@ -69,83 +69,95 @@ class RootHomeBottomSheet extends StatelessWidget {
                       ],
                     ),
                     AppSpacing.md.verticalSpace,
-                    AppButton.variant(
-                      variant: AppButtonVariant.grey,
-                      fill: AppButtonFill.solid,
-                      onTap: onSearchTap,
-                      layout: AppButtonLayout(
-                        shape: AppButtonShape.pill,
-                        height: RootConstants.headerPillHeight.sp,
-                        backgroundColor: context.surface,
-                        contentPadding: REdgeInsets.symmetric(
-                          horizontal: AppSpacing.lg,
-                          vertical: AppSpacing.sm,
-                        ),
+                    Container(
+                      height: RootConstants.headerPillHeight.sp,
+                      decoration: BoxDecoration(
+                        color: context.surface,
+                        borderRadius: BorderRadius.circular(999),
+                        boxShadow: context.shadows.grey,
                       ),
-                      customShadows: context.shadows.grey,
-                      child: AppButtonChild.custom(
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                AppStrings.whereTo,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.s14w600.copyWith(
-                                  color: context.onSurface.withValues(
-                                    alpha: 0.6,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: onSearchTap,
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                padding: REdgeInsets.only(
+                                  left: AppSpacing.lg,
+                                  top: AppSpacing.sm,
+                                  bottom: AppSpacing.sm,
+                                  right: AppSpacing.xs,
+                                ),
+                                child: Text(
+                                  AppStrings.whereTo,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.s14w600.copyWith(
+                                    color: context.onSurface.withValues(
+                                      alpha: 0.6,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                            AppSpacing.sm.horizontalSpace,
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: onLaterTap,
-                              child: Container(
-                                padding: REdgeInsets.symmetric(
-                                  horizontal: AppSpacing.sm,
-                                  vertical: AppSpacing.xs,
+                          ),
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: onLaterTap,
+                            child: Container(
+                              padding: REdgeInsets.symmetric(
+                                horizontal: AppSpacing.sm,
+                                vertical: AppSpacing.xs,
+                              ),
+                              decoration: BoxDecoration(
+                                color: context.primary.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(
+                                  AppRadii.xl.r,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: context.primary.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(
-                                    AppRadii.xl.r,
+                                border: Border.all(
+                                  color: context.primary.withValues(
+                                    alpha: 0.3,
                                   ),
-                                  border: Border.all(
-                                    color: context.primary.withValues(
-                                      alpha: 0.3,
-                                    ),
-                                    width: 1.r,
-                                  ),
+                                  width: 1.r,
                                 ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    FaIcon(
-                                      FontAwesomeIcons.clock,
-                                      size: 11.r,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  FaIcon(
+                                    FontAwesomeIcons.clock,
+                                    size: 11.r,
+                                    color: context.primary,
+                                  ),
+                                  AppSpacing.xs.horizontalSpace,
+                                  Text(
+                                    AppStrings.later,
+                                    style: AppTextStyles.s12w700.copyWith(
                                       color: context.primary,
                                     ),
-                                    AppSpacing.xs.horizontalSpace,
-                                    Text(
-                                      AppStrings.later,
-                                      style: AppTextStyles.s12w700.copyWith(
-                                        color: context.primary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
-                            AppSpacing.sm.horizontalSpace,
-                            FaIcon(
-                              FontAwesomeIcons.magnifyingGlass,
-                              size: 18.r,
-                              color: context.onSurface.withValues(alpha: 0.7),
+                          ),
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: onSearchTap,
+                            child: Container(
+                              padding: REdgeInsets.symmetric(
+                                horizontal: AppSpacing.lg,
+                                vertical: AppSpacing.sm,
+                              ),
+                              child: FaIcon(
+                                FontAwesomeIcons.magnifyingGlass,
+                                size: 18.r,
+                                color: context.onSurface.withValues(alpha: 0.7),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

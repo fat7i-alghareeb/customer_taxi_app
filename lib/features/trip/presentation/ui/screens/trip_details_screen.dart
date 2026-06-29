@@ -78,14 +78,22 @@ class _DetailsContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Chips row — exactly matches the Uber reference image
-          CompletedActionChips(tripId: trip.id),
+          // Chips row — only for completed (paid) trips
+          if (trip.status == TripStatus.completed)
+            CompletedActionChips(tripId: trip.id),
 
           // Rating section — CTA when unrated, given stars + edit when rated.
           if (trip.status == TripStatus.completed) ...[
             AppSpacing.lg.verticalSpace,
             _RatingSection(trip: trip),
           ],
+
+          if (trip.status == TripStatus.cancelled &&
+              trip.cancellation != null) ...[
+            AppSpacing.lg.verticalSpace,
+            _CancellationSection(trip: trip),
+          ],
+
           AppSpacing.xl.verticalSpace,
 
           // Stops timeline (pickup, intermediate, destination)
@@ -178,7 +186,9 @@ class _RatingSection extends StatelessWidget {
                 AppSpacing.md.horizontalSpace,
                 Text(
                   AppStrings.rateTripCta,
-                  style: AppTextStyles.s14w600.copyWith(color: colors.onPrimary),
+                  style: AppTextStyles.s14w600.copyWith(
+                    color: colors.onPrimary,
+                  ),
                 ),
               ],
             ),
@@ -262,7 +272,11 @@ class _DetailsMetaRow extends StatelessWidget {
     if (label.isEmpty) return const SizedBox.shrink();
     return Row(
       children: [
-        FaIcon(icon, size: 16.r, color: colors.onSurface.withValues(alpha: 0.6)),
+        FaIcon(
+          icon,
+          size: 16.r,
+          color: colors.onSurface.withValues(alpha: 0.6),
+        ),
         AppSpacing.md.horizontalSpace,
         Expanded(
           child: Text(
@@ -271,6 +285,108 @@ class _DetailsMetaRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _CancellationSection extends StatelessWidget {
+  const _CancellationSection({required this.trip});
+
+  final TripEntity trip;
+
+  static String _localizeReason(String reason) => switch (reason) {
+        'PassengerWithinOneHour' =>
+          AppStrings.cancellationReasonPassengerWithinOneHour,
+        'DriverLateClaim' => AppStrings.cancellationReasonDriverLateClaim,
+        'PassengerLate' => AppStrings.cancellationReasonPassengerLate,
+        'PassengerNoShow' => AppStrings.cancellationReasonPassengerNoShow,
+        'PassengerUnreachable' =>
+          AppStrings.cancellationReasonPassengerUnreachable,
+        'AdminOverride' => AppStrings.cancellationReasonAdminOverride,
+        'PassengerAfterOneHour' =>
+          AppStrings.cancellationReasonPassengerAfterOneHour,
+        'AirportWaitDeclined' =>
+          AppStrings.cancellationReasonAirportWaitDeclined,
+        'PassengerCancelledAfterArrival' =>
+          AppStrings.cancellationReasonPassengerCancelledAfterArrival,
+        _ => reason,
+      };
+
+  static String _localizeActor(String actor) => switch (actor) {
+        'Passenger' => AppStrings.cancellationActorPassenger,
+        'Driver' => AppStrings.cancellationActorDriver,
+        'Admin' => AppStrings.cancellationActorAdmin,
+        _ => actor,
+      };
+
+  static String? _localizeNote(String? note) {
+    if (note == null) return null;
+    return switch (note) {
+      'Driver too far or taking too long' =>
+        AppStrings.cancelReasonDriverTooLong,
+      'Booked by mistake' => AppStrings.cancelReasonBookedByMistake,
+      'Plans changed' => AppStrings.cancelReasonPlansChanged,
+      'Found another ride' => AppStrings.cancelReasonFoundAnother,
+      'Other' => AppStrings.cancelReasonOther,
+      _ => note,
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+    final cancel = trip.cancellation!;
+    final localizedNote = _localizeNote(cancel.note);
+
+    return Container(
+      padding: REdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: colors.error.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+        border: Border.all(color: colors.error.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              FaIcon(
+                FontAwesomeIcons.circleXmark,
+                size: 16.r,
+                color: colors.error,
+              ),
+              AppSpacing.md.horizontalSpace,
+              Text(
+                AppStrings.cancellationPolicyCancellationHeading,
+                style: AppTextStyles.s14w700.copyWith(color: colors.error),
+              ),
+            ],
+          ),
+          AppSpacing.sm.verticalSpace,
+          Text(
+            _localizeReason(cancel.reason),
+            style: AppTextStyles.s14w600.copyWith(
+              color: colors.onSurface.withValues(alpha: 0.8),
+            ),
+          ),
+          AppSpacing.xs.verticalSpace,
+          Text(
+            '${AppStrings.cancellationCancelledByLabel}: ${_localizeActor(cancel.actor)}',
+            style: AppTextStyles.s12w400.copyWith(
+              color: colors.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          if (localizedNote != null && localizedNote.isNotEmpty) ...[
+            AppSpacing.xs.verticalSpace,
+            Text(
+              localizedNote,
+              style: AppTextStyles.s12w400.copyWith(
+                color: colors.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

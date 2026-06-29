@@ -1,6 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import '../../../domain/entities/trip_entity.dart';
-import '../../../domain/entities/trip_status.dart';
 import 'trip_status_chip.dart';
 import '../screens/active_trip_screen.dart';
 import '../screens/trip_details_screen.dart';
@@ -18,14 +17,16 @@ class TripSummaryCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        side: BorderSide(color: context.colorScheme.outline.withValues(alpha: 0.1)),
+        side: BorderSide(
+          color: context.colorScheme.outline.withValues(alpha: 0.1),
+        ),
       ),
       child: InkWell(
         onTap: () {
           // Live trips → ActiveTripScreen (map + status sheet).
           // Completed trips → TripDetailsScreen (post-trip view with the
           // receipt / invoice chips, mirroring the Uber reference image).
-          final pageName = trip.status == TripStatus.completed
+          final pageName = trip.status.isTerminal
               ? TripDetailsScreen.pageName
               : ActiveTripScreen.pageName;
           context.pushNamed(pageName, extra: trip.id);
@@ -44,8 +45,7 @@ class TripSummaryCard extends StatelessWidget {
                 ],
               ),
               AppSpacing.sm.verticalSpace,
-              if (trip.scheduledAtUtc != null &&
-                  !trip.status.isTerminal) ...[
+              if (trip.scheduledAtUtc != null && !trip.status.isTerminal) ...[
                 Text(
                   AppStrings.tripScheduledFor.replaceAll(
                     '{time}',
@@ -75,7 +75,9 @@ class TripSummaryCard extends StatelessWidget {
                   ),
                   Text(
                     '${trip.quotedFare.toStringAsFixed(2)} ${trip.currencyCode}',
-                    style: AppTextStyles.s16w700.copyWith(color: context.primary),
+                    style: AppTextStyles.s16w700.copyWith(
+                      color: context.primary,
+                    ),
                   ),
                 ],
               ),

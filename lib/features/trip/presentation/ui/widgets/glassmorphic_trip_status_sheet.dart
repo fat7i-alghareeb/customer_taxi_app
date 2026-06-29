@@ -41,9 +41,12 @@ class _GlassmorphicTripStatusSheetState
   Timer? _waitingTicker;
   // Ensures the post-trip rating sheet is only auto-shown once.
   bool _ratingPrompted = false;
-  // Farthest driver→pickup distance seen this en-route session, used as the
-  // baseline so the arrival header's car reflects real journey progress.
+  // Farthest driver→target distance seen for the current tracking leg, used as
+  // the baseline so the arrival header's car reflects real journey progress.
   int? _arrivalBaselineMeters;
+  // The status the current baseline belongs to. Lets us reset the baseline when
+  // the target switches (en-route → in-progress) so progress restarts cleanly.
+  TripStatus? _baselineStatus;
 
   TripEntity get trip => widget.trip;
   BlocStatus<void> get cancelStatus => widget.cancelStatus;
@@ -85,13 +88,23 @@ class _GlassmorphicTripStatusSheetState
     }
   }
 
-  /// Tracks the farthest driver→pickup distance observed while en-route so the
-  /// arrival header can show progress as `(baseline - remaining) / baseline`.
-  /// Resets once the driver is no longer heading to the pickup.
+  /// Tracks the farthest driver→target distance observed for the current leg so
+  /// the arrival header can show progress as `(baseline - remaining) / baseline`.
+  /// The target is the pickup while en-route and the destination while in-progress;
+  /// the baseline resets when leaving those states or when the target switches
+  /// (en-route → in-progress) so progress restarts from the new, farther target.
   void _syncArrivalBaseline() {
-    if (trip.status != TripStatus.enRoute) {
+    final tracksTarget =
+        trip.status == TripStatus.enRoute ||
+        trip.status == TripStatus.inProgress;
+    if (!tracksTarget) {
       _arrivalBaselineMeters = null;
+      _baselineStatus = null;
       return;
+    }
+    if (_baselineStatus != trip.status) {
+      _baselineStatus = trip.status;
+      _arrivalBaselineMeters = null;
     }
     final remaining = driverLocation?.distanceToPickupMeters;
     if (remaining == null) return;
@@ -186,9 +199,13 @@ class _GlassmorphicTripStatusSheetState
     );
   }
 
-  Widget _buildEnRouteSheet(BuildContext context) {
-    // Prefer the live driver-arrival ETA streamed from the driver's moving
-    // position; fall back to the trip's static pickup ETA when unavailable.
+  /// The real-time arrival header — "Arrival in / N min / dashed line with a
+  /// live-progress car / distance • arrival clock" — shared by the en-route sheet
+  /// (driver → pickup) and the in-progress sheet (car → destination). The live
+  /// fields carry pickup- or destination-relative values depending on status.
+  Widget _buildArrivalProgressHeader() {
+    // Prefer the live ETA streamed from the moving position; fall back to the
+    // trip's static pickup ETA when unavailable.
     final int? liveEtaSeconds = driverLocation?.etaToPickupSeconds;
     final int minutes = liveEtaSeconds != null
         ? LiveArrival.minutes(liveEtaSeconds)
@@ -199,7 +216,7 @@ class _GlassmorphicTripStatusSheetState
               : 5);
 
     // Distance-based journey progress: the share of the farthest-seen distance
-    // the driver has already covered. Positions the car on the dashed line.
+    // already covered. Positions the car on the dashed line.
     final int? remainingMeters = driverLocation?.distanceToPickupMeters;
     final int? baseline = _arrivalBaselineMeters;
     final double progress =
@@ -207,18 +224,21 @@ class _GlassmorphicTripStatusSheetState
         ? ((baseline - remainingMeters) / baseline).clamp(0.0, 1.0)
         : 0.0;
 
+    return LiveArrivalProgressHeader(
+      minutes: minutes,
+      progress: progress,
+      distanceMeters: remainingMeters,
+      etaSeconds: liveEtaSeconds,
+    );
+  }
+
+  Widget _buildEnRouteSheet(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Real-time arrival header: "Arrival in / N min / dashed line with a
-        // live-progress car / distance • arrival clock". Replaces the old title
-        // row, ETA pill, distance row and vehicle card for this status.
-        LiveArrivalProgressHeader(
-          minutes: minutes,
-          progress: progress,
-          distanceMeters: remainingMeters,
-          etaSeconds: liveEtaSeconds,
-        ),
+        // Real-time arrival header. Replaces the old title row, ETA pill,
+        // distance row and vehicle card for this status.
+        _buildArrivalProgressHeader(),
         AppSpacing.xl.verticalSpace,
 
         // Cancel button
@@ -456,6 +476,12 @@ class _GlassmorphicTripStatusSheetState
             ),
           ],
         ),
+        AppSpacing.lg.verticalSpace,
+
+        // Real-time progress toward the destination — same card as en-route, now
+        // tracking the trip itself (car → destination) rather than the driver's
+        // arrival at pickup. Sits above the safety options.
+        _buildArrivalProgressHeader(),
         AppSpacing.lg.verticalSpace,
 
         // Safety panel — only while the passenger is in the car with the

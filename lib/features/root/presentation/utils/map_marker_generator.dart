@@ -101,6 +101,54 @@ class MapMarkerGenerator {
     return BitmapDescriptor.bytes(uint8List);
   }
 
+  /// Builds a "dot-in-ring" marker: a solid centre dot, a transparent gap, then a
+  /// solid colored border ring — used for the pickup/destination points instead of
+  /// the lettered A/B circles. [color] tints both the dot and the ring so pickup and
+  /// destination stay distinguishable by color.
+  static Future<BitmapDescriptor> createDotRingMarker({
+    required Color color,
+    double size = 45,
+  }) async {
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    final double radius = size / 2;
+    final Offset center = Offset(radius, radius);
+
+    // Geometry: outer ring sits a little in from the edge to leave room for the
+    // shadow; the dot is centred with a transparent gap between it and the ring.
+    final double ringRadius = radius - (size * 0.14);
+    final double ringStroke = size * 0.11;
+    final double dotRadius = size * 0.16;
+
+    // 1. Soft drop shadow under the ring.
+    final Paint shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.22)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
+    canvas.drawCircle(center.translate(0, 3), ringRadius, shadowPaint);
+
+    // 2. Outer border ring (stroke only — the interior stays transparent).
+    final Paint ringPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = ringStroke;
+    canvas.drawCircle(center, ringRadius, ringPaint);
+
+    // 3. Solid centre dot.
+    final Paint dotPaint = Paint()..color = color;
+    canvas.drawCircle(center, dotRadius, dotPaint);
+
+    final ui.Image image = await pictureRecorder.endRecording().toImage(
+      size.toInt(),
+      size.toInt(),
+    );
+    final ByteData? byteData = await image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+    final Uint8List uint8List = byteData!.buffer.asUint8List();
+
+    return BitmapDescriptor.bytes(uint8List);
+  }
+
   static Future<BitmapDescriptor> createLabelMarker({
     required String text,
     required Color color,

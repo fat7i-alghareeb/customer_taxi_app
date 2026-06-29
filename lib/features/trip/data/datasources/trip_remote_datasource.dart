@@ -67,10 +67,11 @@ class TripRemoteDataSource {
   Future<TripModel> cancelTrip(String id, {String? note}) {
     return rethrowAsAppException(() async {
       printY('[TripRemoteDataSource] cancelTrip id=$id note=$note');
+      // The server recomputes the policy reason/refund from trip timing; the
+      // passenger's own reason is carried as a free-text note only.
       final res = await _dio.post<dynamic>(
         ApiEndpoints.cancelTrip(id),
         data: {
-          'reason': 'PassengerWithinOneHour',
           'note': (note == null || note.trim().isEmpty)
               ? 'Passenger requested cancellation from customer app'
               : note.trim(),

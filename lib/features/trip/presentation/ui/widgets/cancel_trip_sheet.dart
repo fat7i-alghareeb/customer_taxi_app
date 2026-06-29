@@ -1,4 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 
 /// Result of the cancel sheet. Returned only when the rider confirms the
 /// cancellation; [note] is the (optional) reason, or null when none was picked.
@@ -19,18 +21,20 @@ class _CancelReason {
   final String label;
 }
 
-/// Lightweight cancel sheet shown whenever the rider cancels a trip. Cancelling
-/// is free (full refund within the policy window), so the reason is **optional**
-/// — the confirm button is always enabled.
+/// Lightweight cancel sheet shown whenever the rider cancels a trip.
+/// Displays a contextual banner showing the actual refund outcome for the
+/// current trip state before asking the rider to confirm.
 class CancelTripSheet extends StatefulWidget {
-  const CancelTripSheet({super.key});
+  const CancelTripSheet({super.key, required this.trip});
 
-  static Future<CancelTripResult?> show(BuildContext context) {
+  final TripEntity trip;
+
+  static Future<CancelTripResult?> show(BuildContext context, TripEntity trip) {
     return AppBottomSheet.show<CancelTripResult>(
       context,
       sheet: AppBottomSheet.basic(
         title: AppStrings.cancelSheetTitle,
-        child: const CancelTripSheet(),
+        child: CancelTripSheet(trip: trip),
       ),
     );
   }
@@ -44,6 +48,8 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
 
   final TextEditingController _otherController = TextEditingController();
   String? _selectedKey;
+
+  TripEntity get _trip => widget.trip;
 
   List<_CancelReason> _reasons() => [
     _CancelReason(
@@ -86,6 +92,19 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
     Navigator.pop(context, CancelTripResult(note));
   }
 
+  /// Returns true if the passenger is still inside the free cancellation window.
+  /// Mirrors CancellationPolicy.IsWithinFreeWindow on the backend.
+  static bool _isWithinFreeWindow(TripEntity trip) {
+    final now = DateTime.now().toUtc();
+    final booking = trip.createdAtUtc.toUtc();
+    if (now.isBefore(booking.add(const Duration(hours: 1)))) return true;
+    final scheduled = trip.scheduledAtUtc?.toUtc();
+    if (scheduled != null) {
+      return now.isBefore(scheduled.subtract(const Duration(hours: 1)));
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
@@ -94,7 +113,9 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Free-cancellation / full-refund reassurance.
+        _RefundBanner(trip: _trip),
+        AppSpacing.md.verticalSpace,
+        // Static policy note (free window + arrived fee + after-window rule).
         Container(
           padding: REdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
@@ -165,6 +186,86 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// Contextual banner showing the actual refund outcome for the current trip state.
+class _RefundBanner extends StatelessWidget {
+  const _RefundBanner({required this.trip});
+
+  final TripEntity trip;
+
+  @override
+  Widget build(BuildContext context) {
+    final isArrived = trip.status == TripStatus.arrived;
+    final isWithinWindow = _CancelTripSheetState._isWithinFreeWindow(trip);
+
+    if (isArrived) {
+      const fee = 6.50;
+      final refund = (trip.quotedFare - fee).clamp(0.0, double.infinity);
+      final color = context.colorScheme.error;
+      return _BannerTile(
+        icon: FaIcon(FontAwesomeIcons.triangleExclamation, size: 16.r, color: color),
+        color: color,
+        text: AppStrings.cancelBannerArrived
+            .replaceAll('{amount}', refund.toStringAsFixed(2))
+            .replaceAll('{currency}', trip.currencyCode),
+      );
+    } else if (isWithinWindow) {
+      const color = Color(0xFF2E7D32);
+      return _BannerTile(
+        icon: FaIcon(FontAwesomeIcons.circleCheck, size: 16.r, color: color),
+        color: color,
+        text: AppStrings.cancelBannerFreeWindow,
+      );
+    } else {
+      const color = Color(0xFFE65100);
+      return _BannerTile(
+        icon: FaIcon(FontAwesomeIcons.triangleExclamation, size: 16.r, color: color),
+        color: color,
+        text: AppStrings.cancelBannerAfterWindow,
+      );
+    }
+  }
+}
+
+class _BannerTile extends StatelessWidget {
+  const _BannerTile({
+    required this.icon,
+    required this.color,
+    required this.text,
+  });
+
+  final Widget icon;
+  final Color color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: REdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(AppRadii.md.r),
+        border: Border.all(color: color.withValues(alpha: 0.30)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: REdgeInsets.only(top: 2),
+            child: icon,
+          ),
+          AppSpacing.md.horizontalSpace,
+          Expanded(
+            child: Text(
+              text,
+              style: AppTextStyles.s14w500.copyWith(color: color),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
