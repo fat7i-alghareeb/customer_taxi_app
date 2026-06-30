@@ -144,6 +144,14 @@ flutter run
 
 ---
 
+## Refund issue flow
+
+Cancelled trip details include a refund review entry point. The customer app submits refund issues to the backend as support records only; it does not create Stripe refunds, retry refunds, expose Stripe identifiers, or use WhatsApp as the source of truth. WhatsApp can be opened only after the backend review request is saved.
+
+The passenger app also listens for the backend `RefundLifecycleChanged` SignalR event on related trip/user groups. This keeps the client aligned with backend refund state without exposing Stripe identifiers or raw Stripe errors to customers.
+
+---
+
 ## Documentation map
 
 | Document                                                                                                               | What it covers                                                        |

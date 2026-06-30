@@ -4,6 +4,7 @@ import '../../../domain/entities/trip_entity.dart';
 import '../../../domain/entities/trip_status.dart';
 import '../../states/trip_bloc.dart';
 import '../widgets/completed_action_chips.dart';
+import '../widgets/refund/cancelled_trip_refund_section.dart';
 import '../widgets/trip_fare_summary_card.dart';
 import '../widgets/trip_rating_sheet.dart';
 import '../widgets/trip_stops_timeline.dart';
@@ -92,6 +93,8 @@ class _DetailsContent extends StatelessWidget {
               trip.cancellation != null) ...[
             AppSpacing.lg.verticalSpace,
             _CancellationSection(trip: trip),
+            AppSpacing.lg.verticalSpace,
+            CancelledTripRefundSection(trip: trip),
           ],
 
           AppSpacing.xl.verticalSpace,
@@ -295,29 +298,27 @@ class _CancellationSection extends StatelessWidget {
   final TripEntity trip;
 
   static String _localizeReason(String reason) => switch (reason) {
-        'PassengerWithinOneHour' =>
-          AppStrings.cancellationReasonPassengerWithinOneHour,
-        'DriverLateClaim' => AppStrings.cancellationReasonDriverLateClaim,
-        'PassengerLate' => AppStrings.cancellationReasonPassengerLate,
-        'PassengerNoShow' => AppStrings.cancellationReasonPassengerNoShow,
-        'PassengerUnreachable' =>
-          AppStrings.cancellationReasonPassengerUnreachable,
-        'AdminOverride' => AppStrings.cancellationReasonAdminOverride,
-        'PassengerAfterOneHour' =>
-          AppStrings.cancellationReasonPassengerAfterOneHour,
-        'AirportWaitDeclined' =>
-          AppStrings.cancellationReasonAirportWaitDeclined,
-        'PassengerCancelledAfterArrival' =>
-          AppStrings.cancellationReasonPassengerCancelledAfterArrival,
-        _ => reason,
-      };
+    'PassengerWithinOneHour' =>
+      AppStrings.cancellationReasonPassengerWithinOneHour,
+    'DriverLateClaim' => AppStrings.cancellationReasonDriverLateClaim,
+    'PassengerLate' => AppStrings.cancellationReasonPassengerLate,
+    'PassengerNoShow' => AppStrings.cancellationReasonPassengerNoShow,
+    'PassengerUnreachable' => AppStrings.cancellationReasonPassengerUnreachable,
+    'AdminOverride' => AppStrings.cancellationReasonAdminOverride,
+    'PassengerAfterOneHour' =>
+      AppStrings.cancellationReasonPassengerAfterOneHour,
+    'AirportWaitDeclined' => AppStrings.cancellationReasonAirportWaitDeclined,
+    'PassengerCancelledAfterArrival' =>
+      AppStrings.cancellationReasonPassengerCancelledAfterArrival,
+    _ => reason,
+  };
 
   static String _localizeActor(String actor) => switch (actor) {
-        'Passenger' => AppStrings.cancellationActorPassenger,
-        'Driver' => AppStrings.cancellationActorDriver,
-        'Admin' => AppStrings.cancellationActorAdmin,
-        _ => actor,
-      };
+    'Passenger' => AppStrings.cancellationActorPassenger,
+    'Driver' => AppStrings.cancellationActorDriver,
+    'Admin' => AppStrings.cancellationActorAdmin,
+    _ => actor,
+  };
 
   static String? _localizeNote(String? note) {
     if (note == null) return null;

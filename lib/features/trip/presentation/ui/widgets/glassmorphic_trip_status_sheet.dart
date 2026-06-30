@@ -4,15 +4,19 @@ import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
 import 'package:customertaxi/features/trip/presentation/coordinators/trip_completion_coordinator.dart';
-import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/completed_action_chips.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_fare_summary_card.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_stops_timeline.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_rating_sheet.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/in_trip_safety_panel.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_overlay.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_progress_header.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_accepted_status_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_arrived_status_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_completed_status_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_en_route_status_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_general_status_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_in_progress_status_sheet.dart';
 
+/// Glassmorphic bottom sheet shown over the active-trip map. Owns the
+/// real-time bookkeeping shared across statuses (arrival distance baseline,
+/// the arrived-sheet handoff timer, the waiting-time ticker, and the one-shot
+/// rating prompt) and dispatches to the per-status sheet widget.
 class GlassmorphicTripStatusSheet extends StatefulWidget {
   const GlassmorphicTripStatusSheet({
     required this.trip,
@@ -36,11 +40,16 @@ class GlassmorphicTripStatusSheet extends StatefulWidget {
 
 class _GlassmorphicTripStatusSheetState
     extends State<GlassmorphicTripStatusSheet> {
-  // Drives the 1-second rebuilds for the live waiting countdown while the
-  // driver is waiting at pickup.
-  Timer? _waitingTicker;
   // Ensures the post-trip rating sheet is only auto-shown once.
   bool _ratingPrompted = false;
+  // Drives the 1-second rebuilds for the live waiting countdown once the arrived
+  // sheet is showing (phase B).
+  Timer? _waitingTicker;
+  // Arrived shows the completed stepper for a couple of seconds (the "handoff")
+  // before swapping to the dedicated arrived sheet. This flag flips when that
+  // brief replay is over.
+  bool _arrivedHandoffDone = false;
+  Timer? _arrivedHandoffTimer;
   // Farthest driver→target distance seen for the current tracking leg, used as
   // the baseline so the arrival header's car reflects real journey progress.
   int? _arrivalBaselineMeters;
@@ -57,6 +66,7 @@ class _GlassmorphicTripStatusSheetState
   @override
   void initState() {
     super.initState();
+    _syncArrivedHandoff();
     _syncWaitingTicker();
     _syncArrivalBaseline();
     _maybePromptRating();
@@ -65,6 +75,7 @@ class _GlassmorphicTripStatusSheetState
   @override
   void didUpdateWidget(covariant GlassmorphicTripStatusSheet oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _syncArrivedHandoff();
     _syncWaitingTicker();
     _syncArrivalBaseline();
     _maybePromptRating();
@@ -73,11 +84,45 @@ class _GlassmorphicTripStatusSheetState
   @override
   void dispose() {
     _waitingTicker?.cancel();
+    _arrivedHandoffTimer?.cancel();
     super.dispose();
   }
 
+  /// Holds the completed stepper on screen for a beat when the driver arrives,
+  /// then flips to the dedicated arrived sheet. A trip re-opened while already
+  /// arrived (stale `arrivedAtUtc`) skips the replay and lands on the sheet.
+  void _syncArrivedHandoff() {
+    if (trip.status != TripStatus.arrived) {
+      _arrivedHandoffTimer?.cancel();
+      _arrivedHandoffTimer = null;
+      _arrivedHandoffDone = false;
+      return;
+    }
+    if (_arrivedHandoffDone || _arrivedHandoffTimer != null) return;
+
+    final arrivedAt = trip.arrivedAtUtc;
+    final isFresh =
+        arrivedAt == null ||
+        DateTime.now().toUtc().difference(arrivedAt) <
+            const Duration(seconds: 6);
+    if (!isFresh) {
+      _arrivedHandoffDone = true;
+      return;
+    }
+    _arrivedHandoffTimer = Timer(const Duration(milliseconds: 2500), () {
+      if (!mounted) return;
+      setState(() => _arrivedHandoffDone = true);
+      // didUpdateWidget won't fire for this internal setState, so kick the
+      // waiting-counter ticker on directly.
+      _syncWaitingTicker();
+    });
+  }
+
+  /// 1-second rebuilds that keep the waiting-time counter live — only once the
+  /// arrived sheet (phase B) is actually showing.
   void _syncWaitingTicker() {
-    final needsTicker = trip.status == TripStatus.arrived;
+    final needsTicker =
+        trip.status == TripStatus.arrived && _arrivedHandoffDone;
     if (needsTicker && _waitingTicker == null) {
       _waitingTicker = Timer.periodic(const Duration(seconds: 1), (_) {
         if (mounted) setState(() {});
@@ -127,14 +172,37 @@ class _GlassmorphicTripStatusSheetState
     });
   }
 
-  Future<void> _refreshActiveTripGate() async {
-    await getIt<ActiveTripCubit>().refresh();
-  }
+  /// The real-time arrival header — "Arrival in / N min / dashed line with a
+  /// live-progress car / distance • arrival clock" — shared by the en-route sheet
+  /// (driver → pickup) and the in-progress sheet (car → destination). The live
+  /// fields carry pickup- or destination-relative values depending on status.
+  Widget _buildArrivalProgressHeader() {
+    // Prefer the live ETA streamed from the moving position; fall back to the
+    // trip's static pickup ETA when unavailable.
+    final int? liveEtaSeconds = driverLocation?.etaToPickupSeconds;
+    final int minutes = liveEtaSeconds != null
+        ? LiveArrival.minutes(liveEtaSeconds)
+        : (trip.etaToPickup != null
+              ? (trip.etaToPickup!.difference(DateTime.now()).inMinutes > 0
+                    ? trip.etaToPickup!.difference(DateTime.now()).inMinutes
+                    : 1)
+              : 5);
 
-  Future<void> _clearActiveTripGate() async {
-    final cubit = getIt<ActiveTripCubit>();
-    cubit.clear();
-    await cubit.refresh();
+    // Distance-based journey progress: the share of the farthest-seen distance
+    // already covered. Positions the car on the dashed line.
+    final int? remainingMeters = driverLocation?.distanceToPickupMeters;
+    final int? baseline = _arrivalBaselineMeters;
+    final double progress =
+        (baseline != null && baseline > 0 && remainingMeters != null)
+        ? ((baseline - remainingMeters) / baseline).clamp(0.0, 1.0)
+        : 0.0;
+
+    return LiveArrivalProgressHeader(
+      minutes: minutes,
+      progress: progress,
+      distanceMeters: remainingMeters,
+      etaSeconds: liveEtaSeconds,
+    );
   }
 
   @override
@@ -179,479 +247,52 @@ class _GlassmorphicTripStatusSheetState
               ),
               AppSpacing.md.verticalSpace,
 
-              // Glassmorphic status specific cards builder
-              if (trip.status == TripStatus.enRoute) ...[
-                _buildEnRouteSheet(context),
+              // Status-specific sheet content.
+              if (trip.status == TripStatus.accepted) ...[
+                TripAcceptedStatusSheet(
+                  trip: trip,
+                  cancelStatus: cancelStatus,
+                  onCancelPressed: onCancelPressed,
+                ),
+              ] else if (trip.status == TripStatus.enRoute) ...[
+                TripEnRouteStatusSheet(
+                  trip: trip,
+                  cancelStatus: cancelStatus,
+                  onCancelPressed: onCancelPressed,
+                  arrivalProgressHeader: _buildArrivalProgressHeader(),
+                ),
               ] else if (trip.status == TripStatus.arrived) ...[
-                _buildArrivedSheet(context),
+                if (_arrivedHandoffDone)
+                  TripArrivedStatusSheet(
+                    trip: trip,
+                    cancelStatus: cancelStatus,
+                    onCancelPressed: onCancelPressed,
+                    onCompensationPressed: onCompensationPressed,
+                  )
+                else
+                  TripEnRouteStatusSheet(
+                    trip: trip,
+                    cancelStatus: cancelStatus,
+                    onCancelPressed: onCancelPressed,
+                  ),
               ] else if (trip.status == TripStatus.inProgress) ...[
-                _buildInProgressSheet(context),
+                TripInProgressStatusSheet(
+                  trip: trip,
+                  arrivalProgressHeader: _buildArrivalProgressHeader(),
+                ),
               ] else if (trip.status == TripStatus.completed) ...[
-                _buildCompletedSheet(context),
+                TripCompletedStatusSheet(trip: trip),
               ] else ...[
                 // Default fallback
-                _buildGeneralSheet(context),
+                TripGeneralStatusSheet(
+                  trip: trip,
+                  cancelStatus: cancelStatus,
+                  onCancelPressed: onCancelPressed,
+                ),
               ],
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  /// The real-time arrival header — "Arrival in / N min / dashed line with a
-  /// live-progress car / distance • arrival clock" — shared by the en-route sheet
-  /// (driver → pickup) and the in-progress sheet (car → destination). The live
-  /// fields carry pickup- or destination-relative values depending on status.
-  Widget _buildArrivalProgressHeader() {
-    // Prefer the live ETA streamed from the moving position; fall back to the
-    // trip's static pickup ETA when unavailable.
-    final int? liveEtaSeconds = driverLocation?.etaToPickupSeconds;
-    final int minutes = liveEtaSeconds != null
-        ? LiveArrival.minutes(liveEtaSeconds)
-        : (trip.etaToPickup != null
-              ? (trip.etaToPickup!.difference(DateTime.now()).inMinutes > 0
-                    ? trip.etaToPickup!.difference(DateTime.now()).inMinutes
-                    : 1)
-              : 5);
-
-    // Distance-based journey progress: the share of the farthest-seen distance
-    // already covered. Positions the car on the dashed line.
-    final int? remainingMeters = driverLocation?.distanceToPickupMeters;
-    final int? baseline = _arrivalBaselineMeters;
-    final double progress =
-        (baseline != null && baseline > 0 && remainingMeters != null)
-        ? ((baseline - remainingMeters) / baseline).clamp(0.0, 1.0)
-        : 0.0;
-
-    return LiveArrivalProgressHeader(
-      minutes: minutes,
-      progress: progress,
-      distanceMeters: remainingMeters,
-      etaSeconds: liveEtaSeconds,
-    );
-  }
-
-  Widget _buildEnRouteSheet(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Real-time arrival header. Replaces the old title row, ETA pill,
-        // distance row and vehicle card for this status.
-        _buildArrivalProgressHeader(),
-        AppSpacing.xl.verticalSpace,
-
-        // Cancel button
-        AppButton.outline(
-          variant: AppButtonVariant.error,
-          isLoading: cancelStatus.isLoading,
-          onTap: onCancelPressed,
-          child: AppButtonChild.label(AppStrings.activeTripCancelRide),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildArrivedSheet(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Prominent glowing green highlight banner
-        Container(
-          padding: REdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: AppColors.success.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            border: Border.all(
-              color: AppColors.success.withValues(alpha: 0.3),
-              width: 1.r,
-            ),
-          ),
-          child: Row(
-            children: [
-              FaIcon(
-                FontAwesomeIcons.solidCircleCheck,
-                color: AppColors.success,
-                size: 28.r,
-              ).animate().scale(duration: 400.ms),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppStrings.tripStatusDriverArrived,
-                      style: AppTextStyles.s14w700.copyWith(
-                        color: AppColors.success,
-                      ),
-                    ),
-                    AppSpacing.xs.verticalSpace,
-                    Text(
-                      AppStrings.activeTripDriverOutside,
-                      style: AppTextStyles.s16w700.copyWith(
-                        color: colors.onSurface,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        AppSpacing.lg.verticalSpace,
-
-        // Live "board within 10 minutes" countdown + accruing waiting fee.
-        _buildWaitingCountdown(context),
-
-        // Vehicle info
-        _buildVehicleCard(context),
-        AppSpacing.xl.verticalSpace,
-
-        // Cancel button
-        AppButton.outline(
-          variant: AppButtonVariant.error,
-          isLoading: cancelStatus.isLoading,
-          onTap: onCancelPressed,
-          child: AppButtonChild.label(AppStrings.activeTripCancelRide),
-        ),
-
-        // Late-driver compensation claim (policy: >20 min late => 5% back).
-        AppSpacing.sm.verticalSpace,
-        Center(
-          child: TextButton(
-            onPressed: onCompensationPressed,
-            child: Text(AppStrings.activeTripReportDriverLate),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// Shows the 10-minute boarding countdown after the driver arrives. Once the
-  /// free grace window elapses, it switches to the accruing per-minute fee.
-  Widget _buildWaitingCountdown(BuildContext context) {
-    final colors = context.colorScheme;
-    final session = trip.activeWaitingSession;
-    final startUtc = session?.startedAtUtc ?? trip.arrivedAtUtc;
-    if (startUtc == null) return const SizedBox.shrink();
-
-    final graceMinutes = session?.graceMinutes ?? 10;
-    final ratePerMinute = session?.ratePerMinute ?? 0;
-    final now = DateTime.now();
-
-    final Widget content;
-    final Color tint;
-    if (now.isBefore(startUtc)) {
-      // The driver arrived before the scheduled pickup time. Count down to the
-      // trip time rather than showing the boarding window — the free waiting
-      // window only begins at the scheduled time (startUtc).
-      final untilStart = startUtc.difference(now);
-      final mm = untilStart.inMinutes.remainder(60).toString().padLeft(2, '0');
-      final ss = untilStart.inSeconds.remainder(60).toString().padLeft(2, '0');
-      tint = colors.primary;
-      content = Row(
-        children: [
-          FaIcon(FontAwesomeIcons.solidClock, color: tint, size: 18.r),
-          AppSpacing.md.horizontalSpace,
-          Expanded(
-            child: Text(
-              AppStrings.tripScheduledStartsIn.replaceAll('{time}', '$mm:$ss'),
-              style: AppTextStyles.s14w700.copyWith(color: colors.onSurface),
-            ),
-          ),
-        ],
-      );
-    } else {
-      final elapsed = now.difference(startUtc);
-      final graceRemaining = Duration(minutes: graceMinutes) - elapsed;
-      if (graceRemaining > Duration.zero) {
-        final mm = graceRemaining.inMinutes
-            .remainder(60)
-            .toString()
-            .padLeft(2, '0');
-        final ss = graceRemaining.inSeconds
-            .remainder(60)
-            .toString()
-            .padLeft(2, '0');
-        tint = colors.primary;
-        content = Row(
-          children: [
-            FaIcon(FontAwesomeIcons.solidClock, color: tint, size: 18.r),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Text(
-                AppStrings.tripArrivedBoardWithin.replaceAll(
-                  '{time}',
-                  '$mm:$ss',
-                ),
-                style: AppTextStyles.s14w700.copyWith(color: colors.onSurface),
-              ),
-            ),
-          ],
-        );
-      } else {
-        final overdueSeconds = elapsed.inSeconds - graceMinutes * 60;
-        final billableMinutes = (overdueSeconds / 60).ceil();
-        final fee = billableMinutes * ratePerMinute;
-        final amount = '${fee.toStringAsFixed(2)} ${trip.currencyCode}';
-        tint = AppColors.warning;
-        content = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                FaIcon(
-                  FontAwesomeIcons.triangleExclamation,
-                  color: tint,
-                  size: 18.r,
-                ),
-                AppSpacing.md.horizontalSpace,
-                Expanded(
-                  child: Text(
-                    AppStrings.tripWaitingGraceOver,
-                    style: AppTextStyles.s12w500.copyWith(
-                      color: colors.onSurface,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            AppSpacing.xs.verticalSpace,
-            Text(
-              AppStrings.waitingLateMinutes.replaceAll(
-                '{minutes}',
-                billableMinutes.toString(),
-              ),
-              style: AppTextStyles.s14w700.copyWith(color: tint),
-            ),
-            AppSpacing.xs.verticalSpace,
-            Text(
-              AppStrings.tripWaitingFeeAccruing.replaceAll('{amount}', amount),
-              style: AppTextStyles.s16w700.copyWith(color: tint),
-            ),
-            AppSpacing.xs.verticalSpace,
-            Text(
-              AppStrings.waitingPayDriverNotice,
-              style: AppTextStyles.s12w500.copyWith(
-                color: colors.onSurface.withValues(alpha: 0.72),
-              ),
-            ),
-          ],
-        );
-      }
-    }
-
-    return Padding(
-      padding: REdgeInsets.only(bottom: AppSpacing.lg),
-      child: Container(
-        width: double.infinity,
-        padding: REdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: tint.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(AppRadii.lg.r),
-          border: Border.all(color: tint.withValues(alpha: 0.30), width: 1.r),
-        ),
-        child: content,
-      ),
-    );
-  }
-
-  Widget _buildInProgressSheet(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            FaIcon(FontAwesomeIcons.route, color: colors.primary, size: 24.r),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Text(
-                AppStrings.tripStatusInProgress,
-                style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.lg.verticalSpace,
-
-        // Real-time progress toward the destination — same card as en-route, now
-        // tracking the trip itself (car → destination) rather than the driver's
-        // arrival at pickup. Sits above the safety options.
-        _buildArrivalProgressHeader(),
-        AppSpacing.lg.verticalSpace,
-
-        // Safety panel — only while the passenger is in the car with the
-        // driver. Lives inside the sheet so it reads as a section, not a
-        // floating card.
-        Divider(
-          height: 1.h,
-          thickness: 1.r,
-          color: colors.onSurface.withValues(alpha: 0.08),
-        ),
-        AppSpacing.md.verticalSpace,
-        InTripSafetyPanel(tripId: trip.id),
-      ],
-    );
-  }
-
-  Widget _buildCompletedSheet(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Center(
-          child: FaIcon(
-            FontAwesomeIcons.circleCheck,
-            color: AppColors.success,
-            size: 48.r,
-          ),
-        ),
-        AppSpacing.md.verticalSpace,
-        Center(
-          child: Text(
-            AppStrings.tripStatusCompleted,
-            style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
-          ),
-        ),
-        AppSpacing.lg.verticalSpace,
-
-        // Uber-style receipt / invoice chips
-        CompletedActionChips(tripId: trip.id),
-        AppSpacing.lg.verticalSpace,
-
-        // Fare Summary Card
-        TripFareSummaryCard(
-          amount: trip.quotedFare,
-          currencyCode: trip.currencyCode,
-          referenceCode: trip.referenceCode,
-        ),
-        AppSpacing.xl.verticalSpace,
-
-        // Stops Timeline
-        if (trip.stops.isNotEmpty) ...[
-          TripStopsTimeline(stops: trip.stops),
-          AppSpacing.xl.verticalSpace,
-        ],
-
-        // Rate the trip (also auto-shown once on completion).
-        AppButton.outline(
-          onTap: () => showTripRatingSheet(
-            context,
-            tripId: trip.id,
-            onClosed: _refreshActiveTripGate,
-          ),
-          child: AppButtonChild.label(AppStrings.ratingTitle),
-        ),
-        AppSpacing.md.verticalSpace,
-
-        // Done button to route home (explicit dismiss — no auto-redirect)
-        AppButton.primaryGradient(
-          onTap: () async {
-            await _clearActiveTripGate();
-            if (context.mounted) context.goNamed('RootScreen');
-          },
-          child: AppButtonChild.label(AppStrings.done),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildGeneralSheet(BuildContext context) {
-    final colors = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            FaIcon(
-              FontAwesomeIcons.circleInfo,
-              color: colors.primary,
-              size: 24.r,
-            ),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Text(
-                trip.status.title,
-                style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.xl.verticalSpace,
-
-        if (trip.status.canCancel)
-          AppButton.outline(
-            variant: AppButtonVariant.error,
-            isLoading: cancelStatus.isLoading,
-            onTap: onCancelPressed,
-            child: AppButtonChild.label(AppStrings.activeTripCancelRide),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildVehicleCard(BuildContext context) {
-    final colors = context.colorScheme;
-    final vehicleType = trip.vehicleTypeName?.trim().isNotEmpty == true
-        ? trip.vehicleTypeName!.trim()
-        : AppStrings.carType;
-    final vehicleString = AppStrings.activeTripLookForCar.replaceAll(
-      '{type}',
-      vehicleType,
-    );
-
-    return Container(
-      padding: REdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: colors.onSurface.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        border: Border.all(
-          color: colors.onSurface.withValues(alpha: 0.06),
-          width: 1.r,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: REdgeInsets.all(AppSpacing.sm),
-            decoration: BoxDecoration(
-              color: colors.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: FaIcon(
-              FontAwesomeIcons.car,
-              color: colors.primary,
-              size: 24.r,
-            ),
-          ),
-          AppSpacing.md.horizontalSpace,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  vehicleType,
-                  style: AppTextStyles.s16w700.copyWith(
-                    color: colors.onSurface,
-                  ),
-                ),
-                AppSpacing.xs.verticalSpace,
-                Text(
-                  vehicleString,
-                  style: AppTextStyles.s12w400.copyWith(
-                    color: colors.onSurface.withValues(alpha: 0.65),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

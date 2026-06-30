@@ -9,16 +9,46 @@ class AppStrings {
   static String get activeTripArrivalInLabel => 'activeTripArrivalInLabel'.tr();
   /// Arrival - الوصول - Aankomst - Ankunft - Przyjazd - Прибуття - Arrivée - Llegada - Sosire
   static String get activeTripArrivalLabel => 'activeTripArrivalLabel'.tr();
+  /// Booked at {time} - تم الحجز الساعة {time} - Geboekt om {time} - Gebucht um {time} - Zarezerwowano o {time} - Заброньовано о {time} - Réservé à {time} - Reservado a las {time} - Rezervat la {time}
+  static String get activeTripBookedAt => 'activeTripBookedAt'.tr();
   /// Cancel Ride - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulați cursa
   static String get activeTripCancelRide => 'activeTripCancelRide'.tr();
+  /// confirmed - مؤكدة - bevestigd - bestätigt - potwierdzona - підтверджено - confirmé - confirmado - confirmată
+  static String get activeTripConfirmedKeyword => 'activeTripConfirmedKeyword'.tr();
   /// Your driver is outside - سائقك بالخارج الآن - Je chauffeur staat buiten - Ihr Fahrer ist draußen - Twój kierowca czeka na zewnątrz - Ваш водій очікує на вулиці - Votre chauffeur est à l'extérieur - Su conductor está afuera - Șoferul dvs. este afară
   static String get activeTripDriverOutside => 'activeTripDriverOutside'.tr();
+  /// Drop-off location - موقع التوصيل - Afzetlocatie - Zielort - Miejsce docelowe - Місце призначення - Lieu de dépose - Lugar de entrega - Locul de destinație
+  static String get activeTripDropoffLabel => 'activeTripDropoffLabel'.tr();
+  /// Your driver is coming. - سائقك في الطريق إليك. - Uw chauffeur komt eraan. - Ihr Fahrer ist unterwegs. - Twój kierowca już jedzie. - Ваш водій уже їде. - Votre chauffeur arrive. - Su conductor está en camino. - Șoferul tău vine.
+  static String get activeTripDriverComing => 'activeTripDriverComing'.tr();
+  /// Your comfortable trip will begin shortly - ستبدأ رحلتك المريحة قريبًا - Binnenkort begint uw comfortabele reis - Ihre komfortable Fahrt beginnt in Kürze - Twoja komfortowa podróż wkrótce się rozpocznie - Ваша комфортна поїздка незабаром розпочнеться - Votre trajet confortable commencera bientôt - Su cómodo viaje comenzará en breve - Călătoria ta confortabilă va începe în curând
+  static String get activeTripComfortableTripSoon => 'activeTripComfortableTripSoon'.tr();
+  /// Ride accepted - تم قبول الرحلة - Rit geaccepteerd - Fahrt angenommen - Przejazd przyjęty - Поїздку прийнято - Trajet accepté - Viaje aceptado - Cursă acceptată
+  static String get activeTripStepRideAccepted => 'activeTripStepRideAccepted'.tr();
+  /// Driver on the way - السائق في الطريق - Chauffeur onderweg - Fahrer unterwegs - Kierowca w drodze - Водій у дорозі - Chauffeur en route - Conductor en camino - Șofer pe drum
+  static String get activeTripStepDriverOnWay => 'activeTripStepDriverOnWay'.tr();
+  /// Your driver is on the way to pick you up. - سائقك في طريقه لاصطحابك. - Uw chauffeur is op weg om u op te halen. - Ihr Fahrer ist auf dem Weg, um Sie abzuholen. - Twój kierowca jedzie po Ciebie. - Ваш водій прямує, щоб забрати вас. - Votre chauffeur est en route pour vous prendre en charge. - Su conductor está en camino para recogerlo. - Șoferul tău este pe drum să te ia.
+  static String get activeTripStepDriverOnWaySub => 'activeTripStepDriverOnWaySub'.tr();
+  /// Driver arrived - وصل السائق - Chauffeur aangekomen - Fahrer angekommen - Kierowca przybył - Водій прибув - Chauffeur arrivé - Conductor llegó - Șofer sosit
+  static String get activeTripStepDriverArrived => 'activeTripStepDriverArrived'.tr();
+  /// Chat with driver - الدردشة مع السائق - Chat met chauffeur - Mit Fahrer chatten - Czat z kierowcą - Чат з водієм - Discuter avec le chauffeur - Chatear con el conductor - Chat cu șoferul
+  static String get activeTripChatWithDriver => 'activeTripChatWithDriver'.tr();
+  /// Your driver has arrived - وصل سائقك - Uw chauffeur is aangekomen - Ihr Fahrer ist angekommen - Twój kierowca przyjechał - Ваш водій прибув - Votre chauffeur est arrivé - Su conductor ha llegado - Șoferul tău a sosit
+  static String get activeTripDriverArrivedTitle => 'activeTripDriverArrivedTitle'.tr();
+  /// Waiting time - وقت الانتظار - Wachttijd - Wartezeit - Czas oczekiwania - Час очікування - Temps d'attente - Tiempo de espera - Timp de așteptare
+  static String get activeTripWaitingTime => 'activeTripWaitingTime'.tr();
+  /// min - د - min - Min - min - хв - min - min - min
+  static String get activeTripMinShort => 'activeTripMinShort'.tr();
   /// Arriving in ~{time} - يصل خلال ~{time} - Aankomst over ~{time} - Ankunft in ~{time} - Dojechał za ~{time} - Прибуття за ~{time} - Arrivée dans ~{time} - Llegando en ~{time} - Sosește în ~{time}
   static String get activeTripLiveEta => 'activeTripLiveEta'.tr();
   /// Vehicle type: {type} - نوع المركبة: {type} - Voertuigtype: {type} - Fahrzeugtyp: {type} - Typ pojazdu: {type} - Тип авто: {type} - Type de véhicule : {type} - Tipo de vehículo: {type} - Tip vehicul: {type}
   static String get activeTripLookForCar => 'activeTripLookForCar'.tr();
+  /// Pickup location - موقع الاستلام - Ophaallocatie - Abholort - Miejsce odbioru - Місце посадки - Lieu de prise en charge - Lugar de recogida - Locul de preluare
+  static String get activeTripPickupLabel => 'activeTripPickupLabel'.tr();
   /// Driver running late? - السائق متأخر؟ - Chauffeur te laat? - Fahrer verspätet? - Kierowca się spóźnia? - Водій запізнюється? - Chauffeur en retard ? - ¿El conductor se retrasa? - Șoferul întârzie?
   static String get activeTripReportDriverLate => 'activeTripReportDriverLate'.tr();
+  /// Your ride is - رحلتك - Uw rit is - Ihre Fahrt ist - Twoja podróż jest - Вашу поїздку - Votre trajet est - Su viaje está - Călătoria ta este
+  static String get activeTripRideIsPrefix => 'activeTripRideIsPrefix'.tr();
   /// Add stop - إضافة توقف - Stop toevoegen - Halt hinzufügen - Dodaj przystanek - Додати зупинку - Ajouter un arrêt - Añadir parada - Adaugă oprire
   static String get addStop => 'addStop'.tr();
   /// Apr - أبر - Apr - Apr - Kwi - Квіт - Avril - Abr - Apr
@@ -141,6 +171,14 @@ class AppStrings {
   static String get cancellationReasonPassengerUnreachable => 'cancellationReasonPassengerUnreachable'.tr();
   /// Cancelled within free window - ألغيت ضمن فترة الإلغاء المجاني - Geannuleerd binnen het gratis venster - Innerhalb des kostenlosen Stornierungsfensters storniert - Anulowano w bezpłatnym oknie - Скасовано в безкоштовний період - Annulé dans la fenêtre gratuite - Cancelado en el período gratuito - Anulat în perioada gratuită
   static String get cancellationReasonPassengerWithinOneHour => 'cancellationReasonPassengerWithinOneHour'.tr();
+  /// This screen shows the cancellation policy amount from the backend. If something looks wrong, send a review request so support can check the refund record. - تعرض هذه الشاشة مبلغ سياسة الإلغاء من الخادم. إذا بدا شيء غير صحيح، أرسل طلب مراجعة ليتمكن الدعم من فحص سجل الاسترداد. - Dit scherm toont het annuleringsbeleidsbedrag uit de backend. Als iets niet klopt, stuur dan een controleverzoek zodat support het terugbetalingsrecord kan controleren. - Dieser Bildschirm zeigt den Stornierungsbetrag aus dem Backend. Wenn etwas nicht stimmt, sende eine Prüfanfrage, damit der Support den Rückerstattungsdatensatz prüfen kann. - Ten ekran pokazuje kwotę wynikającą z polityki anulowania po stronie backendu. Jeśli coś wygląda nieprawidłowo, wyślij prośbę o weryfikację, aby wsparcie sprawdziło rekord zwrotu. - Цей екран показує суму за політикою скасування з бекенду. Якщо щось виглядає неправильно, надішліть запит на перевірку, щоб підтримка перевірила запис повернення. - Cet écran affiche le montant de la politique d'annulation fourni par le backend. Si quelque chose semble incorrect, envoyez une demande de révision pour que le support vérifie l'enregistrement du remboursement. - Esta pantalla muestra el importe de la política de cancelación del backend. Si algo parece incorrecto, envía una solicitud de revisión para que soporte revise el registro del reembolso. - Acest ecran afișează suma politicii de anulare din backend. Dacă ceva pare greșit, trimite o cerere de revizuire pentru ca suportul să verifice înregistrarea rambursării.
+  static String get cancelledRefundBackendSourceMessage => 'cancelledRefundBackendSourceMessage'.tr();
+  /// Cancelled at - وقت الإلغاء - Geannuleerd om - Storniert um - Anulowano o - Скасовано о - Annulé à - Cancelado a las - Anulat la
+  static String get cancelledRefundCancelledAt => 'cancelledRefundCancelledAt'.tr();
+  /// Policy amount shown by the backend - المبلغ حسب سياسة الخادم - Beleidsbedrag uit de backend - Policy-Betrag aus dem Backend - Kwota z polityki backendu - Сума за політикою бекенду - Montant de politique fourni par le backend - Importe de política mostrado por el backend - Suma politicii afișată de backend
+  static String get cancelledRefundSectionSubtitle => 'cancelledRefundSectionSubtitle'.tr();
+  /// Refund review - مراجعة الاسترداد - Terugbetaling controleren - Rückerstattung prüfen - Weryfikacja zwrotu - Перевірка повернення - Révision du remboursement - Revisión del reembolso - Revizuire rambursare
+  static String get cancelledRefundSectionTitle => 'cancelledRefundSectionTitle'.tr();
   /// Car Type - نوع السيارة - Autotype - Fahrzeugtyp - Typ pojazdu - Тип автомобіля - Type de véhicule - Tipo de coche - Tip mașină
   static String get carType => 'carType'.tr();
   /// 8-passenger bus - باص 8 ركاب - Bus voor 8 passagiers - 8-Personen-Bus - Bus (8 osób) - Бус (8 місць) - Bus 8 passagers - Autobús de 8 pasajeros - Autobuz cu 8 locuri
@@ -471,6 +509,8 @@ class AppStrings {
   static String get networkTimeout => 'networkTimeout'.tr();
   /// No results found. - لا توجد نتائج. - Geen resultaten gevonden. - Keine Ergebnisse gefunden. - Nie znaleziono wyników. - Нічого не знайдено. - Aucun résultat trouvé. - No se encontraron resultados. - Nu s-au găsit rezultate.
   static String get noResultsFound => 'noResultsFound'.tr();
+  /// Not available - غير متوفر - Niet beschikbaar - Nicht verfügbar - Niedostępne - Недоступно - Non disponible - No disponible - Indisponibil
+  static String get notAvailable => 'notAvailable'.tr();
   /// Nov - نوف - Nov - Nov - Lis - Лист - Nov - Nov - Nov
   static String get nov => 'nov'.tr();
   /// November - نوفمبر - November - November - Listopad - Листопад - Novembre - Noviembre - Noiembrie
@@ -721,6 +761,52 @@ class AppStrings {
   static String get recordRideUploadedNote => 'recordRideUploadedNote'.tr();
   /// Saving recording… - جارٍ حفظ التسجيل… - Opname opslaan… - Aufnahme wird gespeichert… - Zapisywanie nagrania… - Збереження запису… - Enregistrement en cours… - Guardando grabación… - Se salvează înregistrarea…
   static String get recordRideUploading => 'recordRideUploading'.tr();
+  /// We will ask support to review the failed refund state recorded by the backend. - سنطلب من الدعم مراجعة حالة فشل الاسترداد المسجلة في الخادم. - Support controleert de mislukte terugbetalingsstatus die door de backend is opgeslagen. - Der Support prüft den vom Backend gespeicherten fehlgeschlagenen Rückerstattungsstatus. - Poprosimy wsparcie o sprawdzenie nieudanego zwrotu zapisanego przez backend. - Підтримка перевірить невдалий статус повернення, записаний бекендом. - Le support vérifiera l'état d'échec du remboursement enregistré par le backend. - Pediremos a soporte que revise el estado de reembolso fallido registrado por el backend. - Suportul va verifica starea de rambursare eșuată înregistrată de backend.
+  static String get refundIssueKnownFailedInfo => 'refundIssueKnownFailedInfo'.tr();
+  /// Review failed refund - مراجعة استرداد فاشل - Mislukte terugbetaling controleren - Fehlgeschlagene Rückerstattung prüfen - Sprawdź nieudany zwrot - Перевірити невдале повернення - Réviser un remboursement échoué - Revisar reembolso fallido - Revizuire rambursare eșuată
+  static String get refundIssueKnownFailedReason => 'refundIssueKnownFailedReason'.tr();
+  /// Add anything support should know... - أضف أي شيء يجب أن يعرفه الدعم... - Voeg toe wat support moet weten... - Füge hinzu, was der Support wissen sollte... - Dodaj, co wsparcie powinno wiedzieć... - Додайте все, що має знати підтримка... - Ajoutez ce que le support doit savoir... - Añade cualquier dato que soporte deba saber... - Adaugă orice ar trebui să știe suportul...
+  static String get refundIssueNoteHint => 'refundIssueNoteHint'.tr();
+  /// Extra details - تفاصيل إضافية - Extra details - Zusätzliche Details - Dodatkowe informacje - Додаткові деталі - Détails supplémentaires - Detalles adicionales - Detalii suplimentare
+  static String get refundIssueNoteTitle => 'refundIssueNoteTitle'.tr();
+  /// Open WhatsApp - فتح واتساب - WhatsApp openen - WhatsApp öffnen - Otwórz WhatsApp - Відкрити WhatsApp - Ouvrir WhatsApp - Abrir WhatsApp - Deschide WhatsApp
+  static String get refundIssueOpenWhatsApp => 'refundIssueOpenWhatsApp'.tr();
+  /// I did not receive the refund - لم أستلم الاسترداد - Ik heb de terugbetaling niet ontvangen - Ich habe die Rückerstattung nicht erhalten - Nie otrzymałem zwrotu - Я не отримав повернення - Je n'ai pas reçu le remboursement - No recibí el reembolso - Nu am primit rambursarea
+  static String get refundIssueReasonDidNotReceive => 'refundIssueReasonDidNotReceive'.tr();
+  /// I received less than expected - استلمت مبلغا أقل من المتوقع - Ik heb minder ontvangen dan verwacht - Ich habe weniger als erwartet erhalten - Otrzymałem mniej niż oczekiwano - Я отримав менше, ніж очікував - J'ai reçu moins que prévu - Recibí menos de lo esperado - Am primit mai puțin decât mă așteptam
+  static String get refundIssueReasonLessThanExpected => 'refundIssueReasonLessThanExpected'.tr();
+  /// Other - أخرى - Anders - Andere - Inne - Інше - Autre - Otro - Altceva
+  static String get refundIssueReasonOther => 'refundIssueReasonOther'.tr();
+  /// I have a question about the refund - لدي سؤال حول الاسترداد - Ik heb een vraag over de terugbetaling - Ich habe eine Frage zur Rückerstattung - Mam pytanie dotyczące zwrotu - У мене є питання щодо повернення - J'ai une question sur le remboursement - Tengo una pregunta sobre el reembolso - Am o întrebare despre rambursare
+  static String get refundIssueReasonQuestion => 'refundIssueReasonQuestion'.tr();
+  /// The refund is taking too long - الاسترداد يستغرق وقتا طويلا - De terugbetaling duurt te lang - Die Rückerstattung dauert zu lange - Zwrot trwa zbyt długo - Повернення триває занадто довго - Le remboursement prend trop de temps - El reembolso tarda demasiado - Rambursarea durează prea mult
+  static String get refundIssueReasonTakingTooLong => 'refundIssueReasonTakingTooLong'.tr();
+  /// Refund amount - مبلغ الاسترداد - Terugbetalingsbedrag - Rückerstattungsbetrag - Kwota zwrotu - Сума повернення - Montant du remboursement - Importe del reembolso - Suma rambursării
+  static String get refundIssueRefundAmount => 'refundIssueRefundAmount'.tr();
+  /// Refund percent - نسبة الاسترداد - Terugbetalingspercentage - Rückerstattungsanteil - Procent zwrotu - Відсоток повернення - Pourcentage du remboursement - Porcentaje de reembolso - Procent rambursare
+  static String get refundIssueRefundPercent => 'refundIssueRefundPercent'.tr();
+  /// Request refund review - طلب مراجعة الاسترداد - Terugbetaling laten controleren - Rückerstattung prüfen lassen - Poproś o weryfikację zwrotu - Запросити перевірку повернення - Demander une révision du remboursement - Solicitar revisión del reembolso - Solicită revizuirea rambursării
+  static String get refundIssueReviewCta => 'refundIssueReviewCta'.tr();
+  /// From - من - Van - Von - Z - Звідки - De - Desde - De la
+  static String get refundIssueRouteFrom => 'refundIssueRouteFrom'.tr();
+  /// To - إلى - Naar - Nach - Do - Куди - À - Hasta - Către
+  static String get refundIssueRouteTo => 'refundIssueRouteTo'.tr();
+  /// Submitting this request opens a support review only. It does not create a new refund or contact Stripe directly. - إرسال هذا الطلب يفتح مراجعة دعم فقط. لا ينشئ استردادا جديدا ولا يتواصل مع Stripe مباشرة. - Deze aanvraag opent alleen een supportcontrole. Er wordt geen nieuwe terugbetaling gemaakt en Stripe wordt niet rechtstreeks benaderd. - Diese Anfrage öffnet nur eine Supportprüfung. Sie erstellt keine neue Rückerstattung und kontaktiert Stripe nicht direkt. - Wysłanie tego zgłoszenia tworzy tylko sprawę do sprawdzenia przez wsparcie. Nie tworzy nowego zwrotu i nie kontaktuje się bezpośrednio ze Stripe. - Надсилання цього запиту лише відкриває звернення до підтримки. Воно не створює нове повернення і не звертається напряму до Stripe. - Cette demande ouvre uniquement une révision par le support. Elle ne crée pas de nouveau remboursement et ne contacte pas Stripe directement. - Enviar esta solicitud solo abre una revisión de soporte. No crea un nuevo reembolso ni contacta directamente con Stripe. - Trimiterea acestei cereri deschide doar o revizuire de suport. Nu creează o rambursare nouă și nu contactează Stripe direct.
+  static String get refundIssueSafeInfo => 'refundIssueSafeInfo'.tr();
+  /// Submit review request - إرسال طلب المراجعة - Controleverzoek versturen - Prüfanfrage senden - Wyślij prośbę o weryfikację - Надіслати запит на перевірку - Envoyer la demande de révision - Enviar solicitud de revisión - Trimite cererea de revizuire
+  static String get refundIssueSubmitCta => 'refundIssueSubmitCta'.tr();
+  /// Your refund review request was sent. - تم إرسال طلب مراجعة الاسترداد. - Je controleverzoek voor de terugbetaling is verzonden. - Deine Prüfanfrage zur Rückerstattung wurde gesendet. - Twoja prośba o weryfikację zwrotu została wysłana. - Ваш запит на перевірку повернення надіслано. - Votre demande de révision du remboursement a été envoyée. - Tu solicitud de revisión de reembolso fue enviada. - Cererea ta de revizuire a rambursării a fost trimisă.
+  static String get refundIssueSubmitSuccess => 'refundIssueSubmitSuccess'.tr();
+  /// Support will review trip {reference}. You can also open WhatsApp now, but this request is already saved in the app. - سيقوم الدعم بمراجعة الرحلة {reference}. يمكنك فتح واتساب الآن أيضا، لكن الطلب محفوظ بالفعل في التطبيق. - Support controleert rit {reference}. Je kunt WhatsApp nu ook openen, maar dit verzoek is al opgeslagen in de app. - Der Support prüft Fahrt {reference}. Du kannst WhatsApp jetzt zusätzlich öffnen, aber diese Anfrage ist bereits in der App gespeichert. - Wsparcie sprawdzi przejazd {reference}. Możesz też otworzyć WhatsApp, ale zgłoszenie jest już zapisane w aplikacji. - Підтримка перевірить поїздку {reference}. Ви також можете відкрити WhatsApp зараз, але цей запит уже збережено в застосунку. - Le support examinera la course {reference}. Vous pouvez aussi ouvrir WhatsApp maintenant, mais cette demande est déjà enregistrée dans l'app. - Soporte revisará el viaje {reference}. También puedes abrir WhatsApp ahora, pero esta solicitud ya quedó guardada en la app. - Suportul va verifica cursa {reference}. Poți deschide și WhatsApp acum, dar cererea este deja salvată în aplicație.
+  static String get refundIssueSuccessBody => 'refundIssueSuccessBody'.tr();
+  /// Request submitted - تم إرسال الطلب - Verzoek verzonden - Anfrage gesendet - Zgłoszenie wysłane - Запит надіслано - Demande envoyée - Solicitud enviada - Cerere trimisă
+  static String get refundIssueSuccessTitle => 'refundIssueSuccessTitle'.tr();
+  /// Refund details - تفاصيل الاسترداد - Terugbetalingsdetails - Rückerstattungsdetails - Szczegóły zwrotu - Деталі повернення - Détails du remboursement - Detalles del reembolso - Detalii rambursare
+  static String get refundIssueSummaryTitle => 'refundIssueSummaryTitle'.tr();
+  /// Refund review - مراجعة الاسترداد - Terugbetaling controleren - Rückerstattung prüfen - Weryfikacja zwrotu - Перевірка повернення - Révision du remboursement - Revisión del reembolso - Revizuire rambursare
+  static String get refundIssueTitle => 'refundIssueTitle'.tr();
+  /// Refund review request for trip {reference}. Expected refund: {amount}. - طلب مراجعة استرداد للرحلة {reference}. الاسترداد المتوقع: {amount}. - Controleverzoek voor terugbetaling van rit {reference}. Verwachte terugbetaling: {amount}. - Rückerstattungsprüfung für Fahrt {reference}. Erwartete Rückerstattung: {amount}. - Prośba o weryfikację zwrotu dla przejazdu {reference}. Oczekiwany zwrot: {amount}. - Запит на перевірку повернення для поїздки {reference}. Очікуване повернення: {amount}. - Demande de révision de remboursement pour la course {reference}. Remboursement attendu : {amount}. - Solicitud de revisión de reembolso para el viaje {reference}. Reembolso esperado: {amount}. - Cerere de revizuire rambursare pentru cursa {reference}. Rambursare estimată: {amount}.
+  static String get refundIssueWhatsAppMessage => 'refundIssueWhatsAppMessage'.tr();
   /// Report driver delay - الإبلاغ عن تأخر السائق - Vertraging chauffeur melden - Fahrverzögerung melden - Zgłoś opóźnienie kierowcy - Повідомити про затримку водія - Signaler le retard du chauffeur - Reportar retraso del conductor - Raportați întârzierea șoferului
   static String get reportDriverDelay => 'reportDriverDelay'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd. - Anfrage wurde abgebrochen. - Żądanie zostało anulowane. - Запит скасовано. - La demande a été annulée. - La solicitud fue cancelada. - Solicitarea a fost anulată.

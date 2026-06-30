@@ -140,6 +140,14 @@ class AppRouteRegistry {
       ),
     ),
     GoRoute(
+      path: RefundIssueScreen.pagePath,
+      name: RefundIssueScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: RefundIssueScreen(args: state.extra as RefundIssueScreenArgs),
+      ),
+    ),
+    GoRoute(
       path: TripChatScreen.pagePath,
       name: TripChatScreen.pageName,
       pageBuilder: (context, state) => AppPageTransitions.build(

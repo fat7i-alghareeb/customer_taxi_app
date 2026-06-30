@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RealtimeEvent {
 
- String get tripId;
+ String? get tripId;
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -64,7 +64,7 @@ class _$RealtimeEventCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? tripId = null,}) {
   return _then(_self.copyWith(
-tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
+tripId: null == tripId ? _self.tripId! : tripId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -86,7 +86,7 @@ extension RealtimeEventPatterns on RealtimeEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( RealtimeTripRequested value)?  tripRequested,TResult Function( RealtimeDriverAssigned value)?  driverAssigned,TResult Function( RealtimeTripAccepted value)?  tripAccepted,TResult Function( RealtimeTripStarted value)?  tripStarted,TResult Function( RealtimeTripCompleted value)?  tripCompleted,TResult Function( RealtimeTripCancelled value)?  tripCancelled,TResult Function( RealtimePaymentConfirmed value)?  paymentConfirmed,TResult Function( RealtimePaymentFailed value)?  paymentFailed,TResult Function( RealtimeTripRefunded value)?  tripRefunded,TResult Function( RealtimeDriverEnRoute value)?  driverEnRoute,TResult Function( RealtimeDriverArrived value)?  driverArrived,TResult Function( RealtimeDriverLocationUpdated value)?  driverLocationUpdated,TResult Function( RealtimeTripStopCompleted value)?  tripStopCompleted,TResult Function( RealtimeTripMessageReceived value)?  tripMessageReceived,TResult Function( RealtimeChatClosed value)?  chatClosed,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( RealtimeTripRequested value)?  tripRequested,TResult Function( RealtimeDriverAssigned value)?  driverAssigned,TResult Function( RealtimeTripAccepted value)?  tripAccepted,TResult Function( RealtimeTripStarted value)?  tripStarted,TResult Function( RealtimeTripCompleted value)?  tripCompleted,TResult Function( RealtimeTripCancelled value)?  tripCancelled,TResult Function( RealtimePaymentConfirmed value)?  paymentConfirmed,TResult Function( RealtimePaymentFailed value)?  paymentFailed,TResult Function( RealtimeTripRefunded value)?  tripRefunded,TResult Function( RealtimeRefundLifecycleChanged value)?  refundLifecycleChanged,TResult Function( RealtimeDriverEnRoute value)?  driverEnRoute,TResult Function( RealtimeDriverArrived value)?  driverArrived,TResult Function( RealtimeDriverLocationUpdated value)?  driverLocationUpdated,TResult Function( RealtimeTripStopCompleted value)?  tripStopCompleted,TResult Function( RealtimeTripMessageReceived value)?  tripMessageReceived,TResult Function( RealtimeChatClosed value)?  chatClosed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case RealtimeTripRequested() when tripRequested != null:
@@ -98,7 +98,8 @@ return tripCompleted(_that);case RealtimeTripCancelled() when tripCancelled != n
 return tripCancelled(_that);case RealtimePaymentConfirmed() when paymentConfirmed != null:
 return paymentConfirmed(_that);case RealtimePaymentFailed() when paymentFailed != null:
 return paymentFailed(_that);case RealtimeTripRefunded() when tripRefunded != null:
-return tripRefunded(_that);case RealtimeDriverEnRoute() when driverEnRoute != null:
+return tripRefunded(_that);case RealtimeRefundLifecycleChanged() when refundLifecycleChanged != null:
+return refundLifecycleChanged(_that);case RealtimeDriverEnRoute() when driverEnRoute != null:
 return driverEnRoute(_that);case RealtimeDriverArrived() when driverArrived != null:
 return driverArrived(_that);case RealtimeDriverLocationUpdated() when driverLocationUpdated != null:
 return driverLocationUpdated(_that);case RealtimeTripStopCompleted() when tripStopCompleted != null:
@@ -122,7 +123,7 @@ return chatClosed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( RealtimeTripRequested value)  tripRequested,required TResult Function( RealtimeDriverAssigned value)  driverAssigned,required TResult Function( RealtimeTripAccepted value)  tripAccepted,required TResult Function( RealtimeTripStarted value)  tripStarted,required TResult Function( RealtimeTripCompleted value)  tripCompleted,required TResult Function( RealtimeTripCancelled value)  tripCancelled,required TResult Function( RealtimePaymentConfirmed value)  paymentConfirmed,required TResult Function( RealtimePaymentFailed value)  paymentFailed,required TResult Function( RealtimeTripRefunded value)  tripRefunded,required TResult Function( RealtimeDriverEnRoute value)  driverEnRoute,required TResult Function( RealtimeDriverArrived value)  driverArrived,required TResult Function( RealtimeDriverLocationUpdated value)  driverLocationUpdated,required TResult Function( RealtimeTripStopCompleted value)  tripStopCompleted,required TResult Function( RealtimeTripMessageReceived value)  tripMessageReceived,required TResult Function( RealtimeChatClosed value)  chatClosed,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( RealtimeTripRequested value)  tripRequested,required TResult Function( RealtimeDriverAssigned value)  driverAssigned,required TResult Function( RealtimeTripAccepted value)  tripAccepted,required TResult Function( RealtimeTripStarted value)  tripStarted,required TResult Function( RealtimeTripCompleted value)  tripCompleted,required TResult Function( RealtimeTripCancelled value)  tripCancelled,required TResult Function( RealtimePaymentConfirmed value)  paymentConfirmed,required TResult Function( RealtimePaymentFailed value)  paymentFailed,required TResult Function( RealtimeTripRefunded value)  tripRefunded,required TResult Function( RealtimeRefundLifecycleChanged value)  refundLifecycleChanged,required TResult Function( RealtimeDriverEnRoute value)  driverEnRoute,required TResult Function( RealtimeDriverArrived value)  driverArrived,required TResult Function( RealtimeDriverLocationUpdated value)  driverLocationUpdated,required TResult Function( RealtimeTripStopCompleted value)  tripStopCompleted,required TResult Function( RealtimeTripMessageReceived value)  tripMessageReceived,required TResult Function( RealtimeChatClosed value)  chatClosed,}){
 final _that = this;
 switch (_that) {
 case RealtimeTripRequested():
@@ -134,7 +135,8 @@ return tripCompleted(_that);case RealtimeTripCancelled():
 return tripCancelled(_that);case RealtimePaymentConfirmed():
 return paymentConfirmed(_that);case RealtimePaymentFailed():
 return paymentFailed(_that);case RealtimeTripRefunded():
-return tripRefunded(_that);case RealtimeDriverEnRoute():
+return tripRefunded(_that);case RealtimeRefundLifecycleChanged():
+return refundLifecycleChanged(_that);case RealtimeDriverEnRoute():
 return driverEnRoute(_that);case RealtimeDriverArrived():
 return driverArrived(_that);case RealtimeDriverLocationUpdated():
 return driverLocationUpdated(_that);case RealtimeTripStopCompleted():
@@ -154,7 +156,7 @@ return chatClosed(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( RealtimeTripRequested value)?  tripRequested,TResult? Function( RealtimeDriverAssigned value)?  driverAssigned,TResult? Function( RealtimeTripAccepted value)?  tripAccepted,TResult? Function( RealtimeTripStarted value)?  tripStarted,TResult? Function( RealtimeTripCompleted value)?  tripCompleted,TResult? Function( RealtimeTripCancelled value)?  tripCancelled,TResult? Function( RealtimePaymentConfirmed value)?  paymentConfirmed,TResult? Function( RealtimePaymentFailed value)?  paymentFailed,TResult? Function( RealtimeTripRefunded value)?  tripRefunded,TResult? Function( RealtimeDriverEnRoute value)?  driverEnRoute,TResult? Function( RealtimeDriverArrived value)?  driverArrived,TResult? Function( RealtimeDriverLocationUpdated value)?  driverLocationUpdated,TResult? Function( RealtimeTripStopCompleted value)?  tripStopCompleted,TResult? Function( RealtimeTripMessageReceived value)?  tripMessageReceived,TResult? Function( RealtimeChatClosed value)?  chatClosed,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( RealtimeTripRequested value)?  tripRequested,TResult? Function( RealtimeDriverAssigned value)?  driverAssigned,TResult? Function( RealtimeTripAccepted value)?  tripAccepted,TResult? Function( RealtimeTripStarted value)?  tripStarted,TResult? Function( RealtimeTripCompleted value)?  tripCompleted,TResult? Function( RealtimeTripCancelled value)?  tripCancelled,TResult? Function( RealtimePaymentConfirmed value)?  paymentConfirmed,TResult? Function( RealtimePaymentFailed value)?  paymentFailed,TResult? Function( RealtimeTripRefunded value)?  tripRefunded,TResult? Function( RealtimeRefundLifecycleChanged value)?  refundLifecycleChanged,TResult? Function( RealtimeDriverEnRoute value)?  driverEnRoute,TResult? Function( RealtimeDriverArrived value)?  driverArrived,TResult? Function( RealtimeDriverLocationUpdated value)?  driverLocationUpdated,TResult? Function( RealtimeTripStopCompleted value)?  tripStopCompleted,TResult? Function( RealtimeTripMessageReceived value)?  tripMessageReceived,TResult? Function( RealtimeChatClosed value)?  chatClosed,}){
 final _that = this;
 switch (_that) {
 case RealtimeTripRequested() when tripRequested != null:
@@ -166,7 +168,8 @@ return tripCompleted(_that);case RealtimeTripCancelled() when tripCancelled != n
 return tripCancelled(_that);case RealtimePaymentConfirmed() when paymentConfirmed != null:
 return paymentConfirmed(_that);case RealtimePaymentFailed() when paymentFailed != null:
 return paymentFailed(_that);case RealtimeTripRefunded() when tripRefunded != null:
-return tripRefunded(_that);case RealtimeDriverEnRoute() when driverEnRoute != null:
+return tripRefunded(_that);case RealtimeRefundLifecycleChanged() when refundLifecycleChanged != null:
+return refundLifecycleChanged(_that);case RealtimeDriverEnRoute() when driverEnRoute != null:
 return driverEnRoute(_that);case RealtimeDriverArrived() when driverArrived != null:
 return driverArrived(_that);case RealtimeDriverLocationUpdated() when driverLocationUpdated != null:
 return driverLocationUpdated(_that);case RealtimeTripStopCompleted() when tripStopCompleted != null:
@@ -189,7 +192,7 @@ return chatClosed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId,  String vehicleTypeId,  String passengerId)?  tripRequested,TResult Function( String tripId,  String passengerId,  String driverId)?  driverAssigned,TResult Function( String tripId,  String passengerId,  String adminId)?  tripAccepted,TResult Function( String tripId,  String passengerId)?  tripStarted,TResult Function( String tripId,  String passengerId)?  tripCompleted,TResult Function( String tripId,  String passengerId)?  tripCancelled,TResult Function( String tripId,  String passengerId)?  paymentConfirmed,TResult Function( String tripId,  String passengerId,  String reason)?  paymentFailed,TResult Function( String tripId,  String passengerId,  double amount)?  tripRefunded,TResult Function( String tripId,  String passengerId,  String driverId)?  driverEnRoute,TResult Function( String tripId,  String passengerId,  String driverId)?  driverArrived,TResult Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult Function( String tripId,  String passengerId,  String? driverId,  int sequence)?  tripStopCompleted,TResult Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)?  tripMessageReceived,TResult Function( String tripId)?  chatClosed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId,  String vehicleTypeId,  String passengerId)?  tripRequested,TResult Function( String tripId,  String passengerId,  String driverId)?  driverAssigned,TResult Function( String tripId,  String passengerId,  String adminId)?  tripAccepted,TResult Function( String tripId,  String passengerId)?  tripStarted,TResult Function( String tripId,  String passengerId)?  tripCompleted,TResult Function( String tripId,  String passengerId)?  tripCancelled,TResult Function( String tripId,  String passengerId)?  paymentConfirmed,TResult Function( String tripId,  String passengerId,  String reason)?  paymentFailed,TResult Function( String tripId,  String passengerId,  double amount)?  tripRefunded,TResult Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)?  refundLifecycleChanged,TResult Function( String tripId,  String passengerId,  String driverId)?  driverEnRoute,TResult Function( String tripId,  String passengerId,  String driverId)?  driverArrived,TResult Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult Function( String tripId,  String passengerId,  String? driverId,  int sequence)?  tripStopCompleted,TResult Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)?  tripMessageReceived,TResult Function( String tripId)?  chatClosed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case RealtimeTripRequested() when tripRequested != null:
 return tripRequested(_that.tripId,_that.vehicleTypeId,_that.passengerId);case RealtimeDriverAssigned() when driverAssigned != null:
@@ -200,7 +203,8 @@ return tripCompleted(_that.tripId,_that.passengerId);case RealtimeTripCancelled(
 return tripCancelled(_that.tripId,_that.passengerId);case RealtimePaymentConfirmed() when paymentConfirmed != null:
 return paymentConfirmed(_that.tripId,_that.passengerId);case RealtimePaymentFailed() when paymentFailed != null:
 return paymentFailed(_that.tripId,_that.passengerId,_that.reason);case RealtimeTripRefunded() when tripRefunded != null:
-return tripRefunded(_that.tripId,_that.passengerId,_that.amount);case RealtimeDriverEnRoute() when driverEnRoute != null:
+return tripRefunded(_that.tripId,_that.passengerId,_that.amount);case RealtimeRefundLifecycleChanged() when refundLifecycleChanged != null:
+return refundLifecycleChanged(_that.refundId,_that.paymentId,_that.tripId,_that.passengerId,_that.status,_that.amount,_that.currency,_that.requiresAdminAction,_that.canRetry,_that.sourceType);case RealtimeDriverEnRoute() when driverEnRoute != null:
 return driverEnRoute(_that.tripId,_that.passengerId,_that.driverId);case RealtimeDriverArrived() when driverArrived != null:
 return driverArrived(_that.tripId,_that.passengerId,_that.driverId);case RealtimeDriverLocationUpdated() when driverLocationUpdated != null:
 return driverLocationUpdated(_that.tripId,_that.driverId,_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case RealtimeTripStopCompleted() when tripStopCompleted != null:
@@ -224,7 +228,7 @@ return chatClosed(_that.tripId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId,  String vehicleTypeId,  String passengerId)  tripRequested,required TResult Function( String tripId,  String passengerId,  String driverId)  driverAssigned,required TResult Function( String tripId,  String passengerId,  String adminId)  tripAccepted,required TResult Function( String tripId,  String passengerId)  tripStarted,required TResult Function( String tripId,  String passengerId)  tripCompleted,required TResult Function( String tripId,  String passengerId)  tripCancelled,required TResult Function( String tripId,  String passengerId)  paymentConfirmed,required TResult Function( String tripId,  String passengerId,  String reason)  paymentFailed,required TResult Function( String tripId,  String passengerId,  double amount)  tripRefunded,required TResult Function( String tripId,  String passengerId,  String driverId)  driverEnRoute,required TResult Function( String tripId,  String passengerId,  String driverId)  driverArrived,required TResult Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)  driverLocationUpdated,required TResult Function( String tripId,  String passengerId,  String? driverId,  int sequence)  tripStopCompleted,required TResult Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)  tripMessageReceived,required TResult Function( String tripId)  chatClosed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId,  String vehicleTypeId,  String passengerId)  tripRequested,required TResult Function( String tripId,  String passengerId,  String driverId)  driverAssigned,required TResult Function( String tripId,  String passengerId,  String adminId)  tripAccepted,required TResult Function( String tripId,  String passengerId)  tripStarted,required TResult Function( String tripId,  String passengerId)  tripCompleted,required TResult Function( String tripId,  String passengerId)  tripCancelled,required TResult Function( String tripId,  String passengerId)  paymentConfirmed,required TResult Function( String tripId,  String passengerId,  String reason)  paymentFailed,required TResult Function( String tripId,  String passengerId,  double amount)  tripRefunded,required TResult Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)  refundLifecycleChanged,required TResult Function( String tripId,  String passengerId,  String driverId)  driverEnRoute,required TResult Function( String tripId,  String passengerId,  String driverId)  driverArrived,required TResult Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)  driverLocationUpdated,required TResult Function( String tripId,  String passengerId,  String? driverId,  int sequence)  tripStopCompleted,required TResult Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)  tripMessageReceived,required TResult Function( String tripId)  chatClosed,}) {final _that = this;
 switch (_that) {
 case RealtimeTripRequested():
 return tripRequested(_that.tripId,_that.vehicleTypeId,_that.passengerId);case RealtimeDriverAssigned():
@@ -235,7 +239,8 @@ return tripCompleted(_that.tripId,_that.passengerId);case RealtimeTripCancelled(
 return tripCancelled(_that.tripId,_that.passengerId);case RealtimePaymentConfirmed():
 return paymentConfirmed(_that.tripId,_that.passengerId);case RealtimePaymentFailed():
 return paymentFailed(_that.tripId,_that.passengerId,_that.reason);case RealtimeTripRefunded():
-return tripRefunded(_that.tripId,_that.passengerId,_that.amount);case RealtimeDriverEnRoute():
+return tripRefunded(_that.tripId,_that.passengerId,_that.amount);case RealtimeRefundLifecycleChanged():
+return refundLifecycleChanged(_that.refundId,_that.paymentId,_that.tripId,_that.passengerId,_that.status,_that.amount,_that.currency,_that.requiresAdminAction,_that.canRetry,_that.sourceType);case RealtimeDriverEnRoute():
 return driverEnRoute(_that.tripId,_that.passengerId,_that.driverId);case RealtimeDriverArrived():
 return driverArrived(_that.tripId,_that.passengerId,_that.driverId);case RealtimeDriverLocationUpdated():
 return driverLocationUpdated(_that.tripId,_that.driverId,_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case RealtimeTripStopCompleted():
@@ -255,7 +260,7 @@ return chatClosed(_that.tripId);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId,  String vehicleTypeId,  String passengerId)?  tripRequested,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverAssigned,TResult? Function( String tripId,  String passengerId,  String adminId)?  tripAccepted,TResult? Function( String tripId,  String passengerId)?  tripStarted,TResult? Function( String tripId,  String passengerId)?  tripCompleted,TResult? Function( String tripId,  String passengerId)?  tripCancelled,TResult? Function( String tripId,  String passengerId)?  paymentConfirmed,TResult? Function( String tripId,  String passengerId,  String reason)?  paymentFailed,TResult? Function( String tripId,  String passengerId,  double amount)?  tripRefunded,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverEnRoute,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverArrived,TResult? Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult? Function( String tripId,  String passengerId,  String? driverId,  int sequence)?  tripStopCompleted,TResult? Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)?  tripMessageReceived,TResult? Function( String tripId)?  chatClosed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId,  String vehicleTypeId,  String passengerId)?  tripRequested,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverAssigned,TResult? Function( String tripId,  String passengerId,  String adminId)?  tripAccepted,TResult? Function( String tripId,  String passengerId)?  tripStarted,TResult? Function( String tripId,  String passengerId)?  tripCompleted,TResult? Function( String tripId,  String passengerId)?  tripCancelled,TResult? Function( String tripId,  String passengerId)?  paymentConfirmed,TResult? Function( String tripId,  String passengerId,  String reason)?  paymentFailed,TResult? Function( String tripId,  String passengerId,  double amount)?  tripRefunded,TResult? Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)?  refundLifecycleChanged,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverEnRoute,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverArrived,TResult? Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult? Function( String tripId,  String passengerId,  String? driverId,  int sequence)?  tripStopCompleted,TResult? Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)?  tripMessageReceived,TResult? Function( String tripId)?  chatClosed,}) {final _that = this;
 switch (_that) {
 case RealtimeTripRequested() when tripRequested != null:
 return tripRequested(_that.tripId,_that.vehicleTypeId,_that.passengerId);case RealtimeDriverAssigned() when driverAssigned != null:
@@ -266,7 +271,8 @@ return tripCompleted(_that.tripId,_that.passengerId);case RealtimeTripCancelled(
 return tripCancelled(_that.tripId,_that.passengerId);case RealtimePaymentConfirmed() when paymentConfirmed != null:
 return paymentConfirmed(_that.tripId,_that.passengerId);case RealtimePaymentFailed() when paymentFailed != null:
 return paymentFailed(_that.tripId,_that.passengerId,_that.reason);case RealtimeTripRefunded() when tripRefunded != null:
-return tripRefunded(_that.tripId,_that.passengerId,_that.amount);case RealtimeDriverEnRoute() when driverEnRoute != null:
+return tripRefunded(_that.tripId,_that.passengerId,_that.amount);case RealtimeRefundLifecycleChanged() when refundLifecycleChanged != null:
+return refundLifecycleChanged(_that.refundId,_that.paymentId,_that.tripId,_that.passengerId,_that.status,_that.amount,_that.currency,_that.requiresAdminAction,_that.canRetry,_that.sourceType);case RealtimeDriverEnRoute() when driverEnRoute != null:
 return driverEnRoute(_that.tripId,_that.passengerId,_that.driverId);case RealtimeDriverArrived() when driverArrived != null:
 return driverArrived(_that.tripId,_that.passengerId,_that.driverId);case RealtimeDriverLocationUpdated() when driverLocationUpdated != null:
 return driverLocationUpdated(_that.tripId,_that.driverId,_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case RealtimeTripStopCompleted() when tripStopCompleted != null:
@@ -896,6 +902,90 @@ tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_n
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class RealtimeRefundLifecycleChanged implements RealtimeEvent {
+  const RealtimeRefundLifecycleChanged({required this.refundId, required this.paymentId, this.tripId, this.passengerId, required this.status, required this.amount, required this.currency, required this.requiresAdminAction, required this.canRetry, required this.sourceType});
+  
+
+ final  String refundId;
+ final  String paymentId;
+@override final  String? tripId;
+ final  String? passengerId;
+ final  String status;
+ final  double amount;
+ final  String currency;
+ final  bool requiresAdminAction;
+ final  bool canRetry;
+ final  String sourceType;
+
+/// Create a copy of RealtimeEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$RealtimeRefundLifecycleChangedCopyWith<RealtimeRefundLifecycleChanged> get copyWith => _$RealtimeRefundLifecycleChangedCopyWithImpl<RealtimeRefundLifecycleChanged>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RealtimeRefundLifecycleChanged&&(identical(other.refundId, refundId) || other.refundId == refundId)&&(identical(other.paymentId, paymentId) || other.paymentId == paymentId)&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.passengerId, passengerId) || other.passengerId == passengerId)&&(identical(other.status, status) || other.status == status)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.requiresAdminAction, requiresAdminAction) || other.requiresAdminAction == requiresAdminAction)&&(identical(other.canRetry, canRetry) || other.canRetry == canRetry)&&(identical(other.sourceType, sourceType) || other.sourceType == sourceType));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,refundId,paymentId,tripId,passengerId,status,amount,currency,requiresAdminAction,canRetry,sourceType);
+
+@override
+String toString() {
+  return 'RealtimeEvent.refundLifecycleChanged(refundId: $refundId, paymentId: $paymentId, tripId: $tripId, passengerId: $passengerId, status: $status, amount: $amount, currency: $currency, requiresAdminAction: $requiresAdminAction, canRetry: $canRetry, sourceType: $sourceType)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $RealtimeRefundLifecycleChangedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
+  factory $RealtimeRefundLifecycleChangedCopyWith(RealtimeRefundLifecycleChanged value, $Res Function(RealtimeRefundLifecycleChanged) _then) = _$RealtimeRefundLifecycleChangedCopyWithImpl;
+@override @useResult
+$Res call({
+ String refundId, String paymentId, String? tripId, String? passengerId, String status, double amount, String currency, bool requiresAdminAction, bool canRetry, String sourceType
+});
+
+
+
+
+}
+/// @nodoc
+class _$RealtimeRefundLifecycleChangedCopyWithImpl<$Res>
+    implements $RealtimeRefundLifecycleChangedCopyWith<$Res> {
+  _$RealtimeRefundLifecycleChangedCopyWithImpl(this._self, this._then);
+
+  final RealtimeRefundLifecycleChanged _self;
+  final $Res Function(RealtimeRefundLifecycleChanged) _then;
+
+/// Create a copy of RealtimeEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? refundId = null,Object? paymentId = null,Object? tripId = freezed,Object? passengerId = freezed,Object? status = null,Object? amount = null,Object? currency = null,Object? requiresAdminAction = null,Object? canRetry = null,Object? sourceType = null,}) {
+  return _then(RealtimeRefundLifecycleChanged(
+refundId: null == refundId ? _self.refundId : refundId // ignore: cast_nullable_to_non_nullable
+as String,paymentId: null == paymentId ? _self.paymentId : paymentId // ignore: cast_nullable_to_non_nullable
+as String,tripId: freezed == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
+as String?,passengerId: freezed == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
+as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as double,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
+as String,requiresAdminAction: null == requiresAdminAction ? _self.requiresAdminAction : requiresAdminAction // ignore: cast_nullable_to_non_nullable
+as bool,canRetry: null == canRetry ? _self.canRetry : canRetry // ignore: cast_nullable_to_non_nullable
+as bool,sourceType: null == sourceType ? _self.sourceType : sourceType // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

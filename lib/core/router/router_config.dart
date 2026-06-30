@@ -26,6 +26,7 @@ import '../../features/trip/presentation/ui/screens/trip_receipt_screen.dart';
 import '../../features/favorites/presentation/ui/screens/favorites_screen.dart';
 import '../../features/order/presentation/ui/screens/location_picker_screen.dart';
 import '../../features/root/domain/entities/root_map_location_entity.dart';
+import '../../features/refund_issues/presentation/ui/screens/refund_issue_screen.dart';
 import '../../features/splash/presentation/ui/screens/splash_screen.dart';
 import '../services/location/startup_map_warmup_coordinator.dart';
 import '../../utils/constants/app_flow_constants.dart';

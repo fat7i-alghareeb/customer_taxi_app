@@ -112,6 +112,16 @@ import 'package:customertaxi/features/profile/domain/repositories/profile_reposi
     as _i482;
 import 'package:customertaxi/features/profile/presentation/states/profile_bloc.dart'
     as _i951;
+import 'package:customertaxi/features/refund_issues/data/datasources/refund_issue_remote_datasource.dart'
+    as _i863;
+import 'package:customertaxi/features/refund_issues/data/repositories/refund_issue_repository_impl.dart'
+    as _i217;
+import 'package:customertaxi/features/refund_issues/domain/facade/refund_issue_facade.dart'
+    as _i264;
+import 'package:customertaxi/features/refund_issues/domain/repositories/refund_issue_repository.dart'
+    as _i411;
+import 'package:customertaxi/features/refund_issues/presentation/states/refund_issue_bloc.dart'
+    as _i62;
 import 'package:customertaxi/features/root/data/datasources/root_remote_datasource.dart'
     as _i312;
 import 'package:customertaxi/features/root/data/repositories/root_repository_impl.dart'
@@ -270,6 +280,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i1044.ProfileRemoteDataSource>(
       () => _i1044.ProfileRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i863.RefundIssueRemoteDataSource>(
+      () => _i863.RefundIssueRemoteDataSource(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i312.RootRemoteDataSource>(
       () => _i312.RootRemoteDataSource(gh<_i361.Dio>()),
     );
@@ -330,6 +343,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i814.AuthManager>(),
       ),
     );
+    gh.lazySingleton<_i411.RefundIssueRepository>(
+      () => _i217.RefundIssueRepositoryImpl(
+        gh<_i863.RefundIssueRemoteDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i153.OrderRepository>(
       () => _i312.OrderRepositoryImpl(
         gh<_i93.OrderRemoteDataSource>(),
@@ -348,6 +366,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i925.OrderFacade>(
       () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
     );
+    gh.lazySingleton<_i264.RefundIssueFacade>(
+      () => _i264.RefundIssueFacade(gh<_i411.RefundIssueRepository>()),
+    );
     gh.factory<_i174.ChatBloc>(
       () => _i174.ChatBloc(
         gh<_i698.ChatRepository>(),
@@ -364,6 +385,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i396.LocationService>(),
         gh<_i925.OrderFacade>(),
       ),
+    );
+    gh.factory<_i62.RefundIssueBloc>(
+      () => _i62.RefundIssueBloc(gh<_i264.RefundIssueFacade>()),
     );
     gh.factory<_i47.OrderBloc>(
       () => _i47.OrderBloc(

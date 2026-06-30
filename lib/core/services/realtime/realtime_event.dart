@@ -60,6 +60,19 @@ sealed class RealtimeEvent with _$RealtimeEvent {
     required double amount,
   }) = RealtimeTripRefunded;
 
+  const factory RealtimeEvent.refundLifecycleChanged({
+    required String refundId,
+    required String paymentId,
+    String? tripId,
+    String? passengerId,
+    required String status,
+    required double amount,
+    required String currency,
+    required bool requiresAdminAction,
+    required bool canRetry,
+    required String sourceType,
+  }) = RealtimeRefundLifecycleChanged;
+
   const factory RealtimeEvent.driverEnRoute({
     required String tripId,
     required String passengerId,
@@ -120,6 +133,7 @@ abstract final class RealtimeMethodNames {
   static const paymentConfirmed = 'PaymentConfirmed';
   static const paymentFailed = 'PaymentFailed';
   static const tripRefunded = 'TripRefunded';
+  static const refundLifecycleChanged = 'RefundLifecycleChanged';
   static const driverEnRoute = 'DriverEnRoute';
   static const driverArrived = 'DriverArrived';
   static const driverLocationUpdated = 'DriverLocationUpdated';
@@ -137,6 +151,7 @@ abstract final class RealtimeMethodNames {
     paymentConfirmed,
     paymentFailed,
     tripRefunded,
+    refundLifecycleChanged,
     driverEnRoute,
     driverArrived,
     driverLocationUpdated,
@@ -158,6 +173,7 @@ extension RealtimeEventTripId on RealtimeEvent {
     RealtimePaymentConfirmed(:final tripId) => tripId,
     RealtimePaymentFailed(:final tripId) => tripId,
     RealtimeTripRefunded(:final tripId) => tripId,
+    RealtimeRefundLifecycleChanged(:final tripId) => tripId ?? '',
     RealtimeDriverEnRoute(:final tripId) => tripId,
     RealtimeDriverArrived(:final tripId) => tripId,
     RealtimeDriverLocationUpdated(:final tripId) => tripId,

@@ -21,7 +21,6 @@ import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_not
 import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart';
 import 'package:vibration/vibration.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_floating_action.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/chat_floating_action.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/glassmorphic_trip_status_sheet.dart';
 
 class ActiveTripBody extends StatefulWidget {
@@ -554,7 +553,6 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                   ? trip.stops.first.longitude
                   : 21.0122;
               final canEditPassengerNote = trip.status.canEditPassengerNote;
-              final showChat = !trip.status.isTerminal;
 
               // Render the car marker straight from bloc state, falling back to
               // the persisted driver coordinate on the trip. This guarantees the
@@ -664,7 +662,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (showChat || canEditPassengerNote)
+                          if (canEditPassengerNote)
                             Padding(
                               padding: REdgeInsets.fromLTRB(
                                 AppSpacing.xl,
@@ -674,22 +672,16 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                               ),
                               child: Row(
                                 children: [
-                                  if (showChat) const ChatFloatingAction(),
                                   const Spacer(),
-                                  if (canEditPassengerNote)
-                                    PassengerNoteFloatingAction(
-                                      hasNote:
-                                          trip.passengerNote
-                                              ?.trim()
-                                              .isNotEmpty ==
-                                          true,
-                                      isLoading:
-                                          state.passengerNoteStatus.isLoading,
-                                      onTap: () => _showPassengerNoteSheet(
-                                        context,
-                                        trip,
-                                      ),
-                                    ),
+                                  PassengerNoteFloatingAction(
+                                    hasNote:
+                                        trip.passengerNote?.trim().isNotEmpty ==
+                                        true,
+                                    isLoading:
+                                        state.passengerNoteStatus.isLoading,
+                                    onTap: () =>
+                                        _showPassengerNoteSheet(context, trip),
+                                  ),
                                 ],
                               ),
                             ),

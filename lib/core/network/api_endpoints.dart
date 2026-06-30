@@ -33,6 +33,8 @@ class ApiEndpoints {
   static String cancelTrip(String id) => '/api/v1/trips/$id/cancellations';
   static String submitCompensationClaim(String id) =>
       '/api/v1/trips/$id/compensation-claims';
+  static String submitRefundIssue(String id) =>
+      '/api/v1/trips/$id/refund-issues';
   static const String uploadCompensationEvidence =
       '/api/v1/uploads/compensation-evidence';
   static const String tripHistory = '/api/v1/trips';
@@ -41,7 +43,8 @@ class ApiEndpoints {
   static String settleWaitingFee(String id) =>
       '/api/v1/trips/$id/waiting-fee/settlements';
   static String tripMessages(String id) => '/api/v1/trips/$id/messages';
-  static String uploadTripRecording(String id) => '/api/v1/trips/$id/recordings';
+  static String uploadTripRecording(String id) =>
+      '/api/v1/trips/$id/recordings';
   static String tripReceipt(String id) => '/api/v1/trips/$id/receipt';
   static String tripInvoice(String id) => '/api/v1/trips/$id/invoice';
   static String tripInvoicePdf(String id) => '/api/v1/trips/$id/invoice/pdf';

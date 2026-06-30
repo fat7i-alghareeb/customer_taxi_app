@@ -204,6 +204,15 @@ The separation between Domain and Data layers must be absolute.
 - `presentation/ui/screens/`: Scaffolding and routing.
 - `presentation/ui/widgets/`: Separated sections and widgets.
 
+### Refund Issue Feature Note
+
+`lib/features/refund_issues/` owns the passenger-facing refund review request flow. It is intentionally a support/request feature only:
+
+- It posts `CreateRefundIssueRequest` to `POST /api/v1/trips/{tripId}/refund-issues`.
+- It never creates a refund, never calls Stripe, and never exposes Stripe identifiers or raw Stripe errors.
+- WhatsApp is offered only after the backend request succeeds; the saved backend issue remains the source of truth.
+- Cancelled trip details may display the cancellation policy refund amount already returned on `TripCancellationEntity`, but current trip DTOs do not expose live Stripe refund lifecycle state.
+
 ---
 
 _For detailed technical deep-dives into specific infrastructure layers, visit the internal documentation in `lib/core/`._
