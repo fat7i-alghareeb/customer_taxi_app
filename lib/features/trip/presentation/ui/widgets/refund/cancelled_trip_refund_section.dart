@@ -1,6 +1,7 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/refund_issues/presentation/ui/screens/refund_issue_screen.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_refund_status.dart';
 
 class CancelledTripRefundSection extends StatelessWidget {
   const CancelledTripRefundSection({super.key, required this.trip});
@@ -11,6 +12,7 @@ class CancelledTripRefundSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final cancellation = trip.cancellation;
     if (cancellation == null) return const SizedBox.shrink();
+    final refundStatus = trip.refund?.status ?? TripRefundStatus.preparing;
 
     return Container(
       padding: REdgeInsets.all(AppSpacing.lg),
@@ -88,23 +90,6 @@ class CancelledTripRefundSection extends StatelessWidget {
             ),
           ],
           AppSpacing.lg.verticalSpace,
-          Container(
-            padding: REdgeInsets.all(AppSpacing.md),
-            decoration: BoxDecoration(
-              color: AppColors.warning.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(AppRadii.md.r),
-              border: Border.all(
-                color: AppColors.warning.withValues(alpha: 0.24),
-              ),
-            ),
-            child: Text(
-              AppStrings.cancelledRefundBackendSourceMessage,
-              style: AppTextStyles.s12w400.copyWith(
-                color: context.onSurface.withValues(alpha: 0.72),
-              ),
-            ),
-          ),
-          AppSpacing.lg.verticalSpace,
           AppButton.warningGradient(
             onTap: () => context.pushNamed(
               RefundIssueScreen.pageName,
@@ -117,6 +102,8 @@ class CancelledTripRefundSection extends StatelessWidget {
                 fromLabel: trip.stops.firstOrNull?.label ?? '',
                 toLabel: trip.stops.lastOrNull?.label ?? '',
                 cancelledAtUtc: cancellation.createdAtUtc,
+                refundStatus: refundStatus,
+                knownFailedRefund: refundStatus == TripRefundStatus.failed,
               ),
             ),
             child: AppButtonChild.labelIcon(

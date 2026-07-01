@@ -211,7 +211,8 @@ The separation between Domain and Data layers must be absolute.
 - It posts `CreateRefundIssueRequest` to `POST /api/v1/trips/{tripId}/refund-issues`.
 - It never creates a refund, never calls Stripe, and never exposes Stripe identifiers or raw Stripe errors.
 - WhatsApp is offered only after the backend request succeeds; the saved backend issue remains the source of truth.
-- Cancelled trip details may display the cancellation policy refund amount already returned on `TripCancellationEntity`, but current trip DTOs do not expose live Stripe refund lifecycle state.
+- Cancelled trip details display the cancellation policy amount from `TripCancellationEntity` and, when present, the customer-safe live refund lifecycle state from `TripRefundEntity`.
+- The refund issue screen receives the same `TripRefundStatus` through typed route args so the request flow explains failed, processing, completed, cancelled, or preparing states without exposing Stripe internals.
 
 ---
 

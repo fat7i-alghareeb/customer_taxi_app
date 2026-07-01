@@ -1,6 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
-import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 
 /// Result of the cancel sheet. Returned only when the rider confirms the
 /// cancellation; [note] is the (optional) reason, or null when none was picked.
@@ -93,16 +92,11 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
   }
 
   /// Returns true if the passenger is still inside the free cancellation window.
-  /// Mirrors CancellationPolicy.IsWithinFreeWindow on the backend.
+  /// Mirrors CancellationPolicy.IsWithinFreeWindow on the backend (inclusive: now <= createdAt + 5 min).
   static bool _isWithinFreeWindow(TripEntity trip) {
     final now = DateTime.now().toUtc();
     final booking = trip.createdAtUtc.toUtc();
-    if (now.isBefore(booking.add(const Duration(hours: 1)))) return true;
-    final scheduled = trip.scheduledAtUtc?.toUtc();
-    if (scheduled != null) {
-      return now.isBefore(scheduled.subtract(const Duration(hours: 1)));
-    }
-    return false;
+    return !now.isAfter(booking.add(const Duration(minutes: 5)));
   }
 
   @override
@@ -198,21 +192,9 @@ class _RefundBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isArrived = trip.status == TripStatus.arrived;
     final isWithinWindow = _CancelTripSheetState._isWithinFreeWindow(trip);
 
-    if (isArrived) {
-      const fee = 6.50;
-      final refund = (trip.quotedFare - fee).clamp(0.0, double.infinity);
-      final color = context.colorScheme.error;
-      return _BannerTile(
-        icon: FaIcon(FontAwesomeIcons.triangleExclamation, size: 16.r, color: color),
-        color: color,
-        text: AppStrings.cancelBannerArrived
-            .replaceAll('{amount}', refund.toStringAsFixed(2))
-            .replaceAll('{currency}', trip.currencyCode),
-      );
-    } else if (isWithinWindow) {
+    if (isWithinWindow) {
       const color = Color(0xFF2E7D32);
       return _BannerTile(
         icon: FaIcon(FontAwesomeIcons.circleCheck, size: 16.r, color: color),

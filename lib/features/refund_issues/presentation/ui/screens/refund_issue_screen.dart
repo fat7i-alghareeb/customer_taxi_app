@@ -1,4 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_refund_status.dart';
 
 import '../../../constants/forms/refund_issue_forms.dart';
 import '../../states/refund_issue_bloc.dart';
@@ -14,6 +15,7 @@ class RefundIssueScreenArgs {
     required this.fromLabel,
     required this.toLabel,
     this.cancelledAtUtc,
+    this.refundStatus = TripRefundStatus.preparing,
     this.knownFailedRefund = false,
   });
 
@@ -25,6 +27,7 @@ class RefundIssueScreenArgs {
   final String fromLabel;
   final String toLabel;
   final DateTime? cancelledAtUtc;
+  final TripRefundStatus refundStatus;
   final bool knownFailedRefund;
 }
 

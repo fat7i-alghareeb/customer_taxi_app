@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'trip_refund_status.dart';
 import 'trip_status.dart';
 
 part 'trip_entity.freezed.dart';
@@ -20,6 +21,7 @@ abstract class TripEntity with _$TripEntity {
     double? driverLng,
     DateTime? etaToPickup,
     TripCancellationEntity? cancellation,
+    TripRefundEntity? refund,
     TripCompensationClaimEntity? compensationClaim,
     TripWaitingSessionEntity? activeWaitingSession,
     String? encodedOverviewPolyline,
@@ -73,6 +75,16 @@ abstract class TripCancellationEntity with _$TripCancellationEntity {
     String? note,
     DateTime? createdAtUtc,
   }) = _TripCancellationEntity;
+}
+
+@freezed
+abstract class TripRefundEntity with _$TripRefundEntity {
+  const factory TripRefundEntity({
+    required TripRefundStatus status,
+    required double amount,
+    required String currencyCode,
+    DateTime? completedAtUtc,
+  }) = _TripRefundEntity;
 }
 
 @freezed

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:customertaxi/features/refund_issues/domain/entities/refund_issue_request_type.dart';
 
 part 'refund_issue_entity.freezed.dart';
 
@@ -7,9 +8,9 @@ abstract class RefundIssueEntity with _$RefundIssueEntity {
   const factory RefundIssueEntity({
     required String id,
     required String tripId,
-    required String requestType,
+    required RefundIssueRequestType requestType,
     required String customerReason,
-    required String reviewStatus,
+    required RefundIssueReviewStatus reviewStatus,
     required DateTime createdAtUtc,
     String? paymentId,
     String? paymentRefundId,

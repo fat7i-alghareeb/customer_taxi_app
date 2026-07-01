@@ -55,6 +55,7 @@ class RefundIssueBodyState extends State<RefundIssueBody> {
           if (issue != null) {
             return RefundIssueSuccessPanel(
               referenceCode: widget.args.referenceCode,
+              refundStatusSnapshot: issue.refundStatusSnapshot,
               onOpenWhatsApp: () => _openWhatsApp(context),
             );
           }
@@ -76,27 +77,29 @@ class RefundIssueBodyState extends State<RefundIssueBody> {
                       .fadeIn(duration: AppDurations.normal)
                       .slideY(begin: 0.08, end: 0),
                   AppSpacing.lg.verticalSpace,
-                  RefundIssueInfoCard(
+                  RefundIssueInfoCard.review(
                         knownFailed: widget.args.knownFailedRefund,
                       )
                       .animate(delay: AppDurations.fast)
                       .fadeIn(duration: AppDurations.normal)
                       .slideY(begin: 0.08, end: 0),
                   AppSpacing.lg.verticalSpace,
-                  if (!widget.args.knownFailedRefund)
-                    ..._options(state.selectedType).map(
-                      (option) => Padding(
-                        padding: REdgeInsets.only(bottom: AppSpacing.sm),
-                        child: RefundIssueReasonOptionTile(
-                          option: option,
-                          selected: state.selectedType == option.type,
-                          onTap: () => context.read<RefundIssueBloc>().add(
-                            RefundIssueEvent.reasonSelected(option.type),
-                          ),
-                        ),
-                      ),
-                    ),
+                  if (!widget.args.knownFailedRefund) ...[
+                    _ReasonGroupCard(selectedType: state.selectedType)
+                        .animate(delay: AppDurations.fast)
+                        .fadeIn(duration: AppDurations.normal)
+                        .slideY(begin: 0.08, end: 0),
+                    AppSpacing.lg.verticalSpace,
+                  ],
                   RefundIssueNoteField(form: widget.form)
+                      .animate(delay: AppDurations.normal)
+                      .fadeIn(duration: AppDurations.normal)
+                      .slideY(begin: 0.08, end: 0),
+                  AppSpacing.lg.verticalSpace,
+                  RefundIssueInfoCard(
+                        title: AppStrings.refundIssueWhatHappensTitle,
+                        message: AppStrings.refundIssueWhatHappensBody,
+                      )
                       .animate(delay: AppDurations.normal)
                       .fadeIn(duration: AppDurations.normal)
                       .slideY(begin: 0.08, end: 0),
@@ -108,35 +111,6 @@ class RefundIssueBodyState extends State<RefundIssueBody> {
       ),
     );
   }
-
-  List<RefundIssueReasonOption> _options(RefundIssueRequestType selectedType) =>
-      [
-        RefundIssueReasonOption(
-          type: RefundIssueRequestType.didNotReceiveRefund,
-          icon: FontAwesomeIcons.circleQuestion,
-          label: AppStrings.refundIssueReasonDidNotReceive,
-        ),
-        RefundIssueReasonOption(
-          type: RefundIssueRequestType.receivedLessThanExpected,
-          icon: FontAwesomeIcons.scaleBalanced,
-          label: AppStrings.refundIssueReasonLessThanExpected,
-        ),
-        RefundIssueReasonOption(
-          type: RefundIssueRequestType.refundTakingTooLong,
-          icon: FontAwesomeIcons.clock,
-          label: AppStrings.refundIssueReasonTakingTooLong,
-        ),
-        RefundIssueReasonOption(
-          type: RefundIssueRequestType.questionAboutRefund,
-          icon: FontAwesomeIcons.comments,
-          label: AppStrings.refundIssueReasonQuestion,
-        ),
-        RefundIssueReasonOption(
-          type: RefundIssueRequestType.other,
-          icon: FontAwesomeIcons.ellipsis,
-          label: AppStrings.refundIssueReasonOther,
-        ),
-      ];
 
   Future<void> _openWhatsApp(BuildContext context) async {
     final number = getIt<SupportContactService>().whatsApp;
@@ -154,6 +128,83 @@ class RefundIssueBodyState extends State<RefundIssueBody> {
 
   String _formatAmount(double value, String currencyCode) =>
       '${value.toStringAsFixed(2)} $currencyCode';
+}
+
+/// Grouped card listing the refund reasons as a single radio list with a
+/// section header and hairline dividers between rows.
+class _ReasonGroupCard extends StatelessWidget {
+  const _ReasonGroupCard({required this.selectedType});
+
+  final RefundIssueRequestType selectedType;
+
+  List<RefundIssueReasonOption> get _options => [
+    RefundIssueReasonOption(
+      type: RefundIssueRequestType.didNotReceiveRefund,
+      label: AppStrings.refundIssueReasonDidNotReceive,
+    ),
+    RefundIssueReasonOption(
+      type: RefundIssueRequestType.receivedLessThanExpected,
+      label: AppStrings.refundIssueReasonLessThanExpected,
+    ),
+    RefundIssueReasonOption(
+      type: RefundIssueRequestType.refundTakingTooLong,
+      label: AppStrings.refundIssueReasonTakingTooLong,
+    ),
+    RefundIssueReasonOption(
+      type: RefundIssueRequestType.questionAboutRefund,
+      label: AppStrings.refundIssueReasonQuestion,
+    ),
+    RefundIssueReasonOption(
+      type: RefundIssueRequestType.other,
+      label: AppStrings.refundIssueReasonOther,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final options = _options;
+    return Container(
+      padding: REdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        color: context.surface,
+        borderRadius: BorderRadius.circular(AppRadii.lg.r),
+        border: Border.all(color: context.onSurface.withValues(alpha: 0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: REdgeInsets.symmetric(
+              horizontal: AppSpacing.xs,
+              vertical: AppSpacing.sm,
+            ),
+            child: Text(
+              AppStrings.refundIssueReasonSectionTitle,
+              style: AppTextStyles.s14w600.copyWith(color: context.onSurface),
+            ),
+          ),
+          for (var i = 0; i < options.length; i++) ...[
+            if (i > 0)
+              Divider(
+                height: 1.h,
+                thickness: 1,
+                color: context.onSurface.withValues(alpha: 0.06),
+              ),
+            RefundIssueReasonOptionTile(
+              option: options[i],
+              selected: selectedType == options[i].type,
+              onTap: () => context.read<RefundIssueBloc>().add(
+                RefundIssueEvent.reasonSelected(options[i].type),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 class RefundIssueBottomAction extends StatelessWidget {
@@ -222,17 +273,5 @@ class RefundIssueBottomAction extends StatelessWidget {
     );
   }
 
-  String _labelFor(RefundIssueRequestType type) => switch (type) {
-    RefundIssueRequestType.didNotReceiveRefund =>
-      AppStrings.refundIssueReasonDidNotReceive,
-    RefundIssueRequestType.receivedLessThanExpected =>
-      AppStrings.refundIssueReasonLessThanExpected,
-    RefundIssueRequestType.refundTakingTooLong =>
-      AppStrings.refundIssueReasonTakingTooLong,
-    RefundIssueRequestType.questionAboutRefund =>
-      AppStrings.refundIssueReasonQuestion,
-    RefundIssueRequestType.knownFailedRefundReview =>
-      AppStrings.refundIssueKnownFailedReason,
-    RefundIssueRequestType.other => AppStrings.refundIssueReasonOther,
-  };
+  String _labelFor(RefundIssueRequestType type) => type.title();
 }

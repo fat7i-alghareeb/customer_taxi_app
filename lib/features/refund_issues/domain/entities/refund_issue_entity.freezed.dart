@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RefundIssueEntity {
 
- String get id; String get tripId; String get requestType; String get customerReason; String get reviewStatus; DateTime get createdAtUtc; String? get paymentId; String? get paymentRefundId; String? get tripCancellationId; String? get note; String? get refundStatusSnapshot; double? get refundAmountSnapshot; String? get refundCurrencySnapshot; String? get tripReferenceCode; bool get whatsAppOpened;
+ String get id; String get tripId; RefundIssueRequestType get requestType; String get customerReason; RefundIssueReviewStatus get reviewStatus; DateTime get createdAtUtc; String? get paymentId; String? get paymentRefundId; String? get tripCancellationId; String? get note; String? get refundStatusSnapshot; double? get refundAmountSnapshot; String? get refundCurrencySnapshot; String? get tripReferenceCode; bool get whatsAppOpened;
 /// Create a copy of RefundIssueEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $RefundIssueEntityCopyWith<$Res>  {
   factory $RefundIssueEntityCopyWith(RefundIssueEntity value, $Res Function(RefundIssueEntity) _then) = _$RefundIssueEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String tripId, String requestType, String customerReason, String reviewStatus, DateTime createdAtUtc, String? paymentId, String? paymentRefundId, String? tripCancellationId, String? note, String? refundStatusSnapshot, double? refundAmountSnapshot, String? refundCurrencySnapshot, String? tripReferenceCode, bool whatsAppOpened
+ String id, String tripId, RefundIssueRequestType requestType, String customerReason, RefundIssueReviewStatus reviewStatus, DateTime createdAtUtc, String? paymentId, String? paymentRefundId, String? tripCancellationId, String? note, String? refundStatusSnapshot, double? refundAmountSnapshot, String? refundCurrencySnapshot, String? tripReferenceCode, bool whatsAppOpened
 });
 
 
@@ -67,9 +67,9 @@ class _$RefundIssueEntityCopyWithImpl<$Res>
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,requestType: null == requestType ? _self.requestType : requestType // ignore: cast_nullable_to_non_nullable
-as String,customerReason: null == customerReason ? _self.customerReason : customerReason // ignore: cast_nullable_to_non_nullable
+as RefundIssueRequestType,customerReason: null == customerReason ? _self.customerReason : customerReason // ignore: cast_nullable_to_non_nullable
 as String,reviewStatus: null == reviewStatus ? _self.reviewStatus : reviewStatus // ignore: cast_nullable_to_non_nullable
-as String,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
+as RefundIssueReviewStatus,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime,paymentId: freezed == paymentId ? _self.paymentId : paymentId // ignore: cast_nullable_to_non_nullable
 as String?,paymentRefundId: freezed == paymentRefundId ? _self.paymentRefundId : paymentRefundId // ignore: cast_nullable_to_non_nullable
 as String?,tripCancellationId: freezed == tripCancellationId ? _self.tripCancellationId : tripCancellationId // ignore: cast_nullable_to_non_nullable
@@ -164,7 +164,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String tripId,  String requestType,  String customerReason,  String reviewStatus,  DateTime createdAtUtc,  String? paymentId,  String? paymentRefundId,  String? tripCancellationId,  String? note,  String? refundStatusSnapshot,  double? refundAmountSnapshot,  String? refundCurrencySnapshot,  String? tripReferenceCode,  bool whatsAppOpened)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String tripId,  RefundIssueRequestType requestType,  String customerReason,  RefundIssueReviewStatus reviewStatus,  DateTime createdAtUtc,  String? paymentId,  String? paymentRefundId,  String? tripCancellationId,  String? note,  String? refundStatusSnapshot,  double? refundAmountSnapshot,  String? refundCurrencySnapshot,  String? tripReferenceCode,  bool whatsAppOpened)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RefundIssueEntity() when $default != null:
 return $default(_that.id,_that.tripId,_that.requestType,_that.customerReason,_that.reviewStatus,_that.createdAtUtc,_that.paymentId,_that.paymentRefundId,_that.tripCancellationId,_that.note,_that.refundStatusSnapshot,_that.refundAmountSnapshot,_that.refundCurrencySnapshot,_that.tripReferenceCode,_that.whatsAppOpened);case _:
@@ -185,7 +185,7 @@ return $default(_that.id,_that.tripId,_that.requestType,_that.customerReason,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String tripId,  String requestType,  String customerReason,  String reviewStatus,  DateTime createdAtUtc,  String? paymentId,  String? paymentRefundId,  String? tripCancellationId,  String? note,  String? refundStatusSnapshot,  double? refundAmountSnapshot,  String? refundCurrencySnapshot,  String? tripReferenceCode,  bool whatsAppOpened)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String tripId,  RefundIssueRequestType requestType,  String customerReason,  RefundIssueReviewStatus reviewStatus,  DateTime createdAtUtc,  String? paymentId,  String? paymentRefundId,  String? tripCancellationId,  String? note,  String? refundStatusSnapshot,  double? refundAmountSnapshot,  String? refundCurrencySnapshot,  String? tripReferenceCode,  bool whatsAppOpened)  $default,) {final _that = this;
 switch (_that) {
 case _RefundIssueEntity():
 return $default(_that.id,_that.tripId,_that.requestType,_that.customerReason,_that.reviewStatus,_that.createdAtUtc,_that.paymentId,_that.paymentRefundId,_that.tripCancellationId,_that.note,_that.refundStatusSnapshot,_that.refundAmountSnapshot,_that.refundCurrencySnapshot,_that.tripReferenceCode,_that.whatsAppOpened);case _:
@@ -205,7 +205,7 @@ return $default(_that.id,_that.tripId,_that.requestType,_that.customerReason,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String tripId,  String requestType,  String customerReason,  String reviewStatus,  DateTime createdAtUtc,  String? paymentId,  String? paymentRefundId,  String? tripCancellationId,  String? note,  String? refundStatusSnapshot,  double? refundAmountSnapshot,  String? refundCurrencySnapshot,  String? tripReferenceCode,  bool whatsAppOpened)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String tripId,  RefundIssueRequestType requestType,  String customerReason,  RefundIssueReviewStatus reviewStatus,  DateTime createdAtUtc,  String? paymentId,  String? paymentRefundId,  String? tripCancellationId,  String? note,  String? refundStatusSnapshot,  double? refundAmountSnapshot,  String? refundCurrencySnapshot,  String? tripReferenceCode,  bool whatsAppOpened)?  $default,) {final _that = this;
 switch (_that) {
 case _RefundIssueEntity() when $default != null:
 return $default(_that.id,_that.tripId,_that.requestType,_that.customerReason,_that.reviewStatus,_that.createdAtUtc,_that.paymentId,_that.paymentRefundId,_that.tripCancellationId,_that.note,_that.refundStatusSnapshot,_that.refundAmountSnapshot,_that.refundCurrencySnapshot,_that.tripReferenceCode,_that.whatsAppOpened);case _:
@@ -225,9 +225,9 @@ class _RefundIssueEntity implements RefundIssueEntity {
 
 @override final  String id;
 @override final  String tripId;
-@override final  String requestType;
+@override final  RefundIssueRequestType requestType;
 @override final  String customerReason;
-@override final  String reviewStatus;
+@override final  RefundIssueReviewStatus reviewStatus;
 @override final  DateTime createdAtUtc;
 @override final  String? paymentId;
 @override final  String? paymentRefundId;
@@ -269,7 +269,7 @@ abstract mixin class _$RefundIssueEntityCopyWith<$Res> implements $RefundIssueEn
   factory _$RefundIssueEntityCopyWith(_RefundIssueEntity value, $Res Function(_RefundIssueEntity) _then) = __$RefundIssueEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String tripId, String requestType, String customerReason, String reviewStatus, DateTime createdAtUtc, String? paymentId, String? paymentRefundId, String? tripCancellationId, String? note, String? refundStatusSnapshot, double? refundAmountSnapshot, String? refundCurrencySnapshot, String? tripReferenceCode, bool whatsAppOpened
+ String id, String tripId, RefundIssueRequestType requestType, String customerReason, RefundIssueReviewStatus reviewStatus, DateTime createdAtUtc, String? paymentId, String? paymentRefundId, String? tripCancellationId, String? note, String? refundStatusSnapshot, double? refundAmountSnapshot, String? refundCurrencySnapshot, String? tripReferenceCode, bool whatsAppOpened
 });
 
 
@@ -291,9 +291,9 @@ class __$RefundIssueEntityCopyWithImpl<$Res>
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,requestType: null == requestType ? _self.requestType : requestType // ignore: cast_nullable_to_non_nullable
-as String,customerReason: null == customerReason ? _self.customerReason : customerReason // ignore: cast_nullable_to_non_nullable
+as RefundIssueRequestType,customerReason: null == customerReason ? _self.customerReason : customerReason // ignore: cast_nullable_to_non_nullable
 as String,reviewStatus: null == reviewStatus ? _self.reviewStatus : reviewStatus // ignore: cast_nullable_to_non_nullable
-as String,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
+as RefundIssueReviewStatus,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime,paymentId: freezed == paymentId ? _self.paymentId : paymentId // ignore: cast_nullable_to_non_nullable
 as String?,paymentRefundId: freezed == paymentRefundId ? _self.paymentRefundId : paymentRefundId // ignore: cast_nullable_to_non_nullable
 as String?,tripCancellationId: freezed == tripCancellationId ? _self.tripCancellationId : tripCancellationId // ignore: cast_nullable_to_non_nullable

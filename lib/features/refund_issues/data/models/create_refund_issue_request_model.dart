@@ -14,7 +14,7 @@ class CreateRefundIssueRequestModel {
   final bool whatsAppOpened;
 
   Map<String, dynamic> toJson() => {
-    'requestType': requestType.apiValue,
+    'requestType': requestType.toJson(),
     'customerReason': customerReason,
     'note': note,
     'whatsAppOpened': whatsAppOpened,

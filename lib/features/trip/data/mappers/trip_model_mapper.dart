@@ -1,6 +1,7 @@
 import '../../domain/entities/trip_entity.dart';
 import '../../domain/entities/trip_invoice_entity.dart';
 import '../../domain/entities/trip_receipt_entity.dart';
+import '../../domain/entities/trip_refund_status.dart';
 import '../../domain/entities/trip_status.dart';
 import '../models/trip_invoice_model.dart';
 import '../models/trip_model.dart';
@@ -22,6 +23,7 @@ extension TripModelMapper on TripModel {
     driverLng: driverLng,
     etaToPickup: etaToPickup,
     cancellation: cancellation?.toEntity,
+    refund: refund?.toEntity,
     compensationClaim: compensationClaim?.toEntity,
     activeWaitingSession: activeWaitingSession?.toEntity,
     encodedOverviewPolyline: encodedOverviewPolyline,
@@ -85,6 +87,15 @@ extension TripCancellationModelMapper on TripCancellationModel {
     currencyCode: currencyCode,
     note: note,
     createdAtUtc: createdAtUtc,
+  );
+}
+
+extension TripRefundModelMapper on TripRefundModel {
+  TripRefundEntity get toEntity => TripRefundEntity(
+    status: TripRefundStatus.fromString(status),
+    amount: amount,
+    currencyCode: currencyCode,
+    completedAtUtc: completedAtUtc,
   );
 }
 

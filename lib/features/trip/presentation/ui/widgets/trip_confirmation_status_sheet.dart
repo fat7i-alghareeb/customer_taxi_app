@@ -1,12 +1,17 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancel_button.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_chat_button.dart';
 
-/// Sheet shown while `TripStatus.accepted` — the driver has been assigned but
-/// hasn't started heading to pickup yet.
-class TripAcceptedStatusSheet extends StatelessWidget {
-  const TripAcceptedStatusSheet({
+/// Confirmation sheet covering the `awaitingAdminAcceptance` → `accepted`
+/// transition. Both statuses share the same layout (booking time, pickup /
+/// drop-off, chat, cancel); only the headline differs — "Your ride is
+/// **pending**" while awaiting, "Your ride is **confirmed**" once accepted. The
+/// headline cross-fades between the two as the status flips, since the parent
+/// keeps this widget mounted across the change.
+class TripConfirmationStatusSheet extends StatelessWidget {
+  const TripConfirmationStatusSheet({
     required this.trip,
     required this.cancelStatus,
     required this.onCancelPressed,
@@ -20,6 +25,7 @@ class TripAcceptedStatusSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
+    final isAccepted = trip.status == TripStatus.accepted;
     final pickupStop = trip.stops.isNotEmpty ? trip.stops.first : null;
     final dropoffStop = trip.stops.length > 1 ? trip.stops.last : null;
     final bookingTime = trip.createdAtUtc.toLocal().toTime24();
@@ -27,17 +33,23 @@ class TripAcceptedStatusSheet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        RichText(
-          text: TextSpan(
-            style: AppTextStyles.s24w700.copyWith(color: colors.onSurface),
-            children: [
-              TextSpan(text: '${AppStrings.activeTripRideIsPrefix} '),
-              TextSpan(
-                text: AppStrings.activeTripConfirmedKeyword,
-                style: TextStyle(color: colors.primary),
-              ),
-            ],
+        // Headline swaps "pending" ↔ "confirmed" with a fade + slide when the
+        // admin accepts the ride.
+        AnimatedSwitcher(
+          duration: AppDurations.slow,
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeIn,
+          transitionBuilder: (child, animation) => FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 0.25),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
           ),
+          child: _Headline(key: ValueKey(isAccepted), isAccepted: isAccepted),
         ),
         AppSpacing.sm.verticalSpace,
 
@@ -73,6 +85,35 @@ class TripAcceptedStatusSheet extends StatelessWidget {
             onTap: onCancelPressed,
           ),
       ],
+    );
+  }
+}
+
+/// "Your ride is **pending / confirmed**" — the keyword and its colour reflect
+/// whether the ride has been accepted yet.
+class _Headline extends StatelessWidget {
+  const _Headline({required this.isAccepted, super.key});
+
+  final bool isAccepted;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+    final keyword = isAccepted
+        ? AppStrings.activeTripConfirmedKeyword
+        : AppStrings.activeTripPendingKeyword;
+    final keywordColor = isAccepted
+        ? colors.primary
+        : colors.onSurface.withValues(alpha: 0.45);
+
+    return RichText(
+      text: TextSpan(
+        style: AppTextStyles.s24w700.copyWith(color: colors.onSurface),
+        children: [
+          TextSpan(text: '${AppStrings.activeTripRideIsPrefix} '),
+          TextSpan(text: keyword, style: TextStyle(color: keywordColor)),
+        ],
+      ),
     );
   }
 }

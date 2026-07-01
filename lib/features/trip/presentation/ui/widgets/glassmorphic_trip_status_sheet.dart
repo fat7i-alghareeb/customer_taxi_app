@@ -6,9 +6,9 @@ import 'package:customertaxi/features/trip/domain/entities/driver_location_entit
 import 'package:customertaxi/features/trip/presentation/coordinators/trip_completion_coordinator.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_overlay.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_progress_header.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_accepted_status_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_arrived_status_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_completed_status_sheet.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_confirmation_status_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_en_route_status_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_general_status_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_in_progress_status_sheet.dart';
@@ -109,7 +109,7 @@ class _GlassmorphicTripStatusSheetState
       _arrivedHandoffDone = true;
       return;
     }
-    _arrivedHandoffTimer = Timer(const Duration(milliseconds: 2500), () {
+    _arrivedHandoffTimer = Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
       setState(() => _arrivedHandoffDone = true);
       // didUpdateWidget won't fire for this internal setState, so kick the
@@ -248,8 +248,11 @@ class _GlassmorphicTripStatusSheetState
               AppSpacing.md.verticalSpace,
 
               // Status-specific sheet content.
-              if (trip.status == TripStatus.accepted) ...[
-                TripAcceptedStatusSheet(
+              if (trip.status == TripStatus.awaitingAdminAcceptance ||
+                  trip.status == TripStatus.accepted) ...[
+                // Same widget for both statuses so the element is reused and the
+                // headline can animate from "pending" to "confirmed" in place.
+                TripConfirmationStatusSheet(
                   trip: trip,
                   cancelStatus: cancelStatus,
                   onCancelPressed: onCancelPressed,

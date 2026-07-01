@@ -35,6 +35,9 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
       : TripCancellationModel.fromJson(
           json['cancellation'] as Map<String, dynamic>,
         ),
+  refund: json['refund'] == null
+      ? null
+      : TripRefundModel.fromJson(json['refund'] as Map<String, dynamic>),
   compensationClaim: json['compensationClaim'] == null
       ? null
       : TripCompensationClaimModel.fromJson(
@@ -85,6 +88,7 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'driverLng': instance.driverLng,
       'etaToPickup': instance.etaToPickup?.toIso8601String(),
       'cancellation': instance.cancellation,
+      'refund': instance.refund,
       'compensationClaim': instance.compensationClaim,
       'activeWaitingSession': instance.activeWaitingSession,
       'encodedOverviewPolyline': instance.encodedOverviewPolyline,
@@ -173,6 +177,24 @@ Map<String, dynamic> _$TripCancellationModelToJson(
   'note': instance.note,
   'createdAtUtc': instance.createdAtUtc?.toIso8601String(),
 };
+
+_TripRefundModel _$TripRefundModelFromJson(Map<String, dynamic> json) =>
+    _TripRefundModel(
+      status: json['status'] as String,
+      amount: (json['amount'] as num).toDouble(),
+      currencyCode: json['currencyCode'] as String,
+      completedAtUtc: json['completedAtUtc'] == null
+          ? null
+          : DateTime.parse(json['completedAtUtc'] as String),
+    );
+
+Map<String, dynamic> _$TripRefundModelToJson(_TripRefundModel instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'amount': instance.amount,
+      'currencyCode': instance.currencyCode,
+      'completedAtUtc': instance.completedAtUtc?.toIso8601String(),
+    };
 
 _TripCompensationClaimModel _$TripCompensationClaimModelFromJson(
   Map<String, dynamic> json,

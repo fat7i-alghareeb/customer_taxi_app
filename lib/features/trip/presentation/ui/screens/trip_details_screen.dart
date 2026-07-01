@@ -1,10 +1,12 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
 import '../../../domain/entities/trip_entity.dart';
+import '../../../domain/entities/trip_refund_status.dart';
 import '../../../domain/entities/trip_status.dart';
 import '../../states/trip_bloc.dart';
 import '../widgets/completed_action_chips.dart';
 import '../widgets/refund/cancelled_trip_refund_section.dart';
+import '../widgets/refund/trip_refund_status_card.dart';
 import '../widgets/trip_fare_summary_card.dart';
 import '../widgets/trip_rating_sheet.dart';
 import '../widgets/trip_stops_timeline.dart';
@@ -62,6 +64,22 @@ class _DetailsContent extends StatelessWidget {
 
   final TripEntity trip;
 
+  /// Real refund status when the backend has one; otherwise a neutral
+  /// "being prepared" state when a cancellation owes a policy amount but no
+  /// refund record exists yet. Null when there is nothing refund-related.
+  TripRefundEntity? _refundToShow(TripEntity trip) {
+    if (trip.refund != null) return trip.refund;
+    final cancellation = trip.cancellation;
+    if (cancellation != null && cancellation.refundAmount > 0) {
+      return TripRefundEntity(
+        status: TripRefundStatus.preparing,
+        amount: cancellation.refundAmount,
+        currencyCode: cancellation.currencyCode,
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
@@ -87,6 +105,14 @@ class _DetailsContent extends StatelessWidget {
           if (trip.status == TripStatus.completed) ...[
             AppSpacing.lg.verticalSpace,
             _RatingSection(trip: trip),
+          ],
+
+          // Prominent, standalone refund outcome (completed / in progress /
+          // failed). Falls back to a neutral "being prepared" state when a
+          // cancellation owes a policy amount but no refund record exists yet.
+          if (_refundToShow(trip) case final refund?) ...[
+            AppSpacing.lg.verticalSpace,
+            TripRefundStatusCard(refund: refund),
           ],
 
           if (trip.status == TripStatus.cancelled &&
@@ -310,6 +336,10 @@ class _CancellationSection extends StatelessWidget {
     'AirportWaitDeclined' => AppStrings.cancellationReasonAirportWaitDeclined,
     'PassengerCancelledAfterArrival' =>
       AppStrings.cancellationReasonPassengerCancelledAfterArrival,
+    'PassengerWithinFiveMinutes' =>
+      AppStrings.cancellationReasonPassengerWithinFiveMinutes,
+    'PassengerAfterFiveMinutes' =>
+      AppStrings.cancellationReasonPassengerAfterFiveMinutes,
     _ => reason,
   };
 

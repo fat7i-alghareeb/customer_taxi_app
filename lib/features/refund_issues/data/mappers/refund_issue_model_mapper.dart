@@ -1,13 +1,14 @@
-import '../../domain/entities/refund_issue_entity.dart';
-import '../models/refund_issue_model.dart';
+import 'package:customertaxi/features/refund_issues/data/models/refund_issue_model.dart';
+import 'package:customertaxi/features/refund_issues/domain/entities/refund_issue_entity.dart';
+import 'package:customertaxi/features/refund_issues/domain/entities/refund_issue_request_type.dart';
 
 extension RefundIssueModelMapper on RefundIssueModel {
   RefundIssueEntity get toEntity => RefundIssueEntity(
     id: id,
     tripId: tripId,
-    requestType: requestType,
+    requestType: RefundIssueRequestType.fromJson(requestType),
     customerReason: customerReason,
-    reviewStatus: reviewStatus,
+    reviewStatus: RefundIssueReviewStatus.fromJson(reviewStatus),
     createdAtUtc: createdAtUtc,
     paymentId: paymentId,
     paymentRefundId: paymentRefundId,

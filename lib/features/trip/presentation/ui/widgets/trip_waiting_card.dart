@@ -159,15 +159,6 @@ class TripWaitingCard extends StatelessWidget {
                 ],
               ),
             ),
-            AppSpacing.md.horizontalSpace,
-            SizedBox(
-              width: 26.r,
-              height: 26.r,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                color: colors.primary,
-              ),
-            ),
           ],
         ),
       ),

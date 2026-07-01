@@ -20,6 +20,7 @@ abstract class TripModel with _$TripModel {
     double? driverLng,
     DateTime? etaToPickup,
     TripCancellationModel? cancellation,
+    TripRefundModel? refund,
     TripCompensationClaimModel? compensationClaim,
     TripWaitingSessionModel? activeWaitingSession,
     String? encodedOverviewPolyline,
@@ -85,6 +86,19 @@ abstract class TripCancellationModel with _$TripCancellationModel {
 
   factory TripCancellationModel.fromJson(Map<String, dynamic> json) =>
       _$TripCancellationModelFromJson(json);
+}
+
+@freezed
+abstract class TripRefundModel with _$TripRefundModel {
+  const factory TripRefundModel({
+    required String status,
+    required double amount,
+    required String currencyCode,
+    DateTime? completedAtUtc,
+  }) = _TripRefundModel;
+
+  factory TripRefundModel.fromJson(Map<String, dynamic> json) =>
+      _$TripRefundModelFromJson(json);
 }
 
 @freezed

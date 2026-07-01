@@ -3,17 +3,14 @@ import 'package:customertaxi/common/imports/imports.dart';
 import '../../../domain/entities/refund_issue_request_type.dart';
 
 class RefundIssueReasonOption {
-  const RefundIssueReasonOption({
-    required this.type,
-    required this.icon,
-    required this.label,
-  });
+  const RefundIssueReasonOption({required this.type, required this.label});
 
   final RefundIssueRequestType type;
-  final FaIconData icon;
   final String label;
 }
 
+/// A borderless radio row meant to sit inside a shared grouped card
+/// (see [RefundIssueBody]). Label on the leading edge, radio glyph trailing.
 class RefundIssueReasonOptionTile extends StatelessWidget {
   const RefundIssueReasonOptionTile({
     super.key,
@@ -28,24 +25,27 @@ class RefundIssueReasonOptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppButton.outline(
-      variant: selected ? AppButtonVariant.warning : AppButtonVariant.grey,
+    return InkWell(
       onTap: onTap,
-      child: AppButtonChild.custom(
-        Row(
+      borderRadius: BorderRadius.circular(AppRadii.md.r),
+      child: Padding(
+        padding: REdgeInsets.symmetric(
+          horizontal: AppSpacing.xs,
+          vertical: AppSpacing.md,
+        ),
+        child: Row(
           children: [
-            FaIcon(
-              option.icon,
-              size: 16.r,
-              color: selected ? AppColors.warning : context.onSurface,
-            ),
-            AppSpacing.md.horizontalSpace,
             Expanded(
               child: Text(
                 option.label,
-                style: AppTextStyles.s14w600.copyWith(color: context.onSurface),
+                style: AppTextStyles.s14w600.copyWith(
+                  color: selected
+                      ? AppColors.warning
+                      : context.onSurface,
+                ),
               ),
             ),
+            AppSpacing.md.horizontalSpace,
             FaIcon(
               selected
                   ? FontAwesomeIcons.solidCircleCheck
@@ -56,10 +56,6 @@ class RefundIssueReasonOptionTile extends StatelessWidget {
                   : context.onSurface.withValues(alpha: 0.42),
             ),
           ],
-        ),
-        padding: REdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.md,
         ),
       ),
     );

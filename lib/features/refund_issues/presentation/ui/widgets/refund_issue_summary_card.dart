@@ -9,6 +9,9 @@ class RefundIssueSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final status = args.refundStatus;
+    final accent = status.color;
+
     return Container(
       padding: REdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -27,14 +30,10 @@ class RefundIssueSummaryCard extends StatelessWidget {
                 height: 42.h,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.warning.withValues(alpha: 0.12),
+                  color: accent.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(AppRadii.lg.r),
                 ),
-                child: FaIcon(
-                  FontAwesomeIcons.rotateLeft,
-                  size: 18.r,
-                  color: AppColors.warning,
-                ),
+                child: FaIcon(status.icon, size: 18.r, color: accent),
               ),
               AppSpacing.md.horizontalSpace,
               Expanded(
@@ -82,6 +81,19 @@ class RefundIssueSummaryCard extends StatelessWidget {
           RefundIssueSummaryRow(
             label: AppStrings.refundIssueRefundPercent,
             value: '${args.refundPercent.toStringAsFixed(0)}%',
+          ),
+          AppSpacing.sm.verticalSpace,
+          RefundIssueSummaryRow(
+            label: AppStrings.tripStatus,
+            value: status.title,
+            valueColor: accent,
+          ),
+          AppSpacing.md.verticalSpace,
+          Text(
+            status.description,
+            style: AppTextStyles.s12w400.copyWith(
+              color: context.onSurface.withValues(alpha: 0.7),
+            ),
           ),
         ],
       ),
