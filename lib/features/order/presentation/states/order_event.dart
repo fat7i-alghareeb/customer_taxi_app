@@ -64,4 +64,9 @@ class OrderEvent with _$OrderEvent {
   const factory OrderEvent.confirmBookingDetailsPressed() =
       _ConfirmBookingDetailsPressed;
   const factory OrderEvent.paymentSheetDismissed() = _PaymentSheetDismissed;
+
+  /// Loads the passenger's wallet balance so the booking step can offer wallet/mixed.
+  const factory OrderEvent.walletBalanceRequested() = _WalletBalanceRequested;
+  const factory OrderEvent.paymentMethodSelected(OrderPaymentMethod method) =
+      _PaymentMethodSelected;
 }

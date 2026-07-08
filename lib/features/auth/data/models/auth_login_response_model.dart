@@ -9,6 +9,8 @@ abstract class AuthLoginResponseModel with _$AuthLoginResponseModel {
     required String accessToken,
     required String refreshToken,
     required AuthUserModel user,
+    @Default(false) bool isNewAccount,
+    @Default(false) bool accountAlreadyExists,
   }) = _AuthLoginResponseModel;
 
   factory AuthLoginResponseModel.fromJson(Map<String, dynamic> json) =>
@@ -21,7 +23,10 @@ abstract class AuthUserModel with _$AuthUserModel {
     required String id,
     String? name,
     required String phone,
+    String? email,
     String? profilePhotoUrl,
+    @Default(true) bool isPhoneVerified,
+    @Default(false) bool isEmailVerified,
   }) = _AuthUserModel;
 
   factory AuthUserModel.fromJson(Map<String, dynamic> json) =>

@@ -36,6 +36,8 @@ abstract class TripEntity with _$TripEntity {
     DateTime? dispatchWindowOpensAtUtc,
     @Default(false) bool canMarkEnRoute,
     @Default('Normal') String attentionState,
+    @Default(1) int passengerCount,
+    @Default(0) int bagCount,
   }) = _TripEntity;
 }
 

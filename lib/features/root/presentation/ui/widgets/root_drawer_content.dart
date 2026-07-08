@@ -11,6 +11,7 @@ import 'package:customertaxi/features/root/presentation/ui/screens/privacy_polic
 import 'package:customertaxi/features/root/presentation/ui/screens/terms_and_conditions_screen.dart';
 import 'package:customertaxi/features/trip/presentation/ui/screens/trip_history_screen.dart';
 import 'package:customertaxi/features/favorites/presentation/ui/screens/favorites_screen.dart';
+import 'package:customertaxi/features/payment/presentation/ui/screens/betaling_screen.dart';
 
 import 'drawer/drawer_expandable_menu_item.dart';
 import 'drawer/drawer_header_section.dart';
@@ -52,6 +53,14 @@ class RootDrawerContent extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                     context.pushNamed(FavoritesScreen.pageName);
+                  },
+                ),
+                DrawerMenuItem(
+                  icon: FontAwesomeIcons.wallet,
+                  label: AppStrings.betalingDrawerLabel,
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(BetalingScreen.pageName);
                   },
                 ),
                 DrawerExpandableMenuItem(

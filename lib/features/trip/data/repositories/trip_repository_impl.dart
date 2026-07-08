@@ -180,4 +180,76 @@ class TripRepositoryImpl implements TripRepository {
       return bytes;
     });
   }
+
+  @override
+  Future<Result<void>> updateTripScheduledTime({
+    required String tripId,
+    required DateTime? scheduledAtUtc,
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] updateTripScheduledTime id=$tripId');
+      await _remote.updateTripScheduledTime(
+        tripId: tripId,
+        scheduledAtUtc: scheduledAtUtc,
+      );
+      printG('[TripRepository] updateTripScheduledTime success');
+    });
+  }
+
+  @override
+  Future<Result<TripEntity>> updateTripStops({
+    required String tripId,
+    required List<TripStopEntity> stops,
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] updateTripStops id=$tripId');
+      final stopsData = stops
+          .map(
+            (s) => {
+              'latitude': s.latitude,
+              'longitude': s.longitude,
+              if (s.label != null) 'label': s.label,
+            },
+          )
+          .toList();
+      final model = await _remote.updateTripStops(
+        tripId: tripId,
+        stops: stopsData,
+      );
+      printG('[TripRepository] updateTripStops success fare=${model.quotedFare}');
+      return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<TripEntity>> updateTripPassengerCount({
+    required String tripId,
+    required int passengerCount,
+  }) {
+    return runAsResult(() async {
+      printM(
+        '[TripRepository] updateTripPassengerCount id=$tripId count=$passengerCount',
+      );
+      final model = await _remote.updateTripPassengerCount(
+        tripId: tripId,
+        passengerCount: passengerCount,
+      );
+      printG(
+        '[TripRepository] updateTripPassengerCount success fare=${model.quotedFare}',
+      );
+      return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<void>> updateTripBagCount({
+    required String tripId,
+    required int bagCount,
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] updateTripBagCount id=$tripId count=$bagCount');
+      await _remote.updateTripBagCount(tripId: tripId, bagCount: bagCount);
+      printG('[TripRepository] updateTripBagCount success');
+    });
+  }
 }

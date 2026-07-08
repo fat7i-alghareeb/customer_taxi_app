@@ -5,6 +5,8 @@ class UserEntity {
     this.email,
     this.phone,
     this.profilePhotoUrl,
+    this.isPhoneVerified = true,
+    this.isEmailVerified = false,
   });
 
   final String? id;
@@ -13,12 +15,19 @@ class UserEntity {
   final String? phone;
   final String? profilePhotoUrl;
 
+  /// False for Google/email accounts that entered a phone but skipped SMS
+  /// verification. Drives the persistent "verify your phone" warning.
+  final bool isPhoneVerified;
+  final bool isEmailVerified;
+
   UserEntity copyWith({
     String? id,
     String? name,
     String? email,
     String? phone,
     String? profilePhotoUrl,
+    bool? isPhoneVerified,
+    bool? isEmailVerified,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -26,6 +35,8 @@ class UserEntity {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
+      isPhoneVerified: isPhoneVerified ?? this.isPhoneVerified,
+      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
     );
   }
 
@@ -35,6 +46,8 @@ class UserEntity {
         'email': email,
         'phone': phone,
         'profilePhotoUrl': profilePhotoUrl,
+        'isPhoneVerified': isPhoneVerified,
+        'isEmailVerified': isEmailVerified,
       };
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
@@ -43,5 +56,7 @@ class UserEntity {
         email: json['email'] as String?,
         phone: json['phone'] as String?,
         profilePhotoUrl: json['profilePhotoUrl'] as String?,
+        isPhoneVerified: json['isPhoneVerified'] as bool? ?? true,
+        isEmailVerified: json['isEmailVerified'] as bool? ?? false,
       );
 }

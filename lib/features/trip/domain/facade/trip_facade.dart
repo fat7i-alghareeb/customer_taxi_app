@@ -107,4 +107,44 @@ class TripFacade {
     printC('[TripFacade] getTripInvoicePdf id=$id lang=$languageCode');
     return _repository.getTripInvoicePdf(id, languageCode: languageCode);
   }
+
+  Future<Result<void>> updateTripScheduledTime({
+    required String tripId,
+    required DateTime? scheduledAtUtc,
+  }) {
+    printC('[TripFacade] updateTripScheduledTime id=$tripId');
+    return _repository.updateTripScheduledTime(
+      tripId: tripId,
+      scheduledAtUtc: scheduledAtUtc,
+    );
+  }
+
+  Future<Result<TripEntity>> updateTripStops({
+    required String tripId,
+    required List<TripStopEntity> stops,
+  }) {
+    printC('[TripFacade] updateTripStops id=$tripId');
+    return _repository.updateTripStops(tripId: tripId, stops: stops);
+  }
+
+  Future<Result<TripEntity>> updateTripPassengerCount({
+    required String tripId,
+    required int passengerCount,
+  }) {
+    printC(
+      '[TripFacade] updateTripPassengerCount id=$tripId count=$passengerCount',
+    );
+    return _repository.updateTripPassengerCount(
+      tripId: tripId,
+      passengerCount: passengerCount,
+    );
+  }
+
+  Future<Result<void>> updateTripBagCount({
+    required String tripId,
+    required int bagCount,
+  }) {
+    printC('[TripFacade] updateTripBagCount id=$tripId count=$bagCount');
+    return _repository.updateTripBagCount(tripId: tripId, bagCount: bagCount);
+  }
 }

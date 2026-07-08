@@ -38,6 +38,8 @@ extension TripModelMapper on TripModel {
     dispatchWindowOpensAtUtc: dispatchWindowOpensAtUtc,
     canMarkEnRoute: canMarkEnRoute,
     attentionState: attentionState,
+    passengerCount: passengerCount,
+    bagCount: bagCount,
   );
 }
 
@@ -153,6 +155,12 @@ extension TripReceiptModelMapper on TripReceiptModel {
     invoiceNumber: invoiceNumber,
     invoiceIssuedAtUtc: invoiceIssuedAtUtc,
     stops: stops.map((s) => s.toStopEntity).toList(),
+    waitingFeeAmount: waitingFeeAmount,
+    walletPaidAmount: walletPaidAmount,
+    cardPaidAmount: cardPaidAmount,
+    totalPaidAmount: totalPaidAmount,
+    unpaidAmount: unpaidAmount,
+    refundedAmount: refundedAmount,
   );
 }
 

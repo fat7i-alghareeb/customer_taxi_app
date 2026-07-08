@@ -41,6 +41,14 @@ class AppRouteRegistry {
           AppPageTransitions.build(state: state, child: const LoginScreen()),
     ),
     GoRoute(
+      path: PhoneVerificationScreen.pagePath,
+      name: PhoneVerificationScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const PhoneVerificationScreen(),
+      ),
+    ),
+    GoRoute(
       path: RootScreen.pagePath,
       name: RootScreen.pageName,
       pageBuilder: (context, state) {
@@ -97,6 +105,14 @@ class AppRouteRegistry {
       pageBuilder: (context, state) => AppPageTransitions.build(
         state: state,
         child: const ProfileSetupScreen(),
+      ),
+    ),
+    GoRoute(
+      path: ProfileEditScreen.pagePath,
+      name: ProfileEditScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const ProfileEditScreen(),
       ),
     ),
     GoRoute(
@@ -161,6 +177,20 @@ class AppRouteRegistry {
       pageBuilder: (context, state) => AppPageTransitions.build(
         state: state,
         child: const FavoritesScreen(),
+      ),
+    ),
+    GoRoute(
+      path: BetalingScreen.pagePath,
+      name: BetalingScreen.pageName,
+      pageBuilder: (context, state) =>
+          AppPageTransitions.build(state: state, child: const BetalingScreen()),
+    ),
+    GoRoute(
+      path: WalletTransactionsScreen.pagePath,
+      name: WalletTransactionsScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const WalletTransactionsScreen(),
       ),
     ),
     GoRoute(

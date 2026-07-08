@@ -1,9 +1,27 @@
 class ApiEndpoints {
   ApiEndpoints._();
 
-  // Auth
+  // Auth (legacy Firebase phone session — kept only for backward compatibility)
   static const String login = '/api/v1/auth/sessions';
   static const String refreshToken = '/api/v1/auth/tokens/refreshes';
+
+  // Auth — backend-owned OTP (CM.com SMS / Titan email) + Google
+  static const String phoneLoginOtp = '/api/v1/auth/phone/login/otp';
+  static const String phoneLoginOtpVerify = '/api/v1/auth/phone/login/otp/verify';
+  static const String phoneSignupOtp = '/api/v1/auth/phone/signup/otp';
+  static const String phoneSignupOtpVerify =
+      '/api/v1/auth/phone/signup/otp/verify';
+  static const String emailLoginOtp = '/api/v1/auth/email/login/otp';
+  static const String emailLoginOtpVerify = '/api/v1/auth/email/login/otp/verify';
+  static const String emailSignupOtp = '/api/v1/auth/email/signup/otp';
+  static const String emailSignupOtpVerify =
+      '/api/v1/auth/email/signup/otp/verify';
+  static const String googleAuth = '/api/v1/auth/google';
+  static const String registerComplete = '/api/v1/auth/register/complete';
+  static const String phoneVerifyOtp = '/api/v1/auth/phone/verify/otp';
+  static const String phoneVerifyOtpVerify =
+      '/api/v1/auth/phone/verify/otp/verify';
+  static const String accountFreshStart = '/api/v1/auth/account/fresh-start';
 
   // Users
   static const String currentUser = '/api/v1/users/me';
@@ -40,6 +58,12 @@ class ApiEndpoints {
   static const String tripHistory = '/api/v1/trips';
   static const String tripCount = '/api/v1/trips/count';
   static String rateTrip(String id) => '/api/v1/trips/$id/rating';
+  static String updateTripScheduledTime(String id) =>
+      '/api/v1/trips/$id/scheduled-time';
+  static String updateTripStops(String id) => '/api/v1/trips/$id/stops';
+  static String updateTripPassengerCount(String id) =>
+      '/api/v1/trips/$id/passenger-count';
+  static String updateTripBagCount(String id) => '/api/v1/trips/$id/bag-count';
   static String settleWaitingFee(String id) =>
       '/api/v1/trips/$id/waiting-fee/settlements';
   static String tripMessages(String id) => '/api/v1/trips/$id/messages';
@@ -48,4 +72,20 @@ class ApiEndpoints {
   static String tripReceipt(String id) => '/api/v1/trips/$id/receipt';
   static String tripInvoice(String id) => '/api/v1/trips/$id/invoice';
   static String tripInvoicePdf(String id) => '/api/v1/trips/$id/invoice/pdf';
+
+  // Wallet (ride balance / Fat7i Saldo)
+  static const String wallet = '/api/v1/wallet';
+  static const String walletTransactions = '/api/v1/wallet/transactions';
+  static const String walletTopUps = '/api/v1/wallet/top-ups';
+
+  // Saved payment methods
+  static const String paymentMethods = '/api/v1/payment-methods';
+  static const String paymentMethodSetupIntents =
+      '/api/v1/payment-methods/setup-intents';
+  static String paymentMethodDefault(String id) =>
+      '/api/v1/payment-methods/$id/default';
+  static String paymentMethodById(String id) => '/api/v1/payment-methods/$id';
+
+  // Preferred trip-booking payment method
+  static const String paymentPreferences = '/api/v1/payment-preferences';
 }

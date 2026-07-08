@@ -94,6 +94,13 @@ class TripWaitingCard extends StatelessWidget {
                     color: colors.onSurface.withValues(alpha: 0.72),
                   ),
                 ),
+                AppSpacing.xs.verticalSpace,
+                Text(
+                  AppStrings.tripConfirmedBoardingWarning,
+                  style: AppTextStyles.s12w400.copyWith(
+                    color: colors.onSurface.withValues(alpha: 0.65),
+                  ),
+                ),
               ],
             ),
           ),
@@ -122,41 +129,53 @@ class TripWaitingCard extends StatelessWidget {
             width: 1.r,
           ),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FaIcon(FontAwesomeIcons.clock, color: colors.primary, size: 26.r),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppStrings.activeTripWaitingTime,
-                    style: AppTextStyles.s12w400.copyWith(
-                      color: colors.onSurface.withValues(alpha: 0.6),
-                    ),
-                  ),
-                  AppSpacing.xs.verticalSpace,
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
+            Row(
+              children: [
+                FaIcon(FontAwesomeIcons.clock, color: colors.primary, size: 26.r),
+                AppSpacing.md.horizontalSpace,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '$mm:$ss',
-                        style: AppTextStyles.s24w700.copyWith(
-                          color: colors.primary,
-                        ),
-                      ),
-                      AppSpacing.xs.horizontalSpace,
-                      Text(
-                        AppStrings.activeTripMinShort,
+                        AppStrings.activeTripWaitingTime,
                         style: AppTextStyles.s12w400.copyWith(
                           color: colors.onSurface.withValues(alpha: 0.6),
                         ),
                       ),
+                      AppSpacing.xs.verticalSpace,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            '$mm:$ss',
+                            style: AppTextStyles.s24w700.copyWith(
+                              color: colors.primary,
+                            ),
+                          ),
+                          AppSpacing.xs.horizontalSpace,
+                          Text(
+                            AppStrings.activeTripMinShort,
+                            style: AppTextStyles.s12w400.copyWith(
+                              color: colors.onSurface.withValues(alpha: 0.6),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
+              ],
+            ),
+            AppSpacing.md.verticalSpace,
+            Text(
+              AppStrings.tripConfirmedBoardingWarning,
+              style: AppTextStyles.s12w400.copyWith(
+                color: colors.onSurface.withValues(alpha: 0.65),
               ),
             ),
           ],

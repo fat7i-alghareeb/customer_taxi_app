@@ -38,6 +38,12 @@ _TripReceiptModel _$TripReceiptModelFromJson(Map<String, dynamic> json) =>
               ?.map((e) => TripStopModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      waitingFeeAmount: (json['waitingFeeAmount'] as num?)?.toDouble() ?? 0,
+      walletPaidAmount: (json['walletPaidAmount'] as num?)?.toDouble() ?? 0,
+      cardPaidAmount: (json['cardPaidAmount'] as num?)?.toDouble() ?? 0,
+      totalPaidAmount: (json['totalPaidAmount'] as num?)?.toDouble() ?? 0,
+      unpaidAmount: (json['unpaidAmount'] as num?)?.toDouble() ?? 0,
+      refundedAmount: (json['refundedAmount'] as num?)?.toDouble() ?? 0,
     );
 
 Map<String, dynamic> _$TripReceiptModelToJson(_TripReceiptModel instance) =>
@@ -62,4 +68,10 @@ Map<String, dynamic> _$TripReceiptModelToJson(_TripReceiptModel instance) =>
       'invoiceNumber': instance.invoiceNumber,
       'invoiceIssuedAtUtc': instance.invoiceIssuedAtUtc?.toIso8601String(),
       'stops': instance.stops,
+      'waitingFeeAmount': instance.waitingFeeAmount,
+      'walletPaidAmount': instance.walletPaidAmount,
+      'cardPaidAmount': instance.cardPaidAmount,
+      'totalPaidAmount': instance.totalPaidAmount,
+      'unpaidAmount': instance.unpaidAmount,
+      'refundedAmount': instance.refundedAmount,
     };

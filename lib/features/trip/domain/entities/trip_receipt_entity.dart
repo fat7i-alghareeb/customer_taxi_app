@@ -27,5 +27,11 @@ abstract class TripReceiptEntity with _$TripReceiptEntity {
     String? invoiceNumber,
     DateTime? invoiceIssuedAtUtc,
     @Default([]) List<TripStopEntity> stops,
+    @Default(0) double waitingFeeAmount,
+    @Default(0) double walletPaidAmount,
+    @Default(0) double cardPaidAmount,
+    @Default(0) double totalPaidAmount,
+    @Default(0) double unpaidAmount,
+    @Default(0) double refundedAmount,
   }) = _TripReceiptEntity;
 }

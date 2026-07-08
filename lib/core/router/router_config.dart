@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../core/router/app_page_transitions.dart';
 import '../../features/auth/presentation/ui/screens/login_screen.dart';
+import '../../features/auth/presentation/ui/screens/phone_verification_screen.dart';
 import '../../features/chat/presentation/ui/screens/trip_chat_screen.dart';
 import '../../features/onboarding/presentation/ui/screens/onboarding_screen.dart';
 import '../../features/permissions/presentation/ui/screens/permission_gate_screen.dart';
@@ -17,7 +18,7 @@ import '../../features/root/presentation/ui/screens/cancellation_policy_screen.d
 import '../../features/root/presentation/ui/screens/contact_us_screen.dart';
 import '../../features/root/presentation/ui/screens/privacy_policy_screen.dart';
 import '../../features/root/presentation/ui/screens/terms_and_conditions_screen.dart';
-import '../../features/profile/presentation/ui/screens/profile_setup_screen.dart';
+import '../../features/profile/presentation/ui/screens/profile_screen.dart';
 import '../../features/trip/presentation/ui/screens/active_trip_screen.dart';
 import '../../features/trip/presentation/ui/screens/trip_details_screen.dart';
 import '../../features/trip/presentation/ui/screens/trip_history_screen.dart';
@@ -27,6 +28,8 @@ import '../../features/favorites/presentation/ui/screens/favorites_screen.dart';
 import '../../features/order/presentation/ui/screens/location_picker_screen.dart';
 import '../../features/root/domain/entities/root_map_location_entity.dart';
 import '../../features/refund_issues/presentation/ui/screens/refund_issue_screen.dart';
+import '../../features/payment/presentation/ui/screens/betaling_screen.dart';
+import '../../features/payment/presentation/ui/screens/wallet_transactions_screen.dart';
 import '../../features/splash/presentation/ui/screens/splash_screen.dart';
 import '../services/location/startup_map_warmup_coordinator.dart';
 import '../../utils/constants/app_flow_constants.dart';

@@ -35,6 +35,8 @@ abstract class TripModel with _$TripModel {
     DateTime? dispatchWindowOpensAtUtc,
     @Default(false) bool canMarkEnRoute,
     @Default('Normal') String attentionState,
+    @Default(1) int passengerCount,
+    @Default(0) int bagCount,
   }) = _TripModel;
 
   factory TripModel.fromJson(Map<String, dynamic> json) =>

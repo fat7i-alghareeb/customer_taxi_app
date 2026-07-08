@@ -116,6 +116,16 @@ class _ReceiptContent extends StatelessWidget {
             amount: receipt.netAmount,
             currencyCode: receipt.currencyCode,
           ),
+          if (receipt.waitingFeeAmount > 0) ...[
+            AppSpacing.md.verticalSpace,
+            _ReceiptLineItem(
+              label: AppStrings.receiptWaitingFee,
+              amount: receipt.waitingFeeAmount,
+              currencyCode: receipt.currencyCode,
+            ),
+          ],
+
+          _PaymentBreakdown(receipt: receipt),
 
           AppSpacing.xl.verticalSpace,
           _SectionHeader(title: AppStrings.receiptPayments),
@@ -220,6 +230,59 @@ class _ReceiptLineItem extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+/// Shows how the trip was paid (wallet / card), plus any unpaid remainder and
+/// refunds. Only non-zero rows render; the whole block hides when there is
+/// nothing to break down (e.g. a plain single-method cash/card trip).
+class _PaymentBreakdown extends StatelessWidget {
+  const _PaymentBreakdown({required this.receipt});
+
+  final TripReceiptEntity receipt;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+    final rows = <Widget>[];
+
+    void addRow(String label, double amount, {Color? color, String sign = ''}) {
+      if (amount <= 0) return;
+      rows.add(AppSpacing.md.verticalSpace);
+      rows.add(
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: AppTextStyles.s14w400.copyWith(
+                  color: colors.onSurface.withValues(alpha: 0.7),
+                ),
+              ),
+            ),
+            Text(
+              '$sign${amount.toStringAsFixed(2)} ${receipt.currencyCode}',
+              style: AppTextStyles.s14w600.copyWith(
+                color: color ?? colors.onSurface,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    addRow(AppStrings.receiptWalletPaid, receipt.walletPaidAmount);
+    addRow(AppStrings.receiptCardPaid, receipt.cardPaidAmount);
+    addRow(AppStrings.receiptUnpaid, receipt.unpaidAmount, color: colors.error);
+    addRow(
+      AppStrings.receiptRefunded,
+      receipt.refundedAmount,
+      color: colors.primary,
+      sign: '-',
+    );
+
+    if (rows.isEmpty) return const SizedBox.shrink();
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: rows);
   }
 }
 

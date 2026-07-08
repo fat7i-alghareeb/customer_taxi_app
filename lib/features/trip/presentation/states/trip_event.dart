@@ -28,4 +28,14 @@ class TripEvent with _$TripEvent {
     required String tripId,
     required String languageCode,
   }) = _LoadInvoicePdf;
+  const factory TripEvent.scheduledTimeUpdateRequested(
+    DateTime? scheduledAtUtc,
+  ) = _ScheduledTimeUpdateRequested;
+  const factory TripEvent.stopsUpdateRequested(
+    List<TripStopEntity> stops,
+  ) = _StopsUpdateRequested;
+  const factory TripEvent.passengerCountUpdateRequested(int count) =
+      _PassengerCountUpdateRequested;
+  const factory TripEvent.bagCountUpdateRequested(int count) =
+      _BagCountUpdateRequested;
 }

@@ -239,6 +239,64 @@ class TripRemoteDataSource {
     });
   }
 
+  Future<void> updateTripScheduledTime({
+    required String tripId,
+    required DateTime? scheduledAtUtc,
+  }) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] updateTripScheduledTime id=$tripId');
+      await _dio.put<dynamic>(
+        ApiEndpoints.updateTripScheduledTime(tripId),
+        data: {'scheduledAtUtc': scheduledAtUtc?.toUtc().toIso8601String()},
+      );
+    });
+  }
+
+  Future<TripModel> updateTripStops({
+    required String tripId,
+    required List<Map<String, dynamic>> stops,
+  }) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] updateTripStops id=$tripId');
+      final res = await _dio.put<dynamic>(
+        ApiEndpoints.updateTripStops(tripId),
+        data: {'stops': stops},
+      );
+      return TripModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<TripModel> updateTripPassengerCount({
+    required String tripId,
+    required int passengerCount,
+  }) {
+    return rethrowAsAppException(() async {
+      printY(
+        '[TripRemoteDataSource] updateTripPassengerCount id=$tripId count=$passengerCount',
+      );
+      final res = await _dio.put<dynamic>(
+        ApiEndpoints.updateTripPassengerCount(tripId),
+        data: {'passengerCount': passengerCount},
+      );
+      return TripModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<void> updateTripBagCount({
+    required String tripId,
+    required int bagCount,
+  }) {
+    return rethrowAsAppException(() async {
+      printY(
+        '[TripRemoteDataSource] updateTripBagCount id=$tripId count=$bagCount',
+      );
+      await _dio.put<dynamic>(
+        ApiEndpoints.updateTripBagCount(tripId),
+        data: {'bagCount': bagCount},
+      );
+    });
+  }
+
   Future<Uint8List> getTripInvoicePdfBytes(
     String id, {
     required String languageCode,

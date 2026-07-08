@@ -12,7 +12,12 @@
           "package_name": "dev.fat7i.fat7i.driverapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "74478390393-2mkq60lv42p5tbjnm66o56eisknq6a65.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBj7U9eBq4TsVk16pi9UvmE3T7jtBJQwNw"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "74478390393-2mkq60lv42p5tbjnm66o56eisknq6a65.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "74478390393-b0j1jnobk6a8kt2f61e9oodj9l2q2jer.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.fat7i.fat7i.driverapp"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,28 @@
           "package_name": "dev.fat7i.customertaxi"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "74478390393-89br3s94qjpa636dgrr21975ifc8debr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.fat7i.customertaxi",
+            "certificate_hash": "1b767a8acf64bbb8834fe0cdeab1b0e75c4d2a26"
+          }
+        },
+        {
+          "client_id": "74478390393-udhd6ortp62p4d4o7n65f9s8ogf1grqd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.fat7i.customertaxi",
+            "certificate_hash": "fa153477320a94af6796a6c312af99600b6c37ad"
+          }
+        },
+        {
+          "client_id": "74478390393-2mkq60lv42p5tbjnm66o56eisknq6a65.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBj7U9eBq4TsVk16pi9UvmE3T7jtBJQwNw"
@@ -39,7 +77,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "74478390393-2mkq60lv42p5tbjnm66o56eisknq6a65.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "74478390393-b0j1jnobk6a8kt2f61e9oodj9l2q2jer.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.fat7i.fat7i.driverapp"
+              }
+            }
+          ]
         }
       }
     }

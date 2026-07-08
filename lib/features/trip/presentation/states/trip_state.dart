@@ -29,5 +29,8 @@ abstract class TripState with _$TripState {
     BlocStatus<TripInvoiceEntity> invoiceStatus,
     @Default(BlocStatus<Uint8List>.initial())
     BlocStatus<Uint8List> invoicePdfStatus,
+
+    // Pre-trip edit operations
+    @Default(BlocStatus<void>.initial()) BlocStatus<void> tripEditStatus,
   }) = _TripState;
 }

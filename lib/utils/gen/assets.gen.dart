@@ -43,6 +43,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/comfort.png
   AssetGenImage get comfort => const AssetGenImage('assets/images/comfort.png');
 
+  /// File path: assets/images/google-icone-symbole-logo-png.png
+  AssetGenImage get googleIconeSymboleLogoPng =>
+      const AssetGenImage('assets/images/google-icone-symbole-logo-png.png');
+
   /// File path: assets/images/login_landing_bg.png
   AssetGenImage get loginLandingBg =>
       const AssetGenImage('assets/images/login_landing_bg.png');
@@ -113,6 +117,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/topText.png
   AssetGenImage get topText => const AssetGenImage('assets/images/topText.png');
 
+  /// File path: assets/images/tripsStatusImage.png
+  AssetGenImage get tripsStatusImage =>
+      const AssetGenImage('assets/images/tripsStatusImage.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     a8Passengeres,
@@ -120,6 +128,7 @@ class $AssetsImagesGen {
     buildings,
     carForRealTime,
     comfort,
+    googleIconeSymboleLogoPng,
     loginLandingBg,
     logoLauncher,
     normalTrip,
@@ -138,6 +147,7 @@ class $AssetsImagesGen {
     splashLight,
     standered,
     topText,
+    tripsStatusImage,
   ];
 }
 

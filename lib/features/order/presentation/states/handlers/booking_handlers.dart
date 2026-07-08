@@ -102,6 +102,37 @@ extension _BookingHandlers on OrderBloc {
     );
   }
 
+  Future<void> _onWalletBalanceRequested(
+    _WalletBalanceRequested event,
+    Emitter<OrderState> emit,
+  ) async {
+    final result = await _paymentFacade.getWalletBalance();
+    if (isClosed) return;
+    result.when(
+      success: (balance) => emit(
+        state.copyWith(
+          booking: state.booking.copyWith(
+            walletBalance: balance.balance,
+            walletCurrency: balance.currencyCode,
+          ),
+        ),
+      ),
+      // Ignore failures — the wallet options just won't be offered.
+      failure: (_) {},
+    );
+  }
+
+  void _onPaymentMethodSelected(
+    _PaymentMethodSelected event,
+    Emitter<OrderState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        booking: state.booking.copyWith(paymentMethod: event.method),
+      ),
+    );
+  }
+
   Future<void> _onConfirmBookingDetailsPressed(
     _ConfirmBookingDetailsPressed event,
     Emitter<OrderState> emit,
@@ -195,6 +226,7 @@ extension _BookingHandlers on OrderBloc {
         scheduledAt: scheduledAtToSend,
         passengerNote: passengerNote.isEmpty ? null : passengerNote,
         flightNumber: isAirport ? normalizedFlightNumber : null,
+        paymentMethod: state.booking.paymentMethod.apiValue,
       ),
     );
 

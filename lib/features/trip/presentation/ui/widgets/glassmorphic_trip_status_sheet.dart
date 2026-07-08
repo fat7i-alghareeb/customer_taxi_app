@@ -140,8 +140,8 @@ class _GlassmorphicTripStatusSheetState
   /// (en-route → in-progress) so progress restarts from the new, farther target.
   void _syncArrivalBaseline() {
     final tracksTarget =
-        trip.status == TripStatus.enRoute ||
-        trip.status == TripStatus.inProgress;
+        trip.status == TripStatus.enRoute;
+        // || trip.status == TripStatus.inProgress;
     if (!tracksTarget) {
       _arrivalBaselineMeters = null;
       _baselineStatus = null;
@@ -281,7 +281,8 @@ class _GlassmorphicTripStatusSheetState
               ] else if (trip.status == TripStatus.inProgress) ...[
                 TripInProgressStatusSheet(
                   trip: trip,
-                  arrivalProgressHeader: _buildArrivalProgressHeader(),
+                  arrivalProgressHeader: const SizedBox.shrink(),
+                  // arrivalProgressHeader: _buildArrivalProgressHeader(),
                 ),
               ] else if (trip.status == TripStatus.completed) ...[
                 TripCompletedStatusSheet(trip: trip),

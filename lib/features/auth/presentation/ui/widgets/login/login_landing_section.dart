@@ -73,29 +73,6 @@ class LoginLandingSection extends StatelessWidget {
 
         AppSpacing.lg.verticalSpace,
 
-        // Discount Section
-        Column(
-          children: [
-            Text(
-              AppStrings.loginLandingDiscountTitle,
-              style: AppTextStyles.s16w400.copyWith(color: Colors.white70),
-            ),
-            Text(
-              AppStrings.loginLandingDiscountSubtitle,
-              style: AppTextStyles.s40w700.copyWith(
-                color: AppColors.landingGold,
-                height: 1.1,
-              ),
-            ),
-            Text(
-              AppStrings.loginLandingDiscountFooter,
-              style: AppTextStyles.s16w400.copyWith(color: Colors.white70),
-            ),
-          ],
-        ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
-
-        AppSpacing.xl.verticalSpace,
-
         // Car imagery placeholder
         Center(
           child: SizedBox(width: 330.w, height: 180.h),
@@ -130,7 +107,7 @@ class LoginLandingSection extends StatelessWidget {
                 ),
                 onTap: () {
                   context.read<AuthBloc>().add(
-                    const AuthEvent.landingProceedRequested(),
+                    const AuthEvent.introProceed(AuthMode.signup),
                   );
                 },
               ),
@@ -143,7 +120,7 @@ class LoginLandingSection extends StatelessWidget {
                 ),
                 onTap: () {
                   context.read<AuthBloc>().add(
-                    const AuthEvent.landingProceedRequested(),
+                    const AuthEvent.introProceed(AuthMode.login),
                   );
                 },
                 layout: const AppButtonLayout(percentageWidth: 1.0),

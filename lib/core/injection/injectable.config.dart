@@ -80,6 +80,8 @@ import 'package:customertaxi/features/auth/domain/repositories/auth_repository.d
     as _i618;
 import 'package:customertaxi/features/auth/presentation/states/auth_bloc.dart'
     as _i781;
+import 'package:customertaxi/features/auth/presentation/states/phone_verification_cubit.dart'
+    as _i404;
 import 'package:customertaxi/features/chat/data/datasources/chat_remote_datasource.dart'
     as _i754;
 import 'package:customertaxi/features/chat/data/repositories/chat_repository_impl.dart'
@@ -102,6 +104,16 @@ import 'package:customertaxi/features/order/domain/repositories/order_repository
     as _i153;
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart'
     as _i47;
+import 'package:customertaxi/features/payment/data/datasources/payment_remote_datasource.dart'
+    as _i935;
+import 'package:customertaxi/features/payment/data/repositories/payment_repository_impl.dart'
+    as _i770;
+import 'package:customertaxi/features/payment/domain/facade/payment_facade.dart'
+    as _i561;
+import 'package:customertaxi/features/payment/domain/repositories/payment_repository.dart'
+    as _i951;
+import 'package:customertaxi/features/payment/presentation/states/payment_bloc.dart'
+    as _i792;
 import 'package:customertaxi/features/profile/data/datasources/profile_remote_datasource.dart'
     as _i1044;
 import 'package:customertaxi/features/profile/data/repositories/profile_repository_impl.dart'
@@ -277,6 +289,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i93.OrderRemoteDataSource>(
       () => _i93.OrderRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i935.PaymentRemoteDataSource>(
+      () => _i935.PaymentRemoteDataSource(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i1044.ProfileRemoteDataSource>(
       () => _i1044.ProfileRemoteDataSource(gh<_i361.Dio>()),
     );
@@ -336,6 +351,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i768.ClientConfigService>(),
       ),
     );
+    gh.lazySingleton<_i951.PaymentRepository>(
+      () => _i770.PaymentRepositoryImpl(gh<_i935.PaymentRemoteDataSource>()),
+    );
     gh.lazySingleton<_i618.AuthRepository>(
       () => _i771.AuthRepositoryImpl(
         gh<_i243.AuthFirebaseDataSource>(),
@@ -366,6 +384,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i925.OrderFacade>(
       () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
     );
+    gh.lazySingleton<_i561.PaymentFacade>(
+      () => _i561.PaymentFacade(gh<_i951.PaymentRepository>()),
+    );
     gh.lazySingleton<_i264.RefundIssueFacade>(
       () => _i264.RefundIssueFacade(gh<_i411.RefundIssueRepository>()),
     );
@@ -375,6 +396,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i404.RealtimeService>(),
         gh<_i814.AuthManager>(),
       ),
+    );
+    gh.factory<_i792.PaymentBloc>(
+      () => _i792.PaymentBloc(gh<_i561.PaymentFacade>()),
     );
     gh.lazySingleton<_i239.AuthFacade>(
       () => _i239.AuthFacade(gh<_i618.AuthRepository>()),
@@ -395,6 +419,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i396.LocationService>(),
         gh<_i768.ClientConfigService>(),
         gh<_i404.RealtimeService>(),
+        gh<_i561.PaymentFacade>(),
       ),
     );
     gh.factory<_i499.FavoritesBloc>(
@@ -404,6 +429,9 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
+    gh.factory<_i404.PhoneVerificationCubit>(
+      () => _i404.PhoneVerificationCubit(gh<_i239.AuthFacade>()),
+    );
     return this;
   }
 }

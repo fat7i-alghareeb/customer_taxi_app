@@ -7,7 +7,10 @@ extension AuthLoginResponseModelMapper on AuthLoginResponseModel {
         id: user.id,
         phone: user.phone,
         name: user.name,
+        email: user.email,
         profilePhotoUrl: user.profilePhotoUrl,
+        isPhoneVerified: user.isPhoneVerified,
+        isEmailVerified: user.isEmailVerified,
       );
 
   AuthTokenModel toAuthTokenModel() => AuthTokenModel(

@@ -48,11 +48,26 @@ class TripArrivedStatusSheet extends StatelessWidget {
               ),
               AppSpacing.md.horizontalSpace,
               Expanded(
-                child: Text(
-                  AppStrings.activeTripDriverArrivedTitle,
-                  style: AppTextStyles.s16w700.copyWith(
-                    color: colors.onSurface,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppStrings.activeTripDriverArrivedTitle,
+                      style: AppTextStyles.s16w700.copyWith(
+                        color: colors.onSurface,
+                      ),
+                    ),
+                    AppSpacing.xs.verticalSpace,
+                    Text(
+                      AppStrings.activeTripDriverWaitingAtPickup,
+                      style: AppTextStyles.s12w400.copyWith(
+                        color: colors.onSurface.withValues(alpha: 0.65),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
               AppSpacing.sm.horizontalSpace,

@@ -3,6 +3,22 @@
 part of app_strings;
 
 class AppStrings {
+  /// Are you sure you want to log out? - هل أنت متأكد أنك تريد تسجيل الخروج؟ - Weet je zeker dat je wilt uitloggen? - Möchten Sie sich wirklich abmelden? - Czy na pewno chcesz się wylogować? - Ви впевнені, що хочете вийти? - Voulez-vous vraiment vous déconnecter ? - ¿Seguro que quieres cerrar sesión? - Sigur vrei să te deconectezi?
+  static String get accountLogoutMessage => 'accountLogoutMessage'.tr();
+  /// Your account - حسابك - Jouw account - Ihr Konto - Twoje konto - Ваш обліковий запис - Votre compte - Tu cuenta - Contul tău
+  static String get accountNameFallback => 'accountNameFallback'.tr();
+  /// No address saved - لا يوجد عنوان محفوظ - Geen adres opgeslagen - Keine Adresse gespeichert - Brak zapisanego adresu - Немає збереженої адреси - Aucune adresse enregistrée - Ninguna dirección guardada - Nicio adresă salvată
+  static String get accountNoAddress => 'accountNoAddress'.tr();
+  /// Account - الحساب - Account - Konto - Konto - Обліковий запис - Compte - Cuenta - Cont
+  static String get accountSectionAccount => 'accountSectionAccount'.tr();
+  /// Legal - الشؤون القانونية - Juridisch - Rechtliches - Informacje prawne - Юридична інформація - Mentions légales - Legal - Informații legale
+  static String get accountSectionLegal => 'accountSectionLegal'.tr();
+  /// Preferences - التفضيلات - Voorkeuren - Einstellungen - Preferencje - Налаштування - Préférences - Preferencias - Preferințe
+  static String get accountSectionPreferences => 'accountSectionPreferences'.tr();
+  /// Support - الدعم - Ondersteuning - Support - Wsparcie - Підтримка - Assistance - Soporte - Asistență
+  static String get accountSectionSupport => 'accountSectionSupport'.tr();
+  /// Verify - تحقق - Verifiëren - Verifizieren - Zweryfikuj - Підтвердити - Vérifier - Verificar - Verifică
+  static String get accountVerifyPhone => 'accountVerifyPhone'.tr();
   /// Active Trip - الرحلة الحالية - Actieve Rit - Aktive Fahrt - Aktywny przejazd - Активна поїздка - Trajet Actif - Viaje activo - Cursă activă
   static String get activeTrip => 'activeTrip'.tr();
   /// Arrival in - يصل خلال - Aankomst over - Ankunft in - Przyjazd za - Прибуття за - Arrivée dans - Llegada en - Sosire în
@@ -25,6 +41,8 @@ class AppStrings {
   static String get activeTripDriverComing => 'activeTripDriverComing'.tr();
   /// Your driver is outside - سائقك بالخارج الآن - Je chauffeur staat buiten - Ihr Fahrer ist draußen - Twój kierowca czeka na zewnątrz - Ваш водій очікує на вулиці - Votre chauffeur est à l'extérieur - Su conductor está afuera - Șoferul dvs. este afară
   static String get activeTripDriverOutside => 'activeTripDriverOutside'.tr();
+  /// Your driver is waiting for you at the pickup location - سائقك ينتظرك في موقع الالتقاء - Uw chauffeur wacht op u waar u wordt opgehaald - Ihr Fahrer wartet auf Sie am Abholort - Twój kierowca czeka na Ciebie w miejscu odbioru - Ваш водій чекає на вас у місці посадки - Votre chauffeur vous attend à l'adresse de prise en charge - Su conductor le espera en el lugar de recogida - Șoferul dvs. vă așteaptă la locul de preluare
+  static String get activeTripDriverWaitingAtPickup => 'activeTripDriverWaitingAtPickup'.tr();
   /// Drop-off location - موقع التوصيل - Afzetlocatie - Zielort - Miejsce docelowe - Місце призначення - Lieu de dépose - Lugar de entrega - Locul de destinație
   static String get activeTripDropoffLabel => 'activeTripDropoffLabel'.tr();
   /// Arriving in ~{time} - يصل خلال ~{time} - Aankomst over ~{time} - Ankunft in ~{time} - Dojechał za ~{time} - Прибуття за ~{time} - Arrivée dans ~{time} - Llegando en ~{time} - Sosește în ~{time}
@@ -51,6 +69,14 @@ class AppStrings {
   static String get activeTripStepRideAccepted => 'activeTripStepRideAccepted'.tr();
   /// Waiting time - وقت الانتظار - Wachttijd - Wartezeit - Czas oczekiwania - Час очікування - Temps d'attente - Tiempo de espera - Timp de așteptare
   static String get activeTripWaitingTime => 'activeTripWaitingTime'.tr();
+  /// This card may be used for future ride-related charges such as waiting or cancellation fees. - يمكن استخدام هذه البطاقة لرسوم مستقبلية متعلقة بالرحلة مثل رسوم الانتظار أو الإلغاء. - Deze kaart kan worden gebruikt voor toekomstige ritkosten zoals wacht- of annuleringskosten. - Diese Karte kann für zukünftige fahrtbezogene Gebühren wie Warte- oder Stornogebühren verwendet werden. - Ta karta może być używana do przyszłych opłat związanych z przejazdem, takich jak opłaty za oczekiwanie lub anulowanie. - Ця картка може використовуватися для майбутніх зборів, пов'язаних із поїздкою, як-от плата за очікування чи скасування. - Cette carte peut être utilisée pour de futurs frais liés aux courses, tels que les frais d'attente ou d'annulation. - Esta tarjeta puede utilizarse para futuros cargos relacionados con el viaje, como tarifas de espera o cancelación. - Acest card poate fi folosit pentru viitoare taxe legate de cursă, cum ar fi taxele de așteptare sau de anulare.
+  static String get addCardConsent => 'addCardConsent'.tr();
+  /// Agree & add - موافق وإضافة - Akkoord & toevoegen - Zustimmen & hinzufügen - Zgadzam się i dodaję - Погодитися та додати - Accepter et ajouter - Aceptar y añadir - Accept și adaug
+  static String get addCardConsentAgree => 'addCardConsentAgree'.tr();
+  /// Card added - تمت إضافة البطاقة - Kaart toegevoegd - Karte hinzugefügt - Karta dodana - Картку додано - Carte ajoutée - Tarjeta añadida - Card adăugat
+  static String get addCardSuccess => 'addCardSuccess'.tr();
+  /// Add payment method - إضافة طريقة دفع - Betaalmethode toevoegen - Zahlungsmethode hinzufügen - Dodaj metodę płatności - Додати спосіб оплати - Ajouter un moyen de paiement - Añadir método de pago - Adaugă metodă de plată
+  static String get addPaymentMethodCta => 'addPaymentMethodCta'.tr();
   /// Add stop - إضافة توقف - Stop toevoegen - Halt hinzufügen - Dodaj przystanek - Додати зупинку - Ajouter un arrêt - Añadir parada - Adaugă oprire
   static String get addStop => 'addStop'.tr();
   /// Apr - أبر - Apr - Apr - Kwi - Квіт - Avril - Abr - Apr
@@ -63,18 +89,112 @@ class AppStrings {
   static String get aug => 'aug'.tr();
   /// August - أغسطس - Augustus - August - Sierpień - Серпень - Août - Agosto - August
   static String get august => 'august'.tr();
+  /// Add your phone number - أضف رقم هاتفك - Voeg je telefoonnummer toe - Fügen Sie Ihre Telefonnummer hinzu - Dodaj swój numer telefonu - Додайте свій номер телефону - Ajoutez votre numéro de téléphone - Añade tu número de teléfono - Adaugă numărul de telefon
+  static String get authAddPhone => 'authAddPhone'.tr();
+  /// You already have an account. - لديك حساب بالفعل. - Je hebt al een account. - Sie haben bereits ein Konto. - Masz już konto. - У вас уже є обліковий запис. - Vous avez déjà un compte. - Ya tienes una cuenta. - Ai deja un cont.
+  static String get authAlreadyHaveAccount => 'authAlreadyHaveAccount'.tr();
+  /// Already have an account? - لديك حساب بالفعل؟ - Heb je al een account? - Schon ein Konto? - Masz już konto? - Вже маєте обліковий запис? - Vous avez déjà un compte ? - ¿Ya tienes una cuenta? - Ai deja un cont?
+  static String get authAlreadyHaveAccountPrompt => 'authAlreadyHaveAccountPrompt'.tr();
+  /// Choose how you would like to continue - اختر كيف تريد المتابعة - Kies hoe je verder wilt gaan - Wählen Sie, wie Sie fortfahren möchten - Wybierz, jak chcesz kontynuować - Виберіть, як продовжити - Choisissez comment continuer - Elige cómo quieres continuar - Alege cum vrei să continui
+  static String get authChooseMethod => 'authChooseMethod'.tr();
+  /// Continue - متابعة - Doorgaan - Weiter - Kontynuuj - Продовжити - Continuer - Continuar - Continuă
+  static String get authContinue => 'authContinue'.tr();
+  /// Continue with email - المتابعة بالبريد الإلكتروني - Doorgaan met e-mail - Mit E-Mail fortfahren - Kontynuuj z e-mailem - Продовжити з електронною поштою - Continuer avec l'e-mail - Continuar con el correo electrónico - Continuă cu e-mailul
+  static String get authContinueWithEmail => 'authContinueWithEmail'.tr();
+  /// Continue with Google - المتابعة عبر Google - Doorgaan met Google - Mit Google fortfahren - Kontynuuj z Google - Продовжити з Google - Continuer avec Google - Continuar con Google - Continuă cu Google
+  static String get authContinueWithGoogle => 'authContinueWithGoogle'.tr();
+  /// Continue with phone - المتابعة برقم الهاتف - Doorgaan met telefoonnummer - Mit Telefonnummer fortfahren - Kontynuuj z numerem telefonu - Продовжити з номером телефону - Continuer avec le téléphone - Continuar con el teléfono - Continuă cu numărul de telefon
+  static String get authContinueWithPhone => 'authContinueWithPhone'.tr();
+  /// Create account - إنشاء حساب - Account aanmaken - Konto erstellen - Utwórz konto - Створити обліковий запис - Créer un compte - Crear cuenta - Creează cont
+  static String get authCreateAccount => 'authCreateAccount'.tr();
+  /// Create your account - أنشئ حسابك - Maak je account aan - Konto erstellen - Utwórz konto - Створіть обліковий запис - Créez votre compte - Crea tu cuenta - Creează-ți contul
+  static String get authCreateAccountTitle => 'authCreateAccountTitle'.tr();
+  /// Don't have an account? - ليس لديك حساب؟ - Nog geen account? - Noch kein Konto? - Nie masz konta? - Немає облікового запису? - Vous n'avez pas de compte ? - ¿No tienes una cuenta? - Nu ai un cont?
+  static String get authDontHaveAccount => 'authDontHaveAccount'.tr();
+  /// Email - البريد الإلكتروني - E-mail - E-Mail - E-mail - Електронна пошта - E-mail - Correo electrónico - E-mail
+  static String get authEmail => 'authEmail'.tr();
+  /// We'll email you a 6-digit code to verify this address. - سنرسل لك رمزًا مكوّنًا من 6 أرقام عبر البريد الإلكتروني للتحقق من هذا العنوان. - We sturen je een 6-cijferige code via e-mail om dit adres te verifiëren. - Wir senden dir einen 6-stelligen Code per E-Mail, um diese Adresse zu bestätigen. - Wyślemy Ci 6-cyfrowy kod e-mailem, aby zweryfikować ten adres. - Ми надішлемо вам 6-значний код на e-mail для підтвердження цієї адреси. - Nous vous enverrons un code à 6 chiffres par e-mail pour vérifier cette adresse. - Te enviaremos un código de 6 dígitos por correo para verificar esta dirección. - Îți vom trimite un cod din 6 cifre prin e-mail pentru a verifica această adresă.
+  static String get authEmailInputHelper => 'authEmailInputHelper'.tr();
+  /// Enter your email - أدخل بريدك الإلكتروني - Voer je e-mailadres in - Geben Sie Ihre E-Mail-Adresse ein - Wprowadź swój e-mail - Введіть свою електронну пошту - Saisissez votre e-mail - Introduce tu correo electrónico - Introdu adresa de e-mail
+  static String get authEnterEmail => 'authEnterEmail'.tr();
+  /// Enter your name - أدخل اسمك - Voer je naam in - Geben Sie Ihren Namen ein - Wprowadź swoje imię - Введіть своє ім'я - Saisissez votre nom - Introduce tu nombre - Introdu numele tău
+  static String get authEnterName => 'authEnterName'.tr();
+  /// We found an existing account with these credentials. You can continue with it or start fresh and clear your history. - وجدنا حسابًا موجودًا بهذه البيانات. يمكنك الاستمرار به أو البدء من جديد ومسح سجلك. - We vonden een bestaand account met deze gegevens. Je kunt doorgaan of opnieuw beginnen en je geschiedenis wissen. - Wir haben ein bestehendes Konto mit diesen Zugangsdaten gefunden. Du kannst damit fortfahren oder neu starten und deine Daten löschen. - Znaleźliśmy istniejące konto z tymi danymi. Możesz kontynuować z nim lub zacząć od nowa i wyczyścić swoją historię. - Ми знайшли існуючий акаунт з цими даними. Ви можете продовжити з ним або почати заново та очистити свою історію. - Nous avons trouvé un compte existant avec ces informations. Vous pouvez continuer avec ce compte ou repartir de zéro et effacer votre historique. - Encontramos una cuenta existente con estas credenciales. Puedes continuar con ella o empezar de nuevo y borrar tu historial. - Am găsit un cont existent cu aceste date. Poți continua cu el sau poți începe de la zero și îți ștergi istoricul.
+  static String get authExistingAccountBody => 'authExistingAccountBody'.tr();
+  /// Finish sign up - إكمال التسجيل - Registratie voltooien - Registrierung abschließen - Zakończ rejestrację - Завершити реєстрацію - Terminer l'inscription - Finalizar registro - Finalizează înregistrarea
+  static String get authFinishSignup => 'authFinishSignup'.tr();
   /// You do not have permission to perform this action. - ليست لديك صلاحية لتنفيذ هذا الإجراء. - U heeft geen toestemming om deze actie uit te voeren. - Sie haben keine Berechtigung, diese Aktion auszuführen. - Nie masz uprawnień do wykonania tej akcji. - У вас немає прав для виконання цієї дії. - Vous n'avez pas la permission d'effectuer cette action. - No tiene permiso para realizar esta acción. - Nu aveți permisiunea de a efectua această acțiune.
   static String get authForbidden => 'authForbidden'.tr();
+  /// Log in - تسجيل الدخول - Inloggen - Anmelden - Zaloguj się - Увійти - Se connecter - Iniciar sesión - Autentificare
+  static String get authLogIn => 'authLogIn'.tr();
+  /// Log in to book your ride - سجّل الدخول لحجز رحلتك - Log in om je rit te boeken - Melde dich an, um deine Fahrt zu buchen - Zaloguj się, aby zamówić przejazd - Увійдіть, щоб замовити поїздку - Connectez-vous pour réserver votre course - Inicia sesión para reservar tu viaje - Autentifică-te pentru a rezerva cursa
+  static String get authLoginSubtitle => 'authLoginSubtitle'.tr();
+  /// Get a 6-digit code by email - احصل على رمز مكوّن من 6 أرقام عبر البريد الإلكتروني - Ontvang een 6-cijferige code via e-mail - Erhalte einen 6-stelligen Code per E-Mail - Otrzymaj 6-cyfrowy kod przez e-mail - Отримайте 6-значний код на e-mail - Recevez un code à 6 chiffres par e-mail - Recibe un código de 6 dígitos por correo - Primește un cod din 6 cifre prin e-mail
+  static String get authMethodEmailSubtitle => 'authMethodEmailSubtitle'.tr();
+  /// Use your Google account - استخدم حساب Google الخاص بك - Gebruik je Google-account - Verwende dein Google-Konto - Użyj swojego konta Google - Використайте свій обліковий запис Google - Utilisez votre compte Google - Usa tu cuenta de Google - Folosește contul tău Google
+  static String get authMethodGoogleSubtitle => 'authMethodGoogleSubtitle'.tr();
+  /// Get a 6-digit code by SMS - احصل على رمز مكوّن من 6 أرقام عبر الرسائل القصيرة - Ontvang een 6-cijferige code via sms - Erhalte einen 6-stelligen Code per SMS - Otrzymaj 6-cyfrowy kod przez SMS - Отримайте 6-значний код у SMS - Recevez un code à 6 chiffres par SMS - Recibe un código de 6 dígitos por SMS - Primește un cod din 6 cifre prin SMS
+  static String get authMethodPhoneSubtitle => 'authMethodPhoneSubtitle'.tr();
+  /// Name - الاسم - Naam - Name - Imię - Ім'я - Nom - Nombre - Nume
+  static String get authName => 'authName'.tr();
+  /// What should we call you? - بماذا تريد أن نناديك؟ - Hoe mogen we je noemen? - Wie sollen wir Sie nennen? - Jak mamy się do Ciebie zwracać? - Як до вас звертатися? - Comment devons-nous vous appeler ? - ¿Cómo quieres que te llamemos? - Cum să îți spunem?
+  static String get authNameStepTitle => 'authNameStepTitle'.tr();
+  /// No account found. Please create an account first. - لم يتم العثور على حساب. يرجى إنشاء حساب أولًا. - Geen account gevonden. Maak eerst een account aan. - Kein Konto gefunden. Bitte erstellen Sie zuerst ein Konto. - Nie znaleziono konta. Najpierw utwórz konto. - Обліковий запис не знайдено. Спершу створіть обліковий запис. - Aucun compte trouvé. Veuillez d'abord créer un compte. - No se encontró ninguna cuenta. Crea una cuenta primero. - Niciun cont găsit. Te rugăm să creezi mai întâi un cont.
+  static String get authNoAccountTitle => 'authNoAccountTitle'.tr();
+  /// or continue with - أو تابع باستخدام - of ga verder met - oder weiter mit - lub kontynuuj przez - або продовжити через - ou continuer avec - o continúa con - sau continuă cu
+  static String get authOrContinueWith => 'authOrContinueWith'.tr();
+  /// Entered the wrong details? Go back - أدخلت بيانات خاطئة؟ ارجع - Verkeerde gegevens ingevoerd? Ga terug - Falsche Angaben eingegeben? Zurück - Wprowadzono błędne dane? Wróć - Ви ввели неправильні дані? Назад - Vous avez saisi de mauvaises informations ? Revenir - ¿Introdujiste datos incorrectos? Volver - Ai introdus date greșite? Înapoi
+  static String get authOtpChangeDestination => 'authOtpChangeDestination'.tr();
   /// OTP sent to {phone} - تم إرسال رمز التحقق إلى {phone} - OTP verzonden naar {phone} - Code an {phone} gesendet - Kod wysłany na numer {phone} - Код надіслано на {phone} - OTP envoyé au {phone} - Código enviado a {phone} - OTP trimis la {phone}
   static String get authOtpSent => 'authOtpSent'.tr();
+  /// We sent a 6-digit code to your email - لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى بريدك الإلكتروني - We hebben een 6-cijferige code naar je e-mail gestuurd - Wir haben einen 6-stelligen Code an Ihre E-Mail gesendet - Wysłaliśmy 6-cyfrowy kod na Twój e-mail - Ми надіслали 6-значний код на вашу електронну пошту - Nous avons envoyé un code à 6 chiffres sur votre e-mail - Hemos enviado un código de 6 dígitos a tu correo electrónico - Am trimis un cod din 6 cifre pe e-mailul tău
+  static String get authOtpSentEmail => 'authOtpSentEmail'.tr();
+  /// We sent a 6-digit code to your phone - لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى هاتفك - We hebben een 6-cijferige code naar je telefoon gestuurd - Wir haben einen 6-stelligen Code an Ihr Telefon gesendet - Wysłaliśmy 6-cyfrowy kod na Twój telefon - Ми надіслали 6-значний код на ваш телефон - Nous avons envoyé un code à 6 chiffres sur votre téléphone - Hemos enviado un código de 6 dígitos a tu teléfono - Am trimis un cod din 6 cifre pe telefonul tău
+  static String get authOtpSentPhone => 'authOtpSentPhone'.tr();
+  /// Enter the 6-digit code we sent to {destination} - أدخل الرمز المكوّن من 6 أرقام الذي أرسلناه إلى {destination} - Voer de 6-cijferige code in die we naar {destination} hebben gestuurd - Gib den 6-stelligen Code ein, den wir an {destination} gesendet haben - Wprowadź 6-cyfrowy kod, który wysłaliśmy na {destination} - Введіть 6-значний код, який ми надіслали на {destination} - Saisissez le code à 6 chiffres que nous avons envoyé à {destination} - Introduce el código de 6 dígitos que enviamos a {destination} - Introdu codul din 6 cifre pe care l-am trimis la {destination}
+  static String get authOtpSentTo => 'authOtpSentTo'.tr();
+  /// We'll text you a 6-digit code to verify this number. - سنرسل لك رمزًا مكوّنًا من 6 أرقام عبر رسالة نصية للتحقق من هذا الرقم. - We sturen je een 6-cijferige code via sms om dit nummer te verifiëren. - Wir senden dir einen 6-stelligen Code per SMS, um diese Nummer zu bestätigen. - Wyślemy Ci 6-cyfrowy kod SMS-em, aby zweryfikować ten numer. - Ми надішлемо вам 6-значний код у SMS для підтвердження цього номера. - Nous vous enverrons un code à 6 chiffres par SMS pour vérifier ce numéro. - Te enviaremos un código de 6 dígitos por SMS para verificar este número. - Îți vom trimite un cod din 6 cifre prin SMS pentru a verifica acest număr.
+  static String get authPhoneInputHelper => 'authPhoneInputHelper'.tr();
+  /// You can verify this number now or later. - يمكنك التحقق من هذا الرقم الآن أو لاحقًا. - Je kunt dit nummer nu of later verifiëren. - Sie können diese Nummer jetzt oder später verifizieren. - Możesz zweryfikować ten numer teraz lub później. - Ви можете підтвердити цей номер зараз або пізніше. - Vous pouvez vérifier ce numéro maintenant ou plus tard. - Puedes verificar este número ahora o más tarde. - Poți verifica acest număr acum sau mai târziu.
+  static String get authPhoneUnverifiedInline => 'authPhoneUnverifiedInline'.tr();
+  /// Your phone number is not verified. You can still use the app, but you may miss important account or trip-related SMS messages. Verify your phone number to secure your account. - لم يتم التحقق من رقم هاتفك. لا يزال بإمكانك استخدام التطبيق، لكن قد تفوتك رسائل نصية مهمة متعلقة بالحساب أو الرحلة. تحقق من رقم هاتفك لتأمين حسابك. - Je telefoonnummer is niet geverifieerd. Je kunt de app blijven gebruiken, maar je mist mogelijk belangrijke account- of ritgerelateerde sms-berichten. Verifieer je telefoonnummer om je account te beveiligen. - Ihre Telefonnummer ist nicht verifiziert. Sie können die App weiterhin nutzen, verpassen aber möglicherweise wichtige konto- oder fahrtbezogene SMS-Nachrichten. Verifizieren Sie Ihre Telefonnummer, um Ihr Konto zu schützen. - Twój numer telefonu nie został zweryfikowany. Możesz nadal korzystać z aplikacji, ale możesz przegapić ważne wiadomości SMS dotyczące konta lub przejazdów. Zweryfikuj numer telefonu, aby zabezpieczyć konto. - Ваш номер телефону не підтверджено. Ви можете продовжувати користуватися застосунком, але можете пропустити важливі SMS щодо облікового запису або поїздок. Підтвердіть номер телефону, щоб захистити свій обліковий запис. - Votre numéro de téléphone n'est pas vérifié. Vous pouvez continuer à utiliser l'application, mais vous risquez de manquer des SMS importants liés à votre compte ou à vos trajets. Vérifiez votre numéro pour sécuriser votre compte. - Tu número de teléfono no está verificado. Puedes seguir usando la aplicación, pero podrías perderte SMS importantes relacionados con tu cuenta o tus viajes. Verifica tu número para proteger tu cuenta. - Numărul tău de telefon nu este verificat. Poți folosi în continuare aplicația, dar poți rata mesaje SMS importante legate de cont sau de curse. Verifică numărul de telefon pentru a-ți securiza contul.
+  static String get authPhoneUnverifiedWarning => 'authPhoneUnverifiedWarning'.tr();
+  /// Phone number verified - تم التحقق من رقم الهاتف - Telefoonnummer geverifieerd - Telefonnummer verifiziert - Numer telefonu zweryfikowany - Номер телефону підтверджено - Numéro de téléphone vérifié - Número de teléfono verificado - Număr de telefon verificat
+  static String get authPhoneVerified => 'authPhoneVerified'.tr();
+  /// Just a few details to finish - بعض التفاصيل الأخيرة للإنهاء - Nog een paar gegevens om af te ronden - Nur noch ein paar Angaben zum Abschluss - Jeszcze kilka danych, aby zakończyć - Ще кілька деталей для завершення - Encore quelques informations pour terminer - Solo unos datos más para terminar - Doar câteva detalii pentru a finaliza
+  static String get authRegistrationSubtitle => 'authRegistrationSubtitle'.tr();
+  /// Resend code - إعادة إرسال الرمز - Code opnieuw versturen - Code erneut senden - Wyślij kod ponownie - Надіслати код повторно - Renvoyer le code - Reenviar código - Retrimite codul
+  static String get authResendCode => 'authResendCode'.tr();
   /// Send OTP - إرسال رمز التحقق - Code verzenden - Code senden - Wyślij kod - Надіслати код - Envoyer OTP - Enviar código - Trimite OTP
   static String get authSendOtp => 'authSendOtp'.tr();
+  /// Sign-in cancelled - تم إلغاء تسجيل الدخول - Aanmelden geannuleerd - Anmeldung abgebrochen - Logowanie anulowane - Вхід скасовано - Connexion annulée - Inicio de sesión cancelado - Autentificare anulată
+  static String get authSignInCancelled => 'authSignInCancelled'.tr();
+  /// Sign up - إنشاء حساب - Registreren - Registrieren - Zarejestruj się - Зареєструватися - S'inscrire - Registrarse - Înregistrare
+  static String get authSignUp => 'authSignUp'.tr();
+  /// Create your account to get started - أنشئ حسابك للبدء - Maak je account aan om te beginnen - Erstelle dein Konto, um loszulegen - Utwórz konto, aby zacząć - Створіть обліковий запис, щоб почати - Créez votre compte pour commencer - Crea tu cuenta para empezar - Creează-ți contul pentru a începe
+  static String get authSignupSubtitle => 'authSignupSubtitle'.tr();
+  /// Skip for now - تخطي الآن - Nu overslaan - Vorerst überspringen - Pomiń na razie - Пропустити поки що - Ignorer pour l'instant - Omitir por ahora - Omite deocamdată
+  static String get authSkipForNow => 'authSkipForNow'.tr();
+  /// Start fresh - البدء من جديد - Opnieuw beginnen - Neu starten - Zacznij od nowa - Почати заново - Repartir de zéro - Empezar de nuevo - Începe de la zero
+  static String get authStartFresh => 'authStartFresh'.tr();
   /// You are not authorized. Please sign in again. - غير مصرح. يرجى تسجيل الدخول مرة أخرى. - U bent niet geautoriseerd. Log opnieuw in. - Sie sind nicht autorisiert. Bitte melden Sie sich erneut an. - Nie masz uprawnień. Zaloguj się ponownie. - Ви не авторизовані. Увійдіть знову. - Vous n'êtes pas autorisé. Veuillez vous reconnecter. - No está autorizado. Por favor, inicie sesión de nuevo. - Nu sunteți autorizat. Vă rugăm să vă conectați din nou.
   static String get authUnauthorized => 'authUnauthorized'.tr();
+  /// Verify now - التحقق الآن - Nu verifiëren - Jetzt verifizieren - Zweryfikuj teraz - Підтвердити зараз - Vérifier maintenant - Verificar ahora - Verifică acum
+  static String get authVerifyNow => 'authVerifyNow'.tr();
   /// Verify - تحقق - Verifiëren - Verifizieren - Weryfikuj - Підтвердити - Vérifier - Verificar - Verifică
   static String get authVerifyOtp => 'authVerifyOtp'.tr();
+  /// Verify your phone number - تحقق من رقم هاتفك - Verifieer je telefoonnummer - Verifizieren Sie Ihre Telefonnummer - Zweryfikuj swój numer telefonu - Підтвердіть свій номер телефону - Vérifiez votre numéro de téléphone - Verifica tu número de teléfono - Verifică numărul de telefon
+  static String get authVerifyYourPhone => 'authVerifyYourPhone'.tr();
+  /// Welcome to Fat7i - مرحبًا بك في Fat7i - Welkom bij Fat7i - Willkommen bei Fat7i - Witamy w Fat7i - Ласкаво просимо до Fat7i - Bienvenue sur Fat7i - Bienvenido a Fat7i - Bine ai venit la Fat7i
+  static String get authWelcome => 'authWelcome'.tr();
+  /// Welcome back - مرحبًا بعودتك - Welkom terug - Willkommen zurück - Witaj ponownie - З поверненням - Bon retour - Bienvenido de nuevo - Bine ai revenit
+  static String get authWelcomeBack => 'authWelcomeBack'.tr();
   /// Confirming payment… - جارٍ تأكيد الدفع… - Betaling bevestigen… - Zahlung wird bestätigt… - Potwierdzanie płatności… - Підтвердження платежу… - Confirmation du paiement… - Confirmando pago… - Se confirmă plata…
   static String get awaitingPayment => 'awaitingPayment'.tr();
+  /// Wallet - المحفظة - Portemonnee - Brieftasche - Portfel - Гаманець - Portefeuille - Monedero - Portofel
+  static String get betalingDrawerLabel => 'betalingDrawerLabel'.tr();
+  /// Wallet - المحفظة - Portemonnee - Brieftasche - Portfel - Гаманець - Portefeuille - Monedero - Portofel
+  static String get betalingTitle => 'betalingTitle'.tr();
   /// Book a Ride Now - احجز رحلة الآن - Boek nu een rit - Jetzt eine Fahrt buchen - Zamów przejazd teraz - Замовити поїздку зараз - Réserver une course maintenant - Reservar un viaje ahora - Rezervă o cursă acum
   static String get bookARideNow => 'bookARideNow'.tr();
   /// Get matched with a driver right away - احصل على سائق على الفور - Word direct gekoppeld aan een chauffeur - Werde sofort mit einem Fahrer verbunden - Zostań natychmiast połączony z kierowcą - Отримайте водія негайно - Trouvez un chauffeur immédiatement - Encuentre un conductor de inmediato - Găsește un șofer imediat
@@ -203,12 +323,24 @@ class AppStrings {
   static String get chatClosedNotice => 'chatClosedNotice'.tr();
   /// No messages yet. Say hello! - لا توجد رسائل بعد. ابدأ بالتحية! - Nog geen berichten. Zeg hallo! - Noch keine Nachrichten. Sag Hallo! - Brak wiadomości. Przywitaj się! - Повідомлень ще немає. Привітайтеся! - Aucun message pour l'instant. Dites bonjour ! - Aún no hay mensajes. ¡Saluda! - Niciun mesaj încă. Salută!
   static String get chatEmptyState => 'chatEmptyState'.tr();
-  /// Type a message… - اكتب رسالة… - Typ een bericht… - Nachricht schreiben… - Napisz wiadomość… - Введіть повідомлення… - Écrivez un message… - Escribe un mensaje… - Scrie un mesaj…
+  /// Type your message - اكتب رسالتك - Typ je bericht - Schreib deine Nachricht - Napisz wiadomość - Напишіть повідомлення - Écrivez votre message - Escribe tu mensaje - Scrie mesajul tău
   static String get chatInputHint => 'chatInputHint'.tr();
+  /// I see you - أراك - Ik zie u - Ich sehe Sie - Widzę pana - Я вас бачу - Je vous vois - Le veo - Vă văd
+  static String get chatQuickISeeYou => 'chatQuickISeeYou'.tr();
+  /// I'm outside - أنا بالخارج - Ik ben buiten - Ich bin draußen - Jestem na zewnątrz - Я на вулиці - Je suis dehors - Estoy afuera - Sunt afară
+  static String get chatQuickOutside => 'chatQuickOutside'.tr();
+  /// I'm ready - أنا جاهز - Ik sta klaar - Ich bin bereit - Jestem gotowy - Я готовий - Je suis prêt - Estoy listo - Sunt gata
+  static String get chatQuickReady => 'chatQuickReady'.tr();
+  /// 👋 - 👋 - 👋 - 👋 - 👋 - 👋 - 👋 - 👋 - 👋
+  static String get chatQuickWave => 'chatQuickWave'.tr();
+  /// Where exactly are you? - أين أنت بالضبط؟ - Waar staat u precies? - Wo genau sind Sie? - Gdzie dokładnie jest pan? - Де саме ви знаходитесь? - Où êtes-vous exactement ? - ¿Dónde está exactamente? - Unde vă aflați exact?
+  static String get chatQuickWhereExactly => 'chatQuickWhereExactly'.tr();
   /// Couldn't send message. Please try again. - تعذّر إرسال الرسالة. حاول مرة أخرى. - Bericht kon niet worden verzonden. Probeer het opnieuw. - Nachricht konnte nicht gesendet werden. Bitte erneut versuchen. - Nie udało się wysłać wiadomości. Spróbuj ponownie. - Не вдалося надіслати повідомлення. Спробуйте ще раз. - Échec de l'envoi du message. Veuillez réessayer. - No se pudo enviar el mensaje. Inténtalo de nuevo. - Mesajul nu a putut fi trimis. Încearcă din nou.
   static String get chatSendFailed => 'chatSendFailed'.tr();
   /// Chat - الدردشة - Chat - Chat - Czat - Чат - Chat - Chat - Chat
   static String get chatTitle => 'chatTitle'.tr();
+  /// Do not share contact details and verification codes. Check the ride details via the app. - لا تشارك بيانات الاتصال ورموز التحقق. تحقق من تفاصيل الرحلة عبر التطبيق. - Deel nog geen contactgegevens en verificatiecodes. Controleer de details van de rit via de app. - Teilen Sie keine Kontaktdaten und Verifizierungscodes. Prüfen Sie die Fahrtdetails über die App. - Nie udostępniaj danych kontaktowych i kodów weryfikacyjnych. Sprawdź szczegóły przejazdu w aplikacji. - Не діліться контактними даними та кодами підтвердження. Перевірте деталі поїздки в додатку. - Ne partagez pas vos coordonnées ni vos codes de vérification. Consultez les détails du trajet dans l'application. - No compartas datos de contacto ni códigos de verificación. Comprueba los detalles del viaje en la app. - Nu partajați datele de contact și codurile de verificare. Verificați detaliile călătoriei prin aplicație.
+  static String get chatWarningMessage => 'chatWarningMessage'.tr();
   /// Clear - مسح - Wissen - Löschen - Wyczyść - Очистити - Effacer - Limpiar - Șterge
   static String get clear => 'clear'.tr();
   /// The request was invalid. - الطلب غير صالح. - De aanvraag was ongeldig. - Die Anfrage war ungültig. - Nieprawidłowe żądanie. - Неправильний запит. - La demande était invalide. - La solicitud no era válida. - Solicitarea a fost invalidă.
@@ -561,6 +693,10 @@ class AppStrings {
   static String get orderLocationUnknownLabel => 'orderLocationUnknownLabel'.tr();
   /// Order now - اطلب الآن - Nu bestellen - Jetzt bestellen - Zamów teraz - Замовити зараз - Commander maintenant - Pedir ahora - Comandă acum
   static String get orderNow => 'orderNow'.tr();
+  /// Wallet + card - الرصيد + البطاقة - Saldo + kaart - Guthaben + Karte - Saldo + karta - Баланс + картка - Solde + carte - Saldo + tarjeta - Sold + card
+  static String get orderPayWalletPlusCard => 'orderPayWalletPlusCard'.tr();
+  /// Pay with Fat7i Saldo - الدفع برصيد Fat7i - Betaal met Fat7i Saldo - Mit Fat7i Saldo bezahlen - Zapłać z Fat7i Saldo - Сплатити з Fat7i Saldo - Payer avec Fat7i Saldo - Pagar con Fat7i Saldo - Plătește cu Fat7i Saldo
+  static String get orderPayWithSaldo => 'orderPayWithSaldo'.tr();
   /// This quote has already been used. - تم استخدام هذا العرض بالفعل. - Deze prijsopgave is al gebruikt. - Dieses Angebot wurde bereits verwendet. - Ta wycena została już wykorzystana. - Ця пропозиція вже використана. - Ce devis a déjà été utilisé. - Este presupuesto ya ha sido utilizado. - Această ofertă a fost deja utilizată.
   static String get orderQuoteAlreadyUsed => 'orderQuoteAlreadyUsed'.tr();
   /// Your price quote has expired. Please request a new quote. - انتهت صلاحية عرض السعر. يرجى طلب عرض جديد. - Uw prijsopgave is verlopen. Vraag een nieuwe opgave aan. - Preisangebot abgelaufen. Bitte fordern Sie ein neues an. - Wycena wygasła. Poproś o nową. - Цінова пропозиція застаріла. Запитуйте нову. - Le devis a expiré. Veuillez en demander un nouveau. - Su presupuesto ha caducado. Por favor, solicite uno nuevo. - Oferta de preț a expirat. Vă rugăm să solicitați una nouă.
@@ -603,10 +739,36 @@ class AppStrings {
   static String get paymentMethodCard => 'paymentMethodCard'.tr();
   /// Cash - نقدًا - Contant - Bar - Gotówka - Готівка - Espèces - Efectivo - Numerar
   static String get paymentMethodCash => 'paymentMethodCash'.tr();
+  /// Default - افتراضية - Standaard - Standard - Domyślna - Основна - Par défaut - Predeterminada - Implicit
+  static String get paymentMethodDefaultLabel => 'paymentMethodDefaultLabel'.tr();
+  /// Remove - إزالة - Verwijderen - Entfernen - Usuń - Видалити - Supprimer - Eliminar - Elimină
+  static String get paymentMethodDelete => 'paymentMethodDelete'.tr();
+  /// Are you sure you want to remove this card? - هل أنت متأكد أنك تريد إزالة هذه البطاقة؟ - Weet je zeker dat je deze kaart wilt verwijderen? - Möchtest du diese Karte wirklich entfernen? - Czy na pewno chcesz usunąć tę kartę? - Ви впевнені, що хочете видалити цю картку? - Voulez-vous vraiment supprimer cette carte ? - ¿Seguro que quieres eliminar esta tarjeta? - Sigur vrei să elimini acest card?
+  static String get paymentMethodDeleteConfirm => 'paymentMethodDeleteConfirm'.tr();
+  /// Set default - تعيين كافتراضية - Als standaard instellen - Als Standard festlegen - Ustaw jako domyślną - Зробити основною - Définir par défaut - Establecer como predeterminada - Setează ca implicit
+  static String get paymentMethodSetDefault => 'paymentMethodSetDefault'.tr();
   /// Wallet - محفظة - Portemonnee - Wallet - Portfel - Гаманець - Portefeuille - Monedero - Portofel
   static String get paymentMethodWallet => 'paymentMethodWallet'.tr();
+  /// Preferred method for new bookings - الطريقة المفضلة للحجوزات الجديدة - Voorkeursmethode voor nieuwe boekingen - Bevorzugte Methode für neue Buchungen - Preferowana metoda dla nowych rezerwacji - Бажаний спосіб для нових бронювань - Méthode préférée pour les nouvelles réservations - Método preferido para nuevas reservas - Metoda preferată pentru rezervări noi
+  static String get paymentMethodsBookingHint => 'paymentMethodsBookingHint'.tr();
+  /// Payment methods - طرق الدفع - Betaalmethoden - Zahlungsmethoden - Metody płatności - Способи оплати - Moyens de paiement - Métodos de pago - Metode de plată
+  static String get paymentMethodsSectionTitle => 'paymentMethodsSectionTitle'.tr();
   /// Payments are temporarily unavailable. - المدفوعات غير متاحة مؤقتاً. - Betalingen zijn tijdelijk niet beschikbaar. - Zahlungen sind vorübergehend nicht verfügbar. - Płatności są tymczasowo niedostępne. - Платежі тимчасово недоступні. - Les paiements sont temporairement indisponibles. - Los pagos no están disponibles temporalmente. - Plățile sunt temporar indisponibile.
   static String get paymentNotEnabled => 'paymentNotEnabled'.tr();
+  /// Apple Pay - Apple Pay - Apple Pay - Apple Pay - Apple Pay - Apple Pay - Apple Pay - Apple Pay - Apple Pay
+  static String get paymentTypeApplePay => 'paymentTypeApplePay'.tr();
+  /// Creditcard - بطاقة ائتمان - Creditcard - Kreditkarte - Karta kredytowa - Кредитна картка - Carte de crédit - Tarjeta de crédito - Card de credit
+  static String get paymentTypeCard => 'paymentTypeCard'.tr();
+  /// Google Pay - Google Pay - Google Pay - Google Pay - Google Pay - Google Pay - Google Pay - Google Pay - Google Pay
+  static String get paymentTypeGooglePay => 'paymentTypeGooglePay'.tr();
+  /// iDEAL | Wero - iDEAL | Wero - iDEAL | Wero - iDEAL | Wero - iDEAL | Wero - iDEAL | Wero - iDEAL | Wero - iDEAL | Wero - iDEAL | Wero
+  static String get paymentTypeIdeal => 'paymentTypeIdeal'.tr();
+  /// Klarna - Klarna - Klarna - Klarna - Klarna - Klarna - Klarna - Klarna - Klarna
+  static String get paymentTypeKlarna => 'paymentTypeKlarna'.tr();
+  /// Pay in 3 or over 30 days - ادفع على 3 دفعات أو خلال 30 يومًا - Betaal in 3 keer of over 30 dagen - In 3 Raten oder in 30 Tagen zahlen - Zapłać w 3 ratach lub w ciągu 30 dni - Платіть у 3 частини або протягом 30 днів - Payez en 3 fois ou sous 30 jours - Paga en 3 plazos o en 30 días - Plătește în 3 rate sau în 30 de zile
+  static String get paymentTypeKlarnaHint => 'paymentTypeKlarnaHint'.tr();
+  /// PayPal - PayPal - PayPal - PayPal - PayPal - PayPal - PayPal - PayPal - PayPal
+  static String get paymentTypePaypal => 'paymentTypePaypal'.tr();
   /// You cannot continue using the app until location permission is granted. - لا يمكنك متابعة استخدام التطبيق حتى تمنح صلاحية الموقع. - U kunt de app niet blijven gebruiken totdat de locatiepermissie is verleend. - Sie können die App erst weiter nutzen, wenn die Standortberechtigung erteilt wurde. - Nie możesz korzystać z aplikacji bez zgody na lokalizację. - Ви не можете користуватися додатком без доступу до геопозиції. - Vous ne pouvez pas utiliser l'application sans la permission de localisation. - No puede seguir usando la aplicación hasta que se conceda el permiso de ubicación. - Nu puteți continua să utilizați aplicația până când nu este acordată permisiunea de locație.
   static String get permissionGateBlockingHint => 'permissionGateBlockingHint'.tr();
   /// Location permission is still denied. Please allow it to continue. - ما زالت صلاحية الموقع مرفوضة. يرجى السماح بها للمتابعة. - Locatiepermissie is nog steeds geweigerd. Sta dit toe om door te gaan. - Standortberechtigung wurde abgelehnt. Bitte erlauben Sie diese, um fortzufahren. - Odmówiono dostępu do lokalizacji. Zezwól na dostęp, aby kontynuować. - Доступ до геопозиції відхилено. Будь ласка, дозвольте доступ. - La permission est refusée. Veuillez l'autoriser pour continuer. - El permiso de ubicación sigue denegado. Por favor, permítalo para continuar. - Permisiunea de locație este în continuare refuzată. Vă rugăm să o permiteți pentru a continua.
@@ -713,6 +875,8 @@ class AppStrings {
   static String get ratingTitle => 'ratingTitle'.tr();
   /// Your rating - تقييمك - Jouw beoordeling - Ihre Bewertung - Twoja ocena - Ваша оцінка - Votre évaluation - Tu valoración - Evaluarea ta
   static String get ratingYourRating => 'ratingYourRating'.tr();
+  /// Paid by card - مدفوع بالبطاقة - Betaald met kaart - Mit Karte bezahlt - Zapłacono kartą - Сплачено карткою - Payé par carte - Pagado con tarjeta - Plătit cu cardul
+  static String get receiptCardPaid => 'receiptCardPaid'.tr();
   /// Distance - المسافة - Afstand - Entfernung - Dystans - Відстань - Distance - Distancia - Distanță
   static String get receiptDistanceLabel => 'receiptDistanceLabel'.tr();
   /// {km} km - {km} كم - {km} km - {km} km - {km} km - {km} км - {km} km - {km} km - {km} km
@@ -725,6 +889,8 @@ class AppStrings {
   static String get receiptHopeEnjoyed => 'receiptHopeEnjoyed'.tr();
   /// Payments - المدفوعات - Betalingen - Zahlungen - Płatności - Платежі - Paiements - Pagos - Plăți
   static String get receiptPayments => 'receiptPayments'.tr();
+  /// Refunded - مُسترد - Terugbetaald - Erstattet - Zwrócono - Повернено - Remboursé - Reembolsado - Rambursat
+  static String get receiptRefunded => 'receiptRefunded'.tr();
   /// Thanks for riding with us, {name} - شكراً لك على إجراء مشاويرك معنا، {name} - Bedankt voor je rit, {name} - Danke, dass du mit uns gefahren bist, {name} - Dziękujemy za przejazd, {name} - Дякуємо, що подорожуєте з нами, {name} - Merci d'avoir voyagé avec nous, {name} - Gracias por viajar con nosotros, {name} - Mulțumim că ai călătorit cu noi, {name}
   static String get receiptThankYou => 'receiptThankYou'.tr();
   /// Receipt - الإيصال - Bon - Beleg - Paragon - Чек - Reçu - Recibo - Bon
@@ -733,6 +899,12 @@ class AppStrings {
   static String get receiptTotal => 'receiptTotal'.tr();
   /// Trip fare - أجرة المشوار - Rittarief - Fahrpreis - Cena kursu - Вартість поїздки - Tarif de la course - Tarifa del viaje - Tarif cursă
   static String get receiptTripFare => 'receiptTripFare'.tr();
+  /// Unpaid - غير مدفوع - Onbetaald - Unbezahlt - Niezapłacone - Не сплачено - Impayé - Sin pagar - Neplătit
+  static String get receiptUnpaid => 'receiptUnpaid'.tr();
+  /// Waiting fee - رسوم الانتظار - Wachtkosten - Wartegebühr - Opłata za oczekiwanie - Плата за очікування - Frais d'attente - Tarifa de espera - Taxă de așteptare
+  static String get receiptWaitingFee => 'receiptWaitingFee'.tr();
+  /// Paid from wallet - مدفوع من المحفظة - Betaald met saldo - Aus Guthaben bezahlt - Zapłacono z portfela - Сплачено з гаманця - Payé avec le solde - Pagado con saldo - Plătit din portofel
+  static String get receiptWalletPaid => 'receiptWalletPaid'.tr();
   /// Recent locations - المواقع الأخيرة - Recente locaties - Letzte Standorte - Ostatnie lokalizacje - Останні адреси - Lieux récents - Ubicaciones recientes - Locații recente
   static String get recentLocations => 'recentLocations'.tr();
   /// Cancel - إلغاء - Annuleren - Abbrechen - Anuluj - Скасувати - Annuler - Cancelar - Anulează
@@ -855,6 +1027,8 @@ class AppStrings {
   static String get sat => 'sat'.tr();
   /// Saturday - السبت - Zaterdag - Samstag - Sobota - Субота - Samedi - Sábado - Sâmbătă
   static String get saturday => 'saturday'.tr();
+  /// Saved cards - البطاقات المحفوظة - Opgeslagen kaarten - Gespeicherte Karten - Zapisane karty - Збережені картки - Cartes enregistrées - Tarjetas guardadas - Carduri salvate
+  static String get savedCardsSectionTitle => 'savedCardsSectionTitle'.tr();
   /// Schedule a Ride in Advance - جدولة رحلة مسبقًا - Plan een rit vooraf - Eine Fahrt im Voraus planen - Zaplanuj przejazd z wyprzedzeniem - Запланувати поїздку наперед - Planifier une course à l'avance - Programar un viaje con antelación - Programează o cursă în avans
   static String get scheduleARideInAdvance => 'scheduleARideInAdvance'.tr();
   /// Pick a date and time that suits you - اختر تاريخًا ووقتًا يناسبك - Kies een datum en tijd die jou uitkomt - Wähle ein passendes Datum und eine Uhrzeit - Wybierz datę i godzinę, która Ci odpowiada - Оберіть дату й час, що вам підходять - Choisissez la date et l'heure qui vous conviennent - Elija una fecha y hora que le convenga - Alege o dată și o oră care ți se potrivesc
@@ -979,6 +1153,10 @@ class AppStrings {
   static String get tripActiveTitle => 'tripActiveTitle'.tr();
   /// Please get in within {time} - الرجاء الركوب خلال {time} - Stap binnen {time} in - Bitte steigen Sie innerhalb von {time} ein - Wsiądź w ciągu {time} - Сідайте протягом {time} - Veuillez monter dans {time} - Sube en un plazo de {time} - Te rugăm să urci în {time}
   static String get tripArrivedBoardWithin => 'tripArrivedBoardWithin'.tr();
+  /// Luggage: {count} - الأمتعة: {count} - Bagage: {count} - Gepäck: {count} - Bagaż: {count} - Багаж: {count} - Bagages : {count} - Equipaje: {count} - Bagaje: {count}
+  static String get tripBagCount => 'tripBagCount'.tr();
+  /// {count} bags - {count} حقائب - {count} koffers - {count} Gepäckstücke - {count} bagaży - {count} одиниць багажу - {count} bagages - {count} maletas - {count} bagaje
+  static String get tripBagsValue => 'tripBagsValue'.tr();
   /// Cancel Trip - إلغاء الرحلة - Rit annuleren - Fahrt stornieren - Anuluj przejazd - Скасувати поїздку - Annuler le trajet - Cancelar viaje - Anulează cursa
   static String get tripCancelButton => 'tripCancelButton'.tr();
   /// Are you sure you want to cancel this trip? - هل أنت متأكد أنك تريد إلغاء هذه الرحلة؟ - Weet u zeker dat u deze rit wilt annuleren? - Möchten Sie diese Fahrt wirklich stornieren? - Czy na pewno chcesz anulować ten przejazd? - Ви впевнені, що хочете скасувати поїздку? - Voulez-vous vraiment annuler ce trajet ? - ¿Está seguro de que desea cancelar este viaje? - Sigur doriți să anulați această cursă?
@@ -991,10 +1169,26 @@ class AppStrings {
   static String get tripCancelledSuccess => 'tripCancelledSuccess'.tr();
   /// Your trip has been cancelled successfully. You can request a new ride anytime. - تم إلغاء رحلتك بنجاح. يمكنك طلب رحلة جديدة في أي وقت. - Je rit is succesvol geannuleerd. Je kunt op elk moment een nieuwe rit aanvragen. - Ihre Fahrt wurde erfolgreich storniert. Sie können jederzeit eine neue Fahrt anfordern. - Twój przejazd został pomyślnie anulowany. Możesz zamówić nowy przejazd w dowolnym momencie. - Вашу поїздку успішно скасовано. Ви можете замовити нову поїздку в будь-який час. - Votre course a été annulée avec succès. Vous pouvez demander une nouvelle course à tout moment. - Su viaje ha sido cancelado con éxito. Puede solicitar un nuevo viaje en cualquier momento. - Cursa ta a fost anulată cu succes. Poți solicita o cursă nouă oricând.
   static String get tripCancelledSuccessDesc => 'tripCancelledSuccessDesc'.tr();
+  /// Please board within 10 minutes of your driver's arrival. Otherwise your trip may be cancelled and cancellation fees may apply. - يرجى الصعود خلال 10 دقائق من وصول سائقك. وإلا قد تُلغى رحلتك وتُطبَّق رسوم الإلغاء. - Zorg dat u binnen 10 minuten na aankomst van uw chauffeur instapt. Anders kan uw rit worden geannuleerd en kunnen annuleringskosten worden berekend. - Bitte steigen Sie innerhalb von 10 Minuten nach Ankunft Ihres Fahrers ein. Ansonsten kann Ihre Fahrt storniert und Stornierungsgebühren können erhoben werden. - Wsiądź do pojazdu w ciągu 10 minut od przyjazdu kierowcy. W przeciwnym razie Twój przejazd może zostać anulowany i mogą zostać naliczone opłaty za anulowanie. - Будь ласка, сідайте в автомобіль протягом 10 хвилин після прибуття водія. Інакше вашу поїздку може бути скасовано і можуть застосовуватися штрафи за скасування. - Veuillez monter dans le véhicule dans les 10 minutes suivant l'arrivée de votre chauffeur. Sinon, votre trajet pourrait être annulé et des frais d'annulation pourraient s'appliquer. - Por favor, suba al vehículo en los 10 minutos siguientes a la llegada de su conductor. De lo contrario, su viaje puede cancelarse y se podrían aplicar cargos por cancelación. - Vă rugăm să urcați în vehicul în termen de 10 minute de la sosirea șoferului dvs. În caz contrar, cursa dvs. poate fi anulată și se pot aplica taxe de anulare.
+  static String get tripConfirmedBoardingWarning => 'tripConfirmedBoardingWarning'.tr();
   /// Requested at - وقت الطلب - Aangevraagd op - Anfragezeit - Czas zgłoszenia - Час запиту - Demandé à - Solicitado a las - Solicitată la
   static String get tripCreatedAt => 'tripCreatedAt'.tr();
   /// Trip details - تفاصيل المشوار - Ritdetails - Fahrtdetails - Szczegóły kursu - Деталі поїздки - Détails de la course - Detalles del viaje - Detalii cursă
   static String get tripDetailsTitle => 'tripDetailsTitle'.tr();
+  /// Change address - تغيير العنوان - Adres wijzigen - Adresse ändern - Zmień adres - Змінити адресу - Modifier l'adresse - Cambiar dirección - Schimbați adresa
+  static String get tripEditAddress => 'tripEditAddress'.tr();
+  /// Editing no longer possible. Address changes are only allowed within 1 hour of booking. - التعديل لم يعد ممكنًا. يُسمح بتغيير العنوان فقط خلال ساعة واحدة من الحجز. - Wijzigen niet meer mogelijk. Adreswijziging is alleen toegestaan binnen 1 uur na de boeking. - Bearbeitung nicht mehr möglich. Adressänderungen sind nur innerhalb einer Stunde nach der Buchung erlaubt. - Edycja nie jest już możliwa. Zmiany adresu są dozwolone tylko w ciągu 1 godziny od rezerwacji. - Редагування більше неможливе. Зміни адреси дозволені лише протягом 1 години після бронювання. - Modification impossible. Les changements d'adresse ne sont autorisés que dans l'heure suivant la réservation. - Ya no es posible editar. Los cambios de dirección solo están permitidos dentro de 1 hora tras la reserva. - Editarea nu mai este posibilă. Modificările de adresă sunt permise doar în termen de 1 oră de la rezervare.
+  static String get tripEditAddressDisabled => 'tripEditAddressDisabled'.tr();
+  /// Change luggage - تغيير عدد الأمتعة - Bagage wijzigen - Gepäck ändern - Zmień bagaż - Змінити багаж - Modifier les bagages - Cambiar equipaje - Schimbați bagajele
+  static String get tripEditBags => 'tripEditBags'.tr();
+  /// Editing no longer possible. - التعديل لم يعد ممكنًا. - Wijzigen niet meer mogelijk. - Bearbeitung nicht mehr möglich. - Edycja nie jest już możliwa. - Редагування більше неможливе. - Modification impossible. - Ya no es posible editar. - Editarea nu mai este posibilă.
+  static String get tripEditNotAllowed => 'tripEditNotAllowed'.tr();
+  /// Change passengers - تغيير عدد الركاب - Passagiers wijzigen - Fahrgäste ändern - Zmień liczbę pasażerów - Змінити кількість пасажирів - Modifier les passagers - Cambiar pasajeros - Schimbați pasagerii
+  static String get tripEditPassengers => 'tripEditPassengers'.tr();
+  /// Change pickup time - تغيير وقت الاستلام - Ophaaltijd wijzigen - Abholzeit ändern - Zmień godzinę odbioru - Змінити час подачі - Modifier l'heure de prise en charge - Cambiar hora de recogida - Schimbați ora de preluare
+  static String get tripEditPickupTime => 'tripEditPickupTime'.tr();
+  /// Editing no longer possible. Time changes are only allowed within 1 hour of booking. - التعديل لم يعد ممكنًا. يُسمح بتغيير الوقت فقط خلال ساعة واحدة من الحجز. - Wijzigen niet meer mogelijk. Tijdwijziging is alleen toegestaan binnen 1 uur na de boeking. - Bearbeitung nicht mehr möglich. Zeitänderungen sind nur innerhalb einer Stunde nach der Buchung erlaubt. - Edycja nie jest już możliwa. Zmiany godziny są dozwolone tylko w ciągu 1 godziny od rezerwacji. - Редагування більше неможливе. Зміни часу дозволені лише протягом 1 години після бронювання. - Modification impossible. Les changements d'horaire ne sont autorisés que dans l'heure suivant la réservation. - Ya no es posible editar. Los cambios de hora solo están permitidos dentro de 1 hora tras la reserva. - Editarea nu mai este posibilă. Modificările de oră sunt permise doar în termen de 1 oră de la rezervare.
+  static String get tripEditTimeDisabled => 'tripEditTimeDisabled'.tr();
   /// {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency}
   static String get tripFare => 'tripFare'.tr();
   /// Trip History - سجل الرحلات - Ritgeschiedenis - Fahrtenverlauf - Historia przejazdów - Історія поїздок - Historique des trajets - Historial de viajes - Istoric curse
@@ -1007,10 +1201,28 @@ class AppStrings {
   static String get tripHistorySearchHint => 'tripHistorySearchHint'.tr();
   /// My Trips - رحلاتي - Mijn Ritten - Meine Fahrten - Moje przejazdy - Мої поїздки - Mes Trajets - Mis viajes - Cursele mele
   static String get tripHistoryTitle => 'tripHistoryTitle'.tr();
+  /// Number of bags - عدد الحقائب - Aantal koffers - Anzahl Gepäckstücke - Liczba bagaży - Кількість багажу - Nombre de bagages - Número de maletas - Număr de bagaje
+  static String get tripInfoBagsLabel => 'tripInfoBagsLabel'.tr();
+  /// Booking time - وقت الحجز - Boekingstijdstip - Buchungszeit - Czas rezerwacji - Час бронювання - Heure de réservation - Hora de reserva - Ora rezervării
+  static String get tripInfoBookingTime => 'tripInfoBookingTime'.tr();
+  /// Destination address - عنوان الوجهة - Bestemmingsadres - Zieladresse - Adres docelowy - Адреса призначення - Adresse de destination - Dirección de destino - Adresă de destinație
+  static String get tripInfoDestinationAddress => 'tripInfoDestinationAddress'.tr();
+  /// Number of passengers - عدد الركاب - Aantal personen - Anzahl Fahrgäste - Liczba pasażerów - Кількість пасажирів - Nombre de passagers - Número de pasajeros - Număr de pasageri
+  static String get tripInfoPassengersLabel => 'tripInfoPassengersLabel'.tr();
+  /// Pickup address - عنوان الاستلام - Ophaaladres - Abholadresse - Adres odbioru - Адреса подачі - Adresse de prise en charge - Dirección de recogida - Adresă de preluare
+  static String get tripInfoPickupAddress => 'tripInfoPickupAddress'.tr();
+  /// Scheduled trip - الرحلة المجدولة - Geplande rit - Geplante Fahrt - Zaplanowany przejazd - Запланована поїздка - Trajet planifié - Viaje programado - Cursă programată
+  static String get tripInfoScheduledTrip => 'tripInfoScheduledTrip'.tr();
   /// Invoice - الفاتورة - Factuur - Rechnung - Faktura - Рахунок - Facture - Factura - Factură
   static String get tripInvoiceChip => 'tripInvoiceChip'.tr();
   /// Scheduled time must be at least 15 minutes from now. - يجب أن يكون الوقت المجدول بعد 15 دقيقة على الأقل من الآن. - De geplande tijd moet minstens 15 minuten in de toekomst liggen. - Die geplante Zeit muss mindestens 15 Minuten in der Zukunft liegen. - Zaplanowany czas musi być o co najmniej 15 minut w przyszłość. - Запланований час має бути щонайменше на 15 хвилин у майбутньому. - L'heure programmée doit être d'au moins 15 minutes dans le futur. - La hora programada debe ser al menos 15 minutos en el futuro. - Ora programată trebuie să fie cu cel puțin 15 minute în viitor.
   static String get tripLeadTimeError => 'tripLeadTimeError'.tr();
+  /// Passengers: {count} - الركاب: {count} - Passagiers: {count} - Fahrgäste: {count} - Pasażerowie: {count} - Пасажири: {count} - Passagers : {count} - Pasajeros: {count} - Pasageri: {count}
+  static String get tripPassengerCount => 'tripPassengerCount'.tr();
+  /// {count} passengers - {count} ركاب - {count} personen - {count} Fahrgäste - {count} pasażerów - {count} пасажирів - {count} passagers - {count} pasajeros - {count} pasageri
+  static String get tripPassengersValue => 'tripPassengersValue'.tr();
+  /// Your trip request is being processed… - جارٍ معالجة طلب رحلتك… - Uw ritaanvraag wordt verwerkt… - Ihre Fahrtanfrage wird bearbeitet… - Twoje zapytanie o przejazd jest przetwarzane… - Ваш запит на поїздку обробляється… - Votre demande de trajet est en cours de traitement… - Su solicitud de viaje está siendo procesada… - Cererea dvs. de cursă este în curs de procesare…
+  static String get tripPendingProcessing => 'tripPendingProcessing'.tr();
   /// Receipt - الإيصال - Bon - Beleg - Paragon - Чек - Reçu - Recibo - Bon
   static String get tripReceiptChip => 'tripReceiptChip'.tr();
   /// Trip #{code} - رحلة رقم {code} - Rit #{code} - Fahrt #{code} - Przejazd #{code} - Поїздка #{code} - Trajet #{code} - Viaje #{code} - Cursa #{code}
@@ -1041,6 +1253,10 @@ class AppStrings {
   static String get tripScheduledConfirmed => 'tripScheduledConfirmed'.tr();
   /// Scheduled for {time} - مجدولة في {time} - Ingepland voor {time} - Geplant für {time} - Zaplanowano na {time} - Заплановано на {time} - Planifié pour {time} - Programado para {time} - Programată pentru {time}
   static String get tripScheduledFor => 'tripScheduledFor'.tr();
+  /// Scheduled pickup date: {date} - تاريخ الاستلام المجدول: {date} - Geplande ophaaldatum: {date} - Geplantes Abholdatum: {date} - Planowana data odbioru: {date} - Запланована дата подачі: {date} - Date de prise en charge prévue : {date} - Fecha de recogida programada: {date} - Data programată de preluare: {date}
+  static String get tripScheduledPickupDate => 'tripScheduledPickupDate'.tr();
+  /// Scheduled pickup time: {time} - وقت الاستلام المجدول: {time} - Geplande ophaaltijd: {time} - Geplante Abholzeit: {time} - Planowany czas odbioru: {time} - Запланований час подачі: {time} - Heure de prise en charge prévue : {time} - Hora de recogida programada: {time} - Ora programată de preluare: {time}
+  static String get tripScheduledPickupTime => 'tripScheduledPickupTime'.tr();
   /// Trip starts in {time} - تبدأ الرحلة خلال {time} - Rit begint over {time} - Fahrt beginnt in {time} - Przejazd zacznie się za {time} - Поїздка почнеться через {time} - Le trajet commence dans {time} - El viaje comienza en {time} - Cursa începe în {time}
   static String get tripScheduledStartsIn => 'tripScheduledStartsIn'.tr();
   /// Status - الحالة - Status - Status - Status - Статус - Statut - Estado - Status
@@ -1071,6 +1287,12 @@ class AppStrings {
   static String get tripStatusScheduled => 'tripStatusScheduled'.tr();
   /// Completed at {time} - اكتمل في {time} - Voltooid om {time} - Abgeschlossen um {time} - Ukończono o {time} - Завершено о {time} - Terminé à {time} - Completado a las {time} - Finalizată la {time}
   static String get tripStopCompletedAt => 'tripStopCompletedAt'.tr();
+  /// Your trip requires a van for {count} passengers. New fare: {fare}. Do you want to continue? - رحلتك تتطلب فان لـ {count} ركاب. الأجرة الجديدة: {fare}. هل تريد المتابعة? - Uw rit vereist een busje voor {count} passagiers. Nieuw tarief: {fare}. Wilt u doorgaan? - Ihre Fahrt erfordert einen Van für {count} Fahrgäste. Neuer Fahrpreis: {fare}. Möchten Sie fortfahren? - Twój przejazd wymaga busa dla {count} pasażerów. Nowa opłata: {fare}. Czy chcesz kontynuować? - Ваша поїздка потребує мікроавтобуса для {count} пасажирів. Новий тариф: {fare}. Бажаєте продовжити? - Votre trajet nécessite un van pour {count} passagers. Nouveau tarif : {fare}. Voulez-vous continuer ? - Su viaje requiere una furgoneta para {count} pasajeros. Nueva tarifa: {fare}. ¿Desea continuar? - Cursa dvs. necesită un van pentru {count} pasageri. Tarif nou: {fare}. Doriți să continuați?
+  static String get tripVanUpgradeConfirmBody => 'tripVanUpgradeConfirmBody'.tr();
+  /// Upgrade to van - الترقية إلى فان - Upgrade naar busje - Upgrade auf Van - Upgrade do busa - Оновлення до мікроавтобуса - Passer au van - Actualizar a furgoneta - Upgrade la van
+  static String get tripVanUpgradeConfirmTitle => 'tripVanUpgradeConfirmTitle'.tr();
+  /// More than 4 passengers requires a van. Your fare will be updated. - أكثر من 4 ركاب يتطلب سيارة فان. سيتم تحديث الأجرة. - Meer dan 4 passagiers vereist een busje. Uw tarief wordt bijgewerkt. - Mehr als 4 Fahrgäste erfordern einen Van. Ihr Fahrpreis wird aktualisiert. - Więcej niż 4 pasażerów wymaga busa. Twoja opłata zostanie zaktualizowana. - Більше 4 пасажирів потребує мікроавтобуса. Ваш тариф буде оновлено. - Plus de 4 passagers nécessite un van. Votre tarif sera mis à jour. - Más de 4 pasajeros requiere una furgoneta. Su tarifa se actualizará. - Mai mult de 4 pasageri necesită un van. Tariful dvs. va fi actualizat.
+  static String get tripVanUpgradeNotice => 'tripVanUpgradeNotice'.tr();
   /// Waiting fee: {amount} - رسوم الانتظار: {amount} - Wachttarief: {amount} - Wartegebühr: {amount} - Opłata za oczekiwanie: {amount} - Плата за очікування: {amount} - Frais d'attente : {amount} - Tarifa de espera: {amount} - Taxă de așteptare: {amount}
   static String get tripWaitingFeeAccruing => 'tripWaitingFeeAccruing'.tr();
   /// Free waiting time is over. A per-minute fee now applies. - انتهى وقت الانتظار المجاني. تُطبّق الآن رسوم لكل دقيقة. - De gratis wachttijd is voorbij. Er geldt nu een tarief per minuut. - Die kostenlose Wartezeit ist vorbei. Es gilt nun eine Gebühr pro Minute. - Bezpłatny czas oczekiwania się skończył. Obowiązuje opłata za minutę. - Безкоштовний час очікування завершився. Тепер діє плата за хвилину. - Le temps d'attente gratuit est terminé. Des frais à la minute s'appliquent désormais. - El tiempo de espera gratuito ha terminado. Ahora se aplica una tarifa por minuto. - Timpul de așteptare gratuit s-a încheiat. Acum se aplică o taxă pe minut.
@@ -1135,6 +1357,36 @@ class AppStrings {
   static String get waitingLateMinutes => 'waitingLateMinutes'.tr();
   /// Please pay the waiting time costs to the driver. - يرجى دفع تكاليف وقت الانتظار للسائق. - Betaal de kosten voor de wachttijd aan de chauffeur. - Bitte zahlen Sie die Wartezeitkosten an den Fahrer. - Prosimy zapłacić kierowcy koszty czasu oczekiwania. - Будь ласка, сплатіть водієві вартість часу очікування. - Veuillez payer au chauffeur les frais liés au temps d’attente. - Por favor, pague al conductor los costes del tiempo de espera. - Vă rugăm să plătiți șoferului costurile pentru timpul de așteptare.
   static String get waitingPayDriverNotice => 'waitingPayDriverNotice'.tr();
+  /// No transactions yet - لا توجد معاملات بعد - Nog geen transacties - Noch keine Transaktionen - Brak transakcji - Ще немає транзакцій - Aucune transaction pour le moment - Aún no hay transacciones - Nicio tranzacție încă
+  static String get walletNoTransactions => 'walletNoTransactions'.tr();
+  /// Fat7i Saldo - رصيد Fat7i - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo
+  static String get walletSaldoTitle => 'walletSaldoTitle'.tr();
+  /// Top-up amount - مبلغ الشحن - Opwaardeerbedrag - Aufladebetrag - Kwota doładowania - Сума поповнення - Montant du rechargement - Importe de recarga - Sumă de reîncărcare
+  static String get walletTopUpAmountTitle => 'walletTopUpAmountTitle'.tr();
+  /// Top up - شحن - Opwaarderen - Aufladen - Doładuj - Поповнити - Recharger - Recargar - Reîncarcă
+  static String get walletTopUpCta => 'walletTopUpCta'.tr();
+  /// Other amount - مبلغ آخر - Ander bedrag - Anderer Betrag - Inna kwota - Інша сума - Autre montant - Otro importe - Altă sumă
+  static String get walletTopUpCustomHint => 'walletTopUpCustomHint'.tr();
+  /// Your top-up is being processed. Your balance updates shortly. - تتم معالجة عملية الشحن. سيتم تحديث رصيدك قريبًا. - Je opwaardering wordt verwerkt. Je saldo wordt zo bijgewerkt. - Deine Aufladung wird verarbeitet. Dein Guthaben wird in Kürze aktualisiert. - Twoje doładowanie jest przetwarzane. Saldo zaktualizuje się wkrótce. - Ваше поповнення обробляється. Баланс невдовзі оновиться. - Votre rechargement est en cours. Votre solde sera mis à jour sous peu. - Tu recarga se está procesando. Tu saldo se actualizará en breve. - Reîncărcarea ta este în curs de procesare. Soldul se va actualiza în curând.
+  static String get walletTopUpProcessing => 'walletTopUpProcessing'.tr();
+  /// Top up your balance securely - اشحن رصيدك بأمان - Veilig opwaarderen - Sicher Guthaben aufladen - Bezpieczne doładowanie salda - Безпечне поповнення балансу - Rechargez votre solde en toute sécurité - Recarga tu saldo de forma segura - Reîncarcă-ți soldul în siguranță
+  static String get walletTopUpVia => 'walletTopUpVia'.tr();
+  /// Transactions - المعاملات - Transacties - Transaktionen - Transakcje - Транзакції - Transactions - Transacciones - Tranzacții
+  static String get walletTransactionsTitle => 'walletTransactionsTitle'.tr();
+  /// Adjustment - تعديل - Correctie - Anpassung - Korekta - Коригування - Ajustement - Ajuste - Ajustare
+  static String get walletTxnAdjustment => 'walletTxnAdjustment'.tr();
+  /// Ride fee - رسوم الرحلة - Ritkosten - Fahrtgebühr - Opłata za przejazd - Плата за поїздку - Frais de course - Tarifa del viaje - Taxă cursă
+  static String get walletTxnFee => 'walletTxnFee'.tr();
+  /// Transaction - معاملة - Transactie - Transaktion - Transakcja - Транзакція - Transaction - Transacción - Tranzacție
+  static String get walletTxnOther => 'walletTxnOther'.tr();
+  /// Pending - قيد الانتظار - In behandeling - Ausstehend - Oczekujące - В очікуванні - En attente - Pendiente - În așteptare
+  static String get walletTxnPending => 'walletTxnPending'.tr();
+  /// Refund - استرداد - Terugbetaling - Rückerstattung - Zwrot - Повернення - Remboursement - Reembolso - Rambursare
+  static String get walletTxnRefund => 'walletTxnRefund'.tr();
+  /// Top-up - شحن - Opwaardering - Aufladung - Doładowanie - Поповнення - Rechargement - Recarga - Reîncărcare
+  static String get walletTxnTopUp => 'walletTxnTopUp'.tr();
+  /// Trip payment - دفع الرحلة - Ritbetaling - Fahrtzahlung - Płatność za przejazd - Оплата поїздки - Paiement de la course - Pago del viaje - Plata cursei
+  static String get walletTxnTripPayment => 'walletTxnTripPayment'.tr();
   /// Wed - أرب - Wo - Mi - Śr - Ср - Mer - Mié - Mie
   static String get wed => 'wed'.tr();
   /// Wednesday - الأربعاء - Woensdag - Mittwoch - Środa - Середа - Mercredi - Miércoles - Miercuri

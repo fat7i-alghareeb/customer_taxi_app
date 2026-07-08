@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TripReceiptModel {
 
- String get tripId; String get referenceCode; String get status; double get grossAmount; double get netAmount; double get taxAmount; String get currencyCode; String get paymentMethod; String? get paymentReference; DateTime? get paidAtUtc; DateTime? get completedAtUtc; double get distanceKm; double get durationMin; String get vehicleTypeName; String? get passengerName; String get issuerName; bool get invoiceAvailable; String? get invoiceNumber; DateTime? get invoiceIssuedAtUtc; List<TripStopModel> get stops;
+ String get tripId; String get referenceCode; String get status; double get grossAmount; double get netAmount; double get taxAmount; String get currencyCode; String get paymentMethod; String? get paymentReference; DateTime? get paidAtUtc; DateTime? get completedAtUtc; double get distanceKm; double get durationMin; String get vehicleTypeName; String? get passengerName; String get issuerName; bool get invoiceAvailable; String? get invoiceNumber; DateTime? get invoiceIssuedAtUtc; List<TripStopModel> get stops; double get waitingFeeAmount; double get walletPaidAmount; double get cardPaidAmount; double get totalPaidAmount; double get unpaidAmount; double get refundedAmount;
 /// Create a copy of TripReceiptModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TripReceiptModelCopyWith<TripReceiptModel> get copyWith => _$TripReceiptModelCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripReceiptModel&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.grossAmount, grossAmount) || other.grossAmount == grossAmount)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&(identical(other.taxAmount, taxAmount) || other.taxAmount == taxAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.paymentReference, paymentReference) || other.paymentReference == paymentReference)&&(identical(other.paidAtUtc, paidAtUtc) || other.paidAtUtc == paidAtUtc)&&(identical(other.completedAtUtc, completedAtUtc) || other.completedAtUtc == completedAtUtc)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm)&&(identical(other.durationMin, durationMin) || other.durationMin == durationMin)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.passengerName, passengerName) || other.passengerName == passengerName)&&(identical(other.issuerName, issuerName) || other.issuerName == issuerName)&&(identical(other.invoiceAvailable, invoiceAvailable) || other.invoiceAvailable == invoiceAvailable)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.invoiceIssuedAtUtc, invoiceIssuedAtUtc) || other.invoiceIssuedAtUtc == invoiceIssuedAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripReceiptModel&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.grossAmount, grossAmount) || other.grossAmount == grossAmount)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&(identical(other.taxAmount, taxAmount) || other.taxAmount == taxAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.paymentReference, paymentReference) || other.paymentReference == paymentReference)&&(identical(other.paidAtUtc, paidAtUtc) || other.paidAtUtc == paidAtUtc)&&(identical(other.completedAtUtc, completedAtUtc) || other.completedAtUtc == completedAtUtc)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm)&&(identical(other.durationMin, durationMin) || other.durationMin == durationMin)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.passengerName, passengerName) || other.passengerName == passengerName)&&(identical(other.issuerName, issuerName) || other.issuerName == issuerName)&&(identical(other.invoiceAvailable, invoiceAvailable) || other.invoiceAvailable == invoiceAvailable)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.invoiceIssuedAtUtc, invoiceIssuedAtUtc) || other.invoiceIssuedAtUtc == invoiceIssuedAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.waitingFeeAmount, waitingFeeAmount) || other.waitingFeeAmount == waitingFeeAmount)&&(identical(other.walletPaidAmount, walletPaidAmount) || other.walletPaidAmount == walletPaidAmount)&&(identical(other.cardPaidAmount, cardPaidAmount) || other.cardPaidAmount == cardPaidAmount)&&(identical(other.totalPaidAmount, totalPaidAmount) || other.totalPaidAmount == totalPaidAmount)&&(identical(other.unpaidAmount, unpaidAmount) || other.unpaidAmount == unpaidAmount)&&(identical(other.refundedAmount, refundedAmount) || other.refundedAmount == refundedAmount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,tripId,referenceCode,status,grossAmount,netAmount,taxAmount,currencyCode,paymentMethod,paymentReference,paidAtUtc,completedAtUtc,distanceKm,durationMin,vehicleTypeName,passengerName,issuerName,invoiceAvailable,invoiceNumber,invoiceIssuedAtUtc,const DeepCollectionEquality().hash(stops)]);
+int get hashCode => Object.hashAll([runtimeType,tripId,referenceCode,status,grossAmount,netAmount,taxAmount,currencyCode,paymentMethod,paymentReference,paidAtUtc,completedAtUtc,distanceKm,durationMin,vehicleTypeName,passengerName,issuerName,invoiceAvailable,invoiceNumber,invoiceIssuedAtUtc,const DeepCollectionEquality().hash(stops),waitingFeeAmount,walletPaidAmount,cardPaidAmount,totalPaidAmount,unpaidAmount,refundedAmount]);
 
 @override
 String toString() {
-  return 'TripReceiptModel(tripId: $tripId, referenceCode: $referenceCode, status: $status, grossAmount: $grossAmount, netAmount: $netAmount, taxAmount: $taxAmount, currencyCode: $currencyCode, paymentMethod: $paymentMethod, paymentReference: $paymentReference, paidAtUtc: $paidAtUtc, completedAtUtc: $completedAtUtc, distanceKm: $distanceKm, durationMin: $durationMin, vehicleTypeName: $vehicleTypeName, passengerName: $passengerName, issuerName: $issuerName, invoiceAvailable: $invoiceAvailable, invoiceNumber: $invoiceNumber, invoiceIssuedAtUtc: $invoiceIssuedAtUtc, stops: $stops)';
+  return 'TripReceiptModel(tripId: $tripId, referenceCode: $referenceCode, status: $status, grossAmount: $grossAmount, netAmount: $netAmount, taxAmount: $taxAmount, currencyCode: $currencyCode, paymentMethod: $paymentMethod, paymentReference: $paymentReference, paidAtUtc: $paidAtUtc, completedAtUtc: $completedAtUtc, distanceKm: $distanceKm, durationMin: $durationMin, vehicleTypeName: $vehicleTypeName, passengerName: $passengerName, issuerName: $issuerName, invoiceAvailable: $invoiceAvailable, invoiceNumber: $invoiceNumber, invoiceIssuedAtUtc: $invoiceIssuedAtUtc, stops: $stops, waitingFeeAmount: $waitingFeeAmount, walletPaidAmount: $walletPaidAmount, cardPaidAmount: $cardPaidAmount, totalPaidAmount: $totalPaidAmount, unpaidAmount: $unpaidAmount, refundedAmount: $refundedAmount)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TripReceiptModelCopyWith<$Res>  {
   factory $TripReceiptModelCopyWith(TripReceiptModel value, $Res Function(TripReceiptModel) _then) = _$TripReceiptModelCopyWithImpl;
 @useResult
 $Res call({
- String tripId, String referenceCode, String status, double grossAmount, double netAmount, double taxAmount, String currencyCode, String paymentMethod, String? paymentReference, DateTime? paidAtUtc, DateTime? completedAtUtc, double distanceKm, double durationMin, String vehicleTypeName, String? passengerName, String issuerName, bool invoiceAvailable, String? invoiceNumber, DateTime? invoiceIssuedAtUtc, List<TripStopModel> stops
+ String tripId, String referenceCode, String status, double grossAmount, double netAmount, double taxAmount, String currencyCode, String paymentMethod, String? paymentReference, DateTime? paidAtUtc, DateTime? completedAtUtc, double distanceKm, double durationMin, String vehicleTypeName, String? passengerName, String issuerName, bool invoiceAvailable, String? invoiceNumber, DateTime? invoiceIssuedAtUtc, List<TripStopModel> stops, double waitingFeeAmount, double walletPaidAmount, double cardPaidAmount, double totalPaidAmount, double unpaidAmount, double refundedAmount
 });
 
 
@@ -65,7 +65,7 @@ class _$TripReceiptModelCopyWithImpl<$Res>
 
 /// Create a copy of TripReceiptModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tripId = null,Object? referenceCode = null,Object? status = null,Object? grossAmount = null,Object? netAmount = null,Object? taxAmount = null,Object? currencyCode = null,Object? paymentMethod = null,Object? paymentReference = freezed,Object? paidAtUtc = freezed,Object? completedAtUtc = freezed,Object? distanceKm = null,Object? durationMin = null,Object? vehicleTypeName = null,Object? passengerName = freezed,Object? issuerName = null,Object? invoiceAvailable = null,Object? invoiceNumber = freezed,Object? invoiceIssuedAtUtc = freezed,Object? stops = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? tripId = null,Object? referenceCode = null,Object? status = null,Object? grossAmount = null,Object? netAmount = null,Object? taxAmount = null,Object? currencyCode = null,Object? paymentMethod = null,Object? paymentReference = freezed,Object? paidAtUtc = freezed,Object? completedAtUtc = freezed,Object? distanceKm = null,Object? durationMin = null,Object? vehicleTypeName = null,Object? passengerName = freezed,Object? issuerName = null,Object? invoiceAvailable = null,Object? invoiceNumber = freezed,Object? invoiceIssuedAtUtc = freezed,Object? stops = null,Object? waitingFeeAmount = null,Object? walletPaidAmount = null,Object? cardPaidAmount = null,Object? totalPaidAmount = null,Object? unpaidAmount = null,Object? refundedAmount = null,}) {
   return _then(_self.copyWith(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -87,7 +87,13 @@ as String,invoiceAvailable: null == invoiceAvailable ? _self.invoiceAvailable : 
 as bool,invoiceNumber: freezed == invoiceNumber ? _self.invoiceNumber : invoiceNumber // ignore: cast_nullable_to_non_nullable
 as String?,invoiceIssuedAtUtc: freezed == invoiceIssuedAtUtc ? _self.invoiceIssuedAtUtc : invoiceIssuedAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,stops: null == stops ? _self.stops : stops // ignore: cast_nullable_to_non_nullable
-as List<TripStopModel>,
+as List<TripStopModel>,waitingFeeAmount: null == waitingFeeAmount ? _self.waitingFeeAmount : waitingFeeAmount // ignore: cast_nullable_to_non_nullable
+as double,walletPaidAmount: null == walletPaidAmount ? _self.walletPaidAmount : walletPaidAmount // ignore: cast_nullable_to_non_nullable
+as double,cardPaidAmount: null == cardPaidAmount ? _self.cardPaidAmount : cardPaidAmount // ignore: cast_nullable_to_non_nullable
+as double,totalPaidAmount: null == totalPaidAmount ? _self.totalPaidAmount : totalPaidAmount // ignore: cast_nullable_to_non_nullable
+as double,unpaidAmount: null == unpaidAmount ? _self.unpaidAmount : unpaidAmount // ignore: cast_nullable_to_non_nullable
+as double,refundedAmount: null == refundedAmount ? _self.refundedAmount : refundedAmount // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 
@@ -172,10 +178,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String tripId,  String referenceCode,  String status,  double grossAmount,  double netAmount,  double taxAmount,  String currencyCode,  String paymentMethod,  String? paymentReference,  DateTime? paidAtUtc,  DateTime? completedAtUtc,  double distanceKm,  double durationMin,  String vehicleTypeName,  String? passengerName,  String issuerName,  bool invoiceAvailable,  String? invoiceNumber,  DateTime? invoiceIssuedAtUtc,  List<TripStopModel> stops)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String tripId,  String referenceCode,  String status,  double grossAmount,  double netAmount,  double taxAmount,  String currencyCode,  String paymentMethod,  String? paymentReference,  DateTime? paidAtUtc,  DateTime? completedAtUtc,  double distanceKm,  double durationMin,  String vehicleTypeName,  String? passengerName,  String issuerName,  bool invoiceAvailable,  String? invoiceNumber,  DateTime? invoiceIssuedAtUtc,  List<TripStopModel> stops,  double waitingFeeAmount,  double walletPaidAmount,  double cardPaidAmount,  double totalPaidAmount,  double unpaidAmount,  double refundedAmount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripReceiptModel() when $default != null:
-return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,_that.netAmount,_that.taxAmount,_that.currencyCode,_that.paymentMethod,_that.paymentReference,_that.paidAtUtc,_that.completedAtUtc,_that.distanceKm,_that.durationMin,_that.vehicleTypeName,_that.passengerName,_that.issuerName,_that.invoiceAvailable,_that.invoiceNumber,_that.invoiceIssuedAtUtc,_that.stops);case _:
+return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,_that.netAmount,_that.taxAmount,_that.currencyCode,_that.paymentMethod,_that.paymentReference,_that.paidAtUtc,_that.completedAtUtc,_that.distanceKm,_that.durationMin,_that.vehicleTypeName,_that.passengerName,_that.issuerName,_that.invoiceAvailable,_that.invoiceNumber,_that.invoiceIssuedAtUtc,_that.stops,_that.waitingFeeAmount,_that.walletPaidAmount,_that.cardPaidAmount,_that.totalPaidAmount,_that.unpaidAmount,_that.refundedAmount);case _:
   return orElse();
 
 }
@@ -193,10 +199,10 @@ return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String tripId,  String referenceCode,  String status,  double grossAmount,  double netAmount,  double taxAmount,  String currencyCode,  String paymentMethod,  String? paymentReference,  DateTime? paidAtUtc,  DateTime? completedAtUtc,  double distanceKm,  double durationMin,  String vehicleTypeName,  String? passengerName,  String issuerName,  bool invoiceAvailable,  String? invoiceNumber,  DateTime? invoiceIssuedAtUtc,  List<TripStopModel> stops)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String tripId,  String referenceCode,  String status,  double grossAmount,  double netAmount,  double taxAmount,  String currencyCode,  String paymentMethod,  String? paymentReference,  DateTime? paidAtUtc,  DateTime? completedAtUtc,  double distanceKm,  double durationMin,  String vehicleTypeName,  String? passengerName,  String issuerName,  bool invoiceAvailable,  String? invoiceNumber,  DateTime? invoiceIssuedAtUtc,  List<TripStopModel> stops,  double waitingFeeAmount,  double walletPaidAmount,  double cardPaidAmount,  double totalPaidAmount,  double unpaidAmount,  double refundedAmount)  $default,) {final _that = this;
 switch (_that) {
 case _TripReceiptModel():
-return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,_that.netAmount,_that.taxAmount,_that.currencyCode,_that.paymentMethod,_that.paymentReference,_that.paidAtUtc,_that.completedAtUtc,_that.distanceKm,_that.durationMin,_that.vehicleTypeName,_that.passengerName,_that.issuerName,_that.invoiceAvailable,_that.invoiceNumber,_that.invoiceIssuedAtUtc,_that.stops);case _:
+return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,_that.netAmount,_that.taxAmount,_that.currencyCode,_that.paymentMethod,_that.paymentReference,_that.paidAtUtc,_that.completedAtUtc,_that.distanceKm,_that.durationMin,_that.vehicleTypeName,_that.passengerName,_that.issuerName,_that.invoiceAvailable,_that.invoiceNumber,_that.invoiceIssuedAtUtc,_that.stops,_that.waitingFeeAmount,_that.walletPaidAmount,_that.cardPaidAmount,_that.totalPaidAmount,_that.unpaidAmount,_that.refundedAmount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +219,10 @@ return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String tripId,  String referenceCode,  String status,  double grossAmount,  double netAmount,  double taxAmount,  String currencyCode,  String paymentMethod,  String? paymentReference,  DateTime? paidAtUtc,  DateTime? completedAtUtc,  double distanceKm,  double durationMin,  String vehicleTypeName,  String? passengerName,  String issuerName,  bool invoiceAvailable,  String? invoiceNumber,  DateTime? invoiceIssuedAtUtc,  List<TripStopModel> stops)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String tripId,  String referenceCode,  String status,  double grossAmount,  double netAmount,  double taxAmount,  String currencyCode,  String paymentMethod,  String? paymentReference,  DateTime? paidAtUtc,  DateTime? completedAtUtc,  double distanceKm,  double durationMin,  String vehicleTypeName,  String? passengerName,  String issuerName,  bool invoiceAvailable,  String? invoiceNumber,  DateTime? invoiceIssuedAtUtc,  List<TripStopModel> stops,  double waitingFeeAmount,  double walletPaidAmount,  double cardPaidAmount,  double totalPaidAmount,  double unpaidAmount,  double refundedAmount)?  $default,) {final _that = this;
 switch (_that) {
 case _TripReceiptModel() when $default != null:
-return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,_that.netAmount,_that.taxAmount,_that.currencyCode,_that.paymentMethod,_that.paymentReference,_that.paidAtUtc,_that.completedAtUtc,_that.distanceKm,_that.durationMin,_that.vehicleTypeName,_that.passengerName,_that.issuerName,_that.invoiceAvailable,_that.invoiceNumber,_that.invoiceIssuedAtUtc,_that.stops);case _:
+return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,_that.netAmount,_that.taxAmount,_that.currencyCode,_that.paymentMethod,_that.paymentReference,_that.paidAtUtc,_that.completedAtUtc,_that.distanceKm,_that.durationMin,_that.vehicleTypeName,_that.passengerName,_that.issuerName,_that.invoiceAvailable,_that.invoiceNumber,_that.invoiceIssuedAtUtc,_that.stops,_that.waitingFeeAmount,_that.walletPaidAmount,_that.cardPaidAmount,_that.totalPaidAmount,_that.unpaidAmount,_that.refundedAmount);case _:
   return null;
 
 }
@@ -228,7 +234,7 @@ return $default(_that.tripId,_that.referenceCode,_that.status,_that.grossAmount,
 @JsonSerializable()
 
 class _TripReceiptModel implements TripReceiptModel {
-  const _TripReceiptModel({required this.tripId, required this.referenceCode, required this.status, required this.grossAmount, required this.netAmount, required this.taxAmount, required this.currencyCode, required this.paymentMethod, this.paymentReference, this.paidAtUtc, this.completedAtUtc, required this.distanceKm, required this.durationMin, required this.vehicleTypeName, this.passengerName, required this.issuerName, required this.invoiceAvailable, this.invoiceNumber, this.invoiceIssuedAtUtc, final  List<TripStopModel> stops = const []}): _stops = stops;
+  const _TripReceiptModel({required this.tripId, required this.referenceCode, required this.status, required this.grossAmount, required this.netAmount, required this.taxAmount, required this.currencyCode, required this.paymentMethod, this.paymentReference, this.paidAtUtc, this.completedAtUtc, required this.distanceKm, required this.durationMin, required this.vehicleTypeName, this.passengerName, required this.issuerName, required this.invoiceAvailable, this.invoiceNumber, this.invoiceIssuedAtUtc, final  List<TripStopModel> stops = const [], this.waitingFeeAmount = 0, this.walletPaidAmount = 0, this.cardPaidAmount = 0, this.totalPaidAmount = 0, this.unpaidAmount = 0, this.refundedAmount = 0}): _stops = stops;
   factory _TripReceiptModel.fromJson(Map<String, dynamic> json) => _$TripReceiptModelFromJson(json);
 
 @override final  String tripId;
@@ -257,6 +263,12 @@ class _TripReceiptModel implements TripReceiptModel {
   return EqualUnmodifiableListView(_stops);
 }
 
+@override@JsonKey() final  double waitingFeeAmount;
+@override@JsonKey() final  double walletPaidAmount;
+@override@JsonKey() final  double cardPaidAmount;
+@override@JsonKey() final  double totalPaidAmount;
+@override@JsonKey() final  double unpaidAmount;
+@override@JsonKey() final  double refundedAmount;
 
 /// Create a copy of TripReceiptModel
 /// with the given fields replaced by the non-null parameter values.
@@ -271,16 +283,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripReceiptModel&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.grossAmount, grossAmount) || other.grossAmount == grossAmount)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&(identical(other.taxAmount, taxAmount) || other.taxAmount == taxAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.paymentReference, paymentReference) || other.paymentReference == paymentReference)&&(identical(other.paidAtUtc, paidAtUtc) || other.paidAtUtc == paidAtUtc)&&(identical(other.completedAtUtc, completedAtUtc) || other.completedAtUtc == completedAtUtc)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm)&&(identical(other.durationMin, durationMin) || other.durationMin == durationMin)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.passengerName, passengerName) || other.passengerName == passengerName)&&(identical(other.issuerName, issuerName) || other.issuerName == issuerName)&&(identical(other.invoiceAvailable, invoiceAvailable) || other.invoiceAvailable == invoiceAvailable)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.invoiceIssuedAtUtc, invoiceIssuedAtUtc) || other.invoiceIssuedAtUtc == invoiceIssuedAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripReceiptModel&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.grossAmount, grossAmount) || other.grossAmount == grossAmount)&&(identical(other.netAmount, netAmount) || other.netAmount == netAmount)&&(identical(other.taxAmount, taxAmount) || other.taxAmount == taxAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.paymentReference, paymentReference) || other.paymentReference == paymentReference)&&(identical(other.paidAtUtc, paidAtUtc) || other.paidAtUtc == paidAtUtc)&&(identical(other.completedAtUtc, completedAtUtc) || other.completedAtUtc == completedAtUtc)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm)&&(identical(other.durationMin, durationMin) || other.durationMin == durationMin)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.passengerName, passengerName) || other.passengerName == passengerName)&&(identical(other.issuerName, issuerName) || other.issuerName == issuerName)&&(identical(other.invoiceAvailable, invoiceAvailable) || other.invoiceAvailable == invoiceAvailable)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.invoiceIssuedAtUtc, invoiceIssuedAtUtc) || other.invoiceIssuedAtUtc == invoiceIssuedAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.waitingFeeAmount, waitingFeeAmount) || other.waitingFeeAmount == waitingFeeAmount)&&(identical(other.walletPaidAmount, walletPaidAmount) || other.walletPaidAmount == walletPaidAmount)&&(identical(other.cardPaidAmount, cardPaidAmount) || other.cardPaidAmount == cardPaidAmount)&&(identical(other.totalPaidAmount, totalPaidAmount) || other.totalPaidAmount == totalPaidAmount)&&(identical(other.unpaidAmount, unpaidAmount) || other.unpaidAmount == unpaidAmount)&&(identical(other.refundedAmount, refundedAmount) || other.refundedAmount == refundedAmount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,tripId,referenceCode,status,grossAmount,netAmount,taxAmount,currencyCode,paymentMethod,paymentReference,paidAtUtc,completedAtUtc,distanceKm,durationMin,vehicleTypeName,passengerName,issuerName,invoiceAvailable,invoiceNumber,invoiceIssuedAtUtc,const DeepCollectionEquality().hash(_stops)]);
+int get hashCode => Object.hashAll([runtimeType,tripId,referenceCode,status,grossAmount,netAmount,taxAmount,currencyCode,paymentMethod,paymentReference,paidAtUtc,completedAtUtc,distanceKm,durationMin,vehicleTypeName,passengerName,issuerName,invoiceAvailable,invoiceNumber,invoiceIssuedAtUtc,const DeepCollectionEquality().hash(_stops),waitingFeeAmount,walletPaidAmount,cardPaidAmount,totalPaidAmount,unpaidAmount,refundedAmount]);
 
 @override
 String toString() {
-  return 'TripReceiptModel(tripId: $tripId, referenceCode: $referenceCode, status: $status, grossAmount: $grossAmount, netAmount: $netAmount, taxAmount: $taxAmount, currencyCode: $currencyCode, paymentMethod: $paymentMethod, paymentReference: $paymentReference, paidAtUtc: $paidAtUtc, completedAtUtc: $completedAtUtc, distanceKm: $distanceKm, durationMin: $durationMin, vehicleTypeName: $vehicleTypeName, passengerName: $passengerName, issuerName: $issuerName, invoiceAvailable: $invoiceAvailable, invoiceNumber: $invoiceNumber, invoiceIssuedAtUtc: $invoiceIssuedAtUtc, stops: $stops)';
+  return 'TripReceiptModel(tripId: $tripId, referenceCode: $referenceCode, status: $status, grossAmount: $grossAmount, netAmount: $netAmount, taxAmount: $taxAmount, currencyCode: $currencyCode, paymentMethod: $paymentMethod, paymentReference: $paymentReference, paidAtUtc: $paidAtUtc, completedAtUtc: $completedAtUtc, distanceKm: $distanceKm, durationMin: $durationMin, vehicleTypeName: $vehicleTypeName, passengerName: $passengerName, issuerName: $issuerName, invoiceAvailable: $invoiceAvailable, invoiceNumber: $invoiceNumber, invoiceIssuedAtUtc: $invoiceIssuedAtUtc, stops: $stops, waitingFeeAmount: $waitingFeeAmount, walletPaidAmount: $walletPaidAmount, cardPaidAmount: $cardPaidAmount, totalPaidAmount: $totalPaidAmount, unpaidAmount: $unpaidAmount, refundedAmount: $refundedAmount)';
 }
 
 
@@ -291,7 +303,7 @@ abstract mixin class _$TripReceiptModelCopyWith<$Res> implements $TripReceiptMod
   factory _$TripReceiptModelCopyWith(_TripReceiptModel value, $Res Function(_TripReceiptModel) _then) = __$TripReceiptModelCopyWithImpl;
 @override @useResult
 $Res call({
- String tripId, String referenceCode, String status, double grossAmount, double netAmount, double taxAmount, String currencyCode, String paymentMethod, String? paymentReference, DateTime? paidAtUtc, DateTime? completedAtUtc, double distanceKm, double durationMin, String vehicleTypeName, String? passengerName, String issuerName, bool invoiceAvailable, String? invoiceNumber, DateTime? invoiceIssuedAtUtc, List<TripStopModel> stops
+ String tripId, String referenceCode, String status, double grossAmount, double netAmount, double taxAmount, String currencyCode, String paymentMethod, String? paymentReference, DateTime? paidAtUtc, DateTime? completedAtUtc, double distanceKm, double durationMin, String vehicleTypeName, String? passengerName, String issuerName, bool invoiceAvailable, String? invoiceNumber, DateTime? invoiceIssuedAtUtc, List<TripStopModel> stops, double waitingFeeAmount, double walletPaidAmount, double cardPaidAmount, double totalPaidAmount, double unpaidAmount, double refundedAmount
 });
 
 
@@ -308,7 +320,7 @@ class __$TripReceiptModelCopyWithImpl<$Res>
 
 /// Create a copy of TripReceiptModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? referenceCode = null,Object? status = null,Object? grossAmount = null,Object? netAmount = null,Object? taxAmount = null,Object? currencyCode = null,Object? paymentMethod = null,Object? paymentReference = freezed,Object? paidAtUtc = freezed,Object? completedAtUtc = freezed,Object? distanceKm = null,Object? durationMin = null,Object? vehicleTypeName = null,Object? passengerName = freezed,Object? issuerName = null,Object? invoiceAvailable = null,Object? invoiceNumber = freezed,Object? invoiceIssuedAtUtc = freezed,Object? stops = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? referenceCode = null,Object? status = null,Object? grossAmount = null,Object? netAmount = null,Object? taxAmount = null,Object? currencyCode = null,Object? paymentMethod = null,Object? paymentReference = freezed,Object? paidAtUtc = freezed,Object? completedAtUtc = freezed,Object? distanceKm = null,Object? durationMin = null,Object? vehicleTypeName = null,Object? passengerName = freezed,Object? issuerName = null,Object? invoiceAvailable = null,Object? invoiceNumber = freezed,Object? invoiceIssuedAtUtc = freezed,Object? stops = null,Object? waitingFeeAmount = null,Object? walletPaidAmount = null,Object? cardPaidAmount = null,Object? totalPaidAmount = null,Object? unpaidAmount = null,Object? refundedAmount = null,}) {
   return _then(_TripReceiptModel(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -330,7 +342,13 @@ as String,invoiceAvailable: null == invoiceAvailable ? _self.invoiceAvailable : 
 as bool,invoiceNumber: freezed == invoiceNumber ? _self.invoiceNumber : invoiceNumber // ignore: cast_nullable_to_non_nullable
 as String?,invoiceIssuedAtUtc: freezed == invoiceIssuedAtUtc ? _self.invoiceIssuedAtUtc : invoiceIssuedAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,stops: null == stops ? _self._stops : stops // ignore: cast_nullable_to_non_nullable
-as List<TripStopModel>,
+as List<TripStopModel>,waitingFeeAmount: null == waitingFeeAmount ? _self.waitingFeeAmount : waitingFeeAmount // ignore: cast_nullable_to_non_nullable
+as double,walletPaidAmount: null == walletPaidAmount ? _self.walletPaidAmount : walletPaidAmount // ignore: cast_nullable_to_non_nullable
+as double,cardPaidAmount: null == cardPaidAmount ? _self.cardPaidAmount : cardPaidAmount // ignore: cast_nullable_to_non_nullable
+as double,totalPaidAmount: null == totalPaidAmount ? _self.totalPaidAmount : totalPaidAmount // ignore: cast_nullable_to_non_nullable
+as double,unpaidAmount: null == unpaidAmount ? _self.unpaidAmount : unpaidAmount // ignore: cast_nullable_to_non_nullable
+as double,refundedAmount: null == refundedAmount ? _self.refundedAmount : refundedAmount // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 

@@ -40,4 +40,20 @@ abstract class TripRepository {
     String id, {
     required String languageCode,
   });
+  Future<Result<void>> updateTripScheduledTime({
+    required String tripId,
+    required DateTime? scheduledAtUtc,
+  });
+  Future<Result<TripEntity>> updateTripStops({
+    required String tripId,
+    required List<TripStopEntity> stops,
+  });
+  Future<Result<TripEntity>> updateTripPassengerCount({
+    required String tripId,
+    required int passengerCount,
+  });
+  Future<Result<void>> updateTripBagCount({
+    required String tripId,
+    required int bagCount,
+  });
 }

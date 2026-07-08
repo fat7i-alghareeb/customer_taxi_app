@@ -40,6 +40,10 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<_LoadReceipt>(_onLoadReceipt);
     on<_LoadInvoice>(_onLoadInvoice);
     on<_LoadInvoicePdf>(_onLoadInvoicePdf);
+    on<_ScheduledTimeUpdateRequested>(_onScheduledTimeUpdateRequested);
+    on<_StopsUpdateRequested>(_onStopsUpdateRequested);
+    on<_PassengerCountUpdateRequested>(_onPassengerCountUpdateRequested);
+    on<_BagCountUpdateRequested>(_onBagCountUpdateRequested);
   }
 
   final TripFacade _facade;
@@ -452,10 +456,162 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     );
   }
 
+  bool _isWithinEditWindow(DateTime createdAtUtc) =>
+      DateTime.now().toUtc().isBefore(createdAtUtc.add(const Duration(hours: 1)));
+
+  Future<void> _onScheduledTimeUpdateRequested(
+    _ScheduledTimeUpdateRequested event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    final trip = state.tripStatus.getDataWhenSuccess;
+    if (id == null || trip == null) return;
+    if (!_isWithinEditWindow(trip.createdAtUtc)) {
+      emit(
+        state.copyWith(
+          tripEditStatus: const BlocStatus<void>.failure('tripEditNotAllowed'),
+        ),
+      );
+      return;
+    }
+    emit(state.copyWith(tripEditStatus: const BlocStatus<void>.loading()));
+    final Result<void> result = await _facade.updateTripScheduledTime(
+      tripId: id,
+      scheduledAtUtc: event.scheduledAtUtc,
+    );
+    result.when(
+      success: (_) {
+        printG('[TripBloc] scheduled time updated');
+        emit(state.copyWith(tripEditStatus: const BlocStatus<void>.success(null)));
+        add(const TripEvent.pollingTick());
+      },
+      failure: (msg) {
+        printY('[TripBloc] scheduled time update failed=$msg');
+        emit(state.copyWith(tripEditStatus: BlocStatus<void>.failure(msg)));
+      },
+    );
+  }
+
+  Future<void> _onStopsUpdateRequested(
+    _StopsUpdateRequested event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    final trip = state.tripStatus.getDataWhenSuccess;
+    if (id == null || trip == null) return;
+    if (!_isWithinEditWindow(trip.createdAtUtc)) {
+      emit(
+        state.copyWith(
+          tripEditStatus: const BlocStatus<void>.failure('tripEditNotAllowed'),
+        ),
+      );
+      return;
+    }
+    emit(state.copyWith(tripEditStatus: const BlocStatus<void>.loading()));
+    final Result<TripEntity> result = await _facade.updateTripStops(
+      tripId: id,
+      stops: event.stops,
+    );
+    result.when(
+      success: (updatedTrip) {
+        printG('[TripBloc] stops updated fare=${updatedTrip.quotedFare}');
+        emit(
+          state.copyWith(
+            tripEditStatus: const BlocStatus<void>.success(null),
+            tripStatus: BlocStatus<TripEntity>.success(updatedTrip),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] stops update failed=$msg');
+        emit(state.copyWith(tripEditStatus: BlocStatus<void>.failure(msg)));
+      },
+    );
+  }
+
+  Future<void> _onPassengerCountUpdateRequested(
+    _PassengerCountUpdateRequested event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    final trip = state.tripStatus.getDataWhenSuccess;
+    if (id == null || trip == null) return;
+    if (!_isWithinEditWindow(trip.createdAtUtc)) {
+      emit(
+        state.copyWith(
+          tripEditStatus: const BlocStatus<void>.failure('tripEditNotAllowed'),
+        ),
+      );
+      return;
+    }
+    emit(state.copyWith(tripEditStatus: const BlocStatus<void>.loading()));
+    final Result<TripEntity> result = await _facade.updateTripPassengerCount(
+      tripId: id,
+      passengerCount: event.count,
+    );
+    result.when(
+      success: (updatedTrip) {
+        printG(
+          '[TripBloc] passenger count updated count=${updatedTrip.passengerCount}',
+        );
+        emit(
+          state.copyWith(
+            tripEditStatus: const BlocStatus<void>.success(null),
+            tripStatus: BlocStatus<TripEntity>.success(updatedTrip),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] passenger count update failed=$msg');
+        emit(state.copyWith(tripEditStatus: BlocStatus<void>.failure(msg)));
+      },
+    );
+  }
+
+  Future<void> _onBagCountUpdateRequested(
+    _BagCountUpdateRequested event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    final trip = state.tripStatus.getDataWhenSuccess;
+    if (id == null || trip == null) return;
+    if (!_isWithinEditWindow(trip.createdAtUtc)) {
+      emit(
+        state.copyWith(
+          tripEditStatus: const BlocStatus<void>.failure('tripEditNotAllowed'),
+        ),
+      );
+      return;
+    }
+    emit(state.copyWith(tripEditStatus: const BlocStatus<void>.loading()));
+    final Result<void> result = await _facade.updateTripBagCount(
+      tripId: id,
+      bagCount: event.count,
+    );
+    result.when(
+      success: (_) {
+        printG('[TripBloc] bag count updated count=${event.count}');
+        // Optimistically update the bag count on the cached trip entity.
+        final updatedTrip = trip.copyWith(bagCount: event.count);
+        emit(
+          state.copyWith(
+            tripEditStatus: const BlocStatus<void>.success(null),
+            tripStatus: BlocStatus<TripEntity>.success(updatedTrip),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] bag count update failed=$msg');
+        emit(state.copyWith(tripEditStatus: BlocStatus<void>.failure(msg)));
+      },
+    );
+  }
+
   Future<void> _onDriverLocationUpdated(
     _DriverLocationUpdated event,
     Emitter<TripState> emit,
   ) async {
+    if (state.tripStatus.getDataWhenSuccess?.status == TripStatus.inProgress) return;
     printC(
       '[TripBloc] driver location updated lat=${event.latitude} lng=${event.longitude}',
     );

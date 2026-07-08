@@ -1,7 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/in_trip_safety_panel.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_chat_button.dart';
 
 /// Sheet shown while `TripStatus.inProgress` — passenger is in the car.
 class TripInProgressStatusSheet extends StatelessWidget {
@@ -38,14 +37,10 @@ class TripInProgressStatusSheet extends StatelessWidget {
         ),
         AppSpacing.lg.verticalSpace,
 
-        // Real-time progress toward the destination — car → destination now
-        // that the passenger is on board. Sits above the safety options.
-        arrivalProgressHeader,
-        AppSpacing.lg.verticalSpace,
+        // // Real-time progress toward the destination:
+        // arrivalProgressHeader,
+        // AppSpacing.lg.verticalSpace,
 
-        // Safety panel — only while the passenger is in the car with the
-        // driver. Lives inside the sheet so it reads as a section, not a
-        // floating card.
         Divider(
           height: 1.h,
           thickness: 1.r,
@@ -53,10 +48,6 @@ class TripInProgressStatusSheet extends StatelessWidget {
         ),
         AppSpacing.md.verticalSpace,
         InTripSafetyPanel(tripId: trip.id),
-        AppSpacing.lg.verticalSpace,
-
-        // Chat with the driver (kept in-sheet after removing the floating pill).
-        const TripChatButton(),
       ],
     );
   }

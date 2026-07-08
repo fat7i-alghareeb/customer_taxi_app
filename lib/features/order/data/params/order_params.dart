@@ -83,6 +83,7 @@ class OrderRequestTripParams {
     this.scheduledAt,
     this.passengerNote,
     this.flightNumber,
+    this.paymentMethod = 'card',
   });
 
   final String quoteId;
@@ -90,6 +91,7 @@ class OrderRequestTripParams {
   final DateTime? scheduledAt;
   final String? passengerNote;
   final String? flightNumber;
+  final String paymentMethod;
 
   Map<String, dynamic> toJson() => {
     'quoteId': quoteId,
@@ -100,5 +102,6 @@ class OrderRequestTripParams {
       'passengerNote': passengerNote!.trim(),
     if (flightNumber?.trim().isNotEmpty == true)
       'flightNumber': flightNumber!.trim(),
+    'paymentMethod': paymentMethod,
   };
 }

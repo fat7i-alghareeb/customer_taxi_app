@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthLoginResponseModel {
 
- String get accessToken; String get refreshToken; AuthUserModel get user;
+ String get accessToken; String get refreshToken; AuthUserModel get user; bool get isNewAccount; bool get accountAlreadyExists;
 /// Create a copy of AuthLoginResponseModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AuthLoginResponseModelCopyWith<AuthLoginResponseModel> get copyWith => _$AuthLo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthLoginResponseModel&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthLoginResponseModel&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.user, user) || other.user == user)&&(identical(other.isNewAccount, isNewAccount) || other.isNewAccount == isNewAccount)&&(identical(other.accountAlreadyExists, accountAlreadyExists) || other.accountAlreadyExists == accountAlreadyExists));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,user);
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,user,isNewAccount,accountAlreadyExists);
 
 @override
 String toString() {
-  return 'AuthLoginResponseModel(accessToken: $accessToken, refreshToken: $refreshToken, user: $user)';
+  return 'AuthLoginResponseModel(accessToken: $accessToken, refreshToken: $refreshToken, user: $user, isNewAccount: $isNewAccount, accountAlreadyExists: $accountAlreadyExists)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AuthLoginResponseModelCopyWith<$Res>  {
   factory $AuthLoginResponseModelCopyWith(AuthLoginResponseModel value, $Res Function(AuthLoginResponseModel) _then) = _$AuthLoginResponseModelCopyWithImpl;
 @useResult
 $Res call({
- String accessToken, String refreshToken, AuthUserModel user
+ String accessToken, String refreshToken, AuthUserModel user, bool isNewAccount, bool accountAlreadyExists
 });
 
 
@@ -65,12 +65,14 @@ class _$AuthLoginResponseModelCopyWithImpl<$Res>
 
 /// Create a copy of AuthLoginResponseModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? accessToken = null,Object? refreshToken = null,Object? user = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? accessToken = null,Object? refreshToken = null,Object? user = null,Object? isNewAccount = null,Object? accountAlreadyExists = null,}) {
   return _then(_self.copyWith(
 accessToken: null == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String,refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
 as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as AuthUserModel,
+as AuthUserModel,isNewAccount: null == isNewAccount ? _self.isNewAccount : isNewAccount // ignore: cast_nullable_to_non_nullable
+as bool,accountAlreadyExists: null == accountAlreadyExists ? _self.accountAlreadyExists : accountAlreadyExists // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 /// Create a copy of AuthLoginResponseModel
@@ -164,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String accessToken,  String refreshToken,  AuthUserModel user)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String accessToken,  String refreshToken,  AuthUserModel user,  bool isNewAccount,  bool accountAlreadyExists)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthLoginResponseModel() when $default != null:
-return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
+return $default(_that.accessToken,_that.refreshToken,_that.user,_that.isNewAccount,_that.accountAlreadyExists);case _:
   return orElse();
 
 }
@@ -185,10 +187,10 @@ return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String accessToken,  String refreshToken,  AuthUserModel user)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String accessToken,  String refreshToken,  AuthUserModel user,  bool isNewAccount,  bool accountAlreadyExists)  $default,) {final _that = this;
 switch (_that) {
 case _AuthLoginResponseModel():
-return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
+return $default(_that.accessToken,_that.refreshToken,_that.user,_that.isNewAccount,_that.accountAlreadyExists);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +207,10 @@ return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String accessToken,  String refreshToken,  AuthUserModel user)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String accessToken,  String refreshToken,  AuthUserModel user,  bool isNewAccount,  bool accountAlreadyExists)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthLoginResponseModel() when $default != null:
-return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
+return $default(_that.accessToken,_that.refreshToken,_that.user,_that.isNewAccount,_that.accountAlreadyExists);case _:
   return null;
 
 }
@@ -220,12 +222,14 @@ return $default(_that.accessToken,_that.refreshToken,_that.user);case _:
 @JsonSerializable()
 
 class _AuthLoginResponseModel implements AuthLoginResponseModel {
-  const _AuthLoginResponseModel({required this.accessToken, required this.refreshToken, required this.user});
+  const _AuthLoginResponseModel({required this.accessToken, required this.refreshToken, required this.user, this.isNewAccount = false, this.accountAlreadyExists = false});
   factory _AuthLoginResponseModel.fromJson(Map<String, dynamic> json) => _$AuthLoginResponseModelFromJson(json);
 
 @override final  String accessToken;
 @override final  String refreshToken;
 @override final  AuthUserModel user;
+@override@JsonKey() final  bool isNewAccount;
+@override@JsonKey() final  bool accountAlreadyExists;
 
 /// Create a copy of AuthLoginResponseModel
 /// with the given fields replaced by the non-null parameter values.
@@ -240,16 +244,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthLoginResponseModel&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthLoginResponseModel&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.user, user) || other.user == user)&&(identical(other.isNewAccount, isNewAccount) || other.isNewAccount == isNewAccount)&&(identical(other.accountAlreadyExists, accountAlreadyExists) || other.accountAlreadyExists == accountAlreadyExists));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,user);
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken,user,isNewAccount,accountAlreadyExists);
 
 @override
 String toString() {
-  return 'AuthLoginResponseModel(accessToken: $accessToken, refreshToken: $refreshToken, user: $user)';
+  return 'AuthLoginResponseModel(accessToken: $accessToken, refreshToken: $refreshToken, user: $user, isNewAccount: $isNewAccount, accountAlreadyExists: $accountAlreadyExists)';
 }
 
 
@@ -260,7 +264,7 @@ abstract mixin class _$AuthLoginResponseModelCopyWith<$Res> implements $AuthLogi
   factory _$AuthLoginResponseModelCopyWith(_AuthLoginResponseModel value, $Res Function(_AuthLoginResponseModel) _then) = __$AuthLoginResponseModelCopyWithImpl;
 @override @useResult
 $Res call({
- String accessToken, String refreshToken, AuthUserModel user
+ String accessToken, String refreshToken, AuthUserModel user, bool isNewAccount, bool accountAlreadyExists
 });
 
 
@@ -277,12 +281,14 @@ class __$AuthLoginResponseModelCopyWithImpl<$Res>
 
 /// Create a copy of AuthLoginResponseModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? accessToken = null,Object? refreshToken = null,Object? user = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? accessToken = null,Object? refreshToken = null,Object? user = null,Object? isNewAccount = null,Object? accountAlreadyExists = null,}) {
   return _then(_AuthLoginResponseModel(
 accessToken: null == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String,refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
 as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as AuthUserModel,
+as AuthUserModel,isNewAccount: null == isNewAccount ? _self.isNewAccount : isNewAccount // ignore: cast_nullable_to_non_nullable
+as bool,accountAlreadyExists: null == accountAlreadyExists ? _self.accountAlreadyExists : accountAlreadyExists // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -302,7 +308,7 @@ $AuthUserModelCopyWith<$Res> get user {
 /// @nodoc
 mixin _$AuthUserModel {
 
- String get id; String? get name; String get phone; String? get profilePhotoUrl;
+ String get id; String? get name; String get phone; String? get email; String? get profilePhotoUrl; bool get isPhoneVerified; bool get isEmailVerified;
 /// Create a copy of AuthUserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -315,16 +321,16 @@ $AuthUserModelCopyWith<AuthUserModel> get copyWith => _$AuthUserModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthUserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthUserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.isPhoneVerified, isPhoneVerified) || other.isPhoneVerified == isPhoneVerified)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,phone,profilePhotoUrl);
+int get hashCode => Object.hash(runtimeType,id,name,phone,email,profilePhotoUrl,isPhoneVerified,isEmailVerified);
 
 @override
 String toString() {
-  return 'AuthUserModel(id: $id, name: $name, phone: $phone, profilePhotoUrl: $profilePhotoUrl)';
+  return 'AuthUserModel(id: $id, name: $name, phone: $phone, email: $email, profilePhotoUrl: $profilePhotoUrl, isPhoneVerified: $isPhoneVerified, isEmailVerified: $isEmailVerified)';
 }
 
 
@@ -335,7 +341,7 @@ abstract mixin class $AuthUserModelCopyWith<$Res>  {
   factory $AuthUserModelCopyWith(AuthUserModel value, $Res Function(AuthUserModel) _then) = _$AuthUserModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String? name, String phone, String? profilePhotoUrl
+ String id, String? name, String phone, String? email, String? profilePhotoUrl, bool isPhoneVerified, bool isEmailVerified
 });
 
 
@@ -352,13 +358,16 @@ class _$AuthUserModelCopyWithImpl<$Res>
 
 /// Create a copy of AuthUserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? phone = null,Object? profilePhotoUrl = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? phone = null,Object? email = freezed,Object? profilePhotoUrl = freezed,Object? isPhoneVerified = null,Object? isEmailVerified = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
-as String?,
+as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
+as String?,isPhoneVerified: null == isPhoneVerified ? _self.isPhoneVerified : isPhoneVerified // ignore: cast_nullable_to_non_nullable
+as bool,isEmailVerified: null == isEmailVerified ? _self.isEmailVerified : isEmailVerified // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -443,10 +452,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? name,  String phone,  String? profilePhotoUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? name,  String phone,  String? email,  String? profilePhotoUrl,  bool isPhoneVerified,  bool isEmailVerified)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthUserModel() when $default != null:
-return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.profilePhotoUrl,_that.isPhoneVerified,_that.isEmailVerified);case _:
   return orElse();
 
 }
@@ -464,10 +473,10 @@ return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? name,  String phone,  String? profilePhotoUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? name,  String phone,  String? email,  String? profilePhotoUrl,  bool isPhoneVerified,  bool isEmailVerified)  $default,) {final _that = this;
 switch (_that) {
 case _AuthUserModel():
-return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.profilePhotoUrl,_that.isPhoneVerified,_that.isEmailVerified);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -484,10 +493,10 @@ return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? name,  String phone,  String? profilePhotoUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? name,  String phone,  String? email,  String? profilePhotoUrl,  bool isPhoneVerified,  bool isEmailVerified)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthUserModel() when $default != null:
-return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl);case _:
+return $default(_that.id,_that.name,_that.phone,_that.email,_that.profilePhotoUrl,_that.isPhoneVerified,_that.isEmailVerified);case _:
   return null;
 
 }
@@ -499,13 +508,16 @@ return $default(_that.id,_that.name,_that.phone,_that.profilePhotoUrl);case _:
 @JsonSerializable()
 
 class _AuthUserModel implements AuthUserModel {
-  const _AuthUserModel({required this.id, this.name, required this.phone, this.profilePhotoUrl});
+  const _AuthUserModel({required this.id, this.name, required this.phone, this.email, this.profilePhotoUrl, this.isPhoneVerified = true, this.isEmailVerified = false});
   factory _AuthUserModel.fromJson(Map<String, dynamic> json) => _$AuthUserModelFromJson(json);
 
 @override final  String id;
 @override final  String? name;
 @override final  String phone;
+@override final  String? email;
 @override final  String? profilePhotoUrl;
+@override@JsonKey() final  bool isPhoneVerified;
+@override@JsonKey() final  bool isEmailVerified;
 
 /// Create a copy of AuthUserModel
 /// with the given fields replaced by the non-null parameter values.
@@ -520,16 +532,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthUserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthUserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.profilePhotoUrl, profilePhotoUrl) || other.profilePhotoUrl == profilePhotoUrl)&&(identical(other.isPhoneVerified, isPhoneVerified) || other.isPhoneVerified == isPhoneVerified)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,phone,profilePhotoUrl);
+int get hashCode => Object.hash(runtimeType,id,name,phone,email,profilePhotoUrl,isPhoneVerified,isEmailVerified);
 
 @override
 String toString() {
-  return 'AuthUserModel(id: $id, name: $name, phone: $phone, profilePhotoUrl: $profilePhotoUrl)';
+  return 'AuthUserModel(id: $id, name: $name, phone: $phone, email: $email, profilePhotoUrl: $profilePhotoUrl, isPhoneVerified: $isPhoneVerified, isEmailVerified: $isEmailVerified)';
 }
 
 
@@ -540,7 +552,7 @@ abstract mixin class _$AuthUserModelCopyWith<$Res> implements $AuthUserModelCopy
   factory _$AuthUserModelCopyWith(_AuthUserModel value, $Res Function(_AuthUserModel) _then) = __$AuthUserModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? name, String phone, String? profilePhotoUrl
+ String id, String? name, String phone, String? email, String? profilePhotoUrl, bool isPhoneVerified, bool isEmailVerified
 });
 
 
@@ -557,13 +569,16 @@ class __$AuthUserModelCopyWithImpl<$Res>
 
 /// Create a copy of AuthUserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? phone = null,Object? profilePhotoUrl = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? phone = null,Object? email = freezed,Object? profilePhotoUrl = freezed,Object? isPhoneVerified = null,Object? isEmailVerified = null,}) {
   return _then(_AuthUserModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
-as String?,
+as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,profilePhotoUrl: freezed == profilePhotoUrl ? _self.profilePhotoUrl : profilePhotoUrl // ignore: cast_nullable_to_non_nullable
+as String?,isPhoneVerified: null == isPhoneVerified ? _self.isPhoneVerified : isPhoneVerified // ignore: cast_nullable_to_non_nullable
+as bool,isEmailVerified: null == isEmailVerified ? _self.isEmailVerified : isEmailVerified // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

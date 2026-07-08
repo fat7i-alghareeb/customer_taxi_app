@@ -55,7 +55,7 @@ extension TripEventPatterns on TripEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _PollingTick value)?  pollingTick,TResult Function( _CancelRequested value)?  cancelRequested,TResult Function( _PassengerNoteSubmitted value)?  passengerNoteSubmitted,TResult Function( _CompensationClaimSubmitted value)?  compensationClaimSubmitted,TResult Function( _StopPolling value)?  stopPolling,TResult Function( _HistoryStarted value)?  historyStarted,TResult Function( _SearchChanged value)?  searchChanged,TResult Function( _NextPageRequested value)?  nextPageRequested,TResult Function( _DriverLocationUpdated value)?  driverLocationUpdated,TResult Function( _LoadReceipt value)?  loadReceipt,TResult Function( _LoadInvoice value)?  loadInvoice,TResult Function( _LoadInvoicePdf value)?  loadInvoicePdf,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _PollingTick value)?  pollingTick,TResult Function( _CancelRequested value)?  cancelRequested,TResult Function( _PassengerNoteSubmitted value)?  passengerNoteSubmitted,TResult Function( _CompensationClaimSubmitted value)?  compensationClaimSubmitted,TResult Function( _StopPolling value)?  stopPolling,TResult Function( _HistoryStarted value)?  historyStarted,TResult Function( _SearchChanged value)?  searchChanged,TResult Function( _NextPageRequested value)?  nextPageRequested,TResult Function( _DriverLocationUpdated value)?  driverLocationUpdated,TResult Function( _LoadReceipt value)?  loadReceipt,TResult Function( _LoadInvoice value)?  loadInvoice,TResult Function( _LoadInvoicePdf value)?  loadInvoicePdf,TResult Function( _ScheduledTimeUpdateRequested value)?  scheduledTimeUpdateRequested,TResult Function( _StopsUpdateRequested value)?  stopsUpdateRequested,TResult Function( _PassengerCountUpdateRequested value)?  passengerCountUpdateRequested,TResult Function( _BagCountUpdateRequested value)?  bagCountUpdateRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -71,7 +71,11 @@ return nextPageRequested(_that);case _DriverLocationUpdated() when driverLocatio
 return driverLocationUpdated(_that);case _LoadReceipt() when loadReceipt != null:
 return loadReceipt(_that);case _LoadInvoice() when loadInvoice != null:
 return loadInvoice(_that);case _LoadInvoicePdf() when loadInvoicePdf != null:
-return loadInvoicePdf(_that);case _:
+return loadInvoicePdf(_that);case _ScheduledTimeUpdateRequested() when scheduledTimeUpdateRequested != null:
+return scheduledTimeUpdateRequested(_that);case _StopsUpdateRequested() when stopsUpdateRequested != null:
+return stopsUpdateRequested(_that);case _PassengerCountUpdateRequested() when passengerCountUpdateRequested != null:
+return passengerCountUpdateRequested(_that);case _BagCountUpdateRequested() when bagCountUpdateRequested != null:
+return bagCountUpdateRequested(_that);case _:
   return orElse();
 
 }
@@ -89,7 +93,7 @@ return loadInvoicePdf(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _PollingTick value)  pollingTick,required TResult Function( _CancelRequested value)  cancelRequested,required TResult Function( _PassengerNoteSubmitted value)  passengerNoteSubmitted,required TResult Function( _CompensationClaimSubmitted value)  compensationClaimSubmitted,required TResult Function( _StopPolling value)  stopPolling,required TResult Function( _HistoryStarted value)  historyStarted,required TResult Function( _SearchChanged value)  searchChanged,required TResult Function( _NextPageRequested value)  nextPageRequested,required TResult Function( _DriverLocationUpdated value)  driverLocationUpdated,required TResult Function( _LoadReceipt value)  loadReceipt,required TResult Function( _LoadInvoice value)  loadInvoice,required TResult Function( _LoadInvoicePdf value)  loadInvoicePdf,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _PollingTick value)  pollingTick,required TResult Function( _CancelRequested value)  cancelRequested,required TResult Function( _PassengerNoteSubmitted value)  passengerNoteSubmitted,required TResult Function( _CompensationClaimSubmitted value)  compensationClaimSubmitted,required TResult Function( _StopPolling value)  stopPolling,required TResult Function( _HistoryStarted value)  historyStarted,required TResult Function( _SearchChanged value)  searchChanged,required TResult Function( _NextPageRequested value)  nextPageRequested,required TResult Function( _DriverLocationUpdated value)  driverLocationUpdated,required TResult Function( _LoadReceipt value)  loadReceipt,required TResult Function( _LoadInvoice value)  loadInvoice,required TResult Function( _LoadInvoicePdf value)  loadInvoicePdf,required TResult Function( _ScheduledTimeUpdateRequested value)  scheduledTimeUpdateRequested,required TResult Function( _StopsUpdateRequested value)  stopsUpdateRequested,required TResult Function( _PassengerCountUpdateRequested value)  passengerCountUpdateRequested,required TResult Function( _BagCountUpdateRequested value)  bagCountUpdateRequested,}){
 final _that = this;
 switch (_that) {
 case _Started():
@@ -105,7 +109,11 @@ return nextPageRequested(_that);case _DriverLocationUpdated():
 return driverLocationUpdated(_that);case _LoadReceipt():
 return loadReceipt(_that);case _LoadInvoice():
 return loadInvoice(_that);case _LoadInvoicePdf():
-return loadInvoicePdf(_that);case _:
+return loadInvoicePdf(_that);case _ScheduledTimeUpdateRequested():
+return scheduledTimeUpdateRequested(_that);case _StopsUpdateRequested():
+return stopsUpdateRequested(_that);case _PassengerCountUpdateRequested():
+return passengerCountUpdateRequested(_that);case _BagCountUpdateRequested():
+return bagCountUpdateRequested(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -122,7 +130,7 @@ return loadInvoicePdf(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _PollingTick value)?  pollingTick,TResult? Function( _CancelRequested value)?  cancelRequested,TResult? Function( _PassengerNoteSubmitted value)?  passengerNoteSubmitted,TResult? Function( _CompensationClaimSubmitted value)?  compensationClaimSubmitted,TResult? Function( _StopPolling value)?  stopPolling,TResult? Function( _HistoryStarted value)?  historyStarted,TResult? Function( _SearchChanged value)?  searchChanged,TResult? Function( _NextPageRequested value)?  nextPageRequested,TResult? Function( _DriverLocationUpdated value)?  driverLocationUpdated,TResult? Function( _LoadReceipt value)?  loadReceipt,TResult? Function( _LoadInvoice value)?  loadInvoice,TResult? Function( _LoadInvoicePdf value)?  loadInvoicePdf,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _PollingTick value)?  pollingTick,TResult? Function( _CancelRequested value)?  cancelRequested,TResult? Function( _PassengerNoteSubmitted value)?  passengerNoteSubmitted,TResult? Function( _CompensationClaimSubmitted value)?  compensationClaimSubmitted,TResult? Function( _StopPolling value)?  stopPolling,TResult? Function( _HistoryStarted value)?  historyStarted,TResult? Function( _SearchChanged value)?  searchChanged,TResult? Function( _NextPageRequested value)?  nextPageRequested,TResult? Function( _DriverLocationUpdated value)?  driverLocationUpdated,TResult? Function( _LoadReceipt value)?  loadReceipt,TResult? Function( _LoadInvoice value)?  loadInvoice,TResult? Function( _LoadInvoicePdf value)?  loadInvoicePdf,TResult? Function( _ScheduledTimeUpdateRequested value)?  scheduledTimeUpdateRequested,TResult? Function( _StopsUpdateRequested value)?  stopsUpdateRequested,TResult? Function( _PassengerCountUpdateRequested value)?  passengerCountUpdateRequested,TResult? Function( _BagCountUpdateRequested value)?  bagCountUpdateRequested,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -138,7 +146,11 @@ return nextPageRequested(_that);case _DriverLocationUpdated() when driverLocatio
 return driverLocationUpdated(_that);case _LoadReceipt() when loadReceipt != null:
 return loadReceipt(_that);case _LoadInvoice() when loadInvoice != null:
 return loadInvoice(_that);case _LoadInvoicePdf() when loadInvoicePdf != null:
-return loadInvoicePdf(_that);case _:
+return loadInvoicePdf(_that);case _ScheduledTimeUpdateRequested() when scheduledTimeUpdateRequested != null:
+return scheduledTimeUpdateRequested(_that);case _StopsUpdateRequested() when stopsUpdateRequested != null:
+return stopsUpdateRequested(_that);case _PassengerCountUpdateRequested() when passengerCountUpdateRequested != null:
+return passengerCountUpdateRequested(_that);case _BagCountUpdateRequested() when bagCountUpdateRequested != null:
+return bagCountUpdateRequested(_that);case _:
   return null;
 
 }
@@ -155,7 +167,7 @@ return loadInvoicePdf(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId)?  started,TResult Function()?  pollingTick,TResult Function( String? note)?  cancelRequested,TResult Function( String? passengerNote)?  passengerNoteSubmitted,TResult Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult Function()?  stopPolling,TResult Function()?  historyStarted,TResult Function( String query)?  searchChanged,TResult Function()?  nextPageRequested,TResult Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult Function( String tripId)?  loadReceipt,TResult Function( String tripId)?  loadInvoice,TResult Function( String tripId,  String languageCode)?  loadInvoicePdf,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId)?  started,TResult Function()?  pollingTick,TResult Function( String? note)?  cancelRequested,TResult Function( String? passengerNote)?  passengerNoteSubmitted,TResult Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult Function()?  stopPolling,TResult Function()?  historyStarted,TResult Function( String query)?  searchChanged,TResult Function()?  nextPageRequested,TResult Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult Function( String tripId)?  loadReceipt,TResult Function( String tripId)?  loadInvoice,TResult Function( String tripId,  String languageCode)?  loadInvoicePdf,TResult Function( DateTime? scheduledAtUtc)?  scheduledTimeUpdateRequested,TResult Function( List<TripStopEntity> stops)?  stopsUpdateRequested,TResult Function( int count)?  passengerCountUpdateRequested,TResult Function( int count)?  bagCountUpdateRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that.tripId);case _PollingTick() when pollingTick != null:
@@ -170,7 +182,11 @@ return nextPageRequested();case _DriverLocationUpdated() when driverLocationUpda
 return driverLocationUpdated(_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _LoadReceipt() when loadReceipt != null:
 return loadReceipt(_that.tripId);case _LoadInvoice() when loadInvoice != null:
 return loadInvoice(_that.tripId);case _LoadInvoicePdf() when loadInvoicePdf != null:
-return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
+return loadInvoicePdf(_that.tripId,_that.languageCode);case _ScheduledTimeUpdateRequested() when scheduledTimeUpdateRequested != null:
+return scheduledTimeUpdateRequested(_that.scheduledAtUtc);case _StopsUpdateRequested() when stopsUpdateRequested != null:
+return stopsUpdateRequested(_that.stops);case _PassengerCountUpdateRequested() when passengerCountUpdateRequested != null:
+return passengerCountUpdateRequested(_that.count);case _BagCountUpdateRequested() when bagCountUpdateRequested != null:
+return bagCountUpdateRequested(_that.count);case _:
   return orElse();
 
 }
@@ -188,7 +204,7 @@ return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId)  started,required TResult Function()  pollingTick,required TResult Function( String? note)  cancelRequested,required TResult Function( String? passengerNote)  passengerNoteSubmitted,required TResult Function( String note,  List<String> evidenceUrls)  compensationClaimSubmitted,required TResult Function()  stopPolling,required TResult Function()  historyStarted,required TResult Function( String query)  searchChanged,required TResult Function()  nextPageRequested,required TResult Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)  driverLocationUpdated,required TResult Function( String tripId)  loadReceipt,required TResult Function( String tripId)  loadInvoice,required TResult Function( String tripId,  String languageCode)  loadInvoicePdf,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId)  started,required TResult Function()  pollingTick,required TResult Function( String? note)  cancelRequested,required TResult Function( String? passengerNote)  passengerNoteSubmitted,required TResult Function( String note,  List<String> evidenceUrls)  compensationClaimSubmitted,required TResult Function()  stopPolling,required TResult Function()  historyStarted,required TResult Function( String query)  searchChanged,required TResult Function()  nextPageRequested,required TResult Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)  driverLocationUpdated,required TResult Function( String tripId)  loadReceipt,required TResult Function( String tripId)  loadInvoice,required TResult Function( String tripId,  String languageCode)  loadInvoicePdf,required TResult Function( DateTime? scheduledAtUtc)  scheduledTimeUpdateRequested,required TResult Function( List<TripStopEntity> stops)  stopsUpdateRequested,required TResult Function( int count)  passengerCountUpdateRequested,required TResult Function( int count)  bagCountUpdateRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started(_that.tripId);case _PollingTick():
@@ -203,7 +219,11 @@ return nextPageRequested();case _DriverLocationUpdated():
 return driverLocationUpdated(_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _LoadReceipt():
 return loadReceipt(_that.tripId);case _LoadInvoice():
 return loadInvoice(_that.tripId);case _LoadInvoicePdf():
-return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
+return loadInvoicePdf(_that.tripId,_that.languageCode);case _ScheduledTimeUpdateRequested():
+return scheduledTimeUpdateRequested(_that.scheduledAtUtc);case _StopsUpdateRequested():
+return stopsUpdateRequested(_that.stops);case _PassengerCountUpdateRequested():
+return passengerCountUpdateRequested(_that.count);case _BagCountUpdateRequested():
+return bagCountUpdateRequested(_that.count);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -220,7 +240,7 @@ return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId)?  started,TResult? Function()?  pollingTick,TResult? Function( String? note)?  cancelRequested,TResult? Function( String? passengerNote)?  passengerNoteSubmitted,TResult? Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult? Function()?  stopPolling,TResult? Function()?  historyStarted,TResult? Function( String query)?  searchChanged,TResult? Function()?  nextPageRequested,TResult? Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult? Function( String tripId)?  loadReceipt,TResult? Function( String tripId)?  loadInvoice,TResult? Function( String tripId,  String languageCode)?  loadInvoicePdf,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId)?  started,TResult? Function()?  pollingTick,TResult? Function( String? note)?  cancelRequested,TResult? Function( String? passengerNote)?  passengerNoteSubmitted,TResult? Function( String note,  List<String> evidenceUrls)?  compensationClaimSubmitted,TResult? Function()?  stopPolling,TResult? Function()?  historyStarted,TResult? Function( String query)?  searchChanged,TResult? Function()?  nextPageRequested,TResult? Function( double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult? Function( String tripId)?  loadReceipt,TResult? Function( String tripId)?  loadInvoice,TResult? Function( String tripId,  String languageCode)?  loadInvoicePdf,TResult? Function( DateTime? scheduledAtUtc)?  scheduledTimeUpdateRequested,TResult? Function( List<TripStopEntity> stops)?  stopsUpdateRequested,TResult? Function( int count)?  passengerCountUpdateRequested,TResult? Function( int count)?  bagCountUpdateRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started(_that.tripId);case _PollingTick() when pollingTick != null:
@@ -235,7 +255,11 @@ return nextPageRequested();case _DriverLocationUpdated() when driverLocationUpda
 return driverLocationUpdated(_that.latitude,_that.longitude,_that.etaToPickupSeconds,_that.distanceToPickupMeters,_that.routeToPickupPolyline);case _LoadReceipt() when loadReceipt != null:
 return loadReceipt(_that.tripId);case _LoadInvoice() when loadInvoice != null:
 return loadInvoice(_that.tripId);case _LoadInvoicePdf() when loadInvoicePdf != null:
-return loadInvoicePdf(_that.tripId,_that.languageCode);case _:
+return loadInvoicePdf(_that.tripId,_that.languageCode);case _ScheduledTimeUpdateRequested() when scheduledTimeUpdateRequested != null:
+return scheduledTimeUpdateRequested(_that.scheduledAtUtc);case _StopsUpdateRequested() when stopsUpdateRequested != null:
+return stopsUpdateRequested(_that.stops);case _PassengerCountUpdateRequested() when passengerCountUpdateRequested != null:
+return passengerCountUpdateRequested(_that.count);case _BagCountUpdateRequested() when bagCountUpdateRequested != null:
+return bagCountUpdateRequested(_that.count);case _:
   return null;
 
 }
@@ -984,12 +1008,283 @@ as String,
 }
 
 /// @nodoc
+
+
+class _ScheduledTimeUpdateRequested implements TripEvent {
+  const _ScheduledTimeUpdateRequested(this.scheduledAtUtc);
+  
+
+ final  DateTime? scheduledAtUtc;
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ScheduledTimeUpdateRequestedCopyWith<_ScheduledTimeUpdateRequested> get copyWith => __$ScheduledTimeUpdateRequestedCopyWithImpl<_ScheduledTimeUpdateRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduledTimeUpdateRequested&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,scheduledAtUtc);
+
+@override
+String toString() {
+  return 'TripEvent.scheduledTimeUpdateRequested(scheduledAtUtc: $scheduledAtUtc)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ScheduledTimeUpdateRequestedCopyWith<$Res> implements $TripEventCopyWith<$Res> {
+  factory _$ScheduledTimeUpdateRequestedCopyWith(_ScheduledTimeUpdateRequested value, $Res Function(_ScheduledTimeUpdateRequested) _then) = __$ScheduledTimeUpdateRequestedCopyWithImpl;
+@useResult
+$Res call({
+ DateTime? scheduledAtUtc
+});
+
+
+
+
+}
+/// @nodoc
+class __$ScheduledTimeUpdateRequestedCopyWithImpl<$Res>
+    implements _$ScheduledTimeUpdateRequestedCopyWith<$Res> {
+  __$ScheduledTimeUpdateRequestedCopyWithImpl(this._self, this._then);
+
+  final _ScheduledTimeUpdateRequested _self;
+  final $Res Function(_ScheduledTimeUpdateRequested) _then;
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? scheduledAtUtc = freezed,}) {
+  return _then(_ScheduledTimeUpdateRequested(
+freezed == scheduledAtUtc ? _self.scheduledAtUtc : scheduledAtUtc // ignore: cast_nullable_to_non_nullable
+as DateTime?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _StopsUpdateRequested implements TripEvent {
+  const _StopsUpdateRequested(final  List<TripStopEntity> stops): _stops = stops;
+  
+
+ final  List<TripStopEntity> _stops;
+ List<TripStopEntity> get stops {
+  if (_stops is EqualUnmodifiableListView) return _stops;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_stops);
+}
+
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$StopsUpdateRequestedCopyWith<_StopsUpdateRequested> get copyWith => __$StopsUpdateRequestedCopyWithImpl<_StopsUpdateRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StopsUpdateRequested&&const DeepCollectionEquality().equals(other._stops, _stops));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_stops));
+
+@override
+String toString() {
+  return 'TripEvent.stopsUpdateRequested(stops: $stops)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$StopsUpdateRequestedCopyWith<$Res> implements $TripEventCopyWith<$Res> {
+  factory _$StopsUpdateRequestedCopyWith(_StopsUpdateRequested value, $Res Function(_StopsUpdateRequested) _then) = __$StopsUpdateRequestedCopyWithImpl;
+@useResult
+$Res call({
+ List<TripStopEntity> stops
+});
+
+
+
+
+}
+/// @nodoc
+class __$StopsUpdateRequestedCopyWithImpl<$Res>
+    implements _$StopsUpdateRequestedCopyWith<$Res> {
+  __$StopsUpdateRequestedCopyWithImpl(this._self, this._then);
+
+  final _StopsUpdateRequested _self;
+  final $Res Function(_StopsUpdateRequested) _then;
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? stops = null,}) {
+  return _then(_StopsUpdateRequested(
+null == stops ? _self._stops : stops // ignore: cast_nullable_to_non_nullable
+as List<TripStopEntity>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _PassengerCountUpdateRequested implements TripEvent {
+  const _PassengerCountUpdateRequested(this.count);
+  
+
+ final  int count;
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$PassengerCountUpdateRequestedCopyWith<_PassengerCountUpdateRequested> get copyWith => __$PassengerCountUpdateRequestedCopyWithImpl<_PassengerCountUpdateRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PassengerCountUpdateRequested&&(identical(other.count, count) || other.count == count));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,count);
+
+@override
+String toString() {
+  return 'TripEvent.passengerCountUpdateRequested(count: $count)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$PassengerCountUpdateRequestedCopyWith<$Res> implements $TripEventCopyWith<$Res> {
+  factory _$PassengerCountUpdateRequestedCopyWith(_PassengerCountUpdateRequested value, $Res Function(_PassengerCountUpdateRequested) _then) = __$PassengerCountUpdateRequestedCopyWithImpl;
+@useResult
+$Res call({
+ int count
+});
+
+
+
+
+}
+/// @nodoc
+class __$PassengerCountUpdateRequestedCopyWithImpl<$Res>
+    implements _$PassengerCountUpdateRequestedCopyWith<$Res> {
+  __$PassengerCountUpdateRequestedCopyWithImpl(this._self, this._then);
+
+  final _PassengerCountUpdateRequested _self;
+  final $Res Function(_PassengerCountUpdateRequested) _then;
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? count = null,}) {
+  return _then(_PassengerCountUpdateRequested(
+null == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _BagCountUpdateRequested implements TripEvent {
+  const _BagCountUpdateRequested(this.count);
+  
+
+ final  int count;
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$BagCountUpdateRequestedCopyWith<_BagCountUpdateRequested> get copyWith => __$BagCountUpdateRequestedCopyWithImpl<_BagCountUpdateRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BagCountUpdateRequested&&(identical(other.count, count) || other.count == count));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,count);
+
+@override
+String toString() {
+  return 'TripEvent.bagCountUpdateRequested(count: $count)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$BagCountUpdateRequestedCopyWith<$Res> implements $TripEventCopyWith<$Res> {
+  factory _$BagCountUpdateRequestedCopyWith(_BagCountUpdateRequested value, $Res Function(_BagCountUpdateRequested) _then) = __$BagCountUpdateRequestedCopyWithImpl;
+@useResult
+$Res call({
+ int count
+});
+
+
+
+
+}
+/// @nodoc
+class __$BagCountUpdateRequestedCopyWithImpl<$Res>
+    implements _$BagCountUpdateRequestedCopyWith<$Res> {
+  __$BagCountUpdateRequestedCopyWithImpl(this._self, this._then);
+
+  final _BagCountUpdateRequested _self;
+  final $Res Function(_BagCountUpdateRequested) _then;
+
+/// Create a copy of TripEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? count = null,}) {
+  return _then(_BagCountUpdateRequested(
+null == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$TripState {
 
 // Active trip
  BlocStatus<TripEntity> get tripStatus; BlocStatus<void> get cancelStatus; BlocStatus<void> get passengerNoteStatus; BlocStatus<TripCompensationClaimEntity> get compensationClaimStatus; bool get isPolling; String? get activeTripId; DriverLocationEntity? get activeDriverLocation;// Trip history
  BlocStatus<List<TripSummaryEntity>> get historyStatus; List<TripSummaryEntity> get trips; int get currentPage; bool get hasMore; bool get isLoadingMore; String get searchQuery;// Receipt / Invoice (per-section loading)
- BlocStatus<TripReceiptEntity> get receiptStatus; BlocStatus<TripInvoiceEntity> get invoiceStatus; BlocStatus<Uint8List> get invoicePdfStatus;
+ BlocStatus<TripReceiptEntity> get receiptStatus; BlocStatus<TripInvoiceEntity> get invoiceStatus; BlocStatus<Uint8List> get invoicePdfStatus;// Pre-trip edit operations
+ BlocStatus<void> get tripEditStatus;
 /// Create a copy of TripState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1000,16 +1295,16 @@ $TripStateCopyWith<TripState> get copyWith => _$TripStateCopyWithImpl<TripState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripState&&(identical(other.tripStatus, tripStatus) || other.tripStatus == tripStatus)&&(identical(other.cancelStatus, cancelStatus) || other.cancelStatus == cancelStatus)&&(identical(other.passengerNoteStatus, passengerNoteStatus) || other.passengerNoteStatus == passengerNoteStatus)&&(identical(other.compensationClaimStatus, compensationClaimStatus) || other.compensationClaimStatus == compensationClaimStatus)&&(identical(other.isPolling, isPolling) || other.isPolling == isPolling)&&(identical(other.activeTripId, activeTripId) || other.activeTripId == activeTripId)&&(identical(other.activeDriverLocation, activeDriverLocation) || other.activeDriverLocation == activeDriverLocation)&&(identical(other.historyStatus, historyStatus) || other.historyStatus == historyStatus)&&const DeepCollectionEquality().equals(other.trips, trips)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.receiptStatus, receiptStatus) || other.receiptStatus == receiptStatus)&&(identical(other.invoiceStatus, invoiceStatus) || other.invoiceStatus == invoiceStatus)&&(identical(other.invoicePdfStatus, invoicePdfStatus) || other.invoicePdfStatus == invoicePdfStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripState&&(identical(other.tripStatus, tripStatus) || other.tripStatus == tripStatus)&&(identical(other.cancelStatus, cancelStatus) || other.cancelStatus == cancelStatus)&&(identical(other.passengerNoteStatus, passengerNoteStatus) || other.passengerNoteStatus == passengerNoteStatus)&&(identical(other.compensationClaimStatus, compensationClaimStatus) || other.compensationClaimStatus == compensationClaimStatus)&&(identical(other.isPolling, isPolling) || other.isPolling == isPolling)&&(identical(other.activeTripId, activeTripId) || other.activeTripId == activeTripId)&&(identical(other.activeDriverLocation, activeDriverLocation) || other.activeDriverLocation == activeDriverLocation)&&(identical(other.historyStatus, historyStatus) || other.historyStatus == historyStatus)&&const DeepCollectionEquality().equals(other.trips, trips)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.receiptStatus, receiptStatus) || other.receiptStatus == receiptStatus)&&(identical(other.invoiceStatus, invoiceStatus) || other.invoiceStatus == invoiceStatus)&&(identical(other.invoicePdfStatus, invoicePdfStatus) || other.invoicePdfStatus == invoicePdfStatus)&&(identical(other.tripEditStatus, tripEditStatus) || other.tripEditStatus == tripEditStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tripStatus,cancelStatus,passengerNoteStatus,compensationClaimStatus,isPolling,activeTripId,activeDriverLocation,historyStatus,const DeepCollectionEquality().hash(trips),currentPage,hasMore,isLoadingMore,searchQuery,receiptStatus,invoiceStatus,invoicePdfStatus);
+int get hashCode => Object.hash(runtimeType,tripStatus,cancelStatus,passengerNoteStatus,compensationClaimStatus,isPolling,activeTripId,activeDriverLocation,historyStatus,const DeepCollectionEquality().hash(trips),currentPage,hasMore,isLoadingMore,searchQuery,receiptStatus,invoiceStatus,invoicePdfStatus,tripEditStatus);
 
 @override
 String toString() {
-  return 'TripState(tripStatus: $tripStatus, cancelStatus: $cancelStatus, passengerNoteStatus: $passengerNoteStatus, compensationClaimStatus: $compensationClaimStatus, isPolling: $isPolling, activeTripId: $activeTripId, activeDriverLocation: $activeDriverLocation, historyStatus: $historyStatus, trips: $trips, currentPage: $currentPage, hasMore: $hasMore, isLoadingMore: $isLoadingMore, searchQuery: $searchQuery, receiptStatus: $receiptStatus, invoiceStatus: $invoiceStatus, invoicePdfStatus: $invoicePdfStatus)';
+  return 'TripState(tripStatus: $tripStatus, cancelStatus: $cancelStatus, passengerNoteStatus: $passengerNoteStatus, compensationClaimStatus: $compensationClaimStatus, isPolling: $isPolling, activeTripId: $activeTripId, activeDriverLocation: $activeDriverLocation, historyStatus: $historyStatus, trips: $trips, currentPage: $currentPage, hasMore: $hasMore, isLoadingMore: $isLoadingMore, searchQuery: $searchQuery, receiptStatus: $receiptStatus, invoiceStatus: $invoiceStatus, invoicePdfStatus: $invoicePdfStatus, tripEditStatus: $tripEditStatus)';
 }
 
 
@@ -1020,11 +1315,11 @@ abstract mixin class $TripStateCopyWith<$Res>  {
   factory $TripStateCopyWith(TripState value, $Res Function(TripState) _then) = _$TripStateCopyWithImpl;
 @useResult
 $Res call({
- BlocStatus<TripEntity> tripStatus, BlocStatus<void> cancelStatus, BlocStatus<void> passengerNoteStatus, BlocStatus<TripCompensationClaimEntity> compensationClaimStatus, bool isPolling, String? activeTripId, DriverLocationEntity? activeDriverLocation, BlocStatus<List<TripSummaryEntity>> historyStatus, List<TripSummaryEntity> trips, int currentPage, bool hasMore, bool isLoadingMore, String searchQuery, BlocStatus<TripReceiptEntity> receiptStatus, BlocStatus<TripInvoiceEntity> invoiceStatus, BlocStatus<Uint8List> invoicePdfStatus
+ BlocStatus<TripEntity> tripStatus, BlocStatus<void> cancelStatus, BlocStatus<void> passengerNoteStatus, BlocStatus<TripCompensationClaimEntity> compensationClaimStatus, bool isPolling, String? activeTripId, DriverLocationEntity? activeDriverLocation, BlocStatus<List<TripSummaryEntity>> historyStatus, List<TripSummaryEntity> trips, int currentPage, bool hasMore, bool isLoadingMore, String searchQuery, BlocStatus<TripReceiptEntity> receiptStatus, BlocStatus<TripInvoiceEntity> invoiceStatus, BlocStatus<Uint8List> invoicePdfStatus, BlocStatus<void> tripEditStatus
 });
 
 
-$BlocStatusCopyWith<TripEntity, $Res> get tripStatus;$BlocStatusCopyWith<void, $Res> get cancelStatus;$BlocStatusCopyWith<void, $Res> get passengerNoteStatus;$BlocStatusCopyWith<TripCompensationClaimEntity, $Res> get compensationClaimStatus;$DriverLocationEntityCopyWith<$Res>? get activeDriverLocation;$BlocStatusCopyWith<List<TripSummaryEntity>, $Res> get historyStatus;$BlocStatusCopyWith<TripReceiptEntity, $Res> get receiptStatus;$BlocStatusCopyWith<TripInvoiceEntity, $Res> get invoiceStatus;$BlocStatusCopyWith<Uint8List, $Res> get invoicePdfStatus;
+$BlocStatusCopyWith<TripEntity, $Res> get tripStatus;$BlocStatusCopyWith<void, $Res> get cancelStatus;$BlocStatusCopyWith<void, $Res> get passengerNoteStatus;$BlocStatusCopyWith<TripCompensationClaimEntity, $Res> get compensationClaimStatus;$DriverLocationEntityCopyWith<$Res>? get activeDriverLocation;$BlocStatusCopyWith<List<TripSummaryEntity>, $Res> get historyStatus;$BlocStatusCopyWith<TripReceiptEntity, $Res> get receiptStatus;$BlocStatusCopyWith<TripInvoiceEntity, $Res> get invoiceStatus;$BlocStatusCopyWith<Uint8List, $Res> get invoicePdfStatus;$BlocStatusCopyWith<void, $Res> get tripEditStatus;
 
 }
 /// @nodoc
@@ -1037,7 +1332,7 @@ class _$TripStateCopyWithImpl<$Res>
 
 /// Create a copy of TripState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tripStatus = null,Object? cancelStatus = null,Object? passengerNoteStatus = null,Object? compensationClaimStatus = null,Object? isPolling = null,Object? activeTripId = freezed,Object? activeDriverLocation = freezed,Object? historyStatus = null,Object? trips = null,Object? currentPage = null,Object? hasMore = null,Object? isLoadingMore = null,Object? searchQuery = null,Object? receiptStatus = null,Object? invoiceStatus = null,Object? invoicePdfStatus = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? tripStatus = null,Object? cancelStatus = null,Object? passengerNoteStatus = null,Object? compensationClaimStatus = null,Object? isPolling = null,Object? activeTripId = freezed,Object? activeDriverLocation = freezed,Object? historyStatus = null,Object? trips = null,Object? currentPage = null,Object? hasMore = null,Object? isLoadingMore = null,Object? searchQuery = null,Object? receiptStatus = null,Object? invoiceStatus = null,Object? invoicePdfStatus = null,Object? tripEditStatus = null,}) {
   return _then(_self.copyWith(
 tripStatus: null == tripStatus ? _self.tripStatus : tripStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<TripEntity>,cancelStatus: null == cancelStatus ? _self.cancelStatus : cancelStatus // ignore: cast_nullable_to_non_nullable
@@ -1055,7 +1350,8 @@ as bool,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ig
 as String,receiptStatus: null == receiptStatus ? _self.receiptStatus : receiptStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<TripReceiptEntity>,invoiceStatus: null == invoiceStatus ? _self.invoiceStatus : invoiceStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<TripInvoiceEntity>,invoicePdfStatus: null == invoicePdfStatus ? _self.invoicePdfStatus : invoicePdfStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<Uint8List>,
+as BlocStatus<Uint8List>,tripEditStatus: null == tripEditStatus ? _self.tripEditStatus : tripEditStatus // ignore: cast_nullable_to_non_nullable
+as BlocStatus<void>,
   ));
 }
 /// Create a copy of TripState
@@ -1141,6 +1437,15 @@ $BlocStatusCopyWith<Uint8List, $Res> get invoicePdfStatus {
   
   return $BlocStatusCopyWith<Uint8List, $Res>(_self.invoicePdfStatus, (value) {
     return _then(_self.copyWith(invoicePdfStatus: value));
+  });
+}/// Create a copy of TripState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BlocStatusCopyWith<void, $Res> get tripEditStatus {
+  
+  return $BlocStatusCopyWith<void, $Res>(_self.tripEditStatus, (value) {
+    return _then(_self.copyWith(tripEditStatus: value));
   });
 }
 }
@@ -1224,10 +1529,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<TripEntity> tripStatus,  BlocStatus<void> cancelStatus,  BlocStatus<void> passengerNoteStatus,  BlocStatus<TripCompensationClaimEntity> compensationClaimStatus,  bool isPolling,  String? activeTripId,  DriverLocationEntity? activeDriverLocation,  BlocStatus<List<TripSummaryEntity>> historyStatus,  List<TripSummaryEntity> trips,  int currentPage,  bool hasMore,  bool isLoadingMore,  String searchQuery,  BlocStatus<TripReceiptEntity> receiptStatus,  BlocStatus<TripInvoiceEntity> invoiceStatus,  BlocStatus<Uint8List> invoicePdfStatus)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BlocStatus<TripEntity> tripStatus,  BlocStatus<void> cancelStatus,  BlocStatus<void> passengerNoteStatus,  BlocStatus<TripCompensationClaimEntity> compensationClaimStatus,  bool isPolling,  String? activeTripId,  DriverLocationEntity? activeDriverLocation,  BlocStatus<List<TripSummaryEntity>> historyStatus,  List<TripSummaryEntity> trips,  int currentPage,  bool hasMore,  bool isLoadingMore,  String searchQuery,  BlocStatus<TripReceiptEntity> receiptStatus,  BlocStatus<TripInvoiceEntity> invoiceStatus,  BlocStatus<Uint8List> invoicePdfStatus,  BlocStatus<void> tripEditStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripState() when $default != null:
-return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_that.compensationClaimStatus,_that.isPolling,_that.activeTripId,_that.activeDriverLocation,_that.historyStatus,_that.trips,_that.currentPage,_that.hasMore,_that.isLoadingMore,_that.searchQuery,_that.receiptStatus,_that.invoiceStatus,_that.invoicePdfStatus);case _:
+return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_that.compensationClaimStatus,_that.isPolling,_that.activeTripId,_that.activeDriverLocation,_that.historyStatus,_that.trips,_that.currentPage,_that.hasMore,_that.isLoadingMore,_that.searchQuery,_that.receiptStatus,_that.invoiceStatus,_that.invoicePdfStatus,_that.tripEditStatus);case _:
   return orElse();
 
 }
@@ -1245,10 +1550,10 @@ return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<TripEntity> tripStatus,  BlocStatus<void> cancelStatus,  BlocStatus<void> passengerNoteStatus,  BlocStatus<TripCompensationClaimEntity> compensationClaimStatus,  bool isPolling,  String? activeTripId,  DriverLocationEntity? activeDriverLocation,  BlocStatus<List<TripSummaryEntity>> historyStatus,  List<TripSummaryEntity> trips,  int currentPage,  bool hasMore,  bool isLoadingMore,  String searchQuery,  BlocStatus<TripReceiptEntity> receiptStatus,  BlocStatus<TripInvoiceEntity> invoiceStatus,  BlocStatus<Uint8List> invoicePdfStatus)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BlocStatus<TripEntity> tripStatus,  BlocStatus<void> cancelStatus,  BlocStatus<void> passengerNoteStatus,  BlocStatus<TripCompensationClaimEntity> compensationClaimStatus,  bool isPolling,  String? activeTripId,  DriverLocationEntity? activeDriverLocation,  BlocStatus<List<TripSummaryEntity>> historyStatus,  List<TripSummaryEntity> trips,  int currentPage,  bool hasMore,  bool isLoadingMore,  String searchQuery,  BlocStatus<TripReceiptEntity> receiptStatus,  BlocStatus<TripInvoiceEntity> invoiceStatus,  BlocStatus<Uint8List> invoicePdfStatus,  BlocStatus<void> tripEditStatus)  $default,) {final _that = this;
 switch (_that) {
 case _TripState():
-return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_that.compensationClaimStatus,_that.isPolling,_that.activeTripId,_that.activeDriverLocation,_that.historyStatus,_that.trips,_that.currentPage,_that.hasMore,_that.isLoadingMore,_that.searchQuery,_that.receiptStatus,_that.invoiceStatus,_that.invoicePdfStatus);case _:
+return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_that.compensationClaimStatus,_that.isPolling,_that.activeTripId,_that.activeDriverLocation,_that.historyStatus,_that.trips,_that.currentPage,_that.hasMore,_that.isLoadingMore,_that.searchQuery,_that.receiptStatus,_that.invoiceStatus,_that.invoicePdfStatus,_that.tripEditStatus);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1265,10 +1570,10 @@ return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<TripEntity> tripStatus,  BlocStatus<void> cancelStatus,  BlocStatus<void> passengerNoteStatus,  BlocStatus<TripCompensationClaimEntity> compensationClaimStatus,  bool isPolling,  String? activeTripId,  DriverLocationEntity? activeDriverLocation,  BlocStatus<List<TripSummaryEntity>> historyStatus,  List<TripSummaryEntity> trips,  int currentPage,  bool hasMore,  bool isLoadingMore,  String searchQuery,  BlocStatus<TripReceiptEntity> receiptStatus,  BlocStatus<TripInvoiceEntity> invoiceStatus,  BlocStatus<Uint8List> invoicePdfStatus)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BlocStatus<TripEntity> tripStatus,  BlocStatus<void> cancelStatus,  BlocStatus<void> passengerNoteStatus,  BlocStatus<TripCompensationClaimEntity> compensationClaimStatus,  bool isPolling,  String? activeTripId,  DriverLocationEntity? activeDriverLocation,  BlocStatus<List<TripSummaryEntity>> historyStatus,  List<TripSummaryEntity> trips,  int currentPage,  bool hasMore,  bool isLoadingMore,  String searchQuery,  BlocStatus<TripReceiptEntity> receiptStatus,  BlocStatus<TripInvoiceEntity> invoiceStatus,  BlocStatus<Uint8List> invoicePdfStatus,  BlocStatus<void> tripEditStatus)?  $default,) {final _that = this;
 switch (_that) {
 case _TripState() when $default != null:
-return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_that.compensationClaimStatus,_that.isPolling,_that.activeTripId,_that.activeDriverLocation,_that.historyStatus,_that.trips,_that.currentPage,_that.hasMore,_that.isLoadingMore,_that.searchQuery,_that.receiptStatus,_that.invoiceStatus,_that.invoicePdfStatus);case _:
+return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_that.compensationClaimStatus,_that.isPolling,_that.activeTripId,_that.activeDriverLocation,_that.historyStatus,_that.trips,_that.currentPage,_that.hasMore,_that.isLoadingMore,_that.searchQuery,_that.receiptStatus,_that.invoiceStatus,_that.invoicePdfStatus,_that.tripEditStatus);case _:
   return null;
 
 }
@@ -1280,7 +1585,7 @@ return $default(_that.tripStatus,_that.cancelStatus,_that.passengerNoteStatus,_t
 
 
 class _TripState implements TripState {
-  const _TripState({this.tripStatus = const BlocStatus<TripEntity>.initial(), this.cancelStatus = const BlocStatus<void>.initial(), this.passengerNoteStatus = const BlocStatus<void>.initial(), this.compensationClaimStatus = const BlocStatus<TripCompensationClaimEntity>.initial(), this.isPolling = false, this.activeTripId, this.activeDriverLocation, this.historyStatus = const BlocStatus<List<TripSummaryEntity>>.initial(), final  List<TripSummaryEntity> trips = const [], this.currentPage = 1, this.hasMore = true, this.isLoadingMore = false, this.searchQuery = '', this.receiptStatus = const BlocStatus<TripReceiptEntity>.initial(), this.invoiceStatus = const BlocStatus<TripInvoiceEntity>.initial(), this.invoicePdfStatus = const BlocStatus<Uint8List>.initial()}): _trips = trips;
+  const _TripState({this.tripStatus = const BlocStatus<TripEntity>.initial(), this.cancelStatus = const BlocStatus<void>.initial(), this.passengerNoteStatus = const BlocStatus<void>.initial(), this.compensationClaimStatus = const BlocStatus<TripCompensationClaimEntity>.initial(), this.isPolling = false, this.activeTripId, this.activeDriverLocation, this.historyStatus = const BlocStatus<List<TripSummaryEntity>>.initial(), final  List<TripSummaryEntity> trips = const [], this.currentPage = 1, this.hasMore = true, this.isLoadingMore = false, this.searchQuery = '', this.receiptStatus = const BlocStatus<TripReceiptEntity>.initial(), this.invoiceStatus = const BlocStatus<TripInvoiceEntity>.initial(), this.invoicePdfStatus = const BlocStatus<Uint8List>.initial(), this.tripEditStatus = const BlocStatus<void>.initial()}): _trips = trips;
   
 
 // Active trip
@@ -1308,6 +1613,8 @@ class _TripState implements TripState {
 @override@JsonKey() final  BlocStatus<TripReceiptEntity> receiptStatus;
 @override@JsonKey() final  BlocStatus<TripInvoiceEntity> invoiceStatus;
 @override@JsonKey() final  BlocStatus<Uint8List> invoicePdfStatus;
+// Pre-trip edit operations
+@override@JsonKey() final  BlocStatus<void> tripEditStatus;
 
 /// Create a copy of TripState
 /// with the given fields replaced by the non-null parameter values.
@@ -1319,16 +1626,16 @@ _$TripStateCopyWith<_TripState> get copyWith => __$TripStateCopyWithImpl<_TripSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripState&&(identical(other.tripStatus, tripStatus) || other.tripStatus == tripStatus)&&(identical(other.cancelStatus, cancelStatus) || other.cancelStatus == cancelStatus)&&(identical(other.passengerNoteStatus, passengerNoteStatus) || other.passengerNoteStatus == passengerNoteStatus)&&(identical(other.compensationClaimStatus, compensationClaimStatus) || other.compensationClaimStatus == compensationClaimStatus)&&(identical(other.isPolling, isPolling) || other.isPolling == isPolling)&&(identical(other.activeTripId, activeTripId) || other.activeTripId == activeTripId)&&(identical(other.activeDriverLocation, activeDriverLocation) || other.activeDriverLocation == activeDriverLocation)&&(identical(other.historyStatus, historyStatus) || other.historyStatus == historyStatus)&&const DeepCollectionEquality().equals(other._trips, _trips)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.receiptStatus, receiptStatus) || other.receiptStatus == receiptStatus)&&(identical(other.invoiceStatus, invoiceStatus) || other.invoiceStatus == invoiceStatus)&&(identical(other.invoicePdfStatus, invoicePdfStatus) || other.invoicePdfStatus == invoicePdfStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripState&&(identical(other.tripStatus, tripStatus) || other.tripStatus == tripStatus)&&(identical(other.cancelStatus, cancelStatus) || other.cancelStatus == cancelStatus)&&(identical(other.passengerNoteStatus, passengerNoteStatus) || other.passengerNoteStatus == passengerNoteStatus)&&(identical(other.compensationClaimStatus, compensationClaimStatus) || other.compensationClaimStatus == compensationClaimStatus)&&(identical(other.isPolling, isPolling) || other.isPolling == isPolling)&&(identical(other.activeTripId, activeTripId) || other.activeTripId == activeTripId)&&(identical(other.activeDriverLocation, activeDriverLocation) || other.activeDriverLocation == activeDriverLocation)&&(identical(other.historyStatus, historyStatus) || other.historyStatus == historyStatus)&&const DeepCollectionEquality().equals(other._trips, _trips)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.receiptStatus, receiptStatus) || other.receiptStatus == receiptStatus)&&(identical(other.invoiceStatus, invoiceStatus) || other.invoiceStatus == invoiceStatus)&&(identical(other.invoicePdfStatus, invoicePdfStatus) || other.invoicePdfStatus == invoicePdfStatus)&&(identical(other.tripEditStatus, tripEditStatus) || other.tripEditStatus == tripEditStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tripStatus,cancelStatus,passengerNoteStatus,compensationClaimStatus,isPolling,activeTripId,activeDriverLocation,historyStatus,const DeepCollectionEquality().hash(_trips),currentPage,hasMore,isLoadingMore,searchQuery,receiptStatus,invoiceStatus,invoicePdfStatus);
+int get hashCode => Object.hash(runtimeType,tripStatus,cancelStatus,passengerNoteStatus,compensationClaimStatus,isPolling,activeTripId,activeDriverLocation,historyStatus,const DeepCollectionEquality().hash(_trips),currentPage,hasMore,isLoadingMore,searchQuery,receiptStatus,invoiceStatus,invoicePdfStatus,tripEditStatus);
 
 @override
 String toString() {
-  return 'TripState(tripStatus: $tripStatus, cancelStatus: $cancelStatus, passengerNoteStatus: $passengerNoteStatus, compensationClaimStatus: $compensationClaimStatus, isPolling: $isPolling, activeTripId: $activeTripId, activeDriverLocation: $activeDriverLocation, historyStatus: $historyStatus, trips: $trips, currentPage: $currentPage, hasMore: $hasMore, isLoadingMore: $isLoadingMore, searchQuery: $searchQuery, receiptStatus: $receiptStatus, invoiceStatus: $invoiceStatus, invoicePdfStatus: $invoicePdfStatus)';
+  return 'TripState(tripStatus: $tripStatus, cancelStatus: $cancelStatus, passengerNoteStatus: $passengerNoteStatus, compensationClaimStatus: $compensationClaimStatus, isPolling: $isPolling, activeTripId: $activeTripId, activeDriverLocation: $activeDriverLocation, historyStatus: $historyStatus, trips: $trips, currentPage: $currentPage, hasMore: $hasMore, isLoadingMore: $isLoadingMore, searchQuery: $searchQuery, receiptStatus: $receiptStatus, invoiceStatus: $invoiceStatus, invoicePdfStatus: $invoicePdfStatus, tripEditStatus: $tripEditStatus)';
 }
 
 
@@ -1339,11 +1646,11 @@ abstract mixin class _$TripStateCopyWith<$Res> implements $TripStateCopyWith<$Re
   factory _$TripStateCopyWith(_TripState value, $Res Function(_TripState) _then) = __$TripStateCopyWithImpl;
 @override @useResult
 $Res call({
- BlocStatus<TripEntity> tripStatus, BlocStatus<void> cancelStatus, BlocStatus<void> passengerNoteStatus, BlocStatus<TripCompensationClaimEntity> compensationClaimStatus, bool isPolling, String? activeTripId, DriverLocationEntity? activeDriverLocation, BlocStatus<List<TripSummaryEntity>> historyStatus, List<TripSummaryEntity> trips, int currentPage, bool hasMore, bool isLoadingMore, String searchQuery, BlocStatus<TripReceiptEntity> receiptStatus, BlocStatus<TripInvoiceEntity> invoiceStatus, BlocStatus<Uint8List> invoicePdfStatus
+ BlocStatus<TripEntity> tripStatus, BlocStatus<void> cancelStatus, BlocStatus<void> passengerNoteStatus, BlocStatus<TripCompensationClaimEntity> compensationClaimStatus, bool isPolling, String? activeTripId, DriverLocationEntity? activeDriverLocation, BlocStatus<List<TripSummaryEntity>> historyStatus, List<TripSummaryEntity> trips, int currentPage, bool hasMore, bool isLoadingMore, String searchQuery, BlocStatus<TripReceiptEntity> receiptStatus, BlocStatus<TripInvoiceEntity> invoiceStatus, BlocStatus<Uint8List> invoicePdfStatus, BlocStatus<void> tripEditStatus
 });
 
 
-@override $BlocStatusCopyWith<TripEntity, $Res> get tripStatus;@override $BlocStatusCopyWith<void, $Res> get cancelStatus;@override $BlocStatusCopyWith<void, $Res> get passengerNoteStatus;@override $BlocStatusCopyWith<TripCompensationClaimEntity, $Res> get compensationClaimStatus;@override $DriverLocationEntityCopyWith<$Res>? get activeDriverLocation;@override $BlocStatusCopyWith<List<TripSummaryEntity>, $Res> get historyStatus;@override $BlocStatusCopyWith<TripReceiptEntity, $Res> get receiptStatus;@override $BlocStatusCopyWith<TripInvoiceEntity, $Res> get invoiceStatus;@override $BlocStatusCopyWith<Uint8List, $Res> get invoicePdfStatus;
+@override $BlocStatusCopyWith<TripEntity, $Res> get tripStatus;@override $BlocStatusCopyWith<void, $Res> get cancelStatus;@override $BlocStatusCopyWith<void, $Res> get passengerNoteStatus;@override $BlocStatusCopyWith<TripCompensationClaimEntity, $Res> get compensationClaimStatus;@override $DriverLocationEntityCopyWith<$Res>? get activeDriverLocation;@override $BlocStatusCopyWith<List<TripSummaryEntity>, $Res> get historyStatus;@override $BlocStatusCopyWith<TripReceiptEntity, $Res> get receiptStatus;@override $BlocStatusCopyWith<TripInvoiceEntity, $Res> get invoiceStatus;@override $BlocStatusCopyWith<Uint8List, $Res> get invoicePdfStatus;@override $BlocStatusCopyWith<void, $Res> get tripEditStatus;
 
 }
 /// @nodoc
@@ -1356,7 +1663,7 @@ class __$TripStateCopyWithImpl<$Res>
 
 /// Create a copy of TripState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripStatus = null,Object? cancelStatus = null,Object? passengerNoteStatus = null,Object? compensationClaimStatus = null,Object? isPolling = null,Object? activeTripId = freezed,Object? activeDriverLocation = freezed,Object? historyStatus = null,Object? trips = null,Object? currentPage = null,Object? hasMore = null,Object? isLoadingMore = null,Object? searchQuery = null,Object? receiptStatus = null,Object? invoiceStatus = null,Object? invoicePdfStatus = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? tripStatus = null,Object? cancelStatus = null,Object? passengerNoteStatus = null,Object? compensationClaimStatus = null,Object? isPolling = null,Object? activeTripId = freezed,Object? activeDriverLocation = freezed,Object? historyStatus = null,Object? trips = null,Object? currentPage = null,Object? hasMore = null,Object? isLoadingMore = null,Object? searchQuery = null,Object? receiptStatus = null,Object? invoiceStatus = null,Object? invoicePdfStatus = null,Object? tripEditStatus = null,}) {
   return _then(_TripState(
 tripStatus: null == tripStatus ? _self.tripStatus : tripStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<TripEntity>,cancelStatus: null == cancelStatus ? _self.cancelStatus : cancelStatus // ignore: cast_nullable_to_non_nullable
@@ -1374,7 +1681,8 @@ as bool,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ig
 as String,receiptStatus: null == receiptStatus ? _self.receiptStatus : receiptStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<TripReceiptEntity>,invoiceStatus: null == invoiceStatus ? _self.invoiceStatus : invoiceStatus // ignore: cast_nullable_to_non_nullable
 as BlocStatus<TripInvoiceEntity>,invoicePdfStatus: null == invoicePdfStatus ? _self.invoicePdfStatus : invoicePdfStatus // ignore: cast_nullable_to_non_nullable
-as BlocStatus<Uint8List>,
+as BlocStatus<Uint8List>,tripEditStatus: null == tripEditStatus ? _self.tripEditStatus : tripEditStatus // ignore: cast_nullable_to_non_nullable
+as BlocStatus<void>,
   ));
 }
 
@@ -1461,6 +1769,15 @@ $BlocStatusCopyWith<Uint8List, $Res> get invoicePdfStatus {
   
   return $BlocStatusCopyWith<Uint8List, $Res>(_self.invoicePdfStatus, (value) {
     return _then(_self.copyWith(invoicePdfStatus: value));
+  });
+}/// Create a copy of TripState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BlocStatusCopyWith<void, $Res> get tripEditStatus {
+  
+  return $BlocStatusCopyWith<void, $Res>(_self.tripEditStatus, (value) {
+    return _then(_self.copyWith(tripEditStatus: value));
   });
 }
 }

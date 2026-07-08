@@ -53,6 +53,7 @@ class OrderRequestTripEntity {
     this.scheduledAt,
     this.passengerNote,
     this.flightNumber,
+    this.paymentMethod = 'card',
   });
 
   final String quoteId;
@@ -60,4 +61,7 @@ class OrderRequestTripEntity {
   final DateTime? scheduledAt;
   final String? passengerNote;
   final String? flightNumber;
+
+  /// "card" (Stripe sheet), "wallet" (balance only), or "mixed" (balance + card).
+  final String paymentMethod;
 }

@@ -70,6 +70,8 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
       : DateTime.parse(json['dispatchWindowOpensAtUtc'] as String),
   canMarkEnRoute: json['canMarkEnRoute'] as bool? ?? false,
   attentionState: json['attentionState'] as String? ?? 'Normal',
+  passengerCount: (json['passengerCount'] as num?)?.toInt() ?? 1,
+  bagCount: (json['bagCount'] as num?)?.toInt() ?? 0,
 );
 
 Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
@@ -104,6 +106,8 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
           ?.toIso8601String(),
       'canMarkEnRoute': instance.canMarkEnRoute,
       'attentionState': instance.attentionState,
+      'passengerCount': instance.passengerCount,
+      'bagCount': instance.bagCount,
     };
 
 _TripRouteSegmentModel _$TripRouteSegmentModelFromJson(

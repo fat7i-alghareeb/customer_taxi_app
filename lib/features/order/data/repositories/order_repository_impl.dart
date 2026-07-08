@@ -174,6 +174,7 @@ class OrderRepositoryImpl implements OrderRepository {
           scheduledAt: request.scheduledAt,
           passengerNote: request.passengerNote,
           flightNumber: request.flightNumber,
+          paymentMethod: request.paymentMethod,
         ),
       );
 

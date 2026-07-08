@@ -1,22 +1,53 @@
-import '../../../../core/domain/user_entity.dart';
 import '../../../../core/utils/result.dart';
+import '../entities/auth_outcome.dart';
+import '../entities/auth_session.dart';
+import '../entities/otp_request_info.dart';
 
+/// All OTP generation/verification and account logic lives on the backend; this
+/// repository is a thin, state-driven client over those endpoints. Session-producing
+/// methods persist the session via AuthManager before returning.
 abstract class AuthRepository {
-  /// Triggers Firebase Phone Auth and returns the verificationId on success.
-  Future<Result<String>> requestSmsCode(String phone);
-
-  /// Verifies the SMS code with Firebase, exchanges the resulting Firebase
-  /// ID token for the system JWT via the backend `/auth/login` endpoint,
-  /// and persists the session via [AuthManager].
-  Future<Result<UserEntity>> verifyAndLogin({
-    required String phone,
-    required String verificationId,
-    required String smsCode,
+  // Phone
+  Future<Result<OtpRequestInfo>> requestPhoneLoginOtp(String phone);
+  Future<Result<AuthSession>> verifyPhoneLoginOtp({
+    required String otpRequestId,
+    required String code,
+  });
+  Future<Result<OtpRequestInfo>> requestPhoneSignupOtp(String phone);
+  Future<Result<AuthSession>> verifyPhoneSignupOtp({
+    required String otpRequestId,
+    required String code,
   });
 
-  /// Updates the FCM device token on the backend.
-  Future<Result<void>> updateFcmToken(String token);
+  // Email
+  Future<Result<OtpRequestInfo>> requestEmailLoginOtp(String email);
+  Future<Result<AuthSession>> verifyEmailLoginOtp({
+    required String otpRequestId,
+    required String code,
+  });
+  Future<Result<OtpRequestInfo>> requestEmailSignupOtp(String email);
+  Future<Result<AuthOutcome>> verifyEmailSignupOtp({
+    required String otpRequestId,
+    required String code,
+  });
 
-  /// Updates the user's preferred language on the backend.
+  // Google
+  Future<Result<AuthOutcome>> signInWithGoogle();
+
+  // Registration finalize + phone verify + fresh start
+  Future<Result<AuthSession>> completeRegistration({
+    required String registrationToken,
+    required String name,
+    required String phone,
+  });
+  Future<Result<OtpRequestInfo>> requestPhoneVerifyOtp(String phone);
+  Future<Result<AuthSession>> verifyPhoneVerifyOtp({
+    required String otpRequestId,
+    required String code,
+  });
+  Future<Result<AuthSession>> freshStart();
+
+  // Misc
+  Future<Result<void>> updateFcmToken(String token);
   Future<Result<void>> updatePreferredLanguage(String languageCode);
 }

@@ -133,6 +133,16 @@
 					<string>customertaxi</string>
 				</array>
 			</dict>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>dev.fat7i.customertaxi.google</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.74478390393-k78g7ipvg0nibbg9sa83b2gou9o4ts73</string>
+				</array>
+			</dict>
 		</array>
 	</dict>
 </plist>

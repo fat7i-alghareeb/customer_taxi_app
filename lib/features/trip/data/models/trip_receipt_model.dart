@@ -28,6 +28,12 @@ abstract class TripReceiptModel with _$TripReceiptModel {
     String? invoiceNumber,
     DateTime? invoiceIssuedAtUtc,
     @Default([]) List<TripStopModel> stops,
+    @Default(0) double waitingFeeAmount,
+    @Default(0) double walletPaidAmount,
+    @Default(0) double cardPaidAmount,
+    @Default(0) double totalPaidAmount,
+    @Default(0) double unpaidAmount,
+    @Default(0) double refundedAmount,
   }) = _TripReceiptModel;
 
   factory TripReceiptModel.fromJson(Map<String, dynamic> json) =>

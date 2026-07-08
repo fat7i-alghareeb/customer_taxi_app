@@ -23,6 +23,7 @@ import '../../domain/entities/order_trip_car_option_entity.dart';
 import '../../domain/entities/order_trip_response_entity.dart';
 import '../../domain/entities/order_trip_route_entity.dart';
 import '../../domain/facade/order_facade.dart';
+import 'package:customertaxi/features/payment/domain/facade/payment_facade.dart';
 import '../helpers/saved_locations_helper.dart';
 import 'slices/order_booking_slice.dart';
 import 'slices/order_map_slice.dart';
@@ -53,6 +54,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     this._locationService,
     this._clientConfig,
     this._realtime,
+    this._paymentFacade,
   ) : super(const OrderState()) {
     printC('[OrderBloc] initialized');
     on<_Started>(_onStarted);
@@ -82,12 +84,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<_PassengerNoteChanged>(_onPassengerNoteChanged);
     on<_FlightNumberChanged>(_onFlightNumberChanged);
     on<_PaymentSheetDismissed>(_onPaymentSheetDismissed);
+    on<_WalletBalanceRequested>(_onWalletBalanceRequested);
+    on<_PaymentMethodSelected>(_onPaymentMethodSelected);
   }
 
   final OrderFacade _facade;
   final LocationService _locationService;
   final ClientConfigService _clientConfig;
   final RealtimeService _realtime;
+  final PaymentFacade _paymentFacade;
 
   int _tripResolutionToken = 0;
   int _prefetchToken = 0;
