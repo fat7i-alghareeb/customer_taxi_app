@@ -72,4 +72,7 @@ class AuthFacade {
       _repository.verifyPhoneVerifyOtp(otpRequestId: otpRequestId, code: code);
 
   Future<Result<AuthSession>> freshStart() => _repository.freshStart();
+
+  Future<Result<void>> continueExistingAccount() =>
+      _repository.continueExistingAccount();
 }

@@ -46,6 +46,7 @@ abstract class AuthRepository {
     required String code,
   });
   Future<Result<AuthSession>> freshStart();
+  Future<Result<void>> continueExistingAccount();
 
   // Misc
   Future<Result<void>> updateFcmToken(String token);

@@ -32,5 +32,14 @@ abstract class TripState with _$TripState {
 
     // Pre-trip edit operations
     @Default(BlocStatus<void>.initial()) BlocStatus<void> tripEditStatus,
+
+    // Mid-trip re-pricing edit (preview → confirm → apply/settle)
+    @Default(BlocStatus<TripEditPreviewEntity>.initial())
+    BlocStatus<TripEditPreviewEntity> editPreviewStatus,
+    @Default(BlocStatus<TripEditApplyResultEntity>.initial())
+    BlocStatus<TripEditApplyResultEntity> editApplyStatus,
+
+    // "No driver found" postpone action
+    @Default(BlocStatus<void>.initial()) BlocStatus<void> postponeStatus,
   }) = _TripState;
 }

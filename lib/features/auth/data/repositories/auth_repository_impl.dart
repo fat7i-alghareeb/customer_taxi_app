@@ -163,6 +163,10 @@ class AuthRepositoryImpl implements AuthRepository {
         return _persist(res);
       });
 
+  @override
+  Future<Result<void>> continueExistingAccount() =>
+      runAsResult(() => _remote.continueExistingAccount());
+
   // ---- Misc ----
 
   @override

@@ -240,6 +240,14 @@ extension _BookingHandlers on OrderBloc {
         printC('[Payment] joining SignalR group for tripId=${trip.id}');
         unawaited(_realtime.joinTripGroup(trip.id));
 
+        // Block re-booking the instant a trip exists server-side, regardless
+        // of payment path below: hides the Home tab's bookable "Now/Later"
+        // pill behind a spinner until ActiveTripGate mounts the live trip
+        // view (which does the real per-trip SignalR join via TripBloc).
+        final activeTripCubit = getIt<ActiveTripCubit>();
+        activeTripCubit.markBookingPending();
+        unawaited(activeTripCubit.refresh());
+
         final stripePayment = trip.stripePayment;
         final stripeEnabled = _clientConfig.current.stripeEnabled;
 
@@ -356,17 +364,34 @@ extension _BookingHandlers on OrderBloc {
           );
           break;
         case _PaymentOutcome.timeout:
-          printY(
-            '[Payment] timeout waiting for backend — emitting optimistic success',
-          );
-          emit(
-            state.copyWith(
-              booking: state.booking.copyWith(
-                paymentSheetState: const BlocStatus.success(null),
-                pendingTripResponse: null,
+          // No confirmation push in time — reconcile against the authoritative trip
+          // status before declaring success, so a genuinely failed async payment
+          // (e.g. iDEAL that later fails) doesn't surface as a booked ride.
+          final reconciled = await _reconcilePaymentStatus(trip.id);
+          if (reconciled == _PaymentOutcome.failed) {
+            printR('[Payment] reconcile: backend reports payment failed');
+            emit(
+              state.copyWith(
+                booking: state.booking.copyWith(
+                  tripRequestStatus: BlocStatus.failure(AppStrings.paymentFailed),
+                  paymentSheetState: const BlocStatus.initial(),
+                  pendingTripResponse: null,
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            printY(
+              '[Payment] reconcile inconclusive/confirmed — optimistic success',
+            );
+            emit(
+              state.copyWith(
+                booking: state.booking.copyWith(
+                  paymentSheetState: const BlocStatus.success(null),
+                  pendingTripResponse: null,
+                ),
+              ),
+            );
+          }
           break;
         case _PaymentOutcome.failed:
           printR(
@@ -457,6 +482,30 @@ extension _BookingHandlers on OrderBloc {
       );
       return _PaymentOutcome.timeout;
     }
+  }
+
+  /// After a confirmation timeout, fetch the authoritative trip status. Returns
+  /// [_PaymentOutcome.failed] only when the backend definitively marked the
+  /// payment failed; otherwise `confirmed`/`timeout` (both treated as optimistic
+  /// success by the caller) so a merely slow webhook or an unreachable fetch
+  /// still keeps the UI responsive.
+  Future<_PaymentOutcome> _reconcilePaymentStatus(String tripId) async {
+    printC('[Payment/_reconcile] fetching trip status tripId=$tripId');
+    final result = await getIt<TripFacade>().getTripById(tripId);
+    return result.when(
+      success: (trip) {
+        switch (trip.status) {
+          case TripStatus.paymentFailed:
+            return _PaymentOutcome.failed;
+          case TripStatus.awaitingPayment:
+            // Card charged locally; the confirming webhook is still pending.
+            return _PaymentOutcome.timeout;
+          default:
+            return _PaymentOutcome.confirmed;
+        }
+      },
+      failure: (_) => _PaymentOutcome.timeout,
+    );
   }
 }
 

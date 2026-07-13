@@ -34,21 +34,21 @@ class TripCompletedStatusSheet extends StatelessWidget {
           child: FaIcon(
             FontAwesomeIcons.circleCheck,
             color: AppColors.success,
-            size: 48.r,
+            size: 40.r,
           ),
         ),
-        AppSpacing.md.verticalSpace,
+        AppSpacing.sm.verticalSpace,
         Center(
           child: Text(
             AppStrings.tripStatusCompleted,
             style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
           ),
         ),
-        AppSpacing.lg.verticalSpace,
+        AppSpacing.sm.verticalSpace,
 
         // Uber-style receipt / invoice chips
         CompletedActionChips(tripId: trip.id),
-        AppSpacing.lg.verticalSpace,
+        AppSpacing.sm.verticalSpace,
 
         // Fare Summary Card
         TripFareSummaryCard(
@@ -56,12 +56,12 @@ class TripCompletedStatusSheet extends StatelessWidget {
           currencyCode: trip.currencyCode,
           referenceCode: trip.referenceCode,
         ),
-        AppSpacing.xl.verticalSpace,
+        AppSpacing.md.verticalSpace,
 
         // Stops Timeline
         if (trip.stops.isNotEmpty) ...[
           TripStopsTimeline(stops: trip.stops),
-          AppSpacing.xl.verticalSpace,
+          AppSpacing.md.verticalSpace,
         ],
 
         // Rate the trip (also auto-shown once on completion).
@@ -73,7 +73,7 @@ class TripCompletedStatusSheet extends StatelessWidget {
           ),
           child: AppButtonChild.label(AppStrings.ratingTitle),
         ),
-        AppSpacing.md.verticalSpace,
+        AppSpacing.sm.verticalSpace,
 
         // Done button to route home (explicit dismiss — no auto-redirect)
         AppButton.primaryGradient(

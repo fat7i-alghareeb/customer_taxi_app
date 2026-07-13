@@ -37,19 +37,33 @@ class TripCompletionCoordinator {
 
   StreamSubscription<RealtimeEvent>? _sub;
   final Set<String> _prompted = <String>{};
+
+  // Trips whose full-screen completed overlay was explicitly closed by the
+  // user. Lives here (lazy singleton) so a remount of `ActiveTripBody` cannot
+  // re-show an overlay the user already dismissed this session.
+  final Set<String> _completedOverlayClosed = <String>{};
   bool _started = false;
 
-  /// Subscribes to realtime completion events. Idempotent.
+  /// Whether the user already closed the completed overlay for [tripId].
+  bool isCompletedOverlayClosed(String tripId) =>
+      _completedOverlayClosed.contains(tripId);
+
+  /// Records that the user closed the completed overlay for [tripId].
+  void markCompletedOverlayClosed(String tripId) {
+    _completedOverlayClosed.add(tripId);
+  }
+
+  /// Idempotent. The realtime `TripCompleted` no longer auto-opens the rating:
+  /// the active-trip screen shows a full-screen completed overlay first and
+  /// triggers the rating only after the user taps its Close button (see
+  /// `ActiveTripBody`). FCM taps still call [promptRatingForTrip] directly.
   void start() {
     if (_started) return;
     _started = true;
-    printC('$_logTag start — listening for TripCompleted');
-    _sub = _realtime.events.listen((event) {
-      if (event is RealtimeTripCompleted) {
-        printG('$_logTag realtime TripCompleted trip=${event.tripId}');
-        unawaited(promptRatingForCompletedTrip(event.tripId));
-      }
-    });
+    printC(
+      '$_logTag start — auto rating-on-complete disabled (deferred to overlay close)',
+    );
+    _sub = _realtime.events.listen((_) {});
   }
 
   Future<void> stop() async {

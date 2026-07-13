@@ -4,12 +4,14 @@ import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_arrival_stepper.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancel_button.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_chat_button.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_editable_details.dart';
 
 /// Sheet for `TripStatus.enRoute`, also reused for the brief "arrived" handoff
 /// (see `GlassmorphicTripStatusSheet`) where all three stepper steps render
-/// checked just before the dedicated arrived sheet takes over. The layout is
-/// identical for both; only the stepper's active step and the live arrival
-/// header (en-route only) change.
+/// checked just before the dedicated arrived sheet takes over. Shows the same
+/// address / passengers / bags block as the confirmation sheet (editable while
+/// the status allows repricing), plus the progress stepper and the live arrival
+/// header (en-route only).
 class TripEnRouteStatusSheet extends StatelessWidget {
   const TripEnRouteStatusSheet({
     required this.trip,
@@ -36,63 +38,12 @@ class TripEnRouteStatusSheet extends StatelessWidget {
       children: [
         if (arrivalProgressHeader != null) ...[
           arrivalProgressHeader!,
-          AppSpacing.md.verticalSpace,
+          AppSpacing.sm.verticalSpace,
         ],
-
-        // Header card: car icon + reassuring title/subtitle.
-        Container(
-          padding: REdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: colors.onSurface.withValues(alpha: 0.04),
-            borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            border: Border.all(
-              color: colors.onSurface.withValues(alpha: 0.06),
-              width: 1.r,
-            ),
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: REdgeInsets.all(AppSpacing.sm),
-                decoration: BoxDecoration(
-                  color: colors.primary.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: FaIcon(
-                  FontAwesomeIcons.carSide,
-                  color: colors.primary,
-                  size: 24.r,
-                ),
-              ),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppStrings.activeTripDriverComing,
-                      style: AppTextStyles.s16w700.copyWith(
-                        color: colors.onSurface,
-                      ),
-                    ),
-                    AppSpacing.xs.verticalSpace,
-                    Text(
-                      AppStrings.activeTripComfortableTripSoon,
-                      style: AppTextStyles.s12w400.copyWith(
-                        color: colors.onSurface.withValues(alpha: 0.6),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        AppSpacing.md.verticalSpace,
 
         // Progress stepper card.
         Container(
-          padding: REdgeInsets.all(AppSpacing.lg),
+          padding: REdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
             color: colors.onSurface.withValues(alpha: 0.04),
             borderRadius: BorderRadius.circular(AppRadii.lg.r),
@@ -109,8 +60,13 @@ class TripEnRouteStatusSheet extends StatelessWidget {
         ),
         AppSpacing.md.verticalSpace,
 
+        // Address, passengers and bags — identical to the confirmation sheet so
+        // the rider sees the same details (and edit affordances) as before.
+        TripEditableDetails(trip: trip),
+        AppSpacing.sm.verticalSpace,
+
         const TripChatButton(),
-        AppSpacing.md.verticalSpace,
+        AppSpacing.sm.verticalSpace,
 
         TripCancelButton(
           isLoading: cancelStatus.isLoading,

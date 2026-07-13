@@ -254,15 +254,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i341.LocalizationInterceptor>(
       () => _i341.LocalizationInterceptor(gh<_i504.LocaleService>()),
     );
+    gh.lazySingleton<_i404.RealtimeService>(
+      () => _i856.SignalRRealtimeService(gh<_i247.JwtTokenStorage>()),
+    );
     gh.lazySingleton<_i814.AuthManager>(
       () => _i814.AuthManager(
         storage: gh<_i742.StorageService>(),
         state: gh<_i32.AuthStateNotifier>(),
         tokenStorage: gh<_i247.JwtTokenStorage>(),
+        objectBoxService: gh<_i477.ObjectBoxService>(),
       ),
-    );
-    gh.lazySingleton<_i404.RealtimeService>(
-      () => _i856.SignalRRealtimeService(gh<_i247.JwtTokenStorage>()),
     );
     gh.singleton<_i361.Dio>(
       () => registerModule.dio(
@@ -331,12 +332,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i753.TripBloc>(
       () => _i753.TripBloc(gh<_i224.TripFacade>(), gh<_i404.RealtimeService>()),
     );
-    gh.lazySingleton<_i5.ActiveTripCubit>(
-      () => _i5.ActiveTripCubit(
-        gh<_i224.TripFacade>(),
-        gh<_i404.RealtimeService>(),
-      ),
-    );
     gh.lazySingleton<_i888.TripCompletionCoordinator>(
       () => _i888.TripCompletionCoordinator(
         gh<_i404.RealtimeService>(),
@@ -370,6 +365,13 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i312.OrderRepositoryImpl(
         gh<_i93.OrderRemoteDataSource>(),
         gh<_i588.OrderLocalDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i5.ActiveTripCubit>(
+      () => _i5.ActiveTripCubit(
+        gh<_i224.TripFacade>(),
+        gh<_i404.RealtimeService>(),
+        gh<_i814.AuthManager>(),
       ),
     );
     gh.lazySingleton<_i501.ProfileFacade>(

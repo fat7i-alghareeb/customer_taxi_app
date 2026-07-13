@@ -8,6 +8,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:customertaxi/core/services/realtime/realtime_event.dart';
 import 'package:customertaxi/core/services/realtime/realtime_connection_state.dart';
 import 'package:customertaxi/core/services/realtime/realtime_service.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_edit_apply_result_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_edit_preview_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_invoice_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_receipt_entity.dart';
@@ -44,6 +46,11 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<_StopsUpdateRequested>(_onStopsUpdateRequested);
     on<_PassengerCountUpdateRequested>(_onPassengerCountUpdateRequested);
     on<_BagCountUpdateRequested>(_onBagCountUpdateRequested);
+    on<_EditPreviewRequested>(_onEditPreviewRequested);
+    on<_EditApplyRequested>(_onEditApplyRequested);
+    on<_EditStatusReset>(_onEditStatusReset);
+    on<_NoDriverPostponeRequested>(_onNoDriverPostponeRequested);
+    on<_NoDriverCancelRequested>(_onNoDriverCancelRequested);
   }
 
   final TripFacade _facade;
@@ -204,6 +211,66 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       },
       failure: (msg) {
         printY('[TripBloc] cancel failed=$msg');
+        emit(state.copyWith(cancelStatus: BlocStatus<void>.failure(msg)));
+      },
+    );
+  }
+
+  Future<void> _onNoDriverPostponeRequested(
+    _NoDriverPostponeRequested event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    if (id == null) return;
+    emit(state.copyWith(postponeStatus: const BlocStatus.loading()));
+    final Result<TripEntity> result = await _facade.postponeNoDriverSearch(id);
+    result.when(
+      success: (trip) {
+        printG('[TripBloc] postpone success');
+        // The returned trip has noDriverDecisionRequired=false, which hides the
+        // overlay. The trip keeps polling/searching as before.
+        emit(
+          state.copyWith(
+            postponeStatus: const BlocStatus<void>.success(null),
+            tripStatus: BlocStatus<TripEntity>.success(trip),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] postpone failed=$msg');
+        emit(state.copyWith(postponeStatus: BlocStatus<void>.failure(msg)));
+        // Reconcile in case an admin accepted the trip in the meantime.
+        add(const TripEvent.pollingTick());
+      },
+    );
+  }
+
+  Future<void> _onNoDriverCancelRequested(
+    _NoDriverCancelRequested event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    if (id == null) return;
+    emit(state.copyWith(cancelStatus: const BlocStatus.loading()));
+    final Result<TripEntity> result = await _facade.noDriverCancelTrip(
+      id,
+      note: event.note,
+    );
+    result.when(
+      success: (trip) {
+        printG('[TripBloc] no-driver cancel success');
+        _stopPolling();
+        unawaited(_unsubscribeFromRealtime());
+        emit(
+          state.copyWith(
+            cancelStatus: const BlocStatus<void>.success(null),
+            tripStatus: BlocStatus<TripEntity>.success(trip),
+            isPolling: false,
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] no-driver cancel failed=$msg');
         emit(state.copyWith(cancelStatus: BlocStatus<void>.failure(msg)));
       },
     );
@@ -499,14 +566,8 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     final id = state.activeTripId;
     final trip = state.tripStatus.getDataWhenSuccess;
     if (id == null || trip == null) return;
-    if (!_isWithinEditWindow(trip.createdAtUtc)) {
-      emit(
-        state.copyWith(
-          tripEditStatus: const BlocStatus<void>.failure('tripEditNotAllowed'),
-        ),
-      );
-      return;
-    }
+    // No client-side window gate — editing is gated purely by trip status server-side
+    // (allowed through Arrived, rejected once the ride is in progress / terminal).
     emit(state.copyWith(tripEditStatus: const BlocStatus<void>.loading()));
     final Result<TripEntity> result = await _facade.updateTripStops(
       tripId: id,
@@ -536,14 +597,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     final id = state.activeTripId;
     final trip = state.tripStatus.getDataWhenSuccess;
     if (id == null || trip == null) return;
-    if (!_isWithinEditWindow(trip.createdAtUtc)) {
-      emit(
-        state.copyWith(
-          tripEditStatus: const BlocStatus<void>.failure('tripEditNotAllowed'),
-        ),
-      );
-      return;
-    }
+    // No client-side window gate — gated purely by trip status server-side.
     emit(state.copyWith(tripEditStatus: const BlocStatus<void>.loading()));
     final Result<TripEntity> result = await _facade.updateTripPassengerCount(
       tripId: id,
@@ -604,6 +658,97 @@ class TripBloc extends Bloc<TripEvent, TripState> {
         printY('[TripBloc] bag count update failed=$msg');
         emit(state.copyWith(tripEditStatus: BlocStatus<void>.failure(msg)));
       },
+    );
+  }
+
+  Future<void> _onEditPreviewRequested(
+    _EditPreviewRequested event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    if (id == null) return;
+    emit(
+      state.copyWith(
+        editPreviewStatus: const BlocStatus<TripEditPreviewEntity>.loading(),
+      ),
+    );
+    final result = await _facade.previewTripEdit(
+      tripId: id,
+      stops: event.stops,
+      passengerCount: event.passengerCount,
+    );
+    result.when(
+      success: (preview) {
+        printG('[TripBloc] edit preview delta=${preview.delta}');
+        emit(
+          state.copyWith(
+            editPreviewStatus:
+                BlocStatus<TripEditPreviewEntity>.success(preview),
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] edit preview failed=$msg');
+        emit(
+          state.copyWith(
+            editPreviewStatus: BlocStatus<TripEditPreviewEntity>.failure(msg),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _onEditApplyRequested(
+    _EditApplyRequested event,
+    Emitter<TripState> emit,
+  ) async {
+    final id = state.activeTripId;
+    if (id == null) return;
+    emit(
+      state.copyWith(
+        editApplyStatus: const BlocStatus<TripEditApplyResultEntity>.loading(),
+      ),
+    );
+    final result = await _facade.applyTripEdit(
+      tripId: id,
+      stops: event.stops,
+      passengerCount: event.passengerCount,
+      expectedDelta: event.expectedDelta,
+    );
+    result.when(
+      success: (applyResult) {
+        printG('[TripBloc] edit apply status=${applyResult.status}');
+        final updatedTrip = applyResult.trip;
+        emit(
+          state.copyWith(
+            editApplyStatus:
+                BlocStatus<TripEditApplyResultEntity>.success(applyResult),
+            // When applied synchronously the server returns the updated trip; adopt it.
+            // The PaymentSheet path leaves the trip unchanged (a realtime refresh follows).
+            tripStatus: updatedTrip != null
+                ? BlocStatus<TripEntity>.success(updatedTrip)
+                : state.tripStatus,
+          ),
+        );
+      },
+      failure: (msg) {
+        printY('[TripBloc] edit apply failed=$msg');
+        emit(
+          state.copyWith(
+            editApplyStatus:
+                BlocStatus<TripEditApplyResultEntity>.failure(msg),
+          ),
+        );
+      },
+    );
+  }
+
+  void _onEditStatusReset(_EditStatusReset event, Emitter<TripState> emit) {
+    emit(
+      state.copyWith(
+        editPreviewStatus: const BlocStatus<TripEditPreviewEntity>.initial(),
+        editApplyStatus: const BlocStatus<TripEditApplyResultEntity>.initial(),
+      ),
     );
   }
 

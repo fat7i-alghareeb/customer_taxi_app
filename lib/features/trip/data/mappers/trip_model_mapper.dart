@@ -40,6 +40,7 @@ extension TripModelMapper on TripModel {
     attentionState: attentionState,
     passengerCount: passengerCount,
     bagCount: bagCount,
+    noDriverDecisionRequired: noDriverDecisionRequired,
   );
 }
 

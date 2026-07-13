@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../objectbox.g.dart' hide Store;
 import '../../error/app_exception.dart';
+import 'entities/objectbox_local_cache_entry_entity.dart';
 
 /// Owns the single ObjectBox [Store] instance for the whole application.
 ///
@@ -98,6 +99,13 @@ class ObjectBoxService {
     P param,
   ) {
     return _store.runInTransactionAsync(TxMode.read, callback, param);
+  }
+
+  /// Clears all locally cached, user-specific data in place (keeps the Store
+  /// open, unlike `Store.removeDbFiles`, which every other DI consumer of
+  /// this long-lived singleton would otherwise break). Call on logout.
+  Future<void> clearAll() async {
+    _store.box<ObjectBoxLocalCacheEntryEntity>().removeAll();
   }
 
   /// Closes the underlying store.

@@ -203,11 +203,11 @@ return paymentMethodSelected(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  orderNowPressed,TResult Function()?  collapseRequested,TResult Function()?  mapPickCancelled,TResult Function()?  vehicleStepBackPressed,TResult Function( int index)?  setOnMapPressed,TResult Function( double latitude,  double longitude,  double zoom)?  mapCameraTargetUpdated,TResult Function()?  confirmMapPointPressed,TResult Function( int index)?  activeStopChanged,TResult Function( int index,  String query)?  stopQueryChanged,TResult Function( int index)?  stopCleared,TResult Function( int index,  OrderSavedLocationEntity location)?  stopSuggestionSelected,TResult Function()?  stopAdded,TResult Function( int index)?  stopRemoved,TResult Function( int oldIndex,  int newIndex)?  stopReordered,TResult Function( int stopIndex,  OrderSavedLocationEntity location)?  savedLocationPinToggled,TResult Function( String typeId)?  carTypeToggled,TResult Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)?  tripPrefetchCompleted,TResult Function()?  confirmOrderPressed,TResult Function()?  confirmCarSelectionPressed,TResult Function()?  bookingDetailsBackPressed,TResult Function( OrderScheduleMode mode)?  scheduleModeChanged,TResult Function( DateTime? time)?  scheduleTimeChanged,TResult Function( String note)?  passengerNoteChanged,TResult Function( String flightNumber)?  flightNumberChanged,TResult Function()?  confirmBookingDetailsPressed,TResult Function()?  paymentSheetDismissed,TResult Function()?  walletBalanceRequested,TResult Function( OrderPaymentMethod method)?  paymentMethodSelected,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( OrderScheduleMode mode)?  orderNowPressed,TResult Function()?  collapseRequested,TResult Function()?  mapPickCancelled,TResult Function()?  vehicleStepBackPressed,TResult Function( int index)?  setOnMapPressed,TResult Function( double latitude,  double longitude,  double zoom)?  mapCameraTargetUpdated,TResult Function()?  confirmMapPointPressed,TResult Function( int index)?  activeStopChanged,TResult Function( int index,  String query)?  stopQueryChanged,TResult Function( int index)?  stopCleared,TResult Function( int index,  OrderSavedLocationEntity location)?  stopSuggestionSelected,TResult Function()?  stopAdded,TResult Function( int index)?  stopRemoved,TResult Function( int oldIndex,  int newIndex)?  stopReordered,TResult Function( int stopIndex,  OrderSavedLocationEntity location)?  savedLocationPinToggled,TResult Function( String typeId)?  carTypeToggled,TResult Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)?  tripPrefetchCompleted,TResult Function()?  confirmOrderPressed,TResult Function()?  confirmCarSelectionPressed,TResult Function()?  bookingDetailsBackPressed,TResult Function( OrderScheduleMode mode)?  scheduleModeChanged,TResult Function( DateTime? time)?  scheduleTimeChanged,TResult Function( String note)?  passengerNoteChanged,TResult Function( String flightNumber)?  flightNumberChanged,TResult Function()?  confirmBookingDetailsPressed,TResult Function()?  paymentSheetDismissed,TResult Function()?  walletBalanceRequested,TResult Function( OrderPaymentMethod method)?  paymentMethodSelected,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _OrderNowPressed() when orderNowPressed != null:
-return orderNowPressed();case _CollapseRequested() when collapseRequested != null:
+return orderNowPressed(_that.mode);case _CollapseRequested() when collapseRequested != null:
 return collapseRequested();case _MapPickCancelled() when mapPickCancelled != null:
 return mapPickCancelled();case _VehicleStepBackPressed() when vehicleStepBackPressed != null:
 return vehicleStepBackPressed();case _SetOnMapPressed() when setOnMapPressed != null:
@@ -252,11 +252,11 @@ return paymentMethodSelected(_that.method);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  orderNowPressed,required TResult Function()  collapseRequested,required TResult Function()  mapPickCancelled,required TResult Function()  vehicleStepBackPressed,required TResult Function( int index)  setOnMapPressed,required TResult Function( double latitude,  double longitude,  double zoom)  mapCameraTargetUpdated,required TResult Function()  confirmMapPointPressed,required TResult Function( int index)  activeStopChanged,required TResult Function( int index,  String query)  stopQueryChanged,required TResult Function( int index)  stopCleared,required TResult Function( int index,  OrderSavedLocationEntity location)  stopSuggestionSelected,required TResult Function()  stopAdded,required TResult Function( int index)  stopRemoved,required TResult Function( int oldIndex,  int newIndex)  stopReordered,required TResult Function( int stopIndex,  OrderSavedLocationEntity location)  savedLocationPinToggled,required TResult Function( String typeId)  carTypeToggled,required TResult Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)  tripPrefetchCompleted,required TResult Function()  confirmOrderPressed,required TResult Function()  confirmCarSelectionPressed,required TResult Function()  bookingDetailsBackPressed,required TResult Function( OrderScheduleMode mode)  scheduleModeChanged,required TResult Function( DateTime? time)  scheduleTimeChanged,required TResult Function( String note)  passengerNoteChanged,required TResult Function( String flightNumber)  flightNumberChanged,required TResult Function()  confirmBookingDetailsPressed,required TResult Function()  paymentSheetDismissed,required TResult Function()  walletBalanceRequested,required TResult Function( OrderPaymentMethod method)  paymentMethodSelected,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( OrderScheduleMode mode)  orderNowPressed,required TResult Function()  collapseRequested,required TResult Function()  mapPickCancelled,required TResult Function()  vehicleStepBackPressed,required TResult Function( int index)  setOnMapPressed,required TResult Function( double latitude,  double longitude,  double zoom)  mapCameraTargetUpdated,required TResult Function()  confirmMapPointPressed,required TResult Function( int index)  activeStopChanged,required TResult Function( int index,  String query)  stopQueryChanged,required TResult Function( int index)  stopCleared,required TResult Function( int index,  OrderSavedLocationEntity location)  stopSuggestionSelected,required TResult Function()  stopAdded,required TResult Function( int index)  stopRemoved,required TResult Function( int oldIndex,  int newIndex)  stopReordered,required TResult Function( int stopIndex,  OrderSavedLocationEntity location)  savedLocationPinToggled,required TResult Function( String typeId)  carTypeToggled,required TResult Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)  tripPrefetchCompleted,required TResult Function()  confirmOrderPressed,required TResult Function()  confirmCarSelectionPressed,required TResult Function()  bookingDetailsBackPressed,required TResult Function( OrderScheduleMode mode)  scheduleModeChanged,required TResult Function( DateTime? time)  scheduleTimeChanged,required TResult Function( String note)  passengerNoteChanged,required TResult Function( String flightNumber)  flightNumberChanged,required TResult Function()  confirmBookingDetailsPressed,required TResult Function()  paymentSheetDismissed,required TResult Function()  walletBalanceRequested,required TResult Function( OrderPaymentMethod method)  paymentMethodSelected,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _OrderNowPressed():
-return orderNowPressed();case _CollapseRequested():
+return orderNowPressed(_that.mode);case _CollapseRequested():
 return collapseRequested();case _MapPickCancelled():
 return mapPickCancelled();case _VehicleStepBackPressed():
 return vehicleStepBackPressed();case _SetOnMapPressed():
@@ -300,11 +300,11 @@ return paymentMethodSelected(_that.method);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  orderNowPressed,TResult? Function()?  collapseRequested,TResult? Function()?  mapPickCancelled,TResult? Function()?  vehicleStepBackPressed,TResult? Function( int index)?  setOnMapPressed,TResult? Function( double latitude,  double longitude,  double zoom)?  mapCameraTargetUpdated,TResult? Function()?  confirmMapPointPressed,TResult? Function( int index)?  activeStopChanged,TResult? Function( int index,  String query)?  stopQueryChanged,TResult? Function( int index)?  stopCleared,TResult? Function( int index,  OrderSavedLocationEntity location)?  stopSuggestionSelected,TResult? Function()?  stopAdded,TResult? Function( int index)?  stopRemoved,TResult? Function( int oldIndex,  int newIndex)?  stopReordered,TResult? Function( int stopIndex,  OrderSavedLocationEntity location)?  savedLocationPinToggled,TResult? Function( String typeId)?  carTypeToggled,TResult? Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)?  tripPrefetchCompleted,TResult? Function()?  confirmOrderPressed,TResult? Function()?  confirmCarSelectionPressed,TResult? Function()?  bookingDetailsBackPressed,TResult? Function( OrderScheduleMode mode)?  scheduleModeChanged,TResult? Function( DateTime? time)?  scheduleTimeChanged,TResult? Function( String note)?  passengerNoteChanged,TResult? Function( String flightNumber)?  flightNumberChanged,TResult? Function()?  confirmBookingDetailsPressed,TResult? Function()?  paymentSheetDismissed,TResult? Function()?  walletBalanceRequested,TResult? Function( OrderPaymentMethod method)?  paymentMethodSelected,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( OrderScheduleMode mode)?  orderNowPressed,TResult? Function()?  collapseRequested,TResult? Function()?  mapPickCancelled,TResult? Function()?  vehicleStepBackPressed,TResult? Function( int index)?  setOnMapPressed,TResult? Function( double latitude,  double longitude,  double zoom)?  mapCameraTargetUpdated,TResult? Function()?  confirmMapPointPressed,TResult? Function( int index)?  activeStopChanged,TResult? Function( int index,  String query)?  stopQueryChanged,TResult? Function( int index)?  stopCleared,TResult? Function( int index,  OrderSavedLocationEntity location)?  stopSuggestionSelected,TResult? Function()?  stopAdded,TResult? Function( int index)?  stopRemoved,TResult? Function( int oldIndex,  int newIndex)?  stopReordered,TResult? Function( int stopIndex,  OrderSavedLocationEntity location)?  savedLocationPinToggled,TResult? Function( String typeId)?  carTypeToggled,TResult? Function( int token,  List<OrderLocationEntity> stops,  BlocStatus<OrderTripRouteEntity> routeState,  BlocStatus<List<OrderTripCarOptionEntity>> pricingState)?  tripPrefetchCompleted,TResult? Function()?  confirmOrderPressed,TResult? Function()?  confirmCarSelectionPressed,TResult? Function()?  bookingDetailsBackPressed,TResult? Function( OrderScheduleMode mode)?  scheduleModeChanged,TResult? Function( DateTime? time)?  scheduleTimeChanged,TResult? Function( String note)?  passengerNoteChanged,TResult? Function( String flightNumber)?  flightNumberChanged,TResult? Function()?  confirmBookingDetailsPressed,TResult? Function()?  paymentSheetDismissed,TResult? Function()?  walletBalanceRequested,TResult? Function( OrderPaymentMethod method)?  paymentMethodSelected,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _OrderNowPressed() when orderNowPressed != null:
-return orderNowPressed();case _CollapseRequested() when collapseRequested != null:
+return orderNowPressed(_that.mode);case _CollapseRequested() when collapseRequested != null:
 return collapseRequested();case _MapPickCancelled() when mapPickCancelled != null:
 return mapPickCancelled();case _VehicleStepBackPressed() when vehicleStepBackPressed != null:
 return vehicleStepBackPressed();case _SetOnMapPressed() when setOnMapPressed != null:
@@ -375,33 +375,67 @@ String toString() {
 
 
 class _OrderNowPressed implements OrderEvent {
-  const _OrderNowPressed();
+  const _OrderNowPressed({this.mode = OrderScheduleMode.now});
   
 
+@JsonKey() final  OrderScheduleMode mode;
 
-
+/// Create a copy of OrderEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$OrderNowPressedCopyWith<_OrderNowPressed> get copyWith => __$OrderNowPressedCopyWithImpl<_OrderNowPressed>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderNowPressed);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderNowPressed&&(identical(other.mode, mode) || other.mode == mode));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,mode);
 
 @override
 String toString() {
-  return 'OrderEvent.orderNowPressed()';
+  return 'OrderEvent.orderNowPressed(mode: $mode)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$OrderNowPressedCopyWith<$Res> implements $OrderEventCopyWith<$Res> {
+  factory _$OrderNowPressedCopyWith(_OrderNowPressed value, $Res Function(_OrderNowPressed) _then) = __$OrderNowPressedCopyWithImpl;
+@useResult
+$Res call({
+ OrderScheduleMode mode
+});
 
 
+
+
+}
+/// @nodoc
+class __$OrderNowPressedCopyWithImpl<$Res>
+    implements _$OrderNowPressedCopyWith<$Res> {
+  __$OrderNowPressedCopyWithImpl(this._self, this._then);
+
+  final _OrderNowPressed _self;
+  final $Res Function(_OrderNowPressed) _then;
+
+/// Create a copy of OrderEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? mode = null,}) {
+  return _then(_OrderNowPressed(
+mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
+as OrderScheduleMode,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

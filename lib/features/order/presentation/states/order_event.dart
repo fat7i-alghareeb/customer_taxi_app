@@ -4,7 +4,9 @@ part of 'order_bloc.dart';
 class OrderEvent with _$OrderEvent {
   const factory OrderEvent.started() = _Started;
 
-  const factory OrderEvent.orderNowPressed() = _OrderNowPressed;
+  const factory OrderEvent.orderNowPressed({
+    @Default(OrderScheduleMode.now) OrderScheduleMode mode,
+  }) = _OrderNowPressed;
   const factory OrderEvent.collapseRequested() = _CollapseRequested;
   const factory OrderEvent.mapPickCancelled() = _MapPickCancelled;
   const factory OrderEvent.vehicleStepBackPressed() = _VehicleStepBackPressed;

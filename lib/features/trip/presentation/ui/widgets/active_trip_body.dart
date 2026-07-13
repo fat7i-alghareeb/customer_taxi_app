@@ -11,6 +11,7 @@ import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
 import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart';
+import 'package:customertaxi/features/trip/presentation/coordinators/trip_completion_coordinator.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/cancel_trip_sheet.dart';
@@ -22,6 +23,10 @@ import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart';
 import 'package:vibration/vibration.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_floating_action.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/glassmorphic_trip_status_sheet.dart';
+// Status banner/card disabled — import kept commented for easy restore.
+// import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_status_banner.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_completed_overlay.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_no_driver_overlay.dart';
 
 class ActiveTripBody extends StatefulWidget {
   const ActiveTripBody({super.key});
@@ -49,7 +54,24 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
   bool _arrivalAlertPlayed = false;
   bool _cancelledSheetShown = false;
+  bool _noDriverCancelInProgress = false;
   TripStatus? _lastSeenTripStatus;
+
+  // Tracks the bottom status sheet's real rendered height so the full-bleed
+  // status image can end flush at its top edge no matter how tall the sheet
+  // grows for a given trip state (e.g. the arrived sheet with the
+  // waiting-fee banner). Re-measured after every frame.
+  final GlobalKey _sheetKey = GlobalKey();
+  double _sheetHeight = 200.h;
+
+  void _measureSheetHeight() {
+    final renderHeight = _sheetKey.currentContext?.size?.height;
+    if (renderHeight != null &&
+        (renderHeight - _sheetHeight).abs() > 0.5 &&
+        mounted) {
+      setState(() => _sheetHeight = renderHeight);
+    }
+  }
 
   // Road-following driver→pickup route, decoded from the backend location payload
   // and drawn dashed by the map canvas. Cached by encoded string to skip re-decoding.
@@ -273,8 +295,14 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     }());
   }
 
-  Future<void> _handleTripCancelled(BuildContext context) async {
-    await TripCancelledSuccessSheet.show(context);
+  Future<void> _handleTripCancelled(
+    BuildContext context,
+    TripEntity trip,
+  ) async {
+    await TripCancelledSuccessSheet.show(
+      context,
+      cancellation: trip.cancellation,
+    );
     if (context.mounted) {
       context.read<OrderBloc>().add(const OrderEvent.collapseRequested());
       getIt<ActiveTripCubit>().clear();
@@ -302,9 +330,9 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
     if (encoded == _lastPickupPolyline) return;
 
-    final decoded = PolylinePoints.decodePolyline(encoded)
-        .map((p) => LatLng(p.latitude, p.longitude))
-        .toList();
+    final decoded = PolylinePoints.decodePolyline(
+      encoded,
+    ).map((p) => LatLng(p.latitude, p.longitude)).toList();
     setState(() {
       _lastPickupPolyline = encoded;
       _pickupRoute = decoded;
@@ -318,7 +346,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         if (trip.status == TripStatus.cancelled) {
           if (!_cancelledSheetShown) {
             _cancelledSheetShown = true;
-            unawaited(_handleTripCancelled(context));
+            unawaited(_handleTripCancelled(context, trip));
           }
           return;
         }
@@ -495,6 +523,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureSheetHeight());
     return MultiBlocListener(
       listeners: [
         BlocListener<TripBloc, TripState>(
@@ -575,7 +604,8 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
               // The car asset is a side-view image kept upright; pick the
               // left-facing (mirrored) variant when the driver heads west so it
               // still faces its direction of travel.
-              final BitmapDescriptor? carMarkerIcon = _headingWest(renderBearing)
+              final BitmapDescriptor? carMarkerIcon =
+                  _headingWest(renderBearing)
                   ? (_carMarkerIconFlipped ?? _carMarkerIcon)
                   : _carMarkerIcon;
 
@@ -585,8 +615,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
               final bool headingToPickup =
                   trip.status == TripStatus.enRoute ||
                   trip.status == TripStatus.arrived;
-              final bool tripInProgress =
-                  trip.status == TripStatus.inProgress;
+              final bool tripInProgress = trip.status == TripStatus.inProgress;
               final LatLng? liveTargetLocation =
                   headingToPickup && trip.stops.isNotEmpty
                   ? LatLng(
@@ -603,6 +632,27 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                   (headingToPickup || tripInProgress)
                   ? _pickupRoute
                   : const <LatLng>[];
+
+              // Status image + text card disabled (see commented blocks below).
+              // final bannerContent = TripStatusBannerContent.forStatus(
+              //   trip.status,
+              // );
+
+              // Clamped anchor for the TEXT CARD only (the image is pinned to
+              // the raw `_sheetHeight`). The card normally sits flush above
+              // the sheet, but some per-status sheets (e.g. the pending/
+              // accepted confirmation sheet, with its full trip info +
+              // buttons) are tall enough to push it off the top of the
+              // screen — cap it so it never goes higher than a safe point
+              // near the top instead of vanishing.
+              // final maxBannerBottom =
+              //     MediaQuery.sizeOf(context).height -
+              //     MediaQuery.paddingOf(context).top -
+              //     100.h -
+              //     AppSpacing.lg.h;
+              // final bannerBottom = _sheetHeight > maxBannerBottom
+              //     ? maxBannerBottom
+              //     : _sheetHeight;
 
               return BlocProvider<ChatBloc>(
                 create: (_) =>
@@ -626,13 +676,51 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                       legPolylines: _buildRoutePolylines(trip),
                       tripMarkers: _buildTripMarkers(trip),
                       onMapCreated: (ctrl) => _onMapCreated(ctrl, trip),
-                      driverLocation: renderPos?.toDriverLocation(renderBearing),
+                      driverLocation: renderPos?.toDriverLocation(
+                        renderBearing,
+                      ),
                       driverMarkerIcon: carMarkerIcon,
                       // Live car→target dashed line: pickup while heading there
                       // (en-route / arrived), destination once on board (in-progress).
                       pickupLocation: liveTargetLocation,
                       pickupRoute: liveTargetRoute,
                     ),
+
+                    // Full-bleed status image — bottom edge always flush at
+                    // the sheet top (unclamped `_sheetHeight`, so it never
+                    // slides under a tall sheet); taller sheets crop the
+                    // artwork off the screen TOP, never at the sheet. Shown
+                    // for the banner statuses; `enRoute` keeps the plain live
+                    // driver-tracking map (no banner).
+                    // Status image intentionally disabled — kept commented so
+                    // it can be restored. The plain live map shows instead.
+                    // if (bannerContent != null)
+                    //   Positioned(
+                    //     left: 0,
+                    //     right: 0,
+                    //     top: 0,
+                    //     bottom: _sheetHeight,
+                    //     child: TripStatusBanner(content: bannerContent),
+                    //   ),
+
+                    // Text card: anchored by its bottom edge just above the
+                    // sheet and left unbounded in height (only `left`+`bottom`
+                    // set) so it grows upward for statuses with more body
+                    // lines (e.g. the 3-line "searching driver" copy) instead
+                    // of overflowing/clipping like it would inside the fixed
+                    // 100.h image band.
+                    // Status text card intentionally disabled — kept commented
+                    // so it can be restored.
+                    // if (bannerContent != null)
+                    //   Positioned(
+                    //     left: AppSpacing.lg.w,
+                    //     bottom: bannerBottom + AppSpacing.md.h,
+                    //     child: TripStatusOverlayCard(
+                    //       icon: bannerContent.icon,
+                    //       title: bannerContent.title,
+                    //       bodyLines: bannerContent.bodyLines,
+                    //     ),
+                    //   ),
 
                     // Top-left live arrival badge — shown whenever a live ETA is
                     // available: arrival at pickup (en-route / arrived) or at the
@@ -642,7 +730,9 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                             trip.status == TripStatus.arrived ||
                             trip.status == TripStatus.inProgress))
                       Positioned(
-                        top: MediaQuery.of(context).padding.top + AppSpacing.sm.h,
+                        top:
+                            MediaQuery.of(context).padding.top +
+                            AppSpacing.sm.h,
                         left: AppSpacing.lg.w,
                         child: LiveArrivalBadge(
                           etaSeconds:
@@ -660,6 +750,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                       right: 0,
                       bottom: 0,
                       child: Column(
+                        key: _sheetKey,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           if (canEditPassengerNote)
@@ -705,6 +796,64 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                         ],
                       ),
                     ),
+
+                    // Full-screen "thank you" overlay: derived (not latched)
+                    // so it also shows when the trip is already completed at
+                    // mount (cold reopen). Only the Close button dismisses it;
+                    // the coordinator remembers the dismissal across remounts.
+                    if (trip.status == TripStatus.completed &&
+                        trip.passengerRating == null &&
+                        !getIt<TripCompletionCoordinator>()
+                            .isCompletedOverlayClosed(trip.id))
+                      TripCompletedOverlay(
+                        onClose: () {
+                          setState(() {
+                            getIt<TripCompletionCoordinator>()
+                                .markCompletedOverlayClosed(trip.id);
+                          });
+                          // Deferred to Close: run the original completion flow
+                          // (navigate home + rating sheet) only now.
+                          unawaited(
+                            getIt<TripCompletionCoordinator>()
+                                .promptRatingForCompletedTrip(trip.id),
+                          );
+                        },
+                      ),
+
+                    // Blocking "no driver found" overlay. Driven by the backend
+                    // flag (survives cold reopen). The second term keeps it mounted
+                    // through the status→cancelled flip ONLY on a successful cancel
+                    // so the apology phase can render; a failed cancel / admin-accept
+                    // race no longer strands it (it falls back to the normal UI).
+                    if ((trip.status == TripStatus.awaitingAdminAcceptance &&
+                            trip.noDriverDecisionRequired) ||
+                        (_noDriverCancelInProgress &&
+                            state.cancelStatus.isSuccess))
+                      TripNoDriverOverlay(
+                        postponeStatus: state.postponeStatus,
+                        cancelStatus: state.cancelStatus,
+                        onPostpone: () => context.read<TripBloc>().add(
+                          const TripEvent.noDriverPostponeRequested(),
+                        ),
+                        onCancel: () {
+                          setState(() {
+                            _noDriverCancelInProgress = true;
+                            _cancelledSheetShown = true;
+                          });
+                          context.read<TripBloc>().add(
+                            const TripEvent.noDriverCancelRequested(),
+                          );
+                        },
+                        onDone: () {
+                          getIt<ActiveTripCubit>().clear();
+                          context.read<OrderBloc>().add(
+                            const OrderEvent.collapseRequested(),
+                          );
+                          // Route home so Done exits in the standalone
+                          // /active_trip route too (mirrors the completed sheet).
+                          if (context.mounted) context.goNamed('RootScreen');
+                        },
+                      ),
                   ],
                 ),
               );

@@ -4,6 +4,8 @@ import 'package:injectable/injectable.dart';
 import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/utils/result.dart';
+import '../entities/trip_edit_apply_result_entity.dart';
+import '../entities/trip_edit_preview_entity.dart';
 import '../entities/trip_entity.dart';
 import '../entities/trip_invoice_entity.dart';
 import '../entities/trip_receipt_entity.dart';
@@ -30,6 +32,16 @@ class TripFacade {
   Future<Result<TripEntity>> cancelTrip(String id, {String? note}) {
     printC('[TripFacade] cancelTrip id=$id');
     return _repository.cancelTrip(id, note: note);
+  }
+
+  Future<Result<TripEntity>> postponeNoDriverSearch(String id) {
+    printC('[TripFacade] postponeNoDriverSearch id=$id');
+    return _repository.postponeNoDriverSearch(id);
+  }
+
+  Future<Result<TripEntity>> noDriverCancelTrip(String id, {String? note}) {
+    printC('[TripFacade] noDriverCancelTrip id=$id');
+    return _repository.noDriverCancelTrip(id, note: note);
   }
 
   Future<Result<TripEntity>> updatePassengerNote({
@@ -146,5 +158,33 @@ class TripFacade {
   }) {
     printC('[TripFacade] updateTripBagCount id=$tripId count=$bagCount');
     return _repository.updateTripBagCount(tripId: tripId, bagCount: bagCount);
+  }
+
+  Future<Result<TripEditPreviewEntity>> previewTripEdit({
+    required String tripId,
+    List<TripStopEntity>? stops,
+    int? passengerCount,
+  }) {
+    printC('[TripFacade] previewTripEdit id=$tripId');
+    return _repository.previewTripEdit(
+      tripId: tripId,
+      stops: stops,
+      passengerCount: passengerCount,
+    );
+  }
+
+  Future<Result<TripEditApplyResultEntity>> applyTripEdit({
+    required String tripId,
+    List<TripStopEntity>? stops,
+    int? passengerCount,
+    required double expectedDelta,
+  }) {
+    printC('[TripFacade] applyTripEdit id=$tripId');
+    return _repository.applyTripEdit(
+      tripId: tripId,
+      stops: stops,
+      passengerCount: passengerCount,
+      expectedDelta: expectedDelta,
+    );
   }
 }

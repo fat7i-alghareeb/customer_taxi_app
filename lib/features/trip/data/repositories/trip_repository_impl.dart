@@ -5,6 +5,8 @@ import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/error/global_error_handler.dart';
 import '../../../../core/utils/result.dart';
+import '../../domain/entities/trip_edit_apply_result_entity.dart';
+import '../../domain/entities/trip_edit_preview_entity.dart';
 import '../../domain/entities/trip_entity.dart';
 import '../../domain/entities/trip_invoice_entity.dart';
 import '../../domain/entities/trip_receipt_entity.dart';
@@ -49,6 +51,26 @@ class TripRepositoryImpl implements TripRepository {
       printM('[TripRepository] cancelTrip id=$id');
       final model = await _remote.cancelTrip(id, note: note);
       printG('[TripRepository] cancelTrip success');
+      return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<TripEntity>> postponeNoDriverSearch(String id) {
+    return runAsResult(() async {
+      printM('[TripRepository] postponeNoDriverSearch id=$id');
+      final model = await _remote.postponeNoDriverSearch(id);
+      printG('[TripRepository] postponeNoDriverSearch success');
+      return model.toEntity;
+    });
+  }
+
+  @override
+  Future<Result<TripEntity>> noDriverCancelTrip(String id, {String? note}) {
+    return runAsResult(() async {
+      printM('[TripRepository] noDriverCancelTrip id=$id');
+      final model = await _remote.noDriverCancelTrip(id, note: note);
+      printG('[TripRepository] noDriverCancelTrip success');
       return model.toEntity;
     });
   }
@@ -252,4 +274,52 @@ class TripRepositoryImpl implements TripRepository {
       printG('[TripRepository] updateTripBagCount success');
     });
   }
+
+  @override
+  Future<Result<TripEditPreviewEntity>> previewTripEdit({
+    required String tripId,
+    List<TripStopEntity>? stops,
+    int? passengerCount,
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] previewTripEdit id=$tripId');
+      final preview = await _remote.previewTripEdit(
+        tripId: tripId,
+        stops: stops == null ? null : _stopsToJson(stops),
+        passengerCount: passengerCount,
+      );
+      printG('[TripRepository] previewTripEdit delta=${preview.delta}');
+      return preview;
+    });
+  }
+
+  @override
+  Future<Result<TripEditApplyResultEntity>> applyTripEdit({
+    required String tripId,
+    List<TripStopEntity>? stops,
+    int? passengerCount,
+    required double expectedDelta,
+  }) {
+    return runAsResult(() async {
+      printM('[TripRepository] applyTripEdit id=$tripId');
+      final result = await _remote.applyTripEdit(
+        tripId: tripId,
+        stops: stops == null ? null : _stopsToJson(stops),
+        passengerCount: passengerCount,
+        expectedDelta: expectedDelta,
+      );
+      printG('[TripRepository] applyTripEdit status=${result.status}');
+      return result;
+    });
+  }
+
+  List<Map<String, dynamic>> _stopsToJson(List<TripStopEntity> stops) => stops
+      .map(
+        (s) => {
+          'latitude': s.latitude,
+          'longitude': s.longitude,
+          if (s.label != null) 'label': s.label,
+        },
+      )
+      .toList();
 }

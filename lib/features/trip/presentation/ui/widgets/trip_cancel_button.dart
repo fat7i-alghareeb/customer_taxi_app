@@ -25,10 +25,7 @@ class TripCancelButton extends StatelessWidget {
           padding: REdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppRadii.lg.r),
-            border: Border.all(
-              color: colors.onSurface.withValues(alpha: 0.08),
-              width: 1.r,
-            ),
+            border: Border.all(color: colors.error, width: 1.r),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -39,7 +36,7 @@ class TripCancelButton extends StatelessWidget {
                       height: 18.r,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: colors.onSurface.withValues(alpha: 0.6),
+                        color: colors.error,
                       ),
                     ),
                   ]
@@ -47,13 +44,13 @@ class TripCancelButton extends StatelessWidget {
                     FaIcon(
                       FontAwesomeIcons.xmark,
                       size: 16.r,
-                      color: colors.onSurface.withValues(alpha: 0.7),
+                      color: colors.error,
                     ),
                     AppSpacing.sm.horizontalSpace,
                     Text(
                       AppStrings.activeTripCancelRide,
                       style: AppTextStyles.s14w600.copyWith(
-                        color: colors.onSurface.withValues(alpha: 0.7),
+                        color: colors.error,
                       ),
                     ),
                   ],

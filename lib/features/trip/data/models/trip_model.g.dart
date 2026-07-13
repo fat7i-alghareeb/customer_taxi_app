@@ -72,6 +72,7 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
   attentionState: json['attentionState'] as String? ?? 'Normal',
   passengerCount: (json['passengerCount'] as num?)?.toInt() ?? 1,
   bagCount: (json['bagCount'] as num?)?.toInt() ?? 0,
+  noDriverDecisionRequired: json['noDriverDecisionRequired'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
@@ -108,6 +109,7 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'attentionState': instance.attentionState,
       'passengerCount': instance.passengerCount,
       'bagCount': instance.bagCount,
+      'noDriverDecisionRequired': instance.noDriverDecisionRequired,
     };
 
 _TripRouteSegmentModel _$TripRouteSegmentModelFromJson(

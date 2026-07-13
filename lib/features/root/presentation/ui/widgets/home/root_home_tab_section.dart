@@ -83,17 +83,13 @@ class _HomeCollapsedOverlay extends StatelessWidget {
   final double discountPercent;
 
   void _openNow(BuildContext context) {
-    context.read<OrderBloc>().add(
-      const OrderEvent.scheduleModeChanged(OrderScheduleMode.now),
-    );
     context.read<OrderBloc>().add(const OrderEvent.orderNowPressed());
   }
 
   void _openLater(BuildContext context) {
     context.read<OrderBloc>().add(
-      const OrderEvent.scheduleModeChanged(OrderScheduleMode.later),
+      const OrderEvent.orderNowPressed(mode: OrderScheduleMode.later),
     );
-    context.read<OrderBloc>().add(const OrderEvent.orderNowPressed());
   }
 
   void _openDrawer(BuildContext context) {

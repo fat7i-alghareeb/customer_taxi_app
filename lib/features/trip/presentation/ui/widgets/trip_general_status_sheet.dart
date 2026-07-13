@@ -38,7 +38,7 @@ class TripGeneralStatusSheet extends StatelessWidget {
             ),
           ],
         ),
-        AppSpacing.xl.verticalSpace,
+        AppSpacing.md.verticalSpace,
 
         if (trip.status.canCancel)
           AppButton.outline(

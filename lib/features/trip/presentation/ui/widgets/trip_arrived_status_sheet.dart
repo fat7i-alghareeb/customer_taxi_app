@@ -30,7 +30,7 @@ class TripArrivedStatusSheet extends StatelessWidget {
       children: [
         // Arrived banner: green check + title + "Aangekomen" badge.
         Container(
-          padding: REdgeInsets.all(AppSpacing.md),
+          padding: REdgeInsets.all(AppSpacing.sm),
           decoration: BoxDecoration(
             color: colors.onSurface.withValues(alpha: 0.04),
             borderRadius: BorderRadius.circular(AppRadii.lg.r),
@@ -104,13 +104,16 @@ class TripArrivedStatusSheet extends StatelessWidget {
             ],
           ),
         ),
-        AppSpacing.md.verticalSpace,
+        AppSpacing.sm.verticalSpace,
 
         // Live waiting-time counter.
         TripWaitingCard(trip: trip),
+        AppSpacing.sm.verticalSpace,
 
+        // Address / passengers can no longer be changed once the driver has
+        // arrived, so no edit actions are shown here.
         const TripChatButton(),
-        AppSpacing.md.verticalSpace,
+        AppSpacing.sm.verticalSpace,
 
         TripCancelButton(
           isLoading: cancelStatus.isLoading,

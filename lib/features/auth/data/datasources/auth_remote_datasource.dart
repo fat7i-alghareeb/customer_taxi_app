@@ -65,6 +65,10 @@ class AuthRemoteDataSource {
         return AuthLoginResponseModel.fromJson(res.data as Map<String, dynamic>);
       });
 
+  Future<void> continueExistingAccount() => rethrowAsAppException(() async {
+        await _dio.post(ApiEndpoints.accountContinueExisting);
+      });
+
   // ---- Misc ----
 
   Future<void> updateFcmToken(String token) => rethrowAsAppException(() async {

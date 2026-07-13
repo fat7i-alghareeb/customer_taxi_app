@@ -10,6 +10,7 @@ import 'package:customertaxi/features/auth/domain/repositories/auth_repository.d
 import '../../../utils/constants/auth_constants.dart';
 import '../../../utils/helpers/colored_print.dart';
 import '../../domain/user_entity.dart';
+import '../objectbox/objectbox_service.dart';
 import '../storage/storage_service.dart';
 import 'auth_state_notifier.dart';
 import 'auth_token_model.dart';
@@ -26,11 +27,13 @@ class AuthManager {
     required this.storage,
     required this.state,
     required this.tokenStorage,
+    required this.objectBoxService,
   });
 
   final StorageService storage;
   final AuthStateNotifier state;
   final JwtTokenStorage tokenStorage;
+  final ObjectBoxService objectBoxService;
 
   StreamSubscription<AuthStatus>? _tokenStatusSub;
 
@@ -169,6 +172,7 @@ class AuthManager {
     );
 
     await tokenStorage.delete(AuthReasons.logout);
+    await objectBoxService.clearAll();
   }
 
   /// Updates the persisted user data by merging with existing data and notifies listeners.

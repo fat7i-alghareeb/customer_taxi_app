@@ -22,6 +22,7 @@ class ApiEndpoints {
   static const String phoneVerifyOtpVerify =
       '/api/v1/auth/phone/verify/otp/verify';
   static const String accountFreshStart = '/api/v1/auth/account/fresh-start';
+  static const String accountContinueExisting = '/api/v1/auth/account/continue';
 
   // Users
   static const String currentUser = '/api/v1/users/me';
@@ -49,6 +50,10 @@ class ApiEndpoints {
   static String updatePassengerNote(String id) =>
       '/api/v1/trips/$id/passenger-note';
   static String cancelTrip(String id) => '/api/v1/trips/$id/cancellations';
+  static String postponeNoDriver(String id) =>
+      '/api/v1/trips/$id/no-driver/postpone';
+  static String noDriverCancelTrip(String id) =>
+      '/api/v1/trips/$id/no-driver/cancel';
   static String submitCompensationClaim(String id) =>
       '/api/v1/trips/$id/compensation-claims';
   static String submitRefundIssue(String id) =>
@@ -64,6 +69,8 @@ class ApiEndpoints {
   static String updateTripPassengerCount(String id) =>
       '/api/v1/trips/$id/passenger-count';
   static String updateTripBagCount(String id) => '/api/v1/trips/$id/bag-count';
+  static String previewTripEdit(String id) => '/api/v1/trips/$id/edit/preview';
+  static String applyTripEdit(String id) => '/api/v1/trips/$id/edit/apply';
   static String settleWaitingFee(String id) =>
       '/api/v1/trips/$id/waiting-fee/settlements';
   static String tripMessages(String id) => '/api/v1/trips/$id/messages';

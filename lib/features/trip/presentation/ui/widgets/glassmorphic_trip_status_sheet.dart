@@ -3,7 +3,6 @@ import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
-import 'package:customertaxi/features/trip/presentation/coordinators/trip_completion_coordinator.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_overlay.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_progress_header.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_arrived_status_sheet.dart';
@@ -40,8 +39,6 @@ class GlassmorphicTripStatusSheet extends StatefulWidget {
 
 class _GlassmorphicTripStatusSheetState
     extends State<GlassmorphicTripStatusSheet> {
-  // Ensures the post-trip rating sheet is only auto-shown once.
-  bool _ratingPrompted = false;
   // Drives the 1-second rebuilds for the live waiting countdown once the arrived
   // sheet is showing (phase B).
   Timer? _waitingTicker;
@@ -69,7 +66,6 @@ class _GlassmorphicTripStatusSheetState
     _syncArrivedHandoff();
     _syncWaitingTicker();
     _syncArrivalBaseline();
-    _maybePromptRating();
   }
 
   @override
@@ -78,7 +74,6 @@ class _GlassmorphicTripStatusSheetState
     _syncArrivedHandoff();
     _syncWaitingTicker();
     _syncArrivalBaseline();
-    _maybePromptRating();
   }
 
   @override
@@ -109,7 +104,7 @@ class _GlassmorphicTripStatusSheetState
       _arrivedHandoffDone = true;
       return;
     }
-    _arrivedHandoffTimer = Timer(const Duration(seconds: 3), () {
+    _arrivedHandoffTimer = Timer(const Duration(milliseconds: 1500), () {
       if (!mounted) return;
       setState(() => _arrivedHandoffDone = true);
       // didUpdateWidget won't fire for this internal setState, so kick the
@@ -139,9 +134,8 @@ class _GlassmorphicTripStatusSheetState
   /// the baseline resets when leaving those states or when the target switches
   /// (en-route → in-progress) so progress restarts from the new, farther target.
   void _syncArrivalBaseline() {
-    final tracksTarget =
-        trip.status == TripStatus.enRoute;
-        // || trip.status == TripStatus.inProgress;
+    final tracksTarget = trip.status == TripStatus.enRoute;
+    // || trip.status == TripStatus.inProgress;
     if (!tracksTarget) {
       _arrivalBaselineMeters = null;
       _baselineStatus = null;
@@ -157,19 +151,6 @@ class _GlassmorphicTripStatusSheetState
     if (baseline == null || remaining > baseline) {
       _arrivalBaselineMeters = remaining;
     }
-  }
-
-  void _maybePromptRating() {
-    if (_ratingPrompted || trip.status != TripStatus.completed) return;
-    _ratingPrompted = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      unawaited(
-        getIt<TripCompletionCoordinator>().promptRatingForCompletedTrip(
-          trip.id,
-        ),
-      );
-    });
   }
 
   /// The real-time arrival header — "Arrival in / N min / dashed line with a
@@ -225,10 +206,10 @@ class _GlassmorphicTripStatusSheetState
             ),
           ),
           padding: REdgeInsets.fromLTRB(
-            AppSpacing.xl,
-            AppSpacing.xl,
-            AppSpacing.xl,
-            AppSpacing.xl + bottomPadding,
+            AppSpacing.lg,
+            AppSpacing.sm,
+            AppSpacing.lg,
+            AppSpacing.sm + bottomPadding,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -245,7 +226,7 @@ class _GlassmorphicTripStatusSheetState
                   ),
                 ),
               ),
-              AppSpacing.md.verticalSpace,
+              AppSpacing.xs.verticalSpace,
 
               // Status-specific sheet content.
               if (trip.status == TripStatus.awaitingAdminAcceptance ||
@@ -279,11 +260,7 @@ class _GlassmorphicTripStatusSheetState
                     onCancelPressed: onCancelPressed,
                   ),
               ] else if (trip.status == TripStatus.inProgress) ...[
-                TripInProgressStatusSheet(
-                  trip: trip,
-                  arrivalProgressHeader: const SizedBox.shrink(),
-                  // arrivalProgressHeader: _buildArrivalProgressHeader(),
-                ),
+                TripInProgressStatusSheet(trip: trip),
               ] else if (trip.status == TripStatus.completed) ...[
                 TripCompletedStatusSheet(trip: trip),
               ] else ...[

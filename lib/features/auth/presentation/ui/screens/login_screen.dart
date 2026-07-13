@@ -72,7 +72,6 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
             showDialog(
               context: context,
               barrierDismissible: false,
-              useRootNavigator: true,
               builder: (_) => const _ExistingAccountDialog(),
             );
           }
@@ -262,7 +261,7 @@ class _ExistingAccountDialogState extends State<_ExistingAccountDialog> {
       content: Text(AuthStrings.authExistingAccountBody),
       actions: [
         TextButton(
-          onPressed: _loading ? null : () => Navigator.pop(context),
+          onPressed: _loading ? null : _onContinue,
           child: Text(AuthStrings.authContinue),
         ),
         FilledButton(
@@ -282,6 +281,13 @@ class _ExistingAccountDialogState extends State<_ExistingAccountDialog> {
     setState(() => _loading = true);
     await getIt<AuthFacade>().freshStart();
     if (mounted) Navigator.pop(context);
+  }
+
+  void _onContinue() {
+    if (_loading) return;
+    _loading = true; // guard re-entry; dialog closes this frame, so no rebuild needed
+    unawaited(getIt<AuthFacade>().continueExistingAccount());
+    Navigator.pop(context);
   }
 }
 

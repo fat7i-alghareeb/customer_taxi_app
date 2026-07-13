@@ -1,6 +1,7 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import '../../../domain/entities/trip_entity.dart';
 import '../../states/trip_bloc.dart';
+import 'trip_history_skeleton.dart';
 import 'trip_summary_card.dart';
 
 class TripHistoryBody extends StatefulWidget {
@@ -83,6 +84,7 @@ class _TripHistoryBodyState extends State<TripHistoryBody> {
             builder: (context, state) {
               return StatusBuilder<List<TripSummaryEntity>>(
                 state: state.historyStatus,
+                loading: () => const TripHistorySkeletonList(),
                 success: (data) => _TripHistoryList(
                   controller: _scrollController,
                   trips: data,

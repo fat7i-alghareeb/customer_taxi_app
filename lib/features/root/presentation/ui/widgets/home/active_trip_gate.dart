@@ -3,6 +3,7 @@ import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/active_trip_body.dart';
 
+import 'active_trip_loading_section.dart';
 import 'root_home_tab_section.dart';
 
 /// Home-tab content switch: shows the live active-trip view (which joins the
@@ -17,8 +18,12 @@ class ActiveTripGate extends StatelessWidget {
       value: getIt<ActiveTripCubit>(),
       child: BlocBuilder<ActiveTripCubit, ActiveTripState>(
         builder: (context, state) {
-          if (!state.loaded) {
-            return const Center(child: CircularProgressIndicator());
+          // The second condition covers the window right after a booking
+          // succeeds: `markBookingPending()` flips `loading` before the
+          // async `refresh()` resolves, so the bookable Home pill stays
+          // hidden instead of flashing while the new trip is fetched.
+          if (!state.loaded || (state.loading && !state.hasActiveTrip)) {
+            return const ActiveTripLoadingSection();
           }
 
           if (state.hasActiveTrip) {

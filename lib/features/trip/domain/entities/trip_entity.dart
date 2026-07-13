@@ -38,6 +38,7 @@ abstract class TripEntity with _$TripEntity {
     @Default('Normal') String attentionState,
     @Default(1) int passengerCount,
     @Default(0) int bagCount,
+    @Default(false) bool noDriverDecisionRequired,
   }) = _TripEntity;
 }
 

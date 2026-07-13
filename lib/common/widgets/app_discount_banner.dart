@@ -14,6 +14,7 @@ class AppDiscountBanner extends StatelessWidget {
     if (discountPercent <= 0) return const SizedBox.shrink();
 
     return Container(
+      margin: REdgeInsets.only(top: AppSpacing.sm),
       padding: REdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.sm,

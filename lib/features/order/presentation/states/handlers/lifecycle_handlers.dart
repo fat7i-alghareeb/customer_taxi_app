@@ -135,6 +135,10 @@ extension _LifecycleHandlers on OrderBloc {
     emit(
       reset.copyWith(
         sheet: reset.sheet.copyWith(mode: OrderSheetMode.expanded),
+        booking: reset.booking.copyWith(
+          scheduleMode: event.mode,
+          scheduledAt: null,
+        ),
       ),
     );
 

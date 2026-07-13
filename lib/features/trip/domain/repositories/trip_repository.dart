@@ -4,6 +4,8 @@ import '../../../../core/utils/result.dart';
 import '../entities/trip_entity.dart';
 import '../entities/trip_invoice_entity.dart';
 import '../entities/trip_receipt_entity.dart';
+import '../entities/trip_edit_apply_result_entity.dart';
+import '../entities/trip_edit_preview_entity.dart';
 import '../entities/waiting_fee_settlement_entity.dart';
 import '../../data/datasources/trip_remote_datasource.dart';
 
@@ -11,6 +13,8 @@ abstract class TripRepository {
   Future<Result<TripEntity>> getTripById(String id);
   Future<Result<TripEntity?>> getActiveTrip();
   Future<Result<TripEntity>> cancelTrip(String id, {String? note});
+  Future<Result<TripEntity>> postponeNoDriverSearch(String id);
+  Future<Result<TripEntity>> noDriverCancelTrip(String id, {String? note});
   Future<Result<TripEntity>> updatePassengerNote({
     required String tripId,
     required String? passengerNote,
@@ -55,5 +59,16 @@ abstract class TripRepository {
   Future<Result<void>> updateTripBagCount({
     required String tripId,
     required int bagCount,
+  });
+  Future<Result<TripEditPreviewEntity>> previewTripEdit({
+    required String tripId,
+    List<TripStopEntity>? stops,
+    int? passengerCount,
+  });
+  Future<Result<TripEditApplyResultEntity>> applyTripEdit({
+    required String tripId,
+    List<TripStopEntity>? stops,
+    int? passengerCount,
+    required double expectedDelta,
   });
 }

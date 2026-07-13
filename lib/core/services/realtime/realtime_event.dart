@@ -119,6 +119,13 @@ sealed class RealtimeEvent with _$RealtimeEvent {
   const factory RealtimeEvent.chatClosed({
     required String tripId,
   }) = RealtimeChatClosed;
+
+  /// No driver was found for a pending trip; the app shows the blocking
+  /// "postpone or cancel" overlay.
+  const factory RealtimeEvent.noDriverFound({
+    required String tripId,
+    required String passengerId,
+  }) = RealtimeNoDriverFound;
 }
 
 /// Stable list of every SignalR method name the hub will push to clients.
@@ -140,6 +147,7 @@ abstract final class RealtimeMethodNames {
   static const tripStopCompleted = 'TripStopCompleted';
   static const tripMessageReceived = 'TripMessageReceived';
   static const chatClosed = 'ChatClosed';
+  static const noDriverFound = 'NoDriverFound';
 
   static const all = <String>[
     tripRequested,
@@ -158,6 +166,7 @@ abstract final class RealtimeMethodNames {
     tripStopCompleted,
     tripMessageReceived,
     chatClosed,
+    noDriverFound,
   ];
 }
 
@@ -180,5 +189,6 @@ extension RealtimeEventTripId on RealtimeEvent {
     RealtimeTripStopCompleted(:final tripId) => tripId,
     RealtimeTripMessageReceived(:final tripId) => tripId,
     RealtimeChatClosed(:final tripId) => tripId,
+    RealtimeNoDriverFound(:final tripId) => tripId,
   };
 }

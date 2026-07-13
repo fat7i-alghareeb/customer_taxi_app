@@ -6,7 +6,10 @@ import 'package:customertaxi/utils/helpers/colored_print.dart';
 
 import '../../../../core/error/global_error_handler.dart';
 import '../../../../core/network/api_endpoints.dart';
+import '../../domain/entities/trip_edit_apply_result_entity.dart';
+import '../../domain/entities/trip_edit_preview_entity.dart';
 import '../../domain/entities/waiting_fee_settlement_entity.dart';
+import '../mappers/trip_model_mapper.dart';
 import '../models/trip_invoice_model.dart';
 import '../models/trip_model.dart';
 import '../models/trip_receipt_model.dart';
@@ -75,6 +78,29 @@ class TripRemoteDataSource {
           'note': (note == null || note.trim().isEmpty)
               ? 'Passenger requested cancellation from customer app'
               : note.trim(),
+        },
+      );
+      return TripModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<TripModel> postponeNoDriverSearch(String tripId) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] postponeNoDriverSearch id=$tripId');
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.postponeNoDriver(tripId),
+      );
+      return TripModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<TripModel> noDriverCancelTrip(String tripId, {String? note}) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] noDriverCancelTrip id=$tripId');
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.noDriverCancelTrip(tripId),
+        data: {
+          if (note != null && note.trim().isNotEmpty) 'note': note.trim(),
         },
       );
       return TripModel.fromJson(res.data as Map<String, dynamic>);
@@ -279,6 +305,75 @@ class TripRemoteDataSource {
         data: {'passengerCount': passengerCount},
       );
       return TripModel.fromJson(res.data as Map<String, dynamic>);
+    });
+  }
+
+  Future<TripEditPreviewEntity> previewTripEdit({
+    required String tripId,
+    List<Map<String, dynamic>>? stops,
+    int? passengerCount,
+  }) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] previewTripEdit id=$tripId');
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.previewTripEdit(tripId),
+        data: {
+          'stops': ?stops,
+          'passengerCount': ?passengerCount,
+        },
+      );
+      final data = res.data as Map<String, dynamic>;
+      return TripEditPreviewEntity(
+        oldFinalFare: (data['oldFinalFare'] as num?)?.toDouble() ?? 0,
+        newFinalFare: (data['newFinalFare'] as num?)?.toDouble() ?? 0,
+        delta: (data['delta'] as num?)?.toDouble() ?? 0,
+        currency: data['currency'] as String? ?? 'EUR',
+        effectivePassengerCount: (data['effectivePassengerCount'] as num?)
+                ?.toInt() ??
+            0,
+        direction: data['direction'] as String? ?? 'none',
+        newVehicleTypeId: data['newVehicleTypeId'] as String?,
+        newVehicleTypeName: data['newVehicleTypeName'] as String?,
+      );
+    });
+  }
+
+  Future<TripEditApplyResultEntity> applyTripEdit({
+    required String tripId,
+    List<Map<String, dynamic>>? stops,
+    int? passengerCount,
+    required double expectedDelta,
+  }) {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] applyTripEdit id=$tripId');
+      final res = await _dio.post<dynamic>(
+        ApiEndpoints.applyTripEdit(tripId),
+        data: {
+          'stops': ?stops,
+          'passengerCount': ?passengerCount,
+          'expectedDelta': expectedDelta,
+        },
+      );
+      final data = res.data as Map<String, dynamic>;
+      final tripJson = data['trip'] as Map<String, dynamic>?;
+      final sheet = data['paymentSheet'] as Map<String, dynamic>?;
+      return TripEditApplyResultEntity(
+        status: data['status'] as String? ?? 'applied',
+        delta: (data['delta'] as num?)?.toDouble() ?? 0,
+        currency: data['currency'] as String? ?? 'EUR',
+        trip: tripJson == null ? null : TripModel.fromJson(tripJson).toEntity,
+        pendingEditId: data['pendingEditId'] as String?,
+        paymentSheet: sheet == null
+            ? null
+            : WaitingFeeStripePaymentEntity(
+                paymentIntentId: sheet['paymentIntentId'] as String? ?? '',
+                clientSecret: sheet['clientSecret'] as String? ?? '',
+                publishableKey: sheet['publishableKey'] as String? ?? '',
+                customerId: sheet['customerId'] as String? ?? '',
+                ephemeralKeySecret:
+                    sheet['ephemeralKeySecret'] as String? ?? '',
+              ),
+      );
     });
   }
 

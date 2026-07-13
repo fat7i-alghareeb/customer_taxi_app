@@ -223,6 +223,7 @@ class SignalRRealtimeService implements RealtimeService {
     hub.on(RealtimeMethodNames.tripStopCompleted, _onTripStopCompleted);
     hub.on(RealtimeMethodNames.tripMessageReceived, _onTripMessageReceived);
     hub.on(RealtimeMethodNames.chatClosed, _onChatClosed);
+    hub.on(RealtimeMethodNames.noDriverFound, _onNoDriverFound);
 
     hub.onclose(({Exception? error}) {
       if (_connection != hub || generation != _connectionGeneration) return;
@@ -451,6 +452,23 @@ class SignalRRealtimeService implements RealtimeService {
     );
     _eventsController.add(
       RealtimeEvent.paymentConfirmed(
+        tripId: _readString(p, 'tripId'),
+        passengerId: _readString(p, 'passengerId'),
+      ),
+    );
+  }
+
+  void _onNoDriverFound(List<Object?>? args) {
+    final p = _payload(args);
+    if (p == null) {
+      printY('$_logTag <= NoDriverFound (empty payload, ignored)');
+      return;
+    }
+    printM(
+      '$_logTag <= NoDriverFound trip=${_readString(p, 'tripId')} passenger=${_readString(p, 'passengerId')}',
+    );
+    _eventsController.add(
+      RealtimeEvent.noDriverFound(
         tripId: _readString(p, 'tripId'),
         passengerId: _readString(p, 'passengerId'),
       ),

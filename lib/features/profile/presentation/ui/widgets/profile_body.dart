@@ -86,11 +86,16 @@ class _ProfileBodyState extends State<ProfileBody> {
     );
   }
 
+  /// Accounts created via email/Google sign-in own a verified email that can't be
+  /// changed in-app; phone accounts keep an unverified, editable email.
+  bool _isEmailLocked(UserEntity? authUser) => authUser?.isEmailVerified == true;
+
   Widget _buildFormSection(
     BuildContext context,
     ProfileState state,
     UserEntity? authUser,
   ) {
+    final emailLocked = _isEmailLocked(authUser);
     return Container(
       padding: REdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
@@ -145,16 +150,18 @@ class _ProfileBodyState extends State<ProfileBody> {
           if (!widget.isSetupMode) const UnverifiedPhoneBanner(),
           AppSpacing.lg.verticalSpace,
 
-          // Email field
+          // Email field — read-only for email/Google accounts (verified email).
           AppReactiveTextField.email(
             formControlName: ProfileForms.emailField,
             title: AppStrings.contactUsEmail,
+            enabled: !emailLocked,
             onChangedDebounced: (value, _) {
               context.read<ProfileBloc>().add(
                 ProfileEvent.emailSaved(value),
               );
             },
           ).animate().fadeIn(delay: 350.ms).slideY(begin: 0.04),
+          if (emailLocked) _buildEmailLockedHint(context),
           AppSpacing.lg.verticalSpace,
 
           // Home address field with map picker
@@ -200,11 +207,38 @@ class _ProfileBodyState extends State<ProfileBody> {
     );
   }
 
+  Widget _buildEmailLockedHint(BuildContext context) {
+    return Padding(
+      padding: REdgeInsets.only(top: AppSpacing.sm),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FaIcon(
+            FontAwesomeIcons.lock,
+            size: 11.r,
+            color: context.onSurface.withValues(alpha: 0.5),
+          ),
+          AppSpacing.sm.horizontalSpace,
+          Expanded(
+            child: Text(
+              AppStrings.profileEmailLockedHint,
+              style: AppTextStyles.s12w400.copyWith(
+                color: context.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSaveButton(
     BuildContext context,
     ProfileState state,
     UserEntity? authUser,
   ) {
+    // Locked (email/Google) accounts can't change email, so it never counts as a change.
+    final emailLocked = _isEmailLocked(authUser);
     return ReactiveFormConsumer(
       builder: (context, form, _) {
         final currentName =
@@ -218,7 +252,7 @@ class _ProfileBodyState extends State<ProfileBody> {
             (form.control(ProfileForms.emailField).value as String?)?.trim() ??
                 '';
         final emailChanged =
-            currentEmail != (authUser?.email ?? '').trim();
+            !emailLocked && currentEmail != (authUser?.email ?? '').trim();
         final hasChanges =
             nameChanged || emailChanged || photoChanged || addressChanged;
 
