@@ -24,11 +24,13 @@ class RootBody extends StatefulWidget {
 class _RootBodyState extends State<RootBody> {
   late final PageController _pageController;
   late int _currentIndex;
+  late final Set<int> _visitedIndices;
 
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.initialTab?.index ?? RootTab.home.index;
+    _visitedIndices = {_currentIndex};
     _pageController = PageController(initialPage: _currentIndex);
   }
 
@@ -39,6 +41,7 @@ class _RootBodyState extends State<RootBody> {
         widget.initialTab != oldWidget.initialTab) {
       setState(() {
         _currentIndex = widget.initialTab!.index;
+        _visitedIndices.add(_currentIndex);
       });
       _pageController.jumpToPage(_currentIndex);
     }
@@ -63,6 +66,7 @@ class _RootBodyState extends State<RootBody> {
     }
     setState(() {
       _currentIndex = index;
+      _visitedIndices.add(index);
     });
     _pageController.jumpToPage(index);
   }
@@ -74,6 +78,7 @@ class _RootBodyState extends State<RootBody> {
     }
     setState(() {
       _currentIndex = index;
+      _visitedIndices.add(index);
     });
   }
 
@@ -95,11 +100,15 @@ class _RootBodyState extends State<RootBody> {
   }
 
   List<Widget> _buildPages() {
-    return <Widget>[
+    final pages = <Widget>[
       const RootProfileTabSection(),
       const ActiveTripGate(),
       const RootTripTabSection(),
     ];
+    return List<Widget>.generate(
+      pages.length,
+      (i) => _visitedIndices.contains(i) ? pages[i] : const SizedBox.shrink(),
+    );
   }
 
   @override

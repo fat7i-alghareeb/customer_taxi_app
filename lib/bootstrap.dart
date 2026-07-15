@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart'
     show SystemChrome, SystemUiMode, appFlavor;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'core/config/localization_config.dart';
 import 'features/trip/presentation/coordinators/trip_completion_coordinator.dart';
@@ -56,6 +58,13 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       //    Ensure Flutter engine + widget binding are ready before any
       //    plugins or framework APIs are used.
       WidgetsFlutterBinding.ensureInitialized();
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        try {
+          await FlutterDisplayMode.setHighRefreshRate();
+        } catch (e) {
+          printY('[Bootstrap] setHighRefreshRate failed: $e');
+        }
+      }
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       await appMediaPickerService.initialize();
 
