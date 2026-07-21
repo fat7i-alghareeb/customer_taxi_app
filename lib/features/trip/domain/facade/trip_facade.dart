@@ -131,27 +131,6 @@ class TripFacade {
     );
   }
 
-  Future<Result<TripEntity>> updateTripStops({
-    required String tripId,
-    required List<TripStopEntity> stops,
-  }) {
-    printC('[TripFacade] updateTripStops id=$tripId');
-    return _repository.updateTripStops(tripId: tripId, stops: stops);
-  }
-
-  Future<Result<TripEntity>> updateTripPassengerCount({
-    required String tripId,
-    required int passengerCount,
-  }) {
-    printC(
-      '[TripFacade] updateTripPassengerCount id=$tripId count=$passengerCount',
-    );
-    return _repository.updateTripPassengerCount(
-      tripId: tripId,
-      passengerCount: passengerCount,
-    );
-  }
-
   Future<Result<void>> updateTripBagCount({
     required String tripId,
     required int bagCount,
@@ -178,6 +157,7 @@ class TripFacade {
     List<TripStopEntity>? stops,
     int? passengerCount,
     required double expectedDelta,
+    String? previewToken,
   }) {
     printC('[TripFacade] applyTripEdit id=$tripId');
     return _repository.applyTripEdit(
@@ -185,6 +165,7 @@ class TripFacade {
       stops: stops,
       passengerCount: passengerCount,
       expectedDelta: expectedDelta,
+      previewToken: previewToken,
     );
   }
 }

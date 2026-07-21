@@ -92,6 +92,9 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
               customerEphemeralKeySecret:
                   topUp.stripePayment.ephemeralKeySecret,
               merchantDisplayName: _merchantName,
+              linkDisplayParams: const LinkDisplayParams(
+                linkDisplay: LinkDisplay.never,
+              ),
               style: ThemeMode.system,
               returnURL: _returnUrl,
             ),
@@ -118,9 +121,11 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
           );
         } catch (_) {
           if (isClosed) return;
-          emit(state.copyWith(
-            topUpStatus: BlocStatus.failure(AppStrings.paymentFailed),
-          ));
+          emit(
+            state.copyWith(
+              topUpStatus: BlocStatus.failure(AppStrings.paymentFailed),
+            ),
+          );
         }
       },
       failure: (message) async =>
@@ -147,6 +152,9 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
               customerId: setup.customerId,
               customerEphemeralKeySecret: setup.ephemeralKeySecret,
               merchantDisplayName: _merchantName,
+              linkDisplayParams: const LinkDisplayParams(
+                linkDisplay: LinkDisplay.never,
+              ),
               style: ThemeMode.system,
               returnURL: _returnUrl,
             ),
@@ -154,15 +162,18 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
           await Stripe.instance.presentPaymentSheet();
 
           // Resolve the saved payment method id from the confirmed SetupIntent.
-          final confirmed =
-              await Stripe.instance.retrieveSetupIntent(setup.clientSecret);
+          final confirmed = await Stripe.instance.retrieveSetupIntent(
+            setup.clientSecret,
+          );
           final paymentMethodId = confirmed.paymentMethodId;
           if (isClosed) return;
 
           if (paymentMethodId.isEmpty) {
-            emit(state.copyWith(
-              addCardStatus: BlocStatus.failure(AppStrings.paymentFailed),
-            ));
+            emit(
+              state.copyWith(
+                addCardStatus: BlocStatus.failure(AppStrings.paymentFailed),
+              ),
+            );
             return;
           }
 
@@ -173,7 +184,9 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
           if (isClosed) return;
           await addResult.when(
             success: (_) async {
-              emit(state.copyWith(addCardStatus: const BlocStatus.success(null)));
+              emit(
+                state.copyWith(addCardStatus: const BlocStatus.success(null)),
+              );
               await _loadMethods(emit);
             },
             failure: (message) async => emit(
@@ -192,9 +205,11 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
           );
         } catch (_) {
           if (isClosed) return;
-          emit(state.copyWith(
-            addCardStatus: BlocStatus.failure(AppStrings.paymentFailed),
-          ));
+          emit(
+            state.copyWith(
+              addCardStatus: BlocStatus.failure(AppStrings.paymentFailed),
+            ),
+          );
         }
       },
       failure: (message) async =>

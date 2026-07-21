@@ -1,7 +1,7 @@
 name: "customertaxi"
 description: "A Flutter Clean Architecture project."
 publish_to: "none"
-version: 1.5.19+20
+version: 1.5.20+22
 
 environment:
   sdk: ^3.10.1

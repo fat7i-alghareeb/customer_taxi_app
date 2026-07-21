@@ -327,6 +327,14 @@ extension _BookingHandlers on OrderBloc {
           customerId: stripePayment.customerId,
           customerEphemeralKeySecret: stripePayment.ephemeralKeySecret,
           merchantDisplayName: 'customertaxi',
+          // Link is suppressed everywhere: riders pay by card / iDEAL / Klarna,
+          // and the extra Link step confused them. Note the sheet's language is
+          // NOT controllable from Dart — flutter_stripe exposes no locale
+          // parameter, so the native sheet follows the device language rather
+          // than the in-app one. Changing that needs native per-app locale work.
+          linkDisplayParams: const LinkDisplayParams(
+            linkDisplay: LinkDisplay.never,
+          ),
           style: ThemeMode.system,
           returnURL: 'customertaxi://stripe-redirect',
           billingDetailsCollectionConfiguration:
@@ -373,7 +381,9 @@ extension _BookingHandlers on OrderBloc {
             emit(
               state.copyWith(
                 booking: state.booking.copyWith(
-                  tripRequestStatus: BlocStatus.failure(AppStrings.paymentFailed),
+                  tripRequestStatus: BlocStatus.failure(
+                    AppStrings.paymentFailed,
+                  ),
                   paymentSheetState: const BlocStatus.initial(),
                   pendingTripResponse: null,
                 ),

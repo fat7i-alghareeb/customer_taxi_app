@@ -33,13 +33,17 @@ class RecordRideSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RecordRideCubit>(
-      create: (_) =>
-          RecordRideCubit(
-            tripId: tripId,
-            dataSource: getIt<TripRemoteDataSource>(),
-          )..start(),
-      child: const _RecordRideView(),
+    // Pushed on the root navigator, so it does not inherit the active-trip
+    // accent from the subtree that opened it — apply it here.
+    return tripAccentTheme(
+      context,
+      child: BlocProvider<RecordRideCubit>(
+        create: (_) => RecordRideCubit(
+          tripId: tripId,
+          dataSource: getIt<TripRemoteDataSource>(),
+        )..start(),
+        child: const _RecordRideView(),
+      ),
     );
   }
 }
@@ -247,10 +251,16 @@ class _StatusIcon extends StatelessWidget {
 
     final (IconData icon, Color color) = switch (status) {
       RecordRideStatus.recording => (Icons.mic_rounded, colors.error),
-      RecordRideStatus.uploading => (Icons.cloud_upload_rounded, colors.primary),
+      RecordRideStatus.uploading => (
+        Icons.cloud_upload_rounded,
+        colors.primary,
+      ),
       RecordRideStatus.uploaded => (Icons.check_circle_rounded, Colors.green),
       RecordRideStatus.failed => (Icons.error_rounded, colors.error),
-      RecordRideStatus.permissionDenied => (Icons.mic_off_rounded, colors.error),
+      RecordRideStatus.permissionDenied => (
+        Icons.mic_off_rounded,
+        colors.error,
+      ),
       RecordRideStatus.idle => (Icons.mic_none_rounded, colors.primary),
     };
 

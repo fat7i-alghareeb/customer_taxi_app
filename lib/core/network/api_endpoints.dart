@@ -65,9 +65,8 @@ class ApiEndpoints {
   static String rateTrip(String id) => '/api/v1/trips/$id/rating';
   static String updateTripScheduledTime(String id) =>
       '/api/v1/trips/$id/scheduled-time';
-  static String updateTripStops(String id) => '/api/v1/trips/$id/stops';
-  static String updateTripPassengerCount(String id) =>
-      '/api/v1/trips/$id/passenger-count';
+  // Stops and passenger count go through edit/preview + edit/apply — the old per-field PUTs
+  // re-priced the trip without charging the difference and have been removed server-side.
   static String updateTripBagCount(String id) => '/api/v1/trips/$id/bag-count';
   static String previewTripEdit(String id) => '/api/v1/trips/$id/edit/preview';
   static String applyTripEdit(String id) => '/api/v1/trips/$id/edit/apply';

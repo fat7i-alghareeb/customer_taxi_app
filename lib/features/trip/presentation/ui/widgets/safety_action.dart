@@ -30,45 +30,26 @@ class SafetyAction extends StatelessWidget {
           decoration: BoxDecoration(
             color: colors.onSurface.withValues(alpha: 0.04),
             borderRadius: BorderRadius.circular(AppRadii.md.r),
-            border: Border.all(
-              color: colors.onSurface.withValues(alpha: 0.12),
-            ),
+            border: Border.all(color: colors.onSurface.withValues(alpha: 0.12)),
           ),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(icon, size: 22.r, color: context.primary),
-                    AppSpacing.sm.verticalSpace,
-                    Text(
-                      label,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.s11w500.copyWith(
-                        color: colors.onSurface,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  width: 8.r,
-                  height: 8.r,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.success,
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 22.r, color: context.primary),
+                AppSpacing.sm.verticalSpace,
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.s11w500.copyWith(
+                    color: colors.onSurface,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

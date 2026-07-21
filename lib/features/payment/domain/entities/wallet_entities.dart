@@ -15,14 +15,29 @@ class StripePaymentEntity {
   final String ephemeralKeySecret;
 }
 
+/// The customer's ride balance. [balance] goes NEGATIVE when a fee could not be collected —
+/// a waiting fee is incurred by the customer and cannot be declined, so rather than losing it
+/// the platform carries it as debt against the wallet.
 class WalletBalanceEntity {
   const WalletBalanceEntity({
     required this.balance,
     required this.currencyCode,
+    this.amountOwed = 0,
+    this.isBookingBlocked = false,
   });
 
   final double balance;
   final String currencyCode;
+
+  /// The debt as a positive figure, so the UI can say "you owe X" without juggling signs.
+  final double amountOwed;
+
+  /// Whether this debt actually stops the customer booking. Comes from the server rather than
+  /// being derived from [amountOwed]: debts too small for Stripe to charge are carried but do
+  /// not block, and duplicating that rule here would drift.
+  final bool isBookingBlocked;
+
+  bool get isInDebt => amountOwed > 0;
 }
 
 class WalletTopUpEntity {

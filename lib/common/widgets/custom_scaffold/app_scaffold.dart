@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 import '../../../common/widgets/app_affixes.dart';
 import '../../../common/widgets/app_icon_source.dart';
+import '../../../core/router/safe_pop.dart';
 import '../../../common/widgets/form/app_reactive_text_field.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../utils/constants/design_constants.dart';

@@ -11,12 +11,12 @@ const String _googleReviewUrl = 'https://g.page/r/CVnGS4OWfBvSEBM/review';
 const int _highRatingThreshold = 4;
 
 /// Shows the post-trip rating sheet. Returns once the rider dismisses it.
-/// Pass [initialStars] (the existing rating) to pre-select the stars when the
-/// rider is editing an earlier rating.
+///
+/// A rating is final — the server rejects a second submission for the same trip
+/// — so this always opens unrated. Only call it for a trip with no rating yet.
 Future<void> showTripRatingSheet(
   BuildContext context, {
   required String tripId,
-  int initialStars = 0,
   FutureOr<void> Function()? onClosed,
 }) async {
   try {
@@ -24,8 +24,7 @@ Future<void> showTripRatingSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) =>
-          _TripRatingSheet(tripId: tripId, initialStars: initialStars),
+      builder: (_) => _TripRatingSheet(tripId: tripId),
     );
   } finally {
     await onClosed?.call();
@@ -33,17 +32,16 @@ Future<void> showTripRatingSheet(
 }
 
 class _TripRatingSheet extends StatefulWidget {
-  const _TripRatingSheet({required this.tripId, this.initialStars = 0});
+  const _TripRatingSheet({required this.tripId});
 
   final String tripId;
-  final int initialStars;
 
   @override
   State<_TripRatingSheet> createState() => _TripRatingSheetState();
 }
 
 class _TripRatingSheetState extends State<_TripRatingSheet> {
-  late int _selected = widget.initialStars.clamp(0, 5);
+  int _selected = 0;
   bool _submitting = false;
   bool _submitted = false;
 
@@ -84,6 +82,13 @@ class _TripRatingSheetState extends State<_TripRatingSheet> {
 
   @override
   Widget build(BuildContext context) {
+    // Orange accent for the whole rating sheet (the "Bedankt" headings and the
+    // icon badge). Builder so the body reads the overridden ColorScheme rather
+    // than the outer one captured above the Theme.
+    return tripAccentTheme(context, child: Builder(builder: _buildSheet));
+  }
+
+  Widget _buildSheet(BuildContext context) {
     final colors = context.colorScheme;
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
 
@@ -93,7 +98,9 @@ class _TripRatingSheetState extends State<_TripRatingSheet> {
         AppSpacing.lg,
         AppSpacing.xl,
         AppSpacing.xl,
-      ).copyWith(bottom: AppSpacing.xl.h + bottomInset),
+        // viewInsets covers the keyboard only. Without bottomPadding the submit
+        // button sits underneath the Android system navigation buttons.
+      ).copyWith(bottom: AppSpacing.xl.h + bottomInset + context.bottomPadding),
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.vertical(
@@ -130,7 +137,7 @@ class _TripRatingSheetState extends State<_TripRatingSheet> {
       Center(
         child: Text(
           AppStrings.ratingHeaderTitle,
-          style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
+          style: AppTextStyles.s20w700.copyWith(color: colors.primary),
           textAlign: TextAlign.center,
         ),
       ),
@@ -186,7 +193,7 @@ class _TripRatingSheetState extends State<_TripRatingSheet> {
         Center(
           child: Text(
             AppStrings.ratingThanksHeading,
-            style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
+            style: AppTextStyles.s20w700.copyWith(color: colors.primary),
             textAlign: TextAlign.center,
           ),
         ),
@@ -198,15 +205,6 @@ class _TripRatingSheetState extends State<_TripRatingSheet> {
               color: colors.onSurface.withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
-          ),
-        ),
-        AppSpacing.lg.verticalSpace,
-        // Car illustration stand-in (a branded PNG can replace this later).
-        Center(
-          child: FaIcon(
-            FontAwesomeIcons.taxi,
-            size: 56.r,
-            color: colors.primary.withValues(alpha: 0.18),
           ),
         ),
         AppSpacing.xl.verticalSpace,

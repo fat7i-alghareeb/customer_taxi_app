@@ -126,6 +126,32 @@ sealed class RealtimeEvent with _$RealtimeEvent {
     required String tripId,
     required String passengerId,
   }) = RealtimeNoDriverFound;
+
+  /// A re-priced edit (new destination / passenger count, possibly a bigger vehicle) was
+  /// committed. Carries what the change cost so the app can confirm the amount, and is the
+  /// only signal for the PaymentSheet path, where the edit lands at the Stripe webhook
+  /// rather than in the apply response.
+  const factory RealtimeEvent.tripEditApplied({
+    required String tripId,
+    required double newFare,
+    required String currency,
+    required double delta,
+    required int passengerCount,
+    String? vehicleTypeName,
+    String? dropoffLabel,
+  }) = RealtimeTripEditApplied;
+
+  /// The customer's wallet balance moved — in practice, a fee they could not pay was charged to
+  /// it and they now owe money. Sent so the debt (and the booking block it causes) shows up
+  /// straight away instead of only when they next open the wallet screen.
+  ///
+  /// Not tied to a trip, so it carries no `tripId`; the trip-scoped filters ignore it.
+  const factory RealtimeEvent.walletBalanceChanged({
+    required String userId,
+    required double balance,
+    required double amountOwed,
+    required String currency,
+  }) = RealtimeWalletBalanceChanged;
 }
 
 /// Stable list of every SignalR method name the hub will push to clients.
@@ -148,6 +174,8 @@ abstract final class RealtimeMethodNames {
   static const tripMessageReceived = 'TripMessageReceived';
   static const chatClosed = 'ChatClosed';
   static const noDriverFound = 'NoDriverFound';
+  static const tripEditApplied = 'TripEditApplied';
+  static const walletBalanceChanged = 'WalletBalanceChanged';
 
   static const all = <String>[
     tripRequested,
@@ -167,6 +195,8 @@ abstract final class RealtimeMethodNames {
     tripMessageReceived,
     chatClosed,
     noDriverFound,
+    tripEditApplied,
+    walletBalanceChanged,
   ];
 }
 
@@ -190,5 +220,9 @@ extension RealtimeEventTripId on RealtimeEvent {
     RealtimeTripMessageReceived(:final tripId) => tripId,
     RealtimeChatClosed(:final tripId) => tripId,
     RealtimeNoDriverFound(:final tripId) => tripId,
+    RealtimeTripEditApplied(:final tripId) => tripId,
+    // Account-scoped, not trip-scoped. The empty id matches no trip, so the per-trip
+    // subscriptions filter it out and only the wallet listener sees it.
+    RealtimeWalletBalanceChanged() => '',
   };
 }

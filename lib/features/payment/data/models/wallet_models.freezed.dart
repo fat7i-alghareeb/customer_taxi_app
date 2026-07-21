@@ -290,7 +290,7 @@ as String,
 /// @nodoc
 mixin _$WalletBalanceModel {
 
- double get balance; String get currencyCode;
+ double get balance; String get currencyCode; double get amountOwed; bool get isBookingBlocked;
 /// Create a copy of WalletBalanceModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -303,16 +303,16 @@ $WalletBalanceModelCopyWith<WalletBalanceModel> get copyWith => _$WalletBalanceM
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WalletBalanceModel&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WalletBalanceModel&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.amountOwed, amountOwed) || other.amountOwed == amountOwed)&&(identical(other.isBookingBlocked, isBookingBlocked) || other.isBookingBlocked == isBookingBlocked));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,balance,currencyCode);
+int get hashCode => Object.hash(runtimeType,balance,currencyCode,amountOwed,isBookingBlocked);
 
 @override
 String toString() {
-  return 'WalletBalanceModel(balance: $balance, currencyCode: $currencyCode)';
+  return 'WalletBalanceModel(balance: $balance, currencyCode: $currencyCode, amountOwed: $amountOwed, isBookingBlocked: $isBookingBlocked)';
 }
 
 
@@ -323,7 +323,7 @@ abstract mixin class $WalletBalanceModelCopyWith<$Res>  {
   factory $WalletBalanceModelCopyWith(WalletBalanceModel value, $Res Function(WalletBalanceModel) _then) = _$WalletBalanceModelCopyWithImpl;
 @useResult
 $Res call({
- double balance, String currencyCode
+ double balance, String currencyCode, double amountOwed, bool isBookingBlocked
 });
 
 
@@ -340,11 +340,13 @@ class _$WalletBalanceModelCopyWithImpl<$Res>
 
 /// Create a copy of WalletBalanceModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? balance = null,Object? currencyCode = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? balance = null,Object? currencyCode = null,Object? amountOwed = null,Object? isBookingBlocked = null,}) {
   return _then(_self.copyWith(
 balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
-as String,
+as String,amountOwed: null == amountOwed ? _self.amountOwed : amountOwed // ignore: cast_nullable_to_non_nullable
+as double,isBookingBlocked: null == isBookingBlocked ? _self.isBookingBlocked : isBookingBlocked // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -429,10 +431,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double balance,  String currencyCode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double balance,  String currencyCode,  double amountOwed,  bool isBookingBlocked)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WalletBalanceModel() when $default != null:
-return $default(_that.balance,_that.currencyCode);case _:
+return $default(_that.balance,_that.currencyCode,_that.amountOwed,_that.isBookingBlocked);case _:
   return orElse();
 
 }
@@ -450,10 +452,10 @@ return $default(_that.balance,_that.currencyCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double balance,  String currencyCode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double balance,  String currencyCode,  double amountOwed,  bool isBookingBlocked)  $default,) {final _that = this;
 switch (_that) {
 case _WalletBalanceModel():
-return $default(_that.balance,_that.currencyCode);case _:
+return $default(_that.balance,_that.currencyCode,_that.amountOwed,_that.isBookingBlocked);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -470,10 +472,10 @@ return $default(_that.balance,_that.currencyCode);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double balance,  String currencyCode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double balance,  String currencyCode,  double amountOwed,  bool isBookingBlocked)?  $default,) {final _that = this;
 switch (_that) {
 case _WalletBalanceModel() when $default != null:
-return $default(_that.balance,_that.currencyCode);case _:
+return $default(_that.balance,_that.currencyCode,_that.amountOwed,_that.isBookingBlocked);case _:
   return null;
 
 }
@@ -485,11 +487,13 @@ return $default(_that.balance,_that.currencyCode);case _:
 @JsonSerializable()
 
 class _WalletBalanceModel implements WalletBalanceModel {
-  const _WalletBalanceModel({required this.balance, required this.currencyCode});
+  const _WalletBalanceModel({required this.balance, required this.currencyCode, this.amountOwed = 0, this.isBookingBlocked = false});
   factory _WalletBalanceModel.fromJson(Map<String, dynamic> json) => _$WalletBalanceModelFromJson(json);
 
 @override final  double balance;
 @override final  String currencyCode;
+@override@JsonKey() final  double amountOwed;
+@override@JsonKey() final  bool isBookingBlocked;
 
 /// Create a copy of WalletBalanceModel
 /// with the given fields replaced by the non-null parameter values.
@@ -504,16 +508,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WalletBalanceModel&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WalletBalanceModel&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.amountOwed, amountOwed) || other.amountOwed == amountOwed)&&(identical(other.isBookingBlocked, isBookingBlocked) || other.isBookingBlocked == isBookingBlocked));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,balance,currencyCode);
+int get hashCode => Object.hash(runtimeType,balance,currencyCode,amountOwed,isBookingBlocked);
 
 @override
 String toString() {
-  return 'WalletBalanceModel(balance: $balance, currencyCode: $currencyCode)';
+  return 'WalletBalanceModel(balance: $balance, currencyCode: $currencyCode, amountOwed: $amountOwed, isBookingBlocked: $isBookingBlocked)';
 }
 
 
@@ -524,7 +528,7 @@ abstract mixin class _$WalletBalanceModelCopyWith<$Res> implements $WalletBalanc
   factory _$WalletBalanceModelCopyWith(_WalletBalanceModel value, $Res Function(_WalletBalanceModel) _then) = __$WalletBalanceModelCopyWithImpl;
 @override @useResult
 $Res call({
- double balance, String currencyCode
+ double balance, String currencyCode, double amountOwed, bool isBookingBlocked
 });
 
 
@@ -541,11 +545,13 @@ class __$WalletBalanceModelCopyWithImpl<$Res>
 
 /// Create a copy of WalletBalanceModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? balance = null,Object? currencyCode = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? balance = null,Object? currencyCode = null,Object? amountOwed = null,Object? isBookingBlocked = null,}) {
   return _then(_WalletBalanceModel(
 balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
 as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
-as String,
+as String,amountOwed: null == amountOwed ? _self.amountOwed : amountOwed // ignore: cast_nullable_to_non_nullable
+as double,isBookingBlocked: null == isBookingBlocked ? _self.isBookingBlocked : isBookingBlocked // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

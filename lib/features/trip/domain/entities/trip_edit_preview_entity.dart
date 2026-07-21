@@ -8,6 +8,7 @@ class TripEditPreviewEntity {
     required this.currency,
     required this.effectivePassengerCount,
     required this.direction,
+    required this.previewToken,
     this.newVehicleTypeId,
     this.newVehicleTypeName,
   });
@@ -20,6 +21,11 @@ class TripEditPreviewEntity {
   final String currency;
   final int effectivePassengerCount;
   final String direction;
+
+  /// Identifies the quote this preview was priced from. Handing it back on apply makes the
+  /// server reuse that exact quote, so the amount charged is the amount confirmed here —
+  /// re-pricing live used to move the delta and reject the edit outright.
+  final String previewToken;
   final String? newVehicleTypeId;
   final String? newVehicleTypeName;
 

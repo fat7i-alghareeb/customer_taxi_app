@@ -40,6 +40,36 @@ abstract class TripEntity with _$TripEntity {
     @Default(0) int bagCount,
     @Default(false) bool noDriverDecisionRequired,
   }) = _TripEntity;
+
+  const TripEntity._();
+
+  /// Whether the rider may still repoint any stop. Mirrors the server rule so
+  /// the edit affordance disappears exactly when the server would refuse,
+  /// instead of leaving a pencil that fails on tap.
+  ///
+  /// The window closes an hour after booking, or — for a scheduled ride — an
+  /// hour before pickup, whichever is later. Anchoring on the pickup keeps the
+  /// address correctable for a ride booked days ahead; taking the later of the
+  /// two preserves the full booking hour for a ride scheduled very soon.
+  bool get canEditStops {
+    if (!status.isEditableForRepricing) return false;
+
+    final bookingDeadline = createdAtUtc.add(const Duration(hours: 1));
+    final scheduled = scheduledAtUtc;
+    final deadline = scheduled == null
+        ? bookingDeadline
+        : _laterOf(
+            scheduled.subtract(const Duration(hours: 1)),
+            bookingDeadline,
+          );
+
+    return !DateTime.now().toUtc().isAfter(deadline.toUtc());
+  }
+
+  /// Whether the rider may still change the passenger or bag count.
+  bool get canEditPartySize => status.isPartySizeEditable;
+
+  static DateTime _laterOf(DateTime a, DateTime b) => a.isAfter(b) ? a : b;
 }
 
 @freezed

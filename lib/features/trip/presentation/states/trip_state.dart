@@ -39,6 +39,10 @@ abstract class TripState with _$TripState {
     @Default(BlocStatus<TripEditApplyResultEntity>.initial())
     BlocStatus<TripEditApplyResultEntity> editApplyStatus,
 
+    /// Set once an edit is actually settled — including the PaymentSheet path, which only
+    /// commits at the Stripe webhook. Widgets listen for this to confirm the amount.
+    TripEditSettlementEntity? editSettlement,
+
     // "No driver found" postpone action
     @Default(BlocStatus<void>.initial()) BlocStatus<void> postponeStatus,
   }) = _TripState;

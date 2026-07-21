@@ -204,7 +204,11 @@ class _AppScaffoldAppBar extends StatelessWidget {
       icon = config.leading ?? IconSource.faIcon(context.chevronStart);
     }
 
-    final resolvedIcon = icon.build(context, color: context.onSurface, size: 22);
+    final resolvedIcon = icon.build(
+      context,
+      color: context.onSurface,
+      size: 22,
+    );
 
     /// If no leading callback is provided, default behavior depends on drawer.
     final onTap =
@@ -213,7 +217,9 @@ class _AppScaffoldAppBar extends StatelessWidget {
           if (leadingDrawerEnabled) {
             Scaffold.of(context).openDrawer();
           } else {
-            context.pop();
+            // safePop, not pop: a screen opened from a notification tap can be
+            // the only route on the stack, where popping shows a black screen.
+            safePop(context);
           }
         };
 

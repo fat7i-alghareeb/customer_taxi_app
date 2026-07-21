@@ -28,12 +28,16 @@ _WalletBalanceModel _$WalletBalanceModelFromJson(Map<String, dynamic> json) =>
     _WalletBalanceModel(
       balance: (json['balance'] as num).toDouble(),
       currencyCode: json['currencyCode'] as String,
+      amountOwed: (json['amountOwed'] as num?)?.toDouble() ?? 0,
+      isBookingBlocked: json['isBookingBlocked'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$WalletBalanceModelToJson(_WalletBalanceModel instance) =>
     <String, dynamic>{
       'balance': instance.balance,
       'currencyCode': instance.currencyCode,
+      'amountOwed': instance.amountOwed,
+      'isBookingBlocked': instance.isBookingBlocked,
     };
 
 _WalletTopUpModel _$WalletTopUpModelFromJson(Map<String, dynamic> json) =>

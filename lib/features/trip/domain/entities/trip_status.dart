@@ -83,14 +83,21 @@ enum TripStatus {
       this == TripStatus.enRoute ||
       this == TripStatus.arrived;
 
-  /// Whether the customer may still change destination / passengers and be
-  /// charged/refunded the fare difference — allowed through arrival, never once
-  /// the ride is in progress or terminal. Mirrors the server's edit policy.
+  /// Whether the route may still be repointed (and the fare re-priced) — allowed
+  /// through arrival, never once the ride is in progress or terminal. This is
+  /// only the status half of the rule; the time window lives on
+  /// `TripEntity.canEditStops`. Mirrors the server's `Trip.IsEditableForRepricing`.
   bool get isEditableForRepricing =>
       this == TripStatus.awaitingAdminAcceptance ||
       this == TripStatus.accepted ||
       this == TripStatus.enRoute ||
       this == TripStatus.arrived;
+
+  /// Whether the passenger and bag counts may still be changed. Closes as soon
+  /// as the driver starts moving, because a passenger-count change can swap the
+  /// assigned vehicle. Mirrors the server's `Trip.IsPartySizeEditable`.
+  bool get isPartySizeEditable =>
+      this == TripStatus.awaitingAdminAcceptance || this == TripStatus.accepted;
 
   static TripStatus fromString(String? value) {
     final normalized = value

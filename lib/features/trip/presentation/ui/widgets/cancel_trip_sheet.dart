@@ -13,11 +13,12 @@ class CancelTripResult {
 /// stored as the cancellation note (admin-readable, language-independent);
 /// [label] is the localized text shown to the rider.
 class _CancelReason {
-  const _CancelReason(this.key, this.canonical, this.label);
+  const _CancelReason(this.key, this.canonical, this.label, this.icon);
 
   final String key;
   final String canonical;
   final String label;
+  final FaIconData icon;
 }
 
 /// Lightweight cancel sheet shown whenever the rider cancels a trip.
@@ -33,7 +34,9 @@ class CancelTripSheet extends StatefulWidget {
       context,
       sheet: AppBottomSheet.basic(
         title: AppStrings.cancelSheetTitle,
-        child: CancelTripSheet(trip: trip),
+        // Pushed on the root navigator, so it does not inherit the active-trip
+        // accent from the subtree that opened it — apply it here.
+        child: tripAccentTheme(context, child: CancelTripSheet(trip: trip)),
       ),
     );
   }
@@ -55,23 +58,32 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
       'driverTooLong',
       'Driver too far or taking too long',
       AppStrings.cancelReasonDriverTooLong,
+      FontAwesomeIcons.clock,
     ),
     _CancelReason(
       'bookedByMistake',
       'Booked by mistake',
       AppStrings.cancelReasonBookedByMistake,
+      FontAwesomeIcons.penToSquare,
     ),
     _CancelReason(
       'plansChanged',
       'Plans changed',
       AppStrings.cancelReasonPlansChanged,
+      FontAwesomeIcons.arrowsRotate,
     ),
     _CancelReason(
       'foundAnother',
       'Found another ride',
       AppStrings.cancelReasonFoundAnother,
+      FontAwesomeIcons.carSide,
     ),
-    _CancelReason(_otherKey, 'Other', AppStrings.cancelReasonOther),
+    _CancelReason(
+      _otherKey,
+      'Other',
+      AppStrings.cancelReasonOther,
+      FontAwesomeIcons.ellipsis,
+    ),
   ];
 
   @override
@@ -108,46 +120,25 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _RefundBanner(trip: _trip),
-        AppSpacing.md.verticalSpace,
-        // Static policy note (free window + arrived fee + after-window rule).
-        Container(
-          padding: REdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: colors.primary.withValues(alpha: 0.10),
-            borderRadius: BorderRadius.circular(AppRadii.md.r),
-          ),
-          child: Row(
-            children: [
-              FaIcon(
-                FontAwesomeIcons.circleInfo,
-                size: 16.r,
-                color: colors.primary,
-              ),
-              AppSpacing.md.horizontalSpace,
-              Expanded(
-                child: Text(
-                  AppStrings.cancelSheetRefundNote,
-                  style: AppTextStyles.s14w400.copyWith(color: colors.onSurface),
-                ),
-              ),
-            ],
-          ),
-        ),
         AppSpacing.lg.verticalSpace,
         Text(
           AppStrings.cancelSheetReasonLabel,
-          style: AppTextStyles.s14w600.copyWith(color: colors.onSurface),
+          style: AppTextStyles.s16w700.copyWith(color: colors.onSurface),
         ),
-        AppSpacing.sm.verticalSpace,
+        AppSpacing.md.verticalSpace,
         ..._reasons().map(
-          (r) => _ReasonTile(
-            label: r.label,
-            selected: _selectedKey == r.key,
-            onTap: () => setState(() => _selectedKey = r.key),
+          (r) => Padding(
+            padding: REdgeInsets.only(bottom: AppSpacing.sm),
+            child: _ReasonTile(
+              label: r.label,
+              icon: r.icon,
+              selected: _selectedKey == r.key,
+              onTap: () => setState(() => _selectedKey = r.key),
+            ),
           ),
         ),
         if (_selectedKey == _otherKey) ...[
-          AppSpacing.sm.verticalSpace,
+          AppSpacing.xs.verticalSpace,
           TextField(
             controller: _otherController,
             minLines: 2,
@@ -155,12 +146,24 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
             maxLength: 500,
             decoration: InputDecoration(
               hintText: AppStrings.cancelReasonOtherHint,
+              // The character counter is chrome the rider does not need; the
+              // limit still applies.
+              counterText: '',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadii.md.r),
               ),
             ),
           ),
         ],
+        AppSpacing.md.verticalSpace,
+        // Static policy note (free window + arrived fee + after-window rule),
+        // kept as a quiet footnote so the reason cards stay the focus.
+        Text(
+          AppStrings.cancelSheetRefundNote,
+          style: AppTextStyles.s12w400.copyWith(
+            color: colors.onSurface.withValues(alpha: 0.55),
+          ),
+        ),
         AppSpacing.lg.verticalSpace,
         Row(
           children: [
@@ -195,23 +198,23 @@ class _RefundBanner extends StatelessWidget {
     final isWithinWindow = _CancelTripSheetState._isWithinFreeWindow(trip);
 
     if (isWithinWindow) {
-      const color = Color(0xFF2E7D32);
       return _BannerTile(
-        icon: FaIcon(FontAwesomeIcons.circleCheck, size: 16.r, color: color),
-        color: color,
+        icon: FontAwesomeIcons.circleCheck,
+        color: const Color(0xFF2E7D32),
         text: AppStrings.cancelBannerFreeWindow,
       );
     } else {
-      const color = Color(0xFFE65100);
       return _BannerTile(
-        icon: FaIcon(FontAwesomeIcons.triangleExclamation, size: 16.r, color: color),
-        color: color,
+        icon: FontAwesomeIcons.triangleExclamation,
+        color: const Color(0xFFE65100),
         text: AppStrings.cancelBannerAfterWindow,
       );
     }
   }
 }
 
+/// Compact one-line pill carrying the refund outcome. Deliberately slimmer than
+/// the reason cards below it: it reports state, it is not a choice.
 class _BannerTile extends StatelessWidget {
   const _BannerTile({
     required this.icon,
@@ -219,31 +222,36 @@ class _BannerTile extends StatelessWidget {
     required this.text,
   });
 
-  final Widget icon;
+  final FaIconData icon;
   final Color color;
   final String text;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: REdgeInsets.all(AppSpacing.md),
+      padding: REdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(AppRadii.md.r),
-        border: Border.all(color: color.withValues(alpha: 0.30)),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: REdgeInsets.only(top: 2),
-            child: icon,
+          Container(
+            padding: REdgeInsets.all(AppSpacing.xs),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.15),
+              shape: BoxShape.circle,
+            ),
+            child: FaIcon(icon, size: 12.r, color: color),
           ),
-          AppSpacing.md.horizontalSpace,
+          AppSpacing.sm.horizontalSpace,
           Expanded(
             child: Text(
               text,
-              style: AppTextStyles.s14w500.copyWith(color: color),
+              style: AppTextStyles.s12w700.copyWith(color: color),
             ),
           ),
         ],
@@ -252,44 +260,75 @@ class _BannerTile extends StatelessWidget {
   }
 }
 
+/// Full-width selectable reason card. Selection is carried by the fill, the
+/// border and a trailing check — not by a radio glyph alone, which read as an
+/// unstyled form on the old sheet.
 class _ReasonTile extends StatelessWidget {
   const _ReasonTile({
     required this.label,
+    required this.icon,
     required this.selected,
     required this.onTap,
   });
 
   final String label;
+  final FaIconData icon;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadii.sm.r),
-      child: Padding(
-        padding: REdgeInsets.symmetric(vertical: AppSpacing.sm),
-        child: Row(
-          children: [
-            Icon(
-              selected
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_unchecked,
-              size: 20.r,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadii.md.r),
+        child: Container(
+          padding: REdgeInsets.all(AppSpacing.md),
+          decoration: BoxDecoration(
+            color: selected
+                ? colors.primary.withValues(alpha: 0.10)
+                : colors.onSurface.withValues(alpha: 0.04),
+            borderRadius: BorderRadius.circular(AppRadii.md.r),
+            border: Border.all(
               color: selected
                   ? colors.primary
-                  : colors.onSurface.withValues(alpha: 0.4),
+                  : colors.onSurface.withValues(alpha: 0.10),
+              width: selected ? 1.5 : 1,
             ),
-            AppSpacing.md.horizontalSpace,
-            Expanded(
-              child: Text(
-                label,
-                style: AppTextStyles.s14w400.copyWith(color: colors.onSurface),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: REdgeInsets.all(AppSpacing.sm),
+                decoration: BoxDecoration(
+                  color: colors.primary.withValues(alpha: 0.10),
+                  shape: BoxShape.circle,
+                ),
+                child: FaIcon(icon, size: 14.r, color: colors.primary),
               ),
-            ),
-          ],
+              AppSpacing.md.horizontalSpace,
+              Expanded(
+                child: Text(
+                  label,
+                  style:
+                      (selected ? AppTextStyles.s14w600 : AppTextStyles.s14w500)
+                          .copyWith(
+                            color: selected ? colors.primary : colors.onSurface,
+                          ),
+                ),
+              ),
+              if (selected) ...[
+                AppSpacing.sm.horizontalSpace,
+                FaIcon(
+                  FontAwesomeIcons.circleCheck,
+                  size: 16.r,
+                  color: colors.primary,
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );

@@ -10,6 +10,7 @@ import 'package:customertaxi/core/services/realtime/realtime_connection_state.da
 import 'package:customertaxi/core/services/realtime/realtime_service.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_edit_apply_result_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_edit_preview_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_edit_settlement_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_invoice_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_receipt_entity.dart';
@@ -43,12 +44,12 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<_LoadInvoice>(_onLoadInvoice);
     on<_LoadInvoicePdf>(_onLoadInvoicePdf);
     on<_ScheduledTimeUpdateRequested>(_onScheduledTimeUpdateRequested);
-    on<_StopsUpdateRequested>(_onStopsUpdateRequested);
-    on<_PassengerCountUpdateRequested>(_onPassengerCountUpdateRequested);
     on<_BagCountUpdateRequested>(_onBagCountUpdateRequested);
     on<_EditPreviewRequested>(_onEditPreviewRequested);
     on<_EditApplyRequested>(_onEditApplyRequested);
+    on<_EditAppliedReceived>(_onEditAppliedReceived);
     on<_EditStatusReset>(_onEditStatusReset);
+    on<_EditSettlementAcknowledged>(_onEditSettlementAcknowledged);
     on<_NoDriverPostponeRequested>(_onNoDriverPostponeRequested);
     on<_NoDriverCancelRequested>(_onNoDriverCancelRequested);
   }
@@ -60,6 +61,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   StreamSubscription<RealtimeEvent>? _realtimeSub;
   StreamSubscription<RealtimeConnectionState>? _connectionSub;
   String? _joinedTripId;
+  int _editSettlementSignal = 0;
 
   bool _isTerminal(TripStatus status) => status.isTerminal;
 
@@ -110,6 +112,18 @@ class TripBloc extends Bloc<TripEvent, TripState> {
           etaToPickupSeconds: event.etaToPickupSeconds,
           distanceToPickupMeters: event.distanceToPickupMeters,
           routeToPickupPolyline: event.routeToPickupPolyline,
+        ),
+      );
+      return;
+    }
+    // Unlike the rest, this one carries the money — pass it through so the amount can be
+    // confirmed immediately rather than waiting on the refetch it also triggers.
+    if (event is RealtimeTripEditApplied) {
+      add(
+        TripEvent.editAppliedReceived(
+          newFare: event.newFare,
+          currency: event.currency,
+          delta: event.delta,
         ),
       );
       return;
@@ -559,69 +573,6 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     );
   }
 
-  Future<void> _onStopsUpdateRequested(
-    _StopsUpdateRequested event,
-    Emitter<TripState> emit,
-  ) async {
-    final id = state.activeTripId;
-    final trip = state.tripStatus.getDataWhenSuccess;
-    if (id == null || trip == null) return;
-    // No client-side window gate — editing is gated purely by trip status server-side
-    // (allowed through Arrived, rejected once the ride is in progress / terminal).
-    emit(state.copyWith(tripEditStatus: const BlocStatus<void>.loading()));
-    final Result<TripEntity> result = await _facade.updateTripStops(
-      tripId: id,
-      stops: event.stops,
-    );
-    result.when(
-      success: (updatedTrip) {
-        printG('[TripBloc] stops updated fare=${updatedTrip.quotedFare}');
-        emit(
-          state.copyWith(
-            tripEditStatus: const BlocStatus<void>.success(null),
-            tripStatus: BlocStatus<TripEntity>.success(updatedTrip),
-          ),
-        );
-      },
-      failure: (msg) {
-        printY('[TripBloc] stops update failed=$msg');
-        emit(state.copyWith(tripEditStatus: BlocStatus<void>.failure(msg)));
-      },
-    );
-  }
-
-  Future<void> _onPassengerCountUpdateRequested(
-    _PassengerCountUpdateRequested event,
-    Emitter<TripState> emit,
-  ) async {
-    final id = state.activeTripId;
-    final trip = state.tripStatus.getDataWhenSuccess;
-    if (id == null || trip == null) return;
-    // No client-side window gate — gated purely by trip status server-side.
-    emit(state.copyWith(tripEditStatus: const BlocStatus<void>.loading()));
-    final Result<TripEntity> result = await _facade.updateTripPassengerCount(
-      tripId: id,
-      passengerCount: event.count,
-    );
-    result.when(
-      success: (updatedTrip) {
-        printG(
-          '[TripBloc] passenger count updated count=${updatedTrip.passengerCount}',
-        );
-        emit(
-          state.copyWith(
-            tripEditStatus: const BlocStatus<void>.success(null),
-            tripStatus: BlocStatus<TripEntity>.success(updatedTrip),
-          ),
-        );
-      },
-      failure: (msg) {
-        printY('[TripBloc] passenger count update failed=$msg');
-        emit(state.copyWith(tripEditStatus: BlocStatus<void>.failure(msg)));
-      },
-    );
-  }
-
   Future<void> _onBagCountUpdateRequested(
     _BagCountUpdateRequested event,
     Emitter<TripState> emit,
@@ -714,6 +665,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       stops: event.stops,
       passengerCount: event.passengerCount,
       expectedDelta: event.expectedDelta,
+      previewToken: event.previewToken,
     );
     result.when(
       success: (applyResult) {
@@ -723,11 +675,20 @@ class TripBloc extends Bloc<TripEvent, TripState> {
           state.copyWith(
             editApplyStatus:
                 BlocStatus<TripEditApplyResultEntity>.success(applyResult),
-            // When applied synchronously the server returns the updated trip; adopt it.
-            // The PaymentSheet path leaves the trip unchanged (a realtime refresh follows).
+            // Applied synchronously → the server returns the updated trip, adopt it and
+            // record what it cost so the UI can confirm the amount. The PaymentSheet path
+            // returns no trip; that settlement is announced later over realtime.
             tripStatus: updatedTrip != null
                 ? BlocStatus<TripEntity>.success(updatedTrip)
                 : state.tripStatus,
+            editSettlement: updatedTrip == null
+                ? state.editSettlement
+                : TripEditSettlementEntity(
+                    delta: applyResult.delta,
+                    currency: applyResult.currency,
+                    newFare: updatedTrip.quotedFare,
+                    signalId: ++_editSettlementSignal,
+                  ),
           ),
         );
       },
@@ -743,6 +704,29 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     );
   }
 
+  /// A re-priced edit was committed server-side. For the PaymentSheet path this is the first
+  /// the app hears of it — the apply response carried no trip because the change only lands
+  /// when the Stripe webhook fires — so refetch rather than trusting local state.
+  Future<void> _onEditAppliedReceived(
+    _EditAppliedReceived event,
+    Emitter<TripState> emit,
+  ) async {
+    printG(
+      '[TripBloc] edit applied delta=${event.delta} newFare=${event.newFare}',
+    );
+    emit(
+      state.copyWith(
+        editSettlement: TripEditSettlementEntity(
+          delta: event.delta,
+          currency: event.currency,
+          newFare: event.newFare,
+          signalId: ++_editSettlementSignal,
+        ),
+      ),
+    );
+    add(const TripEvent.pollingTick());
+  }
+
   void _onEditStatusReset(_EditStatusReset event, Emitter<TripState> emit) {
     emit(
       state.copyWith(
@@ -750,6 +734,16 @@ class TripBloc extends Bloc<TripEvent, TripState> {
         editApplyStatus: const BlocStatus<TripEditApplyResultEntity>.initial(),
       ),
     );
+  }
+
+  /// Clears the settlement after the UI has confirmed it. Kept separate from
+  /// [_onEditStatusReset] because the edit flow resets its own statuses as it finishes,
+  /// which would otherwise wipe the confirmation before it could be shown.
+  void _onEditSettlementAcknowledged(
+    _EditSettlementAcknowledged event,
+    Emitter<TripState> emit,
+  ) {
+    emit(state.copyWith(editSettlement: null));
   }
 
   Future<void> _onDriverLocationUpdated(

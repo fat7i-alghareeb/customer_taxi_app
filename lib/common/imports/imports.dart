@@ -21,6 +21,7 @@ export 'package:go_router/go_router.dart';
 export '../../../../../core/injection/injectable.dart';
 export "../../core/theme/app_colors.dart";
 export "../../core/theme/app_text_styles.dart";
+export "../../core/theme/trip_accent_theme.dart";
 export "../../core/utils/bloc_status.dart";
 export "../../core/utils/status_builder.dart";
 export "../../core/utils/result.dart";

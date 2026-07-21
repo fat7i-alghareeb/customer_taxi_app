@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart'
     show SystemChrome, SystemUiMode, appFlavor;
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'core/config/localization_config.dart';
 import 'features/trip/presentation/coordinators/trip_completion_coordinator.dart';
+import 'features/payment/presentation/states/wallet_cubit.dart';
+import 'features/payment/presentation/ui/screens/betaling_screen.dart';
 import 'features/trip/presentation/states/active_trip_cubit.dart';
 import 'features/trip/presentation/ui/widgets/waiting_fee_settlement_flow.dart';
 import 'firebase_options.dart';
@@ -243,6 +246,15 @@ Future<void> _handleNotificationNavigation(
     return;
   }
 
+  // A fee was charged to the wallet as debt. It is settled against the trip, so the per-trip
+  // settlement sheet has nothing to collect — the money is owed on the account now. Send them
+  // to the wallet, which is also where the booking block is explained.
+  if (_typeFromPayload(payload) == 'wallet_debt') {
+    unawaited(getIt<WalletCubit>().refresh());
+    _navigateTo(BetalingScreen.pagePath);
+    return;
+  }
+
   // Outstanding waiting fee — open the on-session settlement sheet for the trip.
   if (_typeFromPayload(payload) == 'waiting_fee_due') {
     final feeTripId = _tripIdFromPayload(payload);
@@ -298,7 +310,10 @@ Future<void> _navigateToChatWhenReady(String tripId) async {
     final router = getIt<AppRouterConfig>().router;
     if (authState.isAuthenticated &&
         router.routerDelegate.navigatorKey.currentContext != null) {
-      router.goNamed(
+      // push, not go: keeps whatever the user was on underneath so closing the
+      // chat returns there. On a cold start the stack is still splash-only, so
+      // the screen's safePop fallback covers that case.
+      router.pushNamed(
         TripChatScreen.pageName,
         extra: TripChatScreenArgs(tripId: tripId),
       );
@@ -401,6 +416,9 @@ void _initializeRealtime() {
   // Resolves the passenger's active trip so the Home tab can resume it and join
   // its realtime channel.
   getIt<ActiveTripCubit>().start();
+  // Tracks the wallet balance app-wide so an outstanding debt is visible and enforced
+  // wherever the customer is, not only on the wallet screen.
+  getIt<WalletCubit>().start();
 }
 
 /// Runs the application inside a guarded zone and wraps it with

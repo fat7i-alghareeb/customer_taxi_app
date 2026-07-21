@@ -284,8 +284,8 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// @nodoc
 
 
-class _TripEntity implements TripEntity {
-  const _TripEntity({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, this.arrivedAtUtc, final  List<TripStopEntity> stops = const [], this.vehicleTypeName, this.driverLat, this.driverLng, this.etaToPickup, this.cancellation, this.refund, this.compensationClaim, this.activeWaitingSession, this.encodedOverviewPolyline, final  List<TripRouteSegmentEntity> routeSegments = const [], this.passengerNote, this.passengerRating, this.ratingComment, this.acceptedByAdminId, this.acceptedAdminName, this.acceptedAtUtc, this.isScheduled = false, this.dispatchWindowOpensAtUtc, this.canMarkEnRoute = false, this.attentionState = 'Normal', this.passengerCount = 1, this.bagCount = 0, this.noDriverDecisionRequired = false}): _stops = stops,_routeSegments = routeSegments;
+class _TripEntity extends TripEntity {
+  const _TripEntity({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, this.arrivedAtUtc, final  List<TripStopEntity> stops = const [], this.vehicleTypeName, this.driverLat, this.driverLng, this.etaToPickup, this.cancellation, this.refund, this.compensationClaim, this.activeWaitingSession, this.encodedOverviewPolyline, final  List<TripRouteSegmentEntity> routeSegments = const [], this.passengerNote, this.passengerRating, this.ratingComment, this.acceptedByAdminId, this.acceptedAdminName, this.acceptedAtUtc, this.isScheduled = false, this.dispatchWindowOpensAtUtc, this.canMarkEnRoute = false, this.attentionState = 'Normal', this.passengerCount = 1, this.bagCount = 0, this.noDriverDecisionRequired = false}): _stops = stops,_routeSegments = routeSegments,super._();
   
 
 @override final  String id;

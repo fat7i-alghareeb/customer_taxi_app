@@ -85,8 +85,10 @@ class AppStrings {
   static String get activeTripPickupLabel => 'activeTripPickupLabel'.tr();
   /// Driver running late? - السائق متأخر؟ - Chauffeur te laat? - Fahrer verspätet? - Kierowca się spóźnia? - Водій запізнюється? - Chauffeur en retard ? - ¿El conductor se retrasa? - Șoferul întârzie?
   static String get activeTripReportDriverLate => 'activeTripReportDriverLate'.tr();
-  /// Your ride request is being processed… - تتم معالجة طلب رحلتك… - Uw ritaanvraag wordt verwerkt… - Ihre Fahrtanfrage wird bearbeitet… - Twoje zamówienie przejazdu jest przetwarzane… - Ваш запит на поїздку обробляється… - Votre demande de course est en cours de traitement… - Se está procesando tu solicitud de viaje… - Cererea ta de cursă este în curs de procesare…
+  /// Thank you for your ride request - شكراً لطلب رحلتك - Bedankt voor uw ritaanvraag - Danke für Ihre Fahrtanfrage - Dziękujemy za zamówienie przejazdu - Дякуємо за запит на поїздку - Merci pour votre demande de course - Gracias por tu solicitud de viaje - Mulțumim pentru cererea ta de cursă
   static String get activeTripRequestProcessing => 'activeTripRequestProcessing'.tr();
+  /// We're looking for an available driver near you. Your ride will be confirmed as soon as possible. Thank you for your patience. - نحن نبحث عن سائق متاح بالقرب منك. سيتم تأكيد رحلتك في أقرب وقت ممكن. شكراً لصبرك. - We zoeken een beschikbare chauffeur bij u in de buurt. Uw rit wordt zo spoedig mogelijk bevestigd. Bedankt voor uw geduld. - Wir suchen einen verfügbaren Fahrer in Ihrer Nähe. Ihre Fahrt wird so schnell wie möglich bestätigt. Vielen Dank für Ihre Geduld. - Szukamy dostępnego kierowcy w Twojej okolicy. Twój przejazd zostanie potwierdzony najszybciej jak to możliwe. Dziękujemy za cierpliwość. - Ми шукаємо доступного водія поруч із вами. Вашу поїздку буде підтверджено якнайшвидше. Дякуємо за терпіння. - Nous recherchons un chauffeur disponible près de vous. Votre course sera confirmée dès que possible. Merci pour votre patience. - Estamos buscando un conductor disponible cerca de ti. Tu viaje se confirmará lo antes posible. Gracias por tu paciencia. - Căutăm un șofer disponibil în apropierea ta. Cursa ta va fi confirmată cât mai curând posibil. Îți mulțumim pentru răbdare.
+  static String get activeTripRequestProcessingSubtitle => 'activeTripRequestProcessingSubtitle'.tr();
   /// Your ride is - رحلتك - Uw rit is - Ihre Fahrt ist - Twoja podróż jest - Вашу поїздку - Votre trajet est - Su viaje está - Călătoria ta este
   static String get activeTripRideIsPrefix => 'activeTripRideIsPrefix'.tr();
   /// We're looking for an available driver near you. - نبحث عن سائق متاح بالقرب منك. - We zoeken een beschikbare chauffeur bij u in de buurt. - Wir suchen einen verfügbaren Fahrer in Ihrer Nähe. - Szukamy dostępnego kierowcy w Twojej okolicy. - Ми шукаємо доступного водія поруч із вами. - Nous recherchons un chauffeur disponible près de vous. - Estamos buscando un conductor disponible cerca de usted. - Căutăm un șofer disponibil în apropierea ta.
@@ -237,6 +239,10 @@ class AppStrings {
   static String get bookARideNow => 'bookARideNow'.tr();
   /// Get matched with a driver right away - احصل على سائق على الفور - Word direct gekoppeld aan een chauffeur - Werde sofort mit einem Fahrer verbunden - Zostań natychmiast połączony z kierowcą - Отримайте водія негайно - Trouvez un chauffeur immédiatement - Encuentre un conductor de inmediato - Găsește un șofer imediat
   static String get bookARideNowSubtitle => 'bookARideNowSubtitle'.tr();
+  /// You owe {amount}. Settle it to book a new ride. - عليك {amount}. سدّده لحجز رحلة جديدة. - U heeft {amount} openstaan. Betaal dit om een nieuwe rit te boeken. - Sie schulden {amount}. Begleichen Sie den Betrag, um eine neue Fahrt zu buchen. - Masz do zapłaty {amount}. Ureguluj, aby zarezerwować nowy przejazd. - Ви винні {amount}. Погасіть, щоб забронювати нову поїздку. - Vous devez {amount}. Réglez ce montant pour réserver une nouvelle course. - Debes {amount}. Págalo para reservar un nuevo viaje. - Datorezi {amount}. Achită pentru a rezerva o cursă nouă.
+  static String get bookingBlockedByDebtMessage => 'bookingBlockedByDebtMessage'.tr();
+  /// Outstanding balance - مبلغ مستحق - Openstaand bedrag - Offener Betrag - Niespłacona kwota - Заборгованість - Solde impayé - Saldo pendiente - Sumă restantă
+  static String get bookingBlockedByDebtTitle => 'bookingBlockedByDebtTitle'.tr();
   /// Booking Details - تفاصيل الحجز - Boekingsdetails - Buchungsdetails - Szczegóły rezerwacji - Деталі бронювання - Détails de la réservation - Detalles de la reserva - Detalii rezervare
   static String get bookingDetails => 'bookingDetails'.tr();
   /// Cancel - إلغاء - Annuleren - Abbrechen - Anuluj - Скасувати - Annuler - Cancelar - Anulează
@@ -359,6 +365,10 @@ class AppStrings {
   static String get chatChooseGallery => 'chatChooseGallery'.tr();
   /// This chat has ended. - انتهت هذه الدردشة. - Deze chat is beëindigd. - Dieser Chat ist beendet. - Ten czat został zakończony. - Цей чат завершено. - Cette conversation est terminée. - Este chat ha finalizado. - Acest chat s-a încheiat.
   static String get chatClosedNotice => 'chatClosedNotice'.tr();
+  /// Copied - تم النسخ - Gekopieerd - Kopiert - Skopiowano - Скопійовано - Copié - Copiado - Copiat
+  static String get chatCopied => 'chatCopied'.tr();
+  /// Copy - نسخ - Kopiëren - Kopieren - Kopiuj - Копіювати - Copier - Copiar - Copiază
+  static String get chatCopy => 'chatCopy'.tr();
   /// No messages yet. Say hello! - لا توجد رسائل بعد. ابدأ بالتحية! - Nog geen berichten. Zeg hallo! - Noch keine Nachrichten. Sag Hallo! - Brak wiadomości. Przywitaj się! - Повідомлень ще немає. Привітайтеся! - Aucun message pour l'instant. Dites bonjour ! - Aún no hay mensajes. ¡Saluda! - Niciun mesaj încă. Salută!
   static String get chatEmptyState => 'chatEmptyState'.tr();
   /// Type your message - اكتب رسالتك - Typ je bericht - Schreib deine Nachricht - Napisz wiadomość - Напишіть повідомлення - Écrivez votre message - Escribe tu mensaje - Scrie mesajul tău
@@ -373,10 +383,14 @@ class AppStrings {
   static String get chatQuickWave => 'chatQuickWave'.tr();
   /// Where exactly are you? - أين أنت بالضبط؟ - Waar staat u precies? - Wo genau sind Sie? - Gdzie dokładnie jest pan? - Де саме ви знаходитесь? - Où êtes-vous exactement ? - ¿Dónde está exactamente? - Unde vă aflați exact?
   static String get chatQuickWhereExactly => 'chatQuickWhereExactly'.tr();
+  /// {count} selected - تم تحديد {count} - {count} geselecteerd - {count} ausgewählt - Wybrano: {count} - Вибрано: {count} - {count} sélectionné(s) - {count} seleccionado(s) - {count} selectate
+  static String get chatSelectedCount => 'chatSelectedCount'.tr();
   /// Couldn't send message. Please try again. - تعذّر إرسال الرسالة. حاول مرة أخرى. - Bericht kon niet worden verzonden. Probeer het opnieuw. - Nachricht konnte nicht gesendet werden. Bitte erneut versuchen. - Nie udało się wysłać wiadomości. Spróbuj ponownie. - Не вдалося надіслати повідомлення. Спробуйте ще раз. - Échec de l'envoi du message. Veuillez réessayer. - No se pudo enviar el mensaje. Inténtalo de nuevo. - Mesajul nu a putut fi trimis. Încearcă din nou.
   static String get chatSendFailed => 'chatSendFailed'.tr();
   /// Chat - الدردشة - Chat - Chat - Czat - Чат - Chat - Chat - Chat
   static String get chatTitle => 'chatTitle'.tr();
+  /// Chat with driver - محادثة مع السائق - Chat met chauffeur - Chat mit Fahrer - Czat z kierowcą - Чат з водієм - Chat avec le chauffeur - Chat con el conductor - Chat cu șoferul
+  static String get chatTitleWithDriver => 'chatTitleWithDriver'.tr();
   /// Do not share contact details and verification codes. Check the ride details via the app. - لا تشارك بيانات الاتصال ورموز التحقق. تحقق من تفاصيل الرحلة عبر التطبيق. - Deel nog geen contactgegevens en verificatiecodes. Controleer de details van de rit via de app. - Teilen Sie keine Kontaktdaten und Verifizierungscodes. Prüfen Sie die Fahrtdetails über die App. - Nie udostępniaj danych kontaktowych i kodów weryfikacyjnych. Sprawdź szczegóły przejazdu w aplikacji. - Не діліться контактними даними та кодами підтвердження. Перевірте деталі поїздки в додатку. - Ne partagez pas vos coordonnées ni vos codes de vérification. Consultez les détails du trajet dans l'application. - No compartas datos de contacto ni códigos de verificación. Comprueba los detalles del viaje en la app. - Nu partajați datele de contact și codurile de verificare. Verificați detaliile călătoriei prin aplicație.
   static String get chatWarningMessage => 'chatWarningMessage'.tr();
   /// Clear - مسح - Wissen - Löschen - Wyczyść - Очистити - Effacer - Limpiar - Șterge
@@ -909,8 +923,6 @@ class AppStrings {
   static String get ratingHighTitle => 'ratingHighTitle'.tr();
   /// We appreciate your feedback. Have a nice day! - نحن نقدّر ملاحظاتك. نتمنى لك يوماً سعيداً! - We waarderen je feedback. Fijne dag! - Wir schätzen Ihr Feedback. Schönen Tag noch! - Doceniamy Twoją opinię. Miłego dnia! - Ми цінуємо ваш відгук. Гарного дня! - Nous apprécions votre retour. Bonne journée ! - Valoramos tus comentarios. ¡Que tengas un buen día! - Apreciem feedbackul tău. O zi bună!
   static String get ratingLowThanks => 'ratingLowThanks'.tr();
-  /// Edit rating - تعديل التقييم - Wijzig beoordeling - Bewertung ändern - Zmień ocenę - Змінити оцінку - Modifier l'évaluation - Editar valoración - Modifică evaluarea
-  static String get ratingModify => 'ratingModify'.tr();
   /// Maybe later - ربما لاحقاً - Misschien later - Vielleicht später - Może później - Можливо, пізніше - Peut-être plus tard - Quizás más tarde - Poate mai târziu
   static String get ratingShareNo => 'ratingShareNo'.tr();
   /// Yes, review us on Google - نعم، قيّمنا على غوغل - Ja, beoordeel ons op Google - Ja, bewerten Sie uns auf Google - Tak, oceń nas w Google - Так, оцініть нас у Google - Oui, évaluez-nous sur Google - Sí, califícanos en Google - Da, evaluează-ne pe Google
@@ -1229,14 +1241,22 @@ class AppStrings {
   static String get tripEditAddress => 'tripEditAddress'.tr();
   /// Editing no longer possible. Address changes are only allowed within 1 hour of booking. - التعديل لم يعد ممكنًا. يُسمح بتغيير العنوان فقط خلال ساعة واحدة من الحجز. - Wijzigen niet meer mogelijk. Adreswijziging is alleen toegestaan binnen 1 uur na de boeking. - Bearbeitung nicht mehr möglich. Adressänderungen sind nur innerhalb einer Stunde nach der Buchung erlaubt. - Edycja nie jest już możliwa. Zmiany adresu są dozwolone tylko w ciągu 1 godziny od rezerwacji. - Редагування більше неможливе. Зміни адреси дозволені лише протягом 1 години після бронювання. - Modification impossible. Les changements d'adresse ne sont autorisés que dans l'heure suivant la réservation. - Ya no es posible editar. Los cambios de dirección solo están permitidos dentro de 1 hora tras la reserva. - Editarea nu mai este posibilă. Modificările de adresă sunt permise doar în termen de 1 oră de la rezervare.
   static String get tripEditAddressDisabled => 'tripEditAddressDisabled'.tr();
+  /// Your change was applied. - تم تطبيق التغيير. - Uw wijziging is doorgevoerd. - Ihre Änderung wurde übernommen. - Zmiana została zastosowana. - Зміну застосовано. - Votre modification a été appliquée. - Se aplicó tu cambio. - Modificarea a fost aplicată.
+  static String get tripEditAppliedNoChange => 'tripEditAppliedNoChange'.tr();
   /// Change luggage - تغيير عدد الأمتعة - Bagage wijzigen - Gepäck ändern - Zmień bagaż - Змінити багаж - Modifier les bagages - Cambiar equipaje - Schimbați bagajele
   static String get tripEditBags => 'tripEditBags'.tr();
+  /// {amount} was charged. Your trip now costs {total}. - تم خصم {amount}. تكلفة رحلتك الآن {total}. - Er is {amount} in rekening gebracht. Uw rit kost nu {total}. - {amount} wurden berechnet. Ihre Fahrt kostet jetzt {total}. - Pobrano {amount}. Twój przejazd kosztuje teraz {total}. - Списано {amount}. Ваша поїздка тепер коштує {total}. - {amount} ont été débités. Votre course coûte désormais {total}. - Se cobraron {amount}. Tu viaje ahora cuesta {total}. - S-au taxat {amount}. Cursa ta costă acum {total}.
+  static String get tripEditChargedConfirm => 'tripEditChargedConfirm'.tr();
   /// Confirm - تأكيد - Bevestigen - Bestätigen - Potwierdź - Підтвердити - Confirmer - Confirmar - Confirmă
   static String get tripEditConfirm => 'tripEditConfirm'.tr();
+  /// Confirming your payment… - جارٍ تأكيد الدفع… - Uw betaling wordt bevestigd… - Ihre Zahlung wird bestätigt… - Potwierdzanie płatności… - Підтвердження оплати… - Confirmation de votre paiement… - Confirmando tu pago… - Se confirmă plata…
+  static String get tripEditConfirmingPayment => 'tripEditConfirmingPayment'.tr();
   /// The price changed. Please review the new difference. - تغيّر السعر. يرجى مراجعة الفرق الجديد. - De prijs is gewijzigd. Bekijk het nieuwe verschil. - Der Preis hat sich geändert. Bitte prüfen Sie die neue Differenz. - Cena się zmieniła. Sprawdź nową różnicę. - Ціна змінилася. Перегляньте нову різницю. - Le prix a changé. Veuillez vérifier la nouvelle différence. - El precio cambió. Revisa la nueva diferencia. - Prețul s-a schimbat. Verifică noua diferență.
   static String get tripEditDeltaChanged => 'tripEditDeltaChanged'.tr();
   /// We couldn't apply your change. Please try again. - تعذّر تطبيق التغيير. حاول مرة أخرى. - We konden uw wijziging niet doorvoeren. Probeer het opnieuw. - Ihre Änderung konnte nicht übernommen werden. Bitte versuchen Sie es erneut. - Nie udało się zastosować zmiany. Spróbuj ponownie. - Не вдалося застосувати зміну. Спробуйте ще раз. - Nous n'avons pas pu appliquer votre modification. Veuillez réessayer. - No pudimos aplicar tu cambio. Inténtalo de nuevo. - Nu am putut aplica modificarea. Încearcă din nou.
   static String get tripEditFailed => 'tripEditFailed'.tr();
+  /// Can no longer be changed — the driver is on the way - لم يعد التغيير ممكناً — السائق في الطريق - Niet meer te wijzigen — de chauffeur is onderweg - Nicht mehr änderbar — der Fahrer ist unterwegs - Nie można już zmienić — kierowca jest w drodze - Змінити вже не можна — водій у дорозі - Plus modifiable — le chauffeur est en route - Ya no se puede cambiar: el conductor está en camino - Nu mai poate fi modificat — șoferul este pe drum
+  static String get tripEditLockedDriverOnWay => 'tripEditLockedDriverOnWay'.tr();
   /// This change doesn't affect your fare. Continue? - لا يؤثر هذا التغيير على الأجرة. هل تريد المتابعة؟ - Deze wijziging heeft geen invloed op uw ritprijs. Doorgaan? - Diese Änderung wirkt sich nicht auf Ihren Fahrpreis aus. Fortfahren? - Ta zmiana nie wpływa na opłatę. Kontynuować? - Ця зміна не впливає на вартість поїздки. Продовжити? - Cette modification n'affecte pas votre tarif. Continuer ? - Este cambio no afecta tu tarifa. ¿Continuar? - Această modificare nu afectează tariful. Continui?
   static String get tripEditNoChange => 'tripEditNoChange'.tr();
   /// Editing no longer possible. - التعديل لم يعد ممكنًا. - Wijzigen niet meer mogelijk. - Bearbeitung nicht mehr möglich. - Edycja nie jest już możliwa. - Редагування більше неможливе. - Modification impossible. - Ya no es posible editar. - Editarea nu mai este posibilă.
@@ -1255,6 +1275,8 @@ class AppStrings {
   static String get tripEditRefundMessage => 'tripEditRefundMessage'.tr();
   /// Refund the difference - استرداد الفرق - Verschil terugbetalen - Differenz erstatten - Zwrot różnicy - Повернути різницю - Rembourser la différence - Reembolsar la diferencia - Rambursează diferența
   static String get tripEditRefundTitle => 'tripEditRefundTitle'.tr();
+  /// {amount} will be refunded. Your trip now costs {total}. - سيتم استرداد {amount}. تكلفة رحلتك الآن {total}. - {amount} wordt terugbetaald. Uw rit kost nu {total}. - {amount} werden erstattet. Ihre Fahrt kostet jetzt {total}. - {amount} zostanie zwrócone. Twój przejazd kosztuje teraz {total}. - {amount} буде повернуто. Ваша поїздка тепер коштує {total}. - {amount} vous seront remboursés. Votre course coûte désormais {total}. - Se te reembolsarán {amount}. Tu viaje ahora cuesta {total}. - {amount} vor fi rambursați. Cursa ta costă acum {total}.
+  static String get tripEditRefundedConfirm => 'tripEditRefundedConfirm'.tr();
   /// Editing no longer possible. Time changes are only allowed within 1 hour of booking. - التعديل لم يعد ممكنًا. يُسمح بتغيير الوقت فقط خلال ساعة واحدة من الحجز. - Wijzigen niet meer mogelijk. Tijdwijziging is alleen toegestaan binnen 1 uur na de boeking. - Bearbeitung nicht mehr möglich. Zeitänderungen sind nur innerhalb einer Stunde nach der Buchung erlaubt. - Edycja nie jest już możliwa. Zmiany godziny są dozwolone tylko w ciągu 1 godziny od rezerwacji. - Редагування більше неможливе. Зміни часу дозволені лише протягом 1 години після бронювання. - Modification impossible. Les changements d'horaire ne sont autorisés que dans l'heure suivant la réservation. - Ya no es posible editar. Los cambios de hora solo están permitidos dentro de 1 hora tras la reserva. - Editarea nu mai este posibilă. Modificările de oră sunt permise doar în termen de 1 oră de la rezervare.
   static String get tripEditTimeDisabled => 'tripEditTimeDisabled'.tr();
   /// Your vehicle changes to {vehicle} for this trip. - تتغيّر مركبتك إلى {vehicle} لهذه الرحلة. - Uw voertuig wordt gewijzigd naar {vehicle} voor deze rit. - Ihr Fahrzeug wird für diese Fahrt zu {vehicle} geändert. - Twój pojazd zmienia się na {vehicle} dla tego przejazdu. - Ваш автомобіль змінюється на {vehicle} для цієї поїздки. - Votre véhicule devient {vehicle} pour cette course. - Tu vehículo cambia a {vehicle} para este viaje. - Vehiculul tău se schimbă în {vehicle} pentru această cursă.
@@ -1277,12 +1299,18 @@ class AppStrings {
   static String get tripInfoBookingTime => 'tripInfoBookingTime'.tr();
   /// Destination address - عنوان الوجهة - Bestemmingsadres - Zieladresse - Adres docelowy - Адреса призначення - Adresse de destination - Dirección de destino - Adresă de destinație
   static String get tripInfoDestinationAddress => 'tripInfoDestinationAddress'.tr();
+  /// Total fare - إجمالي الأجرة - Totale ritprijs - Gesamtpreis - Łączna opłata - Загальна вартість - Tarif total - Tarifa total - Tarif total
+  static String get tripInfoFareLabel => 'tripInfoFareLabel'.tr();
   /// Number of passengers - عدد الركاب - Aantal personen - Anzahl Fahrgäste - Liczba pasażerów - Кількість пасажирів - Nombre de passagers - Número de pasajeros - Număr de pasageri
   static String get tripInfoPassengersLabel => 'tripInfoPassengersLabel'.tr();
   /// Pickup address - عنوان الاستلام - Ophaaladres - Abholadresse - Adres odbioru - Адреса подачі - Adresse de prise en charge - Dirección de recogida - Adresă de preluare
   static String get tripInfoPickupAddress => 'tripInfoPickupAddress'.tr();
   /// Scheduled trip - الرحلة المجدولة - Geplande rit - Geplante Fahrt - Zaplanowany przejazd - Запланована поїздка - Trajet planifié - Viaje programado - Cursă programată
   static String get tripInfoScheduledTrip => 'tripInfoScheduledTrip'.tr();
+  /// Stop {index} - محطة {index} - Tussenstop {index} - Zwischenstopp {index} - Przystanek {index} - Зупинка {index} - Arrêt {index} - Parada {index} - Oprirea {index}
+  static String get tripInfoStopLabel => 'tripInfoStopLabel'.tr();
+  /// Vehicle - المركبة - Voertuig - Fahrzeug - Pojazd - Автомобіль - Véhicule - Vehículo - Vehicul
+  static String get tripInfoVehicleLabel => 'tripInfoVehicleLabel'.tr();
   /// Invoice - الفاتورة - Factuur - Rechnung - Faktura - Рахунок - Facture - Factura - Factură
   static String get tripInvoiceChip => 'tripInvoiceChip'.tr();
   /// Scheduled time must be at least 15 minutes from now. - يجب أن يكون الوقت المجدول بعد 15 دقيقة على الأقل من الآن. - De geplande tijd moet minstens 15 minuten in de toekomst liggen. - Die geplante Zeit muss mindestens 15 Minuten in der Zukunft liegen. - Zaplanowany czas musi być o co najmniej 15 minut w przyszłość. - Запланований час має бути щонайменше на 15 хвилин у майбутньому. - L'heure programmée doit être d'au moins 15 minutes dans le futur. - La hora programada debe ser al menos 15 minutos en el futuro. - Ora programată trebuie să fie cu cel puțin 15 minute în viitor.
@@ -1427,8 +1455,16 @@ class AppStrings {
   static String get waitingLateMinutes => 'waitingLateMinutes'.tr();
   /// Please pay the waiting time costs to the driver. - يرجى دفع تكاليف وقت الانتظار للسائق. - Betaal de kosten voor de wachttijd aan de chauffeur. - Bitte zahlen Sie die Wartezeitkosten an den Fahrer. - Prosimy zapłacić kierowcy koszty czasu oczekiwania. - Будь ласка, сплатіть водієві вартість часу очікування. - Veuillez payer au chauffeur les frais liés au temps d’attente. - Por favor, pague al conductor los costes del tiempo de espera. - Vă rugăm să plătiți șoferului costurile pentru timpul de așteptare.
   static String get waitingPayDriverNotice => 'waitingPayDriverNotice'.tr();
+  /// Amount owed - مبلغ مستحق - Openstaand bedrag - Offener Betrag - Kwota do zapłaty - Сума до сплати - Montant dû - Importe pendiente - Sumă datorată
+  static String get walletAmountOwedTitle => 'walletAmountOwedTitle'.tr();
+  /// This was charged to your balance because it could not be collected at the time. - تم تحميل هذا على رصيدك لأنه تعذّر تحصيله في حينه. - Dit is op uw saldo geboekt omdat het op dat moment niet kon worden afgeschreven. - Dies wurde Ihrem Guthaben belastet, weil es zum Zeitpunkt nicht eingezogen werden konnte. - Kwota obciążyła Twoje saldo, ponieważ nie udało się jej wtedy pobrać. - Цю суму списано з вашого балансу, бо тоді її не вдалося стягнути. - Ce montant a été imputé à votre solde car il n'a pas pu être prélevé sur le moment. - Se cargó a tu saldo porque no se pudo cobrar en su momento. - A fost debitată din soldul tău deoarece nu a putut fi încasată la momentul respectiv.
+  static String get walletDebtExplainer => 'walletDebtExplainer'.tr();
+  /// Your balance is settled. You can book again. - تم تسوية رصيدك. يمكنك الحجز مجدداً. - Uw saldo is voldaan. U kunt weer boeken. - Ihr Guthaben ist ausgeglichen. Sie können wieder buchen. - Twoje saldo jest uregulowane. Możesz ponownie rezerwować. - Ваш баланс погашено. Можете бронювати знову. - Votre solde est réglé. Vous pouvez réserver à nouveau. - Tu saldo está saldado. Ya puedes reservar. - Soldul tău este achitat. Poți rezerva din nou.
+  static String get walletDebtSettled => 'walletDebtSettled'.tr();
   /// No transactions yet - لا توجد معاملات بعد - Nog geen transacties - Noch keine Transaktionen - Brak transakcji - Ще немає транзакцій - Aucune transaction pour le moment - Aún no hay transacciones - Nicio tranzacție încă
   static String get walletNoTransactions => 'walletNoTransactions'.tr();
+  /// Pay {amount} - ادفع {amount} - Betaal {amount} - {amount} bezahlen - Zapłać {amount} - Сплатити {amount} - Payer {amount} - Pagar {amount} - Plătește {amount}
+  static String get walletPayWhatYouOwe => 'walletPayWhatYouOwe'.tr();
   /// Fat7i Saldo - رصيد Fat7i - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo - Fat7i Saldo
   static String get walletSaldoTitle => 'walletSaldoTitle'.tr();
   /// Top-up amount - مبلغ الشحن - Opwaardeerbedrag - Aufladebetrag - Kwota doładowania - Сума поповнення - Montant du rechargement - Importe de recarga - Sumă de reîncărcare

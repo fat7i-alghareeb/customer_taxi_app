@@ -11,11 +11,16 @@ Future<int?> showTripCountPicker(
 }) {
   return showDialog<int>(
     context: context,
-    builder: (_) => TripCountPickerDialog(
-      title: title,
-      initial: initial,
-      min: min,
-      max: max,
+    // Pushed on the root navigator, so it does not inherit the active-trip
+    // accent from the subtree that opened it — apply it here.
+    builder: (_) => tripAccentTheme(
+      context,
+      child: TripCountPickerDialog(
+        title: title,
+        initial: initial,
+        min: min,
+        max: max,
+      ),
     ),
   );
 }

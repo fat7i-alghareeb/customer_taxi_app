@@ -1,40 +1,49 @@
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/features/order/domain/entities/order_location_entity.dart';
+import 'package:customertaxi/features/order/presentation/ui/screens/location_picker_screen.dart';
+import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_address_picker_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_count_picker_dialog.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_edit_flow.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_fare_card.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_info_row_widget.dart';
 
-/// Pickup → drop-off timeline plus passenger and bag rows — the shared trip
-/// details block rendered identically on the confirmation (pending / accepted)
-/// and en-route sheets. Destination, passengers and bags stay editable while
-/// the trip status allows repricing (`isEditableForRepricing`); each edit is
+/// Stop timeline plus passenger and bag rows — the shared trip details block
+/// rendered identically on the confirmation (pending / accepted) and en-route
+/// sheets. Any stop can be repointed while the route edit window is open
+/// (`TripEntity.canEditStops`); passengers and bags stay editable only until the
+/// driver starts moving (`canEditPartySize`). Route and passenger edits are
 /// previewed and charged/refunded server-side via [runTripEditFlow].
 class TripEditableDetails extends StatelessWidget {
   const TripEditableDetails({required this.trip, super.key});
 
   final TripEntity trip;
 
-  bool get _canEdit => trip.status.isEditableForRepricing;
-
-  Future<void> _editDestination(BuildContext context) async {
-    final location = await showTripAddressPickerSheet(
-      context,
-      title: AppStrings.tripInfoDestinationAddress,
-    );
-    if (location == null || !context.mounted) return;
-
+  /// Opens the same search + pin-on-map picker used when booking, centred on the
+  /// stop being changed, and re-prices the trip with the new route.
+  Future<void> _editStop(BuildContext context, int index) async {
     final current = trip.stops;
-    if (current.isEmpty) return;
-    final lastIndex = current.length - 1;
+    if (index < 0 || index >= current.length) return;
+
+    final stop = current[index];
+    final picked = await context.pushNamed<OrderLocationEntity>(
+      LocationPickerScreen.pageName,
+      extra: RootMapLocationEntity(
+        latitude: stop.latitude,
+        longitude: stop.longitude,
+        zoom: 15,
+      ),
+    );
+    if (picked == null || !context.mounted) return;
+
     final updated = <TripStopEntity>[
       for (var i = 0; i < current.length; i++)
-        if (i == lastIndex)
+        if (i == index)
           TripStopEntity(
-            latitude: location.latitude,
-            longitude: location.longitude,
-            label: location.label,
+            latitude: picked.latitude,
+            longitude: picked.longitude,
+            label: picked.label,
           )
         else
           current[i],
@@ -79,18 +88,23 @@ class TripEditableDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pickup = trip.stops.isNotEmpty ? trip.stops.first : null;
-    final dropoff = trip.stops.length > 1 ? trip.stops.last : null;
+    final canEditStops = trip.canEditStops;
+    final canEditPartySize = trip.canEditPartySize;
+
+    // Party size closes once the driver is moving, because a bigger party can force a
+    // different vehicle. Say so — a bare greyed pencil just looks broken.
+    final partySizeLockReason = canEditPartySize
+        ? null
+        : AppStrings.tripEditLockedDriverOnWay;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (pickup != null || dropoff != null)
+        if (trip.stops.isNotEmpty)
           _StopsSection(
-            pickup: pickup,
-            dropoff: dropoff,
-            onEditDropoff: (dropoff != null && _canEdit)
-                ? () => _editDestination(context)
+            stops: trip.stops,
+            onEditStop: canEditStops
+                ? (index) => _editStop(context, index)
                 : null,
           ),
         AppSpacing.sm.verticalSpace,
@@ -102,7 +116,8 @@ class TripEditableDetails extends StatelessWidget {
             '{count}',
             trip.passengerCount.toString(),
           ),
-          onEditTap: _canEdit ? () => _editPassengers(context) : null,
+          onEditTap: canEditPartySize ? () => _editPassengers(context) : null,
+          disabledReason: partySizeLockReason,
         ),
 
         TripInfoRowWidget(
@@ -112,26 +127,37 @@ class TripEditableDetails extends StatelessWidget {
             '{count}',
             trip.bagCount.toString(),
           ),
-          onEditTap: _canEdit ? () => _editBags(context) : null,
+          onEditTap: canEditPartySize ? () => _editBags(context) : null,
+          disabledReason: partySizeLockReason,
         ),
+
+        // Read-only, but essential: a passenger-count edit past the current capacity swaps
+        // the vehicle, and without this row that upgrade happens invisibly.
+        if (trip.vehicleTypeName case final vehicle?
+            when vehicle.isNotEmpty)
+          TripInfoRowWidget(
+            icon: FontAwesomeIcons.carSide,
+            label: AppStrings.tripInfoVehicleLabel,
+            value: vehicle,
+            showEditAffordance: false,
+          ),
+
+        AppSpacing.sm.verticalSpace,
+        TripFareCard(trip: trip),
       ],
     );
   }
 }
 
-/// Pickup → drop-off dot timeline (orange pickup dot, connector, outlined
-/// drop-off dot). The drop-off row shows an edit pencil when [onEditDropoff]
-/// is provided.
+/// Dot timeline over every stop — orange pickup dot, connectors, outlined dots
+/// for intermediate stops and the drop-off. Each row shows an edit pencil when
+/// [onEditStop] is provided. Intermediate stops used to be hidden entirely; they
+/// are part of the fare, so the rider needs to see and correct them.
 class _StopsSection extends StatelessWidget {
-  const _StopsSection({
-    required this.pickup,
-    required this.dropoff,
-    this.onEditDropoff,
-  });
+  const _StopsSection({required this.stops, this.onEditStop});
 
-  final TripStopEntity? pickup;
-  final TripStopEntity? dropoff;
-  final VoidCallback? onEditDropoff;
+  final List<TripStopEntity> stops;
+  final void Function(int index)? onEditStop;
 
   @override
   Widget build(BuildContext context) {
@@ -199,32 +225,34 @@ class _StopsSection extends StatelessWidget {
       ],
     );
 
+    final connector = Padding(
+      padding: REdgeInsets.only(left: dotSize / 2 - 1),
+      child: Container(
+        width: 2,
+        height: 18,
+        color: colors.onSurface.withValues(alpha: 0.12),
+      ),
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (pickup != null)
+        for (var i = 0; i < stops.length; i++) ...[
+          if (i > 0) connector,
           locationRow(
-            label: AppStrings.activeTripPickupLabel,
-            address: pickup!.label ?? '',
-            isPickup: true,
+            label: _labelFor(i),
+            address: stops[i].label ?? '',
+            isPickup: i == 0,
+            onEdit: onEditStop == null ? null : () => onEditStop!(i),
           ),
-        if (pickup != null && dropoff != null)
-          Padding(
-            padding: REdgeInsets.only(left: dotSize / 2 - 1),
-            child: Container(
-              width: 2,
-              height: 18,
-              color: colors.onSurface.withValues(alpha: 0.12),
-            ),
-          ),
-        if (dropoff != null)
-          locationRow(
-            label: AppStrings.activeTripDropoffLabel,
-            address: dropoff!.label ?? '',
-            isPickup: false,
-            onEdit: onEditDropoff,
-          ),
+        ],
       ],
     );
+  }
+
+  String _labelFor(int index) {
+    if (index == 0) return AppStrings.activeTripPickupLabel;
+    if (index == stops.length - 1) return AppStrings.activeTripDropoffLabel;
+    return AppStrings.tripInfoStopLabel.replaceAll('{index}', index.toString());
   }
 }

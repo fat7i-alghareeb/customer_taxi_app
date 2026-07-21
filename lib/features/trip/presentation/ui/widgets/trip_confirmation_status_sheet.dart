@@ -108,8 +108,8 @@ class _TripConfirmationStatusSheetState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Headline: pending shows "Uw ritaanvraag wordt verwerkt…", accepted
-          // cross-fades to "Uw rit is bevestigd".
+          // Headline: pending shows "Bedankt voor uw ritaanvraag" + reassurance
+          // subtitle, accepted cross-fades to "Uw rit is bevestigd".
           AnimatedSwitcher(
             duration: AppDurations.slow,
             switchInCurve: Curves.easeOutCubic,
@@ -188,8 +188,9 @@ class _TripConfirmationStatusSheetState
   }
 }
 
-/// Pending shows "Uw ritaanvraag wordt verwerkt…"; once accepted it becomes
-/// "Uw rit is **bevestigd**" (keyword in the primary colour).
+/// Pending shows "Bedankt voor uw ritaanvraag" (in [AppColors.tripOrange]) plus
+/// a muted reassurance subtitle; once accepted it becomes "Uw rit is
+/// **bevestigd**" (keyword in the primary colour).
 class _Headline extends StatelessWidget {
   const _Headline({required this.isAccepted, super.key});
 
@@ -200,9 +201,25 @@ class _Headline extends StatelessWidget {
     final colors = context.colorScheme;
 
     if (!isAccepted) {
-      return Text(
-        AppStrings.activeTripRequestProcessing,
-        style: AppTextStyles.s24w700.copyWith(color: colors.onSurface),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            AppStrings.activeTripRequestProcessing,
+            style: AppTextStyles.s24w700.copyWith(
+              color: AppColors.tripOrange,
+            ),
+          ),
+          AppSpacing.xs.verticalSpace,
+          Text(
+            AppStrings.activeTripRequestProcessingSubtitle,
+            style: AppTextStyles.s14w400.copyWith(
+              color: colors.onSurface.withValues(alpha: 0.7),
+              height: 1.35,
+            ),
+          ),
+        ],
       );
     }
 

@@ -14,8 +14,12 @@ extension StripePaymentModelMapper on StripePaymentModel {
 }
 
 extension WalletBalanceModelMapper on WalletBalanceModel {
-  WalletBalanceEntity get toEntity =>
-      WalletBalanceEntity(balance: balance, currencyCode: currencyCode);
+  WalletBalanceEntity get toEntity => WalletBalanceEntity(
+    balance: balance,
+    currencyCode: currencyCode,
+    amountOwed: amountOwed,
+    isBookingBlocked: isBookingBlocked,
+  );
 }
 
 extension WalletTopUpModelMapper on WalletTopUpModel {

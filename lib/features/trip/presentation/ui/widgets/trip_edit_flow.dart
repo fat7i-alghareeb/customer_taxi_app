@@ -24,7 +24,10 @@ Future<void> runTripEditFlow(
 
   // 1) Preview (no mutation).
   bloc.add(
-    TripEvent.editPreviewRequested(stops: stops, passengerCount: passengerCount),
+    TripEvent.editPreviewRequested(
+      stops: stops,
+      passengerCount: passengerCount,
+    ),
   );
   final previewState = await bloc.stream.firstWhere(
     (s) => s.editPreviewStatus.isSuccess || s.editPreviewStatus.isFailed,
@@ -49,12 +52,14 @@ Future<void> runTripEditFlow(
   }
   if (!context.mounted) return;
 
-  // 3) Apply + settle.
+  // 3) Apply + settle. The preview token pins the server to the quote just shown, so the
+  //    amount charged is the amount confirmed above.
   bloc.add(
     TripEvent.editApplyRequested(
       stops: stops,
       passengerCount: passengerCount,
       expectedDelta: preview.delta,
+      previewToken: preview.previewToken,
     ),
   );
   final applyState = await bloc.stream.firstWhere(
@@ -64,17 +69,60 @@ Future<void> runTripEditFlow(
 
   final result = applyState.editApplyStatus.getDataWhenSuccess;
   if (result == null) {
-    showErrorOverlay(context, _mapError(applyState.editApplyStatus.errorMessage));
+    showErrorOverlay(
+      context,
+      _mapError(applyState.editApplyStatus.errorMessage),
+    );
     bloc.add(const TripEvent.editStatusReset());
     return;
   }
 
   // 4) Interactive PaymentSheet fallback (higher fare, no usable saved card).
   if (result.requiresPaymentSheet) {
-    await _presentPaymentSheet(context, result);
+    final paid = await _presentPaymentSheet(context, result);
+    if (!context.mounted) return;
+    bloc.add(const TripEvent.editStatusReset());
+    if (paid) {
+      // The edit is applied by the Stripe webhook, not by the call we just made, so the
+      // trip in hand is still the pre-edit one. Poll for the committed version rather
+      // than leaving the old details on screen — realtime is the fast path, not the only
+      // one, and it was previously the only one.
+      showLoadingOverlay(context, AppStrings.tripEditConfirmingPayment);
+      bloc.add(const TripEvent.pollingTick());
+    }
+    return;
   }
 
-  if (context.mounted) bloc.add(const TripEvent.editStatusReset());
+  // 5) Settled silently (wallet / saved card) — the money already moved, so say so.
+  //    Leaving this silent is what made customers think nothing had been charged.
+  //    The wallet balance needs no nudge here: PaymentBloc is a factory and the wallet
+  //    screen refetches on open, so there is no shared instance holding a stale figure.
+  _showSettlementConfirmation(context, result);
+  bloc.add(const TripEvent.editStatusReset());
+}
+
+/// Confirms what a committed edit cost. [delta] > 0 was charged, < 0 is being refunded.
+void _showSettlementConfirmation(
+  BuildContext context,
+  TripEditApplyResultEntity result,
+) {
+  final amount = '${result.delta.abs().toStringAsFixed(2)} ${result.currency}';
+  final total = result.trip == null
+      ? null
+      : '${result.trip!.quotedFare.toStringAsFixed(2)} ${result.trip!.currencyCode}';
+
+  if (result.delta == 0 || total == null) {
+    showSuccessOverlay(context, AppStrings.tripEditAppliedNoChange);
+    return;
+  }
+
+  final key = result.delta > 0
+      ? 'tripEditChargedConfirm'
+      : 'tripEditRefundedConfirm';
+  showSuccessOverlay(
+    context,
+    key.tr(namedArgs: {'amount': amount, 'total': total}),
+  );
 }
 
 Future<bool?> _showDeltaDialog(
@@ -118,7 +166,9 @@ Future<bool?> _showDeltaDialog(
   );
 }
 
-Future<void> _presentPaymentSheet(
+/// Returns true when the customer completed the sheet, so the caller knows to wait for the
+/// webhook-applied trip rather than assuming nothing changed.
+Future<bool> _presentPaymentSheet(
   BuildContext context,
   TripEditApplyResultEntity result,
 ) async {
@@ -130,30 +180,35 @@ Future<void> _presentPaymentSheet(
         customerId: sheet.customerId,
         customerEphemeralKeySecret: sheet.ephemeralKeySecret,
         merchantDisplayName: 'customertaxi',
+        linkDisplayParams: const LinkDisplayParams(
+          linkDisplay: LinkDisplay.never,
+        ),
         style: ThemeMode.system,
         returnURL: 'customertaxi://stripe-redirect',
       ),
     );
     await Stripe.instance.presentPaymentSheet();
-    // Success: the backend applies the held edit via webhook; the trip refreshes
-    // over realtime. No local mutation needed here.
+    // Paid. The backend applies the held edit from the webhook, so the change lands
+    // shortly after this returns — the caller refreshes rather than assuming.
+    return true;
   } on StripeException catch (e) {
     // Dismissing the sheet abandons the edit — the backend reverts it (no change).
-    if (e.error.code == FailureCode.Canceled) return;
+    if (e.error.code == FailureCode.Canceled) return false;
     if (context.mounted) {
       showErrorOverlay(context, AppStrings.tripEditPaymentDeclined);
     }
+    return false;
   } catch (_) {
     if (context.mounted) {
       showErrorOverlay(context, AppStrings.tripEditPaymentDeclined);
     }
+    return false;
   }
 }
 
 String _mapError(String? message) {
   if (message == null || message.isEmpty) return AppStrings.tripEditFailed;
-  if (message.contains(_deltaChangedCode) ||
-      message.contains('DeltaChanged')) {
+  if (message.contains(_deltaChangedCode) || message.contains('DeltaChanged')) {
     return AppStrings.tripEditDeltaChanged;
   }
   return message;

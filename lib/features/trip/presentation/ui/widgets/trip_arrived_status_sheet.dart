@@ -6,20 +6,18 @@ import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_waiting_
 
 /// Dedicated arrived sheet (shown after the brief stepper handoff in
 /// `GlassmorphicTripStatusSheet`): green arrival banner + live waiting-time
-/// counter + chat + cancel + compensation.
+/// counter + chat + cancel.
 class TripArrivedStatusSheet extends StatelessWidget {
   const TripArrivedStatusSheet({
     required this.trip,
     required this.cancelStatus,
     required this.onCancelPressed,
-    required this.onCompensationPressed,
     super.key,
   });
 
   final TripEntity trip;
   final BlocStatus<void> cancelStatus;
   final VoidCallback onCancelPressed;
-  final VoidCallback onCompensationPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -118,15 +116,6 @@ class TripArrivedStatusSheet extends StatelessWidget {
         TripCancelButton(
           isLoading: cancelStatus.isLoading,
           onTap: onCancelPressed,
-        ),
-
-        // Late-driver compensation claim (policy: >20 min late => compensation).
-        AppSpacing.sm.verticalSpace,
-        Center(
-          child: TextButton(
-            onPressed: onCompensationPressed,
-            child: Text(AppStrings.activeTripReportDriverLate),
-          ),
         ),
       ],
     );

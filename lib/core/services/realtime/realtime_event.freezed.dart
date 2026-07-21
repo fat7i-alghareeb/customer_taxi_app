@@ -14,61 +14,30 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RealtimeEvent {
 
- String? get tripId;
-/// Create a copy of RealtimeEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$RealtimeEventCopyWith<RealtimeEvent> get copyWith => _$RealtimeEventCopyWithImpl<RealtimeEvent>(this as RealtimeEvent, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RealtimeEvent&&(identical(other.tripId, tripId) || other.tripId == tripId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RealtimeEvent);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,tripId);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'RealtimeEvent(tripId: $tripId)';
+  return 'RealtimeEvent()';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $RealtimeEventCopyWith<$Res>  {
-  factory $RealtimeEventCopyWith(RealtimeEvent value, $Res Function(RealtimeEvent) _then) = _$RealtimeEventCopyWithImpl;
-@useResult
-$Res call({
- String tripId
-});
-
-
-
-
-}
-/// @nodoc
-class _$RealtimeEventCopyWithImpl<$Res>
-    implements $RealtimeEventCopyWith<$Res> {
-  _$RealtimeEventCopyWithImpl(this._self, this._then);
-
-  final RealtimeEvent _self;
-  final $Res Function(RealtimeEvent) _then;
-
-/// Create a copy of RealtimeEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? tripId = null,}) {
-  return _then(_self.copyWith(
-tripId: null == tripId ? _self.tripId! : tripId // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
+class $RealtimeEventCopyWith<$Res>  {
+$RealtimeEventCopyWith(RealtimeEvent _, $Res Function(RealtimeEvent) __);
 }
 
 
@@ -86,7 +55,7 @@ extension RealtimeEventPatterns on RealtimeEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( RealtimeTripRequested value)?  tripRequested,TResult Function( RealtimeDriverAssigned value)?  driverAssigned,TResult Function( RealtimeTripAccepted value)?  tripAccepted,TResult Function( RealtimeTripStarted value)?  tripStarted,TResult Function( RealtimeTripCompleted value)?  tripCompleted,TResult Function( RealtimeTripCancelled value)?  tripCancelled,TResult Function( RealtimePaymentConfirmed value)?  paymentConfirmed,TResult Function( RealtimePaymentFailed value)?  paymentFailed,TResult Function( RealtimeTripRefunded value)?  tripRefunded,TResult Function( RealtimeRefundLifecycleChanged value)?  refundLifecycleChanged,TResult Function( RealtimeDriverEnRoute value)?  driverEnRoute,TResult Function( RealtimeDriverArrived value)?  driverArrived,TResult Function( RealtimeDriverLocationUpdated value)?  driverLocationUpdated,TResult Function( RealtimeTripStopCompleted value)?  tripStopCompleted,TResult Function( RealtimeTripMessageReceived value)?  tripMessageReceived,TResult Function( RealtimeChatClosed value)?  chatClosed,TResult Function( RealtimeNoDriverFound value)?  noDriverFound,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( RealtimeTripRequested value)?  tripRequested,TResult Function( RealtimeDriverAssigned value)?  driverAssigned,TResult Function( RealtimeTripAccepted value)?  tripAccepted,TResult Function( RealtimeTripStarted value)?  tripStarted,TResult Function( RealtimeTripCompleted value)?  tripCompleted,TResult Function( RealtimeTripCancelled value)?  tripCancelled,TResult Function( RealtimePaymentConfirmed value)?  paymentConfirmed,TResult Function( RealtimePaymentFailed value)?  paymentFailed,TResult Function( RealtimeTripRefunded value)?  tripRefunded,TResult Function( RealtimeRefundLifecycleChanged value)?  refundLifecycleChanged,TResult Function( RealtimeDriverEnRoute value)?  driverEnRoute,TResult Function( RealtimeDriverArrived value)?  driverArrived,TResult Function( RealtimeDriverLocationUpdated value)?  driverLocationUpdated,TResult Function( RealtimeTripStopCompleted value)?  tripStopCompleted,TResult Function( RealtimeTripMessageReceived value)?  tripMessageReceived,TResult Function( RealtimeChatClosed value)?  chatClosed,TResult Function( RealtimeNoDriverFound value)?  noDriverFound,TResult Function( RealtimeTripEditApplied value)?  tripEditApplied,TResult Function( RealtimeWalletBalanceChanged value)?  walletBalanceChanged,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case RealtimeTripRequested() when tripRequested != null:
@@ -106,7 +75,9 @@ return driverLocationUpdated(_that);case RealtimeTripStopCompleted() when tripSt
 return tripStopCompleted(_that);case RealtimeTripMessageReceived() when tripMessageReceived != null:
 return tripMessageReceived(_that);case RealtimeChatClosed() when chatClosed != null:
 return chatClosed(_that);case RealtimeNoDriverFound() when noDriverFound != null:
-return noDriverFound(_that);case _:
+return noDriverFound(_that);case RealtimeTripEditApplied() when tripEditApplied != null:
+return tripEditApplied(_that);case RealtimeWalletBalanceChanged() when walletBalanceChanged != null:
+return walletBalanceChanged(_that);case _:
   return orElse();
 
 }
@@ -124,7 +95,7 @@ return noDriverFound(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( RealtimeTripRequested value)  tripRequested,required TResult Function( RealtimeDriverAssigned value)  driverAssigned,required TResult Function( RealtimeTripAccepted value)  tripAccepted,required TResult Function( RealtimeTripStarted value)  tripStarted,required TResult Function( RealtimeTripCompleted value)  tripCompleted,required TResult Function( RealtimeTripCancelled value)  tripCancelled,required TResult Function( RealtimePaymentConfirmed value)  paymentConfirmed,required TResult Function( RealtimePaymentFailed value)  paymentFailed,required TResult Function( RealtimeTripRefunded value)  tripRefunded,required TResult Function( RealtimeRefundLifecycleChanged value)  refundLifecycleChanged,required TResult Function( RealtimeDriverEnRoute value)  driverEnRoute,required TResult Function( RealtimeDriverArrived value)  driverArrived,required TResult Function( RealtimeDriverLocationUpdated value)  driverLocationUpdated,required TResult Function( RealtimeTripStopCompleted value)  tripStopCompleted,required TResult Function( RealtimeTripMessageReceived value)  tripMessageReceived,required TResult Function( RealtimeChatClosed value)  chatClosed,required TResult Function( RealtimeNoDriverFound value)  noDriverFound,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( RealtimeTripRequested value)  tripRequested,required TResult Function( RealtimeDriverAssigned value)  driverAssigned,required TResult Function( RealtimeTripAccepted value)  tripAccepted,required TResult Function( RealtimeTripStarted value)  tripStarted,required TResult Function( RealtimeTripCompleted value)  tripCompleted,required TResult Function( RealtimeTripCancelled value)  tripCancelled,required TResult Function( RealtimePaymentConfirmed value)  paymentConfirmed,required TResult Function( RealtimePaymentFailed value)  paymentFailed,required TResult Function( RealtimeTripRefunded value)  tripRefunded,required TResult Function( RealtimeRefundLifecycleChanged value)  refundLifecycleChanged,required TResult Function( RealtimeDriverEnRoute value)  driverEnRoute,required TResult Function( RealtimeDriverArrived value)  driverArrived,required TResult Function( RealtimeDriverLocationUpdated value)  driverLocationUpdated,required TResult Function( RealtimeTripStopCompleted value)  tripStopCompleted,required TResult Function( RealtimeTripMessageReceived value)  tripMessageReceived,required TResult Function( RealtimeChatClosed value)  chatClosed,required TResult Function( RealtimeNoDriverFound value)  noDriverFound,required TResult Function( RealtimeTripEditApplied value)  tripEditApplied,required TResult Function( RealtimeWalletBalanceChanged value)  walletBalanceChanged,}){
 final _that = this;
 switch (_that) {
 case RealtimeTripRequested():
@@ -144,7 +115,9 @@ return driverLocationUpdated(_that);case RealtimeTripStopCompleted():
 return tripStopCompleted(_that);case RealtimeTripMessageReceived():
 return tripMessageReceived(_that);case RealtimeChatClosed():
 return chatClosed(_that);case RealtimeNoDriverFound():
-return noDriverFound(_that);}
+return noDriverFound(_that);case RealtimeTripEditApplied():
+return tripEditApplied(_that);case RealtimeWalletBalanceChanged():
+return walletBalanceChanged(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -158,7 +131,7 @@ return noDriverFound(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( RealtimeTripRequested value)?  tripRequested,TResult? Function( RealtimeDriverAssigned value)?  driverAssigned,TResult? Function( RealtimeTripAccepted value)?  tripAccepted,TResult? Function( RealtimeTripStarted value)?  tripStarted,TResult? Function( RealtimeTripCompleted value)?  tripCompleted,TResult? Function( RealtimeTripCancelled value)?  tripCancelled,TResult? Function( RealtimePaymentConfirmed value)?  paymentConfirmed,TResult? Function( RealtimePaymentFailed value)?  paymentFailed,TResult? Function( RealtimeTripRefunded value)?  tripRefunded,TResult? Function( RealtimeRefundLifecycleChanged value)?  refundLifecycleChanged,TResult? Function( RealtimeDriverEnRoute value)?  driverEnRoute,TResult? Function( RealtimeDriverArrived value)?  driverArrived,TResult? Function( RealtimeDriverLocationUpdated value)?  driverLocationUpdated,TResult? Function( RealtimeTripStopCompleted value)?  tripStopCompleted,TResult? Function( RealtimeTripMessageReceived value)?  tripMessageReceived,TResult? Function( RealtimeChatClosed value)?  chatClosed,TResult? Function( RealtimeNoDriverFound value)?  noDriverFound,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( RealtimeTripRequested value)?  tripRequested,TResult? Function( RealtimeDriverAssigned value)?  driverAssigned,TResult? Function( RealtimeTripAccepted value)?  tripAccepted,TResult? Function( RealtimeTripStarted value)?  tripStarted,TResult? Function( RealtimeTripCompleted value)?  tripCompleted,TResult? Function( RealtimeTripCancelled value)?  tripCancelled,TResult? Function( RealtimePaymentConfirmed value)?  paymentConfirmed,TResult? Function( RealtimePaymentFailed value)?  paymentFailed,TResult? Function( RealtimeTripRefunded value)?  tripRefunded,TResult? Function( RealtimeRefundLifecycleChanged value)?  refundLifecycleChanged,TResult? Function( RealtimeDriverEnRoute value)?  driverEnRoute,TResult? Function( RealtimeDriverArrived value)?  driverArrived,TResult? Function( RealtimeDriverLocationUpdated value)?  driverLocationUpdated,TResult? Function( RealtimeTripStopCompleted value)?  tripStopCompleted,TResult? Function( RealtimeTripMessageReceived value)?  tripMessageReceived,TResult? Function( RealtimeChatClosed value)?  chatClosed,TResult? Function( RealtimeNoDriverFound value)?  noDriverFound,TResult? Function( RealtimeTripEditApplied value)?  tripEditApplied,TResult? Function( RealtimeWalletBalanceChanged value)?  walletBalanceChanged,}){
 final _that = this;
 switch (_that) {
 case RealtimeTripRequested() when tripRequested != null:
@@ -178,7 +151,9 @@ return driverLocationUpdated(_that);case RealtimeTripStopCompleted() when tripSt
 return tripStopCompleted(_that);case RealtimeTripMessageReceived() when tripMessageReceived != null:
 return tripMessageReceived(_that);case RealtimeChatClosed() when chatClosed != null:
 return chatClosed(_that);case RealtimeNoDriverFound() when noDriverFound != null:
-return noDriverFound(_that);case _:
+return noDriverFound(_that);case RealtimeTripEditApplied() when tripEditApplied != null:
+return tripEditApplied(_that);case RealtimeWalletBalanceChanged() when walletBalanceChanged != null:
+return walletBalanceChanged(_that);case _:
   return null;
 
 }
@@ -195,7 +170,7 @@ return noDriverFound(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId,  String vehicleTypeId,  String passengerId)?  tripRequested,TResult Function( String tripId,  String passengerId,  String driverId)?  driverAssigned,TResult Function( String tripId,  String passengerId,  String adminId)?  tripAccepted,TResult Function( String tripId,  String passengerId)?  tripStarted,TResult Function( String tripId,  String passengerId)?  tripCompleted,TResult Function( String tripId,  String passengerId)?  tripCancelled,TResult Function( String tripId,  String passengerId)?  paymentConfirmed,TResult Function( String tripId,  String passengerId,  String reason)?  paymentFailed,TResult Function( String tripId,  String passengerId,  double amount)?  tripRefunded,TResult Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)?  refundLifecycleChanged,TResult Function( String tripId,  String passengerId,  String driverId)?  driverEnRoute,TResult Function( String tripId,  String passengerId,  String driverId)?  driverArrived,TResult Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult Function( String tripId,  String passengerId,  String? driverId,  int sequence)?  tripStopCompleted,TResult Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)?  tripMessageReceived,TResult Function( String tripId)?  chatClosed,TResult Function( String tripId,  String passengerId)?  noDriverFound,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tripId,  String vehicleTypeId,  String passengerId)?  tripRequested,TResult Function( String tripId,  String passengerId,  String driverId)?  driverAssigned,TResult Function( String tripId,  String passengerId,  String adminId)?  tripAccepted,TResult Function( String tripId,  String passengerId)?  tripStarted,TResult Function( String tripId,  String passengerId)?  tripCompleted,TResult Function( String tripId,  String passengerId)?  tripCancelled,TResult Function( String tripId,  String passengerId)?  paymentConfirmed,TResult Function( String tripId,  String passengerId,  String reason)?  paymentFailed,TResult Function( String tripId,  String passengerId,  double amount)?  tripRefunded,TResult Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)?  refundLifecycleChanged,TResult Function( String tripId,  String passengerId,  String driverId)?  driverEnRoute,TResult Function( String tripId,  String passengerId,  String driverId)?  driverArrived,TResult Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult Function( String tripId,  String passengerId,  String? driverId,  int sequence)?  tripStopCompleted,TResult Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)?  tripMessageReceived,TResult Function( String tripId)?  chatClosed,TResult Function( String tripId,  String passengerId)?  noDriverFound,TResult Function( String tripId,  double newFare,  String currency,  double delta,  int passengerCount,  String? vehicleTypeName,  String? dropoffLabel)?  tripEditApplied,TResult Function( String userId,  double balance,  double amountOwed,  String currency)?  walletBalanceChanged,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case RealtimeTripRequested() when tripRequested != null:
 return tripRequested(_that.tripId,_that.vehicleTypeId,_that.passengerId);case RealtimeDriverAssigned() when driverAssigned != null:
@@ -214,7 +189,9 @@ return driverLocationUpdated(_that.tripId,_that.driverId,_that.latitude,_that.lo
 return tripStopCompleted(_that.tripId,_that.passengerId,_that.driverId,_that.sequence);case RealtimeTripMessageReceived() when tripMessageReceived != null:
 return tripMessageReceived(_that.tripId,_that.messageId,_that.senderId,_that.senderRole,_that.content,_that.photoUrl,_that.sentAtUtc);case RealtimeChatClosed() when chatClosed != null:
 return chatClosed(_that.tripId);case RealtimeNoDriverFound() when noDriverFound != null:
-return noDriverFound(_that.tripId,_that.passengerId);case _:
+return noDriverFound(_that.tripId,_that.passengerId);case RealtimeTripEditApplied() when tripEditApplied != null:
+return tripEditApplied(_that.tripId,_that.newFare,_that.currency,_that.delta,_that.passengerCount,_that.vehicleTypeName,_that.dropoffLabel);case RealtimeWalletBalanceChanged() when walletBalanceChanged != null:
+return walletBalanceChanged(_that.userId,_that.balance,_that.amountOwed,_that.currency);case _:
   return orElse();
 
 }
@@ -232,7 +209,7 @@ return noDriverFound(_that.tripId,_that.passengerId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId,  String vehicleTypeId,  String passengerId)  tripRequested,required TResult Function( String tripId,  String passengerId,  String driverId)  driverAssigned,required TResult Function( String tripId,  String passengerId,  String adminId)  tripAccepted,required TResult Function( String tripId,  String passengerId)  tripStarted,required TResult Function( String tripId,  String passengerId)  tripCompleted,required TResult Function( String tripId,  String passengerId)  tripCancelled,required TResult Function( String tripId,  String passengerId)  paymentConfirmed,required TResult Function( String tripId,  String passengerId,  String reason)  paymentFailed,required TResult Function( String tripId,  String passengerId,  double amount)  tripRefunded,required TResult Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)  refundLifecycleChanged,required TResult Function( String tripId,  String passengerId,  String driverId)  driverEnRoute,required TResult Function( String tripId,  String passengerId,  String driverId)  driverArrived,required TResult Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)  driverLocationUpdated,required TResult Function( String tripId,  String passengerId,  String? driverId,  int sequence)  tripStopCompleted,required TResult Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)  tripMessageReceived,required TResult Function( String tripId)  chatClosed,required TResult Function( String tripId,  String passengerId)  noDriverFound,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tripId,  String vehicleTypeId,  String passengerId)  tripRequested,required TResult Function( String tripId,  String passengerId,  String driverId)  driverAssigned,required TResult Function( String tripId,  String passengerId,  String adminId)  tripAccepted,required TResult Function( String tripId,  String passengerId)  tripStarted,required TResult Function( String tripId,  String passengerId)  tripCompleted,required TResult Function( String tripId,  String passengerId)  tripCancelled,required TResult Function( String tripId,  String passengerId)  paymentConfirmed,required TResult Function( String tripId,  String passengerId,  String reason)  paymentFailed,required TResult Function( String tripId,  String passengerId,  double amount)  tripRefunded,required TResult Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)  refundLifecycleChanged,required TResult Function( String tripId,  String passengerId,  String driverId)  driverEnRoute,required TResult Function( String tripId,  String passengerId,  String driverId)  driverArrived,required TResult Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)  driverLocationUpdated,required TResult Function( String tripId,  String passengerId,  String? driverId,  int sequence)  tripStopCompleted,required TResult Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)  tripMessageReceived,required TResult Function( String tripId)  chatClosed,required TResult Function( String tripId,  String passengerId)  noDriverFound,required TResult Function( String tripId,  double newFare,  String currency,  double delta,  int passengerCount,  String? vehicleTypeName,  String? dropoffLabel)  tripEditApplied,required TResult Function( String userId,  double balance,  double amountOwed,  String currency)  walletBalanceChanged,}) {final _that = this;
 switch (_that) {
 case RealtimeTripRequested():
 return tripRequested(_that.tripId,_that.vehicleTypeId,_that.passengerId);case RealtimeDriverAssigned():
@@ -251,7 +228,9 @@ return driverLocationUpdated(_that.tripId,_that.driverId,_that.latitude,_that.lo
 return tripStopCompleted(_that.tripId,_that.passengerId,_that.driverId,_that.sequence);case RealtimeTripMessageReceived():
 return tripMessageReceived(_that.tripId,_that.messageId,_that.senderId,_that.senderRole,_that.content,_that.photoUrl,_that.sentAtUtc);case RealtimeChatClosed():
 return chatClosed(_that.tripId);case RealtimeNoDriverFound():
-return noDriverFound(_that.tripId,_that.passengerId);}
+return noDriverFound(_that.tripId,_that.passengerId);case RealtimeTripEditApplied():
+return tripEditApplied(_that.tripId,_that.newFare,_that.currency,_that.delta,_that.passengerCount,_that.vehicleTypeName,_that.dropoffLabel);case RealtimeWalletBalanceChanged():
+return walletBalanceChanged(_that.userId,_that.balance,_that.amountOwed,_that.currency);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -265,7 +244,7 @@ return noDriverFound(_that.tripId,_that.passengerId);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId,  String vehicleTypeId,  String passengerId)?  tripRequested,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverAssigned,TResult? Function( String tripId,  String passengerId,  String adminId)?  tripAccepted,TResult? Function( String tripId,  String passengerId)?  tripStarted,TResult? Function( String tripId,  String passengerId)?  tripCompleted,TResult? Function( String tripId,  String passengerId)?  tripCancelled,TResult? Function( String tripId,  String passengerId)?  paymentConfirmed,TResult? Function( String tripId,  String passengerId,  String reason)?  paymentFailed,TResult? Function( String tripId,  String passengerId,  double amount)?  tripRefunded,TResult? Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)?  refundLifecycleChanged,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverEnRoute,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverArrived,TResult? Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult? Function( String tripId,  String passengerId,  String? driverId,  int sequence)?  tripStopCompleted,TResult? Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)?  tripMessageReceived,TResult? Function( String tripId)?  chatClosed,TResult? Function( String tripId,  String passengerId)?  noDriverFound,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tripId,  String vehicleTypeId,  String passengerId)?  tripRequested,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverAssigned,TResult? Function( String tripId,  String passengerId,  String adminId)?  tripAccepted,TResult? Function( String tripId,  String passengerId)?  tripStarted,TResult? Function( String tripId,  String passengerId)?  tripCompleted,TResult? Function( String tripId,  String passengerId)?  tripCancelled,TResult? Function( String tripId,  String passengerId)?  paymentConfirmed,TResult? Function( String tripId,  String passengerId,  String reason)?  paymentFailed,TResult? Function( String tripId,  String passengerId,  double amount)?  tripRefunded,TResult? Function( String refundId,  String paymentId,  String? tripId,  String? passengerId,  String status,  double amount,  String currency,  bool requiresAdminAction,  bool canRetry,  String sourceType)?  refundLifecycleChanged,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverEnRoute,TResult? Function( String tripId,  String passengerId,  String driverId)?  driverArrived,TResult? Function( String tripId,  String driverId,  double latitude,  double longitude,  int? etaToPickupSeconds,  int? distanceToPickupMeters,  String? routeToPickupPolyline)?  driverLocationUpdated,TResult? Function( String tripId,  String passengerId,  String? driverId,  int sequence)?  tripStopCompleted,TResult? Function( String tripId,  String messageId,  String senderId,  String senderRole,  String? content,  String? photoUrl,  String sentAtUtc)?  tripMessageReceived,TResult? Function( String tripId)?  chatClosed,TResult? Function( String tripId,  String passengerId)?  noDriverFound,TResult? Function( String tripId,  double newFare,  String currency,  double delta,  int passengerCount,  String? vehicleTypeName,  String? dropoffLabel)?  tripEditApplied,TResult? Function( String userId,  double balance,  double amountOwed,  String currency)?  walletBalanceChanged,}) {final _that = this;
 switch (_that) {
 case RealtimeTripRequested() when tripRequested != null:
 return tripRequested(_that.tripId,_that.vehicleTypeId,_that.passengerId);case RealtimeDriverAssigned() when driverAssigned != null:
@@ -284,7 +263,9 @@ return driverLocationUpdated(_that.tripId,_that.driverId,_that.latitude,_that.lo
 return tripStopCompleted(_that.tripId,_that.passengerId,_that.driverId,_that.sequence);case RealtimeTripMessageReceived() when tripMessageReceived != null:
 return tripMessageReceived(_that.tripId,_that.messageId,_that.senderId,_that.senderRole,_that.content,_that.photoUrl,_that.sentAtUtc);case RealtimeChatClosed() when chatClosed != null:
 return chatClosed(_that.tripId);case RealtimeNoDriverFound() when noDriverFound != null:
-return noDriverFound(_that.tripId,_that.passengerId);case _:
+return noDriverFound(_that.tripId,_that.passengerId);case RealtimeTripEditApplied() when tripEditApplied != null:
+return tripEditApplied(_that.tripId,_that.newFare,_that.currency,_that.delta,_that.passengerCount,_that.vehicleTypeName,_that.dropoffLabel);case RealtimeWalletBalanceChanged() when walletBalanceChanged != null:
+return walletBalanceChanged(_that.userId,_that.balance,_that.amountOwed,_that.currency);case _:
   return null;
 
 }
@@ -299,13 +280,13 @@ class RealtimeTripRequested implements RealtimeEvent {
   const RealtimeTripRequested({required this.tripId, required this.vehicleTypeId, required this.passengerId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String vehicleTypeId;
  final  String passengerId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeTripRequestedCopyWith<RealtimeTripRequested> get copyWith => _$RealtimeTripRequestedCopyWithImpl<RealtimeTripRequested>(this, _$identity);
 
@@ -331,7 +312,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeTripRequestedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeTripRequestedCopyWith(RealtimeTripRequested value, $Res Function(RealtimeTripRequested) _then) = _$RealtimeTripRequestedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String vehicleTypeId, String passengerId
 });
@@ -350,7 +331,7 @@ class _$RealtimeTripRequestedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? vehicleTypeId = null,Object? passengerId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? vehicleTypeId = null,Object? passengerId = null,}) {
   return _then(RealtimeTripRequested(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,vehicleTypeId: null == vehicleTypeId ? _self.vehicleTypeId : vehicleTypeId // ignore: cast_nullable_to_non_nullable
@@ -369,13 +350,13 @@ class RealtimeDriverAssigned implements RealtimeEvent {
   const RealtimeDriverAssigned({required this.tripId, required this.passengerId, required this.driverId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
  final  String driverId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeDriverAssignedCopyWith<RealtimeDriverAssigned> get copyWith => _$RealtimeDriverAssignedCopyWithImpl<RealtimeDriverAssigned>(this, _$identity);
 
@@ -401,7 +382,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeDriverAssignedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeDriverAssignedCopyWith(RealtimeDriverAssigned value, $Res Function(RealtimeDriverAssigned) _then) = _$RealtimeDriverAssignedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId, String driverId
 });
@@ -420,7 +401,7 @@ class _$RealtimeDriverAssignedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? driverId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? driverId = null,}) {
   return _then(RealtimeDriverAssigned(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -439,13 +420,13 @@ class RealtimeTripAccepted implements RealtimeEvent {
   const RealtimeTripAccepted({required this.tripId, required this.passengerId, required this.adminId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
  final  String adminId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeTripAcceptedCopyWith<RealtimeTripAccepted> get copyWith => _$RealtimeTripAcceptedCopyWithImpl<RealtimeTripAccepted>(this, _$identity);
 
@@ -471,7 +452,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeTripAcceptedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeTripAcceptedCopyWith(RealtimeTripAccepted value, $Res Function(RealtimeTripAccepted) _then) = _$RealtimeTripAcceptedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId, String adminId
 });
@@ -490,7 +471,7 @@ class _$RealtimeTripAcceptedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? adminId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? adminId = null,}) {
   return _then(RealtimeTripAccepted(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -509,12 +490,12 @@ class RealtimeTripStarted implements RealtimeEvent {
   const RealtimeTripStarted({required this.tripId, required this.passengerId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeTripStartedCopyWith<RealtimeTripStarted> get copyWith => _$RealtimeTripStartedCopyWithImpl<RealtimeTripStarted>(this, _$identity);
 
@@ -540,7 +521,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeTripStartedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeTripStartedCopyWith(RealtimeTripStarted value, $Res Function(RealtimeTripStarted) _then) = _$RealtimeTripStartedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId
 });
@@ -559,7 +540,7 @@ class _$RealtimeTripStartedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
   return _then(RealtimeTripStarted(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -577,12 +558,12 @@ class RealtimeTripCompleted implements RealtimeEvent {
   const RealtimeTripCompleted({required this.tripId, required this.passengerId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeTripCompletedCopyWith<RealtimeTripCompleted> get copyWith => _$RealtimeTripCompletedCopyWithImpl<RealtimeTripCompleted>(this, _$identity);
 
@@ -608,7 +589,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeTripCompletedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeTripCompletedCopyWith(RealtimeTripCompleted value, $Res Function(RealtimeTripCompleted) _then) = _$RealtimeTripCompletedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId
 });
@@ -627,7 +608,7 @@ class _$RealtimeTripCompletedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
   return _then(RealtimeTripCompleted(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -645,12 +626,12 @@ class RealtimeTripCancelled implements RealtimeEvent {
   const RealtimeTripCancelled({required this.tripId, required this.passengerId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeTripCancelledCopyWith<RealtimeTripCancelled> get copyWith => _$RealtimeTripCancelledCopyWithImpl<RealtimeTripCancelled>(this, _$identity);
 
@@ -676,7 +657,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeTripCancelledCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeTripCancelledCopyWith(RealtimeTripCancelled value, $Res Function(RealtimeTripCancelled) _then) = _$RealtimeTripCancelledCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId
 });
@@ -695,7 +676,7 @@ class _$RealtimeTripCancelledCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
   return _then(RealtimeTripCancelled(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -713,12 +694,12 @@ class RealtimePaymentConfirmed implements RealtimeEvent {
   const RealtimePaymentConfirmed({required this.tripId, required this.passengerId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimePaymentConfirmedCopyWith<RealtimePaymentConfirmed> get copyWith => _$RealtimePaymentConfirmedCopyWithImpl<RealtimePaymentConfirmed>(this, _$identity);
 
@@ -744,7 +725,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimePaymentConfirmedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimePaymentConfirmedCopyWith(RealtimePaymentConfirmed value, $Res Function(RealtimePaymentConfirmed) _then) = _$RealtimePaymentConfirmedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId
 });
@@ -763,7 +744,7 @@ class _$RealtimePaymentConfirmedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
   return _then(RealtimePaymentConfirmed(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -781,13 +762,13 @@ class RealtimePaymentFailed implements RealtimeEvent {
   const RealtimePaymentFailed({required this.tripId, required this.passengerId, required this.reason});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
  final  String reason;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimePaymentFailedCopyWith<RealtimePaymentFailed> get copyWith => _$RealtimePaymentFailedCopyWithImpl<RealtimePaymentFailed>(this, _$identity);
 
@@ -813,7 +794,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimePaymentFailedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimePaymentFailedCopyWith(RealtimePaymentFailed value, $Res Function(RealtimePaymentFailed) _then) = _$RealtimePaymentFailedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId, String reason
 });
@@ -832,7 +813,7 @@ class _$RealtimePaymentFailedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? reason = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? reason = null,}) {
   return _then(RealtimePaymentFailed(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -851,13 +832,13 @@ class RealtimeTripRefunded implements RealtimeEvent {
   const RealtimeTripRefunded({required this.tripId, required this.passengerId, required this.amount});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
  final  double amount;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeTripRefundedCopyWith<RealtimeTripRefunded> get copyWith => _$RealtimeTripRefundedCopyWithImpl<RealtimeTripRefunded>(this, _$identity);
 
@@ -883,7 +864,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeTripRefundedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeTripRefundedCopyWith(RealtimeTripRefunded value, $Res Function(RealtimeTripRefunded) _then) = _$RealtimeTripRefundedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId, double amount
 });
@@ -902,7 +883,7 @@ class _$RealtimeTripRefundedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? amount = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? amount = null,}) {
   return _then(RealtimeTripRefunded(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -923,7 +904,7 @@ class RealtimeRefundLifecycleChanged implements RealtimeEvent {
 
  final  String refundId;
  final  String paymentId;
-@override final  String? tripId;
+ final  String? tripId;
  final  String? passengerId;
  final  String status;
  final  double amount;
@@ -934,7 +915,7 @@ class RealtimeRefundLifecycleChanged implements RealtimeEvent {
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeRefundLifecycleChangedCopyWith<RealtimeRefundLifecycleChanged> get copyWith => _$RealtimeRefundLifecycleChangedCopyWithImpl<RealtimeRefundLifecycleChanged>(this, _$identity);
 
@@ -960,7 +941,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeRefundLifecycleChangedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeRefundLifecycleChangedCopyWith(RealtimeRefundLifecycleChanged value, $Res Function(RealtimeRefundLifecycleChanged) _then) = _$RealtimeRefundLifecycleChangedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String refundId, String paymentId, String? tripId, String? passengerId, String status, double amount, String currency, bool requiresAdminAction, bool canRetry, String sourceType
 });
@@ -979,7 +960,7 @@ class _$RealtimeRefundLifecycleChangedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? refundId = null,Object? paymentId = null,Object? tripId = freezed,Object? passengerId = freezed,Object? status = null,Object? amount = null,Object? currency = null,Object? requiresAdminAction = null,Object? canRetry = null,Object? sourceType = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? refundId = null,Object? paymentId = null,Object? tripId = freezed,Object? passengerId = freezed,Object? status = null,Object? amount = null,Object? currency = null,Object? requiresAdminAction = null,Object? canRetry = null,Object? sourceType = null,}) {
   return _then(RealtimeRefundLifecycleChanged(
 refundId: null == refundId ? _self.refundId : refundId // ignore: cast_nullable_to_non_nullable
 as String,paymentId: null == paymentId ? _self.paymentId : paymentId // ignore: cast_nullable_to_non_nullable
@@ -1005,13 +986,13 @@ class RealtimeDriverEnRoute implements RealtimeEvent {
   const RealtimeDriverEnRoute({required this.tripId, required this.passengerId, required this.driverId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
  final  String driverId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeDriverEnRouteCopyWith<RealtimeDriverEnRoute> get copyWith => _$RealtimeDriverEnRouteCopyWithImpl<RealtimeDriverEnRoute>(this, _$identity);
 
@@ -1037,7 +1018,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeDriverEnRouteCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeDriverEnRouteCopyWith(RealtimeDriverEnRoute value, $Res Function(RealtimeDriverEnRoute) _then) = _$RealtimeDriverEnRouteCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId, String driverId
 });
@@ -1056,7 +1037,7 @@ class _$RealtimeDriverEnRouteCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? driverId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? driverId = null,}) {
   return _then(RealtimeDriverEnRoute(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -1075,13 +1056,13 @@ class RealtimeDriverArrived implements RealtimeEvent {
   const RealtimeDriverArrived({required this.tripId, required this.passengerId, required this.driverId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
  final  String driverId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeDriverArrivedCopyWith<RealtimeDriverArrived> get copyWith => _$RealtimeDriverArrivedCopyWithImpl<RealtimeDriverArrived>(this, _$identity);
 
@@ -1107,7 +1088,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeDriverArrivedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeDriverArrivedCopyWith(RealtimeDriverArrived value, $Res Function(RealtimeDriverArrived) _then) = _$RealtimeDriverArrivedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId, String driverId
 });
@@ -1126,7 +1107,7 @@ class _$RealtimeDriverArrivedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? driverId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? driverId = null,}) {
   return _then(RealtimeDriverArrived(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -1145,7 +1126,7 @@ class RealtimeDriverLocationUpdated implements RealtimeEvent {
   const RealtimeDriverLocationUpdated({required this.tripId, required this.driverId, required this.latitude, required this.longitude, this.etaToPickupSeconds, this.distanceToPickupMeters, this.routeToPickupPolyline});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String driverId;
  final  double latitude;
  final  double longitude;
@@ -1157,7 +1138,7 @@ class RealtimeDriverLocationUpdated implements RealtimeEvent {
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeDriverLocationUpdatedCopyWith<RealtimeDriverLocationUpdated> get copyWith => _$RealtimeDriverLocationUpdatedCopyWithImpl<RealtimeDriverLocationUpdated>(this, _$identity);
 
@@ -1183,7 +1164,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeDriverLocationUpdatedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeDriverLocationUpdatedCopyWith(RealtimeDriverLocationUpdated value, $Res Function(RealtimeDriverLocationUpdated) _then) = _$RealtimeDriverLocationUpdatedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String driverId, double latitude, double longitude, int? etaToPickupSeconds, int? distanceToPickupMeters, String? routeToPickupPolyline
 });
@@ -1202,7 +1183,7 @@ class _$RealtimeDriverLocationUpdatedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? driverId = null,Object? latitude = null,Object? longitude = null,Object? etaToPickupSeconds = freezed,Object? distanceToPickupMeters = freezed,Object? routeToPickupPolyline = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? driverId = null,Object? latitude = null,Object? longitude = null,Object? etaToPickupSeconds = freezed,Object? distanceToPickupMeters = freezed,Object? routeToPickupPolyline = freezed,}) {
   return _then(RealtimeDriverLocationUpdated(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,driverId: null == driverId ? _self.driverId : driverId // ignore: cast_nullable_to_non_nullable
@@ -1225,14 +1206,14 @@ class RealtimeTripStopCompleted implements RealtimeEvent {
   const RealtimeTripStopCompleted({required this.tripId, required this.passengerId, this.driverId, required this.sequence});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
  final  String? driverId;
  final  int sequence;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeTripStopCompletedCopyWith<RealtimeTripStopCompleted> get copyWith => _$RealtimeTripStopCompletedCopyWithImpl<RealtimeTripStopCompleted>(this, _$identity);
 
@@ -1258,7 +1239,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeTripStopCompletedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeTripStopCompletedCopyWith(RealtimeTripStopCompleted value, $Res Function(RealtimeTripStopCompleted) _then) = _$RealtimeTripStopCompletedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId, String? driverId, int sequence
 });
@@ -1277,7 +1258,7 @@ class _$RealtimeTripStopCompletedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? driverId = freezed,Object? sequence = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,Object? driverId = freezed,Object? sequence = null,}) {
   return _then(RealtimeTripStopCompleted(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
@@ -1297,7 +1278,7 @@ class RealtimeTripMessageReceived implements RealtimeEvent {
   const RealtimeTripMessageReceived({required this.tripId, required this.messageId, required this.senderId, required this.senderRole, this.content, this.photoUrl, required this.sentAtUtc});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String messageId;
  final  String senderId;
  final  String senderRole;
@@ -1307,7 +1288,7 @@ class RealtimeTripMessageReceived implements RealtimeEvent {
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeTripMessageReceivedCopyWith<RealtimeTripMessageReceived> get copyWith => _$RealtimeTripMessageReceivedCopyWithImpl<RealtimeTripMessageReceived>(this, _$identity);
 
@@ -1333,7 +1314,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeTripMessageReceivedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeTripMessageReceivedCopyWith(RealtimeTripMessageReceived value, $Res Function(RealtimeTripMessageReceived) _then) = _$RealtimeTripMessageReceivedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String messageId, String senderId, String senderRole, String? content, String? photoUrl, String sentAtUtc
 });
@@ -1352,7 +1333,7 @@ class _$RealtimeTripMessageReceivedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? messageId = null,Object? senderId = null,Object? senderRole = null,Object? content = freezed,Object? photoUrl = freezed,Object? sentAtUtc = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? messageId = null,Object? senderId = null,Object? senderRole = null,Object? content = freezed,Object? photoUrl = freezed,Object? sentAtUtc = null,}) {
   return _then(RealtimeTripMessageReceived(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
@@ -1375,11 +1356,11 @@ class RealtimeChatClosed implements RealtimeEvent {
   const RealtimeChatClosed({required this.tripId});
   
 
-@override final  String tripId;
+ final  String tripId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeChatClosedCopyWith<RealtimeChatClosed> get copyWith => _$RealtimeChatClosedCopyWithImpl<RealtimeChatClosed>(this, _$identity);
 
@@ -1405,7 +1386,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeChatClosedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeChatClosedCopyWith(RealtimeChatClosed value, $Res Function(RealtimeChatClosed) _then) = _$RealtimeChatClosedCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId
 });
@@ -1424,7 +1405,7 @@ class _$RealtimeChatClosedCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,}) {
   return _then(RealtimeChatClosed(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,
@@ -1441,12 +1422,12 @@ class RealtimeNoDriverFound implements RealtimeEvent {
   const RealtimeNoDriverFound({required this.tripId, required this.passengerId});
   
 
-@override final  String tripId;
+ final  String tripId;
  final  String passengerId;
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $RealtimeNoDriverFoundCopyWith<RealtimeNoDriverFound> get copyWith => _$RealtimeNoDriverFoundCopyWithImpl<RealtimeNoDriverFound>(this, _$identity);
 
@@ -1472,7 +1453,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $RealtimeNoDriverFoundCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
   factory $RealtimeNoDriverFoundCopyWith(RealtimeNoDriverFound value, $Res Function(RealtimeNoDriverFound) _then) = _$RealtimeNoDriverFoundCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String tripId, String passengerId
 });
@@ -1491,10 +1472,160 @@ class _$RealtimeNoDriverFoundCopyWithImpl<$Res>
 
 /// Create a copy of RealtimeEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? passengerId = null,}) {
   return _then(RealtimeNoDriverFound(
 tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
 as String,passengerId: null == passengerId ? _self.passengerId : passengerId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class RealtimeTripEditApplied implements RealtimeEvent {
+  const RealtimeTripEditApplied({required this.tripId, required this.newFare, required this.currency, required this.delta, required this.passengerCount, this.vehicleTypeName, this.dropoffLabel});
+  
+
+ final  String tripId;
+ final  double newFare;
+ final  String currency;
+ final  double delta;
+ final  int passengerCount;
+ final  String? vehicleTypeName;
+ final  String? dropoffLabel;
+
+/// Create a copy of RealtimeEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$RealtimeTripEditAppliedCopyWith<RealtimeTripEditApplied> get copyWith => _$RealtimeTripEditAppliedCopyWithImpl<RealtimeTripEditApplied>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RealtimeTripEditApplied&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.newFare, newFare) || other.newFare == newFare)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.delta, delta) || other.delta == delta)&&(identical(other.passengerCount, passengerCount) || other.passengerCount == passengerCount)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.dropoffLabel, dropoffLabel) || other.dropoffLabel == dropoffLabel));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tripId,newFare,currency,delta,passengerCount,vehicleTypeName,dropoffLabel);
+
+@override
+String toString() {
+  return 'RealtimeEvent.tripEditApplied(tripId: $tripId, newFare: $newFare, currency: $currency, delta: $delta, passengerCount: $passengerCount, vehicleTypeName: $vehicleTypeName, dropoffLabel: $dropoffLabel)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $RealtimeTripEditAppliedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
+  factory $RealtimeTripEditAppliedCopyWith(RealtimeTripEditApplied value, $Res Function(RealtimeTripEditApplied) _then) = _$RealtimeTripEditAppliedCopyWithImpl;
+@useResult
+$Res call({
+ String tripId, double newFare, String currency, double delta, int passengerCount, String? vehicleTypeName, String? dropoffLabel
+});
+
+
+
+
+}
+/// @nodoc
+class _$RealtimeTripEditAppliedCopyWithImpl<$Res>
+    implements $RealtimeTripEditAppliedCopyWith<$Res> {
+  _$RealtimeTripEditAppliedCopyWithImpl(this._self, this._then);
+
+  final RealtimeTripEditApplied _self;
+  final $Res Function(RealtimeTripEditApplied) _then;
+
+/// Create a copy of RealtimeEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tripId = null,Object? newFare = null,Object? currency = null,Object? delta = null,Object? passengerCount = null,Object? vehicleTypeName = freezed,Object? dropoffLabel = freezed,}) {
+  return _then(RealtimeTripEditApplied(
+tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
+as String,newFare: null == newFare ? _self.newFare : newFare // ignore: cast_nullable_to_non_nullable
+as double,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
+as String,delta: null == delta ? _self.delta : delta // ignore: cast_nullable_to_non_nullable
+as double,passengerCount: null == passengerCount ? _self.passengerCount : passengerCount // ignore: cast_nullable_to_non_nullable
+as int,vehicleTypeName: freezed == vehicleTypeName ? _self.vehicleTypeName : vehicleTypeName // ignore: cast_nullable_to_non_nullable
+as String?,dropoffLabel: freezed == dropoffLabel ? _self.dropoffLabel : dropoffLabel // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class RealtimeWalletBalanceChanged implements RealtimeEvent {
+  const RealtimeWalletBalanceChanged({required this.userId, required this.balance, required this.amountOwed, required this.currency});
+  
+
+ final  String userId;
+ final  double balance;
+ final  double amountOwed;
+ final  String currency;
+
+/// Create a copy of RealtimeEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$RealtimeWalletBalanceChangedCopyWith<RealtimeWalletBalanceChanged> get copyWith => _$RealtimeWalletBalanceChangedCopyWithImpl<RealtimeWalletBalanceChanged>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RealtimeWalletBalanceChanged&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.amountOwed, amountOwed) || other.amountOwed == amountOwed)&&(identical(other.currency, currency) || other.currency == currency));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,userId,balance,amountOwed,currency);
+
+@override
+String toString() {
+  return 'RealtimeEvent.walletBalanceChanged(userId: $userId, balance: $balance, amountOwed: $amountOwed, currency: $currency)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $RealtimeWalletBalanceChangedCopyWith<$Res> implements $RealtimeEventCopyWith<$Res> {
+  factory $RealtimeWalletBalanceChangedCopyWith(RealtimeWalletBalanceChanged value, $Res Function(RealtimeWalletBalanceChanged) _then) = _$RealtimeWalletBalanceChangedCopyWithImpl;
+@useResult
+$Res call({
+ String userId, double balance, double amountOwed, String currency
+});
+
+
+
+
+}
+/// @nodoc
+class _$RealtimeWalletBalanceChangedCopyWithImpl<$Res>
+    implements $RealtimeWalletBalanceChangedCopyWith<$Res> {
+  _$RealtimeWalletBalanceChangedCopyWithImpl(this._self, this._then);
+
+  final RealtimeWalletBalanceChanged _self;
+  final $Res Function(RealtimeWalletBalanceChanged) _then;
+
+/// Create a copy of RealtimeEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? balance = null,Object? amountOwed = null,Object? currency = null,}) {
+  return _then(RealtimeWalletBalanceChanged(
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
+as double,amountOwed: null == amountOwed ? _self.amountOwed : amountOwed // ignore: cast_nullable_to_non_nullable
+as double,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

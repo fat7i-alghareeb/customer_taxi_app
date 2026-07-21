@@ -10,24 +10,21 @@ import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_editable
 /// (see `GlassmorphicTripStatusSheet`) where all three stepper steps render
 /// checked just before the dedicated arrived sheet takes over. Shows the same
 /// address / passengers / bags block as the confirmation sheet (editable while
-/// the status allows repricing), plus the progress stepper and the live arrival
-/// header (en-route only).
+/// the status allows repricing), plus the progress stepper.
+///
+/// No arrival ETA here: it lives in the `LiveArrivalBadge` over the map, so
+/// repeating it inside the sheet was duplicate information.
 class TripEnRouteStatusSheet extends StatelessWidget {
   const TripEnRouteStatusSheet({
     required this.trip,
     required this.cancelStatus,
     required this.onCancelPressed,
-    this.arrivalProgressHeader,
     super.key,
   });
 
   final TripEntity trip;
   final BlocStatus<void> cancelStatus;
   final VoidCallback onCancelPressed;
-
-  /// Live ETA + dashed-line-with-car header, built by the parent (it owns the
-  /// distance baseline). Only shown while en-route.
-  final Widget? arrivalProgressHeader;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +33,6 @@ class TripEnRouteStatusSheet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (arrivalProgressHeader != null) ...[
-          arrivalProgressHeader!,
-          AppSpacing.sm.verticalSpace,
-        ],
-
         // Progress stepper card.
         Container(
           padding: REdgeInsets.all(AppSpacing.md),

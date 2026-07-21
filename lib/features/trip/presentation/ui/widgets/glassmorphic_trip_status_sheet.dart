@@ -3,8 +3,6 @@ import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/entities/driver_location_entity.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_overlay.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_progress_header.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_arrived_status_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_completed_status_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_confirmation_status_sheet.dart';
@@ -21,7 +19,6 @@ class GlassmorphicTripStatusSheet extends StatefulWidget {
     required this.trip,
     required this.cancelStatus,
     required this.onCancelPressed,
-    required this.onCompensationPressed,
     this.driverLocation,
     super.key,
   });
@@ -29,7 +26,6 @@ class GlassmorphicTripStatusSheet extends StatefulWidget {
   final TripEntity trip;
   final BlocStatus<void> cancelStatus;
   final VoidCallback onCancelPressed;
-  final VoidCallback onCompensationPressed;
   final DriverLocationEntity? driverLocation;
 
   @override
@@ -47,17 +43,10 @@ class _GlassmorphicTripStatusSheetState
   // brief replay is over.
   bool _arrivedHandoffDone = false;
   Timer? _arrivedHandoffTimer;
-  // Farthest driver→target distance seen for the current tracking leg, used as
-  // the baseline so the arrival header's car reflects real journey progress.
-  int? _arrivalBaselineMeters;
-  // The status the current baseline belongs to. Lets us reset the baseline when
-  // the target switches (en-route → in-progress) so progress restarts cleanly.
-  TripStatus? _baselineStatus;
 
   TripEntity get trip => widget.trip;
   BlocStatus<void> get cancelStatus => widget.cancelStatus;
   VoidCallback get onCancelPressed => widget.onCancelPressed;
-  VoidCallback get onCompensationPressed => widget.onCompensationPressed;
   DriverLocationEntity? get driverLocation => widget.driverLocation;
 
   @override
@@ -65,7 +54,6 @@ class _GlassmorphicTripStatusSheetState
     super.initState();
     _syncArrivedHandoff();
     _syncWaitingTicker();
-    _syncArrivalBaseline();
   }
 
   @override
@@ -73,7 +61,6 @@ class _GlassmorphicTripStatusSheetState
     super.didUpdateWidget(oldWidget);
     _syncArrivedHandoff();
     _syncWaitingTicker();
-    _syncArrivalBaseline();
   }
 
   @override
@@ -126,64 +113,6 @@ class _GlassmorphicTripStatusSheetState
       _waitingTicker?.cancel();
       _waitingTicker = null;
     }
-  }
-
-  /// Tracks the farthest driver→target distance observed for the current leg so
-  /// the arrival header can show progress as `(baseline - remaining) / baseline`.
-  /// The target is the pickup while en-route and the destination while in-progress;
-  /// the baseline resets when leaving those states or when the target switches
-  /// (en-route → in-progress) so progress restarts from the new, farther target.
-  void _syncArrivalBaseline() {
-    final tracksTarget = trip.status == TripStatus.enRoute;
-    // || trip.status == TripStatus.inProgress;
-    if (!tracksTarget) {
-      _arrivalBaselineMeters = null;
-      _baselineStatus = null;
-      return;
-    }
-    if (_baselineStatus != trip.status) {
-      _baselineStatus = trip.status;
-      _arrivalBaselineMeters = null;
-    }
-    final remaining = driverLocation?.distanceToPickupMeters;
-    if (remaining == null) return;
-    final baseline = _arrivalBaselineMeters;
-    if (baseline == null || remaining > baseline) {
-      _arrivalBaselineMeters = remaining;
-    }
-  }
-
-  /// The real-time arrival header — "Arrival in / N min / dashed line with a
-  /// live-progress car / distance • arrival clock" — shared by the en-route sheet
-  /// (driver → pickup) and the in-progress sheet (car → destination). The live
-  /// fields carry pickup- or destination-relative values depending on status.
-  Widget _buildArrivalProgressHeader() {
-    // Prefer the live ETA streamed from the moving position; fall back to the
-    // trip's static pickup ETA when unavailable.
-    final int? liveEtaSeconds = driverLocation?.etaToPickupSeconds;
-    final int minutes = liveEtaSeconds != null
-        ? LiveArrival.minutes(liveEtaSeconds)
-        : (trip.etaToPickup != null
-              ? (trip.etaToPickup!.difference(DateTime.now()).inMinutes > 0
-                    ? trip.etaToPickup!.difference(DateTime.now()).inMinutes
-                    : 1)
-              : 5);
-
-    // Distance-based journey progress: the share of the farthest-seen distance
-    // already covered. Positions the car on the dashed line.
-    final int? remainingMeters = driverLocation?.distanceToPickupMeters;
-    final int? baseline = _arrivalBaselineMeters;
-    final double progress =
-        (baseline != null && baseline > 0 && remainingMeters != null)
-        ? ((baseline - remainingMeters) / baseline).clamp(0.0, 1.0)
-        : 0.0;
-
-    return LiveArrivalProgressHeader(
-      minutes: minutes,
-      progress: progress,
-      distanceMeters: remainingMeters,
-      etaSeconds: liveEtaSeconds,
-    );
   }
 
   @override
@@ -243,7 +172,6 @@ class _GlassmorphicTripStatusSheetState
                   trip: trip,
                   cancelStatus: cancelStatus,
                   onCancelPressed: onCancelPressed,
-                  arrivalProgressHeader: _buildArrivalProgressHeader(),
                 ),
               ] else if (trip.status == TripStatus.arrived) ...[
                 if (_arrivedHandoffDone)
@@ -251,7 +179,6 @@ class _GlassmorphicTripStatusSheetState
                     trip: trip,
                     cancelStatus: cancelStatus,
                     onCancelPressed: onCancelPressed,
-                    onCompensationPressed: onCompensationPressed,
                   )
                 else
                   TripEnRouteStatusSheet(

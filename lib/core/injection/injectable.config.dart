@@ -114,6 +114,8 @@ import 'package:customertaxi/features/payment/domain/repositories/payment_reposi
     as _i951;
 import 'package:customertaxi/features/payment/presentation/states/payment_bloc.dart'
     as _i792;
+import 'package:customertaxi/features/payment/presentation/states/wallet_cubit.dart'
+    as _i816;
 import 'package:customertaxi/features/profile/data/datasources/profile_remote_datasource.dart'
     as _i1044;
 import 'package:customertaxi/features/profile/data/repositories/profile_repository_impl.dart'
@@ -395,6 +397,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i174.ChatBloc>(
       () => _i174.ChatBloc(
         gh<_i698.ChatRepository>(),
+        gh<_i404.RealtimeService>(),
+        gh<_i814.AuthManager>(),
+      ),
+    );
+    gh.lazySingleton<_i816.WalletCubit>(
+      () => _i816.WalletCubit(
+        gh<_i561.PaymentFacade>(),
         gh<_i404.RealtimeService>(),
         gh<_i814.AuthManager>(),
       ),

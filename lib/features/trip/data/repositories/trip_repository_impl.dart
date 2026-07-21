@@ -219,51 +219,6 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<Result<TripEntity>> updateTripStops({
-    required String tripId,
-    required List<TripStopEntity> stops,
-  }) {
-    return runAsResult(() async {
-      printM('[TripRepository] updateTripStops id=$tripId');
-      final stopsData = stops
-          .map(
-            (s) => {
-              'latitude': s.latitude,
-              'longitude': s.longitude,
-              if (s.label != null) 'label': s.label,
-            },
-          )
-          .toList();
-      final model = await _remote.updateTripStops(
-        tripId: tripId,
-        stops: stopsData,
-      );
-      printG('[TripRepository] updateTripStops success fare=${model.quotedFare}');
-      return model.toEntity;
-    });
-  }
-
-  @override
-  Future<Result<TripEntity>> updateTripPassengerCount({
-    required String tripId,
-    required int passengerCount,
-  }) {
-    return runAsResult(() async {
-      printM(
-        '[TripRepository] updateTripPassengerCount id=$tripId count=$passengerCount',
-      );
-      final model = await _remote.updateTripPassengerCount(
-        tripId: tripId,
-        passengerCount: passengerCount,
-      );
-      printG(
-        '[TripRepository] updateTripPassengerCount success fare=${model.quotedFare}',
-      );
-      return model.toEntity;
-    });
-  }
-
-  @override
   Future<Result<void>> updateTripBagCount({
     required String tripId,
     required int bagCount,
@@ -299,6 +254,7 @@ class TripRepositoryImpl implements TripRepository {
     List<TripStopEntity>? stops,
     int? passengerCount,
     required double expectedDelta,
+    String? previewToken,
   }) {
     return runAsResult(() async {
       printM('[TripRepository] applyTripEdit id=$tripId');
@@ -307,6 +263,7 @@ class TripRepositoryImpl implements TripRepository {
         stops: stops == null ? null : _stopsToJson(stops),
         passengerCount: passengerCount,
         expectedDelta: expectedDelta,
+        previewToken: previewToken,
       );
       printG('[TripRepository] applyTripEdit status=${result.status}');
       return result;

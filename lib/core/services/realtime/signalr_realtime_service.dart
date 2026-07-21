@@ -224,6 +224,8 @@ class SignalRRealtimeService implements RealtimeService {
     hub.on(RealtimeMethodNames.tripMessageReceived, _onTripMessageReceived);
     hub.on(RealtimeMethodNames.chatClosed, _onChatClosed);
     hub.on(RealtimeMethodNames.noDriverFound, _onNoDriverFound);
+    hub.on(RealtimeMethodNames.tripEditApplied, _onTripEditApplied);
+    hub.on(RealtimeMethodNames.walletBalanceChanged, _onWalletBalanceChanged);
 
     hub.onclose(({Exception? error}) {
       if (_connection != hub || generation != _connectionGeneration) return;
@@ -454,6 +456,49 @@ class SignalRRealtimeService implements RealtimeService {
       RealtimeEvent.paymentConfirmed(
         tripId: _readString(p, 'tripId'),
         passengerId: _readString(p, 'passengerId'),
+      ),
+    );
+  }
+
+  void _onWalletBalanceChanged(List<Object?>? args) {
+    final p = _payload(args);
+    if (p == null) {
+      printY('$_logTag <= WalletBalanceChanged (empty payload, ignored)');
+      return;
+    }
+    printM(
+      '$_logTag <= WalletBalanceChanged balance=${_readDouble(p, 'balance')} '
+      'owed=${_readDouble(p, 'amountOwed')}',
+    );
+    _eventsController.add(
+      RealtimeEvent.walletBalanceChanged(
+        userId: _readString(p, 'userId'),
+        balance: _readDouble(p, 'balance'),
+        amountOwed: _readDouble(p, 'amountOwed'),
+        currency: _readString(p, 'currencyCode'),
+      ),
+    );
+  }
+
+  void _onTripEditApplied(List<Object?>? args) {
+    final p = _payload(args);
+    if (p == null) {
+      printY('$_logTag <= TripEditApplied (empty payload, ignored)');
+      return;
+    }
+    printM(
+      '$_logTag <= TripEditApplied trip=${_readString(p, 'tripId')} '
+      'delta=${_readDouble(p, 'delta')} newFare=${_readDouble(p, 'newFare')}',
+    );
+    _eventsController.add(
+      RealtimeEvent.tripEditApplied(
+        tripId: _readString(p, 'tripId'),
+        newFare: _readDouble(p, 'newFare'),
+        currency: _readString(p, 'currencyCode'),
+        delta: _readDouble(p, 'delta'),
+        passengerCount: _readNullableInt(p, 'passengerCount') ?? 0,
+        vehicleTypeName: _readNullableString(p, 'vehicleTypeName'),
+        dropoffLabel: _readNullableString(p, 'dropoffLabel'),
       ),
     );
   }

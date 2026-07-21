@@ -39,6 +39,9 @@ Future<void> showWaitingFeeSettlement(
             customerId: sp.customerId,
             customerEphemeralKeySecret: sp.ephemeralKeySecret,
             merchantDisplayName: 'customertaxi',
+            linkDisplayParams: const LinkDisplayParams(
+              linkDisplay: LinkDisplay.never,
+            ),
             style: ThemeMode.system,
             returnURL: 'customertaxi://stripe-redirect',
           ),

@@ -278,36 +278,6 @@ class TripRemoteDataSource {
     });
   }
 
-  Future<TripModel> updateTripStops({
-    required String tripId,
-    required List<Map<String, dynamic>> stops,
-  }) {
-    return rethrowAsAppException(() async {
-      printY('[TripRemoteDataSource] updateTripStops id=$tripId');
-      final res = await _dio.put<dynamic>(
-        ApiEndpoints.updateTripStops(tripId),
-        data: {'stops': stops},
-      );
-      return TripModel.fromJson(res.data as Map<String, dynamic>);
-    });
-  }
-
-  Future<TripModel> updateTripPassengerCount({
-    required String tripId,
-    required int passengerCount,
-  }) {
-    return rethrowAsAppException(() async {
-      printY(
-        '[TripRemoteDataSource] updateTripPassengerCount id=$tripId count=$passengerCount',
-      );
-      final res = await _dio.put<dynamic>(
-        ApiEndpoints.updateTripPassengerCount(tripId),
-        data: {'passengerCount': passengerCount},
-      );
-      return TripModel.fromJson(res.data as Map<String, dynamic>);
-    });
-  }
-
   Future<TripEditPreviewEntity> previewTripEdit({
     required String tripId,
     List<Map<String, dynamic>>? stops,
@@ -332,6 +302,7 @@ class TripRemoteDataSource {
                 ?.toInt() ??
             0,
         direction: data['direction'] as String? ?? 'none',
+        previewToken: data['previewToken'] as String? ?? '',
         newVehicleTypeId: data['newVehicleTypeId'] as String?,
         newVehicleTypeName: data['newVehicleTypeName'] as String?,
       );
@@ -343,6 +314,7 @@ class TripRemoteDataSource {
     List<Map<String, dynamic>>? stops,
     int? passengerCount,
     required double expectedDelta,
+    String? previewToken,
   }) {
     return rethrowAsAppException(() async {
       printY('[TripRemoteDataSource] applyTripEdit id=$tripId');
@@ -352,6 +324,8 @@ class TripRemoteDataSource {
           'stops': ?stops,
           'passengerCount': ?passengerCount,
           'expectedDelta': expectedDelta,
+          if (previewToken != null && previewToken.isNotEmpty)
+            'previewToken': previewToken,
         },
       );
       final data = res.data as Map<String, dynamic>;

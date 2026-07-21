@@ -1,4 +1,7 @@
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/features/payment/presentation/states/wallet_cubit.dart';
+import 'package:customertaxi/features/payment/presentation/ui/screens/betaling_screen.dart';
+import 'package:customertaxi/features/payment/presentation/ui/widgets/wallet_debt_banner.dart';
 import 'package:customertaxi/features/root/constants/root_constants.dart';
 import 'package:customertaxi/features/root/presentation/ui/widgets/home/root_header_cta_card.dart';
 
@@ -13,6 +16,16 @@ class RootHomeBottomSheet extends StatelessWidget {
   final VoidCallback onSearchTap;
   final VoidCallback onLaterTap;
   final double discountPercent;
+
+  /// While the customer owes money the server will refuse the booking anyway, so send them to
+  /// the wallet instead of letting them build a trip that cannot be placed.
+  void _startBooking(BuildContext context, VoidCallback proceed) {
+    if (getIt<WalletCubit>().state.isBookingBlocked) {
+      context.pushNamed(BetalingScreen.pageName);
+      return;
+    }
+    proceed();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +44,7 @@ class RootHomeBottomSheet extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const WalletDebtBanner(),
                     AppDiscountBanner(discountPercent: discountPercent),
                     AppSpacing.md.verticalSpace,
                     Text(
@@ -51,7 +65,7 @@ class RootHomeBottomSheet extends StatelessWidget {
                               Assets.images.schdedulTrip.path,
                               fit: BoxFit.contain,
                             ),
-                            onTap: onLaterTap,
+                            onTap: () => _startBooking(context, onLaterTap),
                           ),
                         ),
                         AppSpacing.md.horizontalSpace,
@@ -63,7 +77,7 @@ class RootHomeBottomSheet extends StatelessWidget {
                               Assets.images.normalTrip.path,
                               fit: BoxFit.contain,
                             ),
-                            onTap: onSearchTap,
+                            onTap: () => _startBooking(context, onSearchTap),
                           ),
                         ),
                       ],
@@ -81,7 +95,7 @@ class RootHomeBottomSheet extends StatelessWidget {
                           Expanded(
                             child: GestureDetector(
                               behavior: HitTestBehavior.opaque,
-                              onTap: onSearchTap,
+                              onTap: () => _startBooking(context, onSearchTap),
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 padding: REdgeInsets.only(
@@ -105,7 +119,7 @@ class RootHomeBottomSheet extends StatelessWidget {
                           ),
                           GestureDetector(
                             behavior: HitTestBehavior.opaque,
-                            onTap: onLaterTap,
+                            onTap: () => _startBooking(context, onLaterTap),
                             child: Container(
                               padding: REdgeInsets.symmetric(
                                 horizontal: AppSpacing.sm,
@@ -144,7 +158,7 @@ class RootHomeBottomSheet extends StatelessWidget {
                           ),
                           GestureDetector(
                             behavior: HitTestBehavior.opaque,
-                            onTap: onSearchTap,
+                            onTap: () => _startBooking(context, onSearchTap),
                             child: Container(
                               padding: REdgeInsets.symmetric(
                                 horizontal: AppSpacing.lg,

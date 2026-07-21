@@ -58,31 +58,9 @@ class TripStatusBannerContent {
   }
 }
 
-/// Status image filling the whole area above the bottom status sheet. Sized
-/// by the parent `Positioned` (see `ActiveTripBody`, which pins it from the
-/// screen top down to the sheet's current top edge). Bottom-anchored crop:
-/// the artwork's bottom edge always sits right above the sheet, and taller
-/// sheets crop it off the screen top instead. The text card is rendered
-/// separately (see `ActiveTripBody`) so its height — which varies per status
-/// (some have 1 body line, some 3) — is never tied to the image.
-class TripStatusBanner extends StatelessWidget {
-  const TripStatusBanner({required this.content, super.key});
-
-  final TripStatusBannerContent content;
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.asset(
-      Assets.images.tripsStatusImageForTrip.path,
-      fit: BoxFit.cover,
-      alignment: Alignment.bottomCenter,
-    );
-  }
-}
-
-/// Dark rounded card (icon + title + body lines) used by both [TripStatusBanner]
-/// and the full-screen overlays. Always pinned physically left and LTR-laid-out
-/// regardless of app locale/RTL.
+/// Dark rounded card (icon + title + body lines) shown above the status sheet
+/// and reused by the full-screen overlays. Always pinned physically left and
+/// LTR-laid-out regardless of app locale/RTL.
 class TripStatusOverlayCard extends StatelessWidget {
   const TripStatusOverlayCard({
     required this.icon,
@@ -124,7 +102,7 @@ class TripStatusOverlayCard extends StatelessWidget {
           TextSpan(
             text: match.substring(0, 6), // "Fat7i"
             style: const TextStyle(
-              color: AppColors.primary,
+              color: AppColors.tripOrange,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -167,10 +145,10 @@ class TripStatusOverlayCard extends StatelessWidget {
               Container(
                 padding: REdgeInsets.all(AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.15),
+                  color: AppColors.tripOrange.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: FaIcon(icon, color: AppColors.primary, size: 20.r),
+                child: FaIcon(icon, color: AppColors.tripOrange, size: 20.r),
               ),
               AppSpacing.md.horizontalSpace,
               Flexible(

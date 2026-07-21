@@ -175,12 +175,8 @@ class _RatingSection extends StatelessWidget {
 
   final TripEntity trip;
 
-  Future<void> _openSheet(BuildContext context, {int initialStars = 0}) async {
-    await showTripRatingSheet(
-      context,
-      tripId: trip.id,
-      initialStars: initialStars,
-    );
+  Future<void> _openSheet(BuildContext context) async {
+    await showTripRatingSheet(context, tripId: trip.id);
     if (context.mounted) {
       context.read<TripBloc>().add(TripEvent.started(trip.id));
     }
@@ -226,7 +222,7 @@ class _RatingSection extends StatelessWidget {
       );
     }
 
-    // Already rated — show the given stars + an edit affordance.
+    // Already rated — read-only. A rating is final, so there is no way back in.
     return Container(
       padding: REdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -251,10 +247,6 @@ class _RatingSection extends StatelessWidget {
                 _ReadOnlyStars(value: rating),
               ],
             ),
-          ),
-          TextButton(
-            onPressed: () => _openSheet(context, initialStars: rating),
-            child: Text(AppStrings.ratingModify),
           ),
         ],
       ),

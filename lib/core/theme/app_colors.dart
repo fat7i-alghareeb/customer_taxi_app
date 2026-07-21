@@ -57,4 +57,8 @@ class AppColors {
 
   /// Landing screen specific gold color.
   static const Color landingGold = Color(0xFFE4A030);
+
+  /// Live-trip accent (Vibrant Orange). Scoped to the active-trip experience,
+  /// the rating sheet and chat — see `tripAccentTheme`. Not the app-wide primary.
+  static const Color tripOrange = Color(0xFFF66C21);
 }

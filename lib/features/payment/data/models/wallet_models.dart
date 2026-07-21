@@ -22,6 +22,8 @@ abstract class WalletBalanceModel with _$WalletBalanceModel {
   const factory WalletBalanceModel({
     required double balance,
     required String currencyCode,
+    @Default(0) double amountOwed,
+    @Default(false) bool isBookingBlocked,
   }) = _WalletBalanceModel;
 
   factory WalletBalanceModel.fromJson(Map<String, dynamic> json) =>

@@ -21,7 +21,9 @@ class TripInProgressStatusSheet extends StatelessWidget {
             AppSpacing.md.horizontalSpace,
             Expanded(
               child: Text(
-                AppStrings.tripStatusInProgress,
+                // "Onderweg naar uw bestemming" — the fuller destination-aware
+                // wording; `tripStatusInProgress` stays the short chip label.
+                AppStrings.activeTripInProgressTitle,
                 style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
               ),
             ),
