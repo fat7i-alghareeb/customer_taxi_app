@@ -2,9 +2,8 @@ import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_arrival_stepper.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancel_button.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_chat_button.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_editable_details.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_sheet_actions.dart';
 
 /// Sheet for `TripStatus.enRoute`, also reused for the brief "arrived" handoff
 /// (see `GlassmorphicTripStatusSheet`) where all three stepper steps render
@@ -52,17 +51,15 @@ class TripEnRouteStatusSheet extends StatelessWidget {
         ),
         AppSpacing.md.verticalSpace,
 
-        // Address, passengers and bags — identical to the confirmation sheet so
-        // the rider sees the same details (and edit affordances) as before.
-        TripEditableDetails(trip: trip),
+        // Address + stops stay full; passengers/bags/vehicle collapse to a
+        // single compact line since nothing here can be edited any more.
+        TripEditableDetails(trip: trip, compactPartyRow: true),
         AppSpacing.sm.verticalSpace,
 
-        const TripChatButton(),
-        AppSpacing.sm.verticalSpace,
-
-        TripCancelButton(
-          isLoading: cancelStatus.isLoading,
-          onTap: onCancelPressed,
+        TripSheetActions(
+          showCancel: trip.status.canCancel,
+          cancelIsLoading: cancelStatus.isLoading,
+          onCancelPressed: onCancelPressed,
         ),
       ],
     );

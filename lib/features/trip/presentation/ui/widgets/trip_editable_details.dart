@@ -16,9 +16,17 @@ import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_info_row
 /// driver starts moving (`canEditPartySize`). Route and passenger edits are
 /// previewed and charged/refunded server-side via [runTripEditFlow].
 class TripEditableDetails extends StatelessWidget {
-  const TripEditableDetails({required this.trip, super.key});
+  const TripEditableDetails({
+    required this.trip,
+    this.compactPartyRow = false,
+    super.key,
+  });
 
   final TripEntity trip;
+
+  /// En-route/arrived: collapse passengers, bags and vehicle into one read-only
+  /// line (no edit pencils, no lock reason) instead of three full rows.
+  final bool compactPartyRow;
 
   /// Opens the same search + pin-on-map picker used when booking, centred on the
   /// stop being changed, and re-prices the trip with the new route.
@@ -107,43 +115,118 @@ class TripEditableDetails extends StatelessWidget {
                 ? (index) => _editStop(context, index)
                 : null,
           ),
-        AppSpacing.sm.verticalSpace,
+        AppSpacing.xl.verticalSpace,
 
-        TripInfoRowWidget(
-          icon: FontAwesomeIcons.users,
-          label: AppStrings.tripInfoPassengersLabel,
-          value: AppStrings.tripPassengersValue.replaceAll(
-            '{count}',
-            trip.passengerCount.toString(),
-          ),
-          onEditTap: canEditPartySize ? () => _editPassengers(context) : null,
-          disabledReason: partySizeLockReason,
-        ),
-
-        TripInfoRowWidget(
-          icon: FontAwesomeIcons.suitcase,
-          label: AppStrings.tripInfoBagsLabel,
-          value: AppStrings.tripBagsValue.replaceAll(
-            '{count}',
-            trip.bagCount.toString(),
-          ),
-          onEditTap: canEditPartySize ? () => _editBags(context) : null,
-          disabledReason: partySizeLockReason,
-        ),
-
-        // Read-only, but essential: a passenger-count edit past the current capacity swaps
-        // the vehicle, and without this row that upgrade happens invisibly.
-        if (trip.vehicleTypeName case final vehicle?
-            when vehicle.isNotEmpty)
+        if (compactPartyRow)
+          _CompactPartyRow(trip: trip)
+        else ...[
           TripInfoRowWidget(
-            icon: FontAwesomeIcons.carSide,
-            label: AppStrings.tripInfoVehicleLabel,
-            value: vehicle,
-            showEditAffordance: false,
+            icon: FontAwesomeIcons.users,
+            label: AppStrings.tripInfoPassengersLabel,
+            value: AppStrings.tripPassengersValue.replaceAll(
+              '{count}',
+              trip.passengerCount.toString(),
+            ),
+            onEditTap: canEditPartySize ? () => _editPassengers(context) : null,
+            disabledReason: partySizeLockReason,
           ),
+
+          TripInfoRowWidget(
+            icon: FontAwesomeIcons.suitcase,
+            label: AppStrings.tripInfoBagsLabel,
+            value: AppStrings.tripBagsValue.replaceAll(
+              '{count}',
+              trip.bagCount.toString(),
+            ),
+            onEditTap: canEditPartySize ? () => _editBags(context) : null,
+            disabledReason: partySizeLockReason,
+          ),
+
+          // Read-only, but essential: a passenger-count edit past the current capacity swaps
+          // the vehicle, and without this row that upgrade happens invisibly.
+          if (trip.vehicleTypeName case final vehicle? when vehicle.isNotEmpty)
+            TripInfoRowWidget(
+              icon: FontAwesomeIcons.carSide,
+              label: AppStrings.tripInfoVehicleLabel,
+              value: vehicle,
+              showEditAffordance: false,
+            ),
+        ],
 
         AppSpacing.sm.verticalSpace,
         TripFareCard(trip: trip),
+      ],
+    );
+  }
+}
+
+/// Compact one-line "passengers · bags · vehicle" summary shown once the party
+/// size is locked (en-route / arrived) — replaces the three full editable rows
+/// with icon + value pairs, no pencils and no lock reason.
+class _CompactPartyRow extends StatelessWidget {
+  const _CompactPartyRow({required this.trip});
+
+  final TripEntity trip;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+
+    Widget item(FaIconData icon, String value, {bool flexible = false}) {
+      final content = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FaIcon(
+            icon,
+            size: 18.r,
+            color: colors.primary.withValues(alpha: 0.8),
+          ),
+          AppSpacing.sm.horizontalSpace,
+          flexible
+              ? Flexible(
+                  child: Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.s16w600.copyWith(
+                      color: colors.onSurface,
+                    ),
+                  ),
+                )
+              : Text(
+                  value,
+                  style: AppTextStyles.s16w600.copyWith(
+                    color: colors.onSurface,
+                  ),
+                ),
+        ],
+      );
+      return flexible ? Flexible(child: content) : content;
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        item(
+          FontAwesomeIcons.users,
+          AppStrings.tripPassengersValue.replaceAll(
+            '{count}',
+            trip.passengerCount.toString(),
+          ),
+        ),
+        AppSpacing.lg.horizontalSpace,
+        item(
+          FontAwesomeIcons.suitcase,
+          AppStrings.tripBagsValue.replaceAll(
+            '{count}',
+            trip.bagCount.toString(),
+          ),
+        ),
+        if (trip.vehicleTypeName case final vehicle?
+            when vehicle.isNotEmpty) ...[
+          AppSpacing.lg.horizontalSpace,
+          item(FontAwesomeIcons.carSide, vehicle, flexible: true),
+        ],
       ],
     );
   }

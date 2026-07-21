@@ -17,14 +17,12 @@ class TripStatusBannerContent {
   static TripStatusBannerContent? forStatus(TripStatus status) {
     switch (status) {
       case TripStatus.awaitingAdminAcceptance:
+        // Kept short and distinct from the sheet's own headline/subtitle so the
+        // floating card doesn't echo it (and stays clear of the status bar).
         return TripStatusBannerContent(
           icon: FontAwesomeIcons.carSide,
           title: AppStrings.activeTripSearchingDriverTitle,
-          bodyLines: [
-            AppStrings.activeTripSearchingDriverBody,
-            AppStrings.activeTripSearchingDriverConfirmSoon,
-            AppStrings.activeTripSearchingDriverThanksPatience,
-          ],
+          bodyLines: [AppStrings.activeTripSearchingDriverBody],
         );
       case TripStatus.accepted:
         return TripStatusBannerContent(

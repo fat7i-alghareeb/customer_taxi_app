@@ -3,9 +3,8 @@ import 'package:customertaxi/common/widgets/show_overlay.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancel_button.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_chat_button.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_editable_details.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_sheet_actions.dart';
 
 /// Confirmation sheet covering the `awaitingAdminAcceptance` → `accepted`
 /// transition. Both statuses share the same layout (headline, booking time,
@@ -167,21 +166,18 @@ class _TripConfirmationStatusSheetState
               onEdit: _isWithinEditWindow ? _editScheduledTime : null,
             ),
 
-          AppSpacing.md.verticalSpace,
+          AppSpacing.sm.verticalSpace,
 
           // Address, passengers and bags — the same block reused on the en-route
           // sheet; editable while the status still allows repricing.
           TripEditableDetails(trip: trip),
 
-          AppSpacing.md.verticalSpace,
-          const TripChatButton(),
           AppSpacing.sm.verticalSpace,
-
-          if (trip.status.canCancel)
-            TripCancelButton(
-              isLoading: widget.cancelStatus.isLoading,
-              onTap: widget.onCancelPressed,
-            ),
+          TripSheetActions(
+            showCancel: trip.status.canCancel,
+            cancelIsLoading: widget.cancelStatus.isLoading,
+            onCancelPressed: widget.onCancelPressed,
+          ),
         ],
       ),
     );

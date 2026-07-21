@@ -27,33 +27,39 @@ class TripCancelButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadii.lg.r),
             border: Border.all(color: colors.error, width: 1.r),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: isLoading
-                ? [
-                    SizedBox(
-                      width: 18.r,
-                      height: 18.r,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
+          // Scale the icon+label down to fit the (narrow, flex-1) slot rather
+          // than clipping or ellipsizing — the "Cancel ride" text stays fully
+          // readable at any width / locale.
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: isLoading
+                  ? [
+                      SizedBox(
+                        width: 18.r,
+                        height: 18.r,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: colors.error,
+                        ),
+                      ),
+                    ]
+                  : [
+                      FaIcon(
+                        FontAwesomeIcons.xmark,
+                        size: 16.r,
                         color: colors.error,
                       ),
-                    ),
-                  ]
-                : [
-                    FaIcon(
-                      FontAwesomeIcons.xmark,
-                      size: 16.r,
-                      color: colors.error,
-                    ),
-                    AppSpacing.sm.horizontalSpace,
-                    Text(
-                      AppStrings.activeTripCancelRide,
-                      style: AppTextStyles.s14w600.copyWith(
-                        color: colors.error,
+                      AppSpacing.sm.horizontalSpace,
+                      Text(
+                        AppStrings.activeTripCancelRide,
+                        style: AppTextStyles.s14w600.copyWith(
+                          color: colors.error,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+            ),
           ),
         ),
       ),

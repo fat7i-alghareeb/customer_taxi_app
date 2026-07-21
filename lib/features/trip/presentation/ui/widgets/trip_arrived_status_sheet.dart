@@ -1,7 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancel_button.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_chat_button.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_sheet_actions.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_waiting_card.dart';
 
 /// Dedicated arrived sheet (shown after the brief stepper handoff in
@@ -110,12 +109,10 @@ class TripArrivedStatusSheet extends StatelessWidget {
 
         // Address / passengers can no longer be changed once the driver has
         // arrived, so no edit actions are shown here.
-        const TripChatButton(),
-        AppSpacing.sm.verticalSpace,
-
-        TripCancelButton(
-          isLoading: cancelStatus.isLoading,
-          onTap: onCancelPressed,
+        TripSheetActions(
+          showCancel: trip.status.canCancel,
+          cancelIsLoading: cancelStatus.isLoading,
+          onCancelPressed: onCancelPressed,
         ),
       ],
     );

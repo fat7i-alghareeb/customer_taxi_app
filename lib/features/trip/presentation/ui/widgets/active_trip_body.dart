@@ -691,11 +691,16 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                             // layout in RTL locales.
                             if (bannerContent != null)
                               Padding(
+                                // In-progress has no note button between the
+                                // card and the sheet, so lift the card a little
+                                // higher off the sheet for breathing room.
                                 padding: REdgeInsets.fromLTRB(
                                   AppSpacing.lg,
                                   0,
                                   AppSpacing.lg,
-                                  AppSpacing.md,
+                                  trip.status == TripStatus.inProgress
+                                      ? AppSpacing.xl * 6
+                                      : AppSpacing.md,
                                 ),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
