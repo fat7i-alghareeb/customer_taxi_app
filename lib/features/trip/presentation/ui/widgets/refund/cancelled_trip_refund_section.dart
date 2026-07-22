@@ -32,16 +32,16 @@ class CancelledTripRefundSection extends StatelessWidget {
                 height: 44.h,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.error.withValues(alpha: 0.1),
+                  color: AppColors.tripOrange.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppRadii.lg.r),
                   border: Border.all(
-                    color: AppColors.error.withValues(alpha: 0.28),
+                    color: AppColors.tripOrange.withValues(alpha: 0.28),
                   ),
                 ),
                 child: FaIcon(
                   FontAwesomeIcons.xmark,
                   size: 18.r,
-                  color: AppColors.error,
+                  color: AppColors.tripOrange,
                 ),
               ),
               AppSpacing.md.horizontalSpace,
@@ -74,12 +74,13 @@ class CancelledTripRefundSection extends StatelessWidget {
               cancellation.refundAmount,
               cancellation.currencyCode,
             ),
-            valueColor: AppColors.warning,
+            infoMessage: AppStrings.cancelledRefundBackendSourceMessage,
           ),
           AppSpacing.sm.verticalSpace,
           CancelledTripRefundRow(
             label: AppStrings.refundIssueRefundPercent,
             value: '${cancellation.refundPercent.toStringAsFixed(0)}%',
+            caption: AppStrings.cancelledRefundPercentCaption,
           ),
           if (cancellation.createdAtUtc != null) ...[
             AppSpacing.sm.verticalSpace,
@@ -90,7 +91,7 @@ class CancelledTripRefundSection extends StatelessWidget {
             ),
           ],
           AppSpacing.lg.verticalSpace,
-          AppButton.warningGradient(
+          AppButton.primaryGradient(
             onTap: () => context.pushNamed(
               RefundIssueScreen.pageName,
               extra: RefundIssueScreenArgs(
@@ -126,35 +127,80 @@ class CancelledTripRefundRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.valueColor,
+    this.infoMessage,
+    this.caption,
   });
 
   final String label;
   final String value;
   final Color? valueColor;
 
+  /// Explanation shown in a tap-to-reveal tooltip next to the label, for
+  /// values whose meaning isn't obvious on its own (e.g. why this figure
+  /// can differ from another amount shown elsewhere on the screen).
+  final String? infoMessage;
+
+  /// Short, always-visible note shown under the row (e.g. what a percentage
+  /// is calculated from). Unlike [infoMessage], this doesn't require a tap.
+  final String? caption;
+
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Text(
-            label,
-            style: AppTextStyles.s12w400.copyWith(
-              color: context.onSurface.withValues(alpha: 0.58),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: AppTextStyles.s12w400.copyWith(
+                        color: context.onSurface.withValues(alpha: 0.58),
+                      ),
+                    ),
+                  ),
+                  if (infoMessage != null) ...[
+                    AppSpacing.xs.horizontalSpace,
+                    Tooltip(
+                      message: infoMessage,
+                      triggerMode: TooltipTriggerMode.tap,
+                      child: FaIcon(
+                        FontAwesomeIcons.circleInfo,
+                        size: 12.r,
+                        color: context.onSurface.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            AppSpacing.md.horizontalSpace,
+            Flexible(
+              child: Text(
+                value,
+                textAlign: TextAlign.end,
+                style: AppTextStyles.s12w700.copyWith(
+                  color: valueColor ?? context.onSurface,
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (caption != null) ...[
+          AppSpacing.xs.verticalSpace,
+          Text(
+            caption!,
+            style: AppTextStyles.s11w500.copyWith(
+              color: context.onSurface.withValues(alpha: 0.4),
             ),
           ),
-        ),
-        AppSpacing.md.horizontalSpace,
-        Flexible(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            style: AppTextStyles.s12w700.copyWith(
-              color: valueColor ?? context.onSurface,
-            ),
-          ),
-        ),
+        ],
       ],
     );
   }

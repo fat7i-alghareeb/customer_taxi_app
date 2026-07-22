@@ -1,5 +1,7 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
+import 'package:customertaxi/core/theme/trip_accent_theme.dart';
+
 import '../../../domain/entities/trip_entity.dart';
 import '../../../domain/entities/trip_refund_status.dart';
 import '../../../domain/entities/trip_status.dart';
@@ -82,12 +84,11 @@ class _DetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colorScheme;
     final completedAt = trip.stops.isNotEmpty
         ? trip.stops.last.completedAtUtc
         : null;
 
-    return SingleChildScrollView(
+    final content = SingleChildScrollView(
       padding: REdgeInsets.fromLTRB(
         AppSpacing.xl,
         AppSpacing.lg,
@@ -143,7 +144,7 @@ class _DetailsContent extends StatelessWidget {
             icon: FontAwesomeIcons.carSide,
             label: trip.vehicleTypeName ?? '',
           ),
-          if (completedAt != null) ...[
+          if (trip.status == TripStatus.completed && completedAt != null) ...[
             AppSpacing.md.verticalSpace,
             _DetailsMetaRow(
               icon: FontAwesomeIcons.clock,
@@ -151,20 +152,15 @@ class _DetailsContent extends StatelessWidget {
                   '${completedAt.toLocal().toYmd()} • ${completedAt.toLocal().toTime12Compact()}',
             ),
           ],
-          AppSpacing.md.verticalSpace,
-          Text(
-            AppStrings.tripReferenceCode.replaceAll(
-              '#{code}',
-              trip.referenceCode,
-            ),
-            style: AppTextStyles.s12w400.copyWith(
-              color: colors.onSurface.withValues(alpha: 0.5),
-            ),
-            textAlign: TextAlign.center,
-          ),
         ],
       ),
     );
+
+    // The tripOrange accent (not the app-wide primary) marks this as part of
+    // the trip experience, matching the live-trip accent used elsewhere.
+    return trip.status == TripStatus.cancelled
+        ? tripAccentTheme(context, child: content)
+        : content;
   }
 }
 
@@ -364,9 +360,9 @@ class _CancellationSection extends StatelessWidget {
     return Container(
       padding: REdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: colors.error.withValues(alpha: 0.1),
+        color: colors.onSurface.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(AppRadii.lg.r),
-        border: Border.all(color: colors.error.withValues(alpha: 0.2)),
+        border: Border.all(color: colors.onSurface.withValues(alpha: 0.08)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -376,12 +372,14 @@ class _CancellationSection extends StatelessWidget {
               FaIcon(
                 FontAwesomeIcons.circleXmark,
                 size: 16.r,
-                color: colors.error,
+                color: AppColors.tripOrange,
               ),
               AppSpacing.md.horizontalSpace,
               Text(
                 AppStrings.cancellationPolicyCancellationHeading,
-                style: AppTextStyles.s14w700.copyWith(color: colors.error),
+                style: AppTextStyles.s14w700.copyWith(
+                  color: AppColors.tripOrange,
+                ),
               ),
             ],
           ),

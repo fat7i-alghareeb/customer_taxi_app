@@ -43,31 +43,36 @@ abstract class TripEntity with _$TripEntity {
 
   const TripEntity._();
 
-  /// Whether the rider may still repoint any stop. Mirrors the server rule so
-  /// the edit affordance disappears exactly when the server would refuse,
-  /// instead of leaving a pencil that fails on tap.
+  /// Whether the customer edit window is still open. Mirrors the server rule
+  /// (`TripEditPolicy.IsWithinCustomerEditWindow`) so the edit affordances
+  /// disappear exactly when the server would refuse, instead of leaving a
+  /// pencil that fails on tap.
   ///
-  /// The window closes an hour after booking, or — for a scheduled ride — an
-  /// hour before pickup, whichever is later. Anchoring on the pickup keeps the
-  /// address correctable for a ride booked days ahead; taking the later of the
-  /// two preserves the full booking hour for a ride scheduled very soon.
-  bool get canEditStops {
-    if (!status.isEditableForRepricing) return false;
-
-    final bookingDeadline = createdAtUtc.add(const Duration(hours: 1));
+  /// The window closes 5 minutes after booking, or — for a scheduled ride —
+  /// 5 minutes before pickup, whichever is later. Anchoring on the pickup
+  /// keeps the trip correctable for a ride booked days ahead; taking the
+  /// later of the two preserves the full booking window for a ride scheduled
+  /// very soon.
+  bool get _isWithinCustomerEditWindow {
+    final bookingDeadline = createdAtUtc.add(const Duration(minutes: 5));
     final scheduled = scheduledAtUtc;
     final deadline = scheduled == null
         ? bookingDeadline
         : _laterOf(
-            scheduled.subtract(const Duration(hours: 1)),
+            scheduled.subtract(const Duration(minutes: 5)),
             bookingDeadline,
           );
 
     return !DateTime.now().toUtc().isAfter(deadline.toUtc());
   }
 
+  /// Whether the rider may still repoint any stop.
+  bool get canEditStops =>
+      status.isEditableForRepricing && _isWithinCustomerEditWindow;
+
   /// Whether the rider may still change the passenger or bag count.
-  bool get canEditPartySize => status.isPartySizeEditable;
+  bool get canEditPartySize =>
+      status.isPartySizeEditable && _isWithinCustomerEditWindow;
 
   static DateTime _laterOf(DateTime a, DateTime b) => a.isAfter(b) ? a : b;
 }

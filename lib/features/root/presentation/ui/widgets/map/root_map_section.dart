@@ -14,7 +14,6 @@ import 'package:customertaxi/features/order/domain/entities/order_location_entit
 import 'package:customertaxi/features/order/domain/entities/order_trip_route_entity.dart';
 import 'root_map_canvas_widget.dart';
 import 'root_map_controls_section.dart';
-import 'root_map_eta_pill_widget.dart';
 import '../../../utils/map_marker_generator.dart';
 
 class RootMapSection extends StatefulWidget {
@@ -302,7 +301,12 @@ class _RootMapSectionState extends State<RootMapSection>
   }
 
   String _cleanLabel(String label) {
-    return label.replaceAll('(', '').replaceAll(')', '').trim();
+    final cleaned = label.replaceAll('(', '').replaceAll(')', '').trim();
+    // The backend sends raw route labels "Pick"/"Dest"; surface them as
+    // localized "From"/"To". Intermediate "Stop N" labels are left as-is.
+    if (cleaned == 'Pick') return AppStrings.mapMarkerFrom;
+    if (cleaned == 'Dest') return AppStrings.mapMarkerTo;
+    return cleaned;
   }
 
   LatLng? _calculateMidpoint(List<LatLng> points) {
@@ -604,25 +608,6 @@ class _RootMapSectionState extends State<RootMapSection>
                             );
                           },
                         ),
-                      );
-                    },
-                  ),
-                  BlocBuilder<OrderBloc, OrderState>(
-                    buildWhen: (previous, current) =>
-                        previous.trip.routeState != current.trip.routeState,
-                    builder: (context, orderState) {
-                      return orderState.trip.routeState.maybeWhen(
-                        success: (route) => Positioned(
-                          top: 50.h,
-                          left: 0,
-                          right: 0,
-                          child: Center(
-                            child: RootMapEtaPillWidget(
-                              durationText: route.durationText,
-                            ),
-                          ),
-                        ),
-                        orElse: () => const SizedBox.shrink(),
                       );
                     },
                   ),

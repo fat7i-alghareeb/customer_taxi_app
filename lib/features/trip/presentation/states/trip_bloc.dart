@@ -580,7 +580,10 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     final id = state.activeTripId;
     final trip = state.tripStatus.getDataWhenSuccess;
     if (id == null || trip == null) return;
-    if (!_isWithinEditWindow(trip.createdAtUtc)) {
+    // Mirrors the server's party-size edit window (5 min from booking, or 5
+    // min before pickup for a scheduled ride) rather than the 1-hour window
+    // scheduled-time edits still use.
+    if (!trip.canEditPartySize) {
       emit(
         state.copyWith(
           tripEditStatus: const BlocStatus<void>.failure('tripEditNotAllowed'),

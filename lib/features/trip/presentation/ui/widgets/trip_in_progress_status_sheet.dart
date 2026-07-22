@@ -17,7 +17,11 @@ class TripInProgressStatusSheet extends StatelessWidget {
       children: [
         Row(
           children: [
-            FaIcon(FontAwesomeIcons.route, color: colors.primary, size: 24.r),
+            Assets.images.tripCarImage.image(
+              width: 24.r,
+              height: 24.r,
+              fit: BoxFit.contain,
+            ),
             AppSpacing.md.horizontalSpace,
             Expanded(
               child: Text(
@@ -34,6 +38,7 @@ class TripInProgressStatusSheet extends StatelessWidget {
         // Reassurance cards shown while the ride is underway.
         _InfoCard(
           icon: FontAwesomeIcons.carSide,
+          image: Assets.images.tripCarImage,
           title: AppStrings.activeTripInProgressEnjoyTitle,
           body: AppStrings.activeTripInProgressEnjoyBody,
         ),
@@ -65,12 +70,16 @@ class _InfoCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.body,
+    this.image,
     this.titleColor,
   });
 
   final FaIconData icon;
   final String title;
   final String body;
+
+  /// Optional illustration shown in the leading chip instead of [icon].
+  final AssetGenImage? image;
   final Color? titleColor;
 
   @override
@@ -96,7 +105,9 @@ class _InfoCard extends StatelessWidget {
               color: colors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: FaIcon(icon, color: colors.primary, size: 22.r),
+            child: image != null
+                ? image!.image(width: 22.r, height: 22.r, fit: BoxFit.contain)
+                : FaIcon(icon, color: colors.primary, size: 22.r),
           ),
           AppSpacing.md.horizontalSpace,
           Expanded(

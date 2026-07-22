@@ -17,7 +17,6 @@ import 'package:customertaxi/features/trip/presentation/coordinators/trip_comple
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/cancel_trip_sheet.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/live_arrival_overlay.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancelled_success_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_sheet.dart';
 import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart';
@@ -283,13 +282,24 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     BuildContext context,
     TripEntity trip,
   ) async {
-    await TripCancelledSuccessSheet.show(
+    final action = await TripCancelledSuccessSheet.show(
       context,
       cancellation: trip.cancellation,
     );
-    if (context.mounted) {
-      context.read<OrderBloc>().add(const OrderEvent.collapseRequested());
-      getIt<ActiveTripCubit>().clear();
+    if (!context.mounted) return;
+    // Drop the finished trip so Home stops gating on it, then act on the
+    // rider's choice. The sheet runs on its own route (no OrderBloc/router in
+    // its context), which is why we dispatch from here on the shared instance.
+    getIt<ActiveTripCubit>().clear();
+    switch (action) {
+      case CancelledSheetAction.bookAgain:
+        context.read<OrderBloc>().add(const OrderEvent.orderNowPressed());
+      case CancelledSheetAction.changeTime:
+        context.read<OrderBloc>().add(
+          const OrderEvent.orderNowPressed(mode: OrderScheduleMode.later),
+        );
+      case null:
+        context.read<OrderBloc>().add(const OrderEvent.collapseRequested());
     }
   }
 
@@ -655,30 +665,32 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                           ),
                         ),
 
-                      // Top-left live arrival badge — shown whenever a live ETA is
-                      // available: arrival at pickup (en-route / arrived) or at the
-                      // destination (in-progress).
-                      if (LiveArrival.hasEstimate(state.activeDriverLocation) &&
-                          (trip.status == TripStatus.enRoute ||
-                              trip.status == TripStatus.arrived ||
-                              trip.status == TripStatus.inProgress))
+                      // Status banner card, pinned to the top safe area so it
+                      // never clips into the status bar / notch no matter how tall
+                      // the bottom sheet grows. Left-aligned and force-LTR laid out
+                      // internally (matches its own Directionality).
+                      if (bannerContent != null)
                         Positioned(
                           top:
                               MediaQuery.of(context).padding.top +
                               AppSpacing.sm.h,
                           left: AppSpacing.lg.w,
-                          child: LiveArrivalBadge(
-                            etaSeconds:
-                                state.activeDriverLocation!.etaToPickupSeconds!,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: TripStatusOverlayCard(
+                              icon: bannerContent.icon,
+                              image: bannerContent.image,
+                              title: bannerContent.title,
+                              bodyLines: bannerContent.bodyLines,
+                            ),
                           ).animate().fadeIn(duration: 300.ms),
                         ),
 
-                      // Bottom overlay: the status card and the Note button are
-                      // siblings stacked directly ABOVE the glass status sheet in
-                      // one bottom-anchored column (not at a fixed offset), so
-                      // they always clear it no matter how tall the sheet grows
-                      // for a given trip state (e.g. the arrived sheet with the
-                      // waiting-fee banner).
+                      // Bottom overlay: the Note button (when editable) sits
+                      // directly ABOVE the glass status sheet in one
+                      // bottom-anchored column, so it always clears the sheet no
+                      // matter how tall it grows for a given trip state. The status
+                      // banner card is pinned to the top safe area instead (above).
                       Positioned(
                         left: 0,
                         right: 0,
@@ -686,31 +698,6 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Pinned physically left (Alignment.centerLeft, not
-                            // directional) to match the card's own force-LTR
-                            // layout in RTL locales.
-                            if (bannerContent != null)
-                              Padding(
-                                // In-progress has no note button between the
-                                // card and the sheet, so lift the card a little
-                                // higher off the sheet for breathing room.
-                                padding: REdgeInsets.fromLTRB(
-                                  AppSpacing.lg,
-                                  0,
-                                  AppSpacing.lg,
-                                  trip.status == TripStatus.inProgress
-                                      ? AppSpacing.xl * 6
-                                      : AppSpacing.md,
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: TripStatusOverlayCard(
-                                    icon: bannerContent.icon,
-                                    title: bannerContent.title,
-                                    bodyLines: bannerContent.bodyLines,
-                                  ),
-                                ),
-                              ),
                             if (canEditPassengerNote)
                               Padding(
                                 padding: REdgeInsets.fromLTRB(
@@ -864,8 +851,13 @@ extension on LatLng {
 }
 
 extension on TripStatus {
+  // Hidden once the driver is engaged (en-route / arrived / in-progress) and in
+  // terminal states — the note is only editable while the ride is still being
+  // set up (pending quote, awaiting acceptance, accepted, awaiting payment).
   bool get canEditPassengerNote =>
       this != TripStatus.inProgress &&
+      this != TripStatus.enRoute &&
+      this != TripStatus.arrived &&
       !isTerminal &&
       this != TripStatus.unknown;
 }

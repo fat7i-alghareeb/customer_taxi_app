@@ -185,6 +185,13 @@ Future<bool> _presentPaymentSheet(
         ),
         style: ThemeMode.system,
         returnURL: 'customertaxi://stripe-redirect',
+        // Mirror the first-booking sheet so the edit sheet looks identical.
+        billingDetailsCollectionConfiguration:
+            const BillingDetailsCollectionConfiguration(
+              email: CollectionMode.automatic,
+              name: CollectionMode.automatic,
+              address: AddressCollectionMode.automatic,
+            ),
       ),
     );
     await Stripe.instance.presentPaymentSheet();

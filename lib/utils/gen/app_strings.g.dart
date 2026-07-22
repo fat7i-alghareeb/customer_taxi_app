@@ -239,6 +239,8 @@ class AppStrings {
   static String get bookARideNow => 'bookARideNow'.tr();
   /// Get matched with a driver right away - احصل على سائق على الفور - Word direct gekoppeld aan een chauffeur - Werde sofort mit einem Fahrer verbunden - Zostań natychmiast połączony z kierowcą - Отримайте водія негайно - Trouvez un chauffeur immédiatement - Encuentre un conductor de inmediato - Găsește un șofer imediat
   static String get bookARideNowSubtitle => 'bookARideNowSubtitle'.tr();
+  /// Book again - احجز مرة أخرى - Opnieuw boeken - Erneut buchen - Zarezerwuj ponownie - Забронювати знову - Réserver à nouveau - Reservar de nuevo - Rezervă din nou
+  static String get bookAgain => 'bookAgain'.tr();
   /// You owe {amount}. Settle it to book a new ride. - عليك {amount}. سدّده لحجز رحلة جديدة. - U heeft {amount} openstaan. Betaal dit om een nieuwe rit te boeken. - Sie schulden {amount}. Begleichen Sie den Betrag, um eine neue Fahrt zu buchen. - Masz do zapłaty {amount}. Ureguluj, aby zarezerwować nowy przejazd. - Ви винні {amount}. Погасіть, щоб забронювати нову поїздку. - Vous devez {amount}. Réglez ce montant pour réserver une nouvelle course. - Debes {amount}. Págalo para reservar un nuevo viaje. - Datorezi {amount}. Achită pentru a rezerva o cursă nouă.
   static String get bookingBlockedByDebtMessage => 'bookingBlockedByDebtMessage'.tr();
   /// Outstanding balance - مبلغ مستحق - Openstaand bedrag - Offener Betrag - Niespłacona kwota - Заборгованість - Solde impayé - Saldo pendiente - Sumă restantă
@@ -345,6 +347,8 @@ class AppStrings {
   static String get cancelledRefundBackendSourceMessage => 'cancelledRefundBackendSourceMessage'.tr();
   /// Cancelled at - وقت الإلغاء - Geannuleerd om - Storniert um - Anulowano o - Скасовано о - Annulé à - Cancelado a las - Anulat la
   static String get cancelledRefundCancelledAt => 'cancelledRefundCancelledAt'.tr();
+  /// % of fare, set by the cancellation policy - نسبة من الأجرة وفق سياسة الإلغاء - % van de ritprijs, volgens het annuleringsbeleid - % des Fahrpreises gemäß Stornierungsrichtlinie - % ceny przejazdu, zgodnie z polityką anulowania - % від вартості поїздки згідно з політикою скасування - % du tarif, selon la politique d'annulation - % de la tarifa, según la política de cancelación - % din tarif, conform politicii de anulare
+  static String get cancelledRefundPercentCaption => 'cancelledRefundPercentCaption'.tr();
   /// Policy amount shown by the backend - المبلغ حسب سياسة الخادم - Beleidsbedrag uit de backend - Policy-Betrag aus dem Backend - Kwota z polityki backendu - Сума за політикою бекенду - Montant de politique fourni par le backend - Importe de política mostrado por el backend - Suma politicii afișată de backend
   static String get cancelledRefundSectionSubtitle => 'cancelledRefundSectionSubtitle'.tr();
   /// Refund review - مراجعة الاسترداد - Terugbetaling controleren - Rückerstattung prüfen - Weryfikacja zwrotu - Перевірка повернення - Révision du remboursement - Revisión del reembolso - Revizuire rambursare
@@ -359,6 +363,8 @@ class AppStrings {
   static String get carTypeStandard => 'carTypeStandard'.tr();
   /// Change - تغيير - Wijzigen - Ändern - Zmień - Змінити - Modifier - Cambiar - Schimbă
   static String get change => 'change'.tr();
+  /// Change departure time - تغيير وقت المغادرة - Vertrektijd wijzigen - Abfahrtszeit ändern - Zmień godzinę odjazdu - Змінити час відправлення - Modifier l'heure de départ - Cambiar hora de salida - Schimbă ora de plecare
+  static String get changeDepartureTime => 'changeDepartureTime'.tr();
   /// Camera - الكاميرا - Camera - Kamera - Aparat - Камера - Appareil photo - Cámara - Cameră
   static String get chatChooseCamera => 'chatChooseCamera'.tr();
   /// Gallery - المعرض - Galerij - Galerie - Galeria - Галерея - Galerie - Galería - Galerie
@@ -679,6 +685,10 @@ class AppStrings {
   static String get loginLandingTagline => 'loginLandingTagline'.tr();
   /// Logout - تسجيل الخروج - Uitloggen - Abmelden - Wyloguj - Вийти - Déconnexion - Cerrar sesión - Deconectare
   static String get logout => 'logout'.tr();
+  /// From - من - Van - Von - Od - Звідки - Départ - Desde - De la
+  static String get mapMarkerFrom => 'mapMarkerFrom'.tr();
+  /// To - إلى - Naar - Nach - Do - Куди - Arrivée - Hasta - La
+  static String get mapMarkerTo => 'mapMarkerTo'.tr();
   /// Mar - مار - Mrt - Mär - Mar - Бер - Mars - Mar - Mar
   static String get mar => 'mar'.tr();
   /// March - مارس - Maart - März - Marzec - Березень - Mars - Marzo - Martie
@@ -1337,6 +1347,8 @@ class AppStrings {
   static String get tripCancelConfirmNo => 'tripCancelConfirmNo'.tr();
   /// Yes, Cancel - نعم، إلغاء - Ja, annuleren - Ja, stornieren - Tak, anuluj - Так, скасувати - Oui, annuler - Sí, cancelar - Da, anulează
   static String get tripCancelConfirmYes => 'tripCancelConfirmYes'.tr();
+  /// We're sorry, your trip was cancelled. You can book again or choose a later departure time. - نأسف، تم إلغاء رحلتك. يمكنك الحجز مرة أخرى أو اختيار وقت مغادرة لاحق. - Het spijt ons, je rit is geannuleerd. Je kunt opnieuw boeken of een latere vertrektijd kiezen. - Es tut uns leid, deine Fahrt wurde storniert. Du kannst erneut buchen oder eine spätere Abfahrtszeit wählen. - Przepraszamy, Twój przejazd został anulowany. Możesz zarezerwować ponownie lub wybrać późniejszą godzinę odjazdu. - Вибачте, вашу поїздку скасовано. Ви можете забронювати знову або вибрати пізніший час відправлення. - Nous sommes désolés, votre trajet a été annulé. Vous pouvez réserver à nouveau ou choisir une heure de départ ultérieure. - Lo sentimos, tu viaje fue cancelado. Puedes reservar de nuevo o elegir una hora de salida posterior. - Ne pare rău, cursa ta a fost anulată. Poți rezerva din nou sau alege o oră de plecare ulterioară.
+  static String get tripCancelledByOperatorBody => 'tripCancelledByOperatorBody'.tr();
   /// Trip cancelled successfully - تم إلغاء الرحلة بنجاح - Rit succesvol geannuleerd - Fahrt erfolgreich storniert - Przejazd został pomyślnie anulowany - Поїздку успішно скасовано - Course annulée avec succès - Viaje cancelado con éxito - Cursă anulată cu succes
   static String get tripCancelledSuccess => 'tripCancelledSuccess'.tr();
   /// Your trip has been cancelled successfully. You can request a new ride anytime. - تم إلغاء رحلتك بنجاح. يمكنك طلب رحلة جديدة في أي وقت. - Je rit is succesvol geannuleerd. Je kunt op elk moment een nieuwe rit aanvragen. - Ihre Fahrt wurde erfolgreich storniert. Sie können jederzeit eine neue Fahrt anfordern. - Twój przejazd został pomyślnie anulowany. Możesz zamówić nowy przejazd w dowolnym momencie. - Вашу поїздку успішно скасовано. Ви можете замовити нову поїздку в будь-який час. - Votre course a été annulée avec succès. Vous pouvez demander une nouvelle course à tout moment. - Su viaje ha sido cancelado con éxito. Puede solicitar un nuevo viaje en cualquier momento. - Cursa ta a fost anulată cu succes. Poți solicita o cursă nouă oricând.

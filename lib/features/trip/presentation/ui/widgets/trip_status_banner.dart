@@ -8,11 +8,16 @@ class TripStatusBannerContent {
     required this.icon,
     required this.title,
     required this.bodyLines,
+    this.image,
   });
 
   final FaIconData icon;
   final String title;
   final List<String> bodyLines;
+
+  /// When set, the card renders this illustration in place of [icon] — used to
+  /// show the branded car image for the ride/trip statuses.
+  final AssetGenImage? image;
 
   static TripStatusBannerContent? forStatus(TripStatus status) {
     switch (status) {
@@ -21,24 +26,28 @@ class TripStatusBannerContent {
         // floating card doesn't echo it (and stays clear of the status bar).
         return TripStatusBannerContent(
           icon: FontAwesomeIcons.carSide,
+          image: Assets.images.tripCarImage,
           title: AppStrings.activeTripSearchingDriverTitle,
           bodyLines: [AppStrings.activeTripSearchingDriverBody],
         );
       case TripStatus.accepted:
         return TripStatusBannerContent(
           icon: FontAwesomeIcons.carSide,
+          image: Assets.images.tripCarImage,
           title: AppStrings.activeTripDriverAssignedTitle,
           bodyLines: [AppStrings.activeTripComfortableTripSoon],
         );
       case TripStatus.arrived:
         return TripStatusBannerContent(
           icon: FontAwesomeIcons.carSide,
+          image: Assets.images.tripCarImage,
           title: AppStrings.activeTripDriverArrivedTitle,
           bodyLines: [AppStrings.activeTripDriverWaitingAtPickup],
         );
       case TripStatus.inProgress:
         return TripStatusBannerContent(
           icon: FontAwesomeIcons.route,
+          image: Assets.images.tripCarImage,
           title: AppStrings.activeTripInProgressTitle,
           bodyLines: [AppStrings.activeTripInProgressSubtitle],
         );
@@ -64,6 +73,7 @@ class TripStatusOverlayCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.bodyLines,
+    this.image,
     this.highlightBrand = false,
     super.key,
   });
@@ -71,6 +81,9 @@ class TripStatusOverlayCard extends StatelessWidget {
   final FaIconData icon;
   final String title;
   final List<String> bodyLines;
+
+  /// Optional illustration shown in the leading chip instead of [icon].
+  final AssetGenImage? image;
 
   /// When true, the "Fat7i" brand word inside any body line is split-
   /// coloured — "Fat7i" branding (legacy color-split comment).
@@ -146,7 +159,13 @@ class TripStatusOverlayCard extends StatelessWidget {
                   color: AppColors.tripOrange.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: FaIcon(icon, color: AppColors.tripOrange, size: 20.r),
+                child: image != null
+                    ? image!.image(
+                        width: 20.r,
+                        height: 20.r,
+                        fit: BoxFit.contain,
+                      )
+                    : FaIcon(icon, color: AppColors.tripOrange, size: 20.r),
               ),
               AppSpacing.md.horizontalSpace,
               Flexible(

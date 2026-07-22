@@ -11,8 +11,8 @@ import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_sheet_ac
 /// address / passengers / bags block as the confirmation sheet (editable while
 /// the status allows repricing), plus the progress stepper.
 ///
-/// No arrival ETA here: it lives in the `LiveArrivalBadge` over the map, so
-/// repeating it inside the sheet was duplicate information.
+/// No arrival ETA is shown in this state — the live driver→pickup map carries
+/// the progress on its own.
 class TripEnRouteStatusSheet extends StatelessWidget {
   const TripEnRouteStatusSheet({
     required this.trip,
