@@ -155,7 +155,6 @@ class CancelledTripRefundRow extends StatelessWidget {
             Expanded(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Flexible(
                     child: Text(

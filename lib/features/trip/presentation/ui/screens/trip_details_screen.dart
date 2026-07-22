@@ -1,7 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
-import 'package:customertaxi/core/theme/trip_accent_theme.dart';
-
 import '../../../domain/entities/trip_entity.dart';
 import '../../../domain/entities/trip_refund_status.dart';
 import '../../../domain/entities/trip_status.dart';
