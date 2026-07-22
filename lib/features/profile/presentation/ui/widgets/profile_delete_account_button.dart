@@ -26,9 +26,11 @@ class ProfileDeleteAccountButton extends StatelessWidget {
         );
       },
       builder: (context, state) {
-        return AppButton.variant(
-          variant: AppButtonVariant.error,
-          fill: AppButtonFill.solid,
+        return AppButton.outline(
+          variant: const CustomButtonVariant(
+            color: AppColors.error,
+            foregroundColor: AppColors.error,
+          ),
           isLoading: state.deleteAccountStatus.isLoading,
           onTap: () => _confirmAndDelete(context),
           child: AppButtonChild.labelIcon(

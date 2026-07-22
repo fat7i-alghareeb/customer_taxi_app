@@ -117,9 +117,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/topText.png
   AssetGenImage get topText => const AssetGenImage('assets/images/topText.png');
 
-  /// File path: assets/images/tripsStatusImage-for-trip.png
-  AssetGenImage get tripsStatusImageForTrip =>
-      const AssetGenImage('assets/images/tripsStatusImage-for-trip.png');
+  /// File path: assets/images/trip_car_image.png
+  AssetGenImage get tripCarImage =>
+      const AssetGenImage('assets/images/trip_car_image.png');
 
   /// File path: assets/images/tripsStatusImage.png
   AssetGenImage get tripsStatusImage =>
@@ -151,7 +151,7 @@ class $AssetsImagesGen {
     splashLight,
     standered,
     topText,
-    tripsStatusImageForTrip,
+    tripCarImage,
     tripsStatusImage,
   ];
 }

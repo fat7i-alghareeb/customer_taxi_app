@@ -54,7 +54,7 @@ class _ProfileBodyState extends State<ProfileBody> {
             padding: REdgeInsets.symmetric(
               horizontal: AppSpacing.xl,
               vertical: AppSpacing.lg,
-            ),
+            ).copyWith(bottom: AppSpacing.lg.h + context.bottomPadding),
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -77,7 +77,6 @@ class _ProfileBodyState extends State<ProfileBody> {
                   AppSpacing.xl.verticalSpace,
                   const ProfileDeleteAccountButton(),
                 ],
-                AppSpacing.lg.verticalSpace,
               ],
             ),
           ),
@@ -108,25 +107,6 @@ class _ProfileBodyState extends State<ProfileBody> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Section title
-          Row(
-            children: [
-              FaIcon(
-                FontAwesomeIcons.solidUser,
-                size: 14.r,
-                color: context.primary,
-              ),
-              AppSpacing.sm.horizontalSpace,
-              Text(
-                AppStrings.profileName,
-                style: AppTextStyles.s14w700.copyWith(
-                  color: context.onSurface,
-                ),
-              ),
-            ],
-          ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.05),
-          AppSpacing.lg.verticalSpace,
-
           // Name field
           AppReactiveTextField.text(
             formControlName: ProfileForms.nameField,
@@ -165,33 +145,32 @@ class _ProfileBodyState extends State<ProfileBody> {
           AppSpacing.lg.verticalSpace,
 
           // Home address field with map picker
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                child: AppReactiveTextField.text(
-                  formControlName: ProfileForms.homeAddressField,
-                  title: AppStrings.profileHomeAddress,
-                  hintText: AppStrings.profileHomeAddressHint,
-                  onChangedDebounced: (value, _) {
-                    context.read<ProfileBloc>().add(
-                      ProfileEvent.homeAddressLabelChanged(
-                        value.trim().isEmpty ? null : value.trim(),
-                      ),
-                    );
-                  },
-                ),
+              AppReactiveTextField.text(
+                formControlName: ProfileForms.homeAddressField,
+                title: AppStrings.profileHomeAddress,
+                hintText: AppStrings.profileHomeAddressHint,
+                onChangedDebounced: (value, _) {
+                  context.read<ProfileBloc>().add(
+                    ProfileEvent.homeAddressLabelChanged(
+                      value.trim().isEmpty ? null : value.trim(),
+                    ),
+                  );
+                },
               ),
-              AppSpacing.sm.horizontalSpace,
+              AppSpacing.sm.verticalSpace,
               AppButton.outline(
                 layout: AppButtonLayout(
-                  width: 52.w,
-                  height: 52.h,
+                  width: double.infinity,
+                  height: 48.h,
                   borderRadius: AppRadii.lg,
                 ),
                 onTap: () => _pickHomeAddress(context, state),
-                child: AppButtonChild.icon(
-                  IconSource.faIcon(
+                child: AppButtonChild.labelIcon(
+                  label: AppStrings.setOnMap,
+                  icon: IconSource.faIcon(
                     (state.pendingHomeAddressLatitude ??
                                 state.currentUser?.homeAddressLatitude) !=
                             null
