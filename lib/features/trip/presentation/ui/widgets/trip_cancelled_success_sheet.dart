@@ -22,7 +22,13 @@ class TripCancelledSuccessSheet extends StatelessWidget {
     return AppBottomSheet.show<CancelledSheetAction>(
       context,
       sheet: AppBottomSheet.basic(
-        child: TripCancelledSuccessSheet(cancellation: cancellation),
+        // Pushed on the root navigator, so it does not inherit the active-trip
+        // accent from the subtree that opened it — apply it here (see
+        // tripAccentTheme doc), same as CancelTripSheet.
+        child: tripAccentTheme(
+          context,
+          child: TripCancelledSuccessSheet(cancellation: cancellation),
+        ),
       ),
     );
   }
@@ -53,7 +59,7 @@ class TripCancelledSuccessSheet extends StatelessWidget {
                     isSelfCancel
                         ? FontAwesomeIcons.solidCircleCheck
                         : FontAwesomeIcons.circleXmark,
-                    color: isSelfCancel ? AppColors.success : colors.error,
+                    color: AppColors.tripOrange,
                     size: 72.r,
                   )
                   .animate()
