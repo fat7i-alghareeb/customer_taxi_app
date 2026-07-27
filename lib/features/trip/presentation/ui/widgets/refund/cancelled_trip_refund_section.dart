@@ -105,6 +105,9 @@ class CancelledTripRefundSection extends StatelessWidget {
                 cancelledAtUtc: cancellation.createdAtUtc,
                 refundStatus: refundStatus,
                 knownFailedRefund: refundStatus == TripRefundStatus.failed,
+                // Lets the screen show the review status instead of a form the
+                // server would reject while a request is still open.
+                existingIssue: trip.refundIssue,
               ),
             ),
             child: AppButtonChild.labelIcon(

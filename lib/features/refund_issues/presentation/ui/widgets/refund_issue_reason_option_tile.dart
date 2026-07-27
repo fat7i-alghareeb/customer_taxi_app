@@ -40,7 +40,7 @@ class RefundIssueReasonOptionTile extends StatelessWidget {
                 option.label,
                 style: AppTextStyles.s14w600.copyWith(
                   color: selected
-                      ? AppColors.warning
+                      ? AppColors.tripOrange
                       : context.onSurface,
                 ),
               ),
@@ -52,7 +52,7 @@ class RefundIssueReasonOptionTile extends StatelessWidget {
                   : FontAwesomeIcons.circle,
               size: 16.r,
               color: selected
-                  ? AppColors.warning
+                  ? AppColors.tripOrange
                   : context.onSurface.withValues(alpha: 0.42),
             ),
           ],

@@ -97,7 +97,7 @@ class AppStrings {
   static String get activeTripSearchingDriverConfirmSoon => 'activeTripSearchingDriverConfirmSoon'.tr();
   /// Thank you for your patience. - شكرًا لصبرك. - Bedankt voor uw geduld. - Vielen Dank für Ihre Geduld. - Dziękujemy za cierpliwość. - Дякуємо за терпіння. - Merci pour votre patience. - Gracias por su paciencia. - Îți mulțumim pentru răbdare.
   static String get activeTripSearchingDriverThanksPatience => 'activeTripSearchingDriverThanksPatience'.tr();
-  /// Finding your driver - جارٍ البحث عن سائق - Chauffeur zoeken - Fahrer wird gesucht - Szukamy kierowcy - Шукаємо водія - Recherche d'un chauffeur - Buscando tu conductor - Căutăm un șofer
+  /// We're finding a driver near you - نبحث عن سائق بالقرب منك - We zoeken een chauffeur bij u in de buurt - Wir suchen einen Fahrer in Ihrer Nähe - Szukamy kierowcy w Twojej okolicy - Шукаємо водія поблизу вас - Nous recherchons un chauffeur près de chez vous - Estamos buscando un conductor cerca de ti - Căutăm un șofer în apropierea ta
   static String get activeTripSearchingDriverTitle => 'activeTripSearchingDriverTitle'.tr();
   /// Driver arrived - وصل السائق - Chauffeur aangekomen - Fahrer angekommen - Kierowca przybył - Водій прибув - Chauffeur arrivé - Conductor llegó - Șofer sosit
   static String get activeTripStepDriverArrived => 'activeTripStepDriverArrived'.tr();
@@ -119,6 +119,18 @@ class AppStrings {
   static String get addPaymentMethodCta => 'addPaymentMethodCta'.tr();
   /// Add stop - إضافة توقف - Stop toevoegen - Halt hinzufügen - Dodaj przystanek - Додати зупинку - Ajouter un arrêt - Añadir parada - Adaugă oprire
   static String get addStop => 'addStop'.tr();
+  /// Or drop a pin on the map yourself with the button below. - أو حدّد الموقع بنفسك على الخريطة باستخدام الزر أدناه. - Of zet zelf een speld op de kaart met de knop hieronder. - Oder setzen Sie mit der Schaltfläche unten selbst eine Markierung auf der Karte. - Albo samodzielnie ustaw pinezkę na mapie przyciskiem poniżej. - Або самостійно поставте позначку на мапі кнопкою нижче. - Ou placez vous-même un repère sur la carte avec le bouton ci-dessous. - O coloca tú mismo un marcador en el mapa con el botón de abajo. - Sau pune singur un marcaj pe hartă cu butonul de mai jos.
+  static String get addressModeMapHint => 'addressModeMapHint'.tr();
+  /// Or type at least 2 letters and pick an address from the suggestions. - أو اكتب حرفين على الأقل واختر عنوانًا من الاقتراحات. - Of typ minstens 2 letters en kies een adres uit de suggesties. - Oder geben Sie mindestens 2 Buchstaben ein und wählen Sie eine Adresse aus den Vorschlägen. - Albo wpisz co najmniej 2 litery i wybierz adres z podpowiedzi. - Або введіть щонайменше 2 літери та оберіть адресу з підказок. - Ou saisissez au moins 2 lettres et choisissez une adresse parmi les suggestions. - O escribe al menos 2 letras y elige una dirección entre las sugerencias. - Sau scrie cel puțin 2 litere și alege o adresă din sugestii.
+  static String get addressModeSearchHint => 'addressModeSearchHint'.tr();
+  /// Just type your address as plain text. - اكتب عنوانك كنص عادي. - Typ uw adres vrij in als tekst. - Geben Sie Ihre Adresse einfach als Text ein. - Po prostu wpisz adres jako zwykły tekst. - Просто введіть адресу звичайним текстом. - Saisissez simplement votre adresse en texte libre. - Escribe tu dirección como texto libre. - Scrie pur și simplu adresa ca text.
+  static String get addressModeTypeHint => 'addressModeTypeHint'.tr();
+  /// No addresses found. Adjust your search or drop a pin on the map. - لم يتم العثور على عناوين. عدّل بحثك أو حدّد موقعًا على الخريطة. - Geen adressen gevonden. Pas uw zoekopdracht aan of zet een speld op de kaart. - Keine Adressen gefunden. Passen Sie Ihre Suche an oder setzen Sie eine Markierung auf der Karte. - Nie znaleziono adresów. Zmień wyszukiwanie lub ustaw pinezkę na mapie. - Адрес не знайдено. Змініть запит або поставте позначку на мапі. - Aucune adresse trouvée. Modifiez votre recherche ou placez un repère sur la carte. - No se encontraron direcciones. Ajusta tu búsqueda o coloca un marcador en el mapa. - Nu s-au găsit adrese. Modifică-ți căutarea sau pune un marcaj pe hartă.
+  static String get addressNoResults => 'addressNoResults'.tr();
+  /// Location pinned on the map - تم تحديد الموقع على الخريطة - Locatie vastgezet op de kaart - Standort auf der Karte markiert - Lokalizacja przypięta na mapie - Місце позначено на мапі - Position épinglée sur la carte - Ubicación fijada en el mapa - Locație fixată pe hartă
+  static String get addressPinnedBadge => 'addressPinnedBadge'.tr();
+  /// Searching addresses… - جارٍ البحث عن العناوين… - Adressen zoeken… - Adressen werden gesucht … - Szukanie adresów… - Пошук адрес… - Recherche d'adresses… - Buscando direcciones… - Se caută adrese…
+  static String get addressSearchingLabel => 'addressSearchingLabel'.tr();
   /// Apr - أبر - Apr - Apr - Kwi - Квіт - Avril - Abr - Apr
   static String get apr => 'apr'.tr();
   /// April - أبريل - April - April - Kwiecień - Квітень - Avril - Abril - Aprilie
@@ -251,8 +263,6 @@ class AppStrings {
   static String get cancel => 'cancel'.tr();
   /// The free cancellation window has passed. You'll receive 45% of the fare back. - انتهت نافذة الإلغاء المجاني. ستسترد 45% من قيمة الرحلة. - Het gratis annuleringsvenster is verstreken. U ontvangt 45% van het ritbedrag terug. - Das kostenlose Stornierungsfenster ist abgelaufen. Sie erhalten 45 % des Fahrpreises zurück. - Okno bezpłatnego anulowania minęło. Otrzymasz 45% opłaty za przejazd. - Вікно безкоштовного скасування закінчилося. Ви отримаєте 45% вартості поїздки. - La fenêtre d'annulation gratuite est dépassée. Vous recevrez 45 % du prix de la course. - El período de cancelación gratuita ha vencido. Recibirá el 45 % del importe del viaje. - Fereastra de anulare gratuită a expirat. Veți primi 45% din tarif înapoi.
   static String get cancelBannerAfterWindow => 'cancelBannerAfterWindow'.tr();
-  /// Driver has arrived — €6.50 fee will be charged. Refund: {amount} {currency}. - وصل السائق — سيُخصم 6.50 يورو. المبلغ المُعاد: {amount} {currency}. - Chauffeur is aangekomen — €6,50 annuleringskosten. Terugbetaling: {amount} {currency}. - Fahrer ist angekommen — €6,50 Gebühr. Rückerstattung: {amount} {currency}. - Kierowca przybył — opłata 6,50 €. Zwrot: {amount} {currency}. - Водій прибув — плата 6,50 євро. Повернення: {amount} {currency}. - Le chauffeur est arrivé — frais de 6,50 €. Remboursement : {amount} {currency}. - El conductor ha llegado — tarifa de 6,50 €. Reembolso: {amount} {currency}. - Șoferul a sosit — taxă de 6,50 €. Rambursare: {amount} {currency}.
-  static String get cancelBannerArrived => 'cancelBannerArrived'.tr();
   /// You're within the free cancellation window — full refund guaranteed. - أنت ضمن نافذة الإلغاء المجاني — استرداد كامل مضمون. - U bevindt zich in het gratis annuleringsvenster — volledige terugbetaling gegarandeerd. - Sie befinden sich noch im kostenlosen Stornierungsfenster — volle Rückerstattung. - Jesteś w oknie bezpłatnego anulowania — pełny zwrot środków gwarantowany. - Ви у вікні безкоштовного скасування — повне повернення коштів гарантовано. - Vous êtes dans la fenêtre d'annulation gratuite — remboursement intégral garanti. - Está dentro del período de cancelación gratuita — reembolso total garantizado. - Vă aflați în fereastra de anulare gratuită — rambursare integrală garantată.
   static String get cancelBannerFreeWindow => 'cancelBannerFreeWindow'.tr();
   /// Yes, cancel - نعم، إلغاء - Ja, annuleren - Ja, stornieren - Tak, anuluj - Так, скасувати - Oui, annuler - Sí, cancelar - Da, anulează
@@ -327,6 +337,8 @@ class AppStrings {
   static String get cancellationReasonAirportWaitDeclined => 'cancellationReasonAirportWaitDeclined'.tr();
   /// Driver was too late - السائق تأخر كثيراً - Chauffeur was te laat - Fahrer war zu spät - Kierowca był zbyt spóźniony - Водій надто запізнився - Le chauffeur était trop en retard - El conductor llegó demasiado tarde - Șoferul a întârziat prea mult
   static String get cancellationReasonDriverLateClaim => 'cancellationReasonDriverLateClaim'.tr();
+  /// No driver available - لا يوجد سائق متاح - Geen chauffeur beschikbaar - Kein Fahrer verfügbar - Brak dostępnego kierowcy - Немає доступного водія - Aucun chauffeur disponible - No hay conductor disponible - Niciun șofer disponibil
+  static String get cancellationReasonNoDriverAvailable => 'cancellationReasonNoDriverAvailable'.tr();
   /// Cancelled after free window - ألغيت بعد انتهاء فترة الإلغاء المجاني - Geannuleerd na het gratis venster - Nach dem kostenlosen Stornierungsfenster storniert - Anulowano po bezpłatnym oknie - Скасовано після безкоштовного періоду - Annulé hors de la fenêtre gratuite - Cancelado fuera del período gratuito - Anulat după perioada gratuită
   static String get cancellationReasonPassengerAfterFiveMinutes => 'cancellationReasonPassengerAfterFiveMinutes'.tr();
   /// Cancelled after free window - ألغيت بعد انتهاء فترة الإلغاء المجاني - Geannuleerd na het gratis venster - Nach dem kostenlosen Stornierungsfenster storniert - Anulowano po bezpłatnym oknie - Скасовано після безкоштовного періоду - Annulé hors de la fenêtre gratuite - Cancelado fuera del período gratuito - Anulat după perioada gratuită
@@ -435,14 +447,18 @@ class AppStrings {
   static String get confirmPoint => 'confirmPoint'.tr();
   /// You must accept the Privacy Policy and the Terms and Conditions. - يجب الموافقة على سياسة الخصوصية والشروط والأحكام. - U moet akkoord gaan met het Privacybeleid en de Algemene Voorwaarden. - Sie müssen der Datenschutzerklärung und den Allgemeinen Geschäftsbedingungen zustimmen. - Musisz zaakceptować Politykę prywatności i Regulamin. - Ви повинні прийняти Політику конфіденційності та Умови. - Vous devez accepter la Politique de confidentialité et les Conditions générales. - Debe aceptar la Política de privacidad y los Términos y Condiciones. - Trebuie să accepți Politica de confidențialitate și Termenii și condițiile.
   static String get consentMustAcceptError => 'consentMustAcceptError'.tr();
-  /// Privacy Policy - سياسة الخصوصية - Privacybeleid - Datenschutzerklärung - Politykę prywatności - Політикою конфіденційності - Politique de confidentialité - Política de privacidad - Politica de confidențialitate
+  /// Fat7i Privacy Policy - سياسة الخصوصية الخاصة بـ Fat7i - Privacybeleid van Fat7i - Datenschutzerklärung von Fat7i - Politykę prywatności Fat7i - Політику конфіденційності Fat7i - Politique de confidentialité d'Fat7i - Política de privacidad de Fat7i - Politica de confidențialitate Fat7i
   static String get consentPrivacyLinkLabel => 'consentPrivacyLinkLabel'.tr();
-  /// I agree to the - أوافق على - Ik ga akkoord met het - Ich stimme der - Akceptuję - Я погоджуюсь з - J'accepte la - Acepto la - Sunt de acord cu
+  /// I have read the - لقد قرأت - Ik heb het - Ich habe die - Przeczytałem(-am) - Я прочитав(-ла) - J'ai lu la - He leído la - Am citit
   static String get consentPrivacyPrefix => 'consentPrivacyPrefix'.tr();
-  /// Terms and Conditions - الشروط والأحكام - Algemene Voorwaarden - Allgemeinen Geschäftsbedingungen - Regulamin - Умовами та положеннями - Conditions générales - Términos y Condiciones - Termenii și condițiile
+  /// gelezen - gelesen
+  static String get consentPrivacySuffix => 'consentPrivacySuffix'.tr();
+  /// Fat7i Terms and Conditions - الشروط والأحكام الخاصة بـ Fat7i - Algemene Voorwaarden van Fat7i - Allgemeinen Geschäftsbedingungen von Fat7i - Regulamin Fat7i - Умовами та положеннями Fat7i - Conditions générales d'Fat7i - Términos y Condiciones de Fat7i - Termenii și condițiile Fat7i
   static String get consentTermsLinkLabel => 'consentTermsLinkLabel'.tr();
   /// I agree to the - أوافق على - Ik ga akkoord met de - Ich stimme den - Akceptuję - Я погоджуюсь з - J'accepte les - Acepto los - Sunt de acord cu
   static String get consentTermsPrefix => 'consentTermsPrefix'.tr();
+  /// zu
+  static String get consentTermsSuffix => 'consentTermsSuffix'.tr();
   /// Address - العنوان - Adres - Adresse - Adres - Адреса - Adresse - Dirección - Adresă
   static String get contactUsAddress => 'contactUsAddress'.tr();
   /// Have a question, need more information, or want to book a taxi? Contact customertaxi Tours and we’ll get back to you as soon as possible. Our team is available 24/7 to assist you with bookings, pricing, and special requests. - هل لديك سؤال، أو تحتاج إلى مزيد من المعلومات، أو ترغب في حجز سيارة أجرة؟ تواصل مع آدم لرحلات التاكسي وسنرد عليك في أقرب وقت ممكن. فريقنا متاح على مدار الساعة طوال أيام الأسبوع لمساعدتك في الحجوزات والأسعار والطلبات الخاصة. - Heeft u een vraag, heeft u meer informatie nodig of wilt u een taxi boeken? Neem contact op met customertaxi Tours en we nemen zo snel mogelijk contact met u op. Ons team staat 24/7 voor u klaar om u te helpen met boekingen, prijzen en speciale verzoeken. - Haben Sie Fragen oder möchten Sie ein Taxi buchen? Kontaktieren Sie uns und wir melden uns schnellstmöglich zurück. - Masz pytania lub chcesz zarezerwować taksówkę? Skontaktuj się z nami, a odpowiemy najszybciej jak to możliwe. - Маєте запитання чи хочете замовити таксі? Зв'яжіться з нами. - Une question ou besoin de réserver un taxi ? Contactez-nous. - ¿Tiene alguna pregunta, necesita más información o quiere reservar un taxi? Contacte con nosotros y le responderemos lo antes posible. - Aveți o întrebare, aveți nevoie de mai multe informații sau doriți să rezervați un taxi? Contactați-ne și vă vom răspunde cât mai curând posibil.
@@ -959,9 +975,9 @@ class AppStrings {
   static String get profileEditTitle => 'profileEditTitle'.tr();
   /// Signed in with email or Google. Log out to use a different email. - تم تسجيل الدخول عبر البريد الإلكتروني أو Google. سجّل الخروج لاستخدام بريد إلكتروني آخر. - Ingelogd met e-mail of Google. Log uit om een ander e-mailadres te gebruiken. - Mit E-Mail oder Google angemeldet. Melden Sie sich ab, um eine andere E-Mail zu verwenden. - Zalogowano przez e-mail lub Google. Wyloguj się, aby użyć innego adresu e-mail. - Ви ввійшли через електронну пошту або Google. Вийдіть, щоб використати іншу пошту. - Connecté avec un e-mail ou Google. Déconnectez-vous pour utiliser un autre e-mail. - Sesión iniciada con correo electrónico o Google. Cierra sesión para usar otro correo. - Autentificat cu e-mail sau Google. Deconectează-te pentru a folosi alt e-mail.
   static String get profileEmailLockedHint => 'profileEmailLockedHint'.tr();
-  /// address - عنوان - adres - Heimatadresse - Adres domowy - Домашня адреса - Adresse du domicile - Dirección particular - Adresă de domiciliu
+  /// Address - العنوان - Adres - Heimatadresse - Adres domowy - Домашня адреса - Adresse du domicile - Dirección particular - Adresă de domiciliu
   static String get profileHomeAddress => 'profileHomeAddress'.tr();
-  /// Add your home address (optional) - أضف عنوان منزلك (اختياري) - Voeg je thuisadres toe (optioneel) - Heimatadresse hinzufügen (optional) - Dodaj swój adres domowy (opcjonalnie) - Додайте домашню адресу (необов'язково) - Ajoutez votre adresse de domicile (facultatif) - Añade tu dirección particular (opcional) - Adaugă adresa de domiciliu (opțional)
+  /// Type your address, or pick a suggestion below - اكتب عنوانك، أو اختر اقتراحًا من الأسفل - Typ uw adres, of kies een suggestie hieronder - Geben Sie Ihre Adresse ein oder wählen Sie unten einen Vorschlag - Wpisz swój adres lub wybierz podpowiedź poniżej - Введіть свою адресу або оберіть підказку нижче - Saisissez votre adresse ou choisissez une suggestion ci-dessous - Escribe tu dirección o elige una sugerencia abajo - Scrie adresa ta sau alege o sugestie de mai jos
   static String get profileHomeAddressHint => 'profileHomeAddressHint'.tr();
   /// Full Name - الاسم الكامل - Volledige naam - Vollständiger Name - Imię i nazwisko - Повне ім'я - Nom complet - Nombre completo - Nume complet
   static String get profileName => 'profileName'.tr();
@@ -1077,6 +1093,8 @@ class AppStrings {
   static String get refundIssueNoteTitle => 'refundIssueNoteTitle'.tr();
   /// Open WhatsApp - فتح واتساب - WhatsApp openen - WhatsApp öffnen - Otwórz WhatsApp - Відкрити WhatsApp - Ouvrir WhatsApp - Abrir WhatsApp - Deschide WhatsApp
   static String get refundIssueOpenWhatsApp => 'refundIssueOpenWhatsApp'.tr();
+  /// Your previous request was handled on {date}. You can submit a new one. - تمت معالجة طلبك السابق في {date}. يمكنك إرسال طلب جديد. - Uw vorige verzoek is afgehandeld op {date}. U kunt een nieuw verzoek indienen. - Ihre vorherige Anfrage wurde am {date} bearbeitet. Sie können eine neue einreichen. - Twoje poprzednie zgłoszenie zostało rozpatrzone {date}. Możesz wysłać nowe. - Ваш попередній запит опрацьовано {date}. Ви можете надіслати новий. - Votre demande précédente a été traitée le {date}. Vous pouvez en envoyer une nouvelle. - Tu solicitud anterior se resolvió el {date}. Puedes enviar una nueva. - Solicitarea ta anterioară a fost rezolvată pe {date}. Poți trimite una nouă.
+  static String get refundIssuePreviousResolved => 'refundIssuePreviousResolved'.tr();
   /// I did not receive the refund - لم أستلم الاسترداد - Ik heb de terugbetaling niet ontvangen - Ich habe die Rückerstattung nicht erhalten - Nie otrzymałem zwrotu - Я не отримав повернення - Je n'ai pas reçu le remboursement - No recibí el reembolso - Nu am primit rambursarea
   static String get refundIssueReasonDidNotReceive => 'refundIssueReasonDidNotReceive'.tr();
   /// I received less than expected - استلمت مبلغا أقل من المتوقع - Ik heb minder ontvangen dan verwacht - Ich habe weniger als erwartet erhalten - Otrzymałem mniej niż oczekiwano - Я отримав менше, ніж очікував - J'ai reçu moins que prévu - Recibí menos de lo esperado - Am primit mai puțin decât mă așteptam
@@ -1129,6 +1147,12 @@ class AppStrings {
   static String get refundIssueSummaryTitle => 'refundIssueSummaryTitle'.tr();
   /// Refund review - مراجعة الاسترداد - Terugbetaling controleren - Rückerstattung prüfen - Weryfikacja zwrotu - Перевірка повернення - Révision du remboursement - Revisión del reembolso - Revizuire rambursare
   static String get refundIssueTitle => 'refundIssueTitle'.tr();
+  /// We have received your review request. The amount will be in your account within 2 working days at most. - لقد استلمنا طلب المراجعة الخاص بك. سيصل المبلغ إلى حسابك خلال يومَي عمل كحد أقصى. - We hebben uw controleverzoek ontvangen. Binnen maximaal 2 werkdagen staat het bedrag op uw rekening. - Wir haben Ihre Prüfanfrage erhalten. Der Betrag ist innerhalb von maximal 2 Werktagen auf Ihrem Konto. - Otrzymaliśmy Twoje zgłoszenie do weryfikacji. Kwota znajdzie się na Twoim koncie w ciągu maksymalnie 2 dni roboczych. - Ми отримали ваш запит на перевірку. Кошти надійдуть на ваш рахунок протягом щонайбільше 2 робочих днів. - Nous avons bien reçu votre demande de vérification. Le montant sera sur votre compte sous 2 jours ouvrés maximum. - Hemos recibido tu solicitud de revisión. El importe estará en tu cuenta en un plazo máximo de 2 días laborables. - Am primit solicitarea ta de verificare. Suma va ajunge în contul tău în maximum 2 zile lucrătoare.
+  static String get refundIssueUnderReviewBody => 'refundIssueUnderReviewBody'.tr();
+  /// Submitted on {date} - تم الإرسال في {date} - Ingediend op {date} - Eingereicht am {date} - Zgłoszono {date} - Надіслано {date} - Envoyée le {date} - Enviada el {date} - Trimisă pe {date}
+  static String get refundIssueUnderReviewSubmittedAt => 'refundIssueUnderReviewSubmittedAt'.tr();
+  /// Your request is being reviewed - طلبك قيد المراجعة - Uw verzoek is in behandeling - Ihre Anfrage wird bearbeitet - Twoje zgłoszenie jest rozpatrywane - Ваш запит на розгляді - Votre demande est en cours de traitement - Tu solicitud está en revisión - Solicitarea ta este în curs de verificare
+  static String get refundIssueUnderReviewTitle => 'refundIssueUnderReviewTitle'.tr();
   /// We'll review your request within 24–48 hours. You can track the status here or reach us on WhatsApp. - سنراجع طلبك خلال 24–48 ساعة. يمكنك متابعة الحالة هنا أو التواصل معنا عبر واتساب. - We bekijken je verzoek binnen 24–48 uur. Je kunt de status hier volgen of ons bereiken via WhatsApp. - Wir prüfen deine Anfrage innerhalb von 24–48 Stunden. Du kannst den Status hier verfolgen oder uns über WhatsApp erreichen. - Rozpatrzymy Twoją prośbę w ciągu 24–48 godzin. Możesz śledzić status tutaj lub skontaktować się z nami przez WhatsApp. - Ми розглянемо ваш запит протягом 24–48 годин. Ви можете відстежувати статус тут або звернутися до нас у WhatsApp. - Nous examinerons votre demande sous 24 à 48 heures. Vous pouvez suivre l'état ici ou nous contacter sur WhatsApp. - Revisaremos tu solicitud en un plazo de 24–48 horas. Puedes seguir el estado aquí o contactarnos por WhatsApp. - Vom analiza solicitarea ta în 24–48 de ore. Poți urmări starea aici sau ne poți contacta pe WhatsApp.
   static String get refundIssueWhatHappensBody => 'refundIssueWhatHappensBody'.tr();
   /// What happens now? - ماذا يحدث الآن؟ - Wat gebeurt er nu? - Was passiert jetzt? - Co dzieje się teraz? - Що відбувається далі? - Que se passe-t-il maintenant ? - ¿Qué pasa ahora? - Ce se întâmplă acum?
@@ -1139,6 +1163,44 @@ class AppStrings {
   static String get reportDriverDelay => 'reportDriverDelay'.tr();
   /// Request was cancelled. - تم إلغاء الطلب. - Aanvraag is geannuleerd. - Anfrage wurde abgebrochen. - Żądanie zostało anulowane. - Запит скасовано. - La demande a été annulée. - La solicitud fue cancelada. - Solicitarea a fost anulată.
   static String get requestCancelled => 'requestCancelled'.tr();
+  /// We will let you know that your driver has arrived. - سنُعلمك بوصول سائقك. - We laten u weten dat uw chauffeur is gearriveerd. - Wir informieren Sie, sobald Ihr Fahrer eingetroffen ist. - Damy Ci znać, że kierowca już dojechał. - Ми повідомимо вас, що водій прибув. - Nous vous préviendrons dès que votre chauffeur sera arrivé. - Le avisaremos cuando su conductor haya llegado. - Vă anunțăm când șoferul a ajuns.
+  static String get reservationArrivalBody => 'reservationArrivalBody'.tr();
+  /// When your driver arrives - عند وصول سائقك - Bij aankomst van uw chauffeur - Bei Ankunft Ihres Fahrers - Gdy kierowca dotrze na miejsce - Коли водій прибуде - À l'arrivée de votre chauffeur - Cuando llegue su conductor - La sosirea șoferului
+  static String get reservationArrivalTitle => 'reservationArrivalTitle'.tr();
+  /// Fat7i - Fat7i - Fat7i - Fat7i - Fat7i - Fat7i - Fat7i - Fat7i - Fat7i
+  static String get reservationBrandName => 'reservationBrandName'.tr();
+  /// Your ride has been successfully confirmed. - تم تأكيد رحلتك بنجاح. - Uw rit is succesvol bevestigd. - Ihre Fahrt wurde erfolgreich bestätigt. - Twój przejazd został pomyślnie potwierdzony. - Вашу поїздку успішно підтверджено. - Votre trajet a bien été confirmé. - Su viaje ha sido confirmado correctamente. - Cursa dumneavoastră a fost confirmată cu succes.
+  static String get reservationConfirmedSubtitle => 'reservationConfirmedSubtitle'.tr();
+  /// Got it - حسنًا - Begrepen - Verstanden - Rozumiem - Зрозуміло - Compris - Entendido - Am înțeles
+  static String get reservationConflictDismiss => 'reservationConflictDismiss'.tr();
+  /// You already have a ride around {time}. Only one ride can be underway at a time — please pick another time. - لديك رحلة بالفعل حوالي {time}. لا يمكن أن تكون أكثر من رحلة واحدة جارية في الوقت نفسه — يرجى اختيار وقت آخر. - U heeft al een rit rond {time}. Er kan maar één rit tegelijk onderweg zijn — kies een andere tijd. - Sie haben bereits eine Fahrt gegen {time}. Es kann immer nur eine Fahrt unterwegs sein — bitte wählen Sie eine andere Zeit. - Masz już przejazd około {time}. Tylko jeden przejazd może trwać jednocześnie — wybierz inną godzinę. - У вас уже є поїздка приблизно о {time}. Одночасно може тривати лише одна поїздка — оберіть інший час. - Vous avez déjà une course vers {time}. Une seule course peut être en cours à la fois — veuillez choisir un autre horaire. - Ya tiene un viaje alrededor de las {time}. Solo puede haber un viaje en curso a la vez — elija otra hora. - Aveți deja o cursă în jurul orei {time}. Poate fi o singură cursă în desfășurare la un moment dat — alegeți altă oră.
+  static String get reservationConflictMessage => 'reservationConflictMessage'.tr();
+  /// You already have a ride booked - لديك رحلة محجوزة بالفعل - U heeft al een rit geboekt - Sie haben bereits eine Fahrt gebucht - Masz już zarezerwowany przejazd - У вас уже є заброньована поїздка - Vous avez déjà un trajet réservé - Ya tiene un viaje reservado - Aveți deja o cursă rezervată
+  static String get reservationConflictTitle => 'reservationConflictTitle'.tr();
+  /// Go to Home - إلى الرئيسية - Naar Home - Zur Startseite - Przejdź do strony głównej - На головну - Retour à l'accueil - Ir al inicio - Înapoi acasă
+  static String get reservationGoHome => 'reservationGoHome'.tr();
+  /// 3 notifications - 3 إشعارات - 3 meldingen - 3 Benachrichtigungen - 3 powiadomienia - 3 сповіщення - 3 notifications - 3 notificaciones - 3 notificări
+  static String get reservationNotificationsCount => 'reservationNotificationsCount'.tr();
+  /// You will automatically receive {count} before your scheduled ride: - ستصلك تلقائيًا {count} قبل رحلتك المجدولة: - U ontvangt automatisch {count} vóór uw geplande rit: - Sie erhalten automatisch {count} vor Ihrer geplanten Fahrt: - Automatycznie otrzymasz {count} przed zaplanowanym przejazdem: - Ви автоматично отримаєте {count} перед запланованою поїздкою: - Vous recevrez automatiquement {count} avant votre trajet planifié : - Recibirá automáticamente {count} antes de su viaje programado: - Veți primi automat {count} înainte de cursa programată:
+  static String get reservationNotificationsIntro => 'reservationNotificationsIntro'.tr();
+  /// Another reminder before your driver sets off. - تذكير آخر قبل انطلاق سائقك. - Nog een herinnering voordat uw chauffeur vertrekt. - Noch eine Erinnerung, bevor Ihr Fahrer losfährt. - Jeszcze jedno przypomnienie, zanim kierowca wyruszy. - Ще одне нагадування, перш ніж водій вирушить. - Un dernier rappel avant le départ de votre chauffeur. - Otro recordatorio antes de que salga su conductor. - Încă o reamintire înainte ca șoferul să plece.
+  static String get reservationReminder15Body => 'reservationReminder15Body'.tr();
+  /// 15 minutes before - قبل 15 دقيقة - 15 minuten vooraf - 15 Minuten vorher - 15 minut wcześniej - За 15 хвилин - 15 minutes avant - 15 minutos antes - Cu 15 minute înainte
+  static String get reservationReminder15Title => 'reservationReminder15Title'.tr();
+  /// A reminder of your upcoming ride. - تذكير برحلتك القادمة. - Herinnering van uw aankomende rit. - Eine Erinnerung an Ihre bevorstehende Fahrt. - Przypomnienie o nadchodzącym przejeździe. - Нагадування про вашу майбутню поїздку. - Un rappel de votre trajet à venir. - Un recordatorio de su próximo viaje. - O reamintire despre cursa dumneavoastră.
+  static String get reservationReminder30Body => 'reservationReminder30Body'.tr();
+  /// 30 minutes before - قبل 30 دقيقة - 30 minuten vooraf - 30 Minuten vorher - 30 minut wcześniej - За 30 хвилин - 30 minutes avant - 30 minutos antes - Cu 30 de minute înainte
+  static String get reservationReminder30Title => 'reservationReminder30Title'.tr();
+  /// Your data and payments are 100% safe with {brand}. - بياناتك ومدفوعاتك آمنة 100% مع {brand}. - Uw gegevens en betalingen zijn 100% veilig bij {brand}. - Ihre Daten und Zahlungen sind bei {brand} 100% sicher. - Twoje dane i płatności są w 100% bezpieczne w {brand}. - Ваші дані та платежі на 100% безпечні з {brand}. - Vos données et vos paiements sont 100% sécurisés chez {brand}. - Sus datos y pagos están 100% seguros con {brand}. - Datele și plățile dumneavoastră sunt 100% sigure la {brand}.
+  static String get reservationSecurityNote => 'reservationSecurityNote'.tr();
+  /// reservation! - حجزك! - reservering! - Reservierung! - rezerwację! - бронювання! - réservation ! - ¡reserva! - rezervare!
+  static String get reservationThanksHighlight => 'reservationThanksHighlight'.tr();
+  /// Thank you for your {highlight} - شكرًا على {highlight} - Bedankt voor uw {highlight} - Danke für Ihre {highlight} - Dziękujemy za {highlight} - Дякуємо за {highlight} - Merci pour votre {highlight} - Gracias por su {highlight} - Vă mulțumim pentru {highlight}
+  static String get reservationThanksTitle => 'reservationThanksTitle'.tr();
+  /// {count} reserved rides - {count} حجوزات - {count} reserveringen - {count} Reservierungen - Rezerwacje: {count} - Бронювань: {count} - {count} réservations - {count} reservas - {count} rezervări
+  static String get reservedTripBannerMultiple => 'reservedTripBannerMultiple'.tr();
+  /// Reserved ride at {time} - حجز في {time} - Reservering om {time} - Reservierung um {time} - Rezerwacja o {time} - Бронювання на {time} - Réservation à {time} - Reserva a las {time} - Rezervare la {time}
+  static String get reservedTripBannerSingle => 'reservedTripBannerSingle'.tr();
   /// Retry - إعادة المحاولة - Opnieuw - Wiederholen - Ponów - Повторити - Réessayer - Reintentar - Reîncearcă
   static String get retry => 'retry'.tr();
   /// Current location is unavailable. - الموقع الحالي غير متاح. - Huidige locatie is niet beschikbaar. - Aktueller Standort nicht verfügbar. - Bieżąca lokalizacja jest niedostępna. - Поточне місцезнаходження недоступне. - Position actuelle indisponible. - La ubicación actual no está disponible. - Locația curentă nu este disponibilă.
@@ -1327,6 +1389,12 @@ class AppStrings {
   static String get thursday => 'thursday'.tr();
   /// Time Selected - الوقت المحدد - Geselecteerde tijd - Zeit ausgewählt - Wybrany czas - Час вибрано - Heure sélectionnée - Hora seleccionada - Ora selectată
   static String get timeSelected => 'timeSelected'.tr();
+  /// d - ي - d - T - d - д - j - d - z
+  static String get timeUnitDayShort => 'timeUnitDayShort'.tr();
+  /// h - س - u - Std - godz. - год - h - h - h
+  static String get timeUnitHourShort => 'timeUnitHourShort'.tr();
+  /// min - د - min - Min - min - хв - min - min - min
+  static String get timeUnitMinuteShort => 'timeUnitMinuteShort'.tr();
   /// To - إلى - Naar - Nach - Do - До - À - Hasta - La
   static String get to => 'to'.tr();
   /// Too many attempts. Please try again later. - محاولات كثيرة جداً. يرجى المحاولة لاحقاً. - Te veel pogingen. Probeer het later opnieuw. - Zu viele Versuche. Bitte versuchen Sie es später erneut. - Zbyt wiele prób. Spróbuj ponownie później. - Забагато спроб. Спробуйте пізніше. - Trop de tentatives. Veuillez réessayer plus tard. - Demasiados intentos. Por favor, inténtelo de nuevo más tarde. - Prea multe încercări. Vă rugăm să încercați mai târziu.
@@ -1403,6 +1471,8 @@ class AppStrings {
   static String get tripEditTimeDisabled => 'tripEditTimeDisabled'.tr();
   /// Your vehicle changes to {vehicle} for this trip. - تتغيّر مركبتك إلى {vehicle} لهذه الرحلة. - Uw voertuig wordt gewijzigd naar {vehicle} voor deze rit. - Ihr Fahrzeug wird für diese Fahrt zu {vehicle} geändert. - Twój pojazd zmienia się na {vehicle} dla tego przejazdu. - Ваш автомобіль змінюється на {vehicle} для цієї поїздки. - Votre véhicule devient {vehicle} pour cette course. - Tu vehículo cambia a {vehicle} para este viaje. - Vehiculul tău se schimbă în {vehicle} pentru această cursă.
   static String get tripEditVehicleChangedNotice => 'tripEditVehicleChangedNotice'.tr();
+  /// +{count} stops - +{count} محطات - +{count} stops - +{count} Stopps - +{count} przystanków - +{count} зупинок - +{count} arrêts - +{count} paradas - +{count} opriri
+  static String get tripExtraStops => 'tripExtraStops'.tr();
   /// {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency} - {fare} {currency}
   static String get tripFare => 'tripFare'.tr();
   /// Trip History - سجل الرحلات - Ritgeschiedenis - Fahrtenverlauf - Historia przejazdów - Історія поїздок - Historique des trajets - Historial de viajes - Istoric curse
@@ -1479,6 +1549,10 @@ class AppStrings {
   static String get tripScheduledPickupTime => 'tripScheduledPickupTime'.tr();
   /// Trip starts in {time} - تبدأ الرحلة خلال {time} - Rit begint over {time} - Fahrt beginnt in {time} - Przejazd zacznie się za {time} - Поїздка почнеться через {time} - Le trajet commence dans {time} - El viaje comienza en {time} - Cursa începe în {time}
   static String get tripScheduledStartsIn => 'tripScheduledStartsIn'.tr();
+  /// Starts in {time} - تبدأ خلال {time} - Begint over {time} - Beginnt in {time} - Zaczyna się za {time} - Починається через {time} - Commence dans {time} - Comienza en {time} - Începe în {time}
+  static String get tripStartsIn => 'tripStartsIn'.tr();
+  /// Starting now - تبدأ الآن - Begint nu - Beginnt jetzt - Zaczyna się teraz - Починається зараз - Commence maintenant - Comienza ahora - Începe acum
+  static String get tripStartsNow => 'tripStartsNow'.tr();
   /// Status - الحالة - Status - Status - Status - Статус - Statut - Estado - Status
   static String get tripStatus => 'tripStatus'.tr();
   /// Awaiting payment - بانتظار الدفع - In afwachting van betaling - Zahlung ausstehend - Oczekuje na płatność - Очікує оплати - Paiement en attente - Pendiente de pago - În așteptarea plății
@@ -1507,6 +1581,8 @@ class AppStrings {
   static String get tripStatusScheduled => 'tripStatusScheduled'.tr();
   /// Completed at {time} - اكتمل في {time} - Voltooid om {time} - Abgeschlossen um {time} - Ukończono o {time} - Завершено о {time} - Terminé à {time} - Completado a las {time} - Finalizată la {time}
   static String get tripStopCompletedAt => 'tripStopCompletedAt'.tr();
+  /// Track ride - تتبع الرحلة - Volg rit - Fahrt verfolgen - Śledź przejazd - Стежити за поїздкою - Suivre le trajet - Seguir viaje - Urmăriți cursa
+  static String get tripTrackRide => 'tripTrackRide'.tr();
   /// Your trip requires a van for {count} passengers. New fare: {fare}. Do you want to continue? - رحلتك تتطلب فان لـ {count} ركاب. الأجرة الجديدة: {fare}. هل تريد المتابعة? - Uw rit vereist een busje voor {count} passagiers. Nieuw tarief: {fare}. Wilt u doorgaan? - Ihre Fahrt erfordert einen Van für {count} Fahrgäste. Neuer Fahrpreis: {fare}. Möchten Sie fortfahren? - Twój przejazd wymaga busa dla {count} pasażerów. Nowa opłata: {fare}. Czy chcesz kontynuować? - Ваша поїздка потребує мікроавтобуса для {count} пасажирів. Новий тариф: {fare}. Бажаєте продовжити? - Votre trajet nécessite un van pour {count} passagers. Nouveau tarif : {fare}. Voulez-vous continuer ? - Su viaje requiere una furgoneta para {count} pasajeros. Nueva tarifa: {fare}. ¿Desea continuar? - Cursa dvs. necesită un van pentru {count} pasageri. Tarif nou: {fare}. Doriți să continuați?
   static String get tripVanUpgradeConfirmBody => 'tripVanUpgradeConfirmBody'.tr();
   /// Upgrade to van - الترقية إلى فان - Upgrade naar busje - Upgrade auf Van - Upgrade do busa - Оновлення до мікроавтобуса - Passer au van - Actualizar a furgoneta - Upgrade la van
@@ -1517,6 +1593,8 @@ class AppStrings {
   static String get tripWaitingFeeAccruing => 'tripWaitingFeeAccruing'.tr();
   /// Free waiting time is over. A per-minute fee now applies. - انتهى وقت الانتظار المجاني. تُطبّق الآن رسوم لكل دقيقة. - De gratis wachttijd is voorbij. Er geldt nu een tarief per minuut. - Die kostenlose Wartezeit ist vorbei. Es gilt nun eine Gebühr pro Minute. - Bezpłatny czas oczekiwania się skończył. Obowiązuje opłata za minutę. - Безкоштовний час очікування завершився. Тепер діє плата за хвилину. - Le temps d'attente gratuit est terminé. Des frais à la minute s'appliquent désormais. - El tiempo de espera gratuito ha terminado. Ahora se aplica una tarifa por minuto. - Timpul de așteptare gratuit s-a încheiat. Acum se aplică o taxă pe minut.
   static String get tripWaitingGraceOver => 'tripWaitingGraceOver'.tr();
+  /// Ongoing - جارية الآن - Nu onderweg - Unterwegs - W trakcie - У дорозі - En cours - En curso - În desfășurare
+  static String get tripsGroupOngoing => 'tripsGroupOngoing'.tr();
   /// Tue - ثلا - Di - Di - Wt - Вт - Mar - Mar - Mar
   static String get tue => 'tue'.tr();
   /// Tuesday - الثلاثاء - Dinsdag - Dienstag - Wtorek - Вівторок - Mardi - Martes - Marți
@@ -1579,7 +1657,7 @@ class AppStrings {
   static String get waitingPayDriverNotice => 'waitingPayDriverNotice'.tr();
   /// Amount owed - مبلغ مستحق - Openstaand bedrag - Offener Betrag - Kwota do zapłaty - Сума до сплати - Montant dû - Importe pendiente - Sumă datorată
   static String get walletAmountOwedTitle => 'walletAmountOwedTitle'.tr();
-  /// This was charged to your balance because it could not be collected at the time. - تم تحميل هذا على رصيدك لأنه تعذّر تحصيله في حينه. - Dit is op uw saldo geboekt omdat het op dat moment niet kon worden afgeschreven. - Dies wurde Ihrem Guthaben belastet, weil es zum Zeitpunkt nicht eingezogen werden konnte. - Kwota obciążyła Twoje saldo, ponieważ nie udało się jej wtedy pobrać. - Цю суму списано з вашого балансу, бо тоді її не вдалося стягнути. - Ce montant a été imputé à votre solde car il n'a pas pu être prélevé sur le moment. - Se cargó a tu saldo porque no se pudo cobrar en su momento. - A fost debitată din soldul tău deoarece nu a putut fi încasată la momentul respectiv.
+  /// Extra costs (such as waiting time) could not be charged and are therefore shown as an outstanding balance. Pay this amount to be able to book new rides again - لم يتمكن النظام من خصم التكاليف الإضافية (مثل وقت الانتظار)، لذلك تظهر كرصيد مستحق. ادفع هذا المبلغ لتتمكن من حجز رحلات جديدة مرة أخرى - Extra kosten (zoals wachttijd) konden niet worden afgeschreven en staan daarom als openstaand saldo. Betaal dit bedrag om weer nieuwe ritten te kunnen boeken - Zusatzkosten (z. B. Wartezeit) konnten nicht abgebucht werden und stehen daher als offener Saldo. Bezahlen Sie diesen Betrag, um wieder neue Fahrten buchen zu können - Dodatkowych kosztów (takich jak czas oczekiwania) nie udało się pobrać, dlatego widnieją jako saldo do zapłaty. Opłać tę kwotę, aby ponownie móc rezerwować przejazdy - Додаткові витрати (наприклад, час очікування) не вдалося списати, тому вони відображаються як непогашений баланс. Сплатіть цю суму, щоб знову бронювати поїздки - Des frais supplémentaires (comme le temps d'attente) n'ont pas pu être prélevés et apparaissent donc comme un solde impayé. Payez ce montant pour pouvoir à nouveau réserver des trajets - Los costes adicionales (como el tiempo de espera) no se pudieron cobrar y por eso figuran como saldo pendiente. Paga este importe para poder reservar viajes de nuevo - Costurile suplimentare (cum ar fi timpul de așteptare) nu au putut fi debitate și apar de aceea ca sold restant. Achită această sumă pentru a putea rezerva din nou curse
   static String get walletDebtExplainer => 'walletDebtExplainer'.tr();
   /// Your balance is settled. You can book again. - تم تسوية رصيدك. يمكنك الحجز مجدداً. - Uw saldo is voldaan. U kunt weer boeken. - Ihr Guthaben ist ausgeglichen. Sie können wieder buchen. - Twoje saldo jest uregulowane. Możesz ponownie rezerwować. - Ваш баланс погашено. Можете бронювати знову. - Votre solde est réglé. Vous pouvez réserver à nouveau. - Tu saldo está saldado. Ya puedes reservar. - Soldul tău este achitat. Poți rezerva din nou.
   static String get walletDebtSettled => 'walletDebtSettled'.tr();

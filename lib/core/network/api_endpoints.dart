@@ -46,6 +46,10 @@ class ApiEndpoints {
   static const String tripQuotes = '/api/v1/trips/quotes';
   static const String requestTrip = '/api/v1/trips';
   static const String tripActive = '/api/v1/trips/active';
+
+  /// Every active trip the passenger holds — one live trip plus any number of
+  /// future reservations. [tripActive] stays single-trip for the driver app.
+  static const String tripActiveList = '/api/v1/trips/active/list';
   static String tripById(String id) => '/api/v1/trips/$id';
   static String updatePassengerNote(String id) =>
       '/api/v1/trips/$id/passenger-note';

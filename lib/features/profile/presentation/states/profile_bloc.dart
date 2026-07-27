@@ -83,26 +83,21 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final label = event.label?.trim();
     final isEmpty = label == null || label.isEmpty;
 
-    // Empty label means the user cleared the field → drop the address entirely.
-    // Otherwise keep the coordinates already associated with this address (the
-    // pending map-picked point, falling back to the persisted user coords). This
-    // prevents a label-only edit — including the debounced re-fire that follows a
-    // programmatic map-pick update — from wiping the coordinates.
-    final latitude = isEmpty
-        ? null
-        : (state.pendingHomeAddressLatitude ??
-              state.currentUser?.homeAddressLatitude);
-    final longitude = isEmpty
-        ? null
-        : (state.pendingHomeAddressLongitude ??
-              state.currentUser?.homeAddressLongitude);
-
+    // This event now only ever means "the rider typed an address by hand" —
+    // HomeAddressPicker suppresses the debounced re-fire that follows its own
+    // programmatic writes (map pick, chosen suggestion), which used to arrive
+    // here indistinguishable from real typing.
+    //
+    // So the coordinates are dropped: hand-typed text is not the pinned point it
+    // replaced, and keeping the old pin would leave the saved label and the
+    // saved location describing two different places. Picking a suggestion or a
+    // map point re-supplies them through `homeAddressMapPicked`.
     emit(
       state.copyWith(
         homeAddressTouched: true,
         pendingHomeAddressLabel: isEmpty ? null : label,
-        pendingHomeAddressLatitude: latitude,
-        pendingHomeAddressLongitude: longitude,
+        pendingHomeAddressLatitude: null,
+        pendingHomeAddressLongitude: null,
       ),
     );
   }

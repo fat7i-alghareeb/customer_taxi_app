@@ -1,6 +1,8 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
 
+import 'reservation_conflict_dialog.dart';
+
 class OrderBookingDetailsStepWidget extends StatefulWidget {
   const OrderBookingDetailsStepWidget({super.key, required this.state});
 
@@ -47,10 +49,18 @@ class _OrderBookingDetailsStepWidgetState
         _PaymentMethodChooser(state: state, fare: _selectedFare(state)),
         AppSpacing.xl.verticalSpace,
         AppButton.primary(
-          onTap: () {
-            context.read<OrderBloc>().add(
-              const OrderEvent.confirmBookingDetailsPressed(),
+          onTap: () async {
+            final bloc = context.read<OrderBloc>();
+            // Warn before creating the trip, not after — the rider may already
+            // hold a reservation around this pickup time.
+            final proceed = await confirmReservationConflict(
+              context,
+              scheduledAt: state.booking.scheduleMode == OrderScheduleMode.later
+                  ? state.booking.scheduledAt
+                  : null,
             );
+            if (!proceed) return;
+            bloc.add(const OrderEvent.confirmBookingDetailsPressed());
           },
           isActive: !isLoading && hasValidFlightNumber,
           isLoading: isLoading,

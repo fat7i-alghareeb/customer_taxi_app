@@ -1,5 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import '../widgets/trip_history_body.dart';
+import '../../states/active_trip_cubit.dart';
 import '../../states/trip_bloc.dart';
 
 class TripHistoryScreen extends StatelessWidget {
@@ -10,8 +11,14 @@ class TripHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<TripBloc>()..add(const TripEvent.historyStarted()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              getIt<TripBloc>()..add(const TripEvent.historyStarted()),
+        ),
+        BlocProvider<ActiveTripCubit>.value(value: getIt<ActiveTripCubit>()),
+      ],
       child: AppScaffold.appBar(
         appBarConfig: AppScaffoldAppBarConfig(
           title: AppStrings.tripHistoryTitle,

@@ -6,6 +6,7 @@ class TripInfoRowWidget extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.value,
+    this.image,
     this.onEditTap,
     this.disabledReason,
     this.showEditAffordance = true,
@@ -14,6 +15,11 @@ class TripInfoRowWidget extends StatelessWidget {
   final FaIconData icon;
   final String label;
   final String value;
+
+  /// When set, this illustration replaces [icon] in the leading slot — used to
+  /// show the branded car artwork on the vehicle row instead of a generic glyph.
+  final AssetGenImage? image;
+
   final VoidCallback? onEditTap;
 
   /// Why this row can't be edited right now. Shown under the value so a greyed-out pencil
@@ -33,11 +39,14 @@ class TripInfoRowWidget extends StatelessWidget {
       padding: REdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Row(
         children: [
-          FaIcon(
-            icon,
-            size: 16.r,
-            color: colors.primary.withValues(alpha: 0.7),
-          ),
+          if (image case final image?)
+            image.image(width: 20.r, height: 20.r, fit: BoxFit.contain)
+          else
+            FaIcon(
+              icon,
+              size: 16.r,
+              color: colors.primary.withValues(alpha: 0.7),
+            ),
           AppSpacing.md.horizontalSpace,
           Expanded(
             child: Column(

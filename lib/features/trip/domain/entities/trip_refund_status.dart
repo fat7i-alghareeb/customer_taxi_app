@@ -40,12 +40,16 @@ enum TripRefundStatus {
     TripRefundStatus.unknown => AppStrings.notAvailable,
   };
 
+  /// The in-flight states share the trip accent: to the rider, "wordt
+  /// voorbereid" and "loopt" are one continuous stage — money on its way — and
+  /// they already read apart by icon and title. Only the terminal outcomes keep
+  /// green and red, which carry meaning no brand colour should overwrite.
   Color get color => switch (this) {
     TripRefundStatus.completed => AppColors.success,
-    TripRefundStatus.processing => AppColors.warning,
+    TripRefundStatus.processing => AppColors.tripOrange,
     TripRefundStatus.failed => AppColors.error,
     TripRefundStatus.cancelled => Colors.grey,
-    TripRefundStatus.preparing => AppColors.info,
+    TripRefundStatus.preparing => AppColors.tripOrange,
     TripRefundStatus.unknown => Colors.grey,
   };
 

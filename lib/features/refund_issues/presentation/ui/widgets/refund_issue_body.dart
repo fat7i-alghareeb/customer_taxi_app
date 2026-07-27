@@ -12,6 +12,7 @@ import 'refund_issue_note_field.dart';
 import 'refund_issue_reason_option_tile.dart';
 import 'refund_issue_success_panel.dart';
 import 'refund_issue_summary_card.dart';
+import 'refund_issue_under_review_panel.dart';
 
 class RefundIssueBody extends StatefulWidget {
   const RefundIssueBody({super.key, required this.args, required this.form});
@@ -60,6 +61,17 @@ class RefundIssueBodyState extends State<RefundIssueBody> {
             );
           }
 
+          // Checked after the fresh-submit case above, so submitting in this
+          // session still lands on the success panel rather than jumping
+          // straight to the (stale) "under review" state.
+          final existing = widget.args.existingIssue;
+          if (existing != null && existing.isOpen) {
+            return RefundIssueUnderReviewPanel(
+              submittedAtUtc: existing.createdAtUtc,
+              onOpenWhatsApp: () => _openWhatsApp(context),
+            );
+          }
+
           return ReactiveForm(
             formGroup: widget.form,
             child: SingleChildScrollView(
@@ -72,6 +84,22 @@ class RefundIssueBodyState extends State<RefundIssueBody> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // A closed previous request freed the slot. Say so, otherwise
+                  // being handed a blank form again reads as if the first
+                  // request vanished.
+                  if (existing?.reviewedAtUtc case final reviewedAt?) ...[
+                    RefundIssueInfoCard(
+                          message: AppStrings.refundIssuePreviousResolved
+                              .replaceAll(
+                                '{date}',
+                                reviewedAt.toLocal().toYmd(),
+                              ),
+                        )
+                        .animate()
+                        .fadeIn(duration: AppDurations.normal)
+                        .slideY(begin: 0.08, end: 0),
+                    AppSpacing.lg.verticalSpace,
+                  ],
                   RefundIssueSummaryCard(args: widget.args)
                       .animate()
                       .fadeIn(duration: AppDurations.normal)
@@ -221,8 +249,11 @@ class RefundIssueBottomAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RefundIssueBloc, RefundIssueState>(
       builder: (context, state) {
+        // Nothing to submit once this session succeeded, or while an earlier
+        // request is still open — the server would reject it either way.
         final isDone = state.submitStatus.isSuccess;
-        if (isDone) {
+        final isAwaitingReview = args.existingIssue?.isOpen ?? false;
+        if (isDone || isAwaitingReview) {
           return const SizedBox.shrink();
         }
 
@@ -243,7 +274,9 @@ class RefundIssueBottomAction extends StatelessWidget {
                 ),
               ),
             ),
-            child: AppButton.warningGradient(
+            // Orange under the screen's tripAccentTheme wrapper, so this button
+            // is visually continuous with the CTA the rider tapped to get here.
+            child: AppButton.primaryGradient(
               isLoading: state.submitStatus.isLoading,
               isActive: !state.submitStatus.isLoading,
               onTap: () {

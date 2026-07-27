@@ -1,8 +1,12 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
 /// 3-step vertical timeline — Ride accepted / Driver on the way / Driver
-/// arrived. [activeIndex] is the current step; earlier steps render as
-/// completed (an [activeIndex] past the last step marks all three done).
+/// arrived. [activeIndex] is the step the trip has *reached*, and it renders as
+/// done: a step is ticked as soon as it is happening, not once it is over. So
+/// while the driver is en route, "Chauffeur onderweg" already carries a check
+/// (and shows its sub-line); only steps still ahead stay muted. The connector
+/// below the current step deliberately stays grey — the trip has not travelled
+/// it yet.
 class TripArrivalStepper extends StatelessWidget {
   const TripArrivalStepper({required this.activeIndex, super.key});
 
@@ -29,8 +33,11 @@ class TripArrivalStepper extends StatelessWidget {
       children: List.generate(steps.length, (index) {
         final step = steps[index];
         final isLast = index == steps.length - 1;
-        final isCompleted = index < activeIndex;
         final isActive = index == activeIndex;
+        final isCompleted = index <= activeIndex;
+        // The connector only fills for steps the trip has already left behind,
+        // so the line below the current step stays grey.
+        final isConnectorFilled = index < activeIndex;
         final showSub = isActive && step.sub != null;
 
         return IntrinsicHeight(
@@ -45,7 +52,7 @@ class TripArrivalStepper extends StatelessWidget {
                       child: Container(
                         width: 2.w,
                         margin: REdgeInsets.symmetric(vertical: 2),
-                        color: isCompleted
+                        color: isConnectorFilled
                             ? colors.primary
                             : colors.onSurface.withValues(alpha: 0.15),
                       ),
@@ -88,8 +95,10 @@ class TripArrivalStepper extends StatelessWidget {
   }
 }
 
-/// A single stepper marker: filled+check when completed, an orange ring when
-/// active, and a muted ring when still pending.
+/// A single stepper marker: filled+check for every step the trip has reached
+/// (including the one in progress), and a muted ring for steps still ahead. The
+/// current step keeps its check but gains a soft halo, so "done" and "happening
+/// now" stay distinguishable.
 class _StepDot extends StatelessWidget {
   const _StepDot({required this.isCompleted, required this.isActive});
 
@@ -108,6 +117,15 @@ class _StepDot extends StatelessWidget {
         decoration: BoxDecoration(
           color: colors.primary,
           shape: BoxShape.circle,
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: colors.primary.withValues(alpha: 0.25),
+                    blurRadius: 6.r,
+                    spreadRadius: 2.r,
+                  ),
+                ]
+              : null,
         ),
         child: Center(
           child: FaIcon(
@@ -125,10 +143,8 @@ class _StepDot extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: isActive
-              ? colors.primary
-              : colors.onSurface.withValues(alpha: 0.3),
-          width: isActive ? 2.5.r : 2.r,
+          color: colors.onSurface.withValues(alpha: 0.3),
+          width: 2.r,
         ),
       ),
     );

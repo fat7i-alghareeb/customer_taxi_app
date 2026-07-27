@@ -67,6 +67,21 @@ class TripRemoteDataSource {
     });
   }
 
+  /// Returns every active trip the passenger holds, soonest pickup first.
+  /// Empty when there are none.
+  Future<List<TripModel>> getActiveTrips() {
+    return rethrowAsAppException(() async {
+      printY('[TripRemoteDataSource] getActiveTrips');
+      final res = await _dio.get<dynamic>(ApiEndpoints.tripActiveList);
+      final data = res.data;
+      if (data is! List) return const <TripModel>[];
+      return data
+          .whereType<Map>()
+          .map((e) => TripModel.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+    });
+  }
+
   Future<TripModel> cancelTrip(String id, {String? note}) {
     return rethrowAsAppException(() async {
       printY('[TripRemoteDataSource] cancelTrip id=$id note=$note');

@@ -158,6 +158,8 @@ import 'package:customertaxi/features/trip/presentation/coordinators/trip_comple
     as _i888;
 import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart'
     as _i5;
+import 'package:customertaxi/features/trip/presentation/states/reservation_confirmation_cubit.dart'
+    as _i186;
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart'
     as _i753;
 import 'package:injectable/injectable.dart' as _i526;
@@ -393,6 +395,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i264.RefundIssueFacade>(
       () => _i264.RefundIssueFacade(gh<_i411.RefundIssueRepository>()),
+    );
+    gh.lazySingleton<_i186.ReservationConfirmationCubit>(
+      () => _i186.ReservationConfirmationCubit(gh<_i5.ActiveTripCubit>()),
     );
     gh.factory<_i174.ChatBloc>(
       () => _i174.ChatBloc(

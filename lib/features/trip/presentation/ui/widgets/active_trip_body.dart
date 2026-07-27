@@ -18,10 +18,8 @@ import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
 import 'package:customertaxi/features/order/presentation/states/order_bloc.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/cancel_trip_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_cancelled_success_sheet.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_sheet.dart';
 import 'package:customertaxi/features/chat/presentation/states/chat_bloc.dart';
 import 'package:vibration/vibration.dart';
-import 'package:customertaxi/features/trip/presentation/ui/widgets/passenger_note_floating_action.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/glassmorphic_trip_status_sheet.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_status_banner.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_completed_overlay.dart';
@@ -41,6 +39,12 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   BitmapDescriptor? _carMarkerIconFlipped;
   BitmapDescriptor? _pickupMarkerIcon;
   BitmapDescriptor? _destinationMarkerIcon;
+
+  // Numbered circles for intermediate stops, keyed by the number they show. Two
+  // variants per number: the next stop wears the trip accent, the rest are
+  // muted, so the rider can see where the car is heading at a glance.
+  final Map<int, BitmapDescriptor> _stopIcons = {};
+  final Map<int, BitmapDescriptor> _nextStopIcons = {};
 
   // Animation controller for smooth vehicle movement & rotation interpolation
   late final AnimationController _carMovementController;
@@ -96,15 +100,16 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         width: 56.r,
         mirror: true,
       );
-      // Dot-in-ring markers (solid dot, transparent gap, colored ring) replace the
-      // old lettered A/B circles. Distinct colors keep pickup vs destination clear.
+      // Same marker language as the booking map: a dot-in-ring for "you start
+      // here", a pin for "this is the place". Shape, not colour, carries the
+      // distinction, so both can wear the trip accent.
       final pickupIcon = await MapMarkerGenerator.createDotRingMarker(
-        color: Colors.green,
+        color: AppColors.tripOrange,
         size: 45.r,
       );
-      final destinationIcon = await MapMarkerGenerator.createDotRingMarker(
-        color: Colors.orange,
-        size: 45.r,
+      final destinationIcon = await MapMarkerGenerator.createPinMarker(
+        color: AppColors.tripOrange,
+        height: 56.r,
       );
 
       if (mounted) {
@@ -118,6 +123,38 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
       }
     } catch (e) {
       printY('[ActiveTripBody] Failed to load custom markers: $e');
+    }
+  }
+
+  /// Generates the numbered icons for this trip's intermediate stops. Driven off
+  /// trip state rather than [_loadCustomMarkers] because the stop count is only
+  /// known once the trip loads, and can change when the rider edits the route.
+  Future<void> _syncStopMarkers(TripEntity trip) async {
+    // Stop 0 is the pickup and the last is the destination; only what's between
+    // them gets a number.
+    final intermediateCount = trip.stops.length - 2;
+    if (intermediateCount <= 0) return;
+
+    for (int number = 1; number <= intermediateCount; number++) {
+      if (_stopIcons.containsKey(number)) continue;
+      try {
+        final muted = await MapMarkerGenerator.createNumberedStopMarker(
+          number: number,
+          color: AppColors.secondaryLight,
+        );
+        final next = await MapMarkerGenerator.createNumberedStopMarker(
+          number: number,
+          color: AppColors.tripOrange,
+        );
+        if (!mounted) return;
+        setState(() {
+          _stopIcons[number] = muted;
+          _nextStopIcons[number] = next;
+        });
+      } catch (e) {
+        printY('[ActiveTripBody] Failed to build stop marker $number: $e');
+        return;
+      }
     }
   }
 
@@ -290,7 +327,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     // Drop the finished trip so Home stops gating on it, then act on the
     // rider's choice. The sheet runs on its own route (no OrderBloc/router in
     // its context), which is why we dispatch from here on the shared instance.
-    getIt<ActiveTripCubit>().clear();
+    getIt<ActiveTripCubit>().clearTrip(trip.id);
     switch (action) {
       case CancelledSheetAction.bookAgain:
         context.read<OrderBloc>().add(const OrderEvent.orderNowPressed());
@@ -337,6 +374,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     state.tripStatus.whenOrNull(
       success: (trip) {
         printC('[ActiveTripBody] trip state changed status=${trip.status}');
+        unawaited(_syncStopMarkers(trip));
         if (trip.status == TripStatus.cancelled) {
           if (!_cancelledSheetShown) {
             _cancelledSheetShown = true;
@@ -422,25 +460,14 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         } else if (isDestination) {
           descriptor =
               _destinationMarkerIcon ??
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
         } else {
-          // Intermediate stop
-          if (isNext) {
-            // Highlight the next uncompleted stop in Red
-            descriptor = BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueRed,
-            );
-          } else if (stop.isCompleted) {
-            // Completed stops in Green
-            descriptor = BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueGreen,
-            );
-          } else {
-            // Uncompleted subsequent stops in Violet
-            descriptor = BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueViolet,
-            );
-          }
+          // Intermediate stop: numbered circle, accented while it is the one the
+          // driver is heading for.
+          final icons = isNext ? _nextStopIcons : _stopIcons;
+          descriptor =
+              icons[i] ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
         }
 
         markers.add(
@@ -448,20 +475,11 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
             markerId: MarkerId('trip-stop-${stop.sequence}-$i'),
             position: LatLng(stop.latitude, stop.longitude),
             icon: descriptor,
-            infoWindow: InfoWindow(
-              title:
-                  stop.label ??
-                  (isPickup
-                      ? 'Pickup'
-                      : isDestination
-                      ? 'Destination'
-                      : 'Stop ${i + 1}'),
-              snippet: stop.isCompleted
-                  ? 'Completed'
-                  : isNext
-                  ? 'Next Stop'
-                  : 'Upcoming Stop',
-            ),
+            // The pin's tip is its bottom edge, so it has to be anchored there
+            // to point at the coordinate; everything else is centred.
+            anchor: isDestination && _destinationMarkerIcon != null
+                ? const Offset(0.5, 1)
+                : const Offset(0.5, 0.5),
           ),
         );
       }
@@ -529,17 +547,6 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
         ),
         BlocListener<TripBloc, TripState>(
           listenWhen: (prev, curr) =>
-              prev.passengerNoteStatus != curr.passengerNoteStatus,
-          listener: (context, state) {
-            state.passengerNoteStatus.whenOrNull(
-              success: (_) =>
-                  showSuccessOverlay(context, AppStrings.passengerNoteSaved),
-              failure: (msg) => showErrorOverlay(context, msg),
-            );
-          },
-        ),
-        BlocListener<TripBloc, TripState>(
-          listenWhen: (prev, curr) =>
               prev.tripStatus != curr.tripStatus ||
               prev.activeDriverLocation != curr.activeDriverLocation,
           listener: _handleTripStateChange,
@@ -556,7 +563,6 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
               final double lng = trip.stops.isNotEmpty
                   ? trip.stops.first.longitude
                   : 21.0122;
-              final canEditPassengerNote = trip.status.canEditPassengerNote;
 
               // Render the car marker straight from bloc state, falling back to
               // the persisted driver coordinate on the trip. This guarantees the
@@ -682,66 +688,35 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                               image: bannerContent.image,
                               title: bannerContent.title,
                               bodyLines: bannerContent.bodyLines,
+                              bodyColor: bannerContent.bodyColor,
+                              indicator: bannerContent.indicator,
                             ),
                           ).animate().fadeIn(duration: 300.ms),
                         ),
 
-                      // Bottom overlay: the Note button (when editable) sits
-                      // directly ABOVE the glass status sheet in one
-                      // bottom-anchored column, so it always clears the sheet no
-                      // matter how tall it grows for a given trip state. The status
-                      // banner card is pinned to the top safe area instead (above).
+                      // Bottom overlay: the glass status sheet, bottom-anchored.
+                      // The status banner card is pinned to the top safe area
+                      // instead (above). The in-trip Note button used to live
+                      // here; the note is now only set while booking.
                       Positioned(
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (canEditPassengerNote)
-                              Padding(
-                                padding: REdgeInsets.fromLTRB(
-                                  AppSpacing.xl,
-                                  0,
-                                  AppSpacing.xl,
-                                  AppSpacing.sm,
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Spacer(),
-                                    PassengerNoteFloatingAction(
-                                      hasNote:
-                                          trip.passengerNote
-                                              ?.trim()
-                                              .isNotEmpty ==
-                                          true,
-                                      isLoading:
-                                          state.passengerNoteStatus.isLoading,
-                                      onTap: () => _showPassengerNoteSheet(
-                                        context,
-                                        trip,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            GlassmorphicTripStatusSheet(
-                                  trip: trip,
-                                  cancelStatus: state.cancelStatus,
-                                  driverLocation: state.activeDriverLocation,
-                                  onCancelPressed: () =>
-                                      _showCancelDialog(context, trip),
-                                )
-                                .animate()
-                                .fadeIn(duration: 350.ms)
-                                .slideY(
-                                  begin: 0.2,
-                                  end: 0.0,
-                                  duration: 350.ms,
-                                  curve: Curves.easeOutCubic,
-                                ),
-                          ],
-                        ),
+                        child: GlassmorphicTripStatusSheet(
+                              trip: trip,
+                              cancelStatus: state.cancelStatus,
+                              driverLocation: state.activeDriverLocation,
+                              onCancelPressed: () =>
+                                  _showCancelDialog(context, trip),
+                            )
+                            .animate()
+                            .fadeIn(duration: 350.ms)
+                            .slideY(
+                              begin: 0.2,
+                              end: 0.0,
+                              duration: 350.ms,
+                              curve: Curves.easeOutCubic,
+                            ),
                       ),
 
                       // Full-screen "thank you" overlay: derived (not latched)
@@ -792,7 +767,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                             );
                           },
                           onDone: () {
-                            getIt<ActiveTripCubit>().clear();
+                            getIt<ActiveTripCubit>().clearTrip(trip.id);
                             context.read<OrderBloc>().add(
                               const OrderEvent.collapseRequested(),
                             );
@@ -825,19 +800,6 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
     );
   }
 
-  void _showPassengerNoteSheet(BuildContext context, TripEntity trip) {
-    printM('[ActiveTripBody] passenger note sheet opened');
-    unawaited(
-      PassengerNoteSheet.show(context, initialNote: trip.passengerNote).then((
-        result,
-      ) {
-        if (result == null || !context.mounted) return;
-        context.read<TripBloc>().add(
-          TripEvent.passengerNoteSubmitted(result.note),
-        );
-      }),
-    );
-  }
 }
 
 extension on LatLng {
@@ -848,16 +810,4 @@ extension on LatLng {
       bearing: bearing,
     );
   }
-}
-
-extension on TripStatus {
-  // Hidden once the driver is engaged (en-route / arrived / in-progress) and in
-  // terminal states — the note is only editable while the ride is still being
-  // set up (pending quote, awaiting acceptance, accepted, awaiting payment).
-  bool get canEditPassengerNote =>
-      this != TripStatus.inProgress &&
-      this != TripStatus.enRoute &&
-      this != TripStatus.arrived &&
-      !isTerminal &&
-      this != TripStatus.unknown;
 }

@@ -38,6 +38,11 @@ _TripModel _$TripModelFromJson(Map<String, dynamic> json) => _TripModel(
   refund: json['refund'] == null
       ? null
       : TripRefundModel.fromJson(json['refund'] as Map<String, dynamic>),
+  refundIssue: json['refundIssue'] == null
+      ? null
+      : TripRefundIssueModel.fromJson(
+          json['refundIssue'] as Map<String, dynamic>,
+        ),
   compensationClaim: json['compensationClaim'] == null
       ? null
       : TripCompensationClaimModel.fromJson(
@@ -92,6 +97,7 @@ Map<String, dynamic> _$TripModelToJson(_TripModel instance) =>
       'etaToPickup': instance.etaToPickup?.toIso8601String(),
       'cancellation': instance.cancellation,
       'refund': instance.refund,
+      'refundIssue': instance.refundIssue,
       'compensationClaim': instance.compensationClaim,
       'activeWaitingSession': instance.activeWaitingSession,
       'encodedOverviewPolyline': instance.encodedOverviewPolyline,
@@ -201,6 +207,30 @@ Map<String, dynamic> _$TripRefundModelToJson(_TripRefundModel instance) =>
       'currencyCode': instance.currencyCode,
       'completedAtUtc': instance.completedAtUtc?.toIso8601String(),
     };
+
+_TripRefundIssueModel _$TripRefundIssueModelFromJson(
+  Map<String, dynamic> json,
+) => _TripRefundIssueModel(
+  id: json['id'] as String,
+  requestType: json['requestType'] as String,
+  status: json['status'] as String,
+  isOpen: json['isOpen'] as bool,
+  createdAtUtc: DateTime.parse(json['createdAtUtc'] as String),
+  reviewedAtUtc: json['reviewedAtUtc'] == null
+      ? null
+      : DateTime.parse(json['reviewedAtUtc'] as String),
+);
+
+Map<String, dynamic> _$TripRefundIssueModelToJson(
+  _TripRefundIssueModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'requestType': instance.requestType,
+  'status': instance.status,
+  'isOpen': instance.isOpen,
+  'createdAtUtc': instance.createdAtUtc.toIso8601String(),
+  'reviewedAtUtc': instance.reviewedAtUtc?.toIso8601String(),
+};
 
 _TripCompensationClaimModel _$TripCompensationClaimModelFromJson(
   Map<String, dynamic> json,

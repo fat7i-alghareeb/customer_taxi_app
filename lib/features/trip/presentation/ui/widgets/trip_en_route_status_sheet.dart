@@ -43,10 +43,11 @@ class TripEnRouteStatusSheet extends StatelessWidget {
               width: 1.r,
             ),
           ),
-          // En-route: step 2 active. Arrived handoff: all three checked before
-          // the dedicated arrived sheet takes over.
+          // En-route: the trip has reached step 2, so "Chauffeur onderweg" is
+          // ticked while the driver is still driving. Arrived handoff: step 3,
+          // all three checked, before the dedicated arrived sheet takes over.
           child: TripArrivalStepper(
-            activeIndex: trip.status == TripStatus.arrived ? 3 : 1,
+            activeIndex: trip.status == TripStatus.arrived ? 2 : 1,
           ),
         ),
         AppSpacing.md.verticalSpace,

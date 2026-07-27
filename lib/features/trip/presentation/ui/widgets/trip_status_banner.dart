@@ -1,5 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
+import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_status_indicator.dart';
 
 /// Icon + text content for the status banner shown above the map. `null` from
 /// [forStatus] means the given status keeps the plain map with no banner.
@@ -9,6 +10,8 @@ class TripStatusBannerContent {
     required this.title,
     required this.bodyLines,
     this.image,
+    this.bodyColor,
+    this.indicator,
   });
 
   final FaIconData icon;
@@ -18,6 +21,14 @@ class TripStatusBannerContent {
   /// When set, the card renders this illustration in place of [icon] — used to
   /// show the branded car image for the ride/trip statuses.
   final AssetGenImage? image;
+
+  /// Overrides the muted white body colour. Set for the in-progress banner so
+  /// "Fijne rit!" carries the trip accent instead of reading as fine print.
+  final Color? bodyColor;
+
+  /// Ring drawn around the leading chip. Null for statuses where the chip is
+  /// just an illustration and there is nothing in flight.
+  final TripStatusIndicatorMode? indicator;
 
   static TripStatusBannerContent? forStatus(TripStatus status) {
     switch (status) {
@@ -29,6 +40,7 @@ class TripStatusBannerContent {
           image: Assets.images.tripCarImage,
           title: AppStrings.activeTripSearchingDriverTitle,
           bodyLines: [AppStrings.activeTripSearchingDriverBody],
+          indicator: TripStatusIndicatorMode.searching,
         );
       case TripStatus.accepted:
         return TripStatusBannerContent(
@@ -36,6 +48,8 @@ class TripStatusBannerContent {
           image: Assets.images.tripCarImage,
           title: AppStrings.activeTripDriverAssignedTitle,
           bodyLines: [AppStrings.activeTripComfortableTripSoon],
+          // The search ring closes into a tick — same object, resolved.
+          indicator: TripStatusIndicatorMode.done,
         );
       case TripStatus.arrived:
         return TripStatusBannerContent(
@@ -50,6 +64,7 @@ class TripStatusBannerContent {
           image: Assets.images.tripCarImage,
           title: AppStrings.activeTripInProgressTitle,
           bodyLines: [AppStrings.activeTripInProgressSubtitle],
+          bodyColor: AppColors.tripOrange,
         );
       // En-route shows the plain live driver→pickup map (no banner).
       case TripStatus.enRoute:
@@ -74,6 +89,8 @@ class TripStatusOverlayCard extends StatelessWidget {
     required this.title,
     required this.bodyLines,
     this.image,
+    this.bodyColor,
+    this.indicator,
     this.highlightBrand = false,
     super.key,
   });
@@ -85,9 +102,36 @@ class TripStatusOverlayCard extends StatelessWidget {
   /// Optional illustration shown in the leading chip instead of [icon].
   final AssetGenImage? image;
 
+  /// Overrides the muted white body colour.
+  final Color? bodyColor;
+
+  /// Optional progress ring drawn around the leading chip.
+  final TripStatusIndicatorMode? indicator;
+
   /// When true, the "Fat7i" brand word inside any body line is split-
   /// coloured — "Fat7i" branding (legacy color-split comment).
   final bool highlightBrand;
+
+  /// The circular leading slot: the illustration (or [icon]) on the tinted chip,
+  /// wrapped in the status ring when [indicator] is set. The ring is drawn
+  /// outside the chip so the artwork keeps its full size in both states.
+  Widget _leadingChip() {
+    final chip = Container(
+      padding: REdgeInsets.all(AppSpacing.sm),
+      decoration: BoxDecoration(
+        color: AppColors.tripOrange.withValues(alpha: 0.15),
+        shape: BoxShape.circle,
+      ),
+      child: image != null
+          ? image!.image(width: 20.r, height: 20.r, fit: BoxFit.contain)
+          : FaIcon(icon, color: AppColors.tripOrange, size: 20.r),
+    );
+
+    if (indicator case final mode?) {
+      return TripStatusIndicator(mode: mode, size: 46.r, child: chip);
+    }
+    return chip;
+  }
 
   /// Renders [line], colouring the "Fat7i" brand word when
   /// [highlightBrand] is set; otherwise a plain [Text].
@@ -153,20 +197,7 @@ class TripStatusOverlayCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                padding: REdgeInsets.all(AppSpacing.sm),
-                decoration: BoxDecoration(
-                  color: AppColors.tripOrange.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: image != null
-                    ? image!.image(
-                        width: 20.r,
-                        height: 20.r,
-                        fit: BoxFit.contain,
-                      )
-                    : FaIcon(icon, color: AppColors.tripOrange, size: 20.r),
-              ),
+              _leadingChip(),
               AppSpacing.md.horizontalSpace,
               Flexible(
                 child: Column(
@@ -185,7 +216,12 @@ class TripStatusOverlayCard extends StatelessWidget {
                       _bodyLine(
                         line,
                         AppTextStyles.s12w400.copyWith(
-                          color: Colors.white.withValues(alpha: 0.75),
+                          color:
+                              bodyColor ??
+                              Colors.white.withValues(alpha: 0.75),
+                          fontWeight: bodyColor != null
+                              ? FontWeight.w600
+                              : null,
                         ),
                       ),
                     ],

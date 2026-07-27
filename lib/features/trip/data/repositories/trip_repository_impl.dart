@@ -46,6 +46,16 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  Future<Result<List<TripEntity>>> getActiveTrips() {
+    return runAsResult(() async {
+      printM('[TripRepository] getActiveTrips');
+      final models = await _remote.getActiveTrips();
+      printG('[TripRepository] getActiveTrips count=${models.length}');
+      return models.map((m) => m.toEntity).toList();
+    });
+  }
+
+  @override
   Future<Result<TripEntity>> cancelTrip(String id, {String? note}) {
     return runAsResult(() async {
       printM('[TripRepository] cancelTrip id=$id');

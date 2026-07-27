@@ -16,42 +16,64 @@ import '../../domain/facade/trip_facade.dart';
 import '../coordinators/trip_completion_coordinator.dart';
 
 /// State for the Home-tab active-trip gate.
+///
+/// A passenger can hold several open trips at once: at most one *live* trip
+/// (which owns the map) plus any number of *reserved* future scheduled trips
+/// (which do not block booking). See [TripEntity.isReservedFuture].
 class ActiveTripState {
-  const ActiveTripState({this.trip, this.loading = false, this.loaded = false});
+  const ActiveTripState({
+    this.trips = const [],
+    this.loading = false,
+    this.loaded = false,
+  });
 
-  /// The passenger's current non-terminal trip, or null when there is none.
-  final TripEntity? trip;
+  /// Every non-terminal trip the passenger holds, soonest pickup first.
+  final List<TripEntity> trips;
   final bool loading;
 
   /// True once the first resolve has completed (so the gate can avoid flashing
   /// the booking sheet before we know whether a trip is active).
   final bool loaded;
 
-  // `completed` stays "active" for gate purposes: the active-trip screen
-  // owns showing the one-shot completed overlay + receipt sheet, and only
-  // drops out via the explicit Done button (`ActiveTripCubit.clear()`), not
+  // `completed` stays "live" for gate purposes: the active-trip screen owns
+  // showing the one-shot completed overlay + receipt sheet, and only drops out
+  // via the explicit Done button (`ActiveTripCubit.clearTrip()`), not
   // automatically the moment the status flips terminal.
-  bool get hasActiveTrip =>
-      trip != null &&
-      (!trip!.status.isTerminal || trip!.status == TripStatus.completed);
+  static bool _ownsTheMap(TripEntity trip) =>
+      trip.status == TripStatus.completed || trip.isLiveNow;
+
+  /// The trip currently occupying the Home tab, or null when the passenger is
+  /// free to book. Only future reservations may coexist with booking.
+  TripEntity? get liveTrip {
+    for (final trip in trips) {
+      if (_ownsTheMap(trip)) return trip;
+    }
+    return null;
+  }
+
+  /// Scheduled trips whose dispatch window has not opened yet.
+  List<TripEntity> get reservedTrips =>
+      trips.where((t) => t.isReservedFuture).toList();
+
+  bool get hasLiveTrip => liveTrip != null;
 
   ActiveTripState copyWith({
-    TripEntity? trip,
-    bool clearTrip = false,
+    List<TripEntity>? trips,
     bool? loading,
     bool? loaded,
   }) {
     return ActiveTripState(
-      trip: clearTrip ? null : (trip ?? this.trip),
+      trips: trips ?? this.trips,
       loading: loading ?? this.loading,
       loaded: loaded ?? this.loaded,
     );
   }
 }
 
-/// Resolves and tracks the passenger's current active trip so the Home tab can
-/// show the live trip view (which opens the SignalR channel) instead of the
-/// booking sheet. Refreshes on realtime trip events and on demand.
+/// Resolves and tracks every active trip the passenger holds so the Home tab can
+/// show the live trip view (which opens the SignalR channel) or the booking
+/// sheet, and so future reservations stay visible without blocking a new
+/// booking. Refreshes on realtime trip events and on demand.
 @lazySingleton
 class ActiveTripCubit extends Cubit<ActiveTripState> {
   ActiveTripCubit(this._facade, this._realtime, this._authManager)
@@ -61,14 +83,26 @@ class ActiveTripCubit extends Cubit<ActiveTripState> {
   final RealtimeService _realtime;
   final AuthManager _authManager;
 
+  /// How often the live/reserved split is recomputed. A reservation becomes
+  /// live purely by the clock reaching `pickup - 15 min`, and nothing else in
+  /// the app rebuilds on time alone — without this tick the map would keep
+  /// showing the booking sheet until the next realtime event or tab switch.
+  static const _partitionTick = Duration(seconds: 30);
+
   StreamSubscription<RealtimeEvent>? _eventsSub;
   StreamSubscription<AuthStatus>? _authSub;
   Timer? _debounce;
+  Timer? _partitionTimer;
   bool _started = false;
 
+  /// Trip groups this cubit has joined on the hub, so membership can be diffed
+  /// against the active set instead of being owned by whichever `TripBloc`
+  /// happens to be mounted.
+  final Set<String> _joinedGroups = {};
+
   /// Idempotent. Subscribes to realtime trip events and auth state, and
-  /// resolves the active trip only while authenticated (guests/logged-out
-  /// users must never trigger the protected `getActiveTrip` call).
+  /// resolves the active trips only while authenticated (guests/logged-out
+  /// users must never trigger the protected `getActiveTrips` call).
   void start() {
     if (_started) return;
     _started = true;
@@ -91,6 +125,8 @@ class ActiveTripCubit extends Cubit<ActiveTripState> {
         printC('[ActiveTripCubit] auth -> unauthenticated, resetting');
         _debounce?.cancel();
         _debounce = null;
+        _stopPartitionTimer();
+        unawaited(_syncTripGroups(const []));
         if (!isClosed) emit(const ActiveTripState(loaded: true));
         break;
       case Status.initial:
@@ -108,6 +144,8 @@ class ActiveTripCubit extends Cubit<ActiveTripState> {
     _authSub = null;
     _debounce?.cancel();
     _debounce = null;
+    _stopPartitionTimer();
+    await _syncTripGroups(const []);
     if (!isClosed) emit(const ActiveTripState());
   }
 
@@ -123,18 +161,18 @@ class ActiveTripCubit extends Cubit<ActiveTripState> {
     );
   }
 
-  /// Fetches the current active trip and updates the gate.
+  /// Fetches every active trip and updates the gate.
   Future<void> refresh() async {
     if (isClosed) return;
     emit(state.copyWith(loading: true));
-    final result = await _facade.getActiveTrip();
+    final result = await _facade.getActiveTrips();
     if (isClosed) return;
 
-    TripEntity? activeTrip;
+    List<TripEntity>? activeTrips;
     bool failed = false;
     String? failMessage;
     result.when(
-      success: (trip) => activeTrip = trip,
+      success: (trips) => activeTrips = trips,
       failure: (message) {
         failed = true;
         failMessage = message;
@@ -147,69 +185,125 @@ class ActiveTripCubit extends Cubit<ActiveTripState> {
       return;
     }
 
-    final previousId = state.trip?.id;
-    final previousStatus = state.trip?.status;
+    final previousLive = state.liveTrip;
+    final resolved = List<TripEntity>.from(
+      activeTrips!.where((t) => !t.status.isTerminal),
+    );
 
-    if (activeTrip != null &&
-        (!activeTrip!.status.isTerminal ||
-            activeTrip!.status == TripStatus.completed)) {
-      printG(
-        '[ActiveTripCubit] active trip=${activeTrip!.id} status=${activeTrip!.status}',
-      );
-      emit(ActiveTripState(trip: activeTrip, loaded: true));
-      return;
+    // The server's active statuses exclude Completed, so a just-completed trip
+    // disappears from the list. Before dropping it, if its completed overlay has
+    // NOT been closed yet, keep it mounted so the full-screen overlay stays
+    // until the user taps Close (see `ActiveTripBody`).
+    final retained = await _retainCompletedTrip(previousLive, resolved);
+    if (isClosed) return;
+    if (retained != null) {
+      resolved.insert(0, retained);
     }
 
-    // getActiveTrip() returns no trip for a Completed one (the backend's
-    // ActiveStatuses excludes Completed), so a just-completed trip shows up here
-    // as "no active trip". Before dropping it, if we had a trip whose completed
-    // overlay has NOT been closed yet, keep it mounted so the full-screen
-    // completed overlay stays until the user taps Close (see `ActiveTripBody`).
-    if (previousId != null &&
-        !getIt<TripCompletionCoordinator>().isCompletedOverlayClosed(
-          previousId,
-        )) {
-      // Fast path: we already hold the completed trip — re-emit it without a
-      // network round-trip on each realtime tick.
-      if (previousStatus == TripStatus.completed && state.trip != null) {
-        emit(ActiveTripState(trip: state.trip, loaded: true));
-        return;
-      }
-      // Re-fetch by id to learn whether it just completed (and is still unrated).
-      final byId = await _facade.getTripById(previousId);
-      if (isClosed) return;
-      final kept = byId.when(
-        success: (trip) {
-          if (trip.status == TripStatus.completed &&
-              trip.passengerRating == null) {
-            printG(
-              '[ActiveTripCubit] keep completed trip=${trip.id} until overlay closed',
-            );
-            emit(ActiveTripState(trip: trip, loaded: true));
-            return true;
-          }
-          return false;
-        },
-        failure: (_) => false,
-      );
-      if (kept) return;
-    }
+    printG(
+      '[ActiveTripCubit] active trips=${resolved.length} '
+      'live=${resolved.where(ActiveTripState._ownsTheMap).map((t) => t.id).join(',')}',
+    );
 
-    printM('[ActiveTripCubit] no active trip');
-    emit(const ActiveTripState(loaded: true));
-    // The active trip just ended. If it completed and is still unrated, make
-    // sure the rating sheet appears even if the SignalR completion event was
-    // missed (the coordinator re-checks status, so cancelled trips are ignored).
+    await _syncTripGroups(resolved);
+    if (isClosed) return;
+    emit(ActiveTripState(trips: resolved, loaded: true));
+    _syncPartitionTimer();
+
+    // The live trip just ended. If it completed and is still unrated, make sure
+    // the rating sheet appears even if the SignalR completion event was missed
+    // (the coordinator re-checks status, so cancelled trips are ignored).
     // Skipped when we already observed `completed` locally — that case is owned
-    // by the completed overlay's close button (see `ActiveTripBody`), and firing
-    // it here too would race that flow and navigate home before Close.
-    if (previousId != null && previousStatus != TripStatus.completed) {
+    // by the completed overlay's close button (see `ActiveTripBody`).
+    if (previousLive != null &&
+        previousLive.status != TripStatus.completed &&
+        retained == null &&
+        !resolved.any((t) => t.id == previousLive.id)) {
       unawaited(
         getIt<TripCompletionCoordinator>().promptRatingForCompletedTrip(
-          previousId,
+          previousLive.id,
         ),
       );
     }
+  }
+
+  /// Returns the previously live trip when it has just completed and its
+  /// overlay is still owed to the user, otherwise null.
+  Future<TripEntity?> _retainCompletedTrip(
+    TripEntity? previousLive,
+    List<TripEntity> resolved,
+  ) async {
+    if (previousLive == null) return null;
+    if (resolved.any((t) => t.id == previousLive.id)) return null;
+    if (getIt<TripCompletionCoordinator>().isCompletedOverlayClosed(
+      previousLive.id,
+    )) {
+      return null;
+    }
+
+    // Fast path: we already hold the completed trip — re-emit it without a
+    // network round-trip on each realtime tick.
+    if (previousLive.status == TripStatus.completed) return previousLive;
+
+    final byId = await _facade.getTripById(previousLive.id);
+    if (isClosed) return null;
+    return byId.when(
+      success: (trip) {
+        if (trip.status == TripStatus.completed && trip.passengerRating == null) {
+          printG(
+            '[ActiveTripCubit] keep completed trip=${trip.id} until overlay closed',
+          );
+          return trip;
+        }
+        return null;
+      },
+      failure: (_) => null,
+    );
+  }
+
+  /// Joins the hub group of every active trip and leaves the ones that are gone.
+  /// Owned here rather than in `TripBloc` because several blocs are alive at
+  /// once and a passenger holds several trips.
+  Future<void> _syncTripGroups(List<TripEntity> trips) async {
+    final wanted = trips.map((t) => t.id).toSet();
+    final toJoin = wanted.difference(_joinedGroups);
+    final toLeave = _joinedGroups.difference(wanted);
+
+    for (final id in toJoin) {
+      _joinedGroups.add(id);
+      await _realtime.joinTripGroup(id);
+    }
+    for (final id in toLeave) {
+      _joinedGroups.remove(id);
+      await _realtime.leaveTripGroup(id);
+    }
+  }
+
+  /// Runs the partition tick only while a reservation is still waiting to go
+  /// live — there is nothing to recompute otherwise.
+  void _syncPartitionTimer() {
+    final needsTick = state.reservedTrips.isNotEmpty;
+    if (!needsTick) {
+      _stopPartitionTimer();
+      return;
+    }
+    if (_partitionTimer != null) return;
+    _partitionTimer = Timer.periodic(_partitionTick, (_) {
+      if (isClosed) return;
+      final wasLive = state.liveTrip?.id;
+      // Re-emitting the same list re-evaluates the time-based getters.
+      emit(state.copyWith(trips: List<TripEntity>.from(state.trips)));
+      if (state.liveTrip?.id != wasLive) {
+        printG('[ActiveTripCubit] reservation went live -> refreshing');
+        unawaited(refresh());
+      }
+      _syncPartitionTimer();
+    });
+  }
+
+  void _stopPartitionTimer() {
+    _partitionTimer?.cancel();
+    _partitionTimer = null;
   }
 
   /// Marks a booking as in-flight right after it succeeds, before the async
@@ -222,15 +316,25 @@ class ActiveTripCubit extends Cubit<ActiveTripState> {
     emit(state.copyWith(loading: true));
   }
 
-  /// Drops the current trip so the Home tab returns to the booking flow.
-  void clear() {
-    printC('[ActiveTripCubit] clear');
-    emit(const ActiveTripState(loaded: true));
+  /// Drops one trip so the Home tab returns to the booking flow. Used by the
+  /// cancelled sheet and the no-driver Done button, which resolve a specific
+  /// trip rather than "the" trip.
+  void clearTrip(String tripId) {
+    printC('[ActiveTripCubit] clearTrip $tripId');
+    emit(
+      state.copyWith(
+        trips: state.trips.where((t) => t.id != tripId).toList(),
+        loaded: true,
+        loading: false,
+      ),
+    );
+    _syncPartitionTimer();
   }
 
   @override
   Future<void> close() {
     _debounce?.cancel();
+    _partitionTimer?.cancel();
     _eventsSub?.cancel();
     _authSub?.cancel();
     return super.close();

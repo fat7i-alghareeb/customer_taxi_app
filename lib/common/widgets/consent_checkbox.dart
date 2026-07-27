@@ -9,11 +9,18 @@ class ConsentCheckbox extends StatelessWidget {
     required this.prefixLabel,
     required this.linkLabel,
     required this.onLinkTap,
+    this.suffixLabel,
   });
 
   final String formControlName;
   final String prefixLabel;
   final String linkLabel;
+
+  /// Trailing text after the link. Needed because not every language puts the
+  /// verb before the object — Dutch reads "Ik heb het `Privacybeleid` gelezen",
+  /// German "Ich stimme den `AGB` zu". Empty in languages that don't need it.
+  final String? suffixLabel;
+
   final VoidCallback onLinkTap;
 
   @override
@@ -66,6 +73,9 @@ class ConsentCheckbox extends StatelessWidget {
                             recognizer: TapGestureRecognizer()
                               ..onTap = onLinkTap,
                           ),
+                          if (suffixLabel case final suffix?
+                              when suffix.isNotEmpty)
+                            TextSpan(text: suffix),
                         ],
                       ),
                     ),

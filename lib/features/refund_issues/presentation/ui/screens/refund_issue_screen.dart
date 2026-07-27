@@ -1,4 +1,5 @@
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_refund_status.dart';
 
 import '../../../constants/forms/refund_issue_forms.dart';
@@ -17,6 +18,7 @@ class RefundIssueScreenArgs {
     this.cancelledAtUtc,
     this.refundStatus = TripRefundStatus.preparing,
     this.knownFailedRefund = false,
+    this.existingIssue,
   });
 
   final String tripId;
@@ -29,6 +31,11 @@ class RefundIssueScreenArgs {
   final DateTime? cancelledAtUtc;
   final TripRefundStatus refundStatus;
   final bool knownFailedRefund;
+
+  /// The rider's most recent refund review request for this trip, if any. While
+  /// it is still open the screen shows its status instead of the form — the
+  /// server only accepts one open request per trip.
+  final TripRefundIssueEntity? existingIssue;
 }
 
 class RefundIssueScreen extends StatefulWidget {
@@ -60,17 +67,23 @@ class _RefundIssueScreenState extends State<RefundIssueScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RefundIssueBloc>(
-      create: (_) => getIt<RefundIssueBloc>(),
-      child: AppScaffold.appBar(
-        appBarConfig: AppScaffoldAppBarConfig(
-          title: AppStrings.refundIssueTitle,
+    // Pushed on the root navigator, so it doesn't inherit the trip accent from
+    // the details screen that opened it — re-apply it here to keep the whole
+    // refund journey orange.
+    return tripAccentTheme(
+      context,
+      child: BlocProvider<RefundIssueBloc>(
+        create: (_) => getIt<RefundIssueBloc>(),
+        child: AppScaffold.appBar(
+          appBarConfig: AppScaffoldAppBarConfig(
+            title: AppStrings.refundIssueTitle,
+          ),
+          bottomNavigationBar: RefundIssueBottomAction(
+            args: widget.args,
+            form: _form,
+          ),
+          child: RefundIssueBody(args: widget.args, form: _form),
         ),
-        bottomNavigationBar: RefundIssueBottomAction(
-          args: widget.args,
-          form: _form,
-        ),
-        child: RefundIssueBody(args: widget.args, form: _form),
       ),
     );
   }

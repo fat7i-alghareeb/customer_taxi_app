@@ -9,10 +9,17 @@ import 'package:customertaxi/features/root/presentation/ui/screens/root_screen.d
 /// `pop()` there empties the navigator and leaves the user staring at a black
 /// screen with no way back. Always close through this helper rather than
 /// `Navigator.pop` / `context.pop` on any screen that a deep link can land on.
-void safePop<T extends Object?>(BuildContext context, {T? result}) {
+/// [fallbackExtra] is handed to the root route when there is nothing to pop —
+/// pass a `RootTab` to choose which tab the user lands on. Ignored on the
+/// normal pop path.
+void safePop<T extends Object?>(
+  BuildContext context, {
+  T? result,
+  Object? fallbackExtra,
+}) {
   if (context.canPop()) {
     context.pop(result);
   } else {
-    context.go(RootScreen.pagePath);
+    context.go(RootScreen.pagePath, extra: fallbackExtra);
   }
 }

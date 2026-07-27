@@ -326,6 +326,9 @@ class _CancellationSection extends StatelessWidget {
       AppStrings.cancellationReasonPassengerWithinFiveMinutes,
     'PassengerAfterFiveMinutes' =>
       AppStrings.cancellationReasonPassengerAfterFiveMinutes,
+    'NoDriverAvailable' => AppStrings.cancellationReasonNoDriverAvailable,
+    // Falls back to the raw server enum name. Every CancellationReason value
+    // must have a case above, or the rider sees "NoDriverAvailable" verbatim.
     _ => reason,
   };
 

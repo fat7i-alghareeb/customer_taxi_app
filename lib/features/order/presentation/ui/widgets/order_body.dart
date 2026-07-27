@@ -22,7 +22,12 @@ class OrderBody extends StatelessWidget {
           initial: () {},
           loading: () {},
           success: (trip) {
-            showSuccessOverlay(context, AppStrings.orderConfirmedSuccess);
+            // Scheduled bookings get the full-screen reservation confirmation
+            // instead (raised from the booking handler); a toast underneath it
+            // would only flash behind the overlay.
+            if (trip.scheduledAtUtc == null) {
+              showSuccessOverlay(context, AppStrings.orderConfirmedSuccess);
+            }
             context.read<OrderBloc>().add(const OrderEvent.collapseRequested());
           },
           failure: (message) {

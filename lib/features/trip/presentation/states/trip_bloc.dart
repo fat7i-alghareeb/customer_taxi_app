@@ -88,17 +88,22 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     _realtimeSub = _realtime.events
         .where((event) => event.tripId == tripId)
         .listen(_onRealtimeEvent);
+    // Joining is idempotent and additive, so it is safe even though
+    // `ActiveTripCubit` also joins every active trip's group.
     await _realtime.joinTripGroup(tripId);
   }
 
   Future<void> _unsubscribeFromRealtime() async {
     await _realtimeSub?.cancel();
     _realtimeSub = null;
-    final tripId = _joinedTripId;
-    _joinedTripId = null;
-    if (tripId != null) {
-      printC('[TripBloc] unsubscribing realtime trip=$tripId');
-      await _realtime.leaveTripGroup(tripId);
+    // Deliberately does NOT leave the trip group. Several TripBlocs are alive at
+    // once now (the Home gate plus the trips tab), and a passenger can hold a
+    // live trip alongside future reservations — one bloc tearing down must not
+    // unsubscribe the others. Group membership is owned by `ActiveTripCubit`,
+    // which leaves a group only once the trip is no longer active.
+    if (_joinedTripId != null) {
+      printC('[TripBloc] unsubscribing realtime trip=$_joinedTripId');
+      _joinedTripId = null;
     }
   }
 
@@ -537,9 +542,6 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     );
   }
 
-  bool _isWithinEditWindow(DateTime createdAtUtc) =>
-      DateTime.now().toUtc().isBefore(createdAtUtc.add(const Duration(hours: 1)));
-
   Future<void> _onScheduledTimeUpdateRequested(
     _ScheduledTimeUpdateRequested event,
     Emitter<TripState> emit,
@@ -547,7 +549,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     final id = state.activeTripId;
     final trip = state.tripStatus.getDataWhenSuccess;
     if (id == null || trip == null) return;
-    if (!_isWithinEditWindow(trip.createdAtUtc)) {
+    if (!trip.canEditSchedule) {
       emit(
         state.copyWith(
           tripEditStatus: const BlocStatus<void>.failure('tripEditNotAllowed'),

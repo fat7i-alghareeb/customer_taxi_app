@@ -314,6 +314,7 @@ class _ConsentGate extends StatelessWidget {
               formControlName: AuthForms.privacyConsentField,
               prefixLabel: AppStrings.consentPrivacyPrefix,
               linkLabel: AppStrings.consentPrivacyLinkLabel,
+              suffixLabel: AppStrings.consentPrivacySuffix,
               onLinkTap: () => context.pushNamed(PrivacyPolicyScreen.pageName),
             ),
             AppSpacing.xs.verticalSpace,
@@ -321,6 +322,7 @@ class _ConsentGate extends StatelessWidget {
               formControlName: AuthForms.termsConsentField,
               prefixLabel: AppStrings.consentTermsPrefix,
               linkLabel: AppStrings.consentTermsLinkLabel,
+              suffixLabel: AppStrings.consentTermsSuffix,
               onLinkTap: () =>
                   context.pushNamed(TermsAndConditionsScreen.pageName),
             ),

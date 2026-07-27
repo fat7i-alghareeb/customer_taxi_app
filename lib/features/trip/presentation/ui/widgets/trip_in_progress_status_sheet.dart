@@ -41,6 +41,9 @@ class TripInProgressStatusSheet extends StatelessWidget {
           image: Assets.images.tripCarImage,
           title: AppStrings.activeTripInProgressEnjoyTitle,
           body: AppStrings.activeTripInProgressEnjoyBody,
+          // Orange under tripAccentTheme, matching the ETA card below it — the
+          // "Fijne rit!" line was the only untinted card title on this sheet.
+          titleColor: colors.primary,
         ),
         AppSpacing.sm.verticalSpace,
         _InfoCard(

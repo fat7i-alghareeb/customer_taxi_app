@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -147,6 +148,131 @@ class MapMarkerGenerator {
     final Uint8List uint8List = byteData!.buffer.asUint8List();
 
     return BitmapDescriptor.bytes(uint8List);
+  }
+
+  /// Builds a teardrop pin — a filled circular head tapering to a point, with a
+  /// white inner dot. Used for the destination, opposite the dot-ring used for
+  /// the pickup: circle means "you start here", pin means "this is the place".
+  ///
+  /// The tip sits at the bottom-centre of the bitmap, so callers must anchor the
+  /// marker at `Offset(0.5, 1.0)` for it to point at the actual coordinate.
+  static Future<BitmapDescriptor> createPinMarker({
+    required Color color,
+    double height = 56,
+  }) async {
+    final double headRadius = height * 0.3;
+    final double width = headRadius * 2 + 6; // + shadow buffer
+    final Offset headCenter = Offset(width / 2, headRadius + 3);
+    final double tipY = height - 2;
+
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+
+    // The body is the head circle unioned with a triangle whose top edge is a
+    // chord of that circle, so the two meet without a visible seam.
+    final double chordHalf = headRadius * 0.72;
+    final double chordY = headCenter.dy + math.sqrt(
+      math.max(0, headRadius * headRadius - chordHalf * chordHalf),
+    );
+    final Path body = Path()
+      ..addOval(Rect.fromCircle(center: headCenter, radius: headRadius))
+      ..moveTo(headCenter.dx - chordHalf, chordY)
+      ..lineTo(headCenter.dx, tipY)
+      ..lineTo(headCenter.dx + chordHalf, chordY)
+      ..close();
+
+    // 1. Soft drop shadow, offset down so the pin reads as standing on the map.
+    canvas.drawPath(
+      body.shift(const Offset(0, 2)),
+      Paint()
+        ..color = Colors.black.withValues(alpha: 0.25)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
+    );
+
+    // 2. Solid body.
+    canvas.drawPath(body, Paint()..color = color);
+
+    // 3. White inner dot, matching the hole in the dot-ring pickup marker.
+    canvas.drawCircle(
+      headCenter,
+      headRadius * 0.38,
+      Paint()..color = Colors.white,
+    );
+
+    final ui.Image image = await pictureRecorder.endRecording().toImage(
+      width.toInt(),
+      height.toInt(),
+    );
+    final ByteData? byteData = await image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+
+    return BitmapDescriptor.bytes(byteData!.buffer.asUint8List());
+  }
+
+  /// Builds a small numbered circle for an intermediate stop: solid fill, white
+  /// ring, number centred. Deliberately smaller and quieter than the pickup
+  /// circle and destination pin — stops are waypoints, not endpoints, and the
+  /// number is what tells the rider their order.
+  static Future<BitmapDescriptor> createNumberedStopMarker({
+    required int number,
+    required Color color,
+    double size = 32,
+  }) async {
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    final double radius = size / 2;
+    final Offset center = Offset(radius, radius);
+    final double bodyRadius = radius - 4;
+
+    canvas.drawCircle(
+      center.translate(0, 2),
+      bodyRadius,
+      Paint()
+        ..color = Colors.black.withValues(alpha: 0.2)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
+    );
+
+    canvas.drawCircle(center, bodyRadius, Paint()..color = color);
+
+    canvas.drawCircle(
+      center,
+      bodyRadius,
+      Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5,
+    );
+
+    final TextPainter textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        text: '$number',
+        style: TextStyle(
+          fontSize: size * 0.42,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    )..layout();
+    textPainter.paint(
+      canvas,
+      Offset(
+        radius - (textPainter.width / 2),
+        radius - (textPainter.height / 2),
+      ),
+    );
+
+    final ui.Image image = await pictureRecorder.endRecording().toImage(
+      size.toInt(),
+      size.toInt(),
+    );
+    final ByteData? byteData = await image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+
+    return BitmapDescriptor.bytes(byteData!.buffer.asUint8List());
   }
 
   static Future<BitmapDescriptor> createLabelMarker({

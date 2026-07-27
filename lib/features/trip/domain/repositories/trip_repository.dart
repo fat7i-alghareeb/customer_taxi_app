@@ -12,6 +12,7 @@ import '../../data/datasources/trip_remote_datasource.dart';
 abstract class TripRepository {
   Future<Result<TripEntity>> getTripById(String id);
   Future<Result<TripEntity?>> getActiveTrip();
+  Future<Result<List<TripEntity>>> getActiveTrips();
   Future<Result<TripEntity>> cancelTrip(String id, {String? note});
   Future<Result<TripEntity>> postponeNoDriverSearch(String id);
   Future<Result<TripEntity>> noDriverCancelTrip(String id, {String? note});

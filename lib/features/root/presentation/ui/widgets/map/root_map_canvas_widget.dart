@@ -166,23 +166,16 @@ class _RootMapCanvasWidgetState extends State<RootMapCanvasWidget> {
       );
     }
 
-    // Colors for legs
-    final legColors = [
-      Colors.orange,
-      Colors.blue,
-      Colors.green,
-      Colors.purple,
-      Colors.red,
-      Colors.teal,
-      Colors.indigo,
-    ];
+    // The whole pickup → destination route carries the trip accent, one colour
+    // across every leg: a multi-stop trip is still one journey, and the old
+    // per-leg colour cycle read as several unrelated routes on the map. Stops
+    // stay tellable apart by their markers.
+    const color = AppColors.tripOrange;
 
     // 2. Render each leg
     for (int i = 0; i < legPolylines.length; i++) {
       final points = legPolylines[i];
       if (points.length < 2) continue;
-
-      final color = legColors[i % legColors.length];
 
       // Shadow
       polylines.add(

@@ -41,15 +41,8 @@ class _TripConfirmationStatusSheetState
     );
   }
 
-  /// Booking time / date may only be changed within one hour of when the
-  /// booking was created. Mirrors `TripBloc._isWithinEditWindow` (server is the
-  /// source of truth and rejects late edits with `tripEditNotAllowed`).
-  bool get _isWithinEditWindow => DateTime.now().toUtc().isBefore(
-    trip.createdAtUtc.toUtc().add(const Duration(hours: 1)),
-  );
-
   Future<void> _editScheduledTime() async {
-    if (!_isWithinEditWindow) {
+    if (!trip.canEditSchedule) {
       showErrorOverlay(context, AppStrings.tripEditNotAllowed);
       return;
     }
@@ -139,14 +132,15 @@ class _TripConfirmationStatusSheetState
           ],
           AppSpacing.sm.verticalSpace,
 
-          // Booking / schedule time. Editable pencil only within 1h of booking.
+          // Booking / schedule time. Editable pencil only within 5 minutes of
+          // booking — the same window as every other customer edit.
           if (trip.isScheduled && trip.scheduledAtUtc != null) ...[
             _InfoTimeRow(
               icon: FontAwesomeIcons.calendarDays,
               text:
                   '${AppStrings.tripInfoScheduledTrip}: '
                   '${_formatDateTime(trip.scheduledAtUtc!.toLocal())}',
-              onEdit: _isWithinEditWindow ? _editScheduledTime : null,
+              onEdit: trip.canEditSchedule ? _editScheduledTime : null,
             ),
             AppSpacing.xs.verticalSpace,
             _InfoTimeRow(
@@ -163,7 +157,7 @@ class _TripConfirmationStatusSheetState
                 '{datetime}',
                 _formatDateTime(trip.createdAtUtc.toLocal()),
               ),
-              onEdit: _isWithinEditWindow ? _editScheduledTime : null,
+              onEdit: trip.canEditSchedule ? _editScheduledTime : null,
             ),
 
           AppSpacing.sm.verticalSpace,

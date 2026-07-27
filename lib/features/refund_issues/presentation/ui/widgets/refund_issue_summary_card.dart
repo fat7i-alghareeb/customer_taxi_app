@@ -75,7 +75,7 @@ class RefundIssueSummaryCard extends StatelessWidget {
           RefundIssueSummaryRow(
             label: AppStrings.refundIssueRefundAmount,
             value: _formatAmount(args.refundAmount, args.currencyCode),
-            valueColor: AppColors.warning,
+            valueColor: AppColors.tripOrange,
           ),
           AppSpacing.sm.verticalSpace,
           RefundIssueSummaryRow(

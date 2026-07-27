@@ -22,6 +22,7 @@ abstract class TripEntity with _$TripEntity {
     DateTime? etaToPickup,
     TripCancellationEntity? cancellation,
     TripRefundEntity? refund,
+    TripRefundIssueEntity? refundIssue,
     TripCompensationClaimEntity? compensationClaim,
     TripWaitingSessionEntity? activeWaitingSession,
     String? encodedOverviewPolyline,
@@ -48,23 +49,18 @@ abstract class TripEntity with _$TripEntity {
   /// disappear exactly when the server would refuse, instead of leaving a
   /// pencil that fails on tap.
   ///
-  /// The window closes 5 minutes after booking, or — for a scheduled ride —
-  /// 5 minutes before pickup, whichever is later. Anchoring on the pickup
-  /// keeps the trip correctable for a ride booked days ahead; taking the
-  /// later of the two preserves the full booking window for a ride scheduled
-  /// very soon.
-  bool get _isWithinCustomerEditWindow {
-    final bookingDeadline = createdAtUtc.add(const Duration(minutes: 5));
-    final scheduled = scheduledAtUtc;
-    final deadline = scheduled == null
-        ? bookingDeadline
-        : _laterOf(
-            scheduled.subtract(const Duration(minutes: 5)),
-            bookingDeadline,
-          );
+  /// The window closes exactly 5 minutes after booking, for every trip type.
+  /// A scheduled pickup does *not* extend it: a ride booked for next week locks
+  /// at the same 5-minute mark as an immediate one, so the rider only ever has
+  /// one deadline to understand.
+  bool get _isWithinCustomerEditWindow =>
+      !DateTime.now().toUtc().isAfter(customerEditDeadlineUtc);
 
-    return !DateTime.now().toUtc().isAfter(deadline.toUtc());
-  }
+  /// The instant every edit affordance turns off. Exposed so the sheet can set a
+  /// timer for it — nothing else rebuilds on the clock, so without that the
+  /// pencils would stay lit past the deadline until the next poll.
+  DateTime get customerEditDeadlineUtc =>
+      createdAtUtc.toUtc().add(const Duration(minutes: 5));
 
   /// Whether the rider may still repoint any stop.
   bool get canEditStops =>
@@ -74,7 +70,46 @@ abstract class TripEntity with _$TripEntity {
   bool get canEditPartySize =>
       status.isPartySizeEditable && _isWithinCustomerEditWindow;
 
-  static DateTime _laterOf(DateTime a, DateTime b) => a.isAfter(b) ? a : b;
+  /// Whether the rider may still move the scheduled pickup time. Mirrors
+  /// `TripEditPolicy.CanEditSchedule` — same status gate as the party size, and
+  /// the same 5-minute window as everything else. This used to be a separate
+  /// 1-hour rule on both sides.
+  bool get canEditSchedule =>
+      status.isPartySizeEditable && _isWithinCustomerEditWindow;
+
+  /// The instant this trip stops being a quiet reservation and starts being a
+  /// ride in progress. Mirrors the server's
+  /// `Trip.DispatchWindowOpensAtUtc` = `ScheduledAtUtc - ScheduledEnRouteLeadTime`,
+  /// falling back to the same 15-minute lead if the server did not send it.
+  DateTime? get reservationWindowOpensAtUtc {
+    final scheduled = scheduledAtUtc;
+    if (scheduled == null) return null;
+    return (dispatchWindowOpensAtUtc ??
+            scheduled.subtract(const Duration(minutes: 15)))
+        .toUtc();
+  }
+
+  /// A scheduled trip whose dispatch window has not opened yet.
+  ///
+  /// These do NOT take over the Home tab: the passenger may hold any number of
+  /// future reservations and still book another ride. Note the rule is purely
+  /// time-based — an admin accepting a trip days ahead (which is routine, and
+  /// what the accepted-reminder stages exist for) must not hijack the map.
+  bool get isReservedFuture {
+    if (status.isTerminal) return false;
+    final opensAt = reservationWindowOpensAtUtc;
+    if (opensAt == null) return false;
+    if (status == TripStatus.enRoute ||
+        status == TripStatus.arrived ||
+        status == TripStatus.inProgress) {
+      return false;
+    }
+    return DateTime.now().toUtc().isBefore(opensAt);
+  }
+
+  /// A trip that owns the Home tab right now: any non-terminal trip that is not
+  /// a future reservation. At most one of these exists at a time.
+  bool get isLiveNow => !status.isTerminal && !isReservedFuture;
 }
 
 @freezed
@@ -123,6 +158,25 @@ abstract class TripRefundEntity with _$TripRefundEntity {
     required String currencyCode,
     DateTime? completedAtUtc,
   }) = _TripRefundEntity;
+}
+
+/// The passenger's most recent refund review request for this trip.
+///
+/// [isOpen] is computed by the server (`TripRefundIssueDto.IsOpen`) rather than
+/// derived from [status] here, so the rule about which statuses still block a
+/// new request lives in one place. While it is true the app shows the "under
+/// review" panel instead of the submit form; once an admin resolves or dismisses
+/// the request the slot frees and the form comes back.
+@freezed
+abstract class TripRefundIssueEntity with _$TripRefundIssueEntity {
+  const factory TripRefundIssueEntity({
+    required String id,
+    required String requestType,
+    required String status,
+    required bool isOpen,
+    required DateTime createdAtUtc,
+    DateTime? reviewedAtUtc,
+  }) = _TripRefundIssueEntity;
 }
 
 @freezed

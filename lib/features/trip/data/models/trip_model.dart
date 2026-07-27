@@ -21,6 +21,7 @@ abstract class TripModel with _$TripModel {
     DateTime? etaToPickup,
     TripCancellationModel? cancellation,
     TripRefundModel? refund,
+    TripRefundIssueModel? refundIssue,
     TripCompensationClaimModel? compensationClaim,
     TripWaitingSessionModel? activeWaitingSession,
     String? encodedOverviewPolyline,
@@ -102,6 +103,25 @@ abstract class TripRefundModel with _$TripRefundModel {
 
   factory TripRefundModel.fromJson(Map<String, dynamic> json) =>
       _$TripRefundModelFromJson(json);
+}
+
+/// The passenger's most recent refund review request for this trip, so the app
+/// can show "under review" instead of offering the form a second time. `isOpen`
+/// is computed server-side so the rule about which statuses still block a new
+/// request lives in one place.
+@freezed
+abstract class TripRefundIssueModel with _$TripRefundIssueModel {
+  const factory TripRefundIssueModel({
+    required String id,
+    required String requestType,
+    required String status,
+    required bool isOpen,
+    required DateTime createdAtUtc,
+    DateTime? reviewedAtUtc,
+  }) = _TripRefundIssueModel;
+
+  factory TripRefundIssueModel.fromJson(Map<String, dynamic> json) =>
+      _$TripRefundIssueModelFromJson(json);
 }
 
 @freezed

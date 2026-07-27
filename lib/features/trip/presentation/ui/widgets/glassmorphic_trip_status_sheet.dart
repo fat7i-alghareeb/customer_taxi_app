@@ -43,6 +43,8 @@ class _GlassmorphicTripStatusSheetState
   // brief replay is over.
   bool _arrivedHandoffDone = false;
   Timer? _arrivedHandoffTimer;
+  // One-shot rebuild the moment the 5-minute customer edit window closes.
+  Timer? _editWindowTimer;
 
   TripEntity get trip => widget.trip;
   BlocStatus<void> get cancelStatus => widget.cancelStatus;
@@ -54,6 +56,7 @@ class _GlassmorphicTripStatusSheetState
     super.initState();
     _syncArrivedHandoff();
     _syncWaitingTicker();
+    _syncEditWindowTimer();
   }
 
   @override
@@ -61,13 +64,35 @@ class _GlassmorphicTripStatusSheetState
     super.didUpdateWidget(oldWidget);
     _syncArrivedHandoff();
     _syncWaitingTicker();
+    if (oldWidget.trip.id != trip.id) _syncEditWindowTimer();
   }
 
   @override
   void dispose() {
     _waitingTicker?.cancel();
     _arrivedHandoffTimer?.cancel();
+    _editWindowTimer?.cancel();
     super.dispose();
+  }
+
+  /// Rebuilds once, exactly when the customer edit window closes.
+  ///
+  /// `TripEntity.canEdit*` are computed against the wall clock, but nothing on
+  /// this sheet rebuilds on a timer — so an open sheet would keep showing live
+  /// pencils past the deadline until the next poll landed, and tapping one would
+  /// bounce off the server. One [Timer] is enough: the window only ever closes.
+  void _syncEditWindowTimer() {
+    _editWindowTimer?.cancel();
+    _editWindowTimer = null;
+
+    final remaining = trip.customerEditDeadlineUtc.difference(
+      DateTime.now().toUtc(),
+    );
+    if (remaining.isNegative) return;
+
+    _editWindowTimer = Timer(remaining, () {
+      if (mounted) setState(() {});
+    });
   }
 
   /// Holds the completed stepper on screen for a beat when the driver arrives,

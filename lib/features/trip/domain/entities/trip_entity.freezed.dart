@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TripEntity {
 
- String get id; String get referenceCode; TripStatus get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; DateTime? get arrivedAtUtc; List<TripStopEntity> get stops; String? get vehicleTypeName; double? get driverLat; double? get driverLng; DateTime? get etaToPickup; TripCancellationEntity? get cancellation; TripRefundEntity? get refund; TripCompensationClaimEntity? get compensationClaim; TripWaitingSessionEntity? get activeWaitingSession; String? get encodedOverviewPolyline; List<TripRouteSegmentEntity> get routeSegments; String? get passengerNote; int? get passengerRating; String? get ratingComment; String? get acceptedByAdminId; String? get acceptedAdminName; DateTime? get acceptedAtUtc; bool get isScheduled; DateTime? get dispatchWindowOpensAtUtc; bool get canMarkEnRoute; String get attentionState; int get passengerCount; int get bagCount; bool get noDriverDecisionRequired;
+ String get id; String get referenceCode; TripStatus get status; double get quotedFare; String get currencyCode; DateTime get createdAtUtc; DateTime? get scheduledAtUtc; DateTime? get arrivedAtUtc; List<TripStopEntity> get stops; String? get vehicleTypeName; double? get driverLat; double? get driverLng; DateTime? get etaToPickup; TripCancellationEntity? get cancellation; TripRefundEntity? get refund; TripRefundIssueEntity? get refundIssue; TripCompensationClaimEntity? get compensationClaim; TripWaitingSessionEntity? get activeWaitingSession; String? get encodedOverviewPolyline; List<TripRouteSegmentEntity> get routeSegments; String? get passengerNote; int? get passengerRating; String? get ratingComment; String? get acceptedByAdminId; String? get acceptedAdminName; DateTime? get acceptedAtUtc; bool get isScheduled; DateTime? get dispatchWindowOpensAtUtc; bool get canMarkEnRoute; String get attentionState; int get passengerCount; int get bagCount; bool get noDriverDecisionRequired;
 /// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TripEntityCopyWith<TripEntity> get copyWith => _$TripEntityCopyWithImpl<TripEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&(identical(other.arrivedAtUtc, arrivedAtUtc) || other.arrivedAtUtc == arrivedAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.refund, refund) || other.refund == refund)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other.routeSegments, routeSegments)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote)&&(identical(other.passengerRating, passengerRating) || other.passengerRating == passengerRating)&&(identical(other.ratingComment, ratingComment) || other.ratingComment == ratingComment)&&(identical(other.acceptedByAdminId, acceptedByAdminId) || other.acceptedByAdminId == acceptedByAdminId)&&(identical(other.acceptedAdminName, acceptedAdminName) || other.acceptedAdminName == acceptedAdminName)&&(identical(other.acceptedAtUtc, acceptedAtUtc) || other.acceptedAtUtc == acceptedAtUtc)&&(identical(other.isScheduled, isScheduled) || other.isScheduled == isScheduled)&&(identical(other.dispatchWindowOpensAtUtc, dispatchWindowOpensAtUtc) || other.dispatchWindowOpensAtUtc == dispatchWindowOpensAtUtc)&&(identical(other.canMarkEnRoute, canMarkEnRoute) || other.canMarkEnRoute == canMarkEnRoute)&&(identical(other.attentionState, attentionState) || other.attentionState == attentionState)&&(identical(other.passengerCount, passengerCount) || other.passengerCount == passengerCount)&&(identical(other.bagCount, bagCount) || other.bagCount == bagCount)&&(identical(other.noDriverDecisionRequired, noDriverDecisionRequired) || other.noDriverDecisionRequired == noDriverDecisionRequired));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&(identical(other.arrivedAtUtc, arrivedAtUtc) || other.arrivedAtUtc == arrivedAtUtc)&&const DeepCollectionEquality().equals(other.stops, stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.refund, refund) || other.refund == refund)&&(identical(other.refundIssue, refundIssue) || other.refundIssue == refundIssue)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other.routeSegments, routeSegments)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote)&&(identical(other.passengerRating, passengerRating) || other.passengerRating == passengerRating)&&(identical(other.ratingComment, ratingComment) || other.ratingComment == ratingComment)&&(identical(other.acceptedByAdminId, acceptedByAdminId) || other.acceptedByAdminId == acceptedByAdminId)&&(identical(other.acceptedAdminName, acceptedAdminName) || other.acceptedAdminName == acceptedAdminName)&&(identical(other.acceptedAtUtc, acceptedAtUtc) || other.acceptedAtUtc == acceptedAtUtc)&&(identical(other.isScheduled, isScheduled) || other.isScheduled == isScheduled)&&(identical(other.dispatchWindowOpensAtUtc, dispatchWindowOpensAtUtc) || other.dispatchWindowOpensAtUtc == dispatchWindowOpensAtUtc)&&(identical(other.canMarkEnRoute, canMarkEnRoute) || other.canMarkEnRoute == canMarkEnRoute)&&(identical(other.attentionState, attentionState) || other.attentionState == attentionState)&&(identical(other.passengerCount, passengerCount) || other.passengerCount == passengerCount)&&(identical(other.bagCount, bagCount) || other.bagCount == bagCount)&&(identical(other.noDriverDecisionRequired, noDriverDecisionRequired) || other.noDriverDecisionRequired == noDriverDecisionRequired));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,arrivedAtUtc,const DeepCollectionEquality().hash(stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,refund,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(routeSegments),passengerNote,passengerRating,ratingComment,acceptedByAdminId,acceptedAdminName,acceptedAtUtc,isScheduled,dispatchWindowOpensAtUtc,canMarkEnRoute,attentionState,passengerCount,bagCount,noDriverDecisionRequired]);
+int get hashCode => Object.hashAll([runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,arrivedAtUtc,const DeepCollectionEquality().hash(stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,refund,refundIssue,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(routeSegments),passengerNote,passengerRating,ratingComment,acceptedByAdminId,acceptedAdminName,acceptedAtUtc,isScheduled,dispatchWindowOpensAtUtc,canMarkEnRoute,attentionState,passengerCount,bagCount,noDriverDecisionRequired]);
 
 @override
 String toString() {
-  return 'TripEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, arrivedAtUtc: $arrivedAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, refund: $refund, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments, passengerNote: $passengerNote, passengerRating: $passengerRating, ratingComment: $ratingComment, acceptedByAdminId: $acceptedByAdminId, acceptedAdminName: $acceptedAdminName, acceptedAtUtc: $acceptedAtUtc, isScheduled: $isScheduled, dispatchWindowOpensAtUtc: $dispatchWindowOpensAtUtc, canMarkEnRoute: $canMarkEnRoute, attentionState: $attentionState, passengerCount: $passengerCount, bagCount: $bagCount, noDriverDecisionRequired: $noDriverDecisionRequired)';
+  return 'TripEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, arrivedAtUtc: $arrivedAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, refund: $refund, refundIssue: $refundIssue, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments, passengerNote: $passengerNote, passengerRating: $passengerRating, ratingComment: $ratingComment, acceptedByAdminId: $acceptedByAdminId, acceptedAdminName: $acceptedAdminName, acceptedAtUtc: $acceptedAtUtc, isScheduled: $isScheduled, dispatchWindowOpensAtUtc: $dispatchWindowOpensAtUtc, canMarkEnRoute: $canMarkEnRoute, attentionState: $attentionState, passengerCount: $passengerCount, bagCount: $bagCount, noDriverDecisionRequired: $noDriverDecisionRequired)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $TripEntityCopyWith<$Res>  {
   factory $TripEntityCopyWith(TripEntity value, $Res Function(TripEntity) _then) = _$TripEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, DateTime? arrivedAtUtc, List<TripStopEntity> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationEntity? cancellation, TripRefundEntity? refund, TripCompensationClaimEntity? compensationClaim, TripWaitingSessionEntity? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentEntity> routeSegments, String? passengerNote, int? passengerRating, String? ratingComment, String? acceptedByAdminId, String? acceptedAdminName, DateTime? acceptedAtUtc, bool isScheduled, DateTime? dispatchWindowOpensAtUtc, bool canMarkEnRoute, String attentionState, int passengerCount, int bagCount, bool noDriverDecisionRequired
+ String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, DateTime? arrivedAtUtc, List<TripStopEntity> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationEntity? cancellation, TripRefundEntity? refund, TripRefundIssueEntity? refundIssue, TripCompensationClaimEntity? compensationClaim, TripWaitingSessionEntity? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentEntity> routeSegments, String? passengerNote, int? passengerRating, String? ratingComment, String? acceptedByAdminId, String? acceptedAdminName, DateTime? acceptedAtUtc, bool isScheduled, DateTime? dispatchWindowOpensAtUtc, bool canMarkEnRoute, String attentionState, int passengerCount, int bagCount, bool noDriverDecisionRequired
 });
 
 
-$TripCancellationEntityCopyWith<$Res>? get cancellation;$TripRefundEntityCopyWith<$Res>? get refund;$TripCompensationClaimEntityCopyWith<$Res>? get compensationClaim;$TripWaitingSessionEntityCopyWith<$Res>? get activeWaitingSession;
+$TripCancellationEntityCopyWith<$Res>? get cancellation;$TripRefundEntityCopyWith<$Res>? get refund;$TripRefundIssueEntityCopyWith<$Res>? get refundIssue;$TripCompensationClaimEntityCopyWith<$Res>? get compensationClaim;$TripWaitingSessionEntityCopyWith<$Res>? get activeWaitingSession;
 
 }
 /// @nodoc
@@ -62,7 +62,7 @@ class _$TripEntityCopyWithImpl<$Res>
 
 /// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? arrivedAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? refund = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,Object? passengerNote = freezed,Object? passengerRating = freezed,Object? ratingComment = freezed,Object? acceptedByAdminId = freezed,Object? acceptedAdminName = freezed,Object? acceptedAtUtc = freezed,Object? isScheduled = null,Object? dispatchWindowOpensAtUtc = freezed,Object? canMarkEnRoute = null,Object? attentionState = null,Object? passengerCount = null,Object? bagCount = null,Object? noDriverDecisionRequired = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? arrivedAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? refund = freezed,Object? refundIssue = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,Object? passengerNote = freezed,Object? passengerRating = freezed,Object? ratingComment = freezed,Object? acceptedByAdminId = freezed,Object? acceptedAdminName = freezed,Object? acceptedAtUtc = freezed,Object? isScheduled = null,Object? dispatchWindowOpensAtUtc = freezed,Object? canMarkEnRoute = null,Object? attentionState = null,Object? passengerCount = null,Object? bagCount = null,Object? noDriverDecisionRequired = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -79,7 +79,8 @@ as double?,driverLng: freezed == driverLng ? _self.driverLng : driverLng // igno
 as double?,etaToPickup: freezed == etaToPickup ? _self.etaToPickup : etaToPickup // ignore: cast_nullable_to_non_nullable
 as DateTime?,cancellation: freezed == cancellation ? _self.cancellation : cancellation // ignore: cast_nullable_to_non_nullable
 as TripCancellationEntity?,refund: freezed == refund ? _self.refund : refund // ignore: cast_nullable_to_non_nullable
-as TripRefundEntity?,compensationClaim: freezed == compensationClaim ? _self.compensationClaim : compensationClaim // ignore: cast_nullable_to_non_nullable
+as TripRefundEntity?,refundIssue: freezed == refundIssue ? _self.refundIssue : refundIssue // ignore: cast_nullable_to_non_nullable
+as TripRefundIssueEntity?,compensationClaim: freezed == compensationClaim ? _self.compensationClaim : compensationClaim // ignore: cast_nullable_to_non_nullable
 as TripCompensationClaimEntity?,activeWaitingSession: freezed == activeWaitingSession ? _self.activeWaitingSession : activeWaitingSession // ignore: cast_nullable_to_non_nullable
 as TripWaitingSessionEntity?,encodedOverviewPolyline: freezed == encodedOverviewPolyline ? _self.encodedOverviewPolyline : encodedOverviewPolyline // ignore: cast_nullable_to_non_nullable
 as String?,routeSegments: null == routeSegments ? _self.routeSegments : routeSegments // ignore: cast_nullable_to_non_nullable
@@ -122,6 +123,18 @@ $TripRefundEntityCopyWith<$Res>? get refund {
 
   return $TripRefundEntityCopyWith<$Res>(_self.refund!, (value) {
     return _then(_self.copyWith(refund: value));
+  });
+}/// Create a copy of TripEntity
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TripRefundIssueEntityCopyWith<$Res>? get refundIssue {
+    if (_self.refundIssue == null) {
+    return null;
+  }
+
+  return $TripRefundIssueEntityCopyWith<$Res>(_self.refundIssue!, (value) {
+    return _then(_self.copyWith(refundIssue: value));
   });
 }/// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -229,10 +242,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  DateTime? arrivedAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripRefundEntity? refund,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote,  int? passengerRating,  String? ratingComment,  String? acceptedByAdminId,  String? acceptedAdminName,  DateTime? acceptedAtUtc,  bool isScheduled,  DateTime? dispatchWindowOpensAtUtc,  bool canMarkEnRoute,  String attentionState,  int passengerCount,  int bagCount,  bool noDriverDecisionRequired)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  DateTime? arrivedAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripRefundEntity? refund,  TripRefundIssueEntity? refundIssue,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote,  int? passengerRating,  String? ratingComment,  String? acceptedByAdminId,  String? acceptedAdminName,  DateTime? acceptedAtUtc,  bool isScheduled,  DateTime? dispatchWindowOpensAtUtc,  bool canMarkEnRoute,  String attentionState,  int passengerCount,  int bagCount,  bool noDriverDecisionRequired)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripEntity() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.arrivedAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.refund,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote,_that.passengerRating,_that.ratingComment,_that.acceptedByAdminId,_that.acceptedAdminName,_that.acceptedAtUtc,_that.isScheduled,_that.dispatchWindowOpensAtUtc,_that.canMarkEnRoute,_that.attentionState,_that.passengerCount,_that.bagCount,_that.noDriverDecisionRequired);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.arrivedAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.refund,_that.refundIssue,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote,_that.passengerRating,_that.ratingComment,_that.acceptedByAdminId,_that.acceptedAdminName,_that.acceptedAtUtc,_that.isScheduled,_that.dispatchWindowOpensAtUtc,_that.canMarkEnRoute,_that.attentionState,_that.passengerCount,_that.bagCount,_that.noDriverDecisionRequired);case _:
   return orElse();
 
 }
@@ -250,10 +263,10 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  DateTime? arrivedAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripRefundEntity? refund,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote,  int? passengerRating,  String? ratingComment,  String? acceptedByAdminId,  String? acceptedAdminName,  DateTime? acceptedAtUtc,  bool isScheduled,  DateTime? dispatchWindowOpensAtUtc,  bool canMarkEnRoute,  String attentionState,  int passengerCount,  int bagCount,  bool noDriverDecisionRequired)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  DateTime? arrivedAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripRefundEntity? refund,  TripRefundIssueEntity? refundIssue,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote,  int? passengerRating,  String? ratingComment,  String? acceptedByAdminId,  String? acceptedAdminName,  DateTime? acceptedAtUtc,  bool isScheduled,  DateTime? dispatchWindowOpensAtUtc,  bool canMarkEnRoute,  String attentionState,  int passengerCount,  int bagCount,  bool noDriverDecisionRequired)  $default,) {final _that = this;
 switch (_that) {
 case _TripEntity():
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.arrivedAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.refund,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote,_that.passengerRating,_that.ratingComment,_that.acceptedByAdminId,_that.acceptedAdminName,_that.acceptedAtUtc,_that.isScheduled,_that.dispatchWindowOpensAtUtc,_that.canMarkEnRoute,_that.attentionState,_that.passengerCount,_that.bagCount,_that.noDriverDecisionRequired);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.arrivedAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.refund,_that.refundIssue,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote,_that.passengerRating,_that.ratingComment,_that.acceptedByAdminId,_that.acceptedAdminName,_that.acceptedAtUtc,_that.isScheduled,_that.dispatchWindowOpensAtUtc,_that.canMarkEnRoute,_that.attentionState,_that.passengerCount,_that.bagCount,_that.noDriverDecisionRequired);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -270,10 +283,10 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  DateTime? arrivedAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripRefundEntity? refund,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote,  int? passengerRating,  String? ratingComment,  String? acceptedByAdminId,  String? acceptedAdminName,  DateTime? acceptedAtUtc,  bool isScheduled,  DateTime? dispatchWindowOpensAtUtc,  bool canMarkEnRoute,  String attentionState,  int passengerCount,  int bagCount,  bool noDriverDecisionRequired)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String referenceCode,  TripStatus status,  double quotedFare,  String currencyCode,  DateTime createdAtUtc,  DateTime? scheduledAtUtc,  DateTime? arrivedAtUtc,  List<TripStopEntity> stops,  String? vehicleTypeName,  double? driverLat,  double? driverLng,  DateTime? etaToPickup,  TripCancellationEntity? cancellation,  TripRefundEntity? refund,  TripRefundIssueEntity? refundIssue,  TripCompensationClaimEntity? compensationClaim,  TripWaitingSessionEntity? activeWaitingSession,  String? encodedOverviewPolyline,  List<TripRouteSegmentEntity> routeSegments,  String? passengerNote,  int? passengerRating,  String? ratingComment,  String? acceptedByAdminId,  String? acceptedAdminName,  DateTime? acceptedAtUtc,  bool isScheduled,  DateTime? dispatchWindowOpensAtUtc,  bool canMarkEnRoute,  String attentionState,  int passengerCount,  int bagCount,  bool noDriverDecisionRequired)?  $default,) {final _that = this;
 switch (_that) {
 case _TripEntity() when $default != null:
-return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.arrivedAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.refund,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote,_that.passengerRating,_that.ratingComment,_that.acceptedByAdminId,_that.acceptedAdminName,_that.acceptedAtUtc,_that.isScheduled,_that.dispatchWindowOpensAtUtc,_that.canMarkEnRoute,_that.attentionState,_that.passengerCount,_that.bagCount,_that.noDriverDecisionRequired);case _:
+return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that.currencyCode,_that.createdAtUtc,_that.scheduledAtUtc,_that.arrivedAtUtc,_that.stops,_that.vehicleTypeName,_that.driverLat,_that.driverLng,_that.etaToPickup,_that.cancellation,_that.refund,_that.refundIssue,_that.compensationClaim,_that.activeWaitingSession,_that.encodedOverviewPolyline,_that.routeSegments,_that.passengerNote,_that.passengerRating,_that.ratingComment,_that.acceptedByAdminId,_that.acceptedAdminName,_that.acceptedAtUtc,_that.isScheduled,_that.dispatchWindowOpensAtUtc,_that.canMarkEnRoute,_that.attentionState,_that.passengerCount,_that.bagCount,_that.noDriverDecisionRequired);case _:
   return null;
 
 }
@@ -285,7 +298,7 @@ return $default(_that.id,_that.referenceCode,_that.status,_that.quotedFare,_that
 
 
 class _TripEntity extends TripEntity {
-  const _TripEntity({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, this.arrivedAtUtc, final  List<TripStopEntity> stops = const [], this.vehicleTypeName, this.driverLat, this.driverLng, this.etaToPickup, this.cancellation, this.refund, this.compensationClaim, this.activeWaitingSession, this.encodedOverviewPolyline, final  List<TripRouteSegmentEntity> routeSegments = const [], this.passengerNote, this.passengerRating, this.ratingComment, this.acceptedByAdminId, this.acceptedAdminName, this.acceptedAtUtc, this.isScheduled = false, this.dispatchWindowOpensAtUtc, this.canMarkEnRoute = false, this.attentionState = 'Normal', this.passengerCount = 1, this.bagCount = 0, this.noDriverDecisionRequired = false}): _stops = stops,_routeSegments = routeSegments,super._();
+  const _TripEntity({required this.id, required this.referenceCode, required this.status, required this.quotedFare, required this.currencyCode, required this.createdAtUtc, this.scheduledAtUtc, this.arrivedAtUtc, final  List<TripStopEntity> stops = const [], this.vehicleTypeName, this.driverLat, this.driverLng, this.etaToPickup, this.cancellation, this.refund, this.refundIssue, this.compensationClaim, this.activeWaitingSession, this.encodedOverviewPolyline, final  List<TripRouteSegmentEntity> routeSegments = const [], this.passengerNote, this.passengerRating, this.ratingComment, this.acceptedByAdminId, this.acceptedAdminName, this.acceptedAtUtc, this.isScheduled = false, this.dispatchWindowOpensAtUtc, this.canMarkEnRoute = false, this.attentionState = 'Normal', this.passengerCount = 1, this.bagCount = 0, this.noDriverDecisionRequired = false}): _stops = stops,_routeSegments = routeSegments,super._();
   
 
 @override final  String id;
@@ -309,6 +322,7 @@ class _TripEntity extends TripEntity {
 @override final  DateTime? etaToPickup;
 @override final  TripCancellationEntity? cancellation;
 @override final  TripRefundEntity? refund;
+@override final  TripRefundIssueEntity? refundIssue;
 @override final  TripCompensationClaimEntity? compensationClaim;
 @override final  TripWaitingSessionEntity? activeWaitingSession;
 @override final  String? encodedOverviewPolyline;
@@ -343,16 +357,16 @@ _$TripEntityCopyWith<_TripEntity> get copyWith => __$TripEntityCopyWithImpl<_Tri
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&(identical(other.arrivedAtUtc, arrivedAtUtc) || other.arrivedAtUtc == arrivedAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.refund, refund) || other.refund == refund)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other._routeSegments, _routeSegments)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote)&&(identical(other.passengerRating, passengerRating) || other.passengerRating == passengerRating)&&(identical(other.ratingComment, ratingComment) || other.ratingComment == ratingComment)&&(identical(other.acceptedByAdminId, acceptedByAdminId) || other.acceptedByAdminId == acceptedByAdminId)&&(identical(other.acceptedAdminName, acceptedAdminName) || other.acceptedAdminName == acceptedAdminName)&&(identical(other.acceptedAtUtc, acceptedAtUtc) || other.acceptedAtUtc == acceptedAtUtc)&&(identical(other.isScheduled, isScheduled) || other.isScheduled == isScheduled)&&(identical(other.dispatchWindowOpensAtUtc, dispatchWindowOpensAtUtc) || other.dispatchWindowOpensAtUtc == dispatchWindowOpensAtUtc)&&(identical(other.canMarkEnRoute, canMarkEnRoute) || other.canMarkEnRoute == canMarkEnRoute)&&(identical(other.attentionState, attentionState) || other.attentionState == attentionState)&&(identical(other.passengerCount, passengerCount) || other.passengerCount == passengerCount)&&(identical(other.bagCount, bagCount) || other.bagCount == bagCount)&&(identical(other.noDriverDecisionRequired, noDriverDecisionRequired) || other.noDriverDecisionRequired == noDriverDecisionRequired));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.referenceCode, referenceCode) || other.referenceCode == referenceCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.quotedFare, quotedFare) || other.quotedFare == quotedFare)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.scheduledAtUtc, scheduledAtUtc) || other.scheduledAtUtc == scheduledAtUtc)&&(identical(other.arrivedAtUtc, arrivedAtUtc) || other.arrivedAtUtc == arrivedAtUtc)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.vehicleTypeName, vehicleTypeName) || other.vehicleTypeName == vehicleTypeName)&&(identical(other.driverLat, driverLat) || other.driverLat == driverLat)&&(identical(other.driverLng, driverLng) || other.driverLng == driverLng)&&(identical(other.etaToPickup, etaToPickup) || other.etaToPickup == etaToPickup)&&(identical(other.cancellation, cancellation) || other.cancellation == cancellation)&&(identical(other.refund, refund) || other.refund == refund)&&(identical(other.refundIssue, refundIssue) || other.refundIssue == refundIssue)&&(identical(other.compensationClaim, compensationClaim) || other.compensationClaim == compensationClaim)&&(identical(other.activeWaitingSession, activeWaitingSession) || other.activeWaitingSession == activeWaitingSession)&&(identical(other.encodedOverviewPolyline, encodedOverviewPolyline) || other.encodedOverviewPolyline == encodedOverviewPolyline)&&const DeepCollectionEquality().equals(other._routeSegments, _routeSegments)&&(identical(other.passengerNote, passengerNote) || other.passengerNote == passengerNote)&&(identical(other.passengerRating, passengerRating) || other.passengerRating == passengerRating)&&(identical(other.ratingComment, ratingComment) || other.ratingComment == ratingComment)&&(identical(other.acceptedByAdminId, acceptedByAdminId) || other.acceptedByAdminId == acceptedByAdminId)&&(identical(other.acceptedAdminName, acceptedAdminName) || other.acceptedAdminName == acceptedAdminName)&&(identical(other.acceptedAtUtc, acceptedAtUtc) || other.acceptedAtUtc == acceptedAtUtc)&&(identical(other.isScheduled, isScheduled) || other.isScheduled == isScheduled)&&(identical(other.dispatchWindowOpensAtUtc, dispatchWindowOpensAtUtc) || other.dispatchWindowOpensAtUtc == dispatchWindowOpensAtUtc)&&(identical(other.canMarkEnRoute, canMarkEnRoute) || other.canMarkEnRoute == canMarkEnRoute)&&(identical(other.attentionState, attentionState) || other.attentionState == attentionState)&&(identical(other.passengerCount, passengerCount) || other.passengerCount == passengerCount)&&(identical(other.bagCount, bagCount) || other.bagCount == bagCount)&&(identical(other.noDriverDecisionRequired, noDriverDecisionRequired) || other.noDriverDecisionRequired == noDriverDecisionRequired));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,arrivedAtUtc,const DeepCollectionEquality().hash(_stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,refund,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(_routeSegments),passengerNote,passengerRating,ratingComment,acceptedByAdminId,acceptedAdminName,acceptedAtUtc,isScheduled,dispatchWindowOpensAtUtc,canMarkEnRoute,attentionState,passengerCount,bagCount,noDriverDecisionRequired]);
+int get hashCode => Object.hashAll([runtimeType,id,referenceCode,status,quotedFare,currencyCode,createdAtUtc,scheduledAtUtc,arrivedAtUtc,const DeepCollectionEquality().hash(_stops),vehicleTypeName,driverLat,driverLng,etaToPickup,cancellation,refund,refundIssue,compensationClaim,activeWaitingSession,encodedOverviewPolyline,const DeepCollectionEquality().hash(_routeSegments),passengerNote,passengerRating,ratingComment,acceptedByAdminId,acceptedAdminName,acceptedAtUtc,isScheduled,dispatchWindowOpensAtUtc,canMarkEnRoute,attentionState,passengerCount,bagCount,noDriverDecisionRequired]);
 
 @override
 String toString() {
-  return 'TripEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, arrivedAtUtc: $arrivedAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, refund: $refund, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments, passengerNote: $passengerNote, passengerRating: $passengerRating, ratingComment: $ratingComment, acceptedByAdminId: $acceptedByAdminId, acceptedAdminName: $acceptedAdminName, acceptedAtUtc: $acceptedAtUtc, isScheduled: $isScheduled, dispatchWindowOpensAtUtc: $dispatchWindowOpensAtUtc, canMarkEnRoute: $canMarkEnRoute, attentionState: $attentionState, passengerCount: $passengerCount, bagCount: $bagCount, noDriverDecisionRequired: $noDriverDecisionRequired)';
+  return 'TripEntity(id: $id, referenceCode: $referenceCode, status: $status, quotedFare: $quotedFare, currencyCode: $currencyCode, createdAtUtc: $createdAtUtc, scheduledAtUtc: $scheduledAtUtc, arrivedAtUtc: $arrivedAtUtc, stops: $stops, vehicleTypeName: $vehicleTypeName, driverLat: $driverLat, driverLng: $driverLng, etaToPickup: $etaToPickup, cancellation: $cancellation, refund: $refund, refundIssue: $refundIssue, compensationClaim: $compensationClaim, activeWaitingSession: $activeWaitingSession, encodedOverviewPolyline: $encodedOverviewPolyline, routeSegments: $routeSegments, passengerNote: $passengerNote, passengerRating: $passengerRating, ratingComment: $ratingComment, acceptedByAdminId: $acceptedByAdminId, acceptedAdminName: $acceptedAdminName, acceptedAtUtc: $acceptedAtUtc, isScheduled: $isScheduled, dispatchWindowOpensAtUtc: $dispatchWindowOpensAtUtc, canMarkEnRoute: $canMarkEnRoute, attentionState: $attentionState, passengerCount: $passengerCount, bagCount: $bagCount, noDriverDecisionRequired: $noDriverDecisionRequired)';
 }
 
 
@@ -363,11 +377,11 @@ abstract mixin class _$TripEntityCopyWith<$Res> implements $TripEntityCopyWith<$
   factory _$TripEntityCopyWith(_TripEntity value, $Res Function(_TripEntity) _then) = __$TripEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, DateTime? arrivedAtUtc, List<TripStopEntity> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationEntity? cancellation, TripRefundEntity? refund, TripCompensationClaimEntity? compensationClaim, TripWaitingSessionEntity? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentEntity> routeSegments, String? passengerNote, int? passengerRating, String? ratingComment, String? acceptedByAdminId, String? acceptedAdminName, DateTime? acceptedAtUtc, bool isScheduled, DateTime? dispatchWindowOpensAtUtc, bool canMarkEnRoute, String attentionState, int passengerCount, int bagCount, bool noDriverDecisionRequired
+ String id, String referenceCode, TripStatus status, double quotedFare, String currencyCode, DateTime createdAtUtc, DateTime? scheduledAtUtc, DateTime? arrivedAtUtc, List<TripStopEntity> stops, String? vehicleTypeName, double? driverLat, double? driverLng, DateTime? etaToPickup, TripCancellationEntity? cancellation, TripRefundEntity? refund, TripRefundIssueEntity? refundIssue, TripCompensationClaimEntity? compensationClaim, TripWaitingSessionEntity? activeWaitingSession, String? encodedOverviewPolyline, List<TripRouteSegmentEntity> routeSegments, String? passengerNote, int? passengerRating, String? ratingComment, String? acceptedByAdminId, String? acceptedAdminName, DateTime? acceptedAtUtc, bool isScheduled, DateTime? dispatchWindowOpensAtUtc, bool canMarkEnRoute, String attentionState, int passengerCount, int bagCount, bool noDriverDecisionRequired
 });
 
 
-@override $TripCancellationEntityCopyWith<$Res>? get cancellation;@override $TripRefundEntityCopyWith<$Res>? get refund;@override $TripCompensationClaimEntityCopyWith<$Res>? get compensationClaim;@override $TripWaitingSessionEntityCopyWith<$Res>? get activeWaitingSession;
+@override $TripCancellationEntityCopyWith<$Res>? get cancellation;@override $TripRefundEntityCopyWith<$Res>? get refund;@override $TripRefundIssueEntityCopyWith<$Res>? get refundIssue;@override $TripCompensationClaimEntityCopyWith<$Res>? get compensationClaim;@override $TripWaitingSessionEntityCopyWith<$Res>? get activeWaitingSession;
 
 }
 /// @nodoc
@@ -380,7 +394,7 @@ class __$TripEntityCopyWithImpl<$Res>
 
 /// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? arrivedAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? refund = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,Object? passengerNote = freezed,Object? passengerRating = freezed,Object? ratingComment = freezed,Object? acceptedByAdminId = freezed,Object? acceptedAdminName = freezed,Object? acceptedAtUtc = freezed,Object? isScheduled = null,Object? dispatchWindowOpensAtUtc = freezed,Object? canMarkEnRoute = null,Object? attentionState = null,Object? passengerCount = null,Object? bagCount = null,Object? noDriverDecisionRequired = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? referenceCode = null,Object? status = null,Object? quotedFare = null,Object? currencyCode = null,Object? createdAtUtc = null,Object? scheduledAtUtc = freezed,Object? arrivedAtUtc = freezed,Object? stops = null,Object? vehicleTypeName = freezed,Object? driverLat = freezed,Object? driverLng = freezed,Object? etaToPickup = freezed,Object? cancellation = freezed,Object? refund = freezed,Object? refundIssue = freezed,Object? compensationClaim = freezed,Object? activeWaitingSession = freezed,Object? encodedOverviewPolyline = freezed,Object? routeSegments = null,Object? passengerNote = freezed,Object? passengerRating = freezed,Object? ratingComment = freezed,Object? acceptedByAdminId = freezed,Object? acceptedAdminName = freezed,Object? acceptedAtUtc = freezed,Object? isScheduled = null,Object? dispatchWindowOpensAtUtc = freezed,Object? canMarkEnRoute = null,Object? attentionState = null,Object? passengerCount = null,Object? bagCount = null,Object? noDriverDecisionRequired = null,}) {
   return _then(_TripEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,referenceCode: null == referenceCode ? _self.referenceCode : referenceCode // ignore: cast_nullable_to_non_nullable
@@ -397,7 +411,8 @@ as double?,driverLng: freezed == driverLng ? _self.driverLng : driverLng // igno
 as double?,etaToPickup: freezed == etaToPickup ? _self.etaToPickup : etaToPickup // ignore: cast_nullable_to_non_nullable
 as DateTime?,cancellation: freezed == cancellation ? _self.cancellation : cancellation // ignore: cast_nullable_to_non_nullable
 as TripCancellationEntity?,refund: freezed == refund ? _self.refund : refund // ignore: cast_nullable_to_non_nullable
-as TripRefundEntity?,compensationClaim: freezed == compensationClaim ? _self.compensationClaim : compensationClaim // ignore: cast_nullable_to_non_nullable
+as TripRefundEntity?,refundIssue: freezed == refundIssue ? _self.refundIssue : refundIssue // ignore: cast_nullable_to_non_nullable
+as TripRefundIssueEntity?,compensationClaim: freezed == compensationClaim ? _self.compensationClaim : compensationClaim // ignore: cast_nullable_to_non_nullable
 as TripCompensationClaimEntity?,activeWaitingSession: freezed == activeWaitingSession ? _self.activeWaitingSession : activeWaitingSession // ignore: cast_nullable_to_non_nullable
 as TripWaitingSessionEntity?,encodedOverviewPolyline: freezed == encodedOverviewPolyline ? _self.encodedOverviewPolyline : encodedOverviewPolyline // ignore: cast_nullable_to_non_nullable
 as String?,routeSegments: null == routeSegments ? _self._routeSegments : routeSegments // ignore: cast_nullable_to_non_nullable
@@ -441,6 +456,18 @@ $TripRefundEntityCopyWith<$Res>? get refund {
 
   return $TripRefundEntityCopyWith<$Res>(_self.refund!, (value) {
     return _then(_self.copyWith(refund: value));
+  });
+}/// Create a copy of TripEntity
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TripRefundIssueEntityCopyWith<$Res>? get refundIssue {
+    if (_self.refundIssue == null) {
+    return null;
+  }
+
+  return $TripRefundIssueEntityCopyWith<$Res>(_self.refundIssue!, (value) {
+    return _then(_self.copyWith(refundIssue: value));
   });
 }/// Create a copy of TripEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -1550,6 +1577,278 @@ status: null == status ? _self.status : status // ignore: cast_nullable_to_non_n
 as TripRefundStatus,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
 as String,completedAtUtc: freezed == completedAtUtc ? _self.completedAtUtc : completedAtUtc // ignore: cast_nullable_to_non_nullable
+as DateTime?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$TripRefundIssueEntity {
+
+ String get id; String get requestType; String get status; bool get isOpen; DateTime get createdAtUtc; DateTime? get reviewedAtUtc;
+/// Create a copy of TripRefundIssueEntity
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TripRefundIssueEntityCopyWith<TripRefundIssueEntity> get copyWith => _$TripRefundIssueEntityCopyWithImpl<TripRefundIssueEntity>(this as TripRefundIssueEntity, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripRefundIssueEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.requestType, requestType) || other.requestType == requestType)&&(identical(other.status, status) || other.status == status)&&(identical(other.isOpen, isOpen) || other.isOpen == isOpen)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.reviewedAtUtc, reviewedAtUtc) || other.reviewedAtUtc == reviewedAtUtc));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,requestType,status,isOpen,createdAtUtc,reviewedAtUtc);
+
+@override
+String toString() {
+  return 'TripRefundIssueEntity(id: $id, requestType: $requestType, status: $status, isOpen: $isOpen, createdAtUtc: $createdAtUtc, reviewedAtUtc: $reviewedAtUtc)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TripRefundIssueEntityCopyWith<$Res>  {
+  factory $TripRefundIssueEntityCopyWith(TripRefundIssueEntity value, $Res Function(TripRefundIssueEntity) _then) = _$TripRefundIssueEntityCopyWithImpl;
+@useResult
+$Res call({
+ String id, String requestType, String status, bool isOpen, DateTime createdAtUtc, DateTime? reviewedAtUtc
+});
+
+
+
+
+}
+/// @nodoc
+class _$TripRefundIssueEntityCopyWithImpl<$Res>
+    implements $TripRefundIssueEntityCopyWith<$Res> {
+  _$TripRefundIssueEntityCopyWithImpl(this._self, this._then);
+
+  final TripRefundIssueEntity _self;
+  final $Res Function(TripRefundIssueEntity) _then;
+
+/// Create a copy of TripRefundIssueEntity
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? requestType = null,Object? status = null,Object? isOpen = null,Object? createdAtUtc = null,Object? reviewedAtUtc = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,requestType: null == requestType ? _self.requestType : requestType // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,isOpen: null == isOpen ? _self.isOpen : isOpen // ignore: cast_nullable_to_non_nullable
+as bool,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
+as DateTime,reviewedAtUtc: freezed == reviewedAtUtc ? _self.reviewedAtUtc : reviewedAtUtc // ignore: cast_nullable_to_non_nullable
+as DateTime?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [TripRefundIssueEntity].
+extension TripRefundIssueEntityPatterns on TripRefundIssueEntity {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TripRefundIssueEntity value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TripRefundIssueEntity() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TripRefundIssueEntity value)  $default,){
+final _that = this;
+switch (_that) {
+case _TripRefundIssueEntity():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TripRefundIssueEntity value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TripRefundIssueEntity() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String requestType,  String status,  bool isOpen,  DateTime createdAtUtc,  DateTime? reviewedAtUtc)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TripRefundIssueEntity() when $default != null:
+return $default(_that.id,_that.requestType,_that.status,_that.isOpen,_that.createdAtUtc,_that.reviewedAtUtc);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String requestType,  String status,  bool isOpen,  DateTime createdAtUtc,  DateTime? reviewedAtUtc)  $default,) {final _that = this;
+switch (_that) {
+case _TripRefundIssueEntity():
+return $default(_that.id,_that.requestType,_that.status,_that.isOpen,_that.createdAtUtc,_that.reviewedAtUtc);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String requestType,  String status,  bool isOpen,  DateTime createdAtUtc,  DateTime? reviewedAtUtc)?  $default,) {final _that = this;
+switch (_that) {
+case _TripRefundIssueEntity() when $default != null:
+return $default(_that.id,_that.requestType,_that.status,_that.isOpen,_that.createdAtUtc,_that.reviewedAtUtc);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _TripRefundIssueEntity implements TripRefundIssueEntity {
+  const _TripRefundIssueEntity({required this.id, required this.requestType, required this.status, required this.isOpen, required this.createdAtUtc, this.reviewedAtUtc});
+  
+
+@override final  String id;
+@override final  String requestType;
+@override final  String status;
+@override final  bool isOpen;
+@override final  DateTime createdAtUtc;
+@override final  DateTime? reviewedAtUtc;
+
+/// Create a copy of TripRefundIssueEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TripRefundIssueEntityCopyWith<_TripRefundIssueEntity> get copyWith => __$TripRefundIssueEntityCopyWithImpl<_TripRefundIssueEntity>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripRefundIssueEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.requestType, requestType) || other.requestType == requestType)&&(identical(other.status, status) || other.status == status)&&(identical(other.isOpen, isOpen) || other.isOpen == isOpen)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc)&&(identical(other.reviewedAtUtc, reviewedAtUtc) || other.reviewedAtUtc == reviewedAtUtc));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,requestType,status,isOpen,createdAtUtc,reviewedAtUtc);
+
+@override
+String toString() {
+  return 'TripRefundIssueEntity(id: $id, requestType: $requestType, status: $status, isOpen: $isOpen, createdAtUtc: $createdAtUtc, reviewedAtUtc: $reviewedAtUtc)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$TripRefundIssueEntityCopyWith<$Res> implements $TripRefundIssueEntityCopyWith<$Res> {
+  factory _$TripRefundIssueEntityCopyWith(_TripRefundIssueEntity value, $Res Function(_TripRefundIssueEntity) _then) = __$TripRefundIssueEntityCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String requestType, String status, bool isOpen, DateTime createdAtUtc, DateTime? reviewedAtUtc
+});
+
+
+
+
+}
+/// @nodoc
+class __$TripRefundIssueEntityCopyWithImpl<$Res>
+    implements _$TripRefundIssueEntityCopyWith<$Res> {
+  __$TripRefundIssueEntityCopyWithImpl(this._self, this._then);
+
+  final _TripRefundIssueEntity _self;
+  final $Res Function(_TripRefundIssueEntity) _then;
+
+/// Create a copy of TripRefundIssueEntity
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? requestType = null,Object? status = null,Object? isOpen = null,Object? createdAtUtc = null,Object? reviewedAtUtc = freezed,}) {
+  return _then(_TripRefundIssueEntity(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,requestType: null == requestType ? _self.requestType : requestType // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,isOpen: null == isOpen ? _self.isOpen : isOpen // ignore: cast_nullable_to_non_nullable
+as bool,createdAtUtc: null == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
+as DateTime,reviewedAtUtc: freezed == reviewedAtUtc ? _self.reviewedAtUtc : reviewedAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }

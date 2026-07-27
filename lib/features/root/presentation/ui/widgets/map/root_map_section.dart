@@ -37,9 +37,12 @@ class _RootMapSectionState extends State<RootMapSection>
   bool _isAnimating = false;
   late final AnimationController _flightController;
   CameraPosition? _lastCameraPosition;
-  final Map<String, BitmapDescriptor> _customMarkers = {};
-  final Map<String, BitmapDescriptor> _stopMarkers = {};
-  String? _lastEtaText;
+  // Route endpoint icons, built once: an orange dot-ring for the pickup, an
+  // orange pin for the destination. Intermediate stops get muted numbered
+  // circles, cached by stop number.
+  BitmapDescriptor? _pickupIcon;
+  BitmapDescriptor? _destinationIcon;
+  final Map<int, BitmapDescriptor> _numberedStopIcons = {};
 
   @override
   void initState() {
@@ -230,40 +233,20 @@ class _RootMapSectionState extends State<RootMapSection>
     }
   }
 
+  /// Builds the two endpoint icons once per mount. They never change, so there
+  /// is nothing to invalidate as the route is edited.
   Future<void> _initStaticMarkers() async {
-    final aMarker = await MapMarkerGenerator.createCustomMarker(
-      text: 'A',
-      color: Colors.orange,
-      size: 45,
+    final pickup = await MapMarkerGenerator.createDotRingMarker(
+      color: AppColors.tripOrange,
     );
-    final bMarker = await MapMarkerGenerator.createCustomMarker(
-      text: 'B',
-      color: Colors.blue,
-      size: 45,
+    final destination = await MapMarkerGenerator.createPinMarker(
+      color: AppColors.tripOrange,
     );
 
     if (mounted) {
       setState(() {
-        _customMarkers['A'] = aMarker;
-        _customMarkers['B'] = bMarker;
-      });
-    }
-  }
-
-  Future<void> _updateEtaMarker(String etaText) async {
-    if (_lastEtaText == etaText) return;
-
-    final etaMarker = await MapMarkerGenerator.createCustomMarker(
-      text: etaText,
-      color: Colors.orange,
-      size: 55, // Balanced for ETA
-      isEta: true,
-    );
-
-    if (mounted) {
-      setState(() {
-        _customMarkers['ETA'] = etaMarker;
-        _lastEtaText = etaText;
+        _pickupIcon = pickup;
+        _destinationIcon = destination;
       });
     }
   }
@@ -300,42 +283,22 @@ class _RootMapSectionState extends State<RootMapSection>
     );
   }
 
-  String _cleanLabel(String label) {
-    final cleaned = label.replaceAll('(', '').replaceAll(')', '').trim();
-    // The backend sends raw route labels "Pick"/"Dest"; surface them as
-    // localized "From"/"To". Intermediate "Stop N" labels are left as-is.
-    if (cleaned == 'Pick') return AppStrings.mapMarkerFrom;
-    if (cleaned == 'Dest') return AppStrings.mapMarkerTo;
-    return cleaned;
-  }
-
-  LatLng? _calculateMidpoint(List<LatLng> points) {
-    if (points.isEmpty) return null;
-    return points[points.length ~/ 2];
-  }
-
+  /// Builds a numbered circle per intermediate stop. Cached by stop number, so a
+  /// route edit that keeps the same number of stops repaints nothing.
   Future<void> _generateStopMarkers(OrderTripRouteEntity route) async {
-    final Set<String> labels = {};
-    for (final leg in route.legs) {
-      final start = _cleanLabel(leg.startLabel);
-      final end = _cleanLabel(leg.endLabel);
-      if (start.isNotEmpty) labels.add(start);
-      if (end.isNotEmpty) labels.add(end);
-    }
+    // Legs = stops - 1, so intermediate stops are legs 1..n-1's start points.
+    final intermediateCount = route.legs.length - 1;
 
-    for (final label in labels) {
-      if (_stopMarkers.containsKey(label)) continue;
+    for (int number = 1; number <= intermediateCount; number++) {
+      if (_numberedStopIcons.containsKey(number)) continue;
 
-      final isStart = label == _cleanLabel(route.legs.first.startLabel);
-      final marker = await MapMarkerGenerator.createLabelMarker(
-        text: label,
-        color: isStart ? Colors.orange : Colors.blue,
+      final marker = await MapMarkerGenerator.createNumberedStopMarker(
+        number: number,
+        color: AppColors.secondaryLight,
       );
 
       if (mounted) {
-        setState(() {
-          _stopMarkers[label] = marker;
-        });
+        setState(() => _numberedStopIcons[number] = marker);
       }
     }
   }
@@ -356,16 +319,14 @@ class _RootMapSectionState extends State<RootMapSection>
         orderState.stops.list.whereType<OrderLocationEntity>().toList();
 
     for (int i = 0; i < legs.length; i++) {
-      final leg = legs[i];
-
+      // Pickup: solid dot-in-ring, the "you start here" shape.
       if (i == 0 && validStops.isNotEmpty) {
-        final label = _cleanLabel(leg.startLabel);
         markers.add(
           Marker(
             markerId: const MarkerId('trip-stop-start'),
             position: LatLng(validStops[0].latitude, validStops[0].longitude),
             icon:
-                _stopMarkers[label] ??
+                _pickupIcon ??
                 BitmapDescriptor.defaultMarkerWithHue(
                   BitmapDescriptor.hueOrange,
                 ),
@@ -375,7 +336,6 @@ class _RootMapSectionState extends State<RootMapSection>
 
       if (validStops.length > i + 1) {
         final isLast = i == legs.length - 1;
-        final label = _cleanLabel(leg.endLabel);
         markers.add(
           Marker(
             markerId: MarkerId('trip-stop-${isLast ? "end" : i + 1}'),
@@ -383,33 +343,17 @@ class _RootMapSectionState extends State<RootMapSection>
               validStops[i + 1].latitude,
               validStops[i + 1].longitude,
             ),
+            // Destination: a pin, anchored at its tip so it points at the
+            // coordinate rather than hovering centred over it. Intermediate
+            // stops: a muted numbered circle.
             icon:
-                _stopMarkers[label] ??
-                BitmapDescriptor.defaultMarkerWithHue(
-                  isLast ? BitmapDescriptor.hueBlue : BitmapDescriptor.hueOrange,
-                ),
-          ),
-        );
-      }
-    }
-
-    final points = route.legs.expand((l) => l.points).map((p) => LatLng(p.latitude, p.longitude)).toList();
-    final midpoint = _calculateMidpoint(points);
-    final etaText = route.durationText;
-
-    if (etaText.isNotEmpty) {
-      _updateEtaMarker(etaText);
-      if (midpoint != null) {
-        markers.add(
-          Marker(
-            markerId: const MarkerId('trip-eta'),
-            position: midpoint,
-            icon:
-                _customMarkers['ETA'] ??
+                (isLast ? _destinationIcon : _numberedStopIcons[i + 1]) ??
                 BitmapDescriptor.defaultMarkerWithHue(
                   BitmapDescriptor.hueOrange,
                 ),
-            anchor: const Offset(0.5, 0.5),
+            anchor: isLast && _destinationIcon != null
+                ? const Offset(0.5, 1)
+                : const Offset(0.5, 0.5),
           ),
         );
       }

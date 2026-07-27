@@ -24,6 +24,7 @@ extension TripModelMapper on TripModel {
     etaToPickup: etaToPickup,
     cancellation: cancellation?.toEntity,
     refund: refund?.toEntity,
+    refundIssue: refundIssue?.toEntity,
     compensationClaim: compensationClaim?.toEntity,
     activeWaitingSession: activeWaitingSession?.toEntity,
     encodedOverviewPolyline: encodedOverviewPolyline,
@@ -99,6 +100,17 @@ extension TripRefundModelMapper on TripRefundModel {
     amount: amount,
     currencyCode: currencyCode,
     completedAtUtc: completedAtUtc,
+  );
+}
+
+extension TripRefundIssueModelMapper on TripRefundIssueModel {
+  TripRefundIssueEntity get toEntity => TripRefundIssueEntity(
+    id: id,
+    requestType: requestType,
+    status: status,
+    isOpen: isOpen,
+    createdAtUtc: createdAtUtc,
+    reviewedAtUtc: reviewedAtUtc,
   );
 }
 

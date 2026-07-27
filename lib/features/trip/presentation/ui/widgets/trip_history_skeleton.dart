@@ -1,8 +1,8 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
 /// Loading placeholder for [TripHistoryBody], shown while `historyStatus` is
-/// `loading`. Mirrors `TripSummaryCard`'s layout (title+chip row, date line,
-/// fare row) so the swap to real data doesn't jump.
+/// `loading`. Mirrors `TripCard`'s layout (title+chip row, route block, divider,
+/// date/fare row) so the swap to real data doesn't jump.
 class TripHistorySkeletonList extends StatelessWidget {
   const TripHistorySkeletonList({super.key});
 
@@ -42,13 +42,29 @@ class _TripHistorySkeletonCard extends StatelessWidget {
                 AppShimmer.box(width: 64, height: 20, borderRadius: 20),
               ],
             ),
-            AppSpacing.sm.verticalSpace,
-            AppShimmer.box(width: 120, height: 12),
+            AppSpacing.md.verticalSpace,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppShimmer.box(width: 9, height: 42, borderRadius: 6),
+                AppSpacing.md.horizontalSpace,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppShimmer.box(width: 180, height: 14),
+                      AppSpacing.md.verticalSpace,
+                      AppShimmer.box(width: 140, height: 14),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             AppSpacing.md.verticalSpace,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppShimmer.box(width: 60, height: 14),
+                AppShimmer.box(width: 90, height: 12),
                 AppShimmer.box(width: 70, height: 16),
               ],
             ),

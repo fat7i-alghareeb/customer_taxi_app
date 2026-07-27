@@ -147,6 +147,7 @@ class TripEditableDetails extends StatelessWidget {
           if (trip.vehicleTypeName case final vehicle? when vehicle.isNotEmpty)
             TripInfoRowWidget(
               icon: FontAwesomeIcons.carSide,
+              image: Assets.images.tripCarImage,
               label: AppStrings.tripInfoVehicleLabel,
               value: vehicle,
               showEditAffordance: false,
@@ -172,15 +173,23 @@ class _CompactPartyRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
 
-    Widget item(FaIconData icon, String value, {bool flexible = false}) {
+    Widget item(
+      FaIconData icon,
+      String value, {
+      bool flexible = false,
+      AssetGenImage? image,
+    }) {
       final content = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FaIcon(
-            icon,
-            size: 18.r,
-            color: colors.primary.withValues(alpha: 0.8),
-          ),
+          if (image case final image?)
+            image.image(width: 22.r, height: 22.r, fit: BoxFit.contain)
+          else
+            FaIcon(
+              icon,
+              size: 18.r,
+              color: colors.primary.withValues(alpha: 0.8),
+            ),
           AppSpacing.sm.horizontalSpace,
           flexible
               ? Flexible(
@@ -225,7 +234,12 @@ class _CompactPartyRow extends StatelessWidget {
         if (trip.vehicleTypeName case final vehicle?
             when vehicle.isNotEmpty) ...[
           AppSpacing.lg.horizontalSpace,
-          item(FontAwesomeIcons.carSide, vehicle, flexible: true),
+          item(
+            FontAwesomeIcons.carSide,
+            vehicle,
+            flexible: true,
+            image: Assets.images.tripCarImage,
+          ),
         ],
       ],
     );

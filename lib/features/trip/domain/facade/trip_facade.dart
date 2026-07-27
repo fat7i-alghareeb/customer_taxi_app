@@ -29,6 +29,11 @@ class TripFacade {
     return _repository.getActiveTrip();
   }
 
+  Future<Result<List<TripEntity>>> getActiveTrips() {
+    printC('[TripFacade] getActiveTrips');
+    return _repository.getActiveTrips();
+  }
+
   Future<Result<TripEntity>> cancelTrip(String id, {String? note}) {
     printC('[TripFacade] cancelTrip id=$id');
     return _repository.cancelTrip(id, note: note);

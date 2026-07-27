@@ -7,6 +7,17 @@ part of '../order_bloc.dart';
 const _kPaymentConfirmationTimeout = Duration(seconds: 15);
 
 extension _BookingHandlers on OrderBloc {
+  /// Raises the full-screen "thank you for your reservation" overlay, which is
+  /// scoped to scheduled bookings — an immediate ride goes straight to the live
+  /// trip view and would have nothing to promise. Called from every success
+  /// path (Stripe disabled, no payment intent, and payment confirmed) so the
+  /// confirmation cannot depend on which payment route the rider took.
+  void _announceReservationIfScheduled(OrderTripResponseEntity trip) {
+    if (trip.scheduledAtUtc == null) return;
+    printG('[Payment] scheduled booking confirmed — showing reservation overlay');
+    getIt<ReservationConfirmationCubit>().show(trip.id);
+  }
+
   void _onBookingDetailsBackPressed(
     _BookingDetailsBackPressed event,
     Emitter<OrderState> emit,
@@ -263,6 +274,7 @@ extension _BookingHandlers on OrderBloc {
               ),
             ),
           );
+          _announceReservationIfScheduled(trip);
           return;
         }
 
@@ -278,6 +290,7 @@ extension _BookingHandlers on OrderBloc {
               ),
             ),
           );
+          _announceReservationIfScheduled(trip);
           return;
         }
 
@@ -370,6 +383,7 @@ extension _BookingHandlers on OrderBloc {
               ),
             ),
           );
+          _announceReservationIfScheduled(trip);
           break;
         case _PaymentOutcome.timeout:
           // No confirmation push in time — reconcile against the authoritative trip
@@ -401,6 +415,7 @@ extension _BookingHandlers on OrderBloc {
                 ),
               ),
             );
+            _announceReservationIfScheduled(trip);
           }
           break;
         case _PaymentOutcome.failed:

@@ -7,6 +7,7 @@ import 'package:customertaxi/features/root/presentation/states/root_bloc.dart';
 import 'package:customertaxi/features/root/constants/root_constants.dart';
 import '../map/root_map_loading_section.dart';
 import '../map/root_map_section.dart';
+import 'reserved_trips_banner.dart';
 import 'root_home_bottom_sheet.dart';
 
 class RootHomeTabSection extends StatelessWidget {
@@ -105,24 +106,31 @@ class _HomeCollapsedOverlay extends StatelessWidget {
           child: SafeArea(
             child: Padding(
               padding: REdgeInsets.all(AppSpacing.md),
-              child: AppButton.variant(
-                variant: AppButtonVariant.grey,
-                fill: AppButtonFill.solid,
-                onTap: () => _openDrawer(context),
-                layout: AppButtonLayout(
-                  shape: AppButtonShape.circle,
-                  height: RootConstants.headerMenuSize.sp,
-                  backgroundColor: context.surface,
-                  contentPadding: REdgeInsets.all(AppSpacing.sm),
-                ),
-                customShadows: context.shadows.grey,
-                child: AppButtonChild.custom(
-                  FaIcon(
-                    FontAwesomeIcons.bars,
-                    size: 18.r,
-                    color: context.onSurface,
+              child: Row(
+                children: [
+                  AppButton.variant(
+                    variant: AppButtonVariant.grey,
+                    fill: AppButtonFill.solid,
+                    onTap: () => _openDrawer(context),
+                    layout: AppButtonLayout(
+                      shape: AppButtonShape.circle,
+                      height: RootConstants.headerMenuSize.sp,
+                      backgroundColor: context.surface,
+                      contentPadding: REdgeInsets.all(AppSpacing.sm),
+                    ),
+                    customShadows: context.shadows.grey,
+                    child: AppButtonChild.custom(
+                      FaIcon(
+                        FontAwesomeIcons.bars,
+                        size: 18.r,
+                        color: context.onSurface,
+                      ),
+                    ),
                   ),
-                ),
+                  // Future reservations no longer take over the Home tab, so
+                  // this pill is the only place they surface while booking.
+                  const Expanded(child: ReservedTripsBanner()),
+                ],
               ),
             ),
           ),

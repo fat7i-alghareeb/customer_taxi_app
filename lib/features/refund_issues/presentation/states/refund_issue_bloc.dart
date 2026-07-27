@@ -32,6 +32,14 @@ class RefundIssueBloc extends Bloc<RefundIssueEvent, RefundIssueState> {
     _Submitted event,
     Emitter<RefundIssueState> emit,
   ) async {
+    // The UI hides the button while in flight and after success, but a stray
+    // second event (a queued tap, a rebuilt listener) would otherwise fire a
+    // duplicate request the server now answers with 409.
+    if (state.submitStatus.isLoading || state.submitStatus.isSuccess) {
+      printY('[RefundIssueBloc] submit ignored, already in flight or done');
+      return;
+    }
+
     emit(state.copyWith(submitStatus: const BlocStatus.loading()));
     final result = await _facade.submitRefundIssue(
       tripId: event.tripId,

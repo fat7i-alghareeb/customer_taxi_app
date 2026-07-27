@@ -19,7 +19,7 @@ class TripCompletedStatusSheet extends StatelessWidget {
 
   Future<void> _clearActiveTripGate() async {
     final cubit = getIt<ActiveTripCubit>();
-    cubit.clear();
+    cubit.clearTrip(trip.id);
     await cubit.refresh();
   }
 

@@ -1,6 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 
-/// Warning-tinted info card. Renders an optional bold [title] above [message].
+/// Accent-tinted info card. Renders an optional bold [title] above [message].
 /// Used both for the safe-review notice and the "What happens now?" panel.
 class RefundIssueInfoCard extends StatelessWidget {
   const RefundIssueInfoCard({super.key, required this.message, this.title});
@@ -20,9 +20,9 @@ class RefundIssueInfoCard extends StatelessWidget {
     return Container(
       padding: REdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.warning.withValues(alpha: 0.08),
+        color: AppColors.tripOrange.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(AppRadii.md.r),
-        border: Border.all(color: AppColors.warning.withValues(alpha: 0.28)),
+        border: Border.all(color: AppColors.tripOrange.withValues(alpha: 0.28)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +30,7 @@ class RefundIssueInfoCard extends StatelessWidget {
           FaIcon(
             FontAwesomeIcons.circleInfo,
             size: 16.r,
-            color: AppColors.warning,
+            color: AppColors.tripOrange,
           ),
           AppSpacing.md.horizontalSpace,
           Expanded(

@@ -28,6 +28,7 @@ import 'package:customertaxi/features/payment/domain/facade/payment_facade.dart'
 import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/domain/facade/trip_facade.dart';
 import 'package:customertaxi/features/trip/presentation/states/active_trip_cubit.dart';
+import 'package:customertaxi/features/trip/presentation/states/reservation_confirmation_cubit.dart';
 import '../helpers/saved_locations_helper.dart';
 import 'slices/order_booking_slice.dart';
 import 'slices/order_map_slice.dart';

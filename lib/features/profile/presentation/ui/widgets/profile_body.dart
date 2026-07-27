@@ -8,6 +8,7 @@ import 'package:customertaxi/features/root/domain/entities/root_map_location_ent
 import '../../../../root/presentation/ui/screens/root_screen.dart';
 import '../../states/profile_bloc.dart';
 import '../../../constants/forms/profile_forms.dart';
+import 'home_address_picker.dart';
 import 'profile_photo_picker.dart';
 import 'profile_delete_account_button.dart';
 import '../../../../auth/presentation/ui/widgets/unverified_phone_banner.dart';
@@ -23,6 +24,21 @@ class ProfileBody extends StatefulWidget {
 
 class _ProfileBodyState extends State<ProfileBody> {
   late FormGroup _form;
+
+  // Needed so the map-picker result can be written into the address field
+  // *programmatically* — the picker suppresses its own change handler for those
+  // writes, so a returning pin never reads back as manual typing.
+  final _addressPickerKey = GlobalKey<HomeAddressPickerState>();
+
+  /// Coordinates currently backing the address: the pending pick if the rider
+  /// has touched it this session, otherwise whatever is stored on the account.
+  double? _resolvedLat(ProfileState state) =>
+      state.pendingHomeAddressLatitude ??
+      state.currentUser?.homeAddressLatitude;
+
+  double? _resolvedLng(ProfileState state) =>
+      state.pendingHomeAddressLongitude ??
+      state.currentUser?.homeAddressLongitude;
 
   @override
   void initState() {
@@ -144,42 +160,25 @@ class _ProfileBodyState extends State<ProfileBody> {
           if (emailLocked) _buildEmailLockedHint(context),
           AppSpacing.lg.verticalSpace,
 
-          // Home address field with map picker
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              AppReactiveTextField.text(
-                formControlName: ProfileForms.homeAddressField,
-                title: AppStrings.profileHomeAddress,
-                hintText: AppStrings.profileHomeAddressHint,
-                onChangedDebounced: (value, _) {
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.homeAddressLabelChanged(
-                      value.trim().isEmpty ? null : value.trim(),
-                    ),
-                  );
-                },
+          // Home address: free text, address search, or a pin on the map — all
+          // three surfaced and labelled by the picker itself.
+          HomeAddressPicker(
+            key: _addressPickerKey,
+            form: _form,
+            isPinned: _resolvedLat(state) != null,
+            biasLat: _resolvedLat(state),
+            biasLng: _resolvedLng(state),
+            onLabelTyped: (label) => context.read<ProfileBloc>().add(
+              ProfileEvent.homeAddressLabelChanged(label),
+            ),
+            onLocationResolved: (location) => context.read<ProfileBloc>().add(
+              ProfileEvent.homeAddressMapPicked(
+                label: location.label,
+                latitude: location.latitude,
+                longitude: location.longitude,
               ),
-              AppSpacing.sm.verticalSpace,
-              AppButton.outline(
-                layout: AppButtonLayout(
-                  width: double.infinity,
-                  height: 48.h,
-                  borderRadius: AppRadii.lg,
-                ),
-                onTap: () => _pickHomeAddress(context, state),
-                child: AppButtonChild.labelIcon(
-                  label: AppStrings.setOnMap,
-                  icon: IconSource.faIcon(
-                    (state.pendingHomeAddressLatitude ??
-                                state.currentUser?.homeAddressLatitude) !=
-                            null
-                        ? FontAwesomeIcons.locationCrosshairs
-                        : FontAwesomeIcons.mapLocationDot,
-                  ),
-                ),
-              ),
-            ],
+            ),
+            onMapPressed: () => _pickHomeAddress(context, state),
           ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.04),
         ],
       ),
@@ -264,12 +263,8 @@ class _ProfileBodyState extends State<ProfileBody> {
     BuildContext context,
     ProfileState state,
   ) async {
-    final existingLat =
-        state.pendingHomeAddressLatitude ??
-        state.currentUser?.homeAddressLatitude;
-    final existingLng =
-        state.pendingHomeAddressLongitude ??
-        state.currentUser?.homeAddressLongitude;
+    final existingLat = _resolvedLat(state);
+    final existingLng = _resolvedLng(state);
     final initialLocation =
         existingLat != null && existingLng != null
         ? RootMapLocationEntity(
@@ -284,9 +279,9 @@ class _ProfileBodyState extends State<ProfileBody> {
       extra: initialLocation,
     );
     if (location != null && context.mounted) {
-      _form
-          .control(ProfileForms.homeAddressField)
-          .updateValue(location.label);
+      // Through the picker, not the control directly, so the write is marked as
+      // programmatic and doesn't come back as a manual label edit.
+      _addressPickerKey.currentState?.applyPickedLabel(location.label);
       context.read<ProfileBloc>().add(
         ProfileEvent.homeAddressMapPicked(
           label: location.label,

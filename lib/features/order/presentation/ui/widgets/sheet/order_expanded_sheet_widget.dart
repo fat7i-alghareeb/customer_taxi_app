@@ -10,6 +10,7 @@ import 'order_booking_details_step_widget.dart';
 import 'order_map_context_trigger_widget.dart';
 import 'order_schedule_picker_widget.dart';
 import 'order_vehicle_selection_step_widget.dart';
+import 'reservation_conflict_dialog.dart';
 
 class OrderExpandedSheetWidget extends StatefulWidget {
   const OrderExpandedSheetWidget({super.key, required this.state});
@@ -432,10 +433,17 @@ class _OrderExpandedSheetWidgetState extends State<OrderExpandedSheetWidget> {
               widget.state.booking.paymentSheetState.isLoading;
 
           final vehicleConfirmButton = AppButton.primary(
-            onTap: () {
-              context.read<OrderBloc>().add(
-                const OrderEvent.confirmBookingDetailsPressed(),
+            onTap: () async {
+              final bloc = context.read<OrderBloc>();
+              final booking = widget.state.booking;
+              final proceed = await confirmReservationConflict(
+                context,
+                scheduledAt: booking.scheduleMode == OrderScheduleMode.later
+                    ? booking.scheduledAt
+                    : null,
               );
+              if (!proceed) return;
+              bloc.add(const OrderEvent.confirmBookingDetailsPressed());
             },
             isActive: _isVehicleConfirmActive && !isPaymentLoading,
             isLoading: isPaymentLoading,

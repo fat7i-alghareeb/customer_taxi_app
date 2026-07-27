@@ -1,5 +1,12 @@
 import 'package:customertaxi/common/imports/imports.dart';
+import 'package:customertaxi/core/constants/app_urls.dart';
+import 'package:customertaxi/features/root/presentation/ui/screens/policy_web_view_screen.dart';
 
+/// The privacy policy, loaded from the public website.
+///
+/// Kept as its own screen (rather than routing straight to
+/// [PolicyWebViewScreen]) so the existing `/privacy-policy` route and every
+/// `pushNamed` call site keep working untouched.
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 
@@ -8,71 +15,85 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sections = <(String, String)>[
-      (AppStrings.privacyPolicyIntroTitle, AppStrings.privacyPolicyIntro),
-      (AppStrings.privacyPolicyAboutUsTitle,
-          AppStrings.privacyPolicyAboutUsBody),
-      (AppStrings.privacyPolicyDataCollectedTitle,
-          AppStrings.privacyPolicyDataCollectedBody),
-      (AppStrings.privacyPolicyCameraTitle, AppStrings.privacyPolicyCameraBody),
-      (AppStrings.privacyPolicyAudioTitle, AppStrings.privacyPolicyAudioBody),
-      (AppStrings.privacyPolicyRetentionTitle,
-          AppStrings.privacyPolicyRetentionBody),
-      (AppStrings.privacyPolicySharingTitle,
-          AppStrings.privacyPolicySharingBody),
-      (AppStrings.privacyPolicyMarketingTitle,
-          AppStrings.privacyPolicyMarketingBody),
-      (AppStrings.privacyPolicyCookiesTitle,
-          AppStrings.privacyPolicyCookiesBody),
-      (AppStrings.privacyPolicyPushNotificationsTitle,
-          AppStrings.privacyPolicyPushNotificationsBody),
-      (AppStrings.privacyPolicyRightsTitle,
-          AppStrings.privacyPolicyRightsBody),
-      (AppStrings.privacyPolicySecurityTitle,
-          AppStrings.privacyPolicySecurityBody),
-      (AppStrings.privacyPolicyResponsibilityTitle,
-          AppStrings.privacyPolicyResponsibilityBody),
-      (AppStrings.privacyPolicyAccountDeletionTitle,
-          AppStrings.privacyPolicyAccountDeletionBody),
-      (AppStrings.privacyPolicyChildrenTitle,
-          AppStrings.privacyPolicyChildrenBody),
-      (AppStrings.privacyPolicyChangesTitle,
-          AppStrings.privacyPolicyChangesBody),
-      (AppStrings.privacyPolicyContactTitle,
-          AppStrings.privacyPolicyContactBody),
-      (AppStrings.privacyPolicyApplicableLawTitle,
-          AppStrings.privacyPolicyApplicableLawBody),
-    ];
-
-    return AppScaffold.appBar(
-      appBarConfig: AppScaffoldAppBarConfig(
-        title: AppStrings.privacyPolicyTitle,
-      ),
-      child: ListView.separated(
-        padding: REdgeInsets.symmetric(
-          horizontal: AppSpacing.lg.w,
-          vertical: AppSpacing.lg.h,
-        ),
-        itemCount: sections.length + 1,
-        separatorBuilder: (_, _) => AppSpacing.xl.verticalSpace,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Text(
-              AppStrings.privacyPolicyEffectiveDate,
-              style: AppTextStyles.s14w400.copyWith(
-                color: context.onSurfaceVariant,
-                height: 1.55,
-              ),
-            ).animate().fadeIn(duration: AppDurations.normal);
-          }
-          final (title, body) = sections[index - 1];
-          return PolicySection(
-            title: title,
-            body: body,
-            index: index,
-          );
-        },
-      ),
+    return PolicyWebViewScreen(
+      title: AppStrings.privacyPolicyTitle,
+      url: AppUrls.privacyPolicy,
     );
   }
+
+  // Previous implementation: the full policy rendered natively from 18 pairs of
+  // localization keys (`privacyPolicyIntroTitle`/`privacyPolicyIntro`, …).
+  // Superseded by the hosted page above so legal copy can be corrected without
+  // an app release and nine translations. The keys are still present in
+  // assets/l10n/*.json.
+  //
+  // @override
+  // Widget build(BuildContext context) {
+  //   final sections = <(String, String)>[
+  //     (AppStrings.privacyPolicyIntroTitle, AppStrings.privacyPolicyIntro),
+  //     (AppStrings.privacyPolicyAboutUsTitle,
+  //         AppStrings.privacyPolicyAboutUsBody),
+  //     (AppStrings.privacyPolicyDataCollectedTitle,
+  //         AppStrings.privacyPolicyDataCollectedBody),
+  //     (AppStrings.privacyPolicyCameraTitle, AppStrings.privacyPolicyCameraBody),
+  //     (AppStrings.privacyPolicyAudioTitle, AppStrings.privacyPolicyAudioBody),
+  //     (AppStrings.privacyPolicyRetentionTitle,
+  //         AppStrings.privacyPolicyRetentionBody),
+  //     (AppStrings.privacyPolicySharingTitle,
+  //         AppStrings.privacyPolicySharingBody),
+  //     (AppStrings.privacyPolicyMarketingTitle,
+  //         AppStrings.privacyPolicyMarketingBody),
+  //     (AppStrings.privacyPolicyCookiesTitle,
+  //         AppStrings.privacyPolicyCookiesBody),
+  //     (AppStrings.privacyPolicyPushNotificationsTitle,
+  //         AppStrings.privacyPolicyPushNotificationsBody),
+  //     (AppStrings.privacyPolicyRightsTitle,
+  //         AppStrings.privacyPolicyRightsBody),
+  //     (AppStrings.privacyPolicySecurityTitle,
+  //         AppStrings.privacyPolicySecurityBody),
+  //     (AppStrings.privacyPolicyResponsibilityTitle,
+  //         AppStrings.privacyPolicyResponsibilityBody),
+  //     (AppStrings.privacyPolicyAccountDeletionTitle,
+  //         AppStrings.privacyPolicyAccountDeletionBody),
+  //     (AppStrings.privacyPolicyChildrenTitle,
+  //         AppStrings.privacyPolicyChildrenBody),
+  //     (AppStrings.privacyPolicyChangesTitle,
+  //         AppStrings.privacyPolicyChangesBody),
+  //     (AppStrings.privacyPolicyContactTitle,
+  //         AppStrings.privacyPolicyContactBody),
+  //     (AppStrings.privacyPolicyApplicableLawTitle,
+  //         AppStrings.privacyPolicyApplicableLawBody),
+  //   ];
+  //
+  //   return AppScaffold.appBar(
+  //     appBarConfig: AppScaffoldAppBarConfig(
+  //       title: AppStrings.privacyPolicyTitle,
+  //     ),
+  //     child: ListView.separated(
+  //       padding: REdgeInsets.symmetric(
+  //         horizontal: AppSpacing.lg.w,
+  //         vertical: AppSpacing.lg.h,
+  //       ),
+  //       itemCount: sections.length + 1,
+  //       separatorBuilder: (_, _) => AppSpacing.xl.verticalSpace,
+  //       itemBuilder: (context, index) {
+  //         if (index == 0) {
+  //           return Text(
+  //             AppStrings.privacyPolicyEffectiveDate,
+  //             style: AppTextStyles.s14w400.copyWith(
+  //               color: context.onSurfaceVariant,
+  //               height: 1.55,
+  //             ),
+  //           ).animate().fadeIn(duration: AppDurations.normal);
+  //         }
+  //         final (title, body) = sections[index - 1];
+  //         return PolicySection(
+  //           title: title,
+  //           body: body,
+  //           index: index,
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 }
