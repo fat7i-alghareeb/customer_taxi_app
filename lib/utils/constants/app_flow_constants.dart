@@ -49,9 +49,12 @@ class AppFlowConfig {
 class MapConfig {
   MapConfig._();
 
-  /// Default starting point if no location can be found (Aleppo Center).
-  static const double defaultLat = 36.2021;
-  static const double defaultLng = 37.1343;
+  /// Default starting point if no location can be found (Rotterdam Center).
+  ///
+  /// Also the fallback bias for address search, which the backend rejects
+  /// without coordinates — see [LocationService.resolveSearchBias].
+  static const double defaultLat = 51.9225;
+  static const double defaultLng = 4.47917;
 
   /// Zoom level used when the map initially loads in broad view.
   static const double initialZoom = 10;

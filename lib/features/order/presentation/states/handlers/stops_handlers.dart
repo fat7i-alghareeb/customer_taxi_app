@@ -46,24 +46,16 @@ extension _StopsHandlers on OrderBloc {
     );
 
     if (event.query.trim().isNotEmpty) {
-      var biasLat = state.map.latitude;
-      var biasLng = state.map.longitude;
-
-      try {
-        final lastKnown = await _locationService.getLastKnownPosition();
-        if (lastKnown != null) {
-          biasLat = lastKnown.latitude;
-          biasLng = lastKnown.longitude;
-        }
-      } catch (error) {
-        printY('[OrderBloc] getLastKnownPosition failed: $error');
-      }
+      final bias = await _locationService.resolveSearchBias(
+        fallbackLat: state.map.latitude,
+        fallbackLng: state.map.longitude,
+      );
 
       final result = await _facade.searchLocations(
         OrderLocationSearchRequestEntity(
           query: event.query,
-          biasLat: biasLat,
-          biasLng: biasLng,
+          biasLat: bias.lat,
+          biasLng: bias.lng,
         ),
       );
 

@@ -7,6 +7,7 @@ import 'package:customertaxi/features/root/domain/entities/root_map_location_ent
 import 'package:customertaxi/features/root/presentation/ui/widgets/map/root_map_canvas_widget.dart';
 import 'package:customertaxi/features/order/presentation/ui/widgets/sheet/order_center_pin_widget.dart';
 import 'package:customertaxi/core/services/location/location_service.dart';
+import 'package:customertaxi/utils/constants/app_flow_constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPickerScreen extends StatefulWidget {
@@ -74,13 +75,18 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
         });
       }
     } catch (e) {
-      // Fallback to a default location or show error
+      // Fallback to the app default centre, and seed the camera with it too so
+      // address search still has a bias point.
       if (mounted) {
         setState(() {
           _initialLocation = const RootMapLocationEntity(
-            latitude: 51.9225, // Rotterdam as default fallback
-            longitude: 4.47917,
+            latitude: MapConfig.defaultLat,
+            longitude: MapConfig.defaultLng,
             zoom: 12,
+          );
+          _currentCameraTarget = const LatLng(
+            MapConfig.defaultLat,
+            MapConfig.defaultLng,
           );
         });
       }
@@ -105,11 +111,17 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
 
     setState(() => _isSearching = true);
     final target = _currentCameraTarget;
+    // The camera can still be unresolved here (init in flight, or location
+    // lookup failed), and the search is rejected without coordinates.
+    final bias = await getIt<LocationService>().resolveSearchBias(
+      fallbackLat: target?.latitude,
+      fallbackLng: target?.longitude,
+    );
     final result = await getIt<OrderRepository>().searchLocations(
       OrderLocationSearchRequestEntity(
         query: query,
-        biasLat: target?.latitude,
-        biasLng: target?.longitude,
+        biasLat: bias.lat,
+        biasLng: bias.lng,
       ),
     );
 

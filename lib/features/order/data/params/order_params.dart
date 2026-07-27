@@ -5,18 +5,20 @@ class OrderParams {
 class OrderSearchLocationParams {
   const OrderSearchLocationParams({
     required this.query,
-    this.biasLat,
-    this.biasLng,
+    required this.biasLat,
+    required this.biasLng,
   });
 
   final String query;
-  final double? biasLat;
-  final double? biasLng;
+  final double biasLat;
+  final double biasLng;
 
+  /// Coordinates always go out: the server marks them required and Places
+  /// Text Search needs a bias point to search around.
   Map<String, dynamic> toJson() => {
     'query': query,
-    if (biasLat != null) 'latitude': biasLat,
-    if (biasLng != null) 'longitude': biasLng,
+    'latitude': biasLat,
+    'longitude': biasLng,
   };
 }
 

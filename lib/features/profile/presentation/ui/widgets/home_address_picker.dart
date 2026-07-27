@@ -1,5 +1,6 @@
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
+import 'package:customertaxi/core/services/location/location_service.dart';
 import 'package:customertaxi/features/order/domain/entities/order_location_entity.dart';
 import 'package:customertaxi/features/order/domain/entities/order_location_request_entity.dart';
 import 'package:customertaxi/features/order/domain/repositories/order_repository.dart';
@@ -103,11 +104,19 @@ class HomeAddressPickerState extends State<HomeAddressPicker> {
       _hasSearched = true;
     });
 
+    // The rider's current position beats the saved home address as a bias
+    // point, and either beats nothing at all — the search is rejected without
+    // coordinates.
+    final bias = await getIt<LocationService>().resolveSearchBias(
+      fallbackLat: widget.biasLat,
+      fallbackLng: widget.biasLng,
+    );
+
     final result = await getIt<OrderRepository>().searchLocations(
       OrderLocationSearchRequestEntity(
         query: query,
-        biasLat: widget.biasLat,
-        biasLng: widget.biasLng,
+        biasLat: bias.lat,
+        biasLng: bias.lng,
       ),
     );
 

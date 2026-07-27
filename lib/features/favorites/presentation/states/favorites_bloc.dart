@@ -97,22 +97,13 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     }
     emit(state.copyWith(searchStatus: const BlocStatus.loading()));
     
-    double? biasLat;
-    double? biasLng;
-
-    try {
-      final lastKnown = await _locationService.getLastKnownPosition();
-      if (lastKnown != null) {
-        biasLat = lastKnown.latitude;
-        biasLng = lastKnown.longitude;
-      }
-    } catch (_) {}
+    final bias = await _locationService.resolveSearchBias();
 
     final result = await _orderFacade.searchLocations(
       OrderLocationSearchRequestEntity(
         query: event.query,
-        biasLat: biasLat,
-        biasLng: biasLng,
+        biasLat: bias.lat,
+        biasLng: bias.lng,
       ),
     );
     

@@ -1,13 +1,17 @@
 class OrderLocationSearchRequestEntity {
   const OrderLocationSearchRequestEntity({
     required this.query,
-    this.biasLat,
-    this.biasLng,
+    required this.biasLat,
+    required this.biasLng,
   });
 
   final String query;
-  final double? biasLat;
-  final double? biasLng;
+
+  /// Required: the backend rejects a search without a bias point (400,
+  /// "Search location (coordinates) is required."). Callers resolve these
+  /// through `LocationService.resolveSearchBias`, which never returns null.
+  final double biasLat;
+  final double biasLng;
 }
 
 class OrderReverseGeocodeRequestEntity {
