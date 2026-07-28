@@ -24,11 +24,16 @@ class TripInProgressStatusSheet extends StatelessWidget {
             ),
             AppSpacing.md.horizontalSpace,
             Expanded(
-              child: Text(
-                // "Onderweg naar uw bestemming" — the fuller destination-aware
-                // wording; `tripStatusInProgress` stays the short chip label.
-                AppStrings.activeTripInProgressTitle,
+              // "Onderweg naar uw bestemming" — the fuller destination-aware
+              // wording; `tripStatusInProgress` stays the short chip label.
+              // "Onderweg" is accented here too so the sheet reads as the same
+              // step as the card above it. The rest keeps `onSurface`: this sheet
+              // sits on a light glass surface, where white would be invisible.
+              child: _AccentedTitle(
+                text: AppStrings.activeTripInProgressTitle,
+                accent: AppStrings.activeTripInProgressTitleAccent,
                 style: AppTextStyles.s20w700.copyWith(color: colors.onSurface),
+                accentColor: colors.primary,
               ),
             ),
           ],
@@ -41,9 +46,10 @@ class TripInProgressStatusSheet extends StatelessWidget {
           image: Assets.images.tripCarImage,
           title: AppStrings.activeTripInProgressEnjoyTitle,
           body: AppStrings.activeTripInProgressEnjoyBody,
-          // Orange under tripAccentTheme, matching the ETA card below it — the
-          // "Fijne rit!" line was the only untinted card title on this sheet.
-          titleColor: colors.primary,
+          // Deliberately untinted: on this step the accent belongs to "Onderweg"
+          // in the headline, so "Fijne rit!" reads as plain text (the light-surface
+          // equivalent of the white it gets on the dark card above).
+          titleColor: colors.onSurface,
         ),
         AppSpacing.sm.verticalSpace,
         _InfoCard(
@@ -62,6 +68,46 @@ class TripInProgressStatusSheet extends StatelessWidget {
         AppSpacing.sm.verticalSpace,
         InTripSafetyPanel(tripId: trip.id),
       ],
+    );
+  }
+}
+
+/// Title with one localized substring painted in [accentColor]. Falls back to a
+/// plain [Text] when the accent phrase isn't found, so a translation that drifts
+/// out of sync degrades instead of breaking the headline.
+class _AccentedTitle extends StatelessWidget {
+  const _AccentedTitle({
+    required this.text,
+    required this.accent,
+    required this.style,
+    required this.accentColor,
+  });
+
+  final String text;
+  final String accent;
+  final TextStyle style;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final idx = accent.isEmpty
+        ? -1
+        : text.toLowerCase().indexOf(accent.toLowerCase());
+    if (idx < 0) return Text(text, style: style);
+
+    final before = text.substring(0, idx);
+    final match = text.substring(idx, idx + accent.length);
+    final after = text.substring(idx + accent.length);
+
+    return RichText(
+      text: TextSpan(
+        style: style,
+        children: [
+          if (before.isNotEmpty) TextSpan(text: before),
+          TextSpan(text: match, style: TextStyle(color: accentColor)),
+          if (after.isNotEmpty) TextSpan(text: after),
+        ],
+      ),
     );
   }
 }

@@ -12,11 +12,17 @@ class TripStatusBannerContent {
     this.image,
     this.bodyColor,
     this.indicator,
+    this.titleAccentWord,
   });
 
   final FaIconData icon;
   final String title;
   final List<String> bodyLines;
+
+  /// Substring of [title] painted in the trip accent while the rest stays white.
+  /// Comes from a localized key rather than "the first word" because the phrase to
+  /// highlight differs per language ("Onderweg", "On the way", "في الطريق").
+  final String? titleAccentWord;
 
   /// When set, the card renders this illustration in place of [icon] — used to
   /// show the branded car image for the ride/trip statuses.
@@ -63,11 +69,23 @@ class TripStatusBannerContent {
           icon: FontAwesomeIcons.route,
           image: Assets.images.tripCarImage,
           title: AppStrings.activeTripInProgressTitle,
+          // "Onderweg" carries the accent; the rest of the headline and the
+          // "Fijne rit!" line below it stay plain white.
+          titleAccentWord: AppStrings.activeTripInProgressTitleAccent,
           bodyLines: [AppStrings.activeTripInProgressSubtitle],
-          bodyColor: AppColors.tripOrange,
+          bodyColor: Colors.white,
         );
-      // En-route shows the plain live driver→pickup map (no banner).
+      // TRACKING DISABLED: en-route used to keep the plain live driver→pickup map.
+      // With the car gone there is nothing to watch, so it blurs and gets a card
+      // like every other status. The en-route sheet below is unchanged.
       case TripStatus.enRoute:
+        return TripStatusBannerContent(
+          icon: FontAwesomeIcons.carSide,
+          image: Assets.images.tripCarImage,
+          title: AppStrings.activeTripStepDriverOnWay,
+          bodyLines: [AppStrings.activeTripStepDriverOnWaySub],
+          indicator: TripStatusIndicatorMode.searching,
+        );
       case TripStatus.pendingQuote:
       case TripStatus.completed:
       case TripStatus.cancelled:
@@ -92,12 +110,16 @@ class TripStatusOverlayCard extends StatelessWidget {
     this.bodyColor,
     this.indicator,
     this.highlightBrand = false,
+    this.titleAccentWord,
     super.key,
   });
 
   final FaIconData icon;
   final String title;
   final List<String> bodyLines;
+
+  /// Substring of [title] painted in the trip accent, the rest staying white.
+  final String? titleAccentWord;
 
   /// Optional illustration shown in the leading chip instead of [icon].
   final AssetGenImage? image;
@@ -133,20 +155,26 @@ class TripStatusOverlayCard extends StatelessWidget {
     return chip;
   }
 
-  /// Renders [line], colouring the "Fat7i" brand word when
-  /// [highlightBrand] is set; otherwise a plain [Text].
-  Widget _bodyLine(String line, TextStyle baseStyle) {
-    const brand = 'Fat7i';
-    final idx = highlightBrand
-        ? line.toLowerCase().indexOf(brand.toLowerCase())
-        : -1;
+  /// Case-insensitively locates [word] in [text] and rebuilds it as spans, handing
+  /// the matched slice to [buildMatch] (which may split it further) while the
+  /// surrounding text keeps [baseStyle]. Returns a plain [Text] when there is no
+  /// match, so a mistranslated accent word degrades to the unstyled line.
+  static Widget _highlightWord(
+    String text,
+    String word,
+    TextStyle baseStyle,
+    List<InlineSpan> Function(String match) buildMatch,
+  ) {
+    final idx = word.isEmpty
+        ? -1
+        : text.toLowerCase().indexOf(word.toLowerCase());
     if (idx < 0) {
-      return Text(line, textAlign: TextAlign.left, style: baseStyle);
+      return Text(text, textAlign: TextAlign.left, style: baseStyle);
     }
 
-    final before = line.substring(0, idx);
-    final match = line.substring(idx, idx + brand.length); // keep original case
-    final after = line.substring(idx + brand.length);
+    final before = text.substring(0, idx);
+    final match = text.substring(idx, idx + word.length); // keep original case
+    final after = text.substring(idx + word.length);
 
     return RichText(
       textAlign: TextAlign.left,
@@ -154,24 +182,57 @@ class TripStatusOverlayCard extends StatelessWidget {
         style: baseStyle,
         children: [
           if (before.isNotEmpty) TextSpan(text: before),
+          ...buildMatch(match),
+          if (after.isNotEmpty) TextSpan(text: after),
+        ],
+      ),
+    );
+  }
+
+  /// Renders [title], colouring [titleAccentWord] in the trip accent when set.
+  Widget _titleLine(TextStyle baseStyle) {
+    if (titleAccentWord case final accent? when accent.isNotEmpty) {
+      return _highlightWord(title, accent, baseStyle, (match) {
+        return [
           TextSpan(
-            text: match.substring(0, 6), // "Fat7i"
+            text: match,
             style: const TextStyle(
               color: AppColors.tripOrange,
               fontWeight: FontWeight.w700,
             ),
           ),
-          TextSpan(
-            text: match.substring(6), // "Trip"
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-            ),
+        ];
+      });
+    }
+    return Text(title, textAlign: TextAlign.left, style: baseStyle);
+  }
+
+  /// Renders [line], colouring the "Fat7i" brand word when
+  /// [highlightBrand] is set; otherwise a plain [Text].
+  Widget _bodyLine(String line, TextStyle baseStyle) {
+    const brand = 'Fat7i';
+    if (!highlightBrand) {
+      return Text(line, textAlign: TextAlign.left, style: baseStyle);
+    }
+
+    return _highlightWord(line, brand, baseStyle, (match) {
+      return [
+        TextSpan(
+          text: match.substring(0, 6), // "Fat7i"
+          style: const TextStyle(
+            color: AppColors.tripOrange,
+            fontWeight: FontWeight.w700,
           ),
-          if (after.isNotEmpty) TextSpan(text: after),
-        ],
-      ),
-    );
+        ),
+        TextSpan(
+          text: match.substring(6), // "Trip"
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ];
+    });
   }
 
   @override
@@ -204,12 +265,8 @@ class TripStatusOverlayCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      title,
-                      textAlign: TextAlign.left,
-                      style: AppTextStyles.s14w700.copyWith(
-                        color: Colors.white,
-                      ),
+                    _titleLine(
+                      AppTextStyles.s14w700.copyWith(color: Colors.white),
                     ),
                     for (final line in bodyLines) ...[
                       AppSpacing.xs.verticalSpace,

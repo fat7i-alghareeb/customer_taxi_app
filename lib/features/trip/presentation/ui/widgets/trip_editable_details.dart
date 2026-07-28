@@ -3,6 +3,7 @@ import 'package:customertaxi/features/order/domain/entities/order_location_entit
 import 'package:customertaxi/features/order/presentation/ui/screens/location_picker_screen.dart';
 import 'package:customertaxi/features/root/domain/entities/root_map_location_entity.dart';
 import 'package:customertaxi/features/trip/domain/entities/trip_entity.dart';
+import 'package:customertaxi/features/trip/domain/entities/trip_status.dart';
 import 'package:customertaxi/features/trip/presentation/states/trip_bloc.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_count_picker_dialog.dart';
 import 'package:customertaxi/features/trip/presentation/ui/widgets/trip_edit_flow.dart';
@@ -99,11 +100,17 @@ class TripEditableDetails extends StatelessWidget {
     final canEditStops = trip.canEditStops;
     final canEditPartySize = trip.canEditPartySize;
 
-    // Party size closes once the driver is moving, because a bigger party can force a
-    // different vehicle. Say so — a bare greyed pencil just looks broken.
+    // Party size closes for two different reasons and the message has to match, or it
+    // lies: while still waiting for a driver it is the 5-minute edit window running out
+    // (`TripEntity.customerEditDeadlineUtc`), which also catches scheduled trips booked
+    // days ahead; from en-route onward it is the driver already moving, because a bigger
+    // party can force a different vehicle. A bare greyed pencil just looks broken.
     final partySizeLockReason = canEditPartySize
         ? null
-        : AppStrings.tripEditLockedDriverOnWay;
+        : (trip.status == TripStatus.awaitingAdminAcceptance ||
+                  trip.status == TripStatus.accepted
+              ? AppStrings.tripEditLockedWindowExpired
+              : AppStrings.tripEditLockedDriverOnWay);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -103,7 +103,8 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
     Navigator.pop(context, CancelTripResult(note));
   }
 
-  /// Returns true if the passenger is still inside the free cancellation window.
+  /// Returns true if the passenger is still inside the early cancellation window, where the
+  /// fare comes back minus the flat cancellation fee instead of the 45% that applies after it.
   /// Mirrors CancellationPolicy.IsWithinFreeWindow on the backend (inclusive: now <= createdAt + 5 min).
   static bool _isWithinFreeWindow(TripEntity trip) {
     final now = DateTime.now().toUtc();
@@ -156,8 +157,8 @@ class _CancelTripSheetState extends State<CancelTripSheet> {
           ),
         ],
         AppSpacing.md.verticalSpace,
-        // Static policy note (free window + arrived fee + after-window rule),
-        // kept as a quiet footnote so the reason cards stay the focus.
+        // Static policy note (in-window fee + after-window rule), kept as a
+        // quiet footnote so the reason cards stay the focus.
         Text(
           AppStrings.cancelSheetRefundNote,
           style: AppTextStyles.s12w400.copyWith(
@@ -198,8 +199,10 @@ class _RefundBanner extends StatelessWidget {
     final isWithinWindow = _CancelTripSheetState._isWithinFreeWindow(trip);
 
     if (isWithinWindow) {
+      // Still the good outcome (green), but no longer a clean "free" tick — a fee
+      // is withheld, so the tile informs rather than congratulates.
       return _BannerTile(
-        icon: FontAwesomeIcons.circleCheck,
+        icon: FontAwesomeIcons.circleInfo,
         color: const Color(0xFF2E7D32),
         text: AppStrings.cancelBannerFreeWindow,
       );

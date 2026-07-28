@@ -13,6 +13,10 @@ class CancelledTripRefundSection extends StatelessWidget {
     final cancellation = trip.cancellation;
     if (cancellation == null) return const SizedBox.shrink();
     final refundStatus = trip.refund?.status ?? TripRefundStatus.preparing;
+    // Inside the 5-minute window the server refunds 100% of the fare and withholds a
+    // flat fee. Showing "100%" next to a smaller amount reads as a bug, so the fee row
+    // replaces the percent row whenever one was charged.
+    final hasFee = cancellation.cancellationFeeAmount > 0;
 
     return Container(
       padding: REdgeInsets.all(AppSpacing.lg),
@@ -77,11 +81,20 @@ class CancelledTripRefundSection extends StatelessWidget {
             infoMessage: AppStrings.cancelledRefundBackendSourceMessage,
           ),
           AppSpacing.sm.verticalSpace,
-          CancelledTripRefundRow(
-            label: AppStrings.refundIssueRefundPercent,
-            value: '${cancellation.refundPercent.toStringAsFixed(0)}%',
-            caption: AppStrings.cancelledRefundPercentCaption,
-          ),
+          if (hasFee)
+            CancelledTripRefundRow(
+              label: AppStrings.cancellationFeeLabel,
+              // Signed so it is unmistakably a deduction from the fare, not a payout.
+              value:
+                  '-${_formatAmount(cancellation.cancellationFeeAmount, cancellation.currencyCode)}',
+              valueColor: AppColors.tripOrange,
+            )
+          else
+            CancelledTripRefundRow(
+              label: AppStrings.refundIssueRefundPercent,
+              value: '${cancellation.refundPercent.toStringAsFixed(0)}%',
+              caption: AppStrings.cancelledRefundPercentCaption,
+            ),
           if (cancellation.createdAtUtc != null) ...[
             AppSpacing.sm.verticalSpace,
             CancelledTripRefundRow(

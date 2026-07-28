@@ -1046,7 +1046,10 @@ as double,
 /// @nodoc
 mixin _$TripCancellationEntity {
 
- String get actor; String get reason; double get refundPercent; double get refundAmount; String get currencyCode; String? get note; DateTime? get createdAtUtc;
+ String get actor; String get reason; double get refundPercent; double get refundAmount; String get currencyCode;/// Flat fee withheld from the fare ("annuleringskosten"), 0 when none applied.
+/// Non-zero only for a passenger cancellation inside the 5-minute window, where
+/// [refundPercent] stays 100 and the deduction lives here instead.
+ double get cancellationFeeAmount; String? get note; DateTime? get createdAtUtc;
 /// Create a copy of TripCancellationEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1057,16 +1060,16 @@ $TripCancellationEntityCopyWith<TripCancellationEntity> get copyWith => _$TripCa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripCancellationEntity&&(identical(other.actor, actor) || other.actor == actor)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.refundPercent, refundPercent) || other.refundPercent == refundPercent)&&(identical(other.refundAmount, refundAmount) || other.refundAmount == refundAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.note, note) || other.note == note)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TripCancellationEntity&&(identical(other.actor, actor) || other.actor == actor)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.refundPercent, refundPercent) || other.refundPercent == refundPercent)&&(identical(other.refundAmount, refundAmount) || other.refundAmount == refundAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.cancellationFeeAmount, cancellationFeeAmount) || other.cancellationFeeAmount == cancellationFeeAmount)&&(identical(other.note, note) || other.note == note)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,actor,reason,refundPercent,refundAmount,currencyCode,note,createdAtUtc);
+int get hashCode => Object.hash(runtimeType,actor,reason,refundPercent,refundAmount,currencyCode,cancellationFeeAmount,note,createdAtUtc);
 
 @override
 String toString() {
-  return 'TripCancellationEntity(actor: $actor, reason: $reason, refundPercent: $refundPercent, refundAmount: $refundAmount, currencyCode: $currencyCode, note: $note, createdAtUtc: $createdAtUtc)';
+  return 'TripCancellationEntity(actor: $actor, reason: $reason, refundPercent: $refundPercent, refundAmount: $refundAmount, currencyCode: $currencyCode, cancellationFeeAmount: $cancellationFeeAmount, note: $note, createdAtUtc: $createdAtUtc)';
 }
 
 
@@ -1077,7 +1080,7 @@ abstract mixin class $TripCancellationEntityCopyWith<$Res>  {
   factory $TripCancellationEntityCopyWith(TripCancellationEntity value, $Res Function(TripCancellationEntity) _then) = _$TripCancellationEntityCopyWithImpl;
 @useResult
 $Res call({
- String actor, String reason, double refundPercent, double refundAmount, String currencyCode, String? note, DateTime? createdAtUtc
+ String actor, String reason, double refundPercent, double refundAmount, String currencyCode, double cancellationFeeAmount, String? note, DateTime? createdAtUtc
 });
 
 
@@ -1094,14 +1097,15 @@ class _$TripCancellationEntityCopyWithImpl<$Res>
 
 /// Create a copy of TripCancellationEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? actor = null,Object? reason = null,Object? refundPercent = null,Object? refundAmount = null,Object? currencyCode = null,Object? note = freezed,Object? createdAtUtc = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? actor = null,Object? reason = null,Object? refundPercent = null,Object? refundAmount = null,Object? currencyCode = null,Object? cancellationFeeAmount = null,Object? note = freezed,Object? createdAtUtc = freezed,}) {
   return _then(_self.copyWith(
 actor: null == actor ? _self.actor : actor // ignore: cast_nullable_to_non_nullable
 as String,reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
 as String,refundPercent: null == refundPercent ? _self.refundPercent : refundPercent // ignore: cast_nullable_to_non_nullable
 as double,refundAmount: null == refundAmount ? _self.refundAmount : refundAmount // ignore: cast_nullable_to_non_nullable
 as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
-as String,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String,cancellationFeeAmount: null == cancellationFeeAmount ? _self.cancellationFeeAmount : cancellationFeeAmount // ignore: cast_nullable_to_non_nullable
+as double,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String?,createdAtUtc: freezed == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
@@ -1188,10 +1192,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String actor,  String reason,  double refundPercent,  double refundAmount,  String currencyCode,  String? note,  DateTime? createdAtUtc)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String actor,  String reason,  double refundPercent,  double refundAmount,  String currencyCode,  double cancellationFeeAmount,  String? note,  DateTime? createdAtUtc)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TripCancellationEntity() when $default != null:
-return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,_that.currencyCode,_that.note,_that.createdAtUtc);case _:
+return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,_that.currencyCode,_that.cancellationFeeAmount,_that.note,_that.createdAtUtc);case _:
   return orElse();
 
 }
@@ -1209,10 +1213,10 @@ return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String actor,  String reason,  double refundPercent,  double refundAmount,  String currencyCode,  String? note,  DateTime? createdAtUtc)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String actor,  String reason,  double refundPercent,  double refundAmount,  String currencyCode,  double cancellationFeeAmount,  String? note,  DateTime? createdAtUtc)  $default,) {final _that = this;
 switch (_that) {
 case _TripCancellationEntity():
-return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,_that.currencyCode,_that.note,_that.createdAtUtc);case _:
+return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,_that.currencyCode,_that.cancellationFeeAmount,_that.note,_that.createdAtUtc);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1229,10 +1233,10 @@ return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String actor,  String reason,  double refundPercent,  double refundAmount,  String currencyCode,  String? note,  DateTime? createdAtUtc)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String actor,  String reason,  double refundPercent,  double refundAmount,  String currencyCode,  double cancellationFeeAmount,  String? note,  DateTime? createdAtUtc)?  $default,) {final _that = this;
 switch (_that) {
 case _TripCancellationEntity() when $default != null:
-return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,_that.currencyCode,_that.note,_that.createdAtUtc);case _:
+return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,_that.currencyCode,_that.cancellationFeeAmount,_that.note,_that.createdAtUtc);case _:
   return null;
 
 }
@@ -1244,7 +1248,7 @@ return $default(_that.actor,_that.reason,_that.refundPercent,_that.refundAmount,
 
 
 class _TripCancellationEntity implements TripCancellationEntity {
-  const _TripCancellationEntity({required this.actor, required this.reason, required this.refundPercent, required this.refundAmount, required this.currencyCode, this.note, this.createdAtUtc});
+  const _TripCancellationEntity({required this.actor, required this.reason, required this.refundPercent, required this.refundAmount, required this.currencyCode, this.cancellationFeeAmount = 0, this.note, this.createdAtUtc});
   
 
 @override final  String actor;
@@ -1252,6 +1256,10 @@ class _TripCancellationEntity implements TripCancellationEntity {
 @override final  double refundPercent;
 @override final  double refundAmount;
 @override final  String currencyCode;
+/// Flat fee withheld from the fare ("annuleringskosten"), 0 when none applied.
+/// Non-zero only for a passenger cancellation inside the 5-minute window, where
+/// [refundPercent] stays 100 and the deduction lives here instead.
+@override@JsonKey() final  double cancellationFeeAmount;
 @override final  String? note;
 @override final  DateTime? createdAtUtc;
 
@@ -1265,16 +1273,16 @@ _$TripCancellationEntityCopyWith<_TripCancellationEntity> get copyWith => __$Tri
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripCancellationEntity&&(identical(other.actor, actor) || other.actor == actor)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.refundPercent, refundPercent) || other.refundPercent == refundPercent)&&(identical(other.refundAmount, refundAmount) || other.refundAmount == refundAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.note, note) || other.note == note)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TripCancellationEntity&&(identical(other.actor, actor) || other.actor == actor)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.refundPercent, refundPercent) || other.refundPercent == refundPercent)&&(identical(other.refundAmount, refundAmount) || other.refundAmount == refundAmount)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.cancellationFeeAmount, cancellationFeeAmount) || other.cancellationFeeAmount == cancellationFeeAmount)&&(identical(other.note, note) || other.note == note)&&(identical(other.createdAtUtc, createdAtUtc) || other.createdAtUtc == createdAtUtc));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,actor,reason,refundPercent,refundAmount,currencyCode,note,createdAtUtc);
+int get hashCode => Object.hash(runtimeType,actor,reason,refundPercent,refundAmount,currencyCode,cancellationFeeAmount,note,createdAtUtc);
 
 @override
 String toString() {
-  return 'TripCancellationEntity(actor: $actor, reason: $reason, refundPercent: $refundPercent, refundAmount: $refundAmount, currencyCode: $currencyCode, note: $note, createdAtUtc: $createdAtUtc)';
+  return 'TripCancellationEntity(actor: $actor, reason: $reason, refundPercent: $refundPercent, refundAmount: $refundAmount, currencyCode: $currencyCode, cancellationFeeAmount: $cancellationFeeAmount, note: $note, createdAtUtc: $createdAtUtc)';
 }
 
 
@@ -1285,7 +1293,7 @@ abstract mixin class _$TripCancellationEntityCopyWith<$Res> implements $TripCanc
   factory _$TripCancellationEntityCopyWith(_TripCancellationEntity value, $Res Function(_TripCancellationEntity) _then) = __$TripCancellationEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String actor, String reason, double refundPercent, double refundAmount, String currencyCode, String? note, DateTime? createdAtUtc
+ String actor, String reason, double refundPercent, double refundAmount, String currencyCode, double cancellationFeeAmount, String? note, DateTime? createdAtUtc
 });
 
 
@@ -1302,14 +1310,15 @@ class __$TripCancellationEntityCopyWithImpl<$Res>
 
 /// Create a copy of TripCancellationEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? actor = null,Object? reason = null,Object? refundPercent = null,Object? refundAmount = null,Object? currencyCode = null,Object? note = freezed,Object? createdAtUtc = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? actor = null,Object? reason = null,Object? refundPercent = null,Object? refundAmount = null,Object? currencyCode = null,Object? cancellationFeeAmount = null,Object? note = freezed,Object? createdAtUtc = freezed,}) {
   return _then(_TripCancellationEntity(
 actor: null == actor ? _self.actor : actor // ignore: cast_nullable_to_non_nullable
 as String,reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
 as String,refundPercent: null == refundPercent ? _self.refundPercent : refundPercent // ignore: cast_nullable_to_non_nullable
 as double,refundAmount: null == refundAmount ? _self.refundAmount : refundAmount // ignore: cast_nullable_to_non_nullable
 as double,currencyCode: null == currencyCode ? _self.currencyCode : currencyCode // ignore: cast_nullable_to_non_nullable
-as String,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String,cancellationFeeAmount: null == cancellationFeeAmount ? _self.cancellationFeeAmount : cancellationFeeAmount // ignore: cast_nullable_to_non_nullable
+as double,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String?,createdAtUtc: freezed == createdAtUtc ? _self.createdAtUtc : createdAtUtc // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));

@@ -200,9 +200,7 @@ class $AssetsSvgIconsGen {
   List<String> get values => [home];
 }
 
-class Assets {
-  const Assets._();
-
+abstract final class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsL10nGen l10n = $AssetsL10nGen();

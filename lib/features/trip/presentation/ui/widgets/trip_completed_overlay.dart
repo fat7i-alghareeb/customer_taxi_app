@@ -44,6 +44,7 @@ class TripCompletedOverlay extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: TripStatusOverlayCard(
                 icon: FontAwesomeIcons.carSide,
+                image: Assets.images.tripCarImage,
                 highlightBrand: true,
                 title: AppStrings.activeTripCompletedSafetyTitle,
                 bodyLines: [

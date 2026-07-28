@@ -172,6 +172,8 @@ _TripCancellationModel _$TripCancellationModelFromJson(
   refundPercent: (json['refundPercent'] as num).toDouble(),
   refundAmount: (json['refundAmount'] as num).toDouble(),
   currencyCode: json['currencyCode'] as String,
+  cancellationFeeAmount:
+      (json['cancellationFeeAmount'] as num?)?.toDouble() ?? 0,
   note: json['note'] as String?,
   createdAtUtc: json['createdAtUtc'] == null
       ? null
@@ -186,6 +188,7 @@ Map<String, dynamic> _$TripCancellationModelToJson(
   'refundPercent': instance.refundPercent,
   'refundAmount': instance.refundAmount,
   'currencyCode': instance.currencyCode,
+  'cancellationFeeAmount': instance.cancellationFeeAmount,
   'note': instance.note,
   'createdAtUtc': instance.createdAtUtc?.toIso8601String(),
 };

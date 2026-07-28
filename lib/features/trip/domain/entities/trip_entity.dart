@@ -145,6 +145,11 @@ abstract class TripCancellationEntity with _$TripCancellationEntity {
     required double refundPercent,
     required double refundAmount,
     required String currencyCode,
+
+    /// Flat fee withheld from the fare ("annuleringskosten"), 0 when none applied.
+    /// Non-zero only for a passenger cancellation inside the 5-minute window, where
+    /// [refundPercent] stays 100 and the deduction lives here instead.
+    @Default(0) double cancellationFeeAmount,
     String? note,
     DateTime? createdAtUtc,
   }) = _TripCancellationEntity;

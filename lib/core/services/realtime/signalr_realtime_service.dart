@@ -219,7 +219,9 @@ class SignalRRealtimeService implements RealtimeService {
     );
     hub.on(RealtimeMethodNames.driverEnRoute, _onDriverEnRoute);
     hub.on(RealtimeMethodNames.driverArrived, _onDriverArrived);
-    hub.on(RealtimeMethodNames.driverLocationUpdated, _onDriverLocationUpdated);
+    // TRACKING DISABLED: the server no longer broadcasts driver positions, and the
+    // app no longer draws them. Uncomment to restore live driver tracking.
+    // hub.on(RealtimeMethodNames.driverLocationUpdated, _onDriverLocationUpdated);
     hub.on(RealtimeMethodNames.tripStopCompleted, _onTripStopCompleted);
     hub.on(RealtimeMethodNames.tripMessageReceived, _onTripMessageReceived);
     hub.on(RealtimeMethodNames.chatClosed, _onChatClosed);
@@ -617,6 +619,9 @@ class SignalRRealtimeService implements RealtimeService {
     );
   }
 
+  // TRACKING DISABLED: no longer subscribed above. Kept so restoring tracking is a
+  // pure uncomment on both sides.
+  /*
   void _onDriverLocationUpdated(List<Object?>? args) {
     final p = _payload(args, requireTripId: false);
     if (p == null) return;
@@ -633,6 +638,7 @@ class SignalRRealtimeService implements RealtimeService {
       ),
     );
   }
+  */
 
   void _onTripStopCompleted(List<Object?>? args) {
     final p = _payload(args);

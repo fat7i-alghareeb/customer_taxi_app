@@ -35,7 +35,10 @@ class ActiveTripBody extends StatefulWidget {
 class _ActiveTripBodyState extends State<ActiveTripBody>
     with SingleTickerProviderStateMixin {
   GoogleMapController? _mapController;
+  // TRACKING DISABLED: kept so restoring the driver marker is a pure uncomment.
+  // ignore: unused_field
   BitmapDescriptor? _carMarkerIcon;
+  // ignore: unused_field
   BitmapDescriptor? _carMarkerIconFlipped;
   BitmapDescriptor? _pickupMarkerIcon;
   BitmapDescriptor? _destinationMarkerIcon;
@@ -53,6 +56,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   LatLng? _currentCarPosition;
   double _currentBearing = 0.0;
   double _targetBearing = 0.0;
+  // ignore: unused_field
   double _interpolatedBearing = 0.0;
 
   bool _arrivalAlertPlayed = false;
@@ -95,11 +99,14 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
   Future<void> _loadCustomMarkers() async {
     try {
+      // TRACKING DISABLED: the vehicle marker is never drawn, so it is not built.
+      /*
       final carIcon = await MapMarkerGenerator.createVehicleMarker(width: 56.r);
       final carIconFlipped = await MapMarkerGenerator.createVehicleMarker(
         width: 56.r,
         mirror: true,
       );
+      */
       // Same marker language as the booking map: a dot-in-ring for "you start
       // here", a pin for "this is the place". Shape, not colour, carries the
       // distinction, so both can wear the trip accent.
@@ -114,8 +121,8 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
       if (mounted) {
         setState(() {
-          _carMarkerIcon = carIcon;
-          _carMarkerIconFlipped = carIconFlipped;
+          // _carMarkerIcon = carIcon;
+          // _carMarkerIconFlipped = carIconFlipped;
           _pickupMarkerIcon = pickupIcon;
           _destinationMarkerIcon = destinationIcon;
         });
@@ -188,12 +195,15 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 
   /// Whether the heading has a westward (leftward) component, i.e. the car
   /// should be mirrored to face left. Bearing is degrees clockwise from north.
+  // ignore: unused_element
   bool _headingWest(double bearing) {
     double normalized = bearing % 360;
     if (normalized < 0) normalized += 360;
     return normalized > 180;
   }
 
+  /// TRACKING DISABLED: no caller while driver tracking is off.
+  // ignore: unused_element
   double _calculateBearing(LatLng from, LatLng to) {
     return Geolocator.bearingBetween(
       from.latitude,
@@ -344,6 +354,9 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
   /// in the backend location payload. The target is the pickup while heading there
   /// (en-route / arrived) and the destination once on board (in-progress). Decodes
   /// only when the encoded string changes, and clears the route for any other status.
+  ///
+  /// TRACKING DISABLED: no caller while driver tracking is off.
+  // ignore: unused_element
   void _applyPickupRoute(TripStatus status, String? encoded) {
     final hasLiveTarget =
         status == TripStatus.enRoute ||
@@ -391,6 +404,10 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
           _triggerArrivalAlert();
         }
 
+        // TRACKING DISABLED: no driver positions arrive any more, so the car marker
+        // interpolation and the dashed driver→target route are switched off. Restore
+        // together with the realtime subscription in SignalRRealtimeService.
+        /*
         final liveLoc = state.activeDriverLocation;
         if (liveLoc != null) {
           final newPos = LatLng(liveLoc.latitude, liveLoc.longitude);
@@ -426,6 +443,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
             _currentCarPosition = dbPos;
           }
         }
+        */
 
         // Terminal trips stay on this screen so the customer can browse the
         // receipt / invoice chips at their leisure. Dismissal is now explicit
@@ -564,6 +582,11 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                   ? trip.stops.first.longitude
                   : 21.0122;
 
+              // TRACKING DISABLED: the car marker, its bearing/mirroring and the
+              // dashed car→target line all came from the live driver feed. Restore
+              // this block together with the `driverLocation` / `driverMarkerIcon` /
+              // `pickupLocation` / `pickupRoute` props on the map below.
+              /*
               // Render the car marker straight from bloc state, falling back to
               // the persisted driver coordinate on the trip. This guarantees the
               // marker is visible on first entry into an active trip even before
@@ -613,9 +636,10 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                   (headingToPickup || tripInProgress)
                   ? _pickupRoute
                   : const <LatLng>[];
+              */
 
-              // Null for `enRoute` — that status keeps the plain live
-              // driver-tracking map (no blur, no card).
+              // Non-null for every active status now that `enRoute` no longer
+              // keeps a live tracking map of its own.
               final bannerContent = TripStatusBannerContent.forStatus(
                 trip.status,
               );
@@ -647,6 +671,9 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                         legPolylines: _buildRoutePolylines(trip),
                         tripMarkers: _buildTripMarkers(trip),
                         onMapCreated: (ctrl) => _onMapCreated(ctrl, trip),
+                        // TRACKING DISABLED: no driver marker and no live
+                        // car→target dashed line. Uncomment with the block above.
+                        /*
                         driverLocation: renderPos?.toDriverLocation(
                           renderBearing,
                         ),
@@ -655,12 +682,14 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                         // (en-route / arrived), destination once on board (in-progress).
                         pickupLocation: liveTargetLocation,
                         pickupRoute: liveTargetRoute,
+                        */
                       ),
 
                       // Full-screen blur over the map for the banner statuses —
                       // replaces the old status artwork. Covers the entire
                       // screen (the sheet simply paints on top of it), so no
-                      // clip is needed. `enRoute` keeps the plain sharp map.
+                      // clip is needed. Since tracking was switched off this
+                      // includes `enRoute`, which has nothing live left to show.
                       if (bannerContent != null)
                         Positioned.fill(
                           child: BackdropFilter(
@@ -687,6 +716,7 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
                               icon: bannerContent.icon,
                               image: bannerContent.image,
                               title: bannerContent.title,
+                              titleAccentWord: bannerContent.titleAccentWord,
                               bodyLines: bannerContent.bodyLines,
                               bodyColor: bannerContent.bodyColor,
                               indicator: bannerContent.indicator,
@@ -803,6 +833,8 @@ class _ActiveTripBodyState extends State<ActiveTripBody>
 }
 
 extension on LatLng {
+  /// TRACKING DISABLED: no caller while driver tracking is off.
+  // ignore: unused_element
   DriverLocationEntity toDriverLocation(double bearing) {
     return DriverLocationEntity(
       latitude: latitude,

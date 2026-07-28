@@ -109,6 +109,9 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
   void _onRealtimeEvent(RealtimeEvent event) {
     if (isClosed) return;
+    // TRACKING DISABLED: the event is no longer subscribed to in the realtime
+    // service, so nothing reaches here. Uncomment together with that subscription.
+    /*
     if (event is RealtimeDriverLocationUpdated) {
       add(
         TripEvent.driverLocationUpdated(
@@ -121,6 +124,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       );
       return;
     }
+    */
     // Unlike the rest, this one carries the money — pass it through so the amount can be
     // confirmed immediately rather than waiting on the refetch it also triggers.
     if (event is RealtimeTripEditApplied) {

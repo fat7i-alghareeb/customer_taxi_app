@@ -84,6 +84,8 @@ abstract class TripCancellationModel with _$TripCancellationModel {
     required double refundPercent,
     required double refundAmount,
     required String currencyCode,
+    /// Flat fee withheld from the fare. Defaulted for older payloads that predate the field.
+    @Default(0) double cancellationFeeAmount,
     String? note,
     DateTime? createdAtUtc,
   }) = _TripCancellationModel;
