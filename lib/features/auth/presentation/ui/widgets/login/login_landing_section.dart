@@ -18,39 +18,25 @@ class LoginLandingSection extends StatelessWidget {
           ),
         ).animate().fadeIn(duration: 600.ms).slideY(begin: -0.2),
 
-        AppSpacing.xs.verticalSpace,
+        AppSpacing.lg.verticalSpace,
+        AppSpacing.lg.verticalSpace,
 
         // Tagline text
-        Builder(
-          builder: (context) {
-            final parts = AppStrings.loginLandingTagline.split(' ');
-            if (parts.length < 2) {
-              return Text(
-                AppStrings.loginLandingTagline,
-                style: AppTextStyles.s32w700.copyWith(color: Colors.white),
-                textAlign: TextAlign.center,
-              );
-            }
-            final lastWord = parts.removeLast();
-            final remainingText = parts.join(' ');
-
-            return Text.rich(
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: '${AppStrings.loginLandingTagline}\n'),
               TextSpan(
-                children: [
-                  TextSpan(text: '$remainingText '),
-                  TextSpan(
-                    text: lastWord,
-                    style: const TextStyle(color: AppColors.landingGold),
-                  ),
-                ],
+                text: AppStrings.loginLandingTaglineHighlight,
+                style: const TextStyle(color: AppColors.landingGold),
               ),
-              style: AppTextStyles.s32w700.copyWith(
-                color: Colors.white,
-                height: 1.1,
-              ),
-              textAlign: TextAlign.center,
-            );
-          },
+            ],
+          ),
+          style: AppTextStyles.s32w700.copyWith(
+            color: Colors.white,
+            height: 1.1,
+          ),
+          textAlign: TextAlign.center,
         ).animate().fadeIn(delay: 200.ms),
 
         AppSpacing.md.verticalSpace,

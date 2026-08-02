@@ -695,14 +695,16 @@ class AppStrings {
   static String get loginLandingDiscountSubtitle => 'loginLandingDiscountSubtitle'.tr();
   /// Sign up and get - سجل واحصل على - Meld je aan en krijg - Melde dich an und erhalte - Zarejestruj się i otrzymaj - Зареєструйтеся та отримайте - Inscrivez-vous et recevez - Regístrate y obtén - Înregistrează-te și primești
   static String get loginLandingDiscountTitle => 'loginLandingDiscountTitle'.tr();
-  /// Safe and reliable - آمن وموثوق - Veilig en betrouwbaar - Sicher und zuverlässig - Bezpiecznie i solidnie - Надійно та безпечно - Sûr et fiable - Seguro y confiable - Sigur și de încredere
+  /// Safe & Reliable - آمن وموثوق - Veilig & Betrouwbaar - Sicher & Zuverlässig - Bezpiecznie & Solidnie - Надійно & Безпечно - Sûr & Fiable - Seguro & Confiable - Sigur & De Încredere
   static String get loginLandingFooter => 'loginLandingFooter'.tr();
   /// Login - تسجيل الدخول - Inloggen - Anmelden - Zaloguj się - Увійти - Se connecter - Iniciar sesión - Autentificare
   static String get loginLandingLogin => 'loginLandingLogin'.tr();
   /// Register - تسجيل - Aanmelden - Registrieren - Zarejestruj się - Зареєструватися - S'inscrire - Registrarse - Înregistrare
   static String get loginLandingRegister => 'loginLandingRegister'.tr();
-  /// Your ride, our priority. - رحلتك هي أولويتنا. - Jouw rit, onze prioriteit. - Deine Fahrt, unsere Priorität. - Twój przejazd, nasz priorytet. - Ваша поїздка — наш пріоритет. - Votre trajet, notre priorité. - Tu viaje, nuestra prioridad. - Călătoria ta, prioritatea noastră.
+  /// One Team. - فريق واحد. - Eén Team. - Ein Team. - Jeden Zespół. - Одна Команда. - Une Équipe. - Un Equipo. - O Echipă.
   static String get loginLandingTagline => 'loginLandingTagline'.tr();
+  /// Every Time. - في كل مرة. - Elke Keer. - Jedes Mal. - Za Każdym Razem. - Кожного Разу. - À Chaque Fois. - Cada Vez. - De Fiecare Dată.
+  static String get loginLandingTaglineHighlight => 'loginLandingTaglineHighlight'.tr();
   /// Logout - تسجيل الخروج - Uitloggen - Abmelden - Wyloguj - Вийти - Déconnexion - Cerrar sesión - Deconectare
   static String get logout => 'logout'.tr();
   /// From - من - Van - Von - Od - Звідки - Départ - Desde - De la
