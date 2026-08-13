@@ -22,12 +22,49 @@ class CustomDioInterceptor extends Interceptor {
 
   static final _jsonEncoder = const JsonEncoder.withIndent('  ');
 
+  /// Keys whose values are credentials and must never reach a log sink, even in
+  /// debug builds — logcat is readable by anyone with adb on the device.
+  static const List<String> _redactedBodyKeys = [
+    'accesstoken',
+    'refreshtoken',
+    'token',
+    'password',
+    'newpassword',
+    'currentpassword',
+    'code',
+    'otp',
+    'firebaseidtoken',
+    'fcmtoken',
+  ];
+
+  static const String _redactedPlaceholder = '***REDACTED***';
+
   String _redactHeaders(Map<String, dynamic> headers) {
     final Map<String, dynamic> copy = {};
     headers.forEach((k, v) {
-      copy[k] = v;
+      copy[k] = redactedHeaders.contains(k.toLowerCase())
+          ? _redactedPlaceholder
+          : v;
     });
     return copy.toString();
+  }
+
+  /// Recursively replaces credential-bearing values before a body is printed.
+  Object? _redactBody(Object? data) {
+    if (data is Map) {
+      return data.map(
+        (key, value) => MapEntry(
+          key,
+          _redactedBodyKeys.contains(key.toString().toLowerCase())
+              ? _redactedPlaceholder
+              : _redactBody(value),
+        ),
+      );
+    }
+    if (data is List) {
+      return data.map(_redactBody).toList();
+    }
+    return data;
   }
 
   String _truncate(String text) {
@@ -41,7 +78,10 @@ class CustomDioInterceptor extends Interceptor {
       if (data is FormData) {
         final buf = StringBuffer();
         for (final f in data.fields) {
-          buf.writeln('${f.key}: ${f.value}');
+          final value = _redactedBodyKeys.contains(f.key.toLowerCase())
+              ? _redactedPlaceholder
+              : f.value;
+          buf.writeln('${f.key}: $value');
         }
         for (final f in data.files) {
           final filename = f.value.filename ?? '<file>';
@@ -55,13 +95,13 @@ class CustomDioInterceptor extends Interceptor {
         if ((trimmed.startsWith('{') && trimmed.endsWith('}')) ||
             (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
           final decoded = json.decode(trimmed);
-          return _jsonEncoder.convert(decoded);
+          return _jsonEncoder.convert(_redactBody(decoded));
         }
         return data;
       }
       // If it's a Map/List or encodable, pretty print JSON
       if (data is Map || data is List) {
-        return _jsonEncoder.convert(data);
+        return _jsonEncoder.convert(_redactBody(data));
       }
 
       // Fallback to toString()

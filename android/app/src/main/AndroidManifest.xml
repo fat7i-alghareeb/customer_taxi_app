@@ -1,13 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
   <!-- Notification permissions -->
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
-  <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <!-- In-trip safety audio recording -->
   <uses-permission android:name="android.permission.RECORD_AUDIO"/>
@@ -15,7 +14,15 @@
        MediaStore.Downloads which is permission-less. -->
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                    android:maxSdkVersion="28"/>
-  <application android:label="@string/app_name" android:name="${applicationName}" android:icon="@mipmap/ic_launcher" android:enableOnBackInvokedCallback="true" android:usesCleartextTraffic="true">
+  <!-- open_filex injects the READ_MEDIA_* trio unconditionally, but this app
+       never reads the media store: image_picker goes through the Android photo
+       picker (permission-less) and open_filex only reopens invoices this app
+       itself downloaded. Drop them so Play doesn't demand a Photo and Video
+       Permissions declaration. -->
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove"/>
+  <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:node="remove"/>
+  <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" tools:node="remove"/>
+  <application android:label="@string/app_name" android:name="${applicationName}" android:icon="@mipmap/ic_launcher" android:enableOnBackInvokedCallback="true" android:allowBackup="false">
     <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:taskAffinity="" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
       <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
@@ -38,6 +45,10 @@
     <meta-data android:name="flutterEmbedding" android:value="2"/>
     <!-- Google Maps API Key -->
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="${googleMapsApiKey}"/>
+    <!-- Background location is not requested by this app; drop the geolocator
+         plugin's foreground-location service so it never appears in the shipped
+         manifest and doesn't trigger Play's foreground-service declaration. -->
+    <service android:name="com.baseflow.geolocator.GeolocatorLocationService" tools:node="remove"/>
     <!-- Scheduled notifications -->
     <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" android:exported="false"/>
     <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver" android:exported="false">

@@ -11,13 +11,13 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-android {
-    val keystorePropertiesFile = rootProject.file("key.properties")
-    val keystoreProperties = Properties()
-    if (keystorePropertiesFile.exists()) {
-        keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
-    }
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+}
 
+android {
     signingConfigs {
         create("release") {
             if (keystorePropertiesFile.exists()) {
@@ -81,16 +81,29 @@ android {
 
     buildTypes {
         release {
+            // Only require a real keystore when a release variant is actually being
+            // assembled — falling back to the debug config here (instead of throwing)
+            // keeps `flutter analyze`/`flutter test`/debug builds working without a
+            // keystore. The check below is what actually blocks an unsigned release.
             signingConfig = if (keystorePropertiesFile.exists()) {
                 signingConfigs.getByName("release")
             } else {
                 signingConfigs.getByName("debug")
             }
-            
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+}
+
+if (!keystorePropertiesFile.exists()) {
+    gradle.taskGraph.whenReady {
+        val buildingRelease = allTasks.any { it.name.contains("Release") }
+        if (buildingRelease) {
+            throw GradleException("android/key.properties missing — release build cannot be signed")
         }
     }
 }

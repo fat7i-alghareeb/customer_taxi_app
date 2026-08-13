@@ -1,7 +1,7 @@
 name: "customertaxi"
 description: "A Flutter Clean Architecture project."
 publish_to: "none"
-version: 1.5.23+25
+version: 1.0.0+2
 
 environment:
   sdk: ^3.10.1
@@ -33,6 +33,7 @@ dependencies:
   provider: ^6.1.1
 
   # Networking / Session
+  crypto: ^3.0.6 # SHA-256 fingerprints for TLS certificate pinning
   dio: ^5.9.0
   dio_refresh_bot: ^2.2.1
   flutter_secure_storage: ^10.3.1

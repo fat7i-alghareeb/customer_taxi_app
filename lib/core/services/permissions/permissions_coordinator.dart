@@ -37,10 +37,6 @@ class PermissionsCoordinator extends ChangeNotifier {
     return _locationPermissionService.isForegroundLocationGranted();
   }
 
-  Future<bool> isBackgroundLocationGranted() {
-    return _locationPermissionService.isBackgroundLocationGranted();
-  }
-
   Future<PermissionGateResult> ensurePostSplashPermissions() async {
     printC('[PermissionsCoordinator] ensurePostSplashPermissions start');
     await _requestNotificationSoftly();
@@ -102,47 +98,6 @@ class PermissionsCoordinator extends ChangeNotifier {
     }
 
     printY('[PermissionsCoordinator] result=denied');
-    return PermissionGateResult.denied;
-  }
-
-  Future<PermissionGateResult> ensureBackgroundLocationWhenNeeded({
-    bool openSettingsIfPermanentlyDenied = false,
-  }) async {
-    final hasForeground = await _locationPermissionService
-        .isForegroundLocationGranted();
-
-    if (!hasForeground) {
-      notifyListeners();
-      return PermissionGateResult.denied;
-    }
-
-    final hasBackground = await _locationPermissionService
-        .isBackgroundLocationGranted();
-
-    if (hasBackground) {
-      notifyListeners();
-      return PermissionGateResult.granted;
-    }
-
-    final status = await _locationPermissionService
-        .requestBackgroundLocationPermission(
-          enableDebugLogs: true,
-          openSettingsIfPermanentlyDenied: openSettingsIfPermanentlyDenied,
-        );
-
-    final grantedAfterRequest = await _locationPermissionService
-        .isBackgroundLocationGranted();
-
-    notifyListeners();
-
-    if (grantedAfterRequest) {
-      return PermissionGateResult.granted;
-    }
-
-    if (status.isPermanentlyDenied || status == PermissionStatus.restricted) {
-      return PermissionGateResult.permanentlyDenied;
-    }
-
     return PermissionGateResult.denied;
   }
 

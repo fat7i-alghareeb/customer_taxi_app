@@ -28,14 +28,6 @@ class $AssetsImagesGen {
   AssetGenImage get a8Passengeres =>
       const AssetGenImage('assets/images/8-passengeres.png');
 
-  /// File path: assets/images/adam_logo.png
-  AssetGenImage get adamLogo =>
-      const AssetGenImage('assets/images/adam_logo.png');
-
-  /// File path: assets/images/buildings.png
-  AssetGenImage get buildings =>
-      const AssetGenImage('assets/images/buildings.png');
-
   /// File path: assets/images/carForRealTime.png
   AssetGenImage get carForRealTime =>
       const AssetGenImage('assets/images/carForRealTime.png');
@@ -71,10 +63,6 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding3 =>
       const AssetGenImage('assets/images/onboarding_3.png');
 
-  /// File path: assets/images/legacyCar.png
-  AssetGenImage get legacyCar =>
-      const AssetGenImage('assets/images/legacyCar.png');
-
   /// File path: assets/images/oranje_logo.png
   AssetGenImage get oranjeLogo =>
       const AssetGenImage('assets/images/oranje_logo.png');
@@ -82,14 +70,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/order_now_car.png
   AssetGenImage get orderNowCar =>
       const AssetGenImage('assets/images/order_now_car.png');
-
-  /// File path: assets/images/road_and_buildings.png
-  AssetGenImage get roadAndBuildings =>
-      const AssetGenImage('assets/images/road_and_buildings.png');
-
-  /// File path: assets/images/road_light_trails.png
-  AssetGenImage get roadLightTrails =>
-      const AssetGenImage('assets/images/road_light_trails.png');
 
   /// File path: assets/images/schdedulTrip.png
   AssetGenImage get schdedulTrip =>
@@ -101,14 +81,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/splashScreen.jpg
   AssetGenImage get splashScreen =>
       const AssetGenImage('assets/images/splashScreen.jpg');
-
-  /// File path: assets/images/splash_dark.png
-  AssetGenImage get splashDark =>
-      const AssetGenImage('assets/images/splash_dark.png');
-
-  /// File path: assets/images/splash_light.png
-  AssetGenImage get splashLight =>
-      const AssetGenImage('assets/images/splash_light.png');
 
   /// File path: assets/images/standered.png
   AssetGenImage get standered =>
@@ -128,8 +100,6 @@ class $AssetsImagesGen {
   /// List of all assets
   List<AssetGenImage> get values => [
     a8Passengeres,
-    adamLogo,
-    buildings,
     carForRealTime,
     comfort,
     googleIconeSymboleLogoPng,
@@ -139,16 +109,11 @@ class $AssetsImagesGen {
     onboarding1,
     onboarding2,
     onboarding3,
-    legacyCar,
     oranjeLogo,
     orderNowCar,
-    roadAndBuildings,
-    roadLightTrails,
     schdedulTrip,
     splash,
     splashScreen,
-    splashDark,
-    splashLight,
     standered,
     topText,
     tripCarImage,

@@ -7,11 +7,14 @@ This folder centralizes app permissions needed by startup flow and location/map 
 - Location permission is mandatory for entering the app flow.
 - Notification permission is optional and requested softly after splash.
 - Startup order is: Splash -> Permission Gate -> Onboarding/Auth/Root.
+- Only foreground location is requested. The app does not request or declare
+  background location (no ACCESS_BACKGROUND_LOCATION), so there is no Play
+  Console background-location declaration to file.
 
 ## Files
 
 - location_permission_service.dart
-  - permission_handler wrapper for foreground/background location permission.
+  - permission_handler wrapper for foreground location permission.
   - exposes status checks, request methods, and settings shortcut.
 
 - permissions_coordinator.dart
@@ -30,7 +33,6 @@ For startup gate:
 For map/location features:
 
 1. Call isForegroundLocationGranted() before location-dependent logic.
-2. Call ensureBackgroundLocationWhenNeeded() only when a background tracking flow is activated.
 
 ## Notes
 

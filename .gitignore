@@ -47,13 +47,13 @@ app.*.map.json
 # Environment variables
 .env
 .env.*
-! .env.example
+!.env.example
 
 # Generated Envied files
 lib/core/config/env/*.g.dart
 
 # Android Signing Secrets
-android/keystores/*.jks
-android/keystores/*.keystore
-android/key.properties
+*.jks
+*.keystore
+**/key.properties
 
