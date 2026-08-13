@@ -58,6 +58,14 @@
           }
         },
         {
+          "client_id": "74478390393-biff6o18vdi2ugo5qifukeck35a55080.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.fat7i.customertaxi",
+            "certificate_hash": "ae94906a23982a2a43e13056699b1cef1517a412"
+          }
+        },
+        {
           "client_id": "74478390393-udhd6ortp62p4d4o7n65f9s8ogf1grqd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
