@@ -8,6 +8,7 @@ import '../../../../core/error/app_exception.dart';
 import '../../../../core/error/global_error_handler.dart';
 import '../../../../utils/helpers/app_strings.dart';
 import '../../../../utils/helpers/colored_print.dart';
+import '../../../../utils/helpers/release_log.dart';
 
 /// Firebase is used ONLY for Google Sign-In now. Phone verification moved to the
 /// backend-owned OTP flow (CM.com SMS), so all Firebase phone-auth logic is gone.
@@ -18,7 +19,11 @@ class AuthFirebaseDataSource {
   final FirebaseAuth _firebaseAuth;
   final FirebaseMessaging _firebaseMessaging;
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: const ['email']);
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: const ['email'],
+    serverClientId:
+        '74478390393-2mkq60lv42p5tbjnm66o56eisknq6a65.apps.googleusercontent.com',
+  );
 
   /// Runs the native Google chooser, signs into Firebase with the Google
   /// credential, and returns a fresh Firebase ID token for the backend to verify.
@@ -62,20 +67,40 @@ class AuthFirebaseDataSource {
       } on AppException {
         rethrow;
       } catch (e, s) {
-        // Log the RAW cause before rethrowAsAppException collapses it to "unknown".
+        // `printC/printR` are compiled out of release builds, and
+        // rethrowAsAppException collapses anything unknown into "Unknown error".
+        // Both together make Play Store failures undiagnosable, so log through
+        // dart:developer (survives release) and carry the code in the message.
+        logAlways('GoogleAuth: sign-in failed', error: e, stackTrace: s);
+
         if (e is PlatformException) {
           printR(
             '[GoogleAuth] PlatformException code=${e.code} '
             'message=${e.message} details=${e.details}',
           );
-        } else if (e is FirebaseAuthException) {
+          // 12501 = the user dismissed the chooser; not an error.
+          if (e.code == '12501' || e.code == 'sign_in_canceled') return null;
+          final detail = e.message == null ? '' : ': ${e.message}';
+          throw AppException(
+            'Google sign-in failed (${e.code}$detail)',
+            cause: e,
+            stackTrace: s,
+          );
+        }
+
+        if (e is FirebaseAuthException) {
           printR(
             '[GoogleAuth] FirebaseAuthException code=${e.code} '
             'message=${e.message}',
           );
-        } else {
-          printR('[GoogleAuth] ${e.runtimeType}: $e');
+          throw AppException(
+            'Firebase auth failed (${e.code})',
+            cause: e,
+            stackTrace: s,
+          );
         }
+
+        printR('[GoogleAuth] ${e.runtimeType}: $e');
         printR('[GoogleAuth] stack:\n$s');
         rethrow;
       }

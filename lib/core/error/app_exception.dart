@@ -13,8 +13,17 @@ class AppException implements Exception {
   final StackTrace? stackTrace;
 
   /// Unknown / unexpected error with a generic message.
+  ///
+  /// The cause's runtime type is appended to the message: a release build has
+  /// no other channel to say *what* went wrong, and "Unknown error" alone is
+  /// undiagnosable once the app is on a user's device.
   factory AppException.unknown({Object? cause, StackTrace? stackTrace}) {
-    return AppException('Unknown error', cause: cause, stackTrace: stackTrace);
+    final tag = cause == null ? '' : ' (${cause.runtimeType})';
+    return AppException(
+      'Unknown error$tag',
+      cause: cause,
+      stackTrace: stackTrace,
+    );
   }
 
   /// Convenience factory for mapping known cases.

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 
 import '../../utils/helpers/colored_print.dart';
+import '../../utils/helpers/release_log.dart';
+import '../network/interceptors/error_interceptor.dart';
 import '../utils/result.dart';
 import 'app_exception.dart';
 
@@ -20,15 +22,17 @@ Future<Result<T>> runAsResult<T>(FutureOr<T> Function() action) async {
     return Result.success(value);
   } on AppException catch (e) {
     return Result.failure(e.message);
-  } on DioException catch (e, s) {
-    // Expect that ErrorInterceptor has already converted errors to
-    // AppException via `err.error`. If not, fall back to unknown.
-    final appEx = e.error is AppException
-        ? e.error as AppException
-        : AppException.unknown(cause: e, stackTrace: s);
+  } on DioException catch (e) {
+    // Normally ErrorInterceptor has already converted the error to an
+    // AppException via `err.error`. It can be bypassed though — an earlier
+    // interceptor (the refresh-token one) may reject first — so map it here
+    // rather than degrading to "Unknown error".
+    final appEx =
+        e.error is AppException ? e.error as AppException : ErrorInterceptor.mapDioError(e);
     return Result.failure(appEx.message);
   } catch (e, s) {
     printR('runAsResult unexpected error: $e');
+    logAlways('runAsResult unexpected error', error: e, stackTrace: s);
     return Result.failure(
       AppException.unknown(cause: e, stackTrace: s).message,
     );
@@ -45,12 +49,13 @@ Future<T> rethrowAsAppException<T>(FutureOr<T> Function() action) async {
     return await action();
   } on AppException {
     rethrow;
-  } on DioException catch (e, s) {
+  } on DioException catch (e) {
     if (e.error is AppException) {
       throw e.error!;
     }
-    throw AppException.unknown(cause: e, stackTrace: s);
+    throw ErrorInterceptor.mapDioError(e);
   } catch (e, s) {
+    logAlways('rethrowAsAppException unexpected error', error: e, stackTrace: s);
     throw AppException.unknown(cause: e, stackTrace: s);
   }
 }
@@ -72,14 +77,15 @@ Future<AppException?> runAndReturnError<T>(
     return null;
   } on AppException catch (e) {
     return e;
-  } on DioException catch (e, s) {
+  } on DioException catch (e) {
     if (e.error is AppException) {
       return e.error as AppException;
     }
     printR('runAndReturnError DioException: $e');
-    return AppException.unknown(cause: e, stackTrace: s);
+    return ErrorInterceptor.mapDioError(e);
   } catch (e, s) {
     printR('runAndReturnError unexpected error: $e');
+    logAlways('runAndReturnError unexpected error', error: e, stackTrace: s);
     return AppException.unknown(cause: e, stackTrace: s);
   }
 }

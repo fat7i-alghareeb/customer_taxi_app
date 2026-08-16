@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../utils/helpers/app_strings.dart';
+import '../../../utils/helpers/release_log.dart';
 import '../../error/app_exception.dart';
 
 /// Interceptor that converts all [DioException]s into [AppException]
@@ -19,7 +20,12 @@ import '../../error/app_exception.dart';
 class ErrorInterceptor extends Interceptor {
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    final mapped = _mapDioError(err);
+    logAlways(
+      'http ${err.requestOptions.method} ${err.requestOptions.path} '
+      '→ ${err.response?.statusCode} ${err.type}',
+      error: err.error,
+    );
+    final mapped = mapDioError(err);
     handler.reject(err.copyWith(error: mapped));
   }
 
@@ -29,7 +35,12 @@ class ErrorInterceptor extends Interceptor {
   /// - Detect offline/timeouts early.
   /// - Map well-known HTTP statuses to specific messages.
   /// - Always return *something* even if parsing fails.
-  AppException _mapDioError(DioException error) {
+  ///
+  /// Static and public so callers can map a [DioException] that never passed
+  /// through this interceptor — an earlier interceptor in the chain (the
+  /// refresh-token one) can reject first, which would otherwise leave the
+  /// error unmapped. See `runAsResult` in `global_error_handler.dart`.
+  static AppException mapDioError(DioException error) {
     try {
       //! 1) Transport-level issues (no internet, timeouts, TLS)
       if (_isNoInternet(error)) {
@@ -118,7 +129,7 @@ class ErrorInterceptor extends Interceptor {
   /// - `{ "error": "..." }`
   /// - `{ "title": "..." }` (ProblemDetails)
   /// - `{ "detail": "..." }`
-  String? _extractApiMessage(Response<dynamic>? response) {
+  static String? _extractApiMessage(Response<dynamic>? response) {
     if (response == null) return null;
     final data = response.data;
     if (data == null) return null;
@@ -140,7 +151,7 @@ class ErrorInterceptor extends Interceptor {
     return null;
   }
 
-  String? _extractValidationMessage(Map data) {
+  static String? _extractValidationMessage(Map data) {
     final Object? errors = data['errors'];
     if (errors is! Map) return null;
 
@@ -153,7 +164,7 @@ class ErrorInterceptor extends Interceptor {
     return messages.join('\n');
   }
 
-  void _collectMessages(Object? value, List<String> messages) {
+  static void _collectMessages(Object? value, List<String> messages) {
     if (value is String) {
       final trimmed = value.trim();
       if (trimmed.isNotEmpty) messages.add(trimmed);
@@ -172,13 +183,13 @@ class ErrorInterceptor extends Interceptor {
     }
   }
 
-  String? _readString(Object? value) {
+  static String? _readString(Object? value) {
     if (value is! String) return null;
     final trimmed = value.trim();
     return trimmed.isEmpty ? null : trimmed;
   }
 
-  String? _combineTitleDetail(String? title, String? detail) {
+  static String? _combineTitleDetail(String? title, String? detail) {
     if (title == null && detail == null) return null;
     if (title != null && detail != null && title != detail) {
       return '$title\n$detail';
@@ -186,14 +197,14 @@ class ErrorInterceptor extends Interceptor {
     return title ?? detail;
   }
 
-  bool _isTimeout(DioException e) {
+  static bool _isTimeout(DioException e) {
     return e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.sendTimeout ||
         e.type == DioExceptionType.receiveTimeout;
   }
 
   /// Rough check for offline / DNS issues using the underlying error type.
-  bool _isNoInternet(DioException e) {
+  static bool _isNoInternet(DioException e) {
     return e.error is SocketException;
   }
 }
