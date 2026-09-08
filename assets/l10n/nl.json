@@ -851,5 +851,16 @@
   "tripExtraStops": "+{count} stops",
   "timeUnitDayShort": "d",
   "timeUnitHourShort": "u",
-  "timeUnitMinuteShort": "min"
+  "timeUnitMinuteShort": "min",
+  "forceUpdateTitle": "Update vereist",
+  "forceUpdateMessage": "Deze versie van Fat7i wordt niet meer ondersteund. Werk bij om ritten te blijven boeken.",
+  "forceUpdateCurrentVersionLabel": "Versie",
+  "forceUpdateButton": "Nu bijwerken",
+  "forceUpdateAlreadyUpdated": "Ik heb al bijgewerkt",
+  "forceUpdateStoreOpenFailed": "Kan de store niet openen. Werk Fat7i handmatig bij.",
+  "softUpdateTitle": "Er is een nieuwe versie beschikbaar",
+  "softUpdateMessage": "Werk Fat7i bij voor de nieuwste verbeteringen en oplossingen.",
+  "softUpdateButton": "Bijwerken",
+  "softUpdateLater": "Niet nu",
+  "updateFromStoreHint": "Open je appstore en werk Fat7i bij."
 }

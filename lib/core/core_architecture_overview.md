@@ -61,6 +61,15 @@ This folder should remain **feature-agnostic**. If code is specific to one produ
     - localization
     - session/auth state management
     - onboarding coordination
+    - remote app version gating through `services/app_version/`
+      (`AppVersionService` fetches `GET /api/v1/app-config/app-version`;
+      `AppVersionGateCoordinator` resolves a single
+      `AppVersionGateDecision` and notifies the router). Every failure path
+      fails open — a network error, an unreadable installed version or a
+      malformed remote value all resolve to "no gate", because bricking every
+      install over one bad config row is the dominant risk. A blank store URL
+      is the deliberate exception: the gate still applies and the UI shows a
+      manual-update hint instead of a store button.
     - persistent storage
     - memory/cache management
     - file downloads through `FileDownloadService`, which saves generated

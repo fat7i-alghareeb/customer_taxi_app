@@ -851,5 +851,16 @@
   "tripExtraStops": "+{count} stops",
   "timeUnitDayShort": "d",
   "timeUnitHourShort": "h",
-  "timeUnitMinuteShort": "min"
+  "timeUnitMinuteShort": "min",
+  "forceUpdateTitle": "Update required",
+  "forceUpdateMessage": "This version of Fat7i is no longer supported. Update to keep booking rides.",
+  "forceUpdateCurrentVersionLabel": "Version",
+  "forceUpdateButton": "Update now",
+  "forceUpdateAlreadyUpdated": "I've already updated",
+  "forceUpdateStoreOpenFailed": "Could not open the store. Please update Fat7i manually.",
+  "softUpdateTitle": "A new version is available",
+  "softUpdateMessage": "Update Fat7i to get the latest improvements and fixes.",
+  "softUpdateButton": "Update",
+  "softUpdateLater": "Not now",
+  "updateFromStoreHint": "Open your app store and update Fat7i."
 }

@@ -64,6 +64,17 @@ Contains the design system implementation, typography, and shared widgets.
 **Path**: `lib/core/router/` | `lib/features/`
 Contains the routing logic and feature-specific state management (Bloc).
 
+### 🚧 Startup gates
+
+`AppRouteGuard` owns every pre-app gate, in order:
+**splash → force-update → onboarding → permission → auth → profile-setup.**
+The force-update gate (`lib/features/app_update/`) is deliberately first: a user
+on an unsupported build must not be walked through onboarding, a location prompt
+and an OTP flow before being told to update. It is a presentation-only feature —
+the network lives in `core/services/app_version/` — so it has no `data/` or
+`domain/` layer and was hand-created rather than scaffolded with
+`tool/generate_feature.dart`, exactly like `features/permissions/`.
+
 ### 📦 [Persistence & Services](lib/core/services/objectbox/objectbox_service_guide.md)
 
 **Path**: `lib/core/services/`

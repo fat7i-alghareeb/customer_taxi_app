@@ -1,3 +1,4 @@
+import 'package:customertaxi/core/services/payments/stripe_initializer.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:customertaxi/common/imports/imports.dart';
@@ -85,6 +86,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     await result.when(
       success: (topUp) async {
         try {
+          // Stripe is configured lazily so bootstrap no longer waits on it.
+          await getIt<StripeInitializer>().ensureReady();
           await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
               paymentIntentClientSecret: topUp.stripePayment.clientSecret,
@@ -146,6 +149,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     await result.when(
       success: (setup) async {
         try {
+          // Stripe is configured lazily so bootstrap no longer waits on it.
+          await getIt<StripeInitializer>().ensureReady();
           await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
               setupIntentClientSecret: setup.clientSecret,

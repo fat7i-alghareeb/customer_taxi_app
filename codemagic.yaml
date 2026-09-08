@@ -1,6 +1,6 @@
 workflows:
   android-production:
-    name: customertaxi Android APK (Production)
+    name: customertaxi Android (Production)
 
     max_build_duration: 60
 
@@ -12,6 +12,7 @@ workflows:
 
       groups:
         - production
+        - google_play_credentials
 
       vars:
         GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m"
@@ -118,6 +119,17 @@ workflows:
             --obfuscate \
             --split-debug-info=build/debug-info
 
+      - name: Build App Bundle Production
+        script: |
+          set -e
+
+          flutter build appbundle \
+            --release \
+            --flavor production \
+            -t lib/main.dart \
+            --obfuscate \
+            --split-debug-info=build/debug-info
+
       - name: Print Final APK SHA-1 and SHA-256
         script: |
           set -e
@@ -145,6 +157,7 @@ workflows:
 
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/bundle/**/*.aab
       - build/debug-info/**
 
     publishing:
@@ -156,3 +169,184 @@ workflows:
         notify:
           success: true
           failure: false
+
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: production
+        submit_as_draft: true
+
+  android-closed-testing:
+    name: customertaxi Android (Closed Testing)
+
+    max_build_duration: 60
+
+    environment:
+      flutter: 3.44.1
+
+      android_signing:
+        - customertaxi_release
+
+      groups:
+        - production
+        - google_play_credentials
+
+      vars:
+        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m"
+        ANDROID_NDK_VERSION: "28.2.13676358"
+        ANDROID_NDK_HOME: "/usr/local/share/android-sdk/ndk/28.2.13676358"
+
+    cache:
+      cache_paths:
+        - $HOME/.pub-cache
+        - $HOME/.gradle/caches
+
+    scripts:
+      - name: Get Dependencies
+        script: |
+          set -e
+          flutter pub get
+
+      - name: Generate Code
+        script: |
+          set -e
+
+          echo "--- Environment Diagnostics ---"
+
+          if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
+            echo "ERROR: GOOGLE_MAPS_API_KEY is empty or not found."
+            exit 1
+          else
+            echo "GOOGLE_MAPS_API_KEY detected. Length: ${#GOOGLE_MAPS_API_KEY}"
+          fi
+
+          echo "-------------------------------"
+
+          echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" > .env
+
+          dart run build_runner build --delete-conflicting-outputs
+
+      - name: Set up signing key properties
+        script: |
+          set -e
+
+          echo "--- Code Signing Environment Validation ---"
+
+          if [ -z "$CM_KEYSTORE_PATH" ]; then
+            echo "ERROR: CM_KEYSTORE_PATH is empty. Make sure Android keystore is configured in Codemagic."
+            exit 1
+          else
+            echo "CM_KEYSTORE_PATH is configured."
+          fi
+
+          if [ -z "$CM_KEYSTORE_PASSWORD" ]; then
+            echo "ERROR: CM_KEYSTORE_PASSWORD is empty."
+            exit 1
+          fi
+
+          if [ -z "$CM_KEY_ALIAS" ]; then
+            echo "ERROR: CM_KEY_ALIAS is empty."
+            exit 1
+          fi
+
+          if [ -z "$CM_KEY_PASSWORD" ]; then
+            echo "ERROR: CM_KEY_PASSWORD is empty."
+            exit 1
+          fi
+
+          echo "Key parameters are present."
+          echo "------------------------------------------"
+
+          echo "storePassword=$CM_KEYSTORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$CM_KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$CM_KEY_ALIAS" >> android/key.properties
+          echo "storeFile=$CM_KEYSTORE_PATH" >> android/key.properties
+
+          echo "Generated android/key.properties for CI build."
+
+      - name: Print Uploaded Keystore SHA Before Build
+        script: |
+          set -e
+
+          keytool -list -v \
+            -keystore "$CM_KEYSTORE_PATH" \
+            -alias "$CM_KEY_ALIAS" \
+            -storepass "$CM_KEYSTORE_PASSWORD"
+
+      - name: Print Gradle Signing Report Before Build
+        script: |
+          set -e
+          if [ ! -f "android/gradlew" ]; then
+            echo "ERROR: Gradle wrapper file 'android/gradlew' not found!"
+            echo "Gradle wrapper files must be committed to the Git repository and must not be ignored."
+            exit 1
+          fi
+          chmod +x android/gradlew
+          cd android
+          ./gradlew :app:signingReport --no-daemon
+
+      - name: Build APK Production
+        script: |
+          set -e
+
+          flutter build apk \
+            --release \
+            --flavor production \
+            -t lib/main.dart \
+            --obfuscate \
+            --split-debug-info=build/debug-info
+
+      - name: Build App Bundle Production
+        script: |
+          set -e
+
+          flutter build appbundle \
+            --release \
+            --flavor production \
+            -t lib/main.dart \
+            --obfuscate \
+            --split-debug-info=build/debug-info
+
+      - name: Print Final APK SHA-1 and SHA-256
+        script: |
+          set -e
+
+          APK_PATH=$(find build/app/outputs/flutter-apk -name "*.apk" | head -n 1)
+
+          if [ -z "$APK_PATH" ]; then
+            echo "ERROR: APK not found."
+            exit 1
+          fi
+
+          echo "APK path: $APK_PATH"
+
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -n 1)
+
+          if [ -z "$APKSIGNER" ]; then
+            echo "ERROR: apksigner not found."
+            exit 1
+          fi
+
+          echo "Using apksigner: $APKSIGNER"
+          echo "--- APK Certificate ---"
+
+          "$APKSIGNER" verify --verbose --print-certs "$APK_PATH"
+
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/bundle/**/*.aab
+      - build/debug-info/**
+
+    publishing:
+      email:
+        recipients:
+          - fat7ighareeb@gmail.com
+          - fat7ighareeb@gmail.com
+          - fat7ighareeb@gmail.com
+        notify:
+          success: true
+          failure: false
+
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: alpha
+        submit_as_draft: true

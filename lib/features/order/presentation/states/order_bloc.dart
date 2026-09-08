@@ -1,3 +1,4 @@
+import 'package:customertaxi/core/services/payments/stripe_initializer.dart';
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';

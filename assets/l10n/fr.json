@@ -851,5 +851,16 @@
   "tripExtraStops": "+{count} arrêts",
   "timeUnitDayShort": "j",
   "timeUnitHourShort": "h",
-  "timeUnitMinuteShort": "min"
+  "timeUnitMinuteShort": "min",
+  "forceUpdateTitle": "Mise à jour requise",
+  "forceUpdateMessage": "Cette version d'Fat7i n'est plus prise en charge. Mettez à jour pour continuer à réserver des trajets.",
+  "forceUpdateCurrentVersionLabel": "Version",
+  "forceUpdateButton": "Mettre à jour",
+  "forceUpdateAlreadyUpdated": "J'ai déjà mis à jour",
+  "forceUpdateStoreOpenFailed": "Impossible d'ouvrir le store. Veuillez mettre à jour Fat7i manuellement.",
+  "softUpdateTitle": "Une nouvelle version est disponible",
+  "softUpdateMessage": "Mettez à jour Fat7i pour bénéficier des dernières améliorations et corrections.",
+  "softUpdateButton": "Mettre à jour",
+  "softUpdateLater": "Pas maintenant",
+  "updateFromStoreHint": "Ouvrez votre store et mettez à jour Fat7i."
 }

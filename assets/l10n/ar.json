@@ -851,5 +851,16 @@
   "tripExtraStops": "+{count} محطات",
   "timeUnitDayShort": "ي",
   "timeUnitHourShort": "س",
-  "timeUnitMinuteShort": "د"
+  "timeUnitMinuteShort": "د",
+  "forceUpdateTitle": "التحديث مطلوب",
+  "forceUpdateMessage": "هذا الإصدار من Fat7i لم يعد مدعومًا. حدّث التطبيق لمواصلة حجز الرحلات.",
+  "forceUpdateCurrentVersionLabel": "الإصدار",
+  "forceUpdateButton": "حدّث الآن",
+  "forceUpdateAlreadyUpdated": "لقد حدّثت بالفعل",
+  "forceUpdateStoreOpenFailed": "تعذّر فتح المتجر. يرجى تحديث Fat7i يدويًا.",
+  "softUpdateTitle": "يتوفر إصدار جديد",
+  "softUpdateMessage": "حدّث Fat7i للحصول على أحدث التحسينات والإصلاحات.",
+  "softUpdateButton": "تحديث",
+  "softUpdateLater": "ليس الآن",
+  "updateFromStoreHint": "افتح متجر التطبيقات وحدّث Fat7i."
 }

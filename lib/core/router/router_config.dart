@@ -31,6 +31,8 @@ import '../../features/refund_issues/presentation/ui/screens/refund_issue_screen
 import '../../features/payment/presentation/ui/screens/betaling_screen.dart';
 import '../../features/payment/presentation/ui/screens/wallet_transactions_screen.dart';
 import '../../features/splash/presentation/ui/screens/splash_screen.dart';
+import '../../features/app_update/presentation/ui/screens/force_update_screen.dart';
+import '../services/app_version/app_version_gate_coordinator.dart';
 import '../services/location/startup_map_warmup_coordinator.dart';
 import '../../utils/constants/app_flow_constants.dart';
 import '../../utils/helpers/colored_print.dart';
@@ -50,12 +52,16 @@ class RouterRefreshListenable extends ChangeNotifier {
     required this.onboardingService,
     required this.permissionsCoordinator,
     required this.mapWarmupCoordinator,
+    required this.appVersionGateCoordinator,
   }) {
     // * Listen to all reactive sources that affect routing.
     authState.addListener(_onSourceChanged);
     onboardingService.addListener(_onSourceChanged);
     permissionsCoordinator.addListener(_onSourceChanged);
     mapWarmupCoordinator.addListener(_onSourceChanged);
+    // Without this subscription the force screen would never clear itself after
+    // the user updates and returns.
+    appVersionGateCoordinator.addListener(_onSourceChanged);
 
     // * Ensure the splash is visible for at least [SplashConfig.initialDelay]
     //   even if auth/onboarding resolve instantly.
@@ -70,12 +76,15 @@ class RouterRefreshListenable extends ChangeNotifier {
   final OnboardingService onboardingService;
   final PermissionsCoordinator permissionsCoordinator;
   final StartupMapWarmupCoordinator mapWarmupCoordinator;
+  final AppVersionGateCoordinator appVersionGateCoordinator;
 
   bool _splashDelayElapsed = false;
   int _refreshTick = 0;
 
   bool get splashDelayElapsed => _splashDelayElapsed;
   bool get mapWarmupFinished => mapWarmupCoordinator.isWarmupFinished;
+  bool get forceUpdateRequired =>
+      appVersionGateCoordinator.isForceUpdateRequired;
 
   void _onSourceChanged() {
     _refreshTick++;
@@ -85,7 +94,8 @@ class RouterRefreshListenable extends ChangeNotifier {
       'isGuest=${authState.isGuest} '
       'splashDelayElapsed=$_splashDelayElapsed '
       'mapWarmupFinished=$mapWarmupFinished '
-      'mapWarmupState=${mapWarmupCoordinator.state.name}',
+      'mapWarmupState=${mapWarmupCoordinator.state.name} '
+      'forceUpdate=$forceUpdateRequired',
     );
     notifyListeners();
   }
@@ -96,6 +106,7 @@ class RouterRefreshListenable extends ChangeNotifier {
     onboardingService.removeListener(_onSourceChanged);
     permissionsCoordinator.removeListener(_onSourceChanged);
     mapWarmupCoordinator.removeListener(_onSourceChanged);
+    appVersionGateCoordinator.removeListener(_onSourceChanged);
     super.dispose();
   }
 }
@@ -115,12 +126,14 @@ class AppRouterConfig {
     this._permissionsCoordinator,
     this._mapWarmupCoordinator,
     this._routeRegistry,
+    this._appVersionGateCoordinator,
   ) {
     _refresh = RouterRefreshListenable(
       authState: _authState,
       onboardingService: _onboardingService,
       permissionsCoordinator: _permissionsCoordinator,
       mapWarmupCoordinator: _mapWarmupCoordinator,
+      appVersionGateCoordinator: _appVersionGateCoordinator,
     );
 
     _guard = AppRouteGuard(
@@ -133,6 +146,7 @@ class AppRouterConfig {
       loginPath: LoginScreen.pagePath,
       rootPath: RootScreen.pagePath,
       profileSetupPath: ProfileSetupScreen.pagePath,
+      forceUpdatePath: ForceUpdateScreen.pagePath,
     );
 
     _router = GoRouter(
@@ -144,6 +158,7 @@ class AppRouterConfig {
         state: state,
         splashDelayElapsed: _refresh.splashDelayElapsed,
         mapWarmupFinished: _refresh.mapWarmupFinished,
+        forceUpdateRequired: _refresh.forceUpdateRequired,
       ),
       errorPageBuilder: (context, state) {
         printY(
@@ -163,6 +178,7 @@ class AppRouterConfig {
   final PermissionsCoordinator _permissionsCoordinator;
   final StartupMapWarmupCoordinator _mapWarmupCoordinator;
   final AppRouteRegistry _routeRegistry;
+  final AppVersionGateCoordinator _appVersionGateCoordinator;
 
   late final RouterRefreshListenable _refresh;
   late final AppRouteGuard _guard;
@@ -187,6 +203,7 @@ class AppRouteGuard {
     required this.loginPath,
     required this.rootPath,
     required this.profileSetupPath,
+    required this.forceUpdatePath,
   });
 
   final AuthStateNotifier authState;
@@ -198,6 +215,7 @@ class AppRouteGuard {
   final String loginPath;
   final String rootPath;
   final String profileSetupPath;
+  final String forceUpdatePath;
 
   int _redirectCycleCounter = 0;
 
@@ -225,6 +243,7 @@ class AppRouteGuard {
     required GoRouterState state,
     required bool splashDelayElapsed,
     required bool mapWarmupFinished,
+    required bool forceUpdateRequired,
   }) async {
     final cycleId = ++_redirectCycleCounter;
 
@@ -237,7 +256,8 @@ class AppRouteGuard {
       'currentPath="$currentPath" '
       'status=$initialStatus isGuest=$initialGuest '
       'splashDelayElapsed=$splashDelayElapsed '
-      'mapWarmupFinished=$mapWarmupFinished',
+      'mapWarmupFinished=$mapWarmupFinished '
+      'forceUpdateRequired=$forceUpdateRequired',
     );
 
     // 1) Splash / initial state.
@@ -259,12 +279,36 @@ class AppRouteGuard {
     // still bootstrapping), we must NOT run onboarding/auth redirects.
     // Otherwise GoRouter can immediately redirect away from the splash route
     // before the first frame is painted, making the splash appear to never show.
-    if (!splashDelayElapsed ||
-        initialStatus == Status.initial ||
-        !mapWarmupFinished) {
+    if (!splashDelayElapsed || initialStatus == Status.initial) {
       printC(
         '${RouterLogTags.redirect} #$cycleId decision -> stay '
         '(waiting splash/auth bootstrap/map warmup)',
+      );
+      return null;
+    }
+
+    // 1.5) Remote force-update gate.
+    //
+    // Placed after the splash early-return so the deliberate 4s brand moment is
+    // never cut short, and before onboarding/permission/auth because a user on a
+    // fatally broken build must not be walked through onboarding, a location
+    // prompt and an OTP flow before being told to update. Applies to guests too:
+    // the build is broken regardless of session.
+    final forceUpdateRedirect = _handleForceUpdate(
+      currentPath: currentPath,
+      forceUpdateRequired: forceUpdateRequired,
+    );
+    if (forceUpdateRedirect != null) {
+      printC(
+        '${RouterLogTags.redirect} #$cycleId decision -> "$forceUpdateRedirect" '
+        '(force-update gate)',
+      );
+      return forceUpdateRedirect;
+    }
+    if (forceUpdateRequired) {
+      printC(
+        '${RouterLogTags.redirect} #$cycleId decision -> stay '
+        '(force-update gate)',
       );
       return null;
     }
@@ -362,11 +406,16 @@ class AppRouteGuard {
     required bool splashDelayElapsed,
     required bool mapWarmupFinished,
   }) {
-    if (!splashDelayElapsed || status == Status.initial || !mapWarmupFinished) {
+    // The map warmup is deliberately NOT part of this condition. It is
+    // best-effort: pre-creating the GoogleMap platform view makes the root map
+    // appear instantly, but blocking navigation on it meant a slow map could
+    // hold the user on the splash for its whole timeout. It now keeps warming
+    // behind the root screen instead.
+    if (!splashDelayElapsed || status == Status.initial) {
       if (currentPath != splashPath) {
         printC(
-          '${RouterLogTags.redirect} → splash '
-          '(bootstrapping/map warmup gate)',
+          '${RouterLogTags.redirect} → splash (bootstrapping gate, '
+          'mapWarmupFinished=$mapWarmupFinished)',
         );
         return splashPath;
       }
@@ -438,6 +487,20 @@ class AppRouteGuard {
     return _onboardingOutcome(redirect: null, blockAuth: false);
   }
 
+  /// While the flag is set every redirect cycle either sends the user to the
+  /// gate or holds them there. GoRouter runs `redirect` on pops as well, so this
+  /// alone makes back-navigation impossible; the screen's `PopScope` is a
+  /// second, independent mechanism.
+  String? _handleForceUpdate({
+    required String currentPath,
+    required bool forceUpdateRequired,
+  }) {
+    if (!AppFlowConfig.appUpdateCheckEnabled) return null;
+    if (!forceUpdateRequired) return null;
+    if (currentPath != forceUpdatePath) return forceUpdatePath;
+    return null;
+  }
+
   String? _handleAuth({
     required String currentPath,
     required bool canEnterApp,
@@ -469,7 +532,10 @@ class AppRouteGuard {
     if (currentPath == splashPath ||
         currentPath == permissionPath ||
         currentPath == loginPath ||
-        currentPath == onboardingPath) {
+        currentPath == onboardingPath ||
+        // Without this, an authenticated user whose force-update flag clears
+        // falls through to `return null` below and is stranded on the gate.
+        currentPath == forceUpdatePath) {
       // * Check profile setup BEFORE returning rootPath.
       final profileRedirect = _handleProfileSetup(
         currentPath: currentPath,

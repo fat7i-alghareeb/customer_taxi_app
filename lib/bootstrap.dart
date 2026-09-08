@@ -10,7 +10,6 @@ import 'package:flutter/services.dart'
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter_displaymode/flutter_displaymode.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'core/config/localization_config.dart';
 import 'features/trip/presentation/coordinators/trip_completion_coordinator.dart';
 import 'features/payment/presentation/states/wallet_cubit.dart';
@@ -25,13 +24,14 @@ import 'core/notification/notification_init_options.dart';
 import 'core/notification/notification_payload.dart';
 import 'core/notification/notification_topics.dart';
 import 'core/router/router_config.dart';
-import 'core/services/client_config/client_config_service.dart';
+import 'core/services/app_version/app_version_gate_coordinator.dart';
+import 'core/services/bootstrap_config/bootstrap_config_service.dart';
+import 'core/services/app_version/app_version_service.dart';
 import 'core/services/localization/locale_service.dart';
 import 'core/services/media/media_picker_service.dart';
 import 'core/services/realtime/realtime_lifecycle_coordinator.dart';
 import 'core/services/session/auth_manager.dart';
 import 'core/services/session/auth_state_notifier.dart';
-import 'core/services/support_contact/support_contact_service.dart';
 import 'package:customertaxi/core/utils/result.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/chat/presentation/ui/screens/trip_chat_screen.dart';
@@ -41,6 +41,7 @@ import 'core/theme/theme_controller.dart';
 import 'common/widgets/stage_tools/stage_device_preview_controller.dart';
 import 'flavors.dart' show F, Flavor;
 import 'utils/constants/design_constants.dart';
+import 'utils/helpers/startup_trace.dart';
 import 'utils/helpers/colored_print.dart';
 
 /// Common bootstrap entry point used by all flavors.
@@ -60,16 +61,21 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     () async {
       //    Ensure Flutter engine + widget binding are ready before any
       //    plugins or framework APIs are used.
+      StartupTrace.begin();
       WidgetsFlutterBinding.ensureInitialized();
+      StartupTrace.mark('binding');
       if (defaultTargetPlatform == TargetPlatform.android) {
-        try {
-          await FlutterDisplayMode.setHighRefreshRate();
-        } catch (e) {
-          printY('[Bootstrap] setHighRefreshRate failed: $e');
-        }
+        // Cosmetic and slow on some OEMs — must not hold the native splash open.
+        unawaited(
+          FlutterDisplayMode.setHighRefreshRate().catchError(
+            (Object e) => printY('[Bootstrap] setHighRefreshRate failed: $e'),
+          ),
+        );
       }
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      await appMediaPickerService.initialize();
+      // The picker is not reachable until the user opens one, so it does not
+      // need to block the first frame.
+      unawaited(appMediaPickerService.initialize());
 
       // Select the active flavor (stage / production) based on the
       // compile-time value provided by the native layer. Defaults to
@@ -80,15 +86,13 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         orElse: () => Flavor.production,
       );
 
-      printG('[Bootstrap] initializing Firebase...');
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      printG('[Bootstrap] Firebase initialized');
+      StartupTrace.mark('firebase');
 
-      printG('[Bootstrap] configureDependencies starting...');
       await configureDependencies();
-      printG('[Bootstrap] configureDependencies done');
+      StartupTrace.mark('di');
 
       if (F.appFlavor == Flavor.stage) {
         if (!getIt.isRegistered<StageDevicePreviewController>()) {
@@ -99,79 +103,45 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         await getIt<StageDevicePreviewController>().load();
       }
 
-      printG('[Bootstrap] initializing notifications...');
-      await _initializeNotifications();
-      printG('[Bootstrap] notifications initialized');
+      // Permission dialog + FCM init/subscribe/getToken round trips used to sit
+      // here awaited, adding ~4s to the native splash for nothing the first
+      // frame needs. Fired and forgotten instead — same treatment already
+      // applied to _syncAccountStateInBackground below. Notification taps that
+      // arrive before this finishes are still handled: they come through
+      // onNotificationTap/onForegroundNotification, which are only wired up
+      // once this completes, and a cold-start tap is replayed via
+      // getInitialMessage() inside it regardless of timing.
+      unawaited(_initializeNotifications());
+      StartupTrace.mark('notifications');
 
-      printG('[Bootstrap] initializing EasyLocalization...');
-      await EasyLocalization.ensureInitialized();
-      printG('[Bootstrap] EasyLocalization ready');
+      // Three independent disk reads that used to run in series. They must
+      // still come after configureDependencies() — the latter two resolve from
+      // getIt — but nothing orders them against each other.
+      await Future.wait<void>([
+        EasyLocalization.ensureInitialized(),
+        getIt<ThemeController>().initialize(),
+        _initializeAuthAndNetwork(),
+      ]);
+      StartupTrace.mark('localization+theme+auth');
 
-      printG('[Bootstrap] initializing ThemeController...');
-      await getIt<ThemeController>().initialize();
-      printG('[Bootstrap] ThemeController ready');
+      unawaited(_syncAccountStateInBackground());
 
-      printG('[Bootstrap] initializing Auth and Network...');
-      await _initializeAuthAndNetwork();
-      printG('[Bootstrap] Auth and Network ready');
+      StartupTrace.mark('account-sync');
 
-      // Backup FCM token check on startup if authenticated
-      final authState = getIt<AuthStateNotifier>();
-      if (authState.isAuthenticated) {
-        try {
-          final coordinator = getIt<NotificationCoordinator>();
-          final token = await coordinator.getDeviceToken();
-          if (token != null && token.isNotEmpty) {
-            final authRepo = getIt<AuthRepository>();
-            final result = await authRepo.updateFcmToken(token);
-            result.when(
-              success: (_) =>
-                  printG('[Bootstrap] Startup backup FCM token update SUCCESS'),
-              failure: (msg) => printY(
-                '[Bootstrap] Startup backup FCM token update failed: $msg',
-              ),
-            );
-          }
-        } catch (e) {
-          printY('[Bootstrap] Startup backup FCM token update failed: $e');
-        }
+      _startConfigFetchesInBackground();
+      StartupTrace.mark('config-dispatch');
 
-        // Re-verify if still authenticated (FCM sync or token refresh could have triggered logout)
-        if (authState.isAuthenticated) {
-          try {
-            final localeService = getIt<LocaleService>();
-            final code = await localeService.currentLanguageCode();
-            final authRepo = getIt<AuthRepository>();
-            final result = await authRepo.updatePreferredLanguage(code);
-            result.when(
-              success: (_) => printG(
-                '[Bootstrap] Startup backup language update SUCCESS: $code',
-              ),
-              failure: (msg) => printY(
-                '[Bootstrap] Startup backup language update failed: $msg',
-              ),
-            );
-          } catch (e) {
-            printY('[Bootstrap] Startup backup language update failed: $e');
-          }
-        }
-      }
+      await _initializeAppVersionGate();
+      StartupTrace.mark('version-gate');
 
-      printG('[Bootstrap] fetching client config...');
-      await _initializeClientConfig();
-      printG('[Bootstrap] client config ready');
-
-      printG('[Bootstrap] starting realtime coordinator...');
       _initializeRealtime();
-      printG('[Bootstrap] realtime coordinator started');
+      StartupTrace.mark('realtime');
 
-      printG('[Bootstrap] resolving initial locale...');
       final initialLocale = await getIt<LocaleService>().resolveInitialLocale();
-      printG('[Bootstrap] initialLocale resolved: $initialLocale');
+      StartupTrace.mark('locale');
 
-      printG('[Bootstrap] running app builder...');
       await _runGuardedApp(builder, initialLocale);
-      printG('[Bootstrap] app running');
+      StartupTrace.mark('runApp');
     },
     (error, stackTrace) {
       // Last-resort safety net for any exceptions that happen outside
@@ -377,32 +347,91 @@ String? _tripIdFromPayload(AppNotificationPayload payload) {
 ///   loaded before the UI starts.
 /// - Creates and registers a global Dio client so repositories can perform
 ///   network calls immediately.
+/// Pushes the device's FCM token and preferred language up to the backend.
+///
+/// Two one-way syncs that nothing on the first frame depends on. They used to be
+/// awaited inside [bootstrap], which put a Firebase `getToken()` round trip plus
+/// two of our own POSTs directly on the critical path — and therefore inside the
+/// native splash. Now fired and forgotten; failures are logged, never surfaced.
+Future<void> _syncAccountStateInBackground() async {
+  final authState = getIt<AuthStateNotifier>();
+  if (authState.isAuthenticated) {
+    try {
+      final coordinator = getIt<NotificationCoordinator>();
+      final token = await coordinator.getDeviceToken();
+      if (token != null && token.isNotEmpty) {
+        final authRepo = getIt<AuthRepository>();
+        final result = await authRepo.updateFcmToken(token);
+        result.when(
+          success: (_) =>
+              printG('[Bootstrap] Startup backup FCM token update SUCCESS'),
+          failure: (msg) => printY(
+            '[Bootstrap] Startup backup FCM token update failed: $msg',
+          ),
+        );
+      }
+    } catch (e) {
+      printY('[Bootstrap] Startup backup FCM token update failed: $e');
+    }
+
+    // Re-verify if still authenticated (FCM sync or token refresh could have triggered logout)
+    if (authState.isAuthenticated) {
+      try {
+        final localeService = getIt<LocaleService>();
+        final code = await localeService.currentLanguageCode();
+        final authRepo = getIt<AuthRepository>();
+        final result = await authRepo.updatePreferredLanguage(code);
+        result.when(
+          success: (_) => printG(
+            '[Bootstrap] Startup backup language update SUCCESS: $code',
+          ),
+          failure: (msg) => printY(
+            '[Bootstrap] Startup backup language update failed: $msg',
+          ),
+        );
+      } catch (e) {
+        printY('[Bootstrap] Startup backup language update failed: $e');
+      }
+    }
+  }
+}
+
 Future<void> _initializeAuthAndNetwork() async {
   final authManager = getIt<AuthManager>();
   await authManager.initialize();
 }
 
-/// Fetches remote client config and initializes Stripe if enabled.
-Future<void> _initializeClientConfig() async {
-  final configService = getIt<ClientConfigService>();
-  await configService.fetch();
+/// Kicks off the single combined startup fetch without waiting on it.
+///
+/// One request replaces three (client config, support contact, version gate).
+/// Nothing here blocks the first frame; consumers that need the config call
+/// `ClientConfigService.ensureReady()`, and the update gate re-evaluates once
+/// the payload lands.
+void _startConfigFetchesInBackground() {
+  unawaited(
+    getIt<BootstrapConfigService>().fetchAll().then(
+      (_) => getIt<AppVersionGateCoordinator>().evaluate(),
+    ),
+  );
+}
 
-  final config = configService.current;
-  if (config.stripeEnabled && config.stripePublishableKey.isNotEmpty) {
-    Stripe.publishableKey = config.stripePublishableKey;
-    Stripe.merchantIdentifier = 'merchant.dev.fat7i.customertaxi';
-    Stripe.urlScheme = 'customertaxi';
-    await Stripe.instance.applySettings();
-    printG(
-      '[Bootstrap] Stripe initialized publishableKey=${config.stripePublishableKey.substring(0, 8)}…',
-    );
-  } else {
-    printY('[Bootstrap] Stripe disabled or no publishable key — skipping init');
-  }
-
-  // Prefetch the support contact so the in-trip "Report problem" action opens
-  // instantly. Failures are tolerated — the service falls back to a default.
-  await getIt<SupportContactService>().fetch();
+/// Resolves the update verdict from the on-disk cache.
+///
+/// Only the cached read is awaited. It is a SharedPreferences lookup that is
+/// already in memory, so the gate is decided in about a millisecond and startup
+/// never waits on a network round trip for it.
+///
+/// The refresh arrives via [_startConfigFetchesInBackground], which re-evaluates
+/// the coordinator once the combined payload lands. When it does, the coordinator
+/// notifies `RouterRefreshListenable` and the guard re-runs, so a config change
+/// still applies within the same session.
+///
+/// The one behavioural cost: on the very first launch after install there is no
+/// cache, so a user who should be force-blocked gets a moment of the app before
+/// the wall appears. The block still lands.
+Future<void> _initializeAppVersionGate() async {
+  await getIt<AppVersionService>().loadCached();
+  await getIt<AppVersionGateCoordinator>().evaluate();
 }
 
 /// Starts the realtime coordinator.
@@ -478,6 +507,12 @@ Future<void> _runGuardedApp(
       },
       builder: (context, _) => app,
     ),
+  );
+
+  // The first painted frame is when the OS finally drops the native splash, so
+  // this mark is the number the whole startup budget is measured against.
+  WidgetsBinding.instance.addPostFrameCallback(
+    (_) => StartupTrace.markFirstFrame(),
   );
 
   // Finally render the localized app tree.

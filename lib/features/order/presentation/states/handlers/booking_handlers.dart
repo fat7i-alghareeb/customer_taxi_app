@@ -260,6 +260,9 @@ extension _BookingHandlers on OrderBloc {
         unawaited(activeTripCubit.refresh());
 
         final stripePayment = trip.stripePayment;
+        // Config is fetched in the background at startup; without this the
+        // fail-open default would read stripeEnabled=false and skip payment.
+        await _clientConfig.ensureReady();
         final stripeEnabled = _clientConfig.current.stripeEnabled;
 
         if (!stripeEnabled) {
@@ -334,6 +337,8 @@ extension _BookingHandlers on OrderBloc {
 
     try {
       printC('[Payment] initPaymentSheet — client secret received');
+      // Stripe is configured lazily so bootstrap no longer waits on it.
+      await getIt<StripeInitializer>().ensureReady();
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: stripePayment.clientSecret,

@@ -1,3 +1,4 @@
+import 'package:customertaxi/core/services/payments/stripe_initializer.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
@@ -33,6 +34,8 @@ Future<void> showWaitingFeeSettlement(
 
       final sp = settlement.stripePayment!;
       try {
+        // Stripe is configured lazily so bootstrap no longer waits on it.
+        await getIt<StripeInitializer>().ensureReady();
         await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
             paymentIntentClientSecret: sp.clientSecret,

@@ -1,7 +1,7 @@
 name: "customertaxi"
 description: "A Flutter Clean Architecture project."
 publish_to: "none"
-version: 1.0.3+7
+version: 1.0.4+8
 
 environment:
   sdk: ^3.10.1
@@ -51,6 +51,7 @@ dependencies:
 
   # Device / Permissions
   device_info_plus: ^12.4.0 # capped: syncfusion_flutter_pdfviewer requires ^12.1.0
+  package_info_plus: ^9.0.1 # promoted from transitive; pinned to the already-resolved version
   permission_handler: ^12.0.3
   record: ^7.1.0 # in-trip safety audio recording
   unique_identifier: ^0.4.0

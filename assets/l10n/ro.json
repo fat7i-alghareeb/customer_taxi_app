@@ -851,5 +851,16 @@
   "tripExtraStops": "+{count} opriri",
   "timeUnitDayShort": "z",
   "timeUnitHourShort": "h",
-  "timeUnitMinuteShort": "min"
+  "timeUnitMinuteShort": "min",
+  "forceUpdateTitle": "Actualizare necesară",
+  "forceUpdateMessage": "Această versiune a Fat7i nu mai este acceptată. Actualizați pentru a continua să rezervați curse.",
+  "forceUpdateCurrentVersionLabel": "Versiune",
+  "forceUpdateButton": "Actualizați acum",
+  "forceUpdateAlreadyUpdated": "Am actualizat deja",
+  "forceUpdateStoreOpenFailed": "Magazinul nu a putut fi deschis. Actualizați Fat7i manual.",
+  "softUpdateTitle": "Este disponibilă o versiune nouă",
+  "softUpdateMessage": "Actualizați Fat7i pentru cele mai recente îmbunătățiri și remedieri.",
+  "softUpdateButton": "Actualizați",
+  "softUpdateLater": "Nu acum",
+  "updateFromStoreHint": "Deschideți magazinul de aplicații și actualizați Fat7i."
 }

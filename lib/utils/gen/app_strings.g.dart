@@ -559,6 +559,18 @@ class AppStrings {
   static String get flightNumberInvalid => 'flightNumberInvalid'.tr();
   /// Flight number is required for airport pickups. - رقم الرحلة مطلوب عند الاستلام من المطار. - Een vluchtnummer is verplicht bij ophalen op de luchthaven. - Für Flughafenabholungen ist eine Flugnummer erforderlich. - Numer lotu jest wymagany przy odbiorze z lotniska. - Для зустрічі в аеропорту потрібен номер рейсу. - Le numéro de vol est requis pour une prise en charge à l'aéroport. - El número de vuelo es obligatorio para recogidas en aeropuerto. - Numărul zborului este obligatoriu pentru preluarea de la aeroport.
   static String get flightNumberRequired => 'flightNumberRequired'.tr();
+  /// I've already updated - لقد حدّثت بالفعل - Ik heb al bijgewerkt - Ich habe bereits aktualisiert - Już zaktualizowałem - Я вже оновив - J'ai déjà mis à jour - Ya la he actualizado - Am actualizat deja
+  static String get forceUpdateAlreadyUpdated => 'forceUpdateAlreadyUpdated'.tr();
+  /// Update now - حدّث الآن - Nu bijwerken - Jetzt aktualisieren - Zaktualizuj teraz - Оновити зараз - Mettre à jour - Actualizar ahora - Actualizați acum
+  static String get forceUpdateButton => 'forceUpdateButton'.tr();
+  /// Version - الإصدار - Versie - Version - Wersja - Версія - Version - Versión - Versiune
+  static String get forceUpdateCurrentVersionLabel => 'forceUpdateCurrentVersionLabel'.tr();
+  /// This version of Fat7i is no longer supported. Update to keep booking rides. - هذا الإصدار من Fat7i لم يعد مدعومًا. حدّث التطبيق لمواصلة حجز الرحلات. - Deze versie van Fat7i wordt niet meer ondersteund. Werk bij om ritten te blijven boeken. - Diese Version von Fat7i wird nicht mehr unterstützt. Aktualisieren Sie, um weiter Fahrten zu buchen. - Ta wersja Fat7i nie jest już obsługiwana. Zaktualizuj, aby dalej zamawiać przejazdy. - Ця версія Fat7i більше не підтримується. Оновіть, щоб продовжити замовляти поїздки. - Cette version d'Fat7i n'est plus prise en charge. Mettez à jour pour continuer à réserver des trajets. - Esta versión de Fat7i ya no es compatible. Actualízala para seguir reservando viajes. - Această versiune a Fat7i nu mai este acceptată. Actualizați pentru a continua să rezervați curse.
+  static String get forceUpdateMessage => 'forceUpdateMessage'.tr();
+  /// Could not open the store. Please update Fat7i manually. - تعذّر فتح المتجر. يرجى تحديث Fat7i يدويًا. - Kan de store niet openen. Werk Fat7i handmatig bij. - Der Store konnte nicht geöffnet werden. Bitte aktualisieren Sie Fat7i manuell. - Nie udało się otworzyć sklepu. Zaktualizuj Fat7i ręcznie. - Не вдалося відкрити магазин. Оновіть Fat7i вручну. - Impossible d'ouvrir le store. Veuillez mettre à jour Fat7i manuellement. - No se pudo abrir la tienda. Actualiza Fat7i manualmente. - Magazinul nu a putut fi deschis. Actualizați Fat7i manual.
+  static String get forceUpdateStoreOpenFailed => 'forceUpdateStoreOpenFailed'.tr();
+  /// Update required - التحديث مطلوب - Update vereist - Update erforderlich - Wymagana aktualizacja - Потрібне оновлення - Mise à jour requise - Actualización necesaria - Actualizare necesară
+  static String get forceUpdateTitle => 'forceUpdateTitle'.tr();
   /// Fri - جمع - Vr - Fr - Pt - Пт - Ven - Vie - Vin
   static String get fri => 'fri'.tr();
   /// Friday - الجمعة - Vrijdag - Freitag - Piątek - П'ятниця - Vendredi - Viernes - Vineri
@@ -1279,6 +1291,14 @@ class AppStrings {
   static String get setOnMap => 'setOnMap'.tr();
   /// Settings - الإعدادات - Instellingen - Einstellungen - Ustawienia - Налаштування - Paramètres - Ajustes - Setări
   static String get settings => 'settings'.tr();
+  /// Update - تحديث - Bijwerken - Aktualisieren - Aktualizuj - Оновити - Mettre à jour - Actualizar - Actualizați
+  static String get softUpdateButton => 'softUpdateButton'.tr();
+  /// Not now - ليس الآن - Niet nu - Jetzt nicht - Nie teraz - Не зараз - Pas maintenant - Ahora no - Nu acum
+  static String get softUpdateLater => 'softUpdateLater'.tr();
+  /// Update Fat7i to get the latest improvements and fixes. - حدّث Fat7i للحصول على أحدث التحسينات والإصلاحات. - Werk Fat7i bij voor de nieuwste verbeteringen en oplossingen. - Aktualisieren Sie Fat7i für die neuesten Verbesserungen und Fehlerbehebungen. - Zaktualizuj Fat7i, aby uzyskać najnowsze ulepszenia i poprawki. - Оновіть Fat7i, щоб отримати найновіші покращення та виправлення. - Mettez à jour Fat7i pour bénéficier des dernières améliorations et corrections. - Actualiza Fat7i para obtener las últimas mejoras y correcciones. - Actualizați Fat7i pentru cele mai recente îmbunătățiri și remedieri.
+  static String get softUpdateMessage => 'softUpdateMessage'.tr();
+  /// A new version is available - يتوفر إصدار جديد - Er is een nieuwe versie beschikbaar - Eine neue Version ist verfügbar - Dostępna jest nowa wersja - Доступна нова версія - Une nouvelle version est disponible - Hay una nueva versión disponible - Este disponibilă o versiune nouă
+  static String get softUpdateTitle => 'softUpdateTitle'.tr();
   /// Something went wrong. - حدث خطأ ما. - Er is iets misgegaan. - Etwas ist schief gelaufen. - Coś poszło nie tak. - Щось пішло не так. - Quelque chose s'est mal passé. - Algo salió mal. - Ceva nu a mers bine.
   static String get somethingWentWrong => 'somethingWentWrong'.tr();
   /// Stop - توقف - Stop - Halt - Przystanek - Зупинка - Arrêt - Parada - Oprire
@@ -1611,6 +1631,8 @@ class AppStrings {
   static String get unknownError => 'unknownError'.tr();
   /// Upcoming - القادمة - Aankomend - Bevorstehende - Nadchodzące - Найближчі - À venir - Próximos - Viitoare
   static String get upcomingTrips => 'upcomingTrips'.tr();
+  /// Open your app store and update Fat7i. - افتح متجر التطبيقات وحدّث Fat7i. - Open je appstore en werk Fat7i bij. - Öffnen Sie Ihren App-Store und aktualisieren Sie Fat7i. - Otwórz sklep z aplikacjami i zaktualizuj Fat7i. - Відкрийте магазин застосунків та оновіть Fat7i. - Ouvrez votre store et mettez à jour Fat7i. - Abre tu tienda de aplicaciones y actualiza Fat7i. - Deschideți magazinul de aplicații și actualizați Fat7i.
+  static String get updateFromStoreHint => 'updateFromStoreHint'.tr();
   /// Failed to upload evidence. Please try again. - فشل رفع الأدلة. يرجى المحاولة مرة أخرى. - Upload van bewijs mislukt. Probeer het opnieuw. - Hochladen des Beweises fehlgeschlagen. Bitte erneut versuchen. - Nie udało się przesłać dowodu. Spróbuj ponownie. - Не вдалося завантажити доказ. Спробуйте ще раз. - Échec du téléchargement de la preuve. Veuillez réessayer. - Error al cargar la evidencia. Por favor, inténtelo de nuevo. - Încărcarea dovezii a eșuat. Vă rugăm să încercați din nou.
   static String get uploadFailed => 'uploadFailed'.tr();
   /// Value is invalid. - قيمة غير صحيحة. - Waarde is ongeldig. - Wert ist ungültig. - Wartość jest nieprawidłowa. - Значення недійсне. - La valeur est invalide. - El valor es inválido. - Valoarea este invalidă.

@@ -21,6 +21,17 @@ class SupportContactService {
   /// The WhatsApp number (digits only, no '+') to open via wa.me.
   String get whatsApp => _whatsApp;
 
+  /// Applies a payload already fetched by [BootstrapConfigService].
+  void adoptPayload(Map<String, dynamic> json) {
+    final raw = (json['whatsApp'] as String?)?.trim();
+    if (raw != null && raw.isNotEmpty) {
+      _whatsApp = _normalize(raw);
+      printG('[SupportContactService] adopted whatsApp=$_whatsApp');
+    } else {
+      printY('[SupportContactService] empty number — using fallback');
+    }
+  }
+
   Future<void> fetch() async {
     try {
       final response = await _dio.get<Map<String, dynamic>>(

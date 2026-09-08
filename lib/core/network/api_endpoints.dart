@@ -41,6 +41,8 @@ class ApiEndpoints {
   // App config
   static const String clientConfig = '/api/v1/app-config/client';
   static const String supportContact = '/api/v1/app-config/support-contact';
+  static const String appVersionConfig = '/api/v1/app-config/app-version';
+  static const String bootstrapConfig = '/api/v1/app-config/bootstrap';
 
   // Trips
   static const String tripQuotes = '/api/v1/trips/quotes';

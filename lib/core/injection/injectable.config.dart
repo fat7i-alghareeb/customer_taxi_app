@@ -33,6 +33,12 @@ import 'package:customertaxi/core/notification/notification_permission_service.d
 import 'package:customertaxi/core/notification/notification_timezone_service.dart'
     as _i661;
 import 'package:customertaxi/core/router/router_config.dart' as _i434;
+import 'package:customertaxi/core/services/app_version/app_version_gate_coordinator.dart'
+    as _i265;
+import 'package:customertaxi/core/services/app_version/app_version_service.dart'
+    as _i1034;
+import 'package:customertaxi/core/services/bootstrap_config/bootstrap_config_service.dart'
+    as _i960;
 import 'package:customertaxi/core/services/client_config/client_config_service.dart'
     as _i768;
 import 'package:customertaxi/core/services/file_download/file_download_service.dart'
@@ -49,6 +55,8 @@ import 'package:customertaxi/core/services/objectbox/objectbox_service.dart'
     as _i477;
 import 'package:customertaxi/core/services/onboarding/onboarding_service.dart'
     as _i389;
+import 'package:customertaxi/core/services/payments/stripe_initializer.dart'
+    as _i739;
 import 'package:customertaxi/core/services/permissions/location_permission_service.dart'
     as _i331;
 import 'package:customertaxi/core/services/permissions/permissions_coordinator.dart'
@@ -318,15 +326,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i133.TripRepository>(
       () => _i384.TripRepositoryImpl(gh<_i379.TripRemoteDataSource>()),
     );
-    gh.lazySingleton<_i434.AppRouterConfig>(
-      () => _i434.AppRouterConfig(
-        gh<_i32.AuthStateNotifier>(),
-        gh<_i389.OnboardingService>(),
-        gh<_i102.PermissionsCoordinator>(),
-        gh<_i371.StartupMapWarmupCoordinator>(),
-        gh<_i434.AppRouteRegistry>(),
-      ),
-    );
     gh.lazySingleton<_i224.TripFacade>(
       () => _i224.TripFacade(gh<_i133.TripRepository>()),
     );
@@ -336,19 +335,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i753.TripBloc>(
       () => _i753.TripBloc(gh<_i224.TripFacade>(), gh<_i404.RealtimeService>()),
     );
-    gh.lazySingleton<_i888.TripCompletionCoordinator>(
-      () => _i888.TripCompletionCoordinator(
-        gh<_i404.RealtimeService>(),
-        gh<_i434.AppRouterConfig>(),
-        gh<_i224.TripFacade>(),
-      ),
-    );
     gh.lazySingleton<_i1032.RealtimeLifecycleCoordinator>(
       () => _i1032.RealtimeLifecycleCoordinator(
         gh<_i404.RealtimeService>(),
         gh<_i814.AuthManager>(),
         gh<_i768.ClientConfigService>(),
       ),
+    );
+    gh.singleton<_i1034.AppVersionService>(
+      () =>
+          _i1034.AppVersionService(gh<_i361.Dio>(), gh<_i742.StorageService>()),
     );
     gh.lazySingleton<_i951.PaymentRepository>(
       () => _i770.PaymentRepositoryImpl(gh<_i935.PaymentRemoteDataSource>()),
@@ -390,11 +386,22 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i925.OrderFacade>(
       () => _i925.OrderFacade(gh<_i153.OrderRepository>()),
     );
+    gh.singleton<_i960.BootstrapConfigService>(
+      () => _i960.BootstrapConfigService(
+        gh<_i361.Dio>(),
+        gh<_i768.ClientConfigService>(),
+        gh<_i384.SupportContactService>(),
+        gh<_i1034.AppVersionService>(),
+      ),
+    );
     gh.lazySingleton<_i561.PaymentFacade>(
       () => _i561.PaymentFacade(gh<_i951.PaymentRepository>()),
     );
     gh.lazySingleton<_i264.RefundIssueFacade>(
       () => _i264.RefundIssueFacade(gh<_i411.RefundIssueRepository>()),
+    );
+    gh.lazySingleton<_i739.StripeInitializer>(
+      () => _i739.StripeInitializer(gh<_i768.ClientConfigService>()),
     );
     gh.lazySingleton<_i186.ReservationConfirmationCubit>(
       () => _i186.ReservationConfirmationCubit(gh<_i5.ActiveTripCubit>()),
@@ -415,6 +422,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i792.PaymentBloc>(
       () => _i792.PaymentBloc(gh<_i561.PaymentFacade>()),
+    );
+    gh.lazySingleton<_i265.AppVersionGateCoordinator>(
+      () => _i265.AppVersionGateCoordinator(gh<_i1034.AppVersionService>()),
     );
     gh.lazySingleton<_i239.AuthFacade>(
       () => _i239.AuthFacade(gh<_i618.AuthRepository>()),
@@ -447,6 +457,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i781.AuthBloc>(() => _i781.AuthBloc(gh<_i239.AuthFacade>()));
     gh.factory<_i404.PhoneVerificationCubit>(
       () => _i404.PhoneVerificationCubit(gh<_i239.AuthFacade>()),
+    );
+    gh.lazySingleton<_i434.AppRouterConfig>(
+      () => _i434.AppRouterConfig(
+        gh<_i32.AuthStateNotifier>(),
+        gh<_i389.OnboardingService>(),
+        gh<_i102.PermissionsCoordinator>(),
+        gh<_i371.StartupMapWarmupCoordinator>(),
+        gh<_i434.AppRouteRegistry>(),
+        gh<_i265.AppVersionGateCoordinator>(),
+      ),
+    );
+    gh.lazySingleton<_i888.TripCompletionCoordinator>(
+      () => _i888.TripCompletionCoordinator(
+        gh<_i404.RealtimeService>(),
+        gh<_i434.AppRouterConfig>(),
+        gh<_i224.TripFacade>(),
+      ),
     );
     return this;
   }

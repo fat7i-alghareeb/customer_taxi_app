@@ -1,3 +1,4 @@
+import 'package:customertaxi/core/services/payments/stripe_initializer.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/common/widgets/show_overlay.dart';
@@ -174,6 +175,8 @@ Future<bool> _presentPaymentSheet(
 ) async {
   final sheet = result.paymentSheet!;
   try {
+    // Stripe is configured lazily so bootstrap no longer waits on it.
+    await getIt<StripeInitializer>().ensureReady();
     await Stripe.instance.initPaymentSheet(
       paymentSheetParameters: SetupPaymentSheetParameters(
         paymentIntentClientSecret: sheet.clientSecret,

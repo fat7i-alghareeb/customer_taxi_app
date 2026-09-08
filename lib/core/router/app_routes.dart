@@ -19,6 +19,14 @@ class AppRouteRegistry {
           AppPageTransitions.build(state: state, child: const SplashScreen()),
     ),
     GoRoute(
+      path: ForceUpdateScreen.pagePath,
+      name: ForceUpdateScreen.pageName,
+      pageBuilder: (context, state) => AppPageTransitions.build(
+        state: state,
+        child: const ForceUpdateScreen(),
+      ),
+    ),
+    GoRoute(
       path: OnboardingScreen.pagePath,
       name: OnboardingScreen.pageName,
       pageBuilder: (context, state) => AppPageTransitions.build(

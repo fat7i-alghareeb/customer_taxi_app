@@ -21,11 +21,19 @@ class SplashConfig {
 
   /// Minimal time the splash screen should remain visible before
   /// navigation logic can move away from it.
-  static const Duration initialDelay = Duration(seconds: 4);
+  ///
+  /// Deliberately a held brand beat, not a loading delay — trimmed from 4s
+  /// because at that length it started reading as lag rather than polish.
+  static const Duration initialDelay = Duration(milliseconds: 2500);
 
   /// Maximum time allowed for map warmup during splash before falling back
   /// and continuing startup flow.
-  static const Duration mapWarmupTimeout = Duration(seconds: 8);
+  ///
+  /// The warmup pre-creates the GoogleMap platform view so the root map appears
+  /// instantly, but it is best-effort: routing no longer blocks on it once
+  /// [initialDelay] has elapsed, so this is only the ceiling for how long the
+  /// hidden map keeps trying.
+  static const Duration mapWarmupTimeout = Duration(milliseconds: 2500);
 
   static Duration durationForSplashScreen =
       initialDelay - const Duration(milliseconds: 1000);
@@ -43,6 +51,15 @@ class AppFlowConfig {
 
   /// * Enable startup permission gate before onboarding/auth/root.
   static const bool permissionGateEnabled = true;
+
+  /// * Enable the remote app update check (force / soft update) at startup.
+  ///
+  /// Mirrors the backend `AppUpdateCheckEnabled` config key on purpose: when
+  /// someone is debugging "why isn't the gate firing" they should be looking for
+  /// two switches with the same name, not translating between two. Both must be
+  /// true for the gate to run. This one is compile-time, so it exists as a last
+  /// resort if the backend is misconfigured *and* unreachable.
+  static const bool appUpdateCheckEnabled = true;
 }
 
 /// Map related configuration and defaults.

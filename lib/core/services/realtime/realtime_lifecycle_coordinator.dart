@@ -64,6 +64,14 @@ class RealtimeLifecycleCoordinator with WidgetsBindingObserver {
   void start() {
     if (_started) return;
     _started = true;
+    unawaited(_startWhenConfigReady());
+  }
+
+  /// The client config is fetched in the background during bootstrap, so
+  /// reading `signalREnabled` synchronously here would see the fail-open
+  /// default (`false`) and leave this coordinator permanently inert.
+  Future<void> _startWhenConfigReady() async {
+    await _configService.ensureReady();
 
     if (!_configService.current.signalREnabled) {
       printY('$_logTag signalREnabled=false — coordinator inert');

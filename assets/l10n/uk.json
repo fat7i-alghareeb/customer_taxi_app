@@ -851,5 +851,16 @@
   "tripExtraStops": "+{count} зупинок",
   "timeUnitDayShort": "д",
   "timeUnitHourShort": "год",
-  "timeUnitMinuteShort": "хв"
+  "timeUnitMinuteShort": "хв",
+  "forceUpdateTitle": "Потрібне оновлення",
+  "forceUpdateMessage": "Ця версія Fat7i більше не підтримується. Оновіть, щоб продовжити замовляти поїздки.",
+  "forceUpdateCurrentVersionLabel": "Версія",
+  "forceUpdateButton": "Оновити зараз",
+  "forceUpdateAlreadyUpdated": "Я вже оновив",
+  "forceUpdateStoreOpenFailed": "Не вдалося відкрити магазин. Оновіть Fat7i вручну.",
+  "softUpdateTitle": "Доступна нова версія",
+  "softUpdateMessage": "Оновіть Fat7i, щоб отримати найновіші покращення та виправлення.",
+  "softUpdateButton": "Оновити",
+  "softUpdateLater": "Не зараз",
+  "updateFromStoreHint": "Відкрийте магазин застосунків та оновіть Fat7i."
 }
