@@ -30,6 +30,7 @@
 
 - [Overview](#overview)
 - [How It Works](#how-it-works)
+- [Engineering Highlights](#engineering-highlights)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
@@ -54,6 +55,19 @@ The app follows a strict Clean Architecture layout across every feature, generat
 <div align="center">
   <img src=".github/assets/how-it-works.png" alt="Book, track, and pay flow" width="100%">
 </div>
+
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
+
+## Engineering Highlights
+
+What makes this codebase worth a closer look:
+
+- 📡 **Real-time trip tracking over SignalR** — a live, persistent connection streams driver location and trip-status changes; not polling.
+- 🏗️ **CI-enforced Clean Architecture** — a custom script (`tool/verify_architecture.dart`) fails the build if a feature's `data`/`domain`/`presentation` layering is violated, so the architecture can't silently drift.
+- 💳 **Real payments, not a mock** — Stripe Payment Sheet integration plus an in-app wallet with mixed (wallet + card) settlement and server-generated PDF invoices.
+- 🔒 **Security-hardened networking** — TLS certificate pinning (SHA-256 fingerprint validation) and compile-time secret obfuscation for environment values, guarding against MITM attacks and reverse-engineered API keys.
+- 🧠 **Exhaustive, compiler-checked state** — BLoC/Cubit with `freezed` states means every UI state (loading/success/failure/etc.) must be handled explicitly; there's no way to forget a case.
+- 🌍 **Production-grade i18n** — 9 languages including right-to-left (Arabic) support, driven end-to-end from generated localization code.
 
 <div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
