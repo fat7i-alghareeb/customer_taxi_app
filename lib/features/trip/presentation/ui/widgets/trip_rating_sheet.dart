@@ -2,7 +2,7 @@ import 'package:customertaxi/common/imports/imports.dart';
 import 'package:customertaxi/features/trip/domain/facade/trip_facade.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Public Google review link for Fat7i / Taxi Service. Offered to riders
+/// Public Google review link for customertaxi / Taxi Service. Offered to riders
 /// who give a high (4-5 star) rating.
 const String _googleReviewUrl = 'https://g.page/r/CVnGS4OWfBvSEBM/review';
 

@@ -64,7 +64,7 @@ class _TripInvoiceBodyState extends State<_TripInvoiceBody> {
     if (number != null && number.trim().isNotEmpty) {
       return '${number.trim()}.pdf';
     }
-    return 'fat7i-invoice-${widget.tripId}.pdf';
+    return 'customertaxi-invoice-${widget.tripId}.pdf';
   }
 
   Future<void> _onSharePressed(Uint8List bytes) async {

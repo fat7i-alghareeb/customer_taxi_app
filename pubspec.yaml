@@ -141,7 +141,7 @@ flavorizr:
         applicationId: "dev.fat7i.customertaxi"
     production:
       app:
-        name: "Fat7i"
+        name: "customertaxi"
         package_name: "dev.fat7i.customertaxi"
       android:
         applicationId: "dev.fat7i.customertaxi"

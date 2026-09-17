@@ -130,8 +130,8 @@ class TripStatusOverlayCard extends StatelessWidget {
   /// Optional progress ring drawn around the leading chip.
   final TripStatusIndicatorMode? indicator;
 
-  /// When true, the "Fat7i" brand word inside any body line is split-
-  /// coloured — "Fat7i" branding (legacy color-split comment).
+  /// When true, the "customertaxi" brand word inside any body line is split-
+  /// coloured — "customer" in the trip accent, "taxi" in black.
   final bool highlightBrand;
 
   /// The circular leading slot: the illustration (or [icon]) on the tinted chip,
@@ -207,10 +207,10 @@ class TripStatusOverlayCard extends StatelessWidget {
     return Text(title, textAlign: TextAlign.left, style: baseStyle);
   }
 
-  /// Renders [line], colouring the "Fat7i" brand word when
+  /// Renders [line], colouring the "customertaxi" brand word when
   /// [highlightBrand] is set; otherwise a plain [Text].
   Widget _bodyLine(String line, TextStyle baseStyle) {
-    const brand = 'Fat7i';
+    const brand = 'customertaxi';
     if (!highlightBrand) {
       return Text(line, textAlign: TextAlign.left, style: baseStyle);
     }
@@ -218,14 +218,14 @@ class TripStatusOverlayCard extends StatelessWidget {
     return _highlightWord(line, brand, baseStyle, (match) {
       return [
         TextSpan(
-          text: match.substring(0, 6), // "Fat7i"
+          text: match.substring(0, 8), // "customer"
           style: const TextStyle(
             color: AppColors.tripOrange,
             fontWeight: FontWeight.w700,
           ),
         ),
         TextSpan(
-          text: match.substring(6), // "Trip"
+          text: match.substring(8), // "taxi"
           style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w700,

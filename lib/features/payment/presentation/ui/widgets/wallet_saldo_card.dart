@@ -5,7 +5,7 @@ import '../screens/wallet_transactions_screen.dart';
 import 'payment_format.dart';
 import 'top_up_amount_sheet.dart';
 
-/// Fat7i Saldo card: balance + top-up action. Tapping the card opens the
+/// customertaxi Saldo card: balance + top-up action. Tapping the card opens the
 /// wallet transaction history.
 class WalletSaldoCard extends StatelessWidget {
   const WalletSaldoCard({super.key});

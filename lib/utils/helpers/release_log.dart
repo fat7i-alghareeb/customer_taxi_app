@@ -10,6 +10,6 @@ import 'package:flutter/foundation.dart';
 ///
 /// Reserve this for failures that must stay diagnosable in production.
 void logAlways(String message, {Object? error, StackTrace? stackTrace}) {
-  debugPrint('[fat7i] $message${error == null ? '' : ' | $error'}');
-  if (stackTrace != null) debugPrint('[fat7i] $stackTrace');
+  debugPrint('[customertaxi] $message${error == null ? '' : ' | $error'}');
+  if (stackTrace != null) debugPrint('[customertaxi] $stackTrace');
 }

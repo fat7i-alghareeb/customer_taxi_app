@@ -74,7 +74,7 @@ class _RecordRideView extends StatelessWidget {
     try {
       final bytes = await File(path).readAsBytes();
       final fileName =
-          'fat7i-ride-${DateTime.now().millisecondsSinceEpoch}.m4a';
+          'customertaxi-ride-${DateTime.now().millisecondsSinceEpoch}.m4a';
       final result = await getIt<FileDownloadService>().saveBytes(
         bytes: bytes,
         fileName: fileName,

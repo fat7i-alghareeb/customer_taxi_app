@@ -14,7 +14,7 @@ android.apply {
         create("production") {
             dimension = "flavor-type"
             applicationId = "dev.fat7i.customertaxi"
-            resValue(type = "string", name = "app_name", value = "Fat7i")
+            resValue(type = "string", name = "app_name", value = "customertaxi")
         }
     }
 }

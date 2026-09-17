@@ -27,7 +27,7 @@
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<!-- Make saved invoices visible in Files app under
-		     "On My iPhone > Fat7i" (iOS analog of an Android Downloads folder). -->
+		     "On My iPhone > customertaxi" (iOS analog of an Android Downloads folder). -->
 		<key>UIFileSharingEnabled</key>
 		<true/>
 		<key>LSSupportsOpeningDocumentsInPlace</key>

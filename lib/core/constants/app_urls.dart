@@ -1,4 +1,4 @@
-/// Public Fat7i web pages the app links out to.
+/// Public customertaxi web pages the app links out to.
 ///
 /// These are the canonical, publicly-hosted documents — they must stay readable
 /// without a login, because the consent checkboxes on the sign-up screen link to

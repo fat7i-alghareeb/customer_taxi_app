@@ -85,7 +85,7 @@ class ApiEndpoints {
   static String tripInvoice(String id) => '/api/v1/trips/$id/invoice';
   static String tripInvoicePdf(String id) => '/api/v1/trips/$id/invoice/pdf';
 
-  // Wallet (ride balance / Fat7i Saldo)
+  // Wallet (ride balance / customertaxi Saldo)
   static const String wallet = '/api/v1/wallet';
   static const String walletTransactions = '/api/v1/wallet/transactions';
   static const String walletTopUps = '/api/v1/wallet/top-ups';

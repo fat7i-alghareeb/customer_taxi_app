@@ -456,9 +456,9 @@ class _SecurityNote extends StatelessWidget {
             template: AppStrings.reservationSecurityNote,
             placeholder: '{brand}',
             highlight: AppStrings.reservationBrandName,
-            // "Fat7i" is split-coloured like the rest of the trip UI:
-            // "Fat7i" branding (legacy color-split comment).
-            splitBrandAt: 6,
+            // "customertaxi" is split-coloured like the rest of the trip UI:
+            // "customer" orange, "taxi" white.
+            splitBrandAt: 8,
             style: AppTextStyles.s12w400.copyWith(
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.35,
@@ -493,7 +493,7 @@ class _TwoToneText extends StatelessWidget {
   final TextAlign? textAlign;
 
   /// When set, the highlight itself is two-toned at this character index —
-  /// the leading part orange, the rest white (the "Fat7i" wordmark).
+  /// the leading part orange, the rest white (the "customertaxi" wordmark).
   final int? splitBrandAt;
 
   @override

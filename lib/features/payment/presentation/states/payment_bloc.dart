@@ -28,7 +28,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
 
   final PaymentFacade _facade;
 
-  static const String _merchantName = 'Fat7i';
+  static const String _merchantName = 'customertaxi';
   static const String _returnUrl = 'customertaxi://stripe-redirect';
   static const Duration _webhookGrace = Duration(seconds: 2);
 
