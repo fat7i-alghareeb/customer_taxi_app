@@ -20,11 +20,16 @@
 
 </div>
 
+<div align="center">
+  <img src=".github/assets/stats.png" alt="Project highlights" width="100%">
+</div>
+
 <br>
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [How It Works](#how-it-works)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
@@ -34,7 +39,7 @@
 - [Contributing](#contributing)
 - [License](#license)
 
----
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## Overview
 
@@ -42,7 +47,15 @@
 
 The app follows a strict Clean Architecture layout across every feature, generates most of its boilerplate (DI, models, routing assets) at build time, and ships with its own architecture-conformance check that runs in CI.
 
----
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
+
+## How It Works
+
+<div align="center">
+  <img src=".github/assets/how-it-works.png" alt="Book, track, and pay flow" width="100%">
+</div>
+
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## Features
 
@@ -91,7 +104,7 @@ The app follows a strict Clean Architecture layout across every feature, generat
 </tr>
 </table>
 
----
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## Tech Stack
 
@@ -115,7 +128,7 @@ The app follows a strict Clean Architecture layout across every feature, generat
 | Code generation | `build_runner`, `freezed`, `json_serializable`, `injectable_generator`, `flutter_gen`, `objectbox_generator` |
 | CI/CD | GitHub Actions (analyze, test, architecture check, build) + Codemagic (signed Android release / closed testing) |
 
----
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## Architecture
 
@@ -144,7 +157,32 @@ flowchart TD
     RepoImpl --> Local
 ```
 
----
+**Trip lifecycle**, end to end:
+
+```mermaid
+sequenceDiagram
+    actor Rider
+    participant App as customertaxi
+    participant API as Backend API
+    participant Hub as SignalR Hub
+    participant Driver as Driver (dashboardtaxi)
+
+    Rider->>App: Set pickup/drop-off, confirm fare
+    App->>API: Create order
+    API-->>App: Order accepted, matching
+    API->>Hub: Broadcast order to nearby drivers
+    Hub->>Driver: New trip request
+    Driver->>API: Accept trip
+    API->>Hub: Driver assigned
+    Hub-->>App: Live driver location stream
+    Driver->>Hub: Location updates (en route → arrived → in trip)
+    Hub-->>App: Real-time position on map
+    Driver->>API: Complete trip
+    API-->>App: Trip summary + invoice
+    Rider->>App: Pay (card / wallet) & rate
+```
+
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## Project Structure
 
@@ -180,7 +218,7 @@ customertaxi/
 
 </details>
 
----
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## Getting Started
 
@@ -247,7 +285,7 @@ flutter run --flavor production
 | Run tests | `flutter test` |
 | Build a debug APK (stage) | `flutter build apk --debug --flavor stage` |
 
----
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## Supported Languages
 
@@ -255,7 +293,7 @@ Arabic · German · English · Spanish · French · Dutch · Polish · Romanian 
 
 (`ar`, `de`, `en`, `es`, `fr`, `nl`, `pl`, `ro`, `uk`)
 
----
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## Contributing
 
@@ -268,7 +306,7 @@ Contributions are welcome. If you'd like to help out:
 
 For larger changes, please open an issue first to discuss the approach.
 
----
+<div align="center"><img src=".github/assets/divider.png" alt="" width="100%" height="6"></div>
 
 ## License
 
