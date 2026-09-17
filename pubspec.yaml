@@ -1,7 +1,7 @@
 name: "customertaxi"
 description: "A Flutter Clean Architecture project."
 publish_to: "none"
-version: 1.0.4+8
+version: 1.0.5+9
 
 environment:
   sdk: ^3.10.1
@@ -19,7 +19,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   device_preview_plus: ^2.8.0
   flutter_animate: ^4.5.2
-  flutter_screenutil: ^5.9.3
+  flutter_screenutil: ^5.9.3  
   google_fonts: ^8.1.0
   shimmer: ^3.0.0
   vector_graphics: ^1.2.2

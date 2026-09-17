@@ -30,3 +30,32 @@
 # Keep Play Core classes if present
 -keep class com.google.android.play.core.** { *; }
 -keep interface com.google.android.play.core.** { *; }
+
+# -----------------------------------------------------------------------------
+# flutter_local_notifications — scheduled notification receivers
+# -----------------------------------------------------------------------------
+# Instantiated by the OS directly from class names in AndroidManifest.xml, never
+# referenced from Dart/GeneratedPluginRegistrant, so R8 can't see they're reachable.
+# Plugin ships no consumer-rules.pro of its own. Without this, scheduled and
+# boot-rescheduled notifications silently stop firing under minification.
+-keep class com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver { *; }
+-keep class com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver { *; }
+
+# -----------------------------------------------------------------------------
+# Stripe / TapAndPay reflection safety (official flutter_stripe rules)
+# -----------------------------------------------------------------------------
+# android/build.gradle.kts excludes the gated play-services-tapandpay artifact
+# while stripe_android's compileOnly push-provisioning classes stay referenced
+# in its bytecode, producing R8 "missing class" issues without -dontwarn. This
+# app never uses Stripe Issuing/push provisioning (reached only via
+# Class.forName, never fires here), so silencing is safe. Verbatim from the
+# flutter_stripe 13.x README Android setup section.
+-dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivity$g
+-dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Args
+-dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Error
+-dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter
+-dontwarn com.stripe.android.pushProvisioning.PushProvisioningEphemeralKeyProvider
+-dontwarn kotlinx.parcelize.Parceler$DefaultImpls
+-dontwarn kotlinx.parcelize.Parceler
+-dontwarn kotlinx.parcelize.Parcelize
+-keep class com.stripe.** { *; }
