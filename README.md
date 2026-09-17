@@ -1,14 +1,42 @@
+<div align="center">
+  <img src=".github/assets/banner.png" alt="customertaxi" width="100%">
+</div>
+
+<div align="center">
+
 # customertaxi
 
-A Flutter rider app for on-demand taxi booking — live map-based ordering, real-time trip tracking, and in-app payments, built with Clean Architecture.
+**A Flutter rider app for on-demand taxi booking** — live map-based ordering, real-time trip tracking, and in-app payments, built with Clean Architecture.
 
-![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)
-![Dart](https://img.shields.io/badge/Dart-3.10%2B-0175C2?logo=dart&logoColor=white)
-![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-3DDC84?logo=android&logoColor=white)
-![Architecture](https://img.shields.io/badge/architecture-Clean%20Architecture-6f42c1)
-![State management](https://img.shields.io/badge/state-BLoC%20%2F%20Cubit-1FA2FF)
-![Flutter CI](https://github.com/fat7i-alghareeb/customer_taxi_app/actions/workflows/flutter-ci.yml/badge.svg)
-![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+<p>
+  <img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter">
+  <img src="https://img.shields.io/badge/Dart-3.10%2B-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart">
+  <img src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Platform">
+</p>
+<p>
+  <img src="https://img.shields.io/badge/architecture-Clean%20Architecture-6f42c1?style=for-the-badge" alt="Architecture">
+  <img src="https://img.shields.io/badge/state-BLoC%20%2F%20Cubit-1FA2FF?style=for-the-badge" alt="State management">
+  <img src="https://github.com/fat7i-alghareeb/customer_taxi_app/actions/workflows/flutter-ci.yml/badge.svg?style=for-the-badge" alt="Flutter CI">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge" alt="PRs welcome">
+</p>
+
+</div>
+
+<br>
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Supported Languages](#supported-languages)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
 
 ## Overview
 
@@ -16,41 +44,56 @@ A Flutter rider app for on-demand taxi booking — live map-based ordering, real
 
 The app follows a strict Clean Architecture layout across every feature, generates most of its boilerplate (DI, models, routing assets) at build time, and ships with its own architecture-conformance check that runs in CI.
 
+---
+
 ## Features
 
-**Booking & Trips**
-- 🗺️ Full-screen map booking flow with a search-pill overlay for pickup/drop-off
-- 📍 Address search with saved-location suggestions and location bias
-- 🧭 Multi-stop trips, scheduled rides, and airport pickup with flight-number capture
-- 🚗 Real-time fare quotes across multiple car/service options
-- 📡 Live trip tracking over a SignalR real-time connection
-- 💬 In-trip chat with the driver
-- 🕓 Trip history
+<table>
+<tr>
+<td valign="top" width="50%">
 
-**Payments & Wallet**
-- 💳 Card checkout via the Stripe Payment Sheet
-- 👛 In-app wallet with balance top-up and saved cards
-- 🔀 Mixed payment (wallet + card)
-- 🧾 Invoice preview (PDF) with share/download
-- ↩️ Refund issue submission with live status updates from the backend
+### 🗺️ Booking & Trips
+- Full-screen map booking flow with a search-pill overlay for pickup/drop-off
+- Address search with saved-location suggestions and location bias
+- Multi-stop trips, scheduled rides, and airport pickup with flight-number capture
+- Real-time fare quotes across multiple car/service options
+- Live trip tracking over a SignalR real-time connection
+- In-trip chat with the driver
+- Trip history
 
-**Account**
-- 🔐 Phone number + OTP sign-in via Firebase Auth, plus Google Sign-In
-- 🪪 JWT session with silent token refresh
-- 👤 Profile management with photo upload
+### 💳 Payments & Wallet
+- Card checkout via the Stripe Payment Sheet
+- In-app wallet with balance top-up and saved cards
+- Mixed payment (wallet + card)
+- Invoice preview (PDF) with share/download
+- Refund issue submission with live status updates from the backend
 
-**Platform & UX**
-- 🌍 9-language localization
-- 🔔 Push notifications (Firebase Cloud Messaging) + local notifications
-- 🆙 First-launch onboarding carousel
-- 🔁 Force-update and soft-update prompts
-- 📐 Fully responsive layout (screen-size-aware sizing throughout)
-- 🕵️ Device Preview support for multi-device QA
+</td>
+<td valign="top" width="50%">
 
-**Security**
-- 📌 TLS certificate pinning (SHA-256 fingerprint validation)
-- 🔒 Compile-time secret obfuscation for environment values
-- 🗄️ Secure storage for session tokens
+### 👤 Account
+- Phone number + OTP sign-in via Firebase Auth, plus Google Sign-In
+- JWT session with silent token refresh
+- Profile management with photo upload
+
+### 📐 Platform & UX
+- 9-language localization
+- Push notifications (Firebase Cloud Messaging) + local notifications
+- First-launch onboarding carousel
+- Force-update and soft-update prompts
+- Fully responsive layout (screen-size-aware sizing throughout)
+- Device Preview support for multi-device QA
+
+### 🔒 Security
+- TLS certificate pinning (SHA-256 fingerprint validation)
+- Compile-time secret obfuscation for environment values
+- Secure storage for session tokens
+
+</td>
+</tr>
+</table>
+
+---
 
 ## Tech Stack
 
@@ -73,6 +116,8 @@ The app follows a strict Clean Architecture layout across every feature, generat
 | Env / secrets | `envied` (compile-time obfuscation) |
 | Code generation | `build_runner`, `freezed`, `json_serializable`, `injectable_generator`, `flutter_gen`, `objectbox_generator` |
 | CI/CD | GitHub Actions (analyze, test, architecture check, build) + Codemagic (signed Android release / closed testing) |
+
+---
 
 ## Architecture
 
@@ -101,7 +146,12 @@ flowchart TD
     RepoImpl --> Local
 ```
 
+---
+
 ## Project Structure
+
+<details>
+<summary><b>Expand full folder layout</b></summary>
 
 ```text
 customertaxi/
@@ -130,6 +180,10 @@ customertaxi/
 └── pubspec.yaml
 ```
 
+</details>
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -149,6 +203,9 @@ flutter pub get
 ```
 
 ### Environment configuration
+
+<details>
+<summary><b>Expand environment setup details</b></summary>
 
 Secrets are loaded at compile time via [`envied`](https://pub.dev/packages/envied) from a `.env` file at the project root (git-ignored). Create one with the keys declared in `lib/core/config/env/env.dart`:
 
@@ -170,6 +227,8 @@ For native map rendering, also set the Google Maps key in:
 
 Stripe is configured remotely (fetched from backend client config at runtime), so no publishable key is needed locally.
 
+</details>
+
 ### Run
 
 The app ships two build flavors, `stage` and `production`, defined in `pubspec.yaml` (`flutter_flavorizr`) and read at runtime via Flutter's native flavor mechanism:
@@ -190,11 +249,15 @@ flutter run --flavor production
 | Run tests | `flutter test` |
 | Build a debug APK (stage) | `flutter build apk --debug --flavor stage` |
 
+---
+
 ## Supported Languages
 
 Arabic · German · English · Spanish · French · Dutch · Polish · Romanian · Ukrainian
 
 (`ar`, `de`, `en`, `es`, `fr`, `nl`, `pl`, `ro`, `uk`)
+
+---
 
 ## Contributing
 
@@ -207,6 +270,20 @@ Contributions are welcome. If you'd like to help out:
 
 For larger changes, please open an issue first to discuss the approach.
 
+---
+
 ## License
 
 No license has been published for this repository yet. All rights reserved unless a license file is added.
+
+<br>
+
+<div align="center">
+
+---
+
+Built by [Fat7i](https://github.com/fat7i-alghareeb)
+
+<a href="#customertaxi">⬆ Back to top</a>
+
+</div>
